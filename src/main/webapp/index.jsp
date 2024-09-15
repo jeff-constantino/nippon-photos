@@ -5,8 +5,39 @@
   <title>JSP - Hello World</title>
 </head>
 <body>
-<h1><%= "Hello World!" %></h1>
-<br/>
-<a href="hello-servlet">Hello Servlet</a>
+<h1>Bem vindo ao Curso de JSP</h1>
+
+<form action="ServletLogin" method="post">
+  <input type="hidden" value="<%= request.getParameter("url") %>" name="url">
+
+  <table>
+    <tr>
+      <td><label>Login</label></td>
+      <td>
+        <input name="login" type="text">
+      </td>
+    </tr>
+    <tr>
+      <td><label>Senha</label></td>
+      <td>
+        <input name="senha" type="password">
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value= "Enviar">
+      </td>
+    </tr>
+
+  </table>
+
+
+
+</form>
+<h4>${msg}</h4>
+
+
+
 </body>
 </html>

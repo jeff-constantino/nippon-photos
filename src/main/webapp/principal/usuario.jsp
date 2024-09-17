@@ -364,7 +364,7 @@
 
     function buscarUsuario(){
         var nomeBusca = document.getElementById('nomeBusca').value;
-        //valida que precisa ter valor para continuar
+        //valida que precisa ter valor para continuar BUSCANDO
         if (nomeBusca != null && nomeBusca !='' && nomeBusca.trim() != ''){
 alert(nomeBusca)
         }

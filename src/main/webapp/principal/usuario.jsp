@@ -43,10 +43,22 @@
                                                 <div class="modal-dialog modal-xl">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticBackdropLabel">Cadastro de Usuários</h5> <span>${msg}</span>
+                                                            <h5 class="modal-title" id="staticBackdropLabel">Cadastro de Funcionário     </h5>
 
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
+
+                                                        <div class="container-fluid">
+                                                            <div class="page-body">
+
+                                                                <div class="row">
+                                                                    <div class="col-auto">
+                                                        <span span style="color:#f2a654">${msg}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
                                                         <div class="modal-body">
                                                             <div class="container-fluid">
                                                                 <div class="page-body">
@@ -56,36 +68,34 @@
                                                                             <!-- Basic Form Inputs card start -->
                                                                             <div class="card">
                                                                                 <div class="card-block">
-                                                                                    <h4 class="sub-title">Cad. Usuário</h4>
+                                                                                    <h4 class="sub-title">Insira o nome do Funcionário</h4>
 
                                                                                     <form class="form-material" action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formUser" >
-                                                                                        <div class="form-group form-default form-static-label">
-                                                                                            <input type="text" name="id" id="id" class="form-control"  readonly="readonly" value="${modelLogin.id}">
-                                                                                            <span class="form-bar"></span>
-                                                                                            <label class="float-label">ID:</label>
-                                                                                        </div>
 
-                                                                                        <div class="form-group form-default form-static-label">
-                                                                                            <input type="text" name="nome" id="nome" class="form-control" required="required" value="${modelLogin.nome}">
-                                                                                            <span class="form-bar"></span>
-                                                                                            <label class="float-label">Nome:</label>
-                                                                                        </div>
+                                                                                        <div class="row">
 
-                                                                                        <div class="form-group form-default form-static-label">
-                                                                                            <input type="email" name="email" id="email" class="form-control" required="required" autocomplete="off" value="${modelLogin.email}">
-                                                                                            <span class="form-bar"></span>
-                                                                                            <label class="float-label">E-mail:</label>
-                                                                                        </div>
 
-                                                                                        <div class="form-group form-default form-static-label">
-                                                                                            <input type="password" name="senha" id="senha" class="form-control" required="required" autocomplete="off" value="${modelLogin.senha}">
-                                                                                            <span class="form-bar"></span>
-                                                                                            <label class="float-label">Senha</label>
-                                                                                        </div>
 
-                                                                                        <button type="button" class="btn btn-primary waves-effect waves-light" onclick="limparForm();" >Novo</button>
-                                                                                        <button class="btn btn-success waves-effect waves-light">Salvar</button>
-                                                                                        <button class="btn btn-info waves-effect waves-light">Excluir</button>
+
+                                                                                            <div class="col-sm-1">
+                                                                                                <label class="float-label" >ID:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control" id="id2" name="id" placeholder="" readonly value="${modelLogin.id}">
+                                                                                            </div>
+                                                                                            <div class="col-8">
+                                                                                                <label class="float-label">NOME:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control" id="nome2" name="nome" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.nome}" autofocus>
+
+                                                                                            </div>
+
+                                                                                            <div>
+                                                                                                <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="limparForm();" >Novo</button>
+                                                                                                <button  class="btn btn-outline-success waves-effect waves-light" >Cadastrar</button>
+<%--  BOTOES MODAL--%>
+                                                                                            </div>
+
+                                                                                        </div>
                                                                                     </form>
 
                                                                                 </div>
@@ -123,7 +133,7 @@
                                     <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                         <div class="d-flex d-sm-block d-md-flex align-items-center">
 
-                                            <!--INSERIR BOTÃO 2 AQUI-->
+ <!--INSERIR BOTÃO 2 AQUI-->
                                             <!-- Button trigger modal -->
                                             <button type="button" class="btn btn-outline-behance" data-bs-toggle="modal" data-bs-target="#modal2">
                                                 <h4>Consultar</h4>
@@ -134,28 +144,86 @@
                                                 <div class="modal-dialog modal-xl">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticRanking">RANKING</h5>
+                                                            <h5 class="modal-title" >Pesquisa de Funcionário     </h5>
 
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
+
+                                                        <div class="container-fluid">
+                                                            <div class="page-body">
+
+                                                                <div class="row">
+                                                                    <div class="col-auto">
+                                                                        <span span style="color:#f2a654">${msg}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
                                                         <div class="modal-body">
                                                             <div class="container-fluid">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 grid-margin stretch-card">
-                                                                        <H5>CORPO DO RANKING</H5>
+                                                                <div class="page-body">
+
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <!-- Basic Form Inputs card start -->
+                                                                            <div class="card">
+                                                                                <div class="card-block">
+                                                                                    <h4 class="sub-title">Insira o nome do Funcionário</h4>
+
+                                                                                    <form class="form-material" action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formBuscaUser" >
+
+                                                                                        <div class="row">
+
+
+
+
+                                                                                            <div class="col-sm-1">
+                                                                                                <label class="float-label" >ID:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control" id="idBusca" name="id" placeholder="" readonly value="${modelLogin.id}">
+                                                                                            </div>
+                                                                                            <div class="col-8">
+                                                                                                <label class="float-label">NOME:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control" id="nomeBusca" name="nome" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.nome}" autofocus>
+
+                                                                                            </div>
+
+                                                                                            <div>
+                                                                                                <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="limparbuscaForm();" >Novo</button>
+                                                                                                <button  class="btn btn-outline-success waves-effect waves-light" onclick="buscarUsuario();">Pesquisar</button>
+ <%--  BOTOES MODAL busca--%>
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                        <table class="table">
+                                                                                            <thead>
+                                                                                            <tr>
+                                                                                                <th scope="col">ID</th>
+                                                                                                <th scope="col">NOME</th>
+                                                                                                <th scope="col">VISUALIZAR</th>
+
+                                                                                            </tr>
+                                                                                            </thead>
+                                                                                            <tbody>
+
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </form>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
 
-
-
-
                                                                 </div>
-
                                                             </div>
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>
-                                                            <button type="button" class="btn btn-outline-warning">ENVIAR</button>
+                                                   <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -230,13 +298,38 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">FUNCIONÁRIOS</h4>
+                                <h4 class="card-title">FUNCIONÁRIOS</h4> <span style="color: #f2a654" id="msg">${msg}</span>
                                 <div class="table-responsive">
                                     <table class="table">
  <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
+                                        <form action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formUser2" name="formUser2" >
+                                            <input type="hidden" name="acao" acao value="">
+                                            <div class="row">
 
 
 
+
+                                                <div class="col-sm-1">
+                                                    <label class="float-label" >ID:</label>
+                                                    <span class="form-bar"></span>
+                                                    <input type="text" class="form-control" id="id" name="id" placeholder="" readonly value="${modelLogin.id}">
+                                                </div>
+                                                <div class="col-8">
+                                                    <label class="float-label">NOME:</label>
+                                                    <span class="form-bar"></span>
+                                                    <input type="text" class="form-control" id="nome" name="nome" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.nome}">
+
+                                                </div>
+                                                <br>
+
+                                                <div>
+
+                                                    <button type="button"  class="btn btn-outline-danger waves-effect waves-light" onclick="criarDeleteComAjax();" >Excluir</button>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
 
                                     </table>
                                 </div>
@@ -260,5 +353,84 @@
 <!-- plugins:js -->
 <jsp:include page="pluginsJS.jsp"></jsp:include>
 <!-- End custom js for this page -->
+<SCRIPT type="text/javascript">
+    function criarCadastro(){
+       document.getElementById("acao").value = 'cadastrar';
+        document.getElementById("formUser").submit();
+
+
+
+    }
+
+    function buscarUsuario(){
+        var nomeBusca = document.getElementById('nomeBusca').value;
+        //valida que precisa ter valor para continuar
+        if (nomeBusca != null && nomeBusca !='' && nomeBusca.trim() != ''){
+alert(nomeBusca)
+        }
+
+    }
+
+
+    function criarDeleteComAjax(){
+        if (confirm('Deseja realmente excluir o Funcionário?')){
+            var urlAction = document.getElementById('formUser2').action;
+            var idUser = document.getElementById('id').value;
+
+            $.ajax({
+                type: "GET",
+                url : urlAction,
+                data : "id=" + idUser + '&acao=deletarajax',
+                success : function (response){
+                    limparForm2();
+                    document.getElementById('msg').textContent = response;
+                }
+
+            }).fail(function (xhr, status, errorThrown){
+                alert('Erro ao Excluir o Funcionário :'+xhr.responseText);
+            });
+        }
+    }
+
+    function criarDelete() {
+        if (confirm('Deseja realmente excluir o Funcionário?')) {
+
+            document.getElementById("formUser2").method = 'get';
+            document.getElementById("acao").value = 'deletar';
+            document.getElementById("formUser2").submit();
+
+        }
+    }
+
+
+
+
+    function limparForm(){
+        var elementos =document.getElementById("formUser").elements;
+        for (p=0;p<elementos.length;p++){
+            elementos[p].value = '';
+        }
+
+    }
+    function limparForm2(){
+        var elementos =document.getElementById("formUser2").elements;
+        for (p=0;p<elementos.length;p++){
+            elementos[p].value = '';
+        }
+
+    }
+    function  limparbuscaForm(){
+        var elementos =document.getElementById("formBuscaUser").elements;
+        for (p=0;p<elementos.length;p++){
+            elementos[p].value = '';
+        }
+
+    }
+
+
+
+
+
+</SCRIPT>
 </body>
 </html>

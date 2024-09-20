@@ -1,11 +1,12 @@
-<%--
+<%@ page import="model.ModelLogin" %><%--
   Created by IntelliJ IDEA.
-  User: Constantino
+  User: Jeff Constantino
   Date: 15/09/2024
   Time: 20:41
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
@@ -33,13 +34,13 @@
                                     <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                         <div class="d-flex d-sm-block d-md-flex align-items-center">
          <!--INSERIR BOTÃO 1 AQUI--><!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalPDV">
+                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalCad">
                                                 <h4>Cadastrar</h4>
                                             </button>
 
                                             <!-- Modal -->
 
-                                            <div class="modal fade" id="modalPDV" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal fade" id="modalCad" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -68,14 +69,12 @@
                                                                             <!-- Basic Form Inputs card start -->
                                                                             <div class="card">
                                                                                 <div class="card-block">
-                                                                                    <h4 class="sub-title">Insira o nome do Funcionário</h4>
 
-                                                                                    <form class="form-material" action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formUser" >
+
+                                                                                    <form class="form-material"  action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formUser" >
+
 
                                                                                         <div class="row">
-
-
-
 
                                                                                             <div class="col-sm-1">
                                                                                                 <label class="float-label" >ID:</label>
@@ -89,6 +88,31 @@
 
                                                                                             </div>
 
+
+                                                                                            <div class="form-group">
+
+                                                                                                <label>STATUS</label>
+                                                                                                <select class="form-select" id="status1" name="status">
+                                                                                                    <option disabled="disabled">Selecione o Status</option>
+                                                                                                    <option style="color: #00d25b" value="Ativo"  <%
+                                                                                                        ModelLogin modelLogin =(ModelLogin) request.getAttribute("modelLogin");
+//                                                                                                        System.out.println(modelLogin.getStatus());
+                                                                                                        if (modelLogin != null && modelLogin.getStatus() =="Ativo"){
+                                                                                                        out.print(" ");
+                                                                                                         out.print("selected=\"selected\"");
+                                                                                                         out.print(" ");
+                                                                                                    }%>>Ativo</option>
+
+                                                                                                    <option style="color: #bf3322" value="Inativo" <%
+                                                                                                        modelLogin =(ModelLogin) request.getAttribute("modelLogin");
+                                                                                                        if (modelLogin != null && modelLogin.getStatus() =="Inativo"){
+                                                                                                        out.print(" ");
+                                                                                                        out.print("selected=\"selected\"");
+                                                                                                        out.print(" ");
+                                                                                                    }%>>Inativo</option>
+
+                                                                                                </select>
+                                                                                            </div>
                                                                                             <div>
                                                                                                 <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="limparForm();" >Novo</button>
                                                                                                 <button  class="btn btn-outline-success waves-effect waves-light" >Cadastrar</button>
@@ -119,7 +143,7 @@
 
                                     </div>
                                     <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                                        <i class="icon-lg mdi mdi-account-multiple-plus text-success ml-auto" type="button"  data-bs-toggle="modal" data-bs-target="#modalPDV" ></i>
+                                        <i class="icon-lg mdi mdi-account-multiple-plus text-success ml-auto" type="button"  data-bs-toggle="modal" data-bs-target="#modalCad" ></i>
                                     </div>
                                 </div>
                             </div>
@@ -135,12 +159,12 @@
 
  <!--INSERIR BOTÃO 2 AQUI-->
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-outline-behance" data-bs-toggle="modal" data-bs-target="#modal2">
+                                            <button type="button" class="btn btn-outline-behance" data-bs-toggle="modal" data-bs-target="#modalBusca">
                                                 <h4>Consultar</h4>
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="modal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal fade" id="modalBusca" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -160,7 +184,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="modal-body">
+                                                        <div class="modal-body" >
                                                             <div class="container-fluid">
                                                                 <div class="page-body">
 
@@ -169,9 +193,8 @@
                                                                             <!-- Basic Form Inputs card start -->
                                                                             <div class="card">
                                                                                 <div class="card-block">
-                                                                                    <h4 class="sub-title">Insira o nome do Funcionário</h4>
 
-                                                                                    <form class="form-material" action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formBuscaUser" >
+                                                                                    <form class="form-material"  id="formBuscaUser" method="get" action="<%= request.getContextPath() %>/ServletUsuarioController">
 
                                                                                         <div class="row">
 
@@ -183,7 +206,7 @@
                                                                                                 <span class="form-bar"></span>
                                                                                                 <input type="text" class="form-control" id="idBusca" name="id" placeholder="" readonly value="${modelLogin.id}">
                                                                                             </div>
-                                                                                            <div class="col-8">
+                                                                                            <div class="col-4">
                                                                                                 <label class="float-label">NOME:</label>
                                                                                                 <span class="form-bar"></span>
                                                                                                 <input type="text" class="form-control" id="nomeBusca" name="nome" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.nome}" autofocus>
@@ -192,24 +215,31 @@
 
                                                                                             <div>
                                                                                                 <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="limparbuscaForm();" >Novo</button>
-                                                                                                <button  class="btn btn-outline-success waves-effect waves-light" onclick="buscarUsuario();">Pesquisar</button>
+                                                                                                <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="buscarUsuario();">Pesquisar</button>
  <%--  BOTOES MODAL busca--%>
                                                                                             </div>
+                                                                                            <div style="overflow-x: hidden">
+                                                                                            <div style="height: 300px; overflow-y: auto ">
+                                                                                                <table class="table" id="tabelaresultados">
+                                                                                                    <thead>
+                                                                                                    <tr>
+                                                                                                        <th scope="col">ID</th>
+                                                                                                        <th scope="col">NOME</th>
+                                                                                                        <th scope="col">GERENCIAR</th>
+
+                                                                                                    </tr>
+                                                                                                    </thead>
+                                                                                                    <tbody>
+
+                                                                                                    </tbody>
+                                                                                                </table>
+
+                                                                                            </div>
+                                                                                            </div>
+                                                                                            <span id="totalResultados"></span>
 
                                                                                         </div>
-                                                                                        <table class="table">
-                                                                                            <thead>
-                                                                                            <tr>
-                                                                                                <th scope="col">ID</th>
-                                                                                                <th scope="col">NOME</th>
-                                                                                                <th scope="col">VISUALIZAR</th>
 
-                                                                                            </tr>
-                                                                                            </thead>
-                                                                                            <tbody>
-
-                                                                                            </tbody>
-                                                                                        </table>
                                                                                     </form>
 
                                                                                 </div>
@@ -232,7 +262,7 @@
 
                                     </div>
                                     <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                                        <i class="icon-lg mdi mdi-account-question text-behance ml-auto" type="button"  data-bs-toggle="modal" data-bs-target="#modal2" ></i>
+                                        <i class="icon-lg mdi mdi-account-question text-behance ml-auto" type="button"  data-bs-toggle="modal" data-bs-target="#modalbusca" ></i>
                                     </div>
                                 </div>
                             </div>
@@ -297,17 +327,14 @@
                 <div class="row ">
                     <div class="col-12 grid-margin">
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-body" >
                                 <h4 class="card-title">FUNCIONÁRIOS</h4> <span style="color: #f2a654" id="msg">${msg}</span>
-                                <div class="table-responsive">
-                                    <table class="table">
+                                <div class="table-responsive"style="overflow-x: hidden">
+                                    <table class="table" >
  <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
                                         <form action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formUser2" name="formUser2" >
                                             <input type="hidden" name="acao" acao value="">
                                             <div class="row">
-
-
-
 
                                                 <div class="col-sm-1">
                                                     <label class="float-label" >ID:</label>
@@ -319,11 +346,38 @@
                                                     <span class="form-bar"></span>
                                                     <input type="text" class="form-control" id="nome" name="nome" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.nome}">
 
+                                                    <br>
+                                                    <div class="form-group">
+
+                                                        <label>STATUS</label>
+                                                        <select class="form-select" id="status2" name="status">
+                                                            <option disabled="disabled">Selecione o Status</option>
+                                                            <option style="color: #00d25b" value="Ativo"  <%
+                                                                modelLogin =(ModelLogin) request.getAttribute("modelLogin");
+                                                                if (modelLogin != null && modelLogin.getStatus() =="Ativo"){
+                                                                    out.print(" ");
+                                                                    out.print("selected=\"selected\"");
+                                                                    out.print(" ");
+                                                                }%>>Ativo</option>
+
+                                                            <option style="color: #bf3322" value="Inativo" <%
+                                                                modelLogin =(ModelLogin) request.getAttribute("modelLogin");
+                                                                if (modelLogin != null && modelLogin.getStatus() =="Inativo"){
+                                                                    out.print(" ");
+                                                                    out.print("selected=\"selected\"");
+                                                                    out.print(" ");
+                                                                }%>>Inativo</option>
+
+                                                        </select>
+                                                    </div>
+
                                                 </div>
+
+
                                                 <br>
 
                                                 <div>
-
+                                                    <button  class="btn btn-outline-success waves-effect waves-light" >Atualizar</button>
                                                     <button type="button"  class="btn btn-outline-danger waves-effect waves-light" onclick="criarDeleteComAjax();" >Excluir</button>
                                                 </div>
 
@@ -332,6 +386,42 @@
                                         </form>
 
                                     </table>
+                                    <h5>Funcionários Cadastrados:</h5>
+
+
+                                    <div style="overflow-x: hidden">
+                                        <div style="height: 300px; overflow-y: auto ">
+                                            <table class="table" id="tabelaresultadosview">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">NOME</th>
+                                                    <th scope="col">GERENCIAR</th>
+
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <c:forEach items="${modelLogins}" var ="mL">
+                                                    <tr>
+                                                        <td>
+                                                            <c:out value="${mL.id}"></c:out>
+                                                        </td>
+                                                        <td>
+                                                            <c:out value="${mL.nome}"></c:out>
+                                                        </td>
+                                                        <td><a class="btn btn-outline-success waves-effect waves-light" href="<%= request.getContextPath() %>/ServletUsuarioController?acao=buscarEditar&id=${mL.id}" >Gerenciar</a></td>
+
+                                                    </tr>
+
+                                                </c:forEach>
+
+
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -354,6 +444,13 @@
 <jsp:include page="pluginsJS.jsp"></jsp:include>
 <!-- End custom js for this page -->
 <SCRIPT type="text/javascript">
+    function verEditar(id){
+        var urlAction = document.getElementById('formBuscaUser').action;
+
+       window.location.href = urlAction + '?acao=buscarEditar&id='+id;
+    }
+
+
     function criarCadastro(){
        document.getElementById("acao").value = 'cadastrar';
         document.getElementById("formUser").submit();
@@ -366,7 +463,28 @@
         var nomeBusca = document.getElementById('nomeBusca').value;
         //valida que precisa ter valor para continuar BUSCANDO
         if (nomeBusca != null && nomeBusca !='' && nomeBusca.trim() != ''){
-alert(nomeBusca)
+            var urlAction = document.getElementById('formBuscaUser').action;
+            $.ajax({
+                method: 'GET',
+                url : urlAction,
+                data : "nomeBusca=" + nomeBusca + '&acao=buscaruserajax',
+                success : function (response){
+                    const json = JSON.parse(response);
+
+
+                    $('#tabelaresultados > tbody > tr').remove();
+                  for (var p = 0; p < json.length; p++){
+                      $('#tabelaresultados > tbody').append('<tr> <td>' + json[p].id + '</td> <td>' +json[p].nome+ '</td> <td> <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditar('+json[p].id+')">Editar</button></td></tr>');
+
+                  }
+                  document.getElementById('totalResultados').textContent = 'Resultados: '+json.length;
+
+                }
+
+            }).fail(function (xhr, status, errorThrown){
+                alert('Erro ao Pesquisar o Funcionário :'+xhr.responseText);
+            });
+
         }
 
     }
@@ -378,7 +496,7 @@ alert(nomeBusca)
             var idUser = document.getElementById('id').value;
 
             $.ajax({
-                type: "GET",
+                method : "get",
                 url : urlAction,
                 data : "id=" + idUser + '&acao=deletarajax',
                 success : function (response){

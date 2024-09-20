@@ -24,3 +24,7 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.model_login
     OWNER to postgres;
+
+
+ALTER TABLE IF EXISTS public.model_login
+    ADD COLUMN useradmin boolean NOT NULL DEFAULT false;

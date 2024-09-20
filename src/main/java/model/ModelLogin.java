@@ -11,6 +11,9 @@ public class ModelLogin implements Serializable{
     private String Nome;
     private String Email;
     private String login;
+    private String senha;
+    private String status;
+
 
     public Boolean isNovo(){
         if(this.id == null){
@@ -46,7 +49,13 @@ public class ModelLogin implements Serializable{
         Email = email;
     }
 
-    private String senha;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getLogin() {
         return login;

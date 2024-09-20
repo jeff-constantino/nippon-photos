@@ -2,9 +2,9 @@
          pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Acesso ao Sistema</title>
+  <title>ACESSO AO SISTEMA</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--===============================================================================================-->
@@ -14,57 +14,52 @@
   <!--===============================================================================================-->
   <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
   <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
-  <!--===============================================================================================-->
   <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
   <!--===============================================================================================-->
   <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
   <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
-  <!--===============================================================================================-->
   <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
-  <!--===============================================================================================-->
-  <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
   <!--===============================================================================================-->
   <link rel="stylesheet" type="text/css" href="css/util.css">
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <!--===============================================================================================-->
-
 </head>
-<body background="images/BG.jpg" style="size: landscape; ">
+<body background="images/BG.jpg" style="background-size: auto" >
 
 <div class="limiter">
   <div class="container-login100">
     <div class="wrap-login100">
-      <form class="login100-form validate-form" action="<%= request.getContextPath() %>/ServletLogin" method="post">
-					<span class="login100-form-title p-b-26">
+      <div class="login100-pic js-tilt" data-tilt>
+        <img src="images/img-01.webp" alt="IMG">
+      </div>
+
+      <form class="login100-form validate-form" action="<%= request.getContextPath() %>/ServletLogin" method="post" >
+					<span class="login100-form-title">
 						Bem Vindo
 					</span>
         <div><h4 class="msg">${msg}</h4></div>
-        <div></div>
 
-        <div class="wrap-input100 validate-input" data-validate = "Insira o Login">
-          <input class="input100" type="text" name="login" autofocus>
-          <span class="focus-input100" data-placeholder="Login"></span>
+        <div class="wrap-input100 validate-input" data-validate = "INSIRA O LOGIN">
+          <input class="input100" type="text" name="login" placeholder="Login" autofocus>
+          <span class="focus-input100"></span>
+          <span class="symbol-input100">
+							<i class="fa fa-user" aria-hidden="true"></i>
+						</span>
         </div>
 
-        <div class="wrap-input100 validate-input" data-validate="Insira a Senha">
-						<span class="btn-show-pass">
-							<i class="zmdi zmdi-eye"></i>
+        <div class="wrap-input100 validate-input" data-validate = "INSIRA A SENHA">
+          <input class="input100" type="password" name="senha" placeholder="Senha">
+          <span class="focus-input100"></span>
+          <span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
 						</span>
-          <input class="input100" type="password" name="senha">
-          <span class="focus-input100" data-placeholder="Senha"></span>
         </div>
 
         <div class="container-login100-form-btn">
-          <div class="wrap-login100-form-btn">
-            <div class="login100-form-bgbtn"></div>
-            <button class="login100-form-btn">
-              Login
-            </button>
-          </div>
+          <button class="login100-form-btn">
+            Login
+          </button>
         </div>
-
 
       </form>
     </div>
@@ -72,28 +67,26 @@
 </div>
 
 
-<div id="dropDownSelect1"></div>
+
 
 <!--===============================================================================================-->
 <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
-<script src="vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->
 <script src="vendor/bootstrap/js/popper.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
 <script src="vendor/select2/select2.min.js"></script>
 <!--===============================================================================================-->
-<script src="vendor/daterangepicker/moment.min.js"></script>
-<script src="vendor/daterangepicker/daterangepicker.js"></script>
-<!--===============================================================================================-->
-<script src="vendor/countdowntime/countdowntime.js"></script>
+<script src="vendor/tilt/tilt.jquery.min.js"></script>
+<script >
+  $('.js-tilt').tilt({
+    scale: 1.1
+  })
+</script>
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
 
-
 </body>
 </html>
-
 
 

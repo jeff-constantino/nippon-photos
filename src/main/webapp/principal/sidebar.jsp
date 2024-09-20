@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Constantino
+  User: Jeff Constantino
   Date: 15/09/2024
   Time: 21:32
   To change this template use File | Settings | File Templates.
@@ -67,7 +67,7 @@
                         </a>
                         <div class="collapse" id="auth">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/principal/usuario.jsp"> Funcionários </a></li>
+                                <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletUsuarioController?acao=listarUser"> Funcionários </a></li>
                                 <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Configurações </a></li>
                                 <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
                                 <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 505 </a></li>

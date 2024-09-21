@@ -28,3 +28,57 @@ ALTER TABLE IF EXISTS public.model_login
 
 ALTER TABLE IF EXISTS public.model_login
     ADD COLUMN useradmin boolean NOT NULL DEFAULT false;
+
+
+CREATE SEQUENCE IF NOT EXISTS public.model_login_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
+ALTER SEQUENCE public.model_login_id_seq
+    OWNED BY public.model_login.id;
+
+ALTER SEQUENCE public.model_login_id_seq
+    OWNER TO postgres;
+
+
+    CREATE SEQUENCE IF NOT EXISTS public.vendas_seq
+        INCREMENT 1
+         MINVALUE 1
+        MAXVALUE 2147483647
+    	 START 1
+        CACHE 1;
+
+
+create table vendas (
+id INTEGER NOT NULL DEFAULT NEXTVAL('vendas_seq'::regclass),
+prod1_din character varying (3)not null,
+prod1_deb character varying (3)not null,
+prod1_cred character varying (3)not null,
+prod1_pix character varying (3) not null,
+
+prod2_din character varying (3)not null,
+prod2_deb character varying (3)not null,
+prod2_cred character varying (3)not null,
+prod2_pix character varying (3) not null,
+
+prod3_din character varying (3)not null,
+prod3_deb character varying (3)not null,
+prod3_cred character varying (3)not null,
+prd3_pix character varying (3)not null,
+
+
+
+sobras character varying (5)not null,
+
+vendedor_pai_id bigint not null,
+usuario_cad_id bigint not null,
+
+constraint venda_pk primary key (id),
+constraint vendedor_pai_fk foreign key (vendedor_pai_id) references model_login(id),
+constraint usuario_cad_fk foreign key (usuario_cad_id) references model_login(id)
+
+
+)

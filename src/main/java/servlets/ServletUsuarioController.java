@@ -58,7 +58,6 @@ public class ServletUsuarioController extends ServletGenericUtil{
 
               ObjectMapper mapper = new ObjectMapper();
               String json = mapper.writeValueAsString(dadosJsonUser);
-
              response.getWriter().write(json);
 
 

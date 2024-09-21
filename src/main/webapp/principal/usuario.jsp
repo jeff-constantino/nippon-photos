@@ -513,6 +513,8 @@
                   }
                   document.getElementById('totalResultados').textContent = 'Resultados: '+json.length;
 
+
+
                 }
 
             }).fail(function (xhr, status, errorThrown){

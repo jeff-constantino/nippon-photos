@@ -113,9 +113,10 @@ public class DAOUsuarioRepository {
 
 
 
+
     public List <ModelLogin> consultaUsuarioList(String nome, Long userLogado) throws Exception {
         List <ModelLogin> retorno = new ArrayList<ModelLogin>();
-        String sql = "SELECT * FROM model_login WHERE UPPER (nome) LIKE UPPER(?) and useradmin is false and usuario_id=? limit 6";
+        String sql = "SELECT * FROM model_login WHERE UPPER (nome) LIKE UPPER(?) and useradmin is false and usuario_id=? order by status";
         PreparedStatement preparedSql = connection.prepareStatement(sql);
         preparedSql.setString(1,"%" + nome + "%");
         preparedSql.setLong(2,userLogado);

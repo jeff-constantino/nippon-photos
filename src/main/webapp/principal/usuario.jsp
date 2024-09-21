@@ -7,6 +7,12 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+    response.setDateHeader("Expires", 0); // Proxies
+%>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
@@ -95,9 +101,9 @@
                                                                                                 <select class="form-select" id="status1" name="status">
                                                                                                     <option disabled="disabled">Selecione o Status</option>
                                                                                                     <option style="color: #00d25b" value="Ativo"  <%
-                                                                                                        ModelLogin modelLogin =(ModelLogin) request.getAttribute("modelLogin");
-//                                                                                                        System.out.println(modelLogin.getStatus());
-                                                                                                        if (modelLogin != null && modelLogin.getStatus() =="Ativo"){
+                                                                                                        ModelLogin modelLogin =(ModelLogin)request.getAttribute("modelLogin");
+//                                                                                                        System.out.println(modelLogin);
+                                                                                                        if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Ativo")){
                                                                                                         out.print(" ");
                                                                                                          out.print("selected=\"selected\"");
                                                                                                          out.print(" ");
@@ -105,7 +111,7 @@
 
                                                                                                     <option style="color: #bf3322" value="Inativo" <%
                                                                                                         modelLogin =(ModelLogin) request.getAttribute("modelLogin");
-                                                                                                        if (modelLogin != null && modelLogin.getStatus() =="Inativo"){
+                                                                                                        if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Inativo")){
                                                                                                         out.print(" ");
                                                                                                         out.print("selected=\"selected\"");
                                                                                                         out.print(" ");
@@ -354,7 +360,7 @@
                                                             <option disabled="disabled">Selecione o Status</option>
                                                             <option style="color: #00d25b" value="Ativo"  <%
                                                                 modelLogin =(ModelLogin) request.getAttribute("modelLogin");
-                                                                if (modelLogin != null && modelLogin.getStatus() =="Ativo"){
+                                                                if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Ativo")){
                                                                     out.print(" ");
                                                                     out.print("selected=\"selected\"");
                                                                     out.print(" ");
@@ -362,7 +368,7 @@
 
                                                             <option style="color: #bf3322" value="Inativo" <%
                                                                 modelLogin =(ModelLogin) request.getAttribute("modelLogin");
-                                                                if (modelLogin != null && modelLogin.getStatus() =="Inativo"){
+                                                                if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Inativo")){
                                                                     out.print(" ");
                                                                     out.print("selected=\"selected\"");
                                                                     out.print(" ");
@@ -389,6 +395,10 @@
                                     <h5>Funcionários Cadastrados:</h5>
 
 
+
+
+
+
                                     <div style="overflow-x: hidden">
                                         <div style="height: 300px; overflow-y: auto ">
                                             <table class="table" id="tabelaresultadosview">
@@ -396,6 +406,7 @@
                                                 <tr>
                                                     <th scope="col">ID</th>
                                                     <th scope="col">NOME</th>
+                                                    <th scope="col">STATUS</th>
                                                     <th scope="col">GERENCIAR</th>
 
                                                 </tr>
@@ -407,7 +418,14 @@
                                                             <c:out value="${mL.id}"></c:out>
                                                         </td>
                                                         <td>
-                                                            <c:out value="${mL.nome}"></c:out>
+                                                          <c:out value="${mL.nome}"></c:out>
+                                                           </span>
+
+                                                        </td>
+                                                        <td>
+                                                            <c:out value="${mL.status}"></c:out>
+                                                            </span>
+
                                                         </td>
                                                         <td><a class="btn btn-outline-success waves-effect waves-light" href="<%= request.getContextPath() %>/ServletUsuarioController?acao=buscarEditar&id=${mL.id}" >Gerenciar</a></td>
 
@@ -420,6 +438,22 @@
                                             </table>
 
                                         </div>
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination">
+                                                <%
+                                                int totalPagina = (int) request.getAttribute("totalPagina");
+                                                for (int p=0; p<totalPagina; p++) {
+                                                    String url = request.getContextPath()+"/ServletUsuarioController?acao=paginar&pagina=" + (p * 6);
+
+                                                    out.print("<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"\">"+(p + 1)+"</a></li>");
+                                                }
+                                                %>
+
+
+
+
+                                            </ul>
+                                        </nav>
                                     </div>
 
                                 </div>

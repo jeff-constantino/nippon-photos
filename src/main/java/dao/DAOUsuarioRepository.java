@@ -47,10 +47,15 @@ public class DAOUsuarioRepository {
 
     }
 
-    public List<ModelLogin> consultaUsuarioList(Long userLogado) throws Exception {
+
+
+    public List<ModelLogin> consultaUsuarioListPaginada(Long userLogado, Integer offset) throws Exception {
         List<ModelLogin> retorno = new ArrayList<ModelLogin>();
-        String sql = "SELECT * FROM model_login where useradmin is false and usuario_id= " + userLogado;
+//        String sql = "SELECT * FROM model_login where useradmin is false and usuario_id= " + userLogado + "order by status offset "+offset+"limit 6";
+        String sql = "SELECT * FROM model_login WHERE useradmin is false and usuario_id=? ORDER BY status offset ? limit 6";
         PreparedStatement preparedSql = connection.prepareStatement(sql);
+        preparedSql.setLong(1,userLogado);
+        preparedSql.setLong(2,offset);
         ResultSet resultSet = preparedSql.executeQuery();
         while (resultSet.next()) {
             ModelLogin modelLogin = new ModelLogin();
@@ -68,10 +73,28 @@ public class DAOUsuarioRepository {
     }
 
 
+    public List<ModelLogin> consultaUsuarioList(Long userLogado) throws Exception {
+
+        List <ModelLogin> retorno = new ArrayList<ModelLogin>();
+        String sql = "SELECT * FROM model_login WHERE useradmin is false and usuario_id=? ORDER BY status limit 6";
+        PreparedStatement preparedSql = connection.prepareStatement(sql);
+        preparedSql.setLong(1,userLogado);
+        ResultSet resultSet = preparedSql.executeQuery();
+        while (resultSet.next()) {
+            ModelLogin modelLogin = new ModelLogin();
+            modelLogin.setId(resultSet.getLong("id"));
+            modelLogin.setNome(resultSet.getString("nome"));
+            modelLogin.setStatus(resultSet.getString("status"));
+            retorno.add(modelLogin);
+        }
+        return retorno;
+    }
 
 
-    public int totalPagina() throws Exception {
-        String sql = "SELECT count(1) as total FROM model_login";
+
+
+    public int totalPagina(Long userLogado) throws Exception {
+        String sql = "SELECT count(1) as total FROM model_login where usuario_id= " +userLogado;
         PreparedStatement preparedSql = connection.prepareStatement(sql);
         ResultSet resultSet = preparedSql.executeQuery();
         resultSet.next();
@@ -92,7 +115,7 @@ public class DAOUsuarioRepository {
 
     public List <ModelLogin> consultaUsuarioList(String nome, Long userLogado) throws Exception {
         List <ModelLogin> retorno = new ArrayList<ModelLogin>();
-        String sql = "SELECT * FROM model_login WHERE UPPER (nome) LIKE UPPER(?) and useradmin is false and usuario_id=?" ;
+        String sql = "SELECT * FROM model_login WHERE UPPER (nome) LIKE UPPER(?) and useradmin is false and usuario_id=? limit 6";
         PreparedStatement preparedSql = connection.prepareStatement(sql);
         preparedSql.setString(1,"%" + nome + "%");
         preparedSql.setLong(2,userLogado);

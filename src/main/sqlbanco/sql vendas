@@ -1,0 +1,36 @@
+CREATE TABLE IF NOT EXISTS public.vendas
+(
+    venda_id integer NOT NULL DEFAULT nextval('vendas_seq'::regclass),
+    prod1_din character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    prod1_deb character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    prod1_cred character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    prod1_pix character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    prod2_din character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    prod2_deb character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    prod2_cred character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    prod2_pix character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    prod3_din character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    prod3_deb character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    prod3_cred character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    prod3_pix character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    sobras character varying(5) COLLATE pg_catalog."default" NOT NULL,
+    vendedor_pai_id bigint NOT NULL,
+    usuario_cad_id bigint NOT NULL,
+    data_venda date,
+    ribbon character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    nome character varying(60) COLLATE pg_catalog."default",
+    CONSTRAINT venda_pk PRIMARY KEY (venda_id),
+    CONSTRAINT usuario_cad_fk FOREIGN KEY (usuario_cad_id)
+        REFERENCES public.model_login (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT vendedor_pai_fk FOREIGN KEY (vendedor_pai_id)
+        REFERENCES public.model_login (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.vendas
+    OWNER to postgres;

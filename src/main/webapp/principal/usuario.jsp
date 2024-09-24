@@ -68,9 +68,9 @@
 
                                                         <div class="modal-body">
                                                             <div class="container-fluid">
-                                                                <div class="page-body">
+                                                                <div class="row">
+                                                                    <div class="page-body">
 
-                                                                    <div class="row">
                                                                         <div class="col-sm-12">
                                                                             <!-- Basic Form Inputs card start -->
                                                                             <div class="card">
@@ -478,6 +478,9 @@
 <jsp:include page="pluginsJS.jsp"></jsp:include>
 <!-- End custom js for this page -->
 <SCRIPT type="text/javascript">
+
+
+
     function verEditar(id){
         var urlAction = document.getElementById('formBuscaUser').action;
 

@@ -1,13 +1,10 @@
 package servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dao.DAOLoginRepository;
 import dao.DAOUsuarioRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelLogin;
@@ -189,6 +186,7 @@ public class ServletUsuarioController extends ServletGenericUtil{
                     }
 
                     modelLogin = daoUsuarioRepository.gravarUsuario(modelLogin, super.getUserLogado(request));
+
 
                 }
 

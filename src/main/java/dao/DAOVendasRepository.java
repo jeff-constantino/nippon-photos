@@ -19,22 +19,46 @@ public class DAOVendasRepository {
 
     }
 
-    public ModelVendas gravarVenda(ModelVendas modelVendas) throws Exception {
-        // Verifica se já existe uma venda com o mesmo vendedor_id e nome
-        ModelVendas vendaExistente = consultaVendaPorNome(modelVendas.getNome());
+    public int totalPagina(Long userLogado) throws Exception {
+        String sql = "SELECT count(1) as total FROM vendas where venda_id= " +userLogado;
+        PreparedStatement preparedSql = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedSql.executeQuery();
+        resultSet.next();
 
-        if (vendaExistente != null && vendaExistente.getVenda_id() != null) {
-            // Atualiza a venda existente
-            return atualizarVenda(vendaExistente.getVenda_id(), modelVendas);
+        Double cadastro = resultSet.getDouble("total");
+        Double porpagina = 6.0;
+        Double pagina = cadastro/porpagina;
+        Double resto = pagina % 2;
+        if (resto >0){
+            pagina++;
+        }
+        return pagina.intValue();
+    }
+
+    public ModelVendas gravarVenda(ModelVendas modelVendas, Long userLogado) throws Exception {
+        // Verifica se o venda_id não é nulo e tenta consultar a venda existente
+        if (modelVendas.getVenda_id() != null) {
+            // Tenta consultar a venda existente com o venda_id e userLogado
+            ModelVendas vendaExistente = consultaVenda(modelVendas.getVenda_id(), userLogado);
+
+            if (vendaExistente != null) {
+                // Se a venda existir, atualiza e retorna o objeto atualizado
+                return atualizarVenda(vendaExistente.getVenda_id(), modelVendas, userLogado);
+            } else {
+                // Se a venda não existir, lança uma exceção ou lida conforme necessário
+                throw new Exception("Venda com o ID " + modelVendas.getVenda_id() + " não encontrada.");
+            }
         } else {
-            // Insere uma nova venda
+            // Caso venda_id seja nulo, insere uma nova venda
             String sql = "INSERT INTO vendas(vendedor_id, nome) VALUES (?, ?)";
             PreparedStatement preparedSql = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
+            // Configura os parâmetros para a inserção
             preparedSql.setLong(1, modelVendas.getVendedor_id());
             preparedSql.setString(2, modelVendas.getNome());
 
-            preparedSql.executeUpdate(); // Use executeUpdate para inserção
+            // Executa a inserção
+            preparedSql.executeUpdate();
 
             // Recupera o ID gerado automaticamente
             ResultSet generatedKeys = preparedSql.getGeneratedKeys();
@@ -45,69 +69,66 @@ public class DAOVendasRepository {
                 throw new SQLException("Falha ao obter o ID gerado.");
             }
 
+            // Confirma a transação
             connection.commit();
 
-            // Agora que o venda_id está definido, podemos consultar
-            return this.consultaVenda(modelVendas.getVenda_id());
+            // Retorna o ModelVendas recém-criado
+            return modelVendas;
         }
     }
 
 
-    public ModelVendas consultaVenda(Long venda_id) throws Exception {
+
+    private ModelVendas atualizarVenda(Long venda_id, ModelVendas modelVendas, Long userLogado) throws Exception {
+        String sql = "UPDATE vendas SET vendedor_id = ?, nome = ? WHERE venda_id = ?";
+        PreparedStatement preparedSql = connection.prepareStatement(sql);
+
+        // Configura os parâmetros do PreparedStatement
+        preparedSql.setLong(1, modelVendas.getVendedor_id());
+        preparedSql.setString(2, modelVendas.getNome());
+        preparedSql.setLong(3, venda_id);
+
+        // Executa a atualização
+        int linhasAfetadas = preparedSql.executeUpdate();
+        connection.commit(); // Confirma a transação
+
+        // Retorna o ModelVendas atualizado ou lança uma exceção se não houver linhas afetadas
+        if (linhasAfetadas > 0) {
+            return consultaVenda(venda_id, userLogado); // Passa o segundo parâmetro
+        } else {
+            throw new Exception("Erro ao atualizar a venda. A venda pode não existir.");
+        }
+    }
+
+
+
+
+
+    public ModelVendas consultaVenda(Long venda_id,  Long userLogado) throws Exception {
         // Verifica se o venda_id é nulo antes de prosseguir
         if (venda_id == null) {
             throw new IllegalArgumentException("venda_id não pode ser nulo.");
         }
 
-        ModelVendas modelVendas = new ModelVendas();
+        ModelVendas modelVendas = null;
 
         String sql = "SELECT * FROM vendas WHERE venda_id = ?";
         PreparedStatement preparedSql = connection.prepareStatement(sql);
-        preparedSql.setLong(1, venda_id); // Usar setLong diretamente
-
-        ResultSet resultado = preparedSql.executeQuery();
-        if (resultado.next()) { // Verifica se há resultados
-            modelVendas.setVendedor_id(resultado.getLong("vendedor_id")); // Aqui assume-se que você quer pegar vendedor_id
-            modelVendas.setVenda_id(resultado.getLong("venda_id"));
-            modelVendas.setNome(resultado.getString("nome"));
-        } else {
-            // Se não houver resultados, retornar um modelo vazio ou lançar uma exceção
-            modelVendas = null; // Ou criar um novo ModelVendas se preferir
-        }
-        return modelVendas;
-    }
-
-
-    private ModelVendas consultaVendaPorNome(String nome) throws Exception {
-        ModelVendas modelVendas = null;
-
-        String sql = "SELECT * FROM vendas WHERE nome = ?";
-        PreparedStatement preparedSql = connection.prepareStatement(sql);
-        preparedSql.setString(1, nome);
+        preparedSql.setLong(1,venda_id); // Usar setLong diretamente
 
         ResultSet resultado = preparedSql.executeQuery();
         if (resultado.next()) { // Verifica se há resultados
             modelVendas = new ModelVendas();
-            modelVendas.setVendedor_id(resultado.getLong("vendedor_id")); // Pega vendedor_id
-            modelVendas.setVenda_id(resultado.getLong("venda_id")); // Pega venda_id
-            modelVendas.setNome(resultado.getString("nome")); // Pega nome
+            modelVendas.setVenda_id(resultado.getLong("venda_id"));
+            modelVendas.setVendedor_id(resultado.getLong("vendedor_id"));
+            modelVendas.setNome(resultado.getString("nome"));
+        } else {
+            // Se não houver resultados, retornar null ou lançar uma exceção
+            modelVendas = null; // Retorna null se a venda não existir
         }
         return modelVendas;
     }
 
-    private ModelVendas atualizarVenda(Long venda_id, ModelVendas modelVendas) throws Exception {
-        String sql = "UPDATE vendas SET vendedor_id = ?, nome = ? WHERE venda_id = ?";
-        PreparedStatement preparedSql = connection.prepareStatement(sql);
-
-        preparedSql.setLong(1, modelVendas.getVendedor_id());
-        preparedSql.setString(2, modelVendas.getNome());
-        preparedSql.setLong(3, venda_id);
-
-        preparedSql.executeUpdate(); // Atualiza a venda existente
-        connection.commit();
-
-        return consultaVenda(venda_id); // Retorna a venda atualizada
-    }
 
 
 
@@ -190,4 +211,3 @@ public class DAOVendasRepository {
 
     }
 }
-

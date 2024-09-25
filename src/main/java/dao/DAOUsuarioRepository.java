@@ -2,6 +2,7 @@ package dao;
 
 import connection.SingleConnectionBanco;
 import model.ModelLogin;
+import model.ModelVendas;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -45,6 +46,53 @@ public class DAOUsuarioRepository {
         return this.consultarUsuario(objeto.getNome(), userLogado);
 
 
+    }
+
+    public ModelVendas consultarVenda(Long venda_id) throws Exception {
+        ModelVendas modelVendas = null;
+
+        // Verifica se o venda_id é nulo antes de prosseguir
+        if (venda_id == null) {
+            throw new IllegalArgumentException("venda_id não pode ser nulo.");
+        }
+
+        String sql = "SELECT * FROM vendas WHERE venda_id = ?";
+        PreparedStatement preparedSql = connection.prepareStatement(sql);
+        preparedSql.setLong(1, venda_id); // Usar setLong diretamente
+
+        ResultSet resultado = preparedSql.executeQuery();
+        if (resultado.next()) { // Verifica se há resultados
+            modelVendas = new ModelVendas();
+            modelVendas.setVenda_id(resultado.getLong("venda_id"));
+            modelVendas.setVendedor_id(resultado.getLong("vendedor_id"));
+            modelVendas.setNome(resultado.getString("nome"));
+        }
+
+        return modelVendas;
+    }
+
+
+    public String atualizarVenda(ModelVendas modelVendas) throws Exception {
+        String sql = "UPDATE vendas SET vendedor_id = ?, nome = ? WHERE venda_id = ?";
+        PreparedStatement preparedSql = connection.prepareStatement(sql);
+
+        // Verifica se os campos necessários estão preenchidos
+        if (modelVendas.getVendedor_id() == null) {
+            return "O vendedor_id não pode ser nulo.";
+        }
+
+        preparedSql.setLong(1, modelVendas.getVendedor_id());
+        preparedSql.setString(2, modelVendas.getNome());
+        preparedSql.setLong(3, modelVendas.getVenda_id());
+
+        int linhasAfetadas = preparedSql.executeUpdate(); // Atualiza a venda
+        connection.commit();
+
+        if (linhasAfetadas > 0) {
+            return "Venda atualizada com sucesso.";
+        } else {
+            return "Erro ao atualizar a venda: venda não encontrada.";
+        }
     }
 
 

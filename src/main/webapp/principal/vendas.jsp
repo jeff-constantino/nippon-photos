@@ -30,6 +30,99 @@
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">
                             <div class="modal-header">
+                                <h5 class="modal-title" >Pesquisa de Vendas </h5>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="container-fluid">
+                                <div class="page-body">
+
+                                    <div class="row">
+                                        <div class="col-auto">
+                                            <span id="msg" style="color:#f2a654">${msg}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-body" >
+                                <div class="container-fluid">
+                                    <div class="page-body">
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <!-- Basic Form Inputs card start -->
+                                                <div class="card">
+                                                    <div class="card-block">
+
+                                                        <form class="form-material"  id="formBuscaVenda" method="get" action="<%= request.getContextPath() %>/ServletVendas">
+
+                                                            <div class="row">
+
+
+
+
+                                                                <div class="col-sm-1">
+                                                                    <label class="float-label" >ID:</label>
+                                                                    <span class="form-bar"></span>
+                                                                    <input type="text" class="form-control" id="idVenda" name="venda_id" placeholder="" >
+                                                                </div>
+
+                                                                <div>
+                                                                    <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="buscarVenda();">Pesquisar</button>
+                                                                    <%--  BOTOES MODAL busca--%>
+                                                                </div>
+                                                                <div style="overflow-x: hidden">
+                                                                    <div style="height: 300px; overflow-y: auto ">
+                                                                        <table class="table" id="tabelabuscavenda">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th scope="col">ID</th>
+                                                                                <th scope="col">Selecionar</th>
+
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+
+                                                                            </tbody>
+                                                                        </table>
+
+                                                                    </div>
+                                                                </div>
+
+
+                                                            </div>
+
+                                                        </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>
+                                <%--FIM MODAL BUSCA--%>
+                            </div>
+                        </div>
+                    </div>
+
+
+<%--                   TIRAR AQUI--%>
+
+
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="modalBuscaFuncionario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
                                 <h5 class="modal-title" >Pesquisa de Funcionário </h5>
 
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -56,7 +149,7 @@
                                                 <div class="card">
                                                     <div class="card-block">
 
-                                                        <form class="form-material"  id="formBuscaUser" method="get" action="<%= request.getContextPath() %>/ServletVendas">
+                                                        <form class="form-material"  id="formBuscaFuncionario" method="get" action="<%= request.getContextPath() %>/ServletVendas">
 
                                                             <div class="row">
 
@@ -76,13 +169,13 @@
                                                                 </div>
 
                                                                 <div>
-                                                                    <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="limparbuscaForm();" >Novo</button>
+                                                                    <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="limparbuscaFuncionario();" >Novo</button>
                                                                     <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="buscarFuncionario();">Pesquisar</button>
                                                                     <%--  BOTOES MODAL busca--%>
                                                                 </div>
                                                                 <div style="overflow-x: hidden">
                                                                     <div style="height: 300px; overflow-y: auto ">
-                                                                        <table class="table" id="tabelabusca">
+                                                                        <table class="table" id="tabelabuscafuncionario">
                                                                             <thead>
                                                                             <tr>
                                                                                 <th scope="col">ID</th>
@@ -135,13 +228,16 @@
 
                                 <h4 class="card-title">Vendas do Dia</h4>
 
-                                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalBuscaVenda">
+                                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalBuscaFuncionario">
                                     <h4>Buscar Funcionário</h4>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalBuscaVenda">
+                                    <h4>Buscar Venda</h4>
                                 </button>
                                 <div class="table-responsive"style="overflow-x: hidden">
                                     <table class="table" >
  <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                        <form action="<%= request.getContextPath() %>/ServletVendas" method="post" id="formBuscarUser2" name="formBuscarUser2" >
+                                        <form action="<%= request.getContextPath() %>/ServletVendas" method="post" id="formBuscarVenda" name="formBuscarVenda" >
                                             <input type="hidden" name="acao" acao value="">
                                             <div class="col-sm-1">
                                                 <label class="float-label" >VENDA ID:</label>
@@ -200,7 +296,8 @@
 
                                                 <div>
                                                     <button  class="btn btn-outline-success waves-effect waves-light" >Salvar</button>
-                                                    <button type="button"  class="btn btn-outline-danger waves-effect waves-light" onclick="criarDeleteComAjax();" >Excluir</button>
+                                                    <button type="button"  class="btn btn-outline-danger waves-effect waves-light" onclick="limparFormVendas();" >Limpar</button>
+                                                    <button type="button"  class="btn btn-outline-danger waves-effect waves-light" onclick="deletaVenda();" >Excluir</button>
                                                 </div>
 
                                             </div>
@@ -276,8 +373,118 @@
 <!-- End custom js for this page -->
 <SCRIPT type="text/javascript">
 
+    function deletaVenda(){
+        if (confirm('Deseja realmente excluir a venda?')){
+            var urlAction = document.getElementById('formBuscarVenda').action;
+            var venda_id = document.getElementById('venda_id').value;
+
+            $.ajax({
+                method: "get",
+                url: urlAction,
+                data: "venda_id="+ venda_id+ "&acao=deletarajax",
+                success : function (response){
+                    limparFormVendas();
+                    document.getElementById('msg').textContent=response;
+
+                }
 
 
+            }).fail(function (xhr, status, errorThrown){
+               alert('Erro ao Excluir a Venda :' +xhr.responseText);
+            });
+
+        }
+
+    }
+
+
+    function limparbuscaFuncionario(){
+        var elementos =document.getElementById("formBuscaFuncionario").elements;
+        for (p=0;p<elementos.length;p++){
+            elementos[p].value = '';
+        }
+
+    }
+    function limparFormVendas(){
+        var elementos =document.getElementById("formBuscarVenda").elements;
+        for (p=0;p<elementos.length;p++){
+            elementos[p].value = '';
+        }
+
+    }
+
+
+    function buscarVenda(){
+        var idVenda = document.getElementById('venda_id').value;
+        //valida que precisa ter valor para continuar BUSCANDO
+        if (idVenda != null && idVenda !='' && idVenda.trim() != ''){
+            var urlAction = document.getElementById('formBuscaVenda').action;
+            $.ajax({
+                method: 'GET',
+                url : urlAction,
+                data : "idVenda=" + idVenda + '&acao=buscaruserajax',
+                success : function (response){
+                    const json = JSON.parse(response);
+
+
+                    $('#tabelabuscavenda > tbody > tr').remove();
+                    for (var p = 0; p < json.length; p++){
+                        $('#tabelabuscavenda > tbody').append('<tr> <td>' + json[p].id + '</td> <td>' +json[p].nome+ '</td> <td> <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditar('+json[p].id+')">Selecionar</button></td></tr>');
+
+                    }
+                    document.getElementById('totalResultados').textContent = 'Resultados: '+json.length;
+
+
+
+                }
+
+            }).fail(function (xhr, status, errorThrown){
+                alert('Erro ao Pesquisar o Funcionário :'+xhr.responseText);
+            });
+
+        }
+
+    }
+
+
+
+    function buscarFuncionario(){
+        var nomeBusca = document.getElementById('nomeBusca').value;
+        //valida que precisa ter valor para continuar BUSCANDO
+        if (nomeBusca != null && nomeBusca !='' && nomeBusca.trim() != ''){
+            var urlAction = document.getElementById('formBuscaFuncionario').action;
+            $.ajax({
+                method: 'GET',
+                url : urlAction,
+                data : "nomeBusca=" + nomeBusca + '&acao=buscaruserajax',
+                success : function (response){
+                    const json = JSON.parse(response);
+
+
+                    $('#tabelabuscafuncionario > tbody > tr').remove();
+                    for (var p = 0; p < json.length; p++){
+                        $('#tabelabuscafuncionario > tbody').append('<tr> <td>' + json[p].id + '</td> <td>' +json[p].nome+ '</td> <td> <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditar('+json[p].id+')">Selecionar</button></td></tr>');
+
+                    }
+                    document.getElementById('totalResultados').textContent = 'Resultados: '+json.length;
+
+
+
+                }
+
+            }).fail(function (xhr, status, errorThrown){
+                alert('Erro ao Pesquisar o Funcionário :'+xhr.responseText);
+            });
+
+        }
+
+    }
+
+    function verEditar(id){
+        var urlAction = document.getElementById('formBuscaFuncionario').action;
+
+        window.location.href = urlAction + '?acao=buscarFunc&id='+id;
+    }
 
 
 

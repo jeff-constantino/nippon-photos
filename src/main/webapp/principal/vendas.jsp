@@ -290,35 +290,35 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <label style="color: #f2a654">DINHEIRO</label>
-                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold">
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_din" name="prod1_din" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: #f2a654">VALOR</label>
-                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_din_valor" name="prod1_din_valor">
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: #f2a654">DÉBITO</label>
-                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold">
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_deb" name="prod1_deb" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: #f2a654">VALOR</label>
-                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_deb_valor" name="prod1_deb_valor">
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: #f2a654">CREDITO</label>
-                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold">
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_cred" name="prod1_cred" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: #f2a654">VALOR</label>
-                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_cred_valor" name="prod1_cred_valor">
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: #f2a654">PIX</label>
-                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold">
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_pix" name="prod1_pix" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: #f2a654">VALOR</label>
-                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_pix_valor" name="prod1_pix_valor">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -328,35 +328,35 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <label STYLE="color: #00d25b">DINHEIRO</label>
-                                                            <input type="number" class="form-control" placeholder="" style="background-color: #73b307; color: black; font-weight: bold">
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #73b307; color: black; font-weight: bold" id="prod2_din" name="prod2_din" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label STYLE="color: #00d25b">VALOR</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled id="prod2_din_valor" name="prod2_din_valor">
                                                         </div>
                                                         <div class="col-6">
                                                             <label STYLE="color: #00d25b">DÉBITO</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold">
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" id="prod2_deb" name="prod2_deb" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label STYLE="color: #00d25b">VALOR</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled id="prod2_deb_valor" name="prod2_deb_valor">
                                                         </div>
                                                         <div class="col-6">
                                                             <label STYLE="color: #00d25b">CREDITO</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold">
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" id="prod2_cred" name="prod2_cred" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label STYLE="color: #00d25b">VALOR</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled id="prod2_cred_valor" name="prod2_cred_valor">
                                                         </div>
                                                         <div class="col-6">
                                                             <label STYLE="color: #00d25b">PIX</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold">
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" id="prod2_pix" name="prod2_pix" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label STYLE="color: #00d25b">VALOR</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled id="prod2_pix_valor" name="prod2_pix_valor">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -366,42 +366,45 @@
                                                     <div class="row">
                                                         <div class="col-6">
                                                             <label style="color: fuchsia">DINHEIRO</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold">
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" id="prod3_din" name="prod3_din" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: fuchsia">VALOR</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold" disabled>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" disabled id="prod3_din_valor" name="prod3_din_valor">
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: fuchsia">DÉBITO</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold">
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" id="prod3_deb" name="prod3_deb" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: fuchsia">VALOR</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold" disabled>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" disabled id="prod3_deb_valor" name="prod3_deb_valor">
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: fuchsia">CREDITO</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold">
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" id="prod3_cred" name="prod3_cred" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: fuchsia">VALOR</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold" disabled>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" disabled id="prod3_cred_valor" name="prod3_cred_valor">
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: fuchsia">PIX</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold">
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" id="prod3_pix" name="prod3_pix" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label style="color: fuchsia">VALOR</label>
-                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold" disabled>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" disabled id="prod3_pix_valor" name="prod3_pix_valor">
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <!-- Campo para SOBRAS -->
                                                 <div class="col-2">
                                                     <label>SOBRAS</label>
-                                                    <input type="number" class="form-control" placeholder="">
+                                                    <input type="number" class="form-control" id="sobras" name="sobras" placeholder="">
                                                 </div>
+
                                                 <div class="col-2">
                                                     <label>RIBBON</label>
                                                     <select class="form-select" id="ribbon" name="ribbon">
@@ -507,98 +510,108 @@
 <!-- plugins:js -->
 <jsp:include page="pluginsJS.jsp"></jsp:include>
 <!-- End custom js for this page -->
-<SCRIPT type="text/javascript">
+    <SCRIPT type="text/javascript">
 
-    function deletaVenda() {
-        const vendaId = document.getElementById('venda_id').value; // Obtém o ID da venda
-        if (confirm("Tem certeza que deseja excluir esta venda?")) {
+        function deletaVenda() {
+            const vendaId = document.getElementById('venda_id').value; // Obtém o ID da venda
+            if (confirm("Tem certeza que deseja excluir esta venda?")) {
+                $.ajax({
+                    method: 'POST',
+                    url: '<%= request.getContextPath() %>/ServletVendas',
+                    data: { acao: 'deletar', venda_id: vendaId },
+                    success: function(response) {
+                        alert("Venda excluída com sucesso!");
+                        location.reload(); // Atualiza a página
+                    },
+                    error: function(xhr, status, errorThrown) {
+                        alert('Erro ao excluir a venda: ' + xhr.responseText);
+                    }
+                });
+            }
+        }
+
+        function limparbuscaFuncionario() {
+            var elementos = document.getElementById("formBuscaFuncionario").elements;
+            for (var p = 0; p < elementos.length; p++) {
+                elementos[p].value = '';
+            }
+        }
+
+        function limparFormVendas() {
+            document.getElementById('formBuscarVenda').reset(); // Limpa o formulário
+            // Habilita os botões
+            document.getElementById('botaoSalvar').disabled = false;
+            document.getElementById('botaoExcluir').disabled = false;
+        }
+
+        function buscarFunc() {
+            var nomeBusca = document.getElementById('nomeBusca').value;
+
+            if (nomeBusca != null && nomeBusca.trim() != '') {
+                var urlAction = document.getElementById('formBuscaFuncionario').action;
+
+                $.ajax({
+                    method: 'GET',
+                    url: urlAction,
+                    data: "nome=" + encodeURIComponent(nomeBusca) + '&acao=buscaruserajax',
+                    dataType: 'json',
+                    success: function(json) {
+                        $('#tabelabuscafuncionario > tbody > tr').remove();
+                        for (var p = 0; p < json.length; p++) {
+                            $('#tabelabuscafuncionario > tbody').append(
+                                '<tr> <td>' + json[p].id + '</td> <td>' + json[p].nome +
+                                '</td> <td> <button type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditar(' + json[p].id + ', \'' + json[p].nome + '\')">Selecionar</button></td></tr>'
+                            );
+                        }
+                        document.getElementById('totalResultados').textContent = 'Resultados: ' + json.length;
+                    },
+                    error: function(xhr, status, errorThrown) {
+                        alert('Erro ao Pesquisar o Funcionário: ' + xhr.responseText);
+                    }
+                });
+            }
+        }
+
+        function verEditar(id, nome) {
+            document.getElementById('vendedor_id').value = id;
+            document.getElementById('vendedor').value = nome;
+            $('#modalBuscaFuncionario').modal('hide'); // Fecha o modal
+        }
+
+        function salvarVenda() {
+            var formData = $('#formBuscarVenda').serialize(); // Coleta os dados do formulário
+            var urlAction = document.getElementById('formBuscarVenda').action;
+
             $.ajax({
                 method: 'POST',
-                url: '<%= request.getContextPath() %>/ServletVendas',
-                data: { acao: 'deletar', venda_id: vendaId }, // Envia a ação e o ID
+                url: urlAction,
+                data: formData,
                 success: function(response) {
-                    alert("Venda excluída com sucesso!");
-                    // Redirecione ou atualize a página conforme necessário
+                    // Atualiza a tag ${msg} com a resposta
+                    $('#msg').html(response);
+
+                    // Limpa o formulário
+                    limparFormVendas();
                 },
                 error: function(xhr, status, errorThrown) {
-                    alert('Erro ao excluir a venda: ' + xhr.responseText);
+                    alert('Erro ao salvar a venda: ' + xhr.responseText);
                 }
             });
         }
-    }
 
-
-
-    function limparbuscaFuncionario(){
-        var elementos =document.getElementById("formBuscaFuncionario").elements;
-        for (p=0;p<elementos.length;p++){
-            elementos[p].value = '';
+        function limparFormVendas() {
+            // Limpa os campos do formulário
+            $('#formBuscarVenda')[0].reset();
         }
 
-    }
-    function limparFormVendas() {
-        document.getElementById('formBuscarVenda').reset(); // Reseta todos os campos do formulário
-    }
-
-
-    function buscarFunc() {
-        var nomeBusca = document.getElementById('nomeBusca').value; // Referenciando o id 'nomeBusca'
-
-        // Valida que precisa ter valor para continuar BUSCANDO
-        if (nomeBusca != null && nomeBusca.trim() != '') {
-            var urlAction = document.getElementById('formBuscaFuncionario').action;
-
-            $.ajax({
-                method: 'GET',
-                url: urlAction,
-                data: "nome=" + encodeURIComponent(nomeBusca) + '&acao=buscaruserajax', // Envia o parâmetro 'nome'
-                dataType: 'json', // Especifica que a resposta esperada é um JSON
-                success: function (json) {
-                    console.log('Resposta do servidor:', json); // Verifique o que está sendo retornado aqui
-
-                    // Limpa a tabela de resultados
-                    $('#tabelaresultados > tbody > tr').remove();
-
-                    // Adiciona os novos resultados na tabela
-                    for (var p = 0; p < json.length; p++) {
-                        $('#tabelabuscafuncionario > tbody').append(
-                            '<tr> <td>' + json[p].id + '</td> <td>' + json[p].nome +
-                            '</td> <td> <button type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditar(' + json[p].id + ', \'' + json[p].nome + '\')">Selecionar</button></td></tr>'
-                        );
-                    }
-
-                    // Atualiza o total de resultados
-                    document.getElementById('totalResultados').textContent = 'Resultados: ' + json.length;
-                },
-                error: function (xhr, status, errorThrown) {
-                    alert('Erro ao Pesquisar o Funcionário: ' + xhr.responseText);
-                }
-            });
-        }
-    }
 
 
 
 
-
-
-
-    function verEditar(id, nome) {
-
-
-        document.getElementById('vendedor_id').value = id;
-        document.getElementById('vendedor').value = nome;
-        // Fecha o modal
-        $('#modalBuscaFuncionario').modal('hide');
-
-    }
+    </SCRIPT>
 
 
 
 
-
-
-
-</SCRIPT>
 </body>
 </html>

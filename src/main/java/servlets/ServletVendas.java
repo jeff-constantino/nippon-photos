@@ -12,6 +12,7 @@ import model.ModelLogin;
 import model.ModelVendas;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,21 +137,58 @@ public class ServletVendas extends ServletGenericUtil {
     }
 
 
-    @Override
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         try {
+            String msg = "Operação realizada com sucesso!";
+            // Obtém os parâmetros do request
             String venda_id = request.getParameter("venda_id");
             String nome = request.getParameter("nome");
-            String vendedor_id_str = request.getParameter("vendedor_id"); // O id do vendedor pai (de model_login)
+            String vendedor_id_str = request.getParameter("vendedor_id");
 
-            // Criar um objeto ModelVendas
+            String prod1_din_str = request.getParameter("prod1_din");
+            String prod1_deb_str = request.getParameter("prod1_deb");
+            String prod1_cred_str = request.getParameter("prod1_cred");
+            String prod1_pix_str = request.getParameter("prod1_pix");
+
+            String prod2_din_str = request.getParameter("prod2_din");
+            String prod2_deb_str = request.getParameter("prod2_deb");
+            String prod2_cred_str = request.getParameter("prod2_cred");
+            String prod2_pix_str = request.getParameter("prod2_pix");
+
+            String prod3_din_str = request.getParameter("prod3_din");
+            String prod3_deb_str = request.getParameter("prod3_deb");
+            String prod3_cred_str = request.getParameter("prod3_cred");
+            String prod3_pix_str = request.getParameter("prod3_pix");
+
+            String sobras_str = request.getParameter("sobras");
+
             ModelVendas modelVendas = new ModelVendas();
+
             modelVendas.setVenda_id(venda_id != null && !venda_id.isEmpty() ? Long.parseLong(venda_id) : null);
 
-            // Verifica se o vendedor_id_str não é nulo ou vazio e converte para Long, se válido
             Long vendedor_id = vendedor_id_str != null && !vendedor_id_str.isEmpty() ? Long.parseLong(vendedor_id_str) : null;
-            modelVendas.setVendedor_id(vendedor_id);  // Atribuindo o id correto (chave estrangeira vendedor_id)
+            modelVendas.setVendedor_id(vendedor_id);
             modelVendas.setNome(nome);
+
+            // Settar os campos novos de produtos
+            modelVendas.setProd1_din(prod1_din_str != null && !prod1_din_str.isEmpty() ? Integer.parseInt(prod1_din_str) : 0);
+            modelVendas.setProd1_deb(prod1_deb_str != null && !prod1_deb_str.isEmpty() ? Integer.parseInt(prod1_deb_str) : 0);
+            modelVendas.setProd1_cred(prod1_cred_str != null && !prod1_cred_str.isEmpty() ? Integer.parseInt(prod1_cred_str) : 0);
+            modelVendas.setProd1_pix(prod1_pix_str != null && !prod1_pix_str.isEmpty() ? Integer.parseInt(prod1_pix_str) : 0);
+
+            modelVendas.setProd2_din(prod2_din_str != null && !prod2_din_str.isEmpty() ? Integer.parseInt(prod2_din_str) : 0);
+            modelVendas.setProd2_deb(prod2_deb_str != null && !prod2_deb_str.isEmpty() ? Integer.parseInt(prod2_deb_str) : 0);
+            modelVendas.setProd2_cred(prod2_cred_str != null && !prod2_cred_str.isEmpty() ? Integer.parseInt(prod2_cred_str) : 0);
+            modelVendas.setProd2_pix(prod2_pix_str != null && !prod2_pix_str.isEmpty() ? Integer.parseInt(prod2_pix_str) : 0);
+
+            modelVendas.setProd3_din(prod3_din_str != null && !prod3_din_str.isEmpty() ? Integer.parseInt(prod3_din_str) : 0);
+            modelVendas.setProd3_deb(prod3_deb_str != null && !prod3_deb_str.isEmpty() ? Integer.parseInt(prod3_deb_str) : 0);
+            modelVendas.setProd3_cred(prod3_cred_str != null && !prod3_cred_str.isEmpty() ? Integer.parseInt(prod3_cred_str) : 0);
+            modelVendas.setProd3_pix(prod3_pix_str != null && !prod3_pix_str.isEmpty() ? Integer.parseInt(prod3_pix_str) : 0);
+
+            modelVendas.setSobras(sobras_str != null && !sobras_str.isEmpty() ? Integer.parseInt(sobras_str) : 0);
 
             // Obtém o usuário logado
             Long userLogado = super.getUserLogado(request);

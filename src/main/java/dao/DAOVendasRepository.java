@@ -36,69 +36,89 @@ public class DAOVendasRepository {
     }
 
     public ModelVendas gravarVenda(ModelVendas modelVendas, Long userLogado) throws Exception {
-        // Verifica se o venda_id não é nulo e tenta consultar a venda existente
         if (modelVendas.getVenda_id() != null) {
-            // Tenta consultar a venda existente com o venda_id e userLogado
             ModelVendas vendaExistente = consultaVenda(modelVendas.getVenda_id(), userLogado);
 
             if (vendaExistente != null) {
-                // Se a venda existir, atualiza e retorna o objeto atualizado
                 return atualizarVenda(vendaExistente.getVenda_id(), modelVendas, userLogado);
             } else {
-                // Se a venda não existir, lança uma exceção ou lida conforme necessário
                 throw new Exception("Venda com o ID " + modelVendas.getVenda_id() + " não encontrada.");
             }
         } else {
-            // Caso venda_id seja nulo, insere uma nova venda
-            String sql = "INSERT INTO vendas(vendedor_id, nome) VALUES (?, ?)";
+            String sql = "INSERT INTO vendas(vendedor_id, nome, prod1_din, prod1_deb, prod1_cred, prod1_pix, "
+                    + "prod2_din, prod2_deb, prod2_cred, prod2_pix, prod3_din, prod3_deb, prod3_cred, prod3_pix, sobras) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
             PreparedStatement preparedSql = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            // Configura os parâmetros para a inserção
             preparedSql.setLong(1, modelVendas.getVendedor_id());
             preparedSql.setString(2, modelVendas.getNome());
+            preparedSql.setInt(3, modelVendas.getProd1_din());
+            preparedSql.setInt(4, modelVendas.getProd1_deb());
+            preparedSql.setInt(5, modelVendas.getProd1_cred());
+            preparedSql.setInt(6, modelVendas.getProd1_pix());
+            preparedSql.setInt(7, modelVendas.getProd2_din());
+            preparedSql.setInt(8, modelVendas.getProd2_deb());
+            preparedSql.setInt(9, modelVendas.getProd2_cred());
+            preparedSql.setInt(10, modelVendas.getProd2_pix());
+            preparedSql.setInt(11, modelVendas.getProd3_din());
+            preparedSql.setInt(12, modelVendas.getProd3_deb());
+            preparedSql.setInt(13, modelVendas.getProd3_cred());
+            preparedSql.setInt(14, modelVendas.getProd3_pix());
+            preparedSql.setInt(15, modelVendas.getSobras());
 
-            // Executa a inserção
             preparedSql.executeUpdate();
 
-            // Recupera o ID gerado automaticamente
             ResultSet generatedKeys = preparedSql.getGeneratedKeys();
             if (generatedKeys.next()) {
-                long generatedId = generatedKeys.getLong(1); // Primeiro coluna retorna o ID
-                modelVendas.setVenda_id(generatedId); // Define o ID gerado no modelo
+                long generatedId = generatedKeys.getLong(1);
+                modelVendas.setVenda_id(generatedId);
             } else {
                 throw new SQLException("Falha ao obter o ID gerado.");
             }
 
-            // Confirma a transação
             connection.commit();
-
-            // Retorna o ModelVendas recém-criado
-            return modelVendas;
+            return this.consultaVenda(modelVendas.getVenda_id(), userLogado);
         }
     }
+
 
 
 
     private ModelVendas atualizarVenda(Long venda_id, ModelVendas modelVendas, Long userLogado) throws Exception {
-        String sql = "UPDATE vendas SET vendedor_id = ?, nome = ? WHERE venda_id = ?";
+        String sql = "UPDATE vendas SET vendedor_id = ?, nome = ?, prod1_din = ?, prod1_deb = ?, prod1_cred = ?, prod1_pix = ?, "
+                + "prod2_din = ?, prod2_deb = ?, prod2_cred = ?, prod2_pix = ?, prod3_din = ?, prod3_deb = ?, prod3_cred = ?, prod3_pix = ?, sobras = ? "
+                + "WHERE venda_id = ?";
+
         PreparedStatement preparedSql = connection.prepareStatement(sql);
 
-        // Configura os parâmetros do PreparedStatement
         preparedSql.setLong(1, modelVendas.getVendedor_id());
         preparedSql.setString(2, modelVendas.getNome());
-        preparedSql.setLong(3, venda_id);
+        preparedSql.setInt(3, modelVendas.getProd1_din());
+        preparedSql.setInt(4, modelVendas.getProd1_deb());
+        preparedSql.setInt(5, modelVendas.getProd1_cred());
+        preparedSql.setInt(6, modelVendas.getProd1_pix());
+        preparedSql.setInt(7, modelVendas.getProd2_din());
+        preparedSql.setInt(8, modelVendas.getProd2_deb());
+        preparedSql.setInt(9, modelVendas.getProd2_cred());
+        preparedSql.setInt(10, modelVendas.getProd2_pix());
+        preparedSql.setInt(11, modelVendas.getProd3_din());
+        preparedSql.setInt(12, modelVendas.getProd3_deb());
+        preparedSql.setInt(13, modelVendas.getProd3_cred());
+        preparedSql.setInt(14, modelVendas.getProd3_pix());
+        preparedSql.setInt(15, modelVendas.getSobras());
+        preparedSql.setLong(16, venda_id);
 
-        // Executa a atualização
         int linhasAfetadas = preparedSql.executeUpdate();
-        connection.commit(); // Confirma a transação
+        connection.commit();
 
-        // Retorna o ModelVendas atualizado ou lança uma exceção se não houver linhas afetadas
         if (linhasAfetadas > 0) {
-            return consultaVenda(venda_id, userLogado); // Passa o segundo parâmetro
+            return consultaVenda(venda_id, userLogado);
         } else {
             throw new Exception("Erro ao atualizar a venda. A venda pode não existir.");
         }
     }
+
 
 
 

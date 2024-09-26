@@ -12,6 +12,7 @@ import model.ModelLogin;
 import model.ModelVendas;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/ServletVendas")
@@ -35,17 +36,46 @@ public class ServletVendas extends ServletGenericUtil {
                         request.setAttribute("msg", "Venda Excluída!");
                         request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
                     }
-                } else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscaruserajax")) {
-                    String nomeBusca = request.getParameter("nomeBusca");
-                    List<ModelLogin> dadosJsonUser = daoUsuarioRepository.consultaUsuarioList(nomeBusca, super.getUserLogado(request));
+                }
+                // Ação de buscar usuários via AJAX
+                else if (acao.equalsIgnoreCase("buscaruserajax")) {
+                    String nome = request.getParameter("nome");
+                    System.out.println("Buscando funcionários com o nome: " + nome);
 
+                    List<ModelLogin> dadosJsonUser = new ArrayList<>();
+                    try {
+                        dadosJsonUser = daoVendas.consultaFuncionarioList(nome);
+                        System.out.println("Número de resultados encontrados: " + dadosJsonUser.size());
+                    } catch (Exception e) {
+                        System.err.println("Erro na busca: " + e.getMessage());
+                        // Responde com erro em formato JSON
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"error\":\"Erro ao buscar funcionários: " + e.getMessage() + "\"}");
+                        return;
+                    }
+
+                    // Convertendo a lista para JSON
                     ObjectMapper mapper = new ObjectMapper();
                     String json = mapper.writeValueAsString(dadosJsonUser);
+
+                    // Enviando a resposta JSON
+                    response.setContentType("application/json"); // Define o tipo de conteúdo
                     response.getWriter().write(json);
-
-
                 }
 
+                // Ação de buscar para editar
+                else if (acao.equalsIgnoreCase("buscarEditar")) {
+                    String id = request.getParameter("id");
+                    ModelLogin modelLogin = daoUsuarioRepository.consultarUsuarioID(id, super.getUserLogado(request));
+
+                    List<ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioList(super.getUserLogado(request));
+                    request.setAttribute("modelLogins", modelLogins);
+
+                    request.setAttribute("msg", "EDITAR O FUNCIONÁRIO");
+                    request.setAttribute("modelLogin", modelLogin); // para manter os dados na tela
+                    request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
+                    request.getRequestDispatcher("/principal/vendas.jsp").forward(request, response);
+                }
                 // Ação de deletar via Ajax
                 else if (acao.equals("deletarajax")) {
                     String venda_id = request.getParameter("venda_id");
@@ -54,9 +84,8 @@ public class ServletVendas extends ServletGenericUtil {
                         response.getWriter().write("Venda Excluída!");
                     }
                 }
-
-                // Ação de buscar para editar
-                else if (acao.equalsIgnoreCase("buscarEditar")) {
+                // Ação de buscar para editar venda
+                else if (acao.equalsIgnoreCase("CadVenda")) {
                     String vendaIdStr = request.getParameter("venda_id");
                     Long idVenda = null;
 
@@ -77,7 +106,6 @@ public class ServletVendas extends ServletGenericUtil {
                         // Define os atributos e redireciona para a página de edição
                         request.setAttribute("modelVendas", modelVendas);
                         request.setAttribute("msg", "EDITAR A VENDA");
-                        request.setAttribute("modelVendas", modelVendas); // Para manter os dados na tela
                         request.setAttribute("totalPagina", daoVendas.totalPagina(this.getUserLogado(request)));
 
                         request.getRequestDispatcher("/principal/vendas.jsp").forward(request, response);
@@ -87,43 +115,15 @@ public class ServletVendas extends ServletGenericUtil {
                         request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
                     }
                 }
-
-            } else if (acao.equalsIgnoreCase("buscarFunc")) {
-                String idFuncStr = request.getParameter("id");
-                String nome = request.getParameter("nome");
-                Long idFunc = null;
-
-                // Verifica e tenta converter venda_id para Long
-                if (idFuncStr != null && !idFuncStr.isEmpty()) {
-                    try {
-                        idFunc = Long.parseLong(idFuncStr);
-                    } catch (NumberFormatException e) {
-                        throw new ServletException("ID de venda inválido: " + idFuncStr);
-                    }
-                }
-
-                // Se o idVenda não for nulo, prossegue com a busca para edição
-                if (idFunc != null) {
-                    ModelVendas modelVendas = daoVendas.consultaVenda(idFunc, super.getUserLogado(request));
-                    List<ModelVendas> modelVendasList = daoVendas.listaVendas(super.getUserLogado(request));
-
-                    // Define os atributos e redireciona para a página de edição
-                    request.setAttribute("modelVendas", modelVendas);
-                    request.setAttribute("msg", "Cadastrar Venda");
-                    request.setAttribute("nome", nome);
-                    request.setAttribute("modelVendas", modelVendas); // Para manter os dados na tela
-                    request.setAttribute("totalPagina", daoVendas.totalPagina(this.getUserLogado(request)));
-
-                    request.getRequestDispatcher("/principal/vendas.jsp").forward(request, response);
-                } else {
-                    // Caso o ID seja inválido ou nulo
-                    request.setAttribute("msg", "ID de Funcionário inválido.");
+                // Caso a ação não seja reconhecida
+                else {
+                    request.setAttribute("msg", "Ação não reconhecida.");
                     request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
                 }
-            }
-            {
+
+            } else {
                 // Ação ou ID de venda não especificados
-                request.setAttribute("msg", "Ação ou ID de venda não especificados.");
+                request.setAttribute("msg", "Ação não especificada.");
                 request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
             }
 
@@ -133,8 +133,8 @@ public class ServletVendas extends ServletGenericUtil {
             request.setAttribute("msg", e.getMessage());
             redirecionar.forward(request, response);
         }
-
     }
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

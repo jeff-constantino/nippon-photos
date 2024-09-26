@@ -56,7 +56,7 @@
                                                 <div class="card">
                                                     <div class="card-block">
 
-                                                        <form class="form-material"  id="formBuscaVenda" method="get" action="<%= request.getContextPath() %>/ServletVendas">
+                                                        <form class="form-material" id="formBuscaVenda" method="get" action="<%= request.getContextPath() %>/ServletVendas">
 
                                                             <div class="row">
 
@@ -79,7 +79,7 @@
                                                                             <thead>
                                                                             <tr>
                                                                                 <th scope="col">ID</th>
-                                                                                <th scope="col">Selecionar</th>
+                                                                                <th scope="col">OPÇÕES</th>
 
                                                                             </tr>
                                                                             </thead>
@@ -149,18 +149,10 @@
                                                 <div class="card">
                                                     <div class="card-block">
 
-                                                        <form class="form-material"  id="formBuscaFuncionario" method="get" action="<%= request.getContextPath() %>/ServletVendas">
+                                                        <form class="form-material" id="formBuscaFuncionario" method="get" action="<%= request.getContextPath() %>/ServletVendas">
 
                                                             <div class="row">
 
-
-
-
-                                                                <div class="col-sm-1">
-                                                                    <label class="float-label" >ID:</label>
-                                                                    <span class="form-bar"></span>
-                                                                    <input type="text" class="form-control" id="idBusca" name="id" placeholder="" >
-                                                                </div>
                                                                 <div class="col-4">
                                                                     <label class="float-label">FUNCIONÁRIO:</label>
                                                                     <span class="form-bar"></span>
@@ -169,8 +161,13 @@
                                                                 </div>
 
                                                                 <div>
-                                                                    <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="limparbuscaFuncionario();" >Novo</button>
-                                                                    <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="buscarFuncionario();">Pesquisar</button>
+
+
+                                                                        <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="limparbuscaFuncionario();" >Novo</button>
+                                                                        <button type="button" class="btn btn-outline-success waves-effect waves-light" onclick="buscarFunc();">Pesquisar</button>
+
+
+
                                                                     <%--  BOTOES MODAL busca--%>
                                                                 </div>
                                                                 <div style="overflow-x: hidden">
@@ -180,7 +177,7 @@
                                                                             <tr>
                                                                                 <th scope="col">ID</th>
                                                                                 <th scope="col">NOME</th>
-                                                                                <th scope="col">Selecionar</th>
+                                                                                <th scope="col">OPÇÕES</th>
 
                                                                             </tr>
                                                                             </thead>
@@ -237,72 +234,53 @@
                                 <div class="table-responsive"style="overflow-x: hidden">
                                     <table class="table" >
  <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                        <form action="<%= request.getContextPath() %>/ServletVendas" method="post" id="formBuscarVenda" name="formBuscarVenda" >
-                                            <input type="hidden" name="acao" acao value="">
+                                        <form action="<%= request.getContextPath() %>/ServletVendas" method="post" id="formBuscarVenda" name="formBuscarVenda">
+                                            <input type="hidden" name="acao" value="">
                                             <div class="col-sm-1">
-                                                <label class="float-label" >VENDA ID:</label>
+                                                <label class="float-label">VENDA ID:</label>
                                                 <span class="form-bar"></span>
-                                                <input type="text" class="form-control" id="venda_id" name="venda_id" placeholder=""  readonly value="${modelVendas.venda_id}">
+                                                <input type="text" class="form-control" id="venda_id" name="venda_id" placeholder="" readonly value="${modelVendas.venda_id}">
                                             </div>
                                             <div class="col-6">
                                                 <div class="col-auto">
-                                                    <span span style="color:#1ad76b">${msg}</span>
+                                                    <span style="color:#1ad76b">${msg}</span>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-3">
-                                                    <label for="dataVenda">Data
-                                                        da Venda</label>
-                                                    <input type="date"
-                                                           class="form-control"
-                                                           id="dataVenda"
-                                                           name="dataVenda"
-                                                           >
+                                                    <label for="dataVenda">Data da Venda</label>
+                                                    <input type="date" class="form-control" id="dataVenda" name="dataVenda">
                                                 </div>
 
                                                 <div class="col-sm-1">
-                                                    <label class="float-label" >ID:</label>
+                                                    <label class="float-label">ID:</label>
                                                     <span class="form-bar"></span>
-                                                    <input type="text" class="form-control" id="vendedor_id" name="vendedor_id"   value="${modelVendas.vendedor_id}">
+                                                    <input type="text" class="form-control" id="vendedor_id" name="vendedor_id" placeholder="" readonly>
                                                 </div>
                                                 <div class="col-6">
                                                     <label class="float-label">FUNCIONÁRIO:</label>
                                                     <span class="form-bar"></span>
-                                                    <input type="text" class="form-control" id="vendedor" name="nome" placeholder=""  style="background-color: black" value="${modelVendas.nome}">
-
+                                                    <input type="text" class="form-control" id="vendedor" name="nome" placeholder="" style="background-color: black" readonly>
                                                 </div>
+
                                                 <div class="col-2">
                                                     <label class="float-label">TOTAL DE FOTOS:</label>
                                                     <span class="form-bar"></span>
-                                                    <input type="text" class="form-control" id="nome" name="nome" placeholder=""  style="background-color: black">
-
+                                                    <input type="text" class="form-control" id="nome" name="nome" placeholder="" style="background-color: black">
                                                 </div>
-<%--inicio dos produtos      --%>
-<%--                                                <div style="overflow-x: hidden">--%>
-<%--                                                    <div style="overflow-y: auto ">--%>
-<%--                                                        <table class="table" id="NADA">--%>
-<%--                                                            <thead>--%>
-<%--                                                            <tr>--%>
-<%--                                                                <th scope="col">FOTOS</th>--%>
-<%--                                                                <th scope="col">ENCARTES</th>--%>
-<%--                                                                <th scope="col">DIGITAIS</th>--%>
-<%--                                                            </tr>--%>
-<%--                                                            </thead>--%>
-<%--                                                        </table>--%>
-<%--                                                    </div>--%>
-<%--                                                </div>--%>
 
                                                 <br>
 
                                                 <div>
-                                                    <button  class="btn btn-outline-success waves-effect waves-light" >Salvar</button>
-                                                    <button type="button"  class="btn btn-outline-danger waves-effect waves-light" onclick="limparFormVendas();" >Limpar</button>
-                                                    <button type="button"  class="btn btn-outline-danger waves-effect waves-light" onclick="deletaVenda();" >Excluir</button>
+                                                    <button class="btn btn-outline-success waves-effect waves-light">Salvar</button>
+                                                    <button type="button" class="btn btn-outline-danger waves-effect waves-light" onclick="limparFormVendas();">Limpar</button>
+                                                    <button type="button" class="btn btn-outline-danger waves-effect waves-light" onclick="deletaVenda();">Excluir</button>
                                                 </div>
 
                                             </div>
-
                                         </form>
+
+
 
                                     </table>
                                     <h5>Lançamentos do Dia:</h5>
@@ -373,29 +351,24 @@
 <!-- End custom js for this page -->
 <SCRIPT type="text/javascript">
 
-    function deletaVenda(){
-        if (confirm('Deseja realmente excluir a venda?')){
-            var urlAction = document.getElementById('formBuscarVenda').action;
-            var venda_id = document.getElementById('venda_id').value;
-
+    function deletaVenda() {
+        const vendaId = document.getElementById('venda_id').value; // Obtém o ID da venda
+        if (confirm("Tem certeza que deseja excluir esta venda?")) {
             $.ajax({
-                method: "get",
-                url: urlAction,
-                data: "venda_id="+ venda_id+ "&acao=deletarajax",
-                success : function (response){
-                    limparFormVendas();
-                    document.getElementById('msg').textContent=response;
-
+                method: 'POST',
+                url: '<%= request.getContextPath() %>/ServletVendas',
+                data: { acao: 'deletar', venda_id: vendaId }, // Envia a ação e o ID
+                success: function(response) {
+                    alert("Venda excluída com sucesso!");
+                    // Redirecione ou atualize a página conforme necessário
+                },
+                error: function(xhr, status, errorThrown) {
+                    alert('Erro ao excluir a venda: ' + xhr.responseText);
                 }
-
-
-            }).fail(function (xhr, status, errorThrown){
-               alert('Erro ao Excluir a Venda :' +xhr.responseText);
             });
-
         }
-
     }
+
 
 
     function limparbuscaFuncionario(){
@@ -405,86 +378,66 @@
         }
 
     }
-    function limparFormVendas(){
-        var elementos =document.getElementById("formBuscarVenda").elements;
-        for (p=0;p<elementos.length;p++){
-            elementos[p].value = '';
-        }
-
+    function limparFormVendas() {
+        document.getElementById('formBuscarVenda').reset(); // Reseta todos os campos do formulário
     }
 
 
-    function buscarVenda(){
-        var idVenda = document.getElementById('venda_id').value;
-        //valida que precisa ter valor para continuar BUSCANDO
-        if (idVenda != null && idVenda !='' && idVenda.trim() != ''){
-            var urlAction = document.getElementById('formBuscaVenda').action;
-            $.ajax({
-                method: 'GET',
-                url : urlAction,
-                data : "idVenda=" + idVenda + '&acao=buscaruserajax',
-                success : function (response){
-                    const json = JSON.parse(response);
+    function buscarFunc() {
+        var nomeBusca = document.getElementById('nomeBusca').value; // Referenciando o id 'nomeBusca'
 
-
-                    $('#tabelabuscavenda > tbody > tr').remove();
-                    for (var p = 0; p < json.length; p++){
-                        $('#tabelabuscavenda > tbody').append('<tr> <td>' + json[p].id + '</td> <td>' +json[p].nome+ '</td> <td> <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditar('+json[p].id+')">Selecionar</button></td></tr>');
-
-                    }
-                    document.getElementById('totalResultados').textContent = 'Resultados: '+json.length;
-
-
-
-                }
-
-            }).fail(function (xhr, status, errorThrown){
-                alert('Erro ao Pesquisar o Funcionário :'+xhr.responseText);
-            });
-
-        }
-
-    }
-
-
-
-    function buscarFuncionario(){
-        var nomeBusca = document.getElementById('nomeBusca').value;
-        //valida que precisa ter valor para continuar BUSCANDO
-        if (nomeBusca != null && nomeBusca !='' && nomeBusca.trim() != ''){
+        // Valida que precisa ter valor para continuar BUSCANDO
+        if (nomeBusca != null && nomeBusca.trim() != '') {
             var urlAction = document.getElementById('formBuscaFuncionario').action;
+
             $.ajax({
                 method: 'GET',
-                url : urlAction,
-                data : "nomeBusca=" + nomeBusca + '&acao=buscaruserajax',
-                success : function (response){
-                    const json = JSON.parse(response);
+                url: urlAction,
+                data: "nome=" + encodeURIComponent(nomeBusca) + '&acao=buscaruserajax', // Envia o parâmetro 'nome'
+                dataType: 'json', // Especifica que a resposta esperada é um JSON
+                success: function (json) {
+                    console.log('Resposta do servidor:', json); // Verifique o que está sendo retornado aqui
 
+                    // Limpa a tabela de resultados
+                    $('#tabelaresultados > tbody > tr').remove();
 
-                    $('#tabelabuscafuncionario > tbody > tr').remove();
-                    for (var p = 0; p < json.length; p++){
-                        $('#tabelabuscafuncionario > tbody').append('<tr> <td>' + json[p].id + '</td> <td>' +json[p].nome+ '</td> <td> <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditar('+json[p].id+')">Selecionar</button></td></tr>');
-
+                    // Adiciona os novos resultados na tabela
+                    for (var p = 0; p < json.length; p++) {
+                        $('#tabelabuscafuncionario > tbody').append(
+                            '<tr> <td>' + json[p].id + '</td> <td>' + json[p].nome +
+                            '</td> <td> <button type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditar(' + json[p].id + ', \'' + json[p].nome + '\')">Selecionar</button></td></tr>'
+                        );
                     }
-                    document.getElementById('totalResultados').textContent = 'Resultados: '+json.length;
 
-
-
+                    // Atualiza o total de resultados
+                    document.getElementById('totalResultados').textContent = 'Resultados: ' + json.length;
+                },
+                error: function (xhr, status, errorThrown) {
+                    alert('Erro ao Pesquisar o Funcionário: ' + xhr.responseText);
                 }
-
-            }).fail(function (xhr, status, errorThrown){
-                alert('Erro ao Pesquisar o Funcionário :'+xhr.responseText);
             });
-
         }
+    }
+
+
+
+
+
+
+
+    function verEditar(id, nome) {
+
+
+        document.getElementById('vendedor_id').value = id;
+        document.getElementById('vendedor').value = nome;
+        // Fecha o modal
+        $('#modalBuscaFuncionario').modal('hide');
 
     }
 
-    function verEditar(id){
-        var urlAction = document.getElementById('formBuscaFuncionario').action;
 
-        window.location.href = urlAction + '?acao=buscarFunc&id='+id;
-    }
+
+
 
 
 

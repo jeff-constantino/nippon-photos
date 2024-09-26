@@ -482,7 +482,7 @@
 
 
     function verEditar(id){
-        var urlAction = document.getElementById('formBuscaUser').action;
+        var urlAction = document.getElementById('formBuscaFuncionario').action;
 
         window.location.href = urlAction + '?acao=buscarEditar&id='+id;
     }

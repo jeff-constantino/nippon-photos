@@ -128,6 +128,29 @@ public class DAOVendasRepository {
         }
         return modelVendas;
     }
+    public List<ModelLogin> consultaFuncionarioList(String nome) throws Exception {
+        List<ModelLogin> retorno = new ArrayList<ModelLogin>();
+        String sql = "SELECT * FROM model_login WHERE UPPER(nome) LIKE UPPER(?) AND useradmin IS FALSE ORDER BY status";
+
+        try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
+            preparedSql.setString(1, "%" + nome + "%");
+            ResultSet resultSet = preparedSql.executeQuery();
+
+            while (resultSet.next()) {
+                ModelLogin modelLogin = new ModelLogin();
+                modelLogin.setId(resultSet.getLong("id"));
+                modelLogin.setNome(resultSet.getString("nome"));
+                retorno.add(modelLogin);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao executar a consulta: " + e.getMessage());
+            throw e; // Lança a exceção novamente para ser tratada na servlet
+        }
+
+        return retorno;
+    }
+
+
 
 
 

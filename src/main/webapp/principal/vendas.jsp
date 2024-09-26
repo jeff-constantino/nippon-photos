@@ -1,4 +1,5 @@
-<%@ page import="model.ModelLogin" %><%--
+<%@ page import="model.ModelLogin" %>
+<%@ page import="model.ModelVendas" %><%--
   Created by IntelliJ IDEA.
   User: Jeff Constantino
   Date: 15/09/2024
@@ -239,7 +240,7 @@
                                             <div class="col-sm-1">
                                                 <label class="float-label">VENDA ID:</label>
                                                 <span class="form-bar"></span>
-                                                <input type="text" class="form-control" id="venda_id" name="venda_id" placeholder="" readonly value="${modelVendas.venda_id}">
+                                                <input type="text" class="form-control" id="venda_id" name="venda_id" placeholder="" style="background-color: black" readonly value="${modelVendas.venda_id}" disabled>
                                             </div>
                                             <div class="col-6">
                                                 <div class="col-auto">
@@ -255,7 +256,7 @@
                                                 <div class="col-sm-1">
                                                     <label class="float-label">ID:</label>
                                                     <span class="form-bar"></span>
-                                                    <input type="text" class="form-control" id="vendedor_id" name="vendedor_id" placeholder="" readonly>
+                                                    <input type="text" class="form-control" id="vendedor_id" name="vendedor_id" placeholder="" style="background-color: black" readonly>
                                                 </div>
                                                 <div class="col-6">
                                                     <label class="float-label">FUNCIONÁRIO:</label>
@@ -266,19 +267,176 @@
                                                 <div class="col-2">
                                                     <label class="float-label">TOTAL DE FOTOS:</label>
                                                     <span class="form-bar"></span>
-                                                    <input type="text" class="form-control" id="nome" name="nome" placeholder="" style="background-color: black">
+                                                    <input type="text" class="form-control" id="nome" name="nome" placeholder="" style="background-color: white; color: black" disabled>
                                                 </div>
-
-                                                <br>
-
-                                                <div>
-                                                    <button class="btn btn-outline-success waves-effect waves-light">Salvar</button>
-                                                    <button type="button" class="btn btn-outline-danger waves-effect waves-light" onclick="limparFormVendas();">Limpar</button>
-                                                    <button type="button" class="btn btn-outline-danger waves-effect waves-light" onclick="deletaVenda();">Excluir</button>
-                                                </div>
-
                                             </div>
+
+                                            <!-- Seções para FOTOS, ENCARTE e DIGITAIS em linha -->
+                                            <div class="row mt-3">
+                                                <div class="col-4 text-center">
+                                                    <h5  style="color: #f2a654">FOTOS</h5>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <h5 STYLE="color: #00d25b">ENCARTES</h5>
+                                                </div>
+                                                <div class="col-4 text-center">
+                                                    <h5 style="color: fuchsia">DIGITAIS</h5>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <!-- Inputs para FOTOS -->
+                                                <div class="col-4">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <label style="color: #f2a654">DINHEIRO</label>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: #f2a654">VALOR</label>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: #f2a654">DÉBITO</label>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: #f2a654">VALOR</label>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: #f2a654">CREDITO</label>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: #f2a654">VALOR</label>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: #f2a654">PIX</label>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: #f2a654">VALOR</label>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Inputs para ENCARTE -->
+                                                <div class="col-4">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <label STYLE="color: #00d25b">DINHEIRO</label>
+                                                            <input type="number" class="form-control" placeholder="" style="background-color: #73b307; color: black; font-weight: bold">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label STYLE="color: #00d25b">VALOR</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label STYLE="color: #00d25b">DÉBITO</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label STYLE="color: #00d25b">VALOR</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label STYLE="color: #00d25b">CREDITO</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label STYLE="color: #00d25b">VALOR</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label STYLE="color: #00d25b">PIX</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label STYLE="color: #00d25b">VALOR</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Inputs para DIGITAIS -->
+                                                <div class="col-4">
+                                                    <div class="row">
+                                                        <div class="col-6">
+                                                            <label style="color: fuchsia">DINHEIRO</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: fuchsia">VALOR</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold" disabled>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: fuchsia">DÉBITO</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: fuchsia">VALOR</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold" disabled>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: fuchsia">CREDITO</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: fuchsia">VALOR</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold" disabled>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: fuchsia">PIX</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold">
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label style="color: fuchsia">VALOR</label>
+                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: fuchsia; color: black; font-weight: bold" disabled>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-2">
+                                                    <label>SOBRAS</label>
+                                                    <input type="number" class="form-control" placeholder="">
+                                                </div>
+                                                <div class="col-2">
+                                                    <label>RIBBON</label>
+                                                    <select class="form-select" id="ribbon" name="ribbon">
+                                                        <option disabled="disabled">Tamanho do Papel</option>
+                                                        <option style="color: #00d25b" value="10x15"  <%
+                                                            ModelVendas modelVendas =(ModelVendas) request.getAttribute("modelVendas");
+//                                                                                                        System.out.println(modelVendas);
+                                                            if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("10x15")){
+                                                                out.print(" ");
+                                                                out.print("selected=\"selected\"");
+                                                                out.print(" ");
+                                                            }%>>10x15</option>
+
+                                                        <option style="color: #bf3322" value="15x20" <%
+                                                            modelVendas =(ModelVendas) request.getAttribute("modelVendas");
+                                                            if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("15x20")){
+                                                                out.print(" ");
+                                                                out.print("selected=\"selected\"");
+                                                                out.print(" ");
+                                                            }%>>15x20</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <br>
+
+                                            <div>
+                                                <button class="btn btn-outline-success waves-effect waves-light">Salvar</button>
+                                                <button type="button" class="btn btn-outline-danger waves-effect waves-light" onclick="limparFormVendas();">Limpar</button>
+                                                <button type="button" class="btn btn-outline-danger waves-effect waves-light" onclick="deletaVenda();">Excluir</button>
+                                            </div>
+
                                         </form>
+
 
 
 

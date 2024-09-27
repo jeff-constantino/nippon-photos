@@ -1,6 +1,7 @@
 package servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import dao.DAOUsuarioRepository;
 import dao.DAOVendasRepository;
 import jakarta.servlet.RequestDispatcher;
@@ -137,11 +138,11 @@ public class ServletVendas extends ServletGenericUtil {
     }
 
 
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
             String msg = "Operação realizada com sucesso!";
+
             // Obtém os parâmetros do request
             String venda_id = request.getParameter("venda_id");
             String nome = request.getParameter("nome");
@@ -166,6 +167,7 @@ public class ServletVendas extends ServletGenericUtil {
 
             ModelVendas modelVendas = new ModelVendas();
 
+            // Settar os dados da venda
             modelVendas.setVenda_id(venda_id != null && !venda_id.isEmpty() ? Long.parseLong(venda_id) : null);
 
             Long vendedor_id = vendedor_id_str != null && !vendedor_id_str.isEmpty() ? Long.parseLong(vendedor_id_str) : null;
@@ -190,35 +192,30 @@ public class ServletVendas extends ServletGenericUtil {
 
             modelVendas.setSobras(sobras_str != null && !sobras_str.isEmpty() ? Integer.parseInt(sobras_str) : 0);
 
-            // Obtém o usuário logado
-            Long userLogado = super.getUserLogado(request);
+            // Grava ou atualiza a venda
+            modelVendas = daoVendas.gravarVenda(modelVendas, super.getUserLogado(request));
 
-            // Chama o método para gravar ou atualizar a venda, passando o ModelVendas e o userLogado
-            ModelVendas resultadoVenda = daoVendas.gravarVenda(modelVendas, userLogado);
+            // Corrigido: consulta retorna um ModelVendas, não uma lista de ModelLogin
+            ModelVendas modelVendasConsulta = daoVendas.consultaVenda(modelVendas.getVenda_id(), super.getUserLogado(request));
+            request.setAttribute("modelVendasConsulta", modelVendasConsulta);
 
-            String mensagem;
-            // Diferencia as mensagens de sucesso entre criar e atualizar
-            if (resultadoVenda.getVenda_id() != null) {
-                if (venda_id == null || venda_id.isEmpty()) {
-                    mensagem = "Venda cadastrada com sucesso. ID: " + resultadoVenda.getVenda_id();
-                } else {
-                    mensagem = "Venda atualizada com sucesso. ID: " + resultadoVenda.getVenda_id();
-                }
-            } else {
-                mensagem = "Erro ao gravar a venda.";
-            }
+            // Mantém os dados na tela e envia a mensagem de sucesso
+            request.setAttribute("msg", msg);
+            request.setAttribute("modelVenda", modelVendas);
+            request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
 
-            // Define a mensagem e o objeto para redirecionar com os dados na tela
-            request.setAttribute("msg", mensagem);
-            request.setAttribute("modelVendas", resultadoVenda);
-            request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
+            // Redireciona para vendas.jsp
+            RequestDispatcher redireciona = request.getRequestDispatcher("/principal/vendas.jsp");
+            redireciona.forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp"); // redireciona
+            RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");
             request.setAttribute("msg", e.getMessage());
             redirecionar.forward(request, response);
         }
-
     }
 }
+
+
+

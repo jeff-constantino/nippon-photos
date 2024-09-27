@@ -142,6 +142,21 @@ public class DAOVendasRepository {
             modelVendas.setVenda_id(resultado.getLong("venda_id"));
             modelVendas.setVendedor_id(resultado.getLong("vendedor_id"));
             modelVendas.setNome(resultado.getString("nome"));
+
+            // Campos adicionais
+            modelVendas.setProd1_din(resultado.getInt("prod1_din"));
+            modelVendas.setProd1_deb(resultado.getInt("prod1_deb"));
+            modelVendas.setProd1_cred(resultado.getInt("prod1_cred"));
+            modelVendas.setProd1_pix(resultado.getInt("prod1_pix"));
+            modelVendas.setProd2_din(resultado.getInt("prod2_din"));
+            modelVendas.setProd2_deb(resultado.getInt("prod2_deb"));
+            modelVendas.setProd2_cred(resultado.getInt("prod2_cred"));
+            modelVendas.setProd2_pix(resultado.getInt("prod2_pix"));
+            modelVendas.setProd3_din(resultado.getInt("prod3_din"));
+            modelVendas.setProd3_deb(resultado.getInt("prod3_deb"));
+            modelVendas.setProd3_cred(resultado.getInt("prod3_cred"));
+            modelVendas.setProd3_pix(resultado.getInt("prod3_pix"));
+            modelVendas.setSobras(resultado.getInt("sobras"));
         } else {
             // Se não houver resultados, retornar null ou lançar uma exceção
             modelVendas = null; // Retorna null se a venda não existir

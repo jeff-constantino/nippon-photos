@@ -33,6 +33,9 @@ public class ModelVendas implements Serializable {
 
     private String ribbon;
 
+    public ModelVendas() {
+        // Construtor padrão
+    }
 
 
     public Boolean novaVenda(){

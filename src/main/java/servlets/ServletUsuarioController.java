@@ -25,85 +25,85 @@ public class ServletUsuarioController extends ServletGenericUtil{
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-      try {
-          String acao = request.getParameter("acao");
+        try {
+            String acao = request.getParameter("acao");
 
-          if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletar")) {
-              String idUser = request.getParameter("id");
-              daoUsuarioRepository.deletarUser(idUser);
+            if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletar")) {
+                String idUser = request.getParameter("id");
+                daoUsuarioRepository.deletarUser(idUser);
 
-              List<ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioList(super.getUserLogado(request));
-              request.setAttribute("modelLogins", modelLogins);
+                List<ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioList(super.getUserLogado(request));
+                request.setAttribute("modelLogins", modelLogins);
 
-              request.setAttribute("msg", "Funcionário Apagado com sucesso");
-              request.setAttribute("totalPagina",daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
+                request.setAttribute("msg", "Funcionário Apagado com sucesso");
+                request.setAttribute("totalPagina",daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
 
-              request.getRequestDispatcher("/principal/usuario.jsp").forward(request, response);
+                request.getRequestDispatcher("/principal/usuario.jsp").forward(request, response);
 
-          }
- /*AJAX DELETAR*/
-          else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletarajax")) {
-                  String idUser = request.getParameter("id");
-                  daoUsuarioRepository.deletarUser(idUser);
+            }
+            /*AJAX DELETAR*/
+            else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("deletarajax")) {
+                String idUser = request.getParameter("id");
+                daoUsuarioRepository.deletarUser(idUser);
 
-                  response.getWriter().write("Funcionário Excluído!!!");
-
-
-          }else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscaruserajax")) {
-              String nomeBusca = request.getParameter("nomeBusca");
-              List<ModelLogin> dadosJsonUser = daoUsuarioRepository.consultaUsuarioList(nomeBusca, super.getUserLogado(request));
-
-              ObjectMapper mapper = new ObjectMapper();
-              String json = mapper.writeValueAsString(dadosJsonUser);
-             response.getWriter().write(json);
+                response.getWriter().write("Funcionário Excluído!!!");
 
 
-          }else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarEditar")) {
-           String id = request.getParameter("id");
-           ModelLogin modelLogin = daoUsuarioRepository.consultarUsuarioID(id, super.getUserLogado(request));
+            }else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscaruserajax")) {
+                String nomeBusca = request.getParameter("nomeBusca");
+                List<ModelLogin> dadosJsonUser = daoUsuarioRepository.consultaUsuarioList(nomeBusca, super.getUserLogado(request));
 
-              List<ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioList(super.getUserLogado(request));
-              request.setAttribute("modelLogins", modelLogins);
-
-              request.setAttribute("msg", "EDITAR O FUNCIONÁRIO");
-              request.setAttribute("modelLogin", modelLogin);//para manter os dados na tela
-              request.setAttribute("totalPagina",daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
-              request.getRequestDispatcher("/principal/usuario.jsp").forward(request, response);
+                ObjectMapper mapper = new ObjectMapper();
+                String json = mapper.writeValueAsString(dadosJsonUser);
+                response.getWriter().write(json);
 
 
-          } else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("listarUser")) {
+            }else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarEditar")) {
+                String id = request.getParameter("id");
+                ModelLogin modelLogin = daoUsuarioRepository.consultarUsuarioID(id, super.getUserLogado(request));
+
+                List<ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioList(super.getUserLogado(request));
+                request.setAttribute("modelLogins", modelLogins);
+
+                request.setAttribute("msg", "EDITAR O FUNCIONÁRIO");
+                request.setAttribute("modelLogin", modelLogin);//para manter os dados na tela
+                request.setAttribute("totalPagina",daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
+                request.getRequestDispatcher("/principal/usuario.jsp").forward(request, response);
+
+
+            } else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("listarUser")) {
                 List<ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioList(super.getUserLogado(request));
 
-              request.setAttribute("modelLogins", modelLogins);//para manter os dados na tela
-              request.setAttribute("totalPagina",daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
-              request.getRequestDispatcher("/principal/usuario.jsp").forward(request, response);
+                request.setAttribute("modelLogins", modelLogins);//para manter os dados na tela
+                request.setAttribute("totalPagina",daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
+                request.getRequestDispatcher("/principal/usuario.jsp").forward(request, response);
 
 
 
 
-          }else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("paginar")) {
-              Integer offset = Integer.parseInt(request.getParameter("pagina"));
-              List <ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioListPaginada(this.getUserLogado(request),offset);
-              request.setAttribute("modelLogins", modelLogins);
-              request.setAttribute("totalPagina",daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
-              request.getRequestDispatcher("/principal/usuario.jsp").forward(request, response);
+            }else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("paginar")) {
+                Integer offset = Integer.parseInt(request.getParameter("pagina"));
+                List <ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioListPaginada(this.getUserLogado(request),offset);
+                request.setAttribute("modelLogins", modelLogins);
+                request.setAttribute("totalPagina",daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
+                request.getRequestDispatcher("/principal/usuario.jsp").forward(request, response);
 
 
-          }
+            }
 
-          else {
-              List<ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioList(super.getUserLogado(request));
-              request.setAttribute("modelLogins", modelLogins);
-              request.setAttribute("totalPagina",daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
-              request.getRequestDispatcher("/principal/usuario.jsp").forward(request, response);
-          }
+            else {
+                List<ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioList(super.getUserLogado(request));
+                request.setAttribute("modelLogins", modelLogins);
+                request.setAttribute("totalPagina",daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
+                request.getRequestDispatcher("/principal/usuario.jsp").forward(request, response);
+            }
 
-      }catch (Exception e) {
-          e.printStackTrace();
-          RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");/*redireciona*/
-          request.setAttribute("msg", e.getMessage());
-          redirecionar.forward(request, response);
-      }
+        }catch (Exception e) {
+            e.printStackTrace();
+            RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");/*redireciona*/
+            request.setAttribute("msg", e.getMessage());
+            redirecionar.forward(request, response);
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -117,7 +117,7 @@ public class ServletUsuarioController extends ServletGenericUtil{
 
             ModelLogin modelLogin = new ModelLogin();
 
- //condição ternaria.. valida..? se sim : se não
+            //condição ternaria.. valida..? se sim : se não
             modelLogin.setId(id != null && !id.isEmpty() ? Long.parseLong(id) : null);
             modelLogin.setNome(nome);
             modelLogin.setStatus(status);
@@ -155,7 +155,7 @@ public class ServletUsuarioController extends ServletGenericUtil{
         }
 
 
-/*AJAX CADASTRAR*/
+        /*AJAX CADASTRAR*/
         String acao = request.getParameter("acao");
         if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("cadastrar")) {
 

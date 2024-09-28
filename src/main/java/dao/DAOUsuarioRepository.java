@@ -1,4 +1,5 @@
 
+
 package dao;
 
 import connection.SingleConnectionBanco;
@@ -98,19 +99,19 @@ public class DAOUsuarioRepository {
 
 
     public int totalPagina(Long userLogado) throws Exception {
-        String sql = "SELECT count(1) as total FROM model_login where usuario_id= " +userLogado;
+        String sql = "SELECT count(1) as total FROM model_login WHERE usuario_id = ?";
         PreparedStatement preparedSql = connection.prepareStatement(sql);
+        preparedSql.setLong(1, userLogado); // Substituir diretamente o valor de userLogado
         ResultSet resultSet = preparedSql.executeQuery();
         resultSet.next();
 
         Double cadastro = resultSet.getDouble("total");
         Double porpagina = 6.0;
-        Double pagina = cadastro/porpagina;
-        Double resto = pagina % 2;
-        if (resto >0){
-            pagina++;
-        }
-        return pagina.intValue();
+
+        // Calcular o total de páginas
+        int totalPaginas = (int) Math.ceil(cadastro / porpagina); // Usar Math.ceil para arredondar para cima
+
+        return totalPaginas;
     }
 
 

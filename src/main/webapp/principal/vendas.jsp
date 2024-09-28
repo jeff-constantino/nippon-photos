@@ -379,8 +379,8 @@
 
                                                                 <div>
                                                                     <button class="btn btn-outline-success waves-effect waves-light">Salvar</button>
-                                                                    <button type="button" class="btn btn-outline-danger waves-effect waves-light" onclick="limparFormVendas();">Limpar</button>
-                                                                    <button type="button" class="btn btn-outline-danger waves-effect waves-light" onclick="deletaVenda();">Excluir</button>
+                                                                    <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparFormVendas();">Limpar</button>
+
                                                                 </div>
 
                                                             </form>
@@ -628,19 +628,18 @@
                                                 </div>
 
 
-                                                <div class="row mt-3">
+                                                <div>
 
-                                                    <div class="col-2">
+                                                    <div>
                                                         <button class="btn btn-outline-success waves-effect waves-light">Atualizar</button>
-                                                    </div>
-                                                    <div class="col-2">
-                                                        <button type="button" class="btn btn-warning" onclick="limparFormVendido();">Limpar</button>
-                                                    </div>
-                                                    <div class="col-2">
-                                                        <button type="button" class="btn btn-danger" onclick="deletarVenda();">Deletar</button>
+
+                                                        <button type="button" class="btn btn-outline-warning waves-effect waves-light"  onclick="limparFormVendido();">Limpar</button>
+
+                                                        <button type="button" class="btn btn-outline-danger waves-effect waves-light"  onclick="deletaVenda();">Excluir Venda</button>
                                                     </div>
                                                 </div>
                                             </form>
+
 
 
 
@@ -742,9 +741,7 @@
 
         function limparFormVendas() {
             document.getElementById('formBuscarVenda').reset(); // Limpa o formulário
-            // Habilita os botões
-            document.getElementById('botaoSalvar').disabled = false;
-            document.getElementById('botaoExcluir').disabled = false;
+
         }
 
         function buscarFunc() {

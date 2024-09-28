@@ -98,7 +98,7 @@
                                                                                             <div class="form-group">
 
                                                                                                 <label>STATUS</label>
-                                                                                                <select class="form-select" id="status1" name="status">
+                                                                                                <select class="form-select" id="status1" name="status" required>
                                                                                                     <option disabled="disabled">Selecione o Status</option>
                                                                                                     <option style="color: #00d25b" value="Ativo"  <%
                                                                                                         ModelLogin modelLogin =(ModelLogin)request.getAttribute("modelLogin");
@@ -356,7 +356,7 @@
                                                     <div class="form-group">
 
                                                         <label>STATUS</label>
-                                                        <select class="form-select" id="status2" name="status">
+                                                        <select class="form-select" id="status2" name="status" required>
                                                             <option disabled="disabled">Selecione o Status</option>
                                                             <option style="color: #00d25b" value="Ativo"  <%
                                                                 modelLogin =(ModelLogin) request.getAttribute("modelLogin");
@@ -583,6 +583,19 @@
         }
 
     }
+    function  limpaFormCad(){
+        var elementos = document.getElementById("formUser").elements;
+        for (var p = 0; p < elementos.length; p++){
+            elementos[p].value = '';
+        }
+    }
+
+    // Evento para limpar o formulário ao fechar o modal
+    $('#modalCad').on('hidden.bs.modal', function () {
+        limpaFormCad(); // Limpa o formulário
+    })
+
+
 
 
 

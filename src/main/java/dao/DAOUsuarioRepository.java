@@ -1,3 +1,4 @@
+
 package dao;
 
 import connection.SingleConnectionBanco;
@@ -184,7 +185,7 @@ public class DAOUsuarioRepository {
         ModelLogin modelLogin = new ModelLogin();
         String sql = "SELECT * FROM model_login WHERE upper(login) = upper('"+login+"') and useradmin is false and usuario_id="+userLogado;
         PreparedStatement statement = connection.prepareStatement(sql);
-               ResultSet resultado = statement.executeQuery();
+        ResultSet resultado = statement.executeQuery();
 
         while (resultado.next()) {
             modelLogin.setId(resultado.getLong("id"));
@@ -255,7 +256,7 @@ public class DAOUsuarioRepository {
             modelLogin.setId(resultado.getLong("id"));
             modelLogin.setNome(resultado.getString("nome"));
             modelLogin.setStatus(resultado.getString("status"));
-          ;
+            ;
 
 
         }
@@ -268,7 +269,7 @@ public class DAOUsuarioRepository {
         statement.setString(1, nome);
         ResultSet resultado = statement.executeQuery();
         resultado.next();
-            return resultado.getBoolean("existe");
+        return resultado.getBoolean("existe");
 
     }
 

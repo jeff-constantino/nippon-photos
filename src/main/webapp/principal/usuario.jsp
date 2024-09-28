@@ -19,13 +19,13 @@
 
 <body>
 <div class="container-scroller">
-  <!-- partial:partials/_sidebar.html -->
+    <!-- partial:partials/_sidebar.html -->
     <jsp:include page="sidebar.jsp"></jsp:include>
-<!-- partial -->
+    <!-- partial -->
     <div class="container-fluid page-body-wrapper">
- <!-- partial:partials/_navbar.html -->
+        <!-- partial:partials/_navbar.html -->
         <jsp:include page="navbar.jsp"></jsp:include>
- <!-- partial -->
+        <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="row">
@@ -39,7 +39,7 @@
                                 <div class="row">
                                     <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                         <div class="d-flex d-sm-block d-md-flex align-items-center">
-         <!--INSERIR BOTÃO 1 AQUI--><!-- Button trigger modal -->
+                                            <!--INSERIR BOTÃO 1 AQUI--><!-- Button trigger modal -->
                                             <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalCad">
                                                 <h4>Cadastrar</h4>
                                             </button>
@@ -60,7 +60,7 @@
 
                                                                 <div class="row">
                                                                     <div class="col-auto">
-                                                        <span span style="color:#f2a654">${msg}</span>
+                                                                        <span span style="color:#f2a654">${msg}</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -104,25 +104,25 @@
                                                                                                         ModelLogin modelLogin =(ModelLogin)request.getAttribute("modelLogin");
 //                                                                                                        System.out.println(modelLogin);
                                                                                                         if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Ativo")){
-                                                                                                        out.print(" ");
-                                                                                                         out.print("selected=\"selected\"");
-                                                                                                         out.print(" ");
-                                                                                                    }%>>Ativo</option>
+                                                                                                            out.print(" ");
+                                                                                                            out.print("selected=\"selected\"");
+                                                                                                            out.print(" ");
+                                                                                                        }%>>Ativo</option>
 
                                                                                                     <option style="color: #bf3322" value="Inativo" <%
                                                                                                         modelLogin =(ModelLogin) request.getAttribute("modelLogin");
                                                                                                         if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Inativo")){
-                                                                                                        out.print(" ");
-                                                                                                        out.print("selected=\"selected\"");
-                                                                                                        out.print(" ");
-                                                                                                    }%>>Inativo</option>
+                                                                                                            out.print(" ");
+                                                                                                            out.print("selected=\"selected\"");
+                                                                                                            out.print(" ");
+                                                                                                        }%>>Inativo</option>
 
                                                                                                 </select>
                                                                                             </div>
                                                                                             <div>
                                                                                                 <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="limparForm();" >Novo</button>
                                                                                                 <button  class="btn btn-outline-success waves-effect waves-light" >Cadastrar</button>
-<%--  BOTOES MODAL--%>
+                                                                                                <%--  BOTOES MODAL--%>
                                                                                             </div>
 
                                                                                         </div>
@@ -163,7 +163,7 @@
                                     <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                         <div class="d-flex d-sm-block d-md-flex align-items-center">
 
- <!--INSERIR BOTÃO 2 AQUI-->
+                                            <!--INSERIR BOTÃO 2 AQUI-->
                                             <!-- Button trigger modal -->
                                             <button type="button" class="btn btn-outline-behance" data-bs-toggle="modal" data-bs-target="#modalBusca">
                                                 <h4>Consultar</h4>
@@ -222,25 +222,25 @@
                                                                                             <div>
                                                                                                 <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="limparbuscaForm();" >Novo</button>
                                                                                                 <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="buscarUsuario();">Pesquisar</button>
- <%--  BOTOES MODAL busca--%>
+                                                                                                <%--  BOTOES MODAL busca--%>
                                                                                             </div>
                                                                                             <div style="overflow-x: hidden">
-                                                                                            <div style="height: 300px; overflow-y: auto ">
-                                                                                                <table class="table" id="tabelaresultados">
-                                                                                                    <thead>
-                                                                                                    <tr>
-                                                                                                        <th scope="col">ID</th>
-                                                                                                        <th scope="col">NOME</th>
-                                                                                                        <th scope="col">GERENCIAR</th>
+                                                                                                <div style="height: 300px; overflow-y: auto ">
+                                                                                                    <table class="table" id="tabelaresultados">
+                                                                                                        <thead>
+                                                                                                        <tr>
+                                                                                                            <th scope="col">ID</th>
+                                                                                                            <th scope="col">NOME</th>
+                                                                                                            <th scope="col">GERENCIAR</th>
 
-                                                                                                    </tr>
-                                                                                                    </thead>
-                                                                                                    <tbody>
+                                                                                                        </tr>
+                                                                                                        </thead>
+                                                                                                        <tbody>
 
-                                                                                                    </tbody>
-                                                                                                </table>
+                                                                                                        </tbody>
+                                                                                                    </table>
 
-                                                                                            </div>
+                                                                                                </div>
                                                                                             </div>
                                                                                             <span id="totalResultados"></span>
 
@@ -258,7 +258,7 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                   <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>
+                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>
 
                                                         </div>
                                                     </div>
@@ -337,7 +337,7 @@
                                 <h4 class="card-title">FUNCIONÁRIOS</h4> <span style="color: #f2a654" id="msg">${msg}</span>
                                 <div class="table-responsive"style="overflow-x: hidden">
                                     <table class="table" >
- <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
+                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
                                         <form action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formUser2" name="formUser2" >
                                             <input type="hidden" name="acao" acao value="">
                                             <div class="row">
@@ -418,8 +418,8 @@
                                                             <c:out value="${mL.id}"></c:out>
                                                         </td>
                                                         <td>
-                                                          <c:out value="${mL.nome}"></c:out>
-                                                           </span>
+                                                            <c:out value="${mL.nome}"></c:out>
+                                                            </span>
 
                                                         </td>
                                                         <td>
@@ -441,12 +441,12 @@
                                         <nav aria-label="Page navigation example">
                                             <ul class="pagination">
                                                 <%
-                                                int totalPagina = (int) request.getAttribute("totalPagina");
-                                                for (int p=0; p<totalPagina; p++) {
-                                                    String url = request.getContextPath()+"/ServletUsuarioController?acao=paginar&pagina=" + (p * 6);
+                                                    int totalPagina = (int) request.getAttribute("totalPagina");
+                                                    for (int p=0; p<totalPagina; p++) {
+                                                        String url = request.getContextPath()+"/ServletUsuarioController?acao=paginar&pagina=" + (p * 6);
 
-                                                    out.print("<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"\">"+(p + 1)+"</a></li>");
-                                                }
+                                                        out.print("<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"\">"+(p + 1)+"</a></li>");
+                                                    }
                                                 %>
 
 
@@ -484,12 +484,12 @@
     function verEditar(id){
         var urlAction = document.getElementById('formBuscaUser').action;
 
-       window.location.href = urlAction + '?acao=buscarEditar&id='+id;
+        window.location.href = urlAction + '?acao=buscarEditar&id='+id;
     }
 
 
     function criarCadastro(){
-       document.getElementById("acao").value = 'cadastrar';
+        document.getElementById("acao").value = 'cadastrar';
         document.getElementById("formUser").submit();
 
 
@@ -510,11 +510,11 @@
 
 
                     $('#tabelaresultados > tbody > tr').remove();
-                  for (var p = 0; p < json.length; p++){
-                      $('#tabelaresultados > tbody').append('<tr> <td>' + json[p].id + '</td> <td>' +json[p].nome+ '</td> <td> <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditar('+json[p].id+')">Editar</button></td></tr>');
+                    for (var p = 0; p < json.length; p++){
+                        $('#tabelaresultados > tbody').append('<tr> <td>' + json[p].id + '</td> <td>' +json[p].nome+ '</td> <td> <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditar('+json[p].id+')">Editar</button></td></tr>');
 
-                  }
-                  document.getElementById('totalResultados').textContent = 'Resultados: '+json.length;
+                    }
+                    document.getElementById('totalResultados').textContent = 'Resultados: '+json.length;
 
 
 

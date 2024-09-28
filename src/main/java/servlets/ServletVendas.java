@@ -224,6 +224,3 @@ public class ServletVendas extends ServletGenericUtil {
     }
 
 }
-
-
-

@@ -139,7 +139,6 @@ public class ServletVendas extends ServletGenericUtil {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         try {
             String msg = "Operação realizada com sucesso!";
 
@@ -168,7 +167,11 @@ public class ServletVendas extends ServletGenericUtil {
             ModelVendas modelVendas = new ModelVendas();
 
             // Settar os dados da venda
-            modelVendas.setVenda_id(venda_id != null && !venda_id.isEmpty() ? Long.parseLong(venda_id) : null);
+            if (venda_id != null && !venda_id.isEmpty()) {
+                modelVendas.setVenda_id(Long.parseLong(venda_id)); // Se venda_id está presente, atualiza
+            } else {
+                modelVendas.setVenda_id(null); // Caso contrário, nova venda
+            }
 
             Long vendedor_id = vendedor_id_str != null && !vendedor_id_str.isEmpty() ? Long.parseLong(vendedor_id_str) : null;
             modelVendas.setVendedor_id(vendedor_id);
@@ -193,7 +196,11 @@ public class ServletVendas extends ServletGenericUtil {
             modelVendas.setSobras(sobras_str != null && !sobras_str.isEmpty() ? Integer.parseInt(sobras_str) : 0);
 
             // Grava ou atualiza a venda
-            modelVendas = daoVendas.gravarVenda(modelVendas, super.getUserLogado(request));
+            if (modelVendas.getVenda_id() != null) {
+                modelVendas = daoVendas.atualizarVenda(modelVendas.getVenda_id(), modelVendas, super.getUserLogado(request)); // Atualiza a venda existente
+            } else {
+                modelVendas = daoVendas.gravarVenda(modelVendas, super.getUserLogado(request)); // Grava nova venda
+            }
 
             // Corrigido: consulta retorna um ModelVendas, não uma lista de ModelLogin
             ModelVendas modelVendasConsulta = daoVendas.consultaVenda(modelVendas.getVenda_id(), super.getUserLogado(request));
@@ -215,6 +222,7 @@ public class ServletVendas extends ServletGenericUtil {
             redirecionar.forward(request, response);
         }
     }
+
 }
 
 

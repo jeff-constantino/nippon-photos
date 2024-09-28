@@ -85,7 +85,7 @@ public class DAOVendasRepository {
 
 
 
-    private ModelVendas atualizarVenda(Long venda_id, ModelVendas modelVendas, Long userLogado) throws Exception {
+    public ModelVendas atualizarVenda(Long venda_id, ModelVendas modelVendas, Long userLogado) throws Exception {
         String sql = "UPDATE vendas SET vendedor_id = ?, nome = ?, prod1_din = ?, prod1_deb = ?, prod1_cred = ?, prod1_pix = ?, "
                 + "prod2_din = ?, prod2_deb = ?, prod2_cred = ?, prod2_pix = ?, prod3_din = ?, prod3_deb = ?, prod3_cred = ?, prod3_pix = ?, sobras = ? "
                 + "WHERE venda_id = ?";

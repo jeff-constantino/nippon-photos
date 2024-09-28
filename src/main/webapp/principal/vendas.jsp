@@ -110,7 +110,7 @@
                     <div class="modal-dialog modal-xl">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" >Pesquisa de Funcionário </h5>
+                                <h5 class="modal-title" >Lançamento de vendas </h5>
 
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
@@ -353,7 +353,7 @@
                                                                     <div class="col-2">
                                                                         <label>RIBBON</label>
                                                                         <select class="form-select" id="ribbon" name="ribbon">
-                                                                            <option disabled="disabled">Tamanho do Papel</option>
+                                                                            <option z="disabled">Tamanho do Papel</option>
                                                                             <option style="color: #00d25b" value="10x15"  <%
                                                                                 ModelVendas modelVendas =(ModelVendas) request.getAttribute("modelVendas");
 //                                                                                                        System.out.println(modelVendas);
@@ -418,7 +418,7 @@
                                     <h4 class="card-title">Vendas do Dia</h4>
 
                                     <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalBuscaFuncionario">
-                                        <h4>Buscar Funcionário</h4>
+                                        <h4>Lançamentos</h4>
                                     </button>
                                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalBuscaVenda">
                                         <h4>Buscar Venda</h4>
@@ -431,7 +431,7 @@
                                                 <div class="col-sm-1">
                                                     <label class="float-label">VENDA ID:</label>
                                                     <span class="form-bar"></span>
-                                                    <input type="text" class="form-control" id="outer_venda_id" name="venda_id" placeholder="" style="background-color: black" readonly value="${modelVendasConsulta.venda_id}" disabled>
+                                                    <input type="text" class="form-control" id="outer_venda_id" name="venda_id" placeholder="" style="background-color: black" readonly value="${modelVendasConsulta.venda_id}">
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="col-auto">
@@ -631,10 +631,10 @@
                                                 <div class="row mt-3">
 
                                                     <div class="col-2">
-                                                        <button type="button" class="btn btn-success" onclick="document.getElementById('formBuscarVenda').submit();">Salvar</button>
+                                                        <button class="btn btn-outline-success waves-effect waves-light">Atualizar</button>
                                                     </div>
                                                     <div class="col-2">
-                                                        <button type="button" class="btn btn-warning" onclick="limparFormulario();">Limpar</button>
+                                                        <button type="button" class="btn btn-warning" onclick="limparFormVendido();">Limpar</button>
                                                     </div>
                                                     <div class="col-2">
                                                         <button type="button" class="btn btn-danger" onclick="deletarVenda();">Deletar</button>
@@ -779,6 +779,9 @@
             document.getElementById('vendedor_id').value = id;
             document.getElementById('vendedor').value = nome;
 
+            // Rola até o fim do modal
+            var modal = $('#modalBuscaFuncionario'); // Substitua pelo ID do seu modal
+            modal.animate({ scrollTop: modal[0].scrollHeight }, 1000); // Rola suavemente para o fim em 1 segundo
         }
 
 
@@ -787,6 +790,11 @@
         function limparFormVendas() {
             // Limpa os campos do formulário
             $('#formBuscarVenda')[0].reset();
+        }
+
+        function limparFormVendido() {
+            // Limpa os campos do formulário
+            $('#formVendido')[0].reset();
         }
 
 

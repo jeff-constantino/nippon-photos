@@ -9156,6 +9156,7 @@ progress {
 
 .col {
   flex: 1 0 0%;
+
 }
 
 .row-cols-auto > * {
@@ -25138,7 +25139,7 @@ dl li {
 .content-wrapper {
   background: 	#DAA520;
   padding: 1.875rem 1.75rem;
-  width: 100%;
+  max-width: 100%;
   -webkit-flex-grow: 1;
   flex-grow: 1;
 }

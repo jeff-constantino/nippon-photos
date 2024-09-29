@@ -195,8 +195,9 @@
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-3">
-                                                                    <label for="dataVenda">Data da Venda</label>
-                                                                    <input type="date" class="form-control" id="dataVenda" name="dataVenda">
+                                                                    <label for="outer_dataVenda">Data da Venda</label>
+                                                                    <input type="date" class="form-control" id="outer_dataVenda" name="dataVenda" required
+                                                                           value="${formattedDataVenda != null ? formattedDataVenda : ''}">
                                                                 </div>
                                                                 <div class="col-sm-1">
                                                                     <label class="float-label">ID:</label>
@@ -216,174 +217,174 @@
                                                             </div>
 
 
-                                                                <!-- Seções para FOTOS, ENCARTE e DIGITAIS em linha -->
-                                                                <div class="row mt-3">
-                                                                    <div class="col-4 text-center">
-                                                                        <h5  style="color: #f2a654">FOTOS</h5>
-                                                                    </div>
-                                                                    <div class="col-4 text-center">
-                                                                        <h5 STYLE="color: #00d25b">ENCARTES</h5>
-                                                                    </div>
-                                                                    <div class="col-4 text-center">
-                                                                        <h5 style="color: fuchsia">DIGITAIS</h5>
+                                                            <!-- Seções para FOTOS, ENCARTE e DIGITAIS em linha -->
+                                                            <div class="row mt-3">
+                                                                <div class="col-4 text-center">
+                                                                    <h5  style="color: #f2a654">FOTOS</h5>
+                                                                </div>
+                                                                <div class="col-4 text-center">
+                                                                    <h5 STYLE="color: #00d25b">ENCARTES</h5>
+                                                                </div>
+                                                                <div class="col-4 text-center">
+                                                                    <h5 style="color: fuchsia">DIGITAIS</h5>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <!-- Inputs para FOTOS -->
+                                                                <div class="col-4">
+                                                                    <div class="row">
+                                                                        <div class="col-6">
+                                                                            <label style="color: #f2a654">DINHEIRO</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_din" name="prod1_din" required value="${modelVendas.prod1_din}">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: #f2a654">VALOR</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_din_valor" name="prod1_din_valor">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: #f2a654">DÉBITO</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_deb" name="prod1_deb" required value="${modelVendas.prod1_deb}">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: #f2a654">VALOR</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_deb_valor" name="prod1_deb_valor">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: #f2a654">CREDITO</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_cred" name="prod1_cred" required value="${modelVendas.prod1_cred}">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: #f2a654">VALOR</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_cred_valor" name="prod1_cred_valor">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: #f2a654">PIX</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_pix" name="prod1_pix" required value="${modelVendas.prod1_pix}">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: #f2a654">VALOR</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_pix_valor" name="prod1_pix_valor">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="row">
-                                                                    <!-- Inputs para FOTOS -->
-                                                                    <div class="col-4">
-                                                                        <div class="row">
-                                                                            <div class="col-6">
-                                                                                <label style="color: #f2a654">DINHEIRO</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_din" name="prod1_din" required value="${modelVendas.prod1_din}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: #f2a654">VALOR</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_din_valor" name="prod1_din_valor">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: #f2a654">DÉBITO</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_deb" name="prod1_deb" required value="${modelVendas.prod1_deb}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: #f2a654">VALOR</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_deb_valor" name="prod1_deb_valor">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: #f2a654">CREDITO</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_cred" name="prod1_cred" required value="${modelVendas.prod1_cred}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: #f2a654">VALOR</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_cred_valor" name="prod1_cred_valor">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: #f2a654">PIX</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_pix" name="prod1_pix" required value="${modelVendas.prod1_pix}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: #f2a654">VALOR</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_pix_valor" name="prod1_pix_valor">
-                                                                            </div>
+                                                                <!-- Inputs para ENCARTE -->
+                                                                <div class="col-4">
+                                                                    <div class="row">
+                                                                        <div class="col-6">
+                                                                            <label STYLE="color: #00d25b">DINHEIRO</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: #73b307; color: black; font-weight: bold" id="prod2_din" name="prod2_din" required value="${modelVendas.prod2_din}">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label STYLE="color: #00d25b">VALOR</label>
+                                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled id="prod2_din_valor" name="prod2_din_valor">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label STYLE="color: #00d25b">DÉBITO</label>
+                                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" id="prod2_deb" name="prod2_deb" required value="${modelVendas.prod2_deb}">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label STYLE="color: #00d25b">VALOR</label>
+                                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled id="prod2_deb_valor" name="prod2_deb_valor">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label STYLE="color: #00d25b">CREDITO</label>
+                                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" id="prod2_cred" name="prod2_cred" required value="${modelVendas.prod2_cred}">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label STYLE="color: #00d25b">VALOR</label>
+                                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled id="prod2_cred_valor" name="prod2_cred_valor">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label STYLE="color: #00d25b">PIX</label>
+                                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" id="prod2_pix" name="prod2_pix" required value="${modelVendas.prod2_pix}">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label STYLE="color: #00d25b">VALOR</label>
+                                                                            <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled id="prod2_pix_valor" name="prod2_pix_valor">
                                                                         </div>
                                                                     </div>
+                                                                </div>
 
-                                                                    <!-- Inputs para ENCARTE -->
-                                                                    <div class="col-4">
-                                                                        <div class="row">
-                                                                            <div class="col-6">
-                                                                                <label STYLE="color: #00d25b">DINHEIRO</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: #73b307; color: black; font-weight: bold" id="prod2_din" name="prod2_din" required value="${modelVendas.prod2_din}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label STYLE="color: #00d25b">VALOR</label>
-                                                                                <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled id="prod2_din_valor" name="prod2_din_valor">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label STYLE="color: #00d25b">DÉBITO</label>
-                                                                                <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" id="prod2_deb" name="prod2_deb" required value="${modelVendas.prod2_deb}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label STYLE="color: #00d25b">VALOR</label>
-                                                                                <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled id="prod2_deb_valor" name="prod2_deb_valor">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label STYLE="color: #00d25b">CREDITO</label>
-                                                                                <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" id="prod2_cred" name="prod2_cred" required value="${modelVendas.prod2_cred}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label STYLE="color: #00d25b">VALOR</label>
-                                                                                <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled id="prod2_cred_valor" name="prod2_cred_valor">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label STYLE="color: #00d25b">PIX</label>
-                                                                                <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" id="prod2_pix" name="prod2_pix" required value="${modelVendas.prod2_pix}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label STYLE="color: #00d25b">VALOR</label>
-                                                                                <input type="number" class="form-control" placeholder="" STYLE="background-color: #73b307; color: black; font-weight: bold" disabled id="prod2_pix_valor" name="prod2_pix_valor">
-                                                                            </div>
+                                                                <!-- Inputs para DIGITAIS -->
+                                                                <div class="col-4">
+                                                                    <div class="row">
+                                                                        <div class="col-6">
+                                                                            <label style="color: fuchsia">DINHEIRO</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" id="prod3_din" name="prod3_din" required value="${modelVendas.prod3_din}">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: fuchsia">VALOR</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" disabled id="prod3_din_valor" name="prod3_din_valor">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: fuchsia">DÉBITO</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" id="prod3_deb" name="prod3_deb" required value="${modelVendas.prod3_deb}">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: fuchsia">VALOR</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" disabled id="prod3_deb_valor" name="prod3_deb_valor">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: fuchsia">CREDITO</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" id="prod3_cred" name="prod3_cred" required value="${modelVendas.prod3_cred}">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: fuchsia">VALOR</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" disabled id="prod3_cred_valor" name="prod3_cred_valor">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: fuchsia">PIX</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" id="prod3_pix" name="prod3_pix" required value="${modelVendas.prod3_pix}">
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label style="color: fuchsia">VALOR</label>
+                                                                            <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" disabled id="prod3_pix_valor" name="prod3_pix_valor">
                                                                         </div>
                                                                     </div>
+                                                                </div>
 
-                                                                    <!-- Inputs para DIGITAIS -->
-                                                                    <div class="col-4">
-                                                                        <div class="row">
-                                                                            <div class="col-6">
-                                                                                <label style="color: fuchsia">DINHEIRO</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" id="prod3_din" name="prod3_din" required value="${modelVendas.prod3_din}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: fuchsia">VALOR</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" disabled id="prod3_din_valor" name="prod3_din_valor">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: fuchsia">DÉBITO</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" id="prod3_deb" name="prod3_deb" required value="${modelVendas.prod3_deb}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: fuchsia">VALOR</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" disabled id="prod3_deb_valor" name="prod3_deb_valor">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: fuchsia">CREDITO</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" id="prod3_cred" name="prod3_cred" required value="${modelVendas.prod3_cred}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: fuchsia">VALOR</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" disabled id="prod3_cred_valor" name="prod3_cred_valor">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: fuchsia">PIX</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" id="prod3_pix" name="prod3_pix" required value="${modelVendas.prod3_pix}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label style="color: fuchsia">VALOR</label>
-                                                                                <input type="number" class="form-control" placeholder="" style="background-color: fuchsia; color: black; font-weight: bold" disabled id="prod3_pix_valor" name="prod3_pix_valor">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+                                                                <!-- Campo para SOBRAS -->
+                                                                <div class="col-2">
+                                                                    <label>SOBRAS</label>
+                                                                    <input type="number" class="form-control" id="sobras" name="sobras" placeholder="" value="${modelVendas.sobras}">
+                                                                </div>
 
-                                                                    <!-- Campo para SOBRAS -->
-                                                                    <div class="col-2">
-                                                                        <label>SOBRAS</label>
-                                                                        <input type="number" class="form-control" id="sobras" name="sobras" placeholder="" value="${modelVendas.sobras}">
-                                                                    </div>
-
-                                                                    <div class="col-2">
-                                                                        <label>RIBBON</label>
-                                                                        <select class="form-select" id="ribbon" name="ribbon">
-                                                                            <option z="disabled">Tamanho do Papel</option>
-                                                                            <option style="color: #00d25b" value="10x15"  <%
-                                                                                ModelVendas modelVendas =(ModelVendas) request.getAttribute("modelVendas");
+                                                                <div class="col-2">
+                                                                    <label>RIBBON</label>
+                                                                    <select class="form-select" id="ribbon" name="ribbon"  required value="${modelVendas.ribbon}">
+                                                                        <option z="disabled">Tamanho do Papel</option>
+                                                                        <option style="color: #00d25b" value="10x15"  <%
+                                                                            ModelVendas modelVendas =(ModelVendas) request.getAttribute("modelVendas");
 //                                                                                                        System.out.println(modelVendas);
-                                                                                if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("10x15")){
-                                                                                    out.print(" ");
-                                                                                    out.print("selected=\"selected\"");
-                                                                                    out.print(" ");
-                                                                                }%>>10x15</option>
+                                                                            if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("10x15")){
+                                                                                out.print(" ");
+                                                                                out.print("selected=\"selected\"");
+                                                                                out.print(" ");
+                                                                            }%>>10x15</option>
 
-                                                                            <option style="color: #bf3322" value="15x20" <%
-                                                                                modelVendas =(ModelVendas) request.getAttribute("modelVendas");
-                                                                                if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("15x20")){
-                                                                                    out.print(" ");
-                                                                                    out.print("selected=\"selected\"");
-                                                                                    out.print(" ");
-                                                                                }%>>15x20</option>
+                                                                        <option style="color: #bf3322" value="15x20" <%
+                                                                            modelVendas =(ModelVendas) request.getAttribute("modelVendas");
+                                                                            if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("15x20")){
+                                                                                out.print(" ");
+                                                                                out.print("selected=\"selected\"");
+                                                                                out.print(" ");
+                                                                            }%>>15x20</option>
 
-                                                                        </select>
-                                                                    </div>
+                                                                    </select>
                                                                 </div>
+                                                            </div>
 
-                                                                <br>
+                                                            <br>
 
-                                                                <div>
-                                                                    <button class="btn btn-outline-success waves-effect waves-light">Salvar</button>
-                                                                    <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparFormVendas();">Limpar</button>
+                                                            <div>
+                                                                <button class="btn btn-outline-success waves-effect waves-light">Salvar</button>
+                                                                <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparFormVendas();">Limpar</button>
 
-                                                                </div>
+                                                            </div>
 
-                                                            </form>
+                                                        </form>
                                                         </form>
 
                                                     </div>
@@ -441,8 +442,10 @@
                                                 <div class="row">
                                                     <div class="col-3">
                                                         <label for="outer_dataVenda">Data da Venda</label>
-                                                        <input type="date" class="form-control" id="outer_dataVenda" name="dataVenda">
+                                                        <input type="date" class="form-control" id="odataVenda" name="dataVenda" required
+                                                               value="${formattedDataVenda != null ? formattedDataVenda : ''}">
                                                     </div>
+
 
                                                     <div class="col-sm-1">
                                                         <label class="float-label">ID:</label>
@@ -589,7 +592,7 @@
                                                             </div>
                                                         </div>
 
-                                                        </div>
+                                                    </div>
                                                     <div class="col-4">
                                                         <div class="row">
                                                             <div class="col-6">
@@ -598,7 +601,7 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <label>RIBBON</label>
-                                                                <select class="form-select" id="ribbon2" name="ribbon">
+                                                                <select class="form-select" id="ribbon2" name="ribbon"  required value="${modelVendas.ribbon}">
                                                                     <option disabled="disabled">Tamanho do Papel</option>
                                                                     <option style="color: #00d25b" value="10x15"  <%
                                                                         modelVendas = (ModelVendas) request.getAttribute("modelVendas");
@@ -796,7 +799,11 @@
 
 
 
-
+        // Ao abrir o modal, define a data atual
+        $('#modalBuscaVenda').on('show.bs.modal', function () {
+            const today = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+            $('#outer_dataVenda').val(today);
+        });
 
 
     </SCRIPT>

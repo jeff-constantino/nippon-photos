@@ -1,7 +1,6 @@
 package servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import dao.DAOUsuarioRepository;
 import dao.DAOVendasRepository;
 import jakarta.servlet.RequestDispatcher;
@@ -11,9 +10,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelLogin;
 import model.ModelVendas;
+import util.DateUtil;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Date;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,6 +141,8 @@ public class ServletVendas extends ServletGenericUtil {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+
+
             String msg = "Operação realizada com sucesso!";
 
             // Obtém os parâmetros do request
@@ -147,6 +150,7 @@ public class ServletVendas extends ServletGenericUtil {
             String nome = request.getParameter("nome");
             String vendedor_id_str = request.getParameter("vendedor_id");
 
+            // Produtos
             String prod1_din_str = request.getParameter("prod1_din");
             String prod1_deb_str = request.getParameter("prod1_deb");
             String prod1_cred_str = request.getParameter("prod1_cred");
@@ -162,15 +166,24 @@ public class ServletVendas extends ServletGenericUtil {
             String prod3_cred_str = request.getParameter("prod3_cred");
             String prod3_pix_str = request.getParameter("prod3_pix");
 
+
+            // Data da Venda
+            String dataVenda = request.getParameter("dataVenda"); // Certifique-se que o nome do parâmetro é correto
+
+            // Sobras
             String sobras_str = request.getParameter("sobras");
 
+            // Ribbon
+            String ribbon = request.getParameter("ribbon"); // Obtém o parâmetro 'ribbon'
+
+            // Criação do objeto ModelVendas
             ModelVendas modelVendas = new ModelVendas();
+
+
 
             // Settar os dados da venda
             if (venda_id != null && !venda_id.isEmpty()) {
-                modelVendas.setVenda_id(Long.parseLong(venda_id)); // Se venda_id está presente, atualiza
-            } else {
-                modelVendas.setVenda_id(null); // Caso contrário, nova venda
+                modelVendas.setVenda_id(Long.parseLong(venda_id)); // Atualiza se existe
             }
 
             Long vendedor_id = vendedor_id_str != null && !vendedor_id_str.isEmpty() ? Long.parseLong(vendedor_id_str) : null;
@@ -193,16 +206,35 @@ public class ServletVendas extends ServletGenericUtil {
             modelVendas.setProd3_cred(prod3_cred_str != null && !prod3_cred_str.isEmpty() ? Integer.parseInt(prod3_cred_str) : 0);
             modelVendas.setProd3_pix(prod3_pix_str != null && !prod3_pix_str.isEmpty() ? Integer.parseInt(prod3_pix_str) : 0);
 
+            // Definindo a data da venda
+            if (dataVenda != null && !dataVenda.isEmpty()) {
+                Date sqlDate = Date.valueOf(dataVenda); // Converte diretamente para java.sql.Date
+                modelVendas.setData_venda(sqlDate);
+            } else {
+                throw new Exception("O parâmetro 'dataVenda' não pode ser nulo ou vazio."); // A mensagem de erro
+            }
+
+            // Após recuperar a data da venda
+            if (modelVendas.getData_venda() != null) {
+                String formattedDataVenda = DateUtil.formatDate(modelVendas.getData_venda());
+                request.setAttribute("formattedDataVenda", formattedDataVenda);
+            }
+
             modelVendas.setSobras(sobras_str != null && !sobras_str.isEmpty() ? Integer.parseInt(sobras_str) : 0);
+
+            // Definindo o ribbon
+            if (ribbon != null && !ribbon.isEmpty()) {
+                modelVendas.setRibbon(ribbon); // Supondo que você tenha um método setRibbon no seu ModelVendas
+            }
 
             // Grava ou atualiza a venda
             if (modelVendas.getVenda_id() != null) {
-                modelVendas = daoVendas.atualizarVenda(modelVendas.getVenda_id(), modelVendas, super.getUserLogado(request)); // Atualiza a venda existente
+                modelVendas = daoVendas.atualizarVenda(modelVendas.getVenda_id(), modelVendas, super.getUserLogado(request)); // Atualiza
             } else {
                 modelVendas = daoVendas.gravarVenda(modelVendas, super.getUserLogado(request)); // Grava nova venda
             }
 
-            // Corrigido: consulta retorna um ModelVendas, não uma lista de ModelLogin
+            // Consulta a venda
             ModelVendas modelVendasConsulta = daoVendas.consultaVenda(modelVendas.getVenda_id(), super.getUserLogado(request));
             request.setAttribute("modelVendasConsulta", modelVendasConsulta);
 
@@ -211,9 +243,38 @@ public class ServletVendas extends ServletGenericUtil {
             request.setAttribute("modelVenda", modelVendas);
             request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
 
-            // Redireciona para vendas.jsp
+
+
+            // Após recuperar a venda
+            ModelVendas modelVendasConsulta1 = daoVendas.consultaVenda(modelVendas.getVenda_id(), super.getUserLogado(request));
+
+// Debugging para verificar os dados da venda
+            System.out.println("Dados da Venda Consultada:");
+            System.out.println("Venda ID: " + modelVendasConsulta1.getVenda_id());
+            System.out.println("Nome: " + modelVendasConsulta.getNome());
+            System.out.println("Data da Venda: " + modelVendasConsulta.getData_venda()); // Verifique se está retornando a data
+
+// Formata a data para o formato necessário
+            if (modelVendasConsulta1.getData_venda() != null) {
+                String formattedDataVenda = DateUtil.formatDate(modelVendasConsulta1.getData_venda());
+                System.out.println("Data formatada: " + formattedDataVenda); // Debugging da data formatada
+                request.setAttribute("formattedDataVenda", formattedDataVenda);
+            } else {
+                System.out.println("Data da venda está nula."); // Mensagem caso a data esteja nula
+            }
+
+// Mantém os dados na tela e envia a mensagem de sucesso
+            request.setAttribute("msg", msg);
+            request.setAttribute("modelVenda", modelVendas);
+            request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
+
+// Redireciona para vendas.jsp
             RequestDispatcher redireciona = request.getRequestDispatcher("/principal/vendas.jsp");
             redireciona.forward(request, response);
+
+
+
+           
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -222,5 +283,10 @@ public class ServletVendas extends ServletGenericUtil {
             redirecionar.forward(request, response);
         }
     }
+
+
+
+
+
 
 }

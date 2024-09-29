@@ -51,7 +51,7 @@
             <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
 
-                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Vendas</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/principal/relvendas.jsp">Vendas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">DRE</a></li>
                 </ul>
             </div>

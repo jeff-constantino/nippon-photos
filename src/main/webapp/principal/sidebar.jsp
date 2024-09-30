@@ -68,10 +68,10 @@
                         <div class="collapse" id="auth">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletUsuarioController?acao=listarUser"> Funcionários </a></li>
-                                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Configurações </a></li>
-                                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 505 </a></li>
-                                <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> 606 </a></li>
+                                <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletConfig"> Configurações </a></li>
+                                <li class="nav-item"> <a class="nav-link" href=""> 404 </a></li>
+                                <li class="nav-item"> <a class="nav-link" href=""> 505 </a></li>
+                                <li class="nav-item"> <a class="nav-link" href=""> 606 </a></li>
                             </ul>
                         </div>
                     </li>

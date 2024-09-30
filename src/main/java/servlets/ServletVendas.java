@@ -274,7 +274,7 @@ public class ServletVendas extends ServletGenericUtil {
 
 
 
-           
+
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -26,7 +26,8 @@
                                     <div class="col-sm-1">
                                         <label class="float-label">ID:</label>
                                         <span class="form-bar"></span>
-                                        <input type="text" class="form-control" id="idConf" name="IdConf" placeholder="" value="${modelConfig.idConf}" readonly>
+                                        <input type="text" class="form-control" id="idConf" name="idConf" placeholder="" value="${modelConfig.idConf}" readonly>
+
                                     </div>
                                     <div class="row">
                                         <div class="col-auto">
@@ -69,7 +70,7 @@
                                         </div>
                                     </div>
                                     <button type="submit" class="btn btn-outline-success">Salvar</button>
-                                    <button type="button" class="btn btn-outline-primary" onclick="atualizarConfig()">Atualizar</button>
+
 
                                 </form>
                             </div>
@@ -147,20 +148,7 @@
         document.getElementById('configForm').elements['prod3_valor'].value = prod3_valor; // Preenche o valor do produto 3
     }
 
-    function atualizarConfig() {
-        const formData = new FormData(document.getElementById('configForm'));
 
-        fetch('<%= request.getContextPath() %>/ServletConfig', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.text())
-            .then(data => {
-                // Aqui você pode lidar com a resposta do servidor, como atualizar a tabela ou mostrar uma mensagem
-                document.getElementById('responseContainer').innerHTML = data; // Exibe a resposta do servidor
-            })
-            .catch(error => console.error('Erro:', error));
-    }
 
 
 

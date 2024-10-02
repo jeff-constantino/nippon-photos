@@ -141,8 +141,8 @@
                                                             <div class="row">
 
                                                                 <div class="col-4">
-                                                                    <label class="float-label">FUNCIONÁRIO:</label>
-                                                                    <span class="form-bar"></span>
+
+
                                                                     <input type="text" class="form-control" id="nomeBusca" name="nome" placeholder=""  style="background-color: black" REQUIRED  autofocus>
 
                                                                 </div>
@@ -236,11 +236,18 @@
                                                                     <div class="row">
                                                                         <div class="col-6">
                                                                             <label style="color: #f2a654">DINHEIRO</label>
-                                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" id="prod1_din" name="prod1_din" required value="${modelVendas.prod1_din}">
+                                                                            <input type="number" class="form-control"
+                                                                                   style="background-color: #f2a654; color: black; font-weight: bold"
+                                                                                   id="prod1_din" name="prod1_din"
+                                                                                   required value="${modelVendas.prod1_din}"
+                                                                                   oninput="calcularValor(1)" /> <!-- Passando 1 como argumento -->
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label style="color: #f2a654">VALOR</label>
-                                                                            <input type="number" class="form-control" placeholder="" style="background-color: #f2a654; color: black; font-weight: bold" disabled id="prod1_din_valor" name="prod1_din_valor">
+                                                                            <input type="number" class="form-control"
+                                                                                   id="prod1_din_valor"
+                                                                                   name="prod1_din_valor" style="background-color: #f2a654; color: black; font-weight: bold"
+                                                                                   value="${valorProd1}" readonly>
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label style="color: #f2a654">DÉBITO</label>
@@ -775,7 +782,11 @@
             }
         }
 
-        function verEditar(id, nome) {
+
+
+
+
+            function verEditar(id, nome) {
             document.getElementById('vendedor_id').value = id;
             document.getElementById('vendedor').value = nome;
 
@@ -805,10 +816,42 @@
             $('#outer_dataVenda').val(today);
         });
 
+        function calcularValor(produto) {
+            console.log(`Calculando para produto: ${produto}`);
+
+            let valorProduto = document.getElementById(`valorProd${produto}`);
+            console.log(`valorProduto:`, valorProduto);
+
+            let quantidade = document.getElementById(`prod${produto}_din`);
+            console.log(`quantidade:`, quantidade);
+
+            if (valorProduto && quantidade) {
+                valorProduto = parseFloat(valorProduto.value);
+                quantidade = parseFloat(quantidade.value);
+
+                // Verifica se os valores são válidos
+                if (!isNaN(valorProduto) && !isNaN(quantidade)) {
+                    let resultado = valorProduto * quantidade;
+                    document.getElementById(`prod${produto}_din_valor`).value = resultado.toFixed(2); // Mostra o resultado
+                } else {
+                    document.getElementById(`prod${produto}_din_valor`).value = ''; // Limpa o campo se não for válido
+                }
+            } else {
+                console.error(`Elemento não encontrado: valorProduto ou quantidade`);
+            }
+        }
+
+
+        // Adicione listeners para os campos de entrada
+        document.getElementById('prod1_din').addEventListener('input', function() { calcularValor(1); });
+        document.getElementById('prod2_din').addEventListener('input', function() { calcularValor(2); });
+        document.getElementById('prod3_din').addEventListener('input', function() { calcularValor(3); });
+
+
 
     </SCRIPT>
 
-
+   
 
 
 </body>

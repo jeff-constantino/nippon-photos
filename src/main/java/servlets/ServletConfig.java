@@ -41,33 +41,36 @@ public class ServletConfig extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String msg = "Operação realizada com sucesso!";
-            String idConf = request.getParameter("idConf");
-
+            String idConfParam = request.getParameter("idConf");
             ModelConfig modelConfig = new ModelConfig();
 
-            // Se idConf não for nulo, configure o idConf
-            if (idConf != null && !idConf.isEmpty()) {
-                modelConfig.setIdConf(Long.parseLong(idConf)); // Converter para Long
-            } else {
-                modelConfig.setIdConf(null); // ou modelConfig.setIdConf(0L); dependendo da lógica
+            // Verifica se o idConf foi passado e o configura
+            if (idConfParam != null && !idConfParam.isEmpty()) {
+                modelConfig.setIdConf(Long.parseLong(idConfParam)); // Converter para Long
             }
 
             modelConfig.setProd1_nome(request.getParameter("prod1_nome"));
             modelConfig.setProd2_nome(request.getParameter("prod2_nome"));
             modelConfig.setProd3_nome(request.getParameter("prod3_nome"));
 
-            // Definindo valores de produtos e comissões, com tratamento de exceção
+            // Definindo valores de produtos e comissões
             modelConfig.setProd1_valor(parseBigDecimal(request.getParameter("prod1_valor")));
             modelConfig.setProd2_valor(parseBigDecimal(request.getParameter("prod2_valor")));
             modelConfig.setProd3_valor(parseBigDecimal(request.getParameter("prod3_valor")));
             modelConfig.setComissao(parseBigDecimal(request.getParameter("comissao")));
 
-            // Grava a configuração no banco de dados
-            modelConfig = daoConfig.gravarConfig(modelConfig);
+            // Grava ou atualiza a configuração no banco de dados
+            modelConfig = daoConfig.gravarConfig(modelConfig); // Ajuste este método para que ele possa gravar ou atualizar
 
-            // Define a mensagem de sucesso e os dados do modelo para a requisição
-            request.setAttribute("msg", msg);
-            request.setAttribute("modelConfig", modelConfig);
+            // Obtendo valores de configuração para cada produto
+            BigDecimal valorProd1 = modelConfig.getProd1_valor();
+            BigDecimal valorProd2 = modelConfig.getProd2_valor();
+            BigDecimal valorProd3 = modelConfig.getProd3_valor();
+
+            // Adicionando os valores ao request
+            request.setAttribute("valorProd1", valorProd1);
+            request.setAttribute("valorProd2", valorProd2);
+            request.setAttribute("valorProd3", valorProd3);
 
             // Redireciona para o método doGet para carregar os dados atualizados
             doGet(request, response); // Chama o método doGet para recuperar os dados da configuração
@@ -77,6 +80,8 @@ public class ServletConfig extends HttpServlet {
             request.getRequestDispatcher("erro.jsp").forward(request, response);
         }
     }
+
+
 
     private BigDecimal parseBigDecimal(String value) {
         if (value != null && !value.isEmpty()) {

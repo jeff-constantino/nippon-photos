@@ -1,5 +1,6 @@
 package dao;
 
+import com.sun.source.tree.WhileLoopTree;
 import connection.SingleConnectionBanco;
 import model.ModelLogin;
 import model.ModelVendas;
@@ -139,7 +140,164 @@ public class DAOVendasRepository {
         return this.consultaVenda(venda_id, userLogado);
     }
 
+    public List<ModelVendas> consultaVendasRel() throws Exception {
+        List<ModelVendas> modelVendasList = new ArrayList<>();
 
+        String sql = "SELECT * FROM vendas order by venda_id desc";
+        PreparedStatement preparedSql = connection.prepareStatement(sql);
+        ResultSet resultado = preparedSql.executeQuery();
+
+        while (resultado.next()) { // Verifica se há resultados
+            ModelVendas modelVenda = new ModelVendas();
+            modelVenda = new ModelVendas();
+            modelVenda.setVenda_id(resultado.getLong("venda_id"));
+            modelVenda.setVendedor_id(resultado.getLong("vendedor_id"));
+            modelVenda.setNome(resultado.getString("nome"));
+
+            // Campos adicionais
+            modelVenda.setProd1_din(resultado.getInt("prod1_din"));
+            modelVenda.setProd1_deb(resultado.getInt("prod1_deb"));
+            modelVenda.setProd1_cred(resultado.getInt("prod1_cred"));
+            modelVenda.setProd1_pix(resultado.getInt("prod1_pix"));
+            modelVenda.setProd2_din(resultado.getInt("prod2_din"));
+            modelVenda.setProd2_deb(resultado.getInt("prod2_deb"));
+            modelVenda.setProd2_cred(resultado.getInt("prod2_cred"));
+            modelVenda.setProd2_pix(resultado.getInt("prod2_pix"));
+            modelVenda.setProd3_din(resultado.getInt("prod3_din"));
+            modelVenda.setProd3_deb(resultado.getInt("prod3_deb"));
+            modelVenda.setProd3_cred(resultado.getInt("prod3_cred"));
+            modelVenda.setProd3_pix(resultado.getInt("prod3_pix"));
+            modelVenda.setSobras(resultado.getInt("sobras"));
+            modelVenda.setRibbon(resultado.getString("ribbon"));
+            modelVenda.setData_venda(resultado.getDate("data_venda"));
+            modelVenda.setSobras(resultado.getInt("sobras"));
+
+            modelVendasList.add(modelVenda);
+        }
+        return modelVendasList;
+    }
+
+
+    public List<ModelVendas> consultaVendasRel(String dataInicialStr, String dataFinalStr) throws Exception {
+        List<ModelVendas> modelVendasList = new ArrayList<>();
+
+        String sql = "SELECT * FROM vendas WHERE data_venda >= ? AND data_venda <= ? ORDER BY venda_id DESC";
+
+        PreparedStatement preparedSql = connection.prepareStatement(sql);
+
+        // Converter String para java.sql.Date
+        Date dataInicial = Date.valueOf(dataInicialStr);
+        Date dataFinal = Date.valueOf(dataFinalStr);
+
+        // Definir os parâmetros de data corretamente
+        preparedSql.setDate(1, dataInicial);
+        preparedSql.setDate(2, dataFinal);
+
+        ResultSet resultado = preparedSql.executeQuery();
+
+        while (resultado.next()) {
+            ModelVendas modelVenda = new ModelVendas();
+            modelVenda.setVenda_id(resultado.getLong("venda_id"));
+            modelVenda.setVendedor_id(resultado.getLong("vendedor_id"));
+            modelVenda.setNome(resultado.getString("nome"));
+
+            // Campos adicionais
+            modelVenda.setProd1_din(resultado.getInt("prod1_din"));
+            modelVenda.setProd1_deb(resultado.getInt("prod1_deb"));
+            modelVenda.setProd1_cred(resultado.getInt("prod1_cred"));
+            modelVenda.setProd1_pix(resultado.getInt("prod1_pix"));
+            modelVenda.setProd2_din(resultado.getInt("prod2_din"));
+            modelVenda.setProd2_deb(resultado.getInt("prod2_deb"));
+            modelVenda.setProd2_cred(resultado.getInt("prod2_cred"));
+            modelVenda.setProd2_pix(resultado.getInt("prod2_pix"));
+            modelVenda.setProd3_din(resultado.getInt("prod3_din"));
+            modelVenda.setProd3_deb(resultado.getInt("prod3_deb"));
+            modelVenda.setProd3_cred(resultado.getInt("prod3_cred"));
+            modelVenda.setProd3_pix(resultado.getInt("prod3_pix"));
+            modelVenda.setSobras(resultado.getInt("sobras"));
+            modelVenda.setRibbon(resultado.getString("ribbon"));
+            modelVenda.setData_venda(resultado.getDate("data_venda"));
+            modelVenda.setSobras(resultado.getInt("sobras"));
+
+            modelVendasList.add(modelVenda);
+        }
+        return modelVendasList;
+    }
+
+
+    public List<ModelVendas> listVenda(Long vendedor_id) throws Exception {
+        List<ModelVendas> modelVendasList = new ArrayList<>();
+
+        String sql = "SELECT * FROM vendas WHERE vendedor_id = ?";
+        PreparedStatement preparedSql = connection.prepareStatement(sql);
+        preparedSql.setLong(1, vendedor_id);
+        ResultSet resultado = preparedSql.executeQuery();
+
+        while (resultado.next()) {
+            ModelVendas modelVendedor = new ModelVendas();
+            modelVendedor.setVenda_id(resultado.getLong("venda_id"));
+            modelVendedor.setVendedor_id(resultado.getLong("vendedor_id"));
+            modelVendedor.setNome(resultado.getString("nome"));
+            modelVendedor.setProd1_din(resultado.getInt("prod1_din"));
+            modelVendedor.setProd1_deb(resultado.getInt("prod1_deb"));
+            modelVendedor.setProd1_cred(resultado.getInt("prod1_cred"));
+            modelVendedor.setProd1_pix(resultado.getInt("prod1_pix"));
+            modelVendedor.setProd2_din(resultado.getInt("prod2_din"));
+            modelVendedor.setProd2_deb(resultado.getInt("prod2_deb"));
+            modelVendedor.setProd2_cred(resultado.getInt("prod2_cred"));
+            modelVendedor.setProd2_pix(resultado.getInt("prod2_pix"));
+            modelVendedor.setProd3_din(resultado.getInt("prod3_din"));
+            modelVendedor.setProd3_deb(resultado.getInt("prod3_deb"));
+            modelVendedor.setProd3_cred(resultado.getInt("prod3_cred"));
+            modelVendedor.setProd3_pix(resultado.getInt("prod3_pix"));
+            modelVendedor.setSobras(resultado.getInt("sobras"));
+            modelVendedor.setRibbon(resultado.getString("ribbon"));
+            modelVendedor.setData_venda(resultado.getDate("data_venda"));
+
+            modelVendasList.add(modelVendedor);
+
+        }
+        return modelVendasList;
+    }
+
+    public List<ModelVendas> vendaDia() throws Exception {
+        List<ModelVendas> modelVendasList = new ArrayList<>();
+
+
+        // Consulta SQL para filtrar as vendas realizadas no dia atual
+        String sql = "SELECT * FROM vendas WHERE data_venda = CURRENT_DATE ORDER BY venda_id DESC";
+
+        PreparedStatement preparedSql = connection.prepareStatement(sql);
+        ResultSet resultado = preparedSql.executeQuery();
+
+        while (resultado.next()) {
+            ModelVendas modelVenda = new ModelVendas();
+            modelVenda.setVenda_id(resultado.getLong("venda_id"));
+            modelVenda.setVendedor_id(resultado.getLong("vendedor_id"));
+            modelVenda.setNome(resultado.getString("nome"));
+
+            // Campos adicionais
+            modelVenda.setProd1_din(resultado.getInt("prod1_din"));
+            modelVenda.setProd1_deb(resultado.getInt("prod1_deb"));
+            modelVenda.setProd1_cred(resultado.getInt("prod1_cred"));
+            modelVenda.setProd1_pix(resultado.getInt("prod1_pix"));
+            modelVenda.setProd2_din(resultado.getInt("prod2_din"));
+            modelVenda.setProd2_deb(resultado.getInt("prod2_deb"));
+            modelVenda.setProd2_cred(resultado.getInt("prod2_cred"));
+            modelVenda.setProd2_pix(resultado.getInt("prod2_pix"));
+            modelVenda.setProd3_din(resultado.getInt("prod3_din"));
+            modelVenda.setProd3_deb(resultado.getInt("prod3_deb"));
+            modelVenda.setProd3_cred(resultado.getInt("prod3_cred"));
+            modelVenda.setProd3_pix(resultado.getInt("prod3_pix"));
+            modelVenda.setSobras(resultado.getInt("sobras"));
+            modelVenda.setRibbon(resultado.getString("ribbon"));
+            modelVenda.setData_venda(resultado.getDate("data_venda"));
+            System.out.println("Venda encontrada: " + modelVenda.getData_venda());
+
+            modelVendasList.add(modelVenda);
+        }
+        return modelVendasList;
+    }
 
 
 
@@ -281,6 +439,7 @@ public class DAOVendasRepository {
             modelVendas.setSobras(rs.getInt("sobras"));
             modelVendas.setUsuario_cad_id(rs.getLong("usuario_cad_id"));
             modelVendas.setVendedor_id(rs.getLong("vendedor_id"));
+            modelVendas.setData_venda(rs.getDate("data_venda"));
 
 
 

@@ -14,7 +14,6 @@ import util.DateUtil;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +29,17 @@ public class ServletVendas extends ServletGenericUtil {
             String acao = request.getParameter("acao");
 
             if (acao != null && !acao.isEmpty()) {
+                // Ação para listar vendas do dia
+                if (acao.equals("vendaDoDia")) {
+                    System.out.println("Buscando vendas do dia...");
+                    List<ModelVendas> listaVendasDoDia = daoVendas.vendaDia(); // Chama o método que busca vendas do dia
+                    System.out.println("Vendas do dia: " + listaVendasDoDia.size());
+                    request.setAttribute("listaVendasDoDia", listaVendasDoDia); // Define a lista como atributo
+                    request.getRequestDispatcher("principal/vendas.jsp").forward(request, response); // Redireciona para o JSP
+                    return; // Sai do método
+                }
+
+
 
                 // Ação de deletar
                 if (acao.equals("deletar")) {
@@ -86,6 +96,26 @@ public class ServletVendas extends ServletGenericUtil {
                         daoVendas.deleteVenda(Long.parseLong(venda_id));
                         response.getWriter().write("Venda Excluída!");
                     }
+                    //AÇÃO PARA RELATORIO DE VENDAS
+                }else if (acao.equals("imprimirRelatorioVendas")) {
+                    String dataInicial = request.getParameter("dataInicial");
+                    String dataFinal = request.getParameter("dataFinal");
+
+               if (dataFinal == null || dataFinal.isEmpty() && dataFinal == null || dataFinal.isEmpty()) {
+                   request.setAttribute("listaVendas", daoVendas.consultaVendasRel());
+
+
+               }else {
+
+                   request.setAttribute("listaVendas", daoVendas.consultaVendasRel(dataInicial,dataFinal));
+
+
+               }
+
+                    request.setAttribute("dataInicial", dataInicial);
+                    request.setAttribute("dataFinal", dataFinal);
+                    request.getRequestDispatcher("/principal/relvendas.jsp").forward(request, response);
+
                 }
                 // Ação de buscar para editar venda
                 else if (acao.equalsIgnoreCase("CadVenda")) {
@@ -248,11 +278,7 @@ public class ServletVendas extends ServletGenericUtil {
             // Após recuperar a venda
             ModelVendas modelVendasConsulta1 = daoVendas.consultaVenda(modelVendas.getVenda_id(), super.getUserLogado(request));
 
-// Debugging para verificar os dados da venda
-            System.out.println("Dados da Venda Consultada:");
-            System.out.println("Venda ID: " + modelVendasConsulta1.getVenda_id());
-            System.out.println("Nome: " + modelVendasConsulta.getNome());
-            System.out.println("Data da Venda: " + modelVendasConsulta.getData_venda()); // Verifique se está retornando a data
+
 
 // Formata a data para o formato necessário
             if (modelVendasConsulta1.getData_venda() != null) {

@@ -7,6 +7,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
@@ -28,53 +29,135 @@
 
 
                     </div>
-                    <div class="row ">
-                        <div class="col-12 grid-margin">
-                            <div class="card">
+                  <div class="row">
+                      <div class="col-12 grid-margin">
+                          <div class="card">
+                              <div class="card-body">
+                                  <h4 class="card-title">Relatório de Vendas:</h4>
 
-                                <div class="card-body" >
-
-                                    <h4 class="card-title">Relatório de Vendas:</h4>
-
-                                    <form action="<%= request.getContextPath() %>/ServletVendas?acao=imprimirRelatorioVendas" method="post" id="formBuscarVenda" name="formBuscarVenda">
-                                        <div class="form-row align-items-center">
-                                            <div class="col-auto">
-                                                <label class="sr-only" for="inlineFormInput">Name</label>
-                                                <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Jane Doe">
-                                            </div>
-                                            <div class="col-auto">
-                                                <label class="sr-only" for="inlineFormInputGroup">Username</label>
-                                                <div class="input-group mb-2">
-                                                    <div class="input-group-prepend">
-                                                        <div class="input-group-text">@</div>
-                                                    </div>
-                                                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Username">
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="checkbox" id="autoSizingCheck">
-                                                    <label class="form-check-label" for="autoSizingCheck">
-                                                        Remember me
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <button type="submit" class="btn btn-primary mb-2">Submit</button>
-                                            </div>
-                                        </div>
-
-                                    </form>
-
-<%--PAGINA PRINCIPAL                  --%>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                  <form action="<%= request.getContextPath() %>/ServletVendas" method="get" id="formBuscarVenda" name="formBuscarVenda">
+                                     <input type="hidden" name="acao"value="imprimirRelatorioVendas">
+                                      <div class="form-row align-items-center">
+                                          <div class="col-auto">
+                                              <label class="sr-only" for="dataInicial">Data Inicial</label>
+                                              <input type="date" class="form-control" id="dataInicial" name="dataInicial" value="${dataInicial}">
+                                          </div>
+                                          <div class="col-auto">
+                                              <label class="sr-only" for="dataFinal">Data Final</label>
+                                              <input type="date" class="form-control" id="dataFinal" name="dataFinal" value="${dataFinal}">
+                                          </div>
+                                          <div class="col-auto">
+                                              <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
+                                          </div>
+                                      </div>
+                                  </form>
+                                  <div style="height: 300px; overflow-y: auto ">
+                                      <table class="table" id="tabelarelvendas">
+                                          <thead>
+                                          <tr>
+                                              <th scope="col">Id Venda</th>
+                                              <th scope="col">NOME</th>
 
 
-                </div>
+                                              <th scope="col">Ft Din</th>
+                                              <th scope="col">Ft Deb</th>
+                                              <th scope="col">Ft Cred</th>
+                                              <th scope="col">Ft Pix</th>
+
+                                              <th scope="col">Enc Din</th>
+                                              <th scope="col">Enc Deb</th>
+                                              <th scope="col">Enc Cred</th>
+                                              <th scope="col">Enc Pix</th>
+
+                                              <th scope="col">Dig Din</th>
+                                              <th scope="col">Dig Deb</th>
+                                              <th scope="col">Dig Cred</th>
+                                              <th scope="col">Dig Pix</th>
+
+                                              <th scope="col">Sobras</th>
+                                              <th scope="col">DATA</th>
+
+
+                                          </tr>
+                                          </thead>
+                                          <tbody>
+                                          <c:forEach items="${listaVendas}" var="mv">
+                                              <tr>
+                                                  <td>
+                                                      <c:out value="${mv.venda_id}"></c:out>
+                                                  </td>
+                                                  <td>
+                                                      <c:out value="${mv.nome}"></c:out>
+                                                  </td>
+
+
+                                                  <td>
+                                                      <c:out value="${mv.prod1_din}"></c:out>
+                                                  </td>
+                                                  <td>
+                                                      <c:out value="${mv.prod1_deb}"></c:out>
+                                                  </td>
+                                                  <td>
+                                                      <c:out value="${mv.prod1_cred}"></c:out>
+                                                  </td>
+                                                  <td>
+                                                      <c:out value="${mv.prod1_pix}"></c:out>
+                                                  </td>
+
+
+                                                  <td>
+                                                      <c:out value="${mv.prod2_din}"></c:out>
+                                                  </td>
+                                                  <td>
+                                                      <c:out value="${mv.prod2_deb}"></c:out>
+                                                  </td>
+                                                  <td>
+                                                      <c:out value="${mv.prod2_cred}"></c:out>
+                                                  </td>
+                                                  <td>
+                                                      <c:out value="${mv.prod2_pix}"></c:out>
+                                                  </td>
+
+                                                  <td>
+                                                      <c:out value="${mv.prod3_din}"></c:out>
+                                                  </td>
+                                                  <td>
+                                                      <c:out value="${mv.prod3_deb}"></c:out>
+                                                  </td>
+                                                  <td>
+                                                      <c:out value="${mv.prod3_cred}"></c:out>
+                                                  </td>
+                                                  <td>
+                                                      <c:out value="${mv.prod3_pix}"></c:out>
+                                                  </td>
+                                                  <td>
+                                                      <c:out value="${mv.sobras}"></c:out>
+                                                  </td>
+                                                  <td>
+                                                      <c:out value="${mv.data_venda}"></c:out>
+                                                  </td>
+
+                                                  
+                                              </tr>
+                                              
+                                          </c:forEach>
+
+
+
+                                          </tbody>
+                                      </table>
+
+                                  </div>
+
+                                  <%--PAGINA PRINCIPAL                  --%>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+
+
+              </div>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
                 <jsp:include page="footer.jsp"></jsp:include>

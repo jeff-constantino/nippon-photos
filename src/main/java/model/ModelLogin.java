@@ -13,6 +13,7 @@ public class ModelLogin implements Serializable{
     private String login;
     private String senha;
     private String status;
+    private String vendas;
 
 
     public Boolean isNovo(){

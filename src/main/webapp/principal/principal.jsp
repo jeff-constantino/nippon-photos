@@ -36,7 +36,7 @@
                                         <div class="d-flex d-sm-block d-md-flex align-items-center">
                                             <!--INSERIR BOTÃO 1 AQUI--><!-- Button trigger modal -->
 
-                                                <a class="nav-link" href="<%= request.getContextPath() %>/ServletVendas?acao=vendaDoDia" style="font-size: large;color: #f5c102; font-weight: bold"> Vendas </a>
+                                                <a class="nav-link" href="<%= request.getContextPath() %>/ServletVendas" style="font-size: large;color: #f5c102; font-weight: bold"> Vendas </a>
                                             </button>
 
                                             <!-- Modal -->

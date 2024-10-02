@@ -23,10 +23,40 @@ public class ServletVendas extends ServletGenericUtil {
     private DAOVendasRepository daoVendas = new DAOVendasRepository();
     private DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
 
+
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String acao = request.getParameter("acao");
+            String idVenda = request.getParameter("venda_id"); // Pega o ID da venda para gerenciar
+
+            // Se a ação não for especificada, chama a ação vendaDoDia automaticamente
+            if (acao == null || acao.isEmpty()) {
+                acao = "vendaDoDia";
+            }
+
+            if (acao.equals("vendaDoDia")) {
+                // Lógica para buscar as vendas do dia
+                List<ModelVendas> listaVendasDoDia = daoVendas.vendaDia();
+                System.out.println("Total de vendas do dia: " + listaVendasDoDia.size());
+                request.setAttribute("listaVendasDoDia", listaVendasDoDia);
+                request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
+                return;
+            }
+
+            // Nova ação: Gerenciar Venda
+            if (acao.equals("gerenciarVenda") && idVenda != null && !idVenda.isEmpty()) {
+                // Busca a venda específica pelo ID
+                ModelVendas modelVendasConsulta = daoVendas.buscarVendaPorId(Long.parseLong(idVenda));
+
+                if (modelVendasConsulta != null) {
+                    // Envia os dados da venda para o JSP
+                    request.setAttribute("modelVendasConsulta", modelVendasConsulta);
+                    request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
+                    return;
+                }
+            }
 
             if (acao != null && !acao.isEmpty()) {
                 // Ação para listar vendas do dia
@@ -38,8 +68,6 @@ public class ServletVendas extends ServletGenericUtil {
                     request.getRequestDispatcher("principal/vendas.jsp").forward(request, response); // Redireciona para o JSP
                     return; // Sai do método
                 }
-
-
 
                 // Ação de deletar
                 if (acao.equals("deletar")) {
@@ -96,36 +124,30 @@ public class ServletVendas extends ServletGenericUtil {
                         daoVendas.deleteVenda(Long.parseLong(venda_id));
                         response.getWriter().write("Venda Excluída!");
                     }
-                    //AÇÃO PARA RELATORIO DE VENDAS
-                }else if (acao.equals("imprimirRelatorioVendas")) {
+                    // AÇÃO PARA RELATORIO DE VENDAS
+                } else if (acao.equals("imprimirRelatorioVendas")) {
                     String dataInicial = request.getParameter("dataInicial");
                     String dataFinal = request.getParameter("dataFinal");
 
-               if (dataFinal == null || dataFinal.isEmpty() && dataFinal == null || dataFinal.isEmpty()) {
-                   request.setAttribute("listaVendas", daoVendas.consultaVendasRel());
-
-
-               }else {
-
-                   request.setAttribute("listaVendas", daoVendas.consultaVendasRel(dataInicial,dataFinal));
-
-
-               }
+                    if (dataFinal == null || dataFinal.isEmpty() && dataFinal == null || dataFinal.isEmpty()) {
+                        request.setAttribute("listaVendas", daoVendas.consultaVendasRel());
+                    } else {
+                        request.setAttribute("listaVendas", daoVendas.consultaVendasRel(dataInicial, dataFinal));
+                    }
 
                     request.setAttribute("dataInicial", dataInicial);
                     request.setAttribute("dataFinal", dataFinal);
                     request.getRequestDispatcher("/principal/relvendas.jsp").forward(request, response);
-
                 }
                 // Ação de buscar para editar venda
                 else if (acao.equalsIgnoreCase("CadVenda")) {
                     String vendaIdStr = request.getParameter("venda_id");
-                    Long idVenda = null;
+                    idVenda = null;
 
                     // Verifica e tenta converter venda_id para Long
                     if (vendaIdStr != null && !vendaIdStr.isEmpty()) {
                         try {
-                            idVenda = Long.parseLong(vendaIdStr);
+                            idVenda = (vendaIdStr);
                         } catch (NumberFormatException e) {
                             throw new ServletException("ID de venda inválido: " + vendaIdStr);
                         }
@@ -133,7 +155,7 @@ public class ServletVendas extends ServletGenericUtil {
 
                     // Se o idVenda não for nulo, prossegue com a busca para edição
                     if (idVenda != null) {
-                        ModelVendas modelVendas = daoVendas.consultaVenda(idVenda, super.getUserLogado(request));
+                        ModelVendas modelVendas = daoVendas.consultaVenda(Long.valueOf(idVenda), super.getUserLogado(request));
                         List<ModelVendas> modelVendasList = daoVendas.listaVendas(super.getUserLogado(request));
 
                         // Define os atributos e redireciona para a página de edição
@@ -153,7 +175,6 @@ public class ServletVendas extends ServletGenericUtil {
                     request.setAttribute("msg", "Ação não reconhecida.");
                     request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
                 }
-
             } else {
                 // Ação ou ID de venda não especificados
                 request.setAttribute("msg", "Ação não especificada.");
@@ -171,14 +192,11 @@ public class ServletVendas extends ServletGenericUtil {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-
-
             String msg = "Operação realizada com sucesso!";
 
             // Obtém os parâmetros do request
             String venda_id = request.getParameter("venda_id");
             String nome = request.getParameter("nome");
-            String vendedor_id_str = request.getParameter("vendedor_id");
 
             // Produtos
             String prod1_din_str = request.getParameter("prod1_din");
@@ -196,7 +214,6 @@ public class ServletVendas extends ServletGenericUtil {
             String prod3_cred_str = request.getParameter("prod3_cred");
             String prod3_pix_str = request.getParameter("prod3_pix");
 
-
             // Data da Venda
             String dataVenda = request.getParameter("dataVenda"); // Certifique-se que o nome do parâmetro é correto
 
@@ -209,15 +226,14 @@ public class ServletVendas extends ServletGenericUtil {
             // Criação do objeto ModelVendas
             ModelVendas modelVendas = new ModelVendas();
 
-
-
             // Settar os dados da venda
             if (venda_id != null && !venda_id.isEmpty()) {
                 modelVendas.setVenda_id(Long.parseLong(venda_id)); // Atualiza se existe
             }
 
-            Long vendedor_id = vendedor_id_str != null && !vendedor_id_str.isEmpty() ? Long.parseLong(vendedor_id_str) : null;
-            modelVendas.setVendedor_id(vendedor_id);
+            // Usando o novo método para setar vendedor_id
+            String vendedor_id_str = request.getParameter("vendedor_id");
+            modelVendas.setVendedor_id(vendedor_id_str); // Define o ID do vendedor no modelo
             modelVendas.setNome(nome);
 
             // Settar os campos novos de produtos
@@ -273,14 +289,10 @@ public class ServletVendas extends ServletGenericUtil {
             request.setAttribute("modelVenda", modelVendas);
             request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
 
-
-
             // Após recuperar a venda
             ModelVendas modelVendasConsulta1 = daoVendas.consultaVenda(modelVendas.getVenda_id(), super.getUserLogado(request));
 
-
-
-// Formata a data para o formato necessário
+            // Formata a data para o formato necessário
             if (modelVendasConsulta1.getData_venda() != null) {
                 String formattedDataVenda = DateUtil.formatDate(modelVendasConsulta1.getData_venda());
                 System.out.println("Data formatada: " + formattedDataVenda); // Debugging da data formatada
@@ -289,18 +301,18 @@ public class ServletVendas extends ServletGenericUtil {
                 System.out.println("Data da venda está nula."); // Mensagem caso a data esteja nula
             }
 
-// Mantém os dados na tela e envia a mensagem de sucesso
+            // Mantém os dados na tela e envia a mensagem de sucesso
             request.setAttribute("msg", msg);
             request.setAttribute("modelVenda", modelVendas);
             request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
 
-// Redireciona para vendas.jsp
-            RequestDispatcher redireciona = request.getRequestDispatcher("/principal/vendas.jsp");
-            redireciona.forward(request, response);
+//            // Redireciona para vendas.jsp
+//            RequestDispatcher redireciona = request.getRequestDispatcher("/principal/vendas.jsp");
+//            redireciona.forward(request, response);
 
-
-
-
+            // Chama o doGet para buscar vendas do dia após a gravação
+            request.setAttribute("acao", "vendaDoDia"); // Define a ação para o doGet
+            doGet(request, response); // Chama o doGet
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -309,7 +321,6 @@ public class ServletVendas extends ServletGenericUtil {
             redirecionar.forward(request, response);
         }
     }
-
 
 
 

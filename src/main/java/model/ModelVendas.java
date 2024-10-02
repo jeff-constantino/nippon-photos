@@ -6,7 +6,8 @@ import java.sql.Date;
 public class ModelVendas implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long Venda_id;
+
+    private Long venda_id;
     private String nome;
     private int prod1_din;
     private int prod1_deb;
@@ -29,25 +30,38 @@ public class ModelVendas implements Serializable {
     private Date data_venda;
 
     private Long vendedor_id;
+
+
     private Long usuario_cad_id;
 
     private String ribbon;
 
+
+
+
+
     public ModelVendas() {
         // Construtor padrão
     }
-
-
-    public Boolean novaVenda(){
-        if(this.Venda_id == null){
+public Boolean novaVenda(){
+        if(this.venda_id==null){
             return true;
-        } else if (this.Venda_id != null && this.Venda_id > 0) {
+        } else if (this.venda_id != null && this.venda_id > 0) {
             return false;
-        }
 
-        return Venda_id == null;
+        }
+        return venda_id==null;
+}
+
+
+
+    public Long getVenda_id() {
+        return venda_id;
     }
 
+    public void setVenda_id(Long venda_id) {
+        this.venda_id = venda_id;
+    }
 
     public String getRibbon() {
         return ribbon;
@@ -73,13 +87,9 @@ public class ModelVendas implements Serializable {
         this.data_venda = data_venda;
     }
 
-    public Long getVenda_id() {
-        return Venda_id;
-    }
 
-    public void setVenda_id(Long venda_id) {
-        Venda_id = venda_id;
-    }
+
+
 
     public int getProd1_din() {
         return prod1_din;
@@ -189,8 +199,17 @@ public class ModelVendas implements Serializable {
         return vendedor_id;
     }
 
-    public void setVendedor_id(Long vendedor_id) {
-        this.vendedor_id = vendedor_id;
+    // Método para setar vendedor_id
+    public void setVendedor_id(String vendedorIdStr) throws Exception {
+        if (vendedorIdStr != null && !vendedorIdStr.isEmpty()) {
+            try {
+                this.vendedor_id = Long.parseLong(vendedorIdStr);
+            } catch (NumberFormatException e) {
+                throw new Exception("ID do vendedor inválido: " + vendedorIdStr);
+            }
+        } else {
+            this.vendedor_id = null; // Ou você pode decidir lançar uma exceção
+        }
     }
 
     public Long getUsuario_cad_id() {

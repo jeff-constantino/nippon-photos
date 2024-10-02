@@ -151,7 +151,7 @@ public class DAOVendasRepository {
             ModelVendas modelVenda = new ModelVendas();
             modelVenda = new ModelVendas();
             modelVenda.setVenda_id(resultado.getLong("venda_id"));
-            modelVenda.setVendedor_id(resultado.getLong("vendedor_id"));
+            modelVenda.setVendedor_id(resultado.getString("vendedor_id"));
             modelVenda.setNome(resultado.getString("nome"));
 
             // Campos adicionais
@@ -198,7 +198,7 @@ public class DAOVendasRepository {
         while (resultado.next()) {
             ModelVendas modelVenda = new ModelVendas();
             modelVenda.setVenda_id(resultado.getLong("venda_id"));
-            modelVenda.setVendedor_id(resultado.getLong("vendedor_id"));
+            modelVenda.setVendedor_id(resultado.getString("vendedor_id"));
             modelVenda.setNome(resultado.getString("nome"));
 
             // Campos adicionais
@@ -236,7 +236,7 @@ public class DAOVendasRepository {
         while (resultado.next()) {
             ModelVendas modelVendedor = new ModelVendas();
             modelVendedor.setVenda_id(resultado.getLong("venda_id"));
-            modelVendedor.setVendedor_id(resultado.getLong("vendedor_id"));
+            modelVendedor.setVendedor_id(resultado.getString("vendedor_id"));
             modelVendedor.setNome(resultado.getString("nome"));
             modelVendedor.setProd1_din(resultado.getInt("prod1_din"));
             modelVendedor.setProd1_deb(resultado.getInt("prod1_deb"));
@@ -273,7 +273,7 @@ public class DAOVendasRepository {
         while (resultado.next()) {
             ModelVendas modelVenda = new ModelVendas();
             modelVenda.setVenda_id(resultado.getLong("venda_id"));
-            modelVenda.setVendedor_id(resultado.getLong("vendedor_id"));
+            modelVenda.setVendedor_id(resultado.getString("vendedor_id"));
             modelVenda.setNome(resultado.getString("nome"));
 
             // Campos adicionais
@@ -299,6 +299,64 @@ public class DAOVendasRepository {
         return modelVendasList;
     }
 
+    public ModelVendas buscarVendaPorId(Long idVenda) throws SQLException {
+        ModelVendas venda = null;
+        String sql = "SELECT * FROM vendas WHERE venda_id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, idVenda);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                venda = new ModelVendas();
+                venda.setVenda_id(rs.getLong("venda_id"));
+                venda.setNome(rs.getString("nome"));
+                venda.setProd1_din(rs.getInt("prod1_din"));
+                venda.setProd1_deb(rs.getInt("prod1_deb"));
+                venda.setProd1_cred(rs.getInt("prod1_cred"));
+                venda.setProd1_pix(rs.getInt("prod1_pix"));
+                venda.setProd2_din(rs.getInt("prod2_din"));
+                venda.setProd2_deb(rs.getInt("prod2_deb"));
+                venda.setProd2_cred(rs.getInt("prod2_cred"));
+                venda.setProd2_pix(rs.getInt("prod2_pix"));
+                venda.setProd3_din(rs.getInt("prod3_din"));
+                venda.setProd3_deb(rs.getInt("prod3_deb"));
+                venda.setProd3_cred(rs.getInt("prod3_cred"));
+                venda.setProd3_pix(rs.getInt("prod3_pix"));
+                venda.setSobras(rs.getInt("sobras"));
+                venda.setRibbon(rs.getString("ribbon"));
+
+                // Tratamento do vendedor_id
+                String vendedorId = rs.getString("vendedor_id");
+                try {
+                    if (vendedorId != null) {
+                        venda.setVendedor_id(vendedorId);
+                    } else {
+                        venda.setVendedor_id(null); // Ou trate como preferir
+                    }
+                } catch (Exception e) {
+                    // Captura a exceção aqui e trate-a conforme necessário
+                    System.err.println("Erro ao definir vendedor_id: " + e.getMessage());
+                    // Você pode lançar uma SQLException aqui se desejar
+                }
+
+                // Tratamento da data
+                Date dataVenda = rs.getDate("data_venda");
+                if (dataVenda != null) {
+                    venda.setData_venda(dataVenda);
+                } else {
+                    venda.setData_venda(null); // Ou trate como preferir
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Erro ao buscar a venda pelo ID: " + e.getMessage());
+        }
+
+        return venda;
+    }
+
+
 
 
 
@@ -320,7 +378,7 @@ public class DAOVendasRepository {
         if (resultado.next()) { // Verifica se há resultados
             modelVendas = new ModelVendas();
             modelVendas.setVenda_id(resultado.getLong("venda_id"));
-            modelVendas.setVendedor_id(resultado.getLong("vendedor_id"));
+            modelVendas.setVendedor_id(resultado.getString("vendedor_id"));
             modelVendas.setNome(resultado.getString("nome"));
 
             // Campos adicionais
@@ -379,7 +437,7 @@ public class DAOVendasRepository {
 
         ResultSet resultado = preparedSql.executeQuery();
         while (resultado.next()) {
-            modelVendas.setVendedor_id (resultado.getLong("id"));
+            modelVendas.setVendedor_id (resultado.getString("id"));
             modelVendas.setNome(resultado.getString("nome"));
         }
         return modelVendas;
@@ -438,7 +496,7 @@ public class DAOVendasRepository {
 
             modelVendas.setSobras(rs.getInt("sobras"));
             modelVendas.setUsuario_cad_id(rs.getLong("usuario_cad_id"));
-            modelVendas.setVendedor_id(rs.getLong("vendedor_id"));
+            modelVendas.setVendedor_id(rs.getString("vendedor_id"));
             modelVendas.setData_venda(rs.getDate("data_venda"));
 
 

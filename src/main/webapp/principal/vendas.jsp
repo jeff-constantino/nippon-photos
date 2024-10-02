@@ -58,19 +58,29 @@
                                             <div class="col-sm-12">
                                                 <div class="card">
                                                     <div class="card-block">
-                                                        <form action="<%= request.getContextPath() %>/ServletVendas" method="get" id="formBuscarVenda" name="formBuscarVenda">
-                                                            <input type="hidden" name="acao"value="imprimirRelatorioVendas">
+                                                        <form action="<%= request.getContextPath() %>/ServletVendas"
+                                                              method="get" id="formBuscarVenda" name="formBuscarVenda">
+                                                            <input type="hidden" name="acao"
+                                                                   value="imprimirRelatorioVendas">
                                                             <div class="form-row align-items-center">
                                                                 <div class="col-auto">
-                                                                    <label class="sr-only" for="dataInicial">Data Inicial</label>
-                                                                    <input type="date" class="form-control" id="dataInicial" name="dataInicial" value="${dataInicial}">
+                                                                    <label class="sr-only" for="dataInicial">Data
+                                                                        Inicial</label>
+                                                                    <input type="date" class="form-control"
+                                                                           id="dataInicial" name="dataInicial"
+                                                                           value="${dataInicial}">
                                                                 </div>
                                                                 <div class="col-auto">
-                                                                    <label class="sr-only" for="dataFinal">Data Final</label>
-                                                                    <input type="date" class="form-control" id="dataFinal" name="dataFinal" value="${dataFinal}">
+                                                                    <label class="sr-only" for="dataFinal">Data
+                                                                        Final</label>
+                                                                    <input type="date" class="form-control"
+                                                                           id="dataFinal" name="dataFinal"
+                                                                           value="${dataFinal}">
                                                                 </div>
                                                                 <div class="col-auto">
-                                                                    <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
+                                                                    <button type="submit" class="btn btn-primary">
+                                                                        Imprimir Relatório
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -164,7 +174,6 @@
                                                                     </tr>
 
                                                                 </c:forEach>
-
 
 
                                                                 </tbody>
@@ -985,82 +994,82 @@
                                             </form>
 
 
-
-
                                         </table>
                                         <h5>Lançamentos do Dia:</h5>
-
 
 
                                         <div style="overflow-x: hidden">
                                             <div style="height: 300px; overflow-y: auto;">
 
-                                                    <input type="hidden" name="acao" value="vendaDoDia">
-                                                    <table class="table" id="tabelabuscaview">
-                                                        <thead>
-                                                        <tr>
-                                                            <th scope="col">Nome</th>
-                                                            <th scope="col">Ft Din</th>
-                                                            <th scope="col">Ft Deb</th>
-                                                            <th scope="col">Ft Cred</th>
-                                                            <th scope="col">Ft Pix</th>
-                                                            <th scope="col">Enc Din</th>
-                                                            <th scope="col">Enc Deb</th>
-                                                            <th scope="col">Enc Cred</th>
-                                                            <th scope="col">Enc Pix</th>
-                                                            <th scope="col">Dig Din</th>
-                                                            <th scope="col">Dig Deb</th>
-                                                            <th scope="col">Dig Cred</th>
-                                                            <th scope="col">Dig Pix</th>
-                                                            <th scope="col">Sobras</th>
-                                                            <th scope="col">Ribbon</th>
-                                                            <th scope="col">ID Vendedor</th>
-                                                            <th scope="col">Data</th>
-                                                            <th scope="col">Ações</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        <c:choose>
-                                                            <c:when test="${not empty listaVendasDoDia}">
-                                                                <c:forEach var="venda" items="${listaVendasDoDia}">
-                                                                    <tr>
-                                                                        <td>${venda.nome}</td>
-                                                                        <td>${venda.prod1_din}</td>
-                                                                        <td>${venda.prod1_deb}</td>
-                                                                        <td>${venda.prod1_cred}</td>
-                                                                        <td>${venda.prod1_pix}</td>
-                                                                        <td>${venda.prod2_din}</td>
-                                                                        <td>${venda.prod2_deb}</td>
-                                                                        <td>${venda.prod2_cred}</td>
-                                                                        <td>${venda.prod2_pix}</td>
-                                                                        <td>${venda.prod3_din}</td>
-                                                                        <td>${venda.prod3_deb}</td>
-                                                                        <td>${venda.prod3_cred}</td>
-                                                                        <td>${venda.prod3_pix}</td>
-                                                                        <td>${venda.sobras}</td>
-                                                                        <td>${venda.ribbon}</td>
-                                                                        <td>${venda.vendedor_id}</td>
-                                                                        <td>${venda.data_venda}</td>
-                                                                        <td>
-                                                                            <form action="<%= request.getContextPath() %>/ServletVendas" method="post">
-                                                                                <input type="hidden" name="acao" value="editar">
-                                                                                <input type="hidden" name="venda_id" value="${venda.venda_id}">
-                                                                                <button type="submit">Editar</button>
-                                                                            </form>
-
-                                                                            <a href="ServletVendas?acao=deletar&venda_id=${venda.venda_id}">Excluir</a>
-                                                                        </td>
-                                                                    </tr>
-                                                                </c:forEach>
-                                                            </c:when>
-                                                            <c:otherwise>
+                                                <input type="hidden" name="acao" value="vendaDoDia">
+                                                <table class="table" id="tabelaVendaDia">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col">Nome</th>
+                                                        <th scope="col">Ft Din</th>
+                                                        <th scope="col">Ft Deb</th>
+                                                        <th scope="col">Ft Cred</th>
+                                                        <th scope="col">Ft Pix</th>
+                                                        <th scope="col">Enc Din</th>
+                                                        <th scope="col">Enc Deb</th>
+                                                        <th scope="col">Enc Cred</th>
+                                                        <th scope="col">Enc Pix</th>
+                                                        <th scope="col">Dig Din</th>
+                                                        <th scope="col">Dig Deb</th>
+                                                        <th scope="col">Dig Cred</th>
+                                                        <th scope="col">Dig Pix</th>
+                                                        <th scope="col">Sobras</th>
+                                                        <th scope="col">Ribbon</th>
+                                                        <th scope="col">ID Vendedor</th>
+                                                        <th scope="col">Data</th>
+                                                        <th scope="col">ID Venda</th>
+                                                        <th scope="col">Ações</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <c:out value="${listaVendasDoDia}"/>
+                                                    <tbody>
+                                                    <c:choose>
+                                                        <c:when test="${not empty listaVendasDoDia}">
+                                                            <c:forEach var="vd" items="${listaVendasDoDia}">
                                                                 <tr>
-                                                                    <td colspan="15">Nenhuma venda encontrada para o dia.</td>
+                                                                    <td><c:out value="${vd.nome}"/></td>
+                                                                    <td><c:out value="${vd.prod1_din}"/></td>
+                                                                    <td><c:out value="${vd.prod1_deb}"/></td>
+                                                                    <td><c:out value="${vd.prod1_cred}"/></td>
+                                                                    <td><c:out value="${vd.prod1_pix}"/></td>
+                                                                    <td><c:out value="${vd.prod2_din}"/></td>
+                                                                    <td><c:out value="${vd.prod2_deb}"/></td>
+                                                                    <td><c:out value="${vd.prod2_cred}"/></td>
+                                                                    <td><c:out value="${vd.prod2_pix}"/></td>
+                                                                    <td><c:out value="${vd.prod3_din}"/></td>
+                                                                    <td><c:out value="${vd.prod3_deb}"/></td>
+                                                                    <td><c:out value="${vd.prod3_cred}"/></td>
+                                                                    <td><c:out value="${vd.prod3_pix}"/></td>
+                                                                    <td><c:out value="${vd.sobras}"/></td>
+                                                                    <td><c:out value="${vd.ribbon}"/></td>
+                                                                    <td><c:out value="${vd.vendedor_id}"/></td>
+                                                                    <td><c:out value="${vd.data_venda}"/></td>
+
+
+                                                                    <td><c:out value="${vd.venda_id}"/></td>
+
+                                                                    <td>
+                                                                        <a class="btn btn-outline-success waves-effect waves-light"
+                                                                           href="<%= request.getContextPath() %>/ServletVendas?acao=gerenciarVenda&venda_id=${vd.venda_id}">Gerenciar</a>
+                                                                    </td>
                                                                 </tr>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                        </tbody>
-                                                    </table>
+                                                            </c:forEach>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <tr>
+                                                                <td colspan="15">Nenhuma venda encontrada para o dia.
+                                                                </td>
+                                                            </tr>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    </tbody>
+
+                                                </table>
                                                 </form>
                                             </div>
                                         </div>
@@ -1169,12 +1178,6 @@
         }
 
 
-        // Ao abrir o modal, define a data atual
-        $('#modalBuscaVenda').on('show.bs.modal', function () {
-            const today = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
-            $('#outer_dataVenda').val(today);
-        });
-
         function calcularValor(produto) {
             console.log(`Calculando para produto: ${produto}`);
 
@@ -1213,10 +1216,9 @@
         });
 
 
-
-
     </SCRIPT>
 
 
+</div>
 </body>
 </html>

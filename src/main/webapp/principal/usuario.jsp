@@ -102,7 +102,6 @@
                                                                                                     <option disabled="disabled">Selecione o Status</option>
                                                                                                     <option style="color: #00d25b" value="Ativo"  <%
                                                                                                         ModelLogin modelLogin =(ModelLogin)request.getAttribute("modelLogin");
-//                                                                                                        System.out.println(modelLogin);
                                                                                                         if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Ativo")){
                                                                                                             out.print(" ");
                                                                                                             out.print("selected=\"selected\"");

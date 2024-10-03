@@ -25,9 +25,10 @@ public class ServletConfig extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         try {
             List<ModelConfig> configs = daoConfig.consultarTodasConfigs(); // Recupera todas as configurações
-            System.out.println("Número de configurações encontradas: " + configs.size()); // Exibe a quantidade de configurações
+
             request.setAttribute("configs", configs); // Adiciona a lista ao request
             request.getRequestDispatcher("/principal/config.jsp").forward(request, response); // Redireciona para a JSP
         } catch (Exception e) {

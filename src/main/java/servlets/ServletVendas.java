@@ -1,6 +1,8 @@
 package servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import dao.DAOConfig;
 import dao.DAOUsuarioRepository;
 import dao.DAOVendasRepository;
 import jakarta.servlet.RequestDispatcher;
@@ -8,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.ModelConfig;
 import model.ModelLogin;
 import model.ModelVendas;
 import util.DateUtil;
@@ -23,10 +26,18 @@ public class ServletVendas extends ServletGenericUtil {
     private DAOVendasRepository daoVendas = new DAOVendasRepository();
     private DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
 
+    private DAOConfig daoConfig;
 
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        daoConfig = new DAOConfig(); // Instanciar o DAOConfig aqui
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+
         try {
             String acao = request.getParameter("acao");
             String idVenda = request.getParameter("venda_id"); // Pega o ID da venda para gerenciar
@@ -35,11 +46,21 @@ public class ServletVendas extends ServletGenericUtil {
             if (acao == null || acao.isEmpty()) {
                 acao = "vendaDoDia";
             }
+            if ("buscarValoresProdutos".equals(acao)) {
+                // Supondo que você tenha uma instância do DAOConfig
+                List<ModelConfig> configs = daoConfig.consultarTodasConfigs();
+
+                // Converte a lista de configurações em JSON
+                String jsonResponse = new Gson().toJson(configs); // Usando a biblioteca Gson
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(jsonResponse);
+                return;
+            }
 
             if (acao.equals("vendaDoDia")) {
                 // Lógica para buscar as vendas do dia
                 List<ModelVendas> listaVendasDoDia = daoVendas.vendaDia();
-                System.out.println("Total de vendas do dia: " + listaVendasDoDia.size());
                 request.setAttribute("listaVendasDoDia", listaVendasDoDia);
                 request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
                 return;
@@ -61,9 +82,9 @@ public class ServletVendas extends ServletGenericUtil {
             if (acao != null && !acao.isEmpty()) {
                 // Ação para listar vendas do dia
                 if (acao.equals("vendaDoDia")) {
-                    System.out.println("Buscando vendas do dia...");
+
                     List<ModelVendas> listaVendasDoDia = daoVendas.vendaDia(); // Chama o método que busca vendas do dia
-                    System.out.println("Vendas do dia: " + listaVendasDoDia.size());
+
                     request.setAttribute("listaVendasDoDia", listaVendasDoDia); // Define a lista como atributo
                     request.getRequestDispatcher("principal/vendas.jsp").forward(request, response); // Redireciona para o JSP
                     return; // Sai do método
@@ -81,12 +102,11 @@ public class ServletVendas extends ServletGenericUtil {
                 // Ação de buscar usuários via AJAX
                 else if (acao.equalsIgnoreCase("buscaruserajax")) {
                     String nome = request.getParameter("nome");
-                    System.out.println("Buscando funcionários com o nome: " + nome);
 
                     List<ModelLogin> dadosJsonUser = new ArrayList<>();
                     try {
                         dadosJsonUser = daoVendas.consultaFuncionarioList(nome);
-                        System.out.println("Número de resultados encontrados: " + dadosJsonUser.size());
+
                     } catch (Exception e) {
                         System.err.println("Erro na busca: " + e.getMessage());
                         // Responde com erro em formato JSON
@@ -295,7 +315,7 @@ public class ServletVendas extends ServletGenericUtil {
             // Formata a data para o formato necessário
             if (modelVendasConsulta1.getData_venda() != null) {
                 String formattedDataVenda = DateUtil.formatDate(modelVendasConsulta1.getData_venda());
-                System.out.println("Data formatada: " + formattedDataVenda); // Debugging da data formatada
+
                 request.setAttribute("formattedDataVenda", formattedDataVenda);
             } else {
                 System.out.println("Data da venda está nula."); // Mensagem caso a data esteja nula

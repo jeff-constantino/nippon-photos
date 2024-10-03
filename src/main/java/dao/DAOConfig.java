@@ -149,7 +149,7 @@ public class DAOConfig {
                 listaConfigs.add(modelConfig);
             }
 
-            System.out.println("Número de configurações retornadas: " + listaConfigs.size()); // Verifique a quantidade retornada
+
         } catch (SQLException e) {
             System.err.println("Erro ao consultar configurações: " + e.getMessage()); // Captura erros de SQL
             throw e; // Repropaga a exceção para ser tratada na camada superior

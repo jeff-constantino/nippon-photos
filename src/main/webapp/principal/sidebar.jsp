@@ -40,19 +40,48 @@
                 <span class="menu-title">Inicio</span>
             </a>
         </li>
+
+
         <li class="nav-item menu-items">
-            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+            <a class="nav-link" data-bs-toggle="collapse" href="#financeiro" aria-expanded="false" aria-controls="financeiro">
+              <span class="menu-icon">
+                <i class="mdi mdi-chart-bar"></i>
+              </span>
+                <span class="menu-title">Financeiro</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="financeiro">
+                <ul class="nav flex-column sub-menu">
+
+                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/principal/relvendas.jsp">Contas a Pagar</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="">Vales e Despesas</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="">Cartões e Pix</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="">Vales e Despesas</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="">Salários</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="">Vales e Despesas</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="">Fechamento do Mês</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="">Ranking de Funcionários</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="">Death Note</a></li>
+                </ul>
+            </div>
+        </li>
+
+
+
+        <li class="nav-item menu-items">
+            <a class="nav-link" data-bs-toggle="collapse" href="#relatorio" aria-expanded="false" aria-controls="relatorio">
               <span class="menu-icon">
                 <i class="mdi mdi-chart-bar"></i>
               </span>
                 <span class="menu-title">Relatório</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="ui-basic">
+            <div class="collapse" id="relatorio">
                 <ul class="nav flex-column sub-menu">
 
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/principal/relvendas.jsp">Vendas</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">DRE</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="">Contas e Despesas</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="">DRE</a></li>
                 </ul>
             </div>
         </li>

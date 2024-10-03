@@ -337,10 +337,10 @@
                                                                 <div class="col-2">
                                                                     <label class="float-label">TOTAL DE FOTOS:</label>
                                                                     <span class="form-bar"></span>
-                                                                    <input type="text" class="form-control" id="nome"
-                                                                           name="nome" placeholder=""
+                                                                    <input type="text" class="form-control" id="total"
+                                                                           name="total" placeholder=""
                                                                            style="background-color: white; color: black"
-                                                                           readonly>
+                                                                           readonly oninput="buscarValorModal('total')">
                                                                 </div>
                                                             </div>
 
@@ -369,7 +369,7 @@
                                                                                    id="prod1_din" name="prod1_din"
                                                                                    required
                                                                                    value="${modelVendas.prod1_din}"
-                                                                                   oninput="calcularValor(1)"/>
+                                                                                   oninput="buscarValorModal('prod1_din')"/>
                                                                             <!-- Passando 1 como argumento -->
                                                                         </div>
                                                                         <div class="col-6">
@@ -378,7 +378,7 @@
                                                                                    id="prod1_din_valor"
                                                                                    name="prod1_din_valor"
                                                                                    style="background-color: #f2a654; color: black; font-weight: bold"
-                                                                                   value="${valorProd1}" readonly>
+                                                                                   value="${valorProd1}" disabled>
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label style="color: #f2a654">DÉBITO</label>
@@ -387,7 +387,7 @@
                                                                                    style="background-color: #f2a654; color: black; font-weight: bold"
                                                                                    id="prod1_deb" name="prod1_deb"
                                                                                    required
-                                                                                   value="${modelVendas.prod1_deb}">
+                                                                                   value="${modelVendas.prod1_deb}" oninput="buscarValorModal('prod1_deb')">
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label style="color: #f2a654">VALOR</label>
@@ -404,7 +404,7 @@
                                                                                    style="background-color: #f2a654; color: black; font-weight: bold"
                                                                                    id="prod1_cred" name="prod1_cred"
                                                                                    required
-                                                                                   value="${modelVendas.prod1_cred}">
+                                                                                   value="${modelVendas.prod1_cred}" oninput="buscarValorModal('prod1_cred')">
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label style="color: #f2a654">VALOR</label>
@@ -421,7 +421,7 @@
                                                                                    style="background-color: #f2a654; color: black; font-weight: bold"
                                                                                    id="prod1_pix" name="prod1_pix"
                                                                                    required
-                                                                                   value="${modelVendas.prod1_pix}">
+                                                                                   value="${modelVendas.prod1_pix}" oninput="buscarValorModal('prod1_pix')">
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label style="color: #f2a654">VALOR</label>
@@ -444,7 +444,7 @@
                                                                                    style="background-color: #73b307; color: black; font-weight: bold"
                                                                                    id="prod2_din" name="prod2_din"
                                                                                    required
-                                                                                   value="${modelVendas.prod2_din}">
+                                                                                   value="${modelVendas.prod2_din}" oninput="buscarValorModal('prod2_din')">
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label STYLE="color: #00d25b">VALOR</label>
@@ -461,7 +461,7 @@
                                                                                    STYLE="background-color: #73b307; color: black; font-weight: bold"
                                                                                    id="prod2_deb" name="prod2_deb"
                                                                                    required
-                                                                                   value="${modelVendas.prod2_deb}">
+                                                                                   value="${modelVendas.prod2_deb}" oninput="buscarValorModal('prod2_deb')">
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label STYLE="color: #00d25b">VALOR</label>
@@ -478,7 +478,7 @@
                                                                                    STYLE="background-color: #73b307; color: black; font-weight: bold"
                                                                                    id="prod2_cred" name="prod2_cred"
                                                                                    required
-                                                                                   value="${modelVendas.prod2_cred}">
+                                                                                   value="${modelVendas.prod2_cred}" oninput="buscarValorModal('prod2_cred')">
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label STYLE="color: #00d25b">VALOR</label>
@@ -495,7 +495,7 @@
                                                                                    STYLE="background-color: #73b307; color: black; font-weight: bold"
                                                                                    id="prod2_pix" name="prod2_pix"
                                                                                    required
-                                                                                   value="${modelVendas.prod2_pix}">
+                                                                                   value="${modelVendas.prod2_pix}" oninput="buscarValorModal('prod2_pix')">
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label STYLE="color: #00d25b">VALOR</label>
@@ -518,7 +518,7 @@
                                                                                    style="background-color: fuchsia; color: black; font-weight: bold"
                                                                                    id="prod3_din" name="prod3_din"
                                                                                    required
-                                                                                   value="${modelVendas.prod3_din}">
+                                                                                   value="${modelVendas.prod3_din}" oninput="buscarValorModal('prod3_din')">
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label style="color: fuchsia">VALOR</label>
@@ -535,7 +535,7 @@
                                                                                    style="background-color: fuchsia; color: black; font-weight: bold"
                                                                                    id="prod3_deb" name="prod3_deb"
                                                                                    required
-                                                                                   value="${modelVendas.prod3_deb}">
+                                                                                   value="${modelVendas.prod3_deb}" oninput="buscarValorModal('prod3_deb')">
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label style="color: fuchsia">VALOR</label>
@@ -552,7 +552,7 @@
                                                                                    style="background-color: fuchsia; color: black; font-weight: bold"
                                                                                    id="prod3_cred" name="prod3_cred"
                                                                                    required
-                                                                                   value="${modelVendas.prod3_cred}">
+                                                                                   value="${modelVendas.prod3_cred}" oninput="buscarValorModal('prod3_cred')">
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label style="color: fuchsia">VALOR</label>
@@ -569,7 +569,7 @@
                                                                                    style="background-color: fuchsia; color: black; font-weight: bold"
                                                                                    id="prod3_pix" name="prod3_pix"
                                                                                    required
-                                                                                   value="${modelVendas.prod3_pix}">
+                                                                                   value="${modelVendas.prod3_pix}" oninput="buscarValorModal('prod3_pix')">
                                                                         </div>
                                                                         <div class="col-6">
                                                                             <label style="color: fuchsia">VALOR</label>
@@ -595,25 +595,25 @@
                                                                     <select class="form-select" id="ribbon"
                                                                             name="ribbon" required
                                                                             value="${modelVendas.ribbon}">
-                                                                        <option z="disabled">Tamanho do Papel</option>
-                                                                        <option style="color: #00d25b" value="10x15"  <%
-                                                                            ModelVendas modelVendas = (ModelVendas) request.getAttribute("modelVendas");
-//                                                                                                        System.out.println(modelVendas);
-                                                                            if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("10x15")) {
-                                                                                out.print(" ");
-                                                                                out.print("selected=\"selected\"");
-                                                                                out.print(" ");
-                                                                            }%>>10x15
+                                                                        <option disabled>Tamanho do Papel</option>
+                                                                        <option style="color: #00d25b" value="10x15"
+                                                                                <%
+                                                                                    ModelVendas modelVendas = (ModelVendas) request.getAttribute("modelVendas");
+                                                                                    if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("10x15")) {
+                                                                                        out.print("selected=\"selected\"");
+                                                                                    }
+                                                                                %>>10x15
+                                                                        </option>
+                                                                        <option style="color: #bf3322" value="15x20"
+                                                                                <%
+                                                                                    modelVendas = (ModelVendas) request.getAttribute("modelVendas");
+                                                                                    if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("15x20")) {
+                                                                                        out.print("selected=\"selected\"");
+                                                                                    }
+                                                                                %>>15x20
                                                                         </option>
 
-                                                                        <option style="color: #bf3322" value="15x20" <%
-                                                                            modelVendas = (ModelVendas) request.getAttribute("modelVendas");
-                                                                            if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("15x20")) {
-                                                                                out.print(" ");
-                                                                                out.print("selected=\"selected\"");
-                                                                                out.print(" ");
-                                                                            }%>>15x20
-                                                                        </option>
+
 
                                                                     </select>
                                                                 </div>
@@ -722,8 +722,8 @@
                                                     <div class="col-2">
                                                         <label class="float-label">TOTAL DE FOTOS:</label>
                                                         <span class="form-bar"></span>
-                                                        <input type="text" class="form-control" id="outer_nome"
-                                                               name="nome" placeholder=""
+                                                        <input type="text" class="form-control" id="outer_total"
+                                                               name="outer_total" placeholder=""
                                                                style="background-color: white; color: black" disabled>
                                                     </div>
                                                 </div>
@@ -750,7 +750,7 @@
                                                                 <input type="number" class="form-control" placeholder=""
                                                                        style="background-color: #f2a654; color: black; font-weight: bold"
                                                                        id="outer_prod1_din" name="prod1_din" required
-                                                                       value="${modelVendasConsulta.prod1_din}">
+                                                                       value="${modelVendasConsulta.prod1_din}"oninput="buscarValor('outer_prod1_din')">
                                                             </div>
                                                             <div class="col-6">
                                                                 <label style="color: #f2a654">VALOR</label>
@@ -764,7 +764,7 @@
                                                                 <input type="number" class="form-control" placeholder=""
                                                                        style="background-color: #f2a654; color: black; font-weight: bold"
                                                                        id="outer_prod1_deb" name="prod1_deb" required
-                                                                       value="${modelVendasConsulta.prod1_deb}">
+                                                                       value="${modelVendasConsulta.prod1_deb}"oninput="buscarValor('outer_prod1_deb')">
                                                             </div>
                                                             <div class="col-6">
                                                                 <label style="color: #f2a654">VALOR</label>
@@ -778,7 +778,7 @@
                                                                 <input type="number" class="form-control" placeholder=""
                                                                        style="background-color: #f2a654; color: black; font-weight: bold"
                                                                        id="outer_prod1_cred" name="prod1_cred" required
-                                                                       value="${modelVendasConsulta.prod1_cred}">
+                                                                       value="${modelVendasConsulta.prod1_cred}"oninput="buscarValor('outer_prod1_cred')">
                                                             </div>
                                                             <div class="col-6">
                                                                 <label style="color: #f2a654">VALOR</label>
@@ -792,7 +792,7 @@
                                                                 <input type="number" class="form-control" placeholder=""
                                                                        style="background-color: #f2a654; color: black; font-weight: bold"
                                                                        id="outer_prod1_pix" name="prod1_pix" required
-                                                                       value="${modelVendasConsulta.prod1_pix}">
+                                                                       value="${modelVendasConsulta.prod1_pix}"oninput="buscarValor('outer_prod1_pix')">
                                                             </div>
                                                             <div class="col-6">
                                                                 <label style="color: #f2a654">VALOR</label>
@@ -812,7 +812,7 @@
                                                                 <input type="number" class="form-control" placeholder=""
                                                                        style="background-color: #73b307; color: black; font-weight: bold"
                                                                        id="outer_prod2_din" name="prod2_din" required
-                                                                       value="${modelVendasConsulta.prod2_din}">
+                                                                       value="${modelVendasConsulta.prod2_din}" oninput="buscarValor('outer_prod2_din')">
                                                             </div>
                                                             <div class="col-6">
                                                                 <label STYLE="color: #00d25b">VALOR</label>
@@ -826,7 +826,7 @@
                                                                 <input type="number" class="form-control" placeholder=""
                                                                        STYLE="background-color: #73b307; color: black; font-weight: bold"
                                                                        id="outer_prod2_deb" name="prod2_deb" required
-                                                                       value="${modelVendasConsulta.prod2_deb}">
+                                                                       value="${modelVendasConsulta.prod2_deb}" oninput="buscarValor('outer_prod2_deb')">
                                                             </div>
                                                             <div class="col-6">
                                                                 <label STYLE="color: #00d25b">VALOR</label>
@@ -840,7 +840,7 @@
                                                                 <input type="number" class="form-control" placeholder=""
                                                                        STYLE="background-color: #73b307; color: black; font-weight: bold"
                                                                        id="outer_prod2_cred" name="prod2_cred" required
-                                                                       value="${modelVendasConsulta.prod2_cred}">
+                                                                       value="${modelVendasConsulta.prod2_cred}" oninput="buscarValor('outer_prod2_cred')">
                                                             </div>
                                                             <div class="col-6">
                                                                 <label STYLE="color: #00d25b">VALOR</label>
@@ -854,7 +854,7 @@
                                                                 <input type="number" class="form-control" placeholder=""
                                                                        STYLE="background-color: #73b307; color: black; font-weight: bold"
                                                                        id="outer_prod2_pix" name="prod2_pix" required
-                                                                       value="${modelVendasConsulta.prod2_pix}">
+                                                                       value="${modelVendasConsulta.prod2_pix}" oninput="buscarValor('outer_prod2_pix')">
                                                             </div>
                                                             <div class="col-6">
                                                                 <label STYLE="color: #00d25b">VALOR</label>
@@ -874,7 +874,7 @@
                                                                 <input type="number" class="form-control" placeholder=""
                                                                        style="background-color: fuchsia; color: black; font-weight: bold"
                                                                        id="outer_prod3_din" name="prod3_din" required
-                                                                       value="${modelVendasConsulta.prod3_din}">
+                                                                       value="${modelVendasConsulta.prod3_din}" oninput="buscarValor('outer_prod3_din')">
                                                             </div>
                                                             <div class="col-6">
                                                                 <label style="color: fuchsia">VALOR</label>
@@ -888,7 +888,7 @@
                                                                 <input type="number" class="form-control" placeholder=""
                                                                        style="background-color: fuchsia; color: black; font-weight: bold"
                                                                        id="outer_prod3_deb" name="prod3_deb" required
-                                                                       value="${modelVendasConsulta.prod3_deb}">
+                                                                       value="${modelVendasConsulta.prod3_deb}" oninput="buscarValor('outer_prod3_deb')">
                                                             </div>
                                                             <div class="col-6">
                                                                 <label style="color: fuchsia">VALOR</label>
@@ -902,7 +902,7 @@
                                                                 <input type="number" class="form-control" placeholder=""
                                                                        style="background-color: fuchsia; color: black; font-weight: bold"
                                                                        id="outer_prod3_cred" name="prod3_cred" required
-                                                                       value="${modelVendasConsulta.prod3_cred}">
+                                                                       value="${modelVendasConsulta.prod3_cred}" oninput="buscarValor('outer_prod3_cred')">
                                                             </div>
                                                             <div class="col-6">
                                                                 <label style="color: fuchsia">VALOR</label>
@@ -916,7 +916,7 @@
                                                                 <input type="number" class="form-control" placeholder=""
                                                                        style="background-color: fuchsia; color: black; font-weight: bold"
                                                                        id="outer_prod3_pix" name="prod3_pix" required
-                                                                       value="${modelVendasConsulta.prod3_pix}">
+                                                                       value="${modelVendasConsulta.prod3_pix}"  oninput="buscarValor('outer_prod3_pix')">
                                                             </div>
                                                             <div class="col-6">
                                                                 <label style="color: fuchsia">VALOR</label>
@@ -941,25 +941,22 @@
                                                                 <label>RIBBON</label>
                                                                 <select class="form-select" id="ribbon2" name="ribbon"
                                                                         required value="${modelVendas.ribbon}">
-                                                                    <option disabled="disabled">Tamanho do Papel
+                                                                    <option disabled>Tamanho do Papel</option>
+                                                                    <option style="color: #00d25b" value="10x15"
+                                                                            <%
+                                                                                 modelVendas = (ModelVendas) request.getAttribute("modelVendas");
+                                                                                if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("10x15")) {
+                                                                                    out.print("selected=\"selected\"");
+                                                                                }
+                                                                            %>>10x15
                                                                     </option>
-                                                                    <option style="color: #00d25b" value="10x15"  <%
-                                                                        modelVendas = (ModelVendas) request.getAttribute("modelVendas");
-//                                                                                                        System.out.println(modelVendas);
-                                                                        if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("10x15")) {
-                                                                            out.print(" ");
-                                                                            out.print("selected=\"selected\"");
-                                                                            out.print(" ");
-                                                                        }%>>10x15
-                                                                    </option>
-
-                                                                    <option style="color: #bf3322" value="15x20" <%
-                                                                        modelVendas = (ModelVendas) request.getAttribute("modelVendas");
-                                                                        if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("15x20")) {
-                                                                            out.print(" ");
-                                                                            out.print("selected=\"selected\"");
-                                                                            out.print(" ");
-                                                                        }%>>15x20
+                                                                    <option style="color: #bf3322" value="15x20"
+                                                                            <%
+                                                                                modelVendas = (ModelVendas) request.getAttribute("modelVendas");
+                                                                                if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("15x20")) {
+                                                                                    out.print("selected=\"selected\"");
+                                                                                }
+                                                                            %>>15x20
                                                                     </option>
 
                                                                 </select>
@@ -1001,7 +998,7 @@
                                         <div style="overflow-x: hidden">
                                             <div style="height: 300px; overflow-y: auto;">
 
-                                                <input type="hidden" name="acao" value="vendaDoDia">
+
                                                 <table class="table" id="tabelaVendaDia">
                                                     <thead>
                                                     <tr>
@@ -1026,7 +1023,7 @@
                                                         <th scope="col">Ações</th>
                                                     </tr>
                                                     </thead>
-                                                    <c:out value="${listaVendasDoDia}"/>
+
                                                     <tbody>
                                                     <c:choose>
                                                         <c:when test="${not empty listaVendasDoDia}">
@@ -1178,44 +1175,226 @@
         }
 
 
-        function calcularValor(produto) {
-            console.log(`Calculando para produto: ${produto}`);
 
-            let valorProduto = document.getElementById(`valorProd${produto}`);
-            console.log(`valorProduto:`, valorProduto);
 
-            let quantidade = document.getElementById(`prod${produto}_din`);
-            console.log(`quantidade:`, quantidade);
+        let produtos = []; // Array para armazenar os valores dos produtos
 
-            if (valorProduto && quantidade) {
-                valorProduto = parseFloat(valorProduto.value);
-                quantidade = parseFloat(quantidade.value);
+        function buscarValor(produtoId) {
+            const quantidade = document.getElementById(produtoId).value;
+            console.log('Quantidade digitada para', produtoId, ':', quantidade); // Log da quantidade digitada
 
-                // Verifica se os valores são válidos
-                if (!isNaN(valorProduto) && !isNaN(quantidade)) {
-                    let resultado = valorProduto * quantidade;
-                    document.getElementById(`prod${produto}_din_valor`).value = resultado.toFixed(2); // Mostra o resultado
-                } else {
-                    document.getElementById(`prod${produto}_din_valor`).value = ''; // Limpa o campo se não for válido
-                }
+            // Verifica se o array de produtos está vazio
+            if (produtos.length === 0) {
+                // Chama o servidor para buscar os valores
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', `ServletVendas?acao=buscarValoresProdutos`, true);
+
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        // Preenche o array de produtos com os valores retornados
+                        produtos = JSON.parse(xhr.responseText);
+                        console.log('Produtos carregados:', produtos); // Log dos produtos carregados
+                        calcularValor(quantidade, produtoId); // Calcular valor após receber os produtos
+                    } else {
+                        console.error('Erro ao buscar valores:', xhr.statusText);
+                    }
+                };
+                xhr.send();
             } else {
-                console.error(`Elemento não encontrado: valorProduto ou quantidade`);
+                calcularValor(quantidade, produtoId); // Se os produtos já foram carregados, calcular o valor imediatamente
             }
         }
 
+        function calcularValor(quantidade, produtoId) {
+            console.log('Recalculando valor para a quantidade:', quantidade, 'do produto:', produtoId); // Log da recalculação
 
-        // Adicione listeners para os campos de entrada
-        document.getElementById('prod1_din').addEventListener('input', function () {
-            calcularValor(1);
-        });
-        document.getElementById('prod2_din').addEventListener('input', function () {
-            calcularValor(2);
-        });
-        document.getElementById('prod3_din').addEventListener('input', function () {
-            calcularValor(3);
-        });
+            const prod = produtos[0]; // Considerando que você só tem um produto na lista
+
+            if (prod) {
+                let valorProduto;
+
+                switch (produtoId) {
+                    case 'outer_prod1_din':
+                    case 'outer_prod1_deb':
+                    case 'outer_prod1_cred':
+                    case 'outer_prod1_pix':
+                        valorProduto = parseFloat(prod.prod1_valor);
+                        break;
+                    case 'outer_prod2_din':
+                    case 'outer_prod2_deb':
+                    case 'outer_prod2_cred':
+                    case 'outer_prod2_pix':
+                        valorProduto = parseFloat(prod.prod2_valor);
+                        break;
+                    case 'outer_prod3_din':
+                    case 'outer_prod3_deb':
+                    case 'outer_prod3_cred':
+                    case 'outer_prod3_pix':
+                        valorProduto = parseFloat(prod.prod3_valor);
+                        break;
+                    default:
+                        console.log('Produto não encontrado');
+                        return;
+                }
+
+                const valorTotal = quantidade * valorProduto; // Calcula o valor total
+                document.getElementById(produtoId + '_valor').value = valorTotal.toFixed(2); // Mostrando duas casas decimais
+                console.log('Valor total calculado:', valorTotal.toFixed(2)); // Log do valor total
+
+                atualizarTotal(); // Atualiza o total geral
+            } else {
+                console.log('Produto não encontrado');
+            }
+        }
+
+        function atualizarTotal() {
+            let total = 0;
+            // Soma as quantidades digitadas apenas dos campos do prod1
+            ['outer_prod1_din', 'outer_prod1_deb', 'outer_prod1_cred', 'outer_prod1_pix'].forEach(id => {
+                const quantidade = parseFloat(document.getElementById(id).value) || 0; // Pega o valor ou 0 se estiver vazio
+                total += quantidade;
+            });
+            document.getElementById('outer_total').value = total; // Atualiza o valor total no campo
+            console.log('Total atualizado:', total); // Log do total
+        }
+
+        // Funções para o modal
+        function buscarValorModal(produtoId) {
+            const quantidade = document.getElementById(produtoId).value;
+            console.log('Quantidade digitada para', produtoId, ':', quantidade); // Log da quantidade digitada
+
+            if (produtos.length === 0) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', `ServletVendas?acao=buscarValoresProdutos`, true);
+
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        produtos = JSON.parse(xhr.responseText);
+                        console.log('Produtos carregados:', produtos);
+                        calcularValorModal(quantidade, produtoId);
+                    } else {
+                        console.error('Erro ao buscar valores:', xhr.statusText);
+                    }
+                };
+                xhr.send();
+            } else {
+                calcularValorModal(quantidade, produtoId);
+            }
+        }
+
+        function calcularValorModal(quantidade, produtoId) {
+            console.log('Recalculando valor para a quantidade:', quantidade, 'do produto:', produtoId);
+
+            const prod = produtos[0];
+
+            if (prod) {
+                let valorProduto;
+
+                switch (produtoId) {
+                    case 'prod1_din':
+                    case 'prod1_deb':
+                    case 'prod1_cred':
+                    case 'prod1_pix':
+                        valorProduto = parseFloat(prod.prod1_valor);
+                        break;
+                    case 'prod2_din':
+                    case 'prod2_deb':
+                    case 'prod2_cred':
+                    case 'prod2_pix':
+                        valorProduto = parseFloat(prod.prod2_valor);
+                        break;
+                    case 'prod3_din':
+                    case 'prod3_deb':
+                    case 'prod3_cred':
+                    case 'prod3_pix':
+                        valorProduto = parseFloat(prod.prod3_valor);
+                        break;
+                    default:
+                        console.log('Produto não encontrado');
+                        return;
+                }
+
+                const valorTotal = quantidade * valorProduto;
+                document.getElementById(produtoId + '_valor').value = valorTotal.toFixed(2);
+                console.log('Valor total calculado:', valorTotal.toFixed(2));
+
+                atualizarTotalModal(); // Atualiza o total geral do modal
+            } else {
+                console.log('Produto não encontrado');
+            }
+        }
+
+        function atualizarTotalModal() {
+            let total = 0;
+            // Soma as quantidades digitadas apenas dos campos do prod1
+            ['prod1_din', 'prod1_deb', 'prod1_cred', 'prod1_pix'].forEach(id => {
+                const quantidade = parseFloat(document.getElementById(id).value) || 0;
+                total += quantidade;
+            });
+            document.getElementById('total').value = total;
+            console.log('Total atualizado no modal:', total); // Log do total
+        }
 
 
+        function toggleInputs(selectId, fieldsToDisable) {
+            var ribbonSelect = document.getElementById(selectId);
+
+            if (ribbonSelect.value === "15x20") {
+                // Desabilitar todos os campos e alterar a cor de fundo para cinza
+                fieldsToDisable.forEach(function(field) {
+                    field.disabled = true;
+                    field.style.backgroundColor = "black"; // Cor de fundo cinza
+                });
+            } else if (ribbonSelect.value === "10x15") {
+                // Habilitar todos os campos e restaurar a cor de fundo original
+                fieldsToDisable.forEach(function(field) {
+                    field.disabled = false;
+                    field.style.backgroundColor = "#f2a654"; // Restaura a cor de fundo padrão
+                });
+            }
+        }
+
+        function setupToggle() {
+            // Inicializa os campos no carregamento da página com base no valor inicial
+            toggleInputs("ribbon", [
+                document.getElementById("prod2_din"),
+                document.getElementById("prod2_deb"),
+                document.getElementById("prod2_cred"),
+                document.getElementById("prod2_pix")
+            ]);
+
+            toggleInputs("ribbon2", [
+                document.getElementById("outer_prod2_din"),
+                document.getElementById("outer_prod2_deb"),
+                document.getElementById("outer_prod2_cred"),
+                document.getElementById("outer_prod2_pix")
+            ]);
+        }
+
+        // Executa a função ao carregar a página
+        window.onload = function() {
+            setupToggle();
+        };
+
+        // Adiciona o event listener para o select "ribbon"
+        document.getElementById("ribbon").addEventListener("change", function() {
+            toggleInputs("ribbon", [
+                document.getElementById("prod2_din"),
+                document.getElementById("prod2_deb"),
+                document.getElementById("prod2_cred"),
+                document.getElementById("prod2_pix")
+            ]);
+        });
+
+        // Adiciona o event listener para o select "ribbon2"
+        document.getElementById("ribbon2").addEventListener("change", function() {
+            toggleInputs("ribbon2", [
+                document.getElementById("outer_prod2_din"),
+                document.getElementById("outer_prod2_deb"),
+                document.getElementById("outer_prod2_cred"),
+                document.getElementById("outer_prod2_pix")
+            ]);
+        });
     </SCRIPT>
 
 

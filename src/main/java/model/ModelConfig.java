@@ -12,10 +12,22 @@ public class ModelConfig {
     private String prod2_nome;
     private String prod3_nome;
 
+    @Override
+    public String toString() {
+        return "ModelConfig{" +
+                "idConf=" + idConf +
+                ", prod1_valor=" + prod1_valor +
+                ", prod2_valor=" + prod2_valor +
+                ", prod3_valor=" + prod3_valor +
+                ", comissao=" + comissao +
+                ", prod1_nome='" + prod1_nome + '\'' +
+                ", prod2_nome='" + prod2_nome + '\'' +
+                ", prod3_nome='" + prod3_nome + '\'' +
+                '}';
+    }
 
 
-
-    // Getters e Setters
+// Getters e Setters
 
 
     public Long getIdConf() {

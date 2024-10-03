@@ -292,7 +292,7 @@ public class DAOVendasRepository {
             modelVenda.setSobras(resultado.getInt("sobras"));
             modelVenda.setRibbon(resultado.getString("ribbon"));
             modelVenda.setData_venda(resultado.getDate("data_venda"));
-            System.out.println("Venda encontrada: " + modelVenda.getData_venda());
+
 
             modelVendasList.add(modelVenda);
         }

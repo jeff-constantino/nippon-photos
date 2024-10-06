@@ -11,6 +11,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <%
     DAOContas daoContas = new DAOContas(); // Certifique-se de que a conexão esteja configurada corretamente
@@ -27,13 +28,13 @@
 
 <body>
 <div class="container-scroller">
-  <!-- partial:partials/_sidebar.html -->
+    <!-- partial:partials/_sidebar.html -->
     <jsp:include page="sidebar.jsp"></jsp:include>
-<!-- partial -->
+    <!-- partial -->
     <div class="container-fluid page-body-wrapper">
- <!-- partial:partials/_navbar.html -->
+        <!-- partial:partials/_navbar.html -->
         <jsp:include page="navbar.jsp"></jsp:include>
- <!-- partial -->
+        <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="row">
@@ -113,13 +114,13 @@
 
                                                                                             <div class="col-3">
 
-                                                                                                    <label class="float-label">Nº PEDIDO:</label>
-                                                                                                    <span class="form-bar"></span>
-                                                                                                    <input type="text" class="form-control"
-                                                                                                           id="pedido" name="numero_pedido"
-                                                                                                    placeholder=""
-                                                                                                    style="background-color: black"
-                                                                                                    value="${modelContas.numero_pedido != null ? modelContas.numero_pedido : ''}">
+                                                                                                <label class="float-label">Nº PEDIDO:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control"
+                                                                                                       id="pedido" name="numero_pedido"
+                                                                                                       placeholder=""
+                                                                                                       style="background-color: black"
+                                                                                                       value="${modelContas.numero_pedido != null ? modelContas.numero_pedido : ''}">
 
 
                                                                                             </div>
@@ -150,10 +151,16 @@
                                                                                                                 <div class="input-group-prepend">
                                                                                                                     <span class="input-group-text" style="color: #f2a654; font-weight: bold">R$</span>
                                                                                                                 </div>
+                                                                                                                <!-- Campo de entrada para valor formatado -->
                                                                                                                 <input type="text" class="form-control"
                                                                                                                        style="background-color: #f2a654; color: black; font-weight: bold"
-                                                                                                                       id="valor" name="valor"
-                                                                                                                       required oninput="formatarValor(this);">
+                                                                                                                       id="valorExibido" name="valorExibido"
+                                                                                                                       required oninput="formatarValor(this);"
+                                                                                                                       value="${modelContas.valor != null ? modelContas.valor : ''}"> <!-- Valor formatado -->
+
+                                                                                                                <!-- Campo oculto para o valor bruto sem formatação -->
+                                                                                                                <input type="hidden" id="valorBruto" name="valor" value="">
+
                                                                                                             </div>
                                                                                                         </div>
 
@@ -328,41 +335,36 @@
                                 <div class="table-responsive">
 
 
-                                    <form action="<%= request.getContextPath() %>/ServletContas" method="post" id="Conta" name="lançarConta">
-                                        <input type="hidden" name="acao" value="atualizar"> <!-- Adicionando valor para a ação -->
+                                    <form action="<%= request.getContextPath() %>/ServletContas" method="post" id="Conta" name="lançarConta" style="overflow-x: hidden">
+                                        <input type="hidden" name="acao" value="atualizar">
+                                        <!-- Campo oculto para armazenar o ID da conta -->
+
 
                                         <div class="row">
                                             <div class="col-3">
                                                 <label for="dataCompra">Data da Compra</label>
-                                                <input type="date" class="form-control"
-                                                       id="dataCompra2" name="dataCompra2"
-                                                       required
+                                                <input type="date" class="form-control" id="dataCompra2" name="dataCompra2" required
                                                        value="${formattedDataCompra != null ? formattedDataCompra : ''}">
                                             </div>
                                             <div class="col-3">
                                                 <label for="dataPagamento">Data de Pagamento</label>
-                                                <input type="date" class="form-control"
-                                                       id="dataPagamento2" name="dataPagamento2"
+                                                <input type="date" class="form-control" id="dataPagamento2" name="dataPagamento2"
                                                        value="${formattedDataPagamento != null ? formattedDataPagamento : ''}">
                                             </div>
-                                            <div class="col-sm-2">
+                                            <div class="col-2">
                                                 <label class="float-label">Nº PEDIDO:</label>
-                                                <span class="form-bar"></span>
-                                                <input type="text" class="form-control"
-                                                       id="pedido2" name="pedido2"
-                                                placeholder=""
-                                                style="background-color: black"
-                                                value="${modelContas.numero_pedido != null ? modelContas.numero_pedido : ''}">
+                                                <input type="text" class="form-control" id="pedido2" name="pedido2" placeholder=""
+                                                       style="background-color: black"
+                                                       value="${modelContas.numero_pedido != null ? modelContas.numero_pedido : ''}">
                                             </div>
-                                            <div class="col-6">
-                                                <label class="float-label">EMPRESA:</label>
-                                                <span class="form-bar"></span>
-                                                <input type="text" class="form-control"
-                                                       id="empresa2" name="empresa2" placeholder=""
+                                            <div class="col-4">
+                                                <label class="float-label">ID:</label>
+                                                <input type="text" class="form-control" id="idPedido" name="idPedido" placeholder=""
                                                        style="background-color: black; text-transform: uppercase;"
-                                                       value="${modelContas.empresa != null ? modelContas.empresa : ''}">
+                                                       value="${modelContas.conta_id != null ? modelContas.conta_id : ''}">
                                             </div>
                                         </div>
+
 
                                         <div class="row">
                                             <div class="col">
@@ -383,12 +385,11 @@
                                                                 </div>
                                                                 <input type="text" class="form-control"
                                                                        style="background-color: #f2a654; color: black; font-weight: bold"
-                                                                       id="valor2" name="valorExibido"
-                                                                       required oninput="formatarValor(this);"
-                                                                       value="${modelContas.valor != null ? modelContas.valor : ''}"> <!-- Valor formatado -->
+                                                                       id="valor2" name="valor2"
+                                                                       required oninput="formatarValor(this);"> <!-- Outro valor -->
 
-                                                                <!-- Campo oculto para o valor bruto sem formatação -->
-                                                                <input type="hidden" id="valor" name="valor" value="">
+                                                                <!-- Campo oculto para o valor bruto do segundo campo -->
+                                                                <input type="hidden" id="valorBruto2" name="valor2" value="">
                                                             </div>
                                                         </div>
 
@@ -401,60 +402,81 @@
                                                         </div>
 
                                                     </div>
-                                                    </div>
                                                 </div>
                                             </div>
-                                    </form>
-                                        </div>
-
-                                        <br>
-
-                                        <div>
-                                            <button class="btn btn-outline-success waves-effect waves-light">Salvar</button>
-                                            <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparForm();">Limpar</button>
                                         </div>
                                     </form>
+                                </div>
 
-                                    <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Número do Pedido</th>
-                                            <th>Empresa</th>
-                                            <th>Itens</th>
-                                            <th>Valor</th>
-                                            <th>Data de Pedido</th>
-                                            <th>Data de Pagamento</th>
-                                            <th>Opções</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:choose>
-                                            <c:when test="${not empty contasVencendo}">
-                                                <c:forEach var="conta" items="${contasVencendo}">
+                                <br>
+
+                                <div>
+                                    <button type="submit" class="btn btn-outline-success">Atualizar</button>
+                                    <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparForm();">Limpar</button>
+                                </div>
+                                </form>
+
+
+                            </div>
+                            <div class="row ">
+                                <div class="col-12 grid-margin">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title">CONTAS A PAGAR</h4>
+
+                                            <div class="table-responsive">
+                                                <h2>Todas as Contas</h2>
+                                                <table class="table table-striped table-bordered">
+                                                    <thead>
                                                     <tr>
-                                                        <td><c:out value="${conta.numero_pedido}"/></td>
-                                                        <td><c:out value="${conta.empresa}"/></td>
-                                                        <td><c:out value="${conta.itens}"/></td>
-                                                        <td><c:out value="${conta.valor}"/></td>
-                                                        <td><c:out value="${conta.data_de_pedido}"/></td>
-                                                        <td><c:out value="${conta.data_de_pagamento}"/></td>
-                                                        <td>
-                                                        <td><button class="btn btn-primary" onclick="editarConta(this)">EDITAR</button></td>
-                                                        </td>
+                                                        <th>Número do Pedido</th>
+                                                        <th>Empresa</th>
+                                                        <th>Itens</th>
+                                                        <th>Valor</th>
+                                                        <th>Data de Pedido</th>
+                                                        <th>Data de Pagamento</th>
+                                                        <th>Status</th>
+                                                        <th>ID</th>
+                                                        <th>Opções</th>
+
                                                     </tr>
-                                                </c:forEach>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <tr>
-                                                    <td colspan="6">Nenhuma conta vencendo em 7 dias.</td>
-                                                </tr>
-                                            </c:otherwise>
-                                        </c:choose>
-                                        </tbody>
-                                    </table>
+                                                    </thead>
+                                                    <tbody>
+                                                    <c:choose>
+                                                        <c:when test="${not empty todasContas}">
+                                                            <c:forEach var="conta" items="${todasContas}">
+                                                                <tr>
+                                                                    <td><c:out value="${conta.numero_pedido}"/></td>
+                                                                    <td><c:out value="${conta.empresa}"/></td>
+                                                                    <td><c:out value="${conta.itens}"/></td>
+                                                                    <td><fmt:formatNumber value="${conta.valor}" type="currency" currencySymbol="R$" /></td>
+                                                                    <td><fmt:formatDate value="${conta.data_de_pedido}" pattern="dd/MM/yyyy"/></td>
+                                                                    <td><fmt:formatDate value="${conta.data_de_pagamento}" pattern="dd/MM/yyyy"/></td>
+                                                                    <td><c:out value="${conta.status}"/></td>
+                                                                    <td><c:out value="${conta.conta_id}"/></td>
+                                                                    <td>
+
+                                                                        <button class="btn btn-outline-primary" onclick="editarConta(this, '${conta.conta_id}', '${conta.data_de_pedido}', '${conta.data_de_pagamento}', '${conta.valor}', '${conta.status}', '${conta.itens}', '${conta.numero_pedido}')">Editar</button>
+
+                                                                    </td>
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <tr>
+                                                                <td colspan="7">Nenhuma conta encontrada.</td>
+                                                            </tr>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
 
                         </div>
                     </div>
@@ -478,7 +500,42 @@
 
 <script>
 
+    function editarConta(button, conta_id, dataPedido, dataPagamento, valor, status, itens, numeroPedido) {
+        // Preencher os campos do formulário com os dados da conta
+        document.getElementById('idPedido').value = conta_id; // ID da conta
+        document.getElementById('dataCompra2').value = formatarData(dataPedido); // Data de Pedido
+        document.getElementById('dataPagamento2').value = formatarData(dataPagamento); // Data de Pagamento
+        document.getElementById('pedido2').value = numeroPedido; // Número do Pedido
+        document.getElementById('itens2').value = itens; // Itens do Pedido
+        document.getElementById('valor2').value = valor; // Valor
+        document.getElementById('status2').value = status; // Status
 
+        // Caso precise manipular o valor bruto, descomente a linha abaixo
+        // document.getElementById('valorBruto2').value = valor; // Valor bruto, se necessário
+    }
+
+
+    // Função para formatar a data no formato 'yyyy-mm-dd' para o campo date
+    function formatarData(data) {
+        const partes = data.split('/');
+        return partes[2] + '-' + partes[1] + '-' + partes[0]; // Converte 'dd/MM/yyyy' para 'yyyy-MM-dd'
+    }
+
+
+
+
+
+
+
+
+    function formatarData(data) {
+        // Função para formatar a data no formato 'yyyy-MM-dd' (necessário para input type="date")
+        var partes = data.split('/');
+        if (partes.length === 3) {
+            return `${partes[2]}-${partes[1]}-${partes[0]}`; // Converte 'dd/MM/yyyy' para 'yyyy-MM-dd'
+        }
+        return data;
+    }
 
 
     function formatarValor(input) {
@@ -499,40 +556,13 @@
 
         // Atualiza o campo oculto com o valor sem formatação
         const valorSemFormatacao = valor.replace(/\./g, '').replace(',', '.'); // Remove formatação e usa ponto como separador decimal
-        document.getElementById('valor').value = valorSemFormatacao;
-    }
 
-
-
-
-    function editarConta(button) {
-        // Obter a linha da tabela onde o botão foi clicado
-        var linha = button.closest('tr');
-
-        // Coletar os dados da linha
-        var numeroPedido = linha.cells[0].innerText;
-        var empresa = linha.cells[1].innerText;
-        var itens = linha.cells[2].innerText;
-        var valor = linha.cells[3].innerText;
-        var dataPedido = linha.cells[4].innerText;
-        var dataPagamento = linha.cells[5].innerText;
-
-        // Preencher o formulário com os dados coletados
-        document.getElementById('pedido2').value = numeroPedido.trim();
-        document.getElementById('empresa2').value = empresa.trim();
-        document.getElementById('itens2').value = itens.trim();
-        document.getElementById('valor2').value = valor.trim();
-        document.getElementById('dataCompra2').value = formatarData(dataPedido.trim());
-        document.getElementById('dataPagamento2').value = formatarData(dataPagamento.trim());
-    }
-
-    function formatarData(data) {
-        // Função para formatar a data no formato 'yyyy-MM-dd' (necessário para input type="date")
-        var partes = data.split('/');
-        if (partes.length === 3) {
-            return `${partes[2]}-${partes[1]}-${partes[0]}`; // Converte 'dd/MM/yyyy' para 'yyyy-MM-dd'
+        // Atualiza o campo oculto correspondente
+        if (input.id === "valorExibido") {
+            document.getElementById('valorBruto').value = valorSemFormatacao; // Atualiza o campo oculto para valorExibido
+        } else if (input.id === "valor2") {
+            document.getElementById('valorBruto2').value = valorSemFormatacao; // Atualiza o campo oculto para valor2
         }
-        return data;
     }
 
 

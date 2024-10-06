@@ -24,6 +24,9 @@ public class ServletContas extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("Método doPost chamado.");
+
+        String contaIdStr = request.getParameter("conta_id"); // Capturando conta_id como String (pode ser nulo)
         String numeroPedidoStr = request.getParameter("numero_pedido");
         String empresa = request.getParameter("empresa");
         String itens = request.getParameter("itens");
@@ -100,10 +103,42 @@ public class ServletContas extends HttpServlet {
 
         conta.setStatus(status);
 
-        // Salvar conta no banco
+        // Inicializa contaId como null
+        Long contaId = null;
+        if (contaIdStr != null && !contaIdStr.trim().isEmpty()) {
+            try {
+                contaId = Long.parseLong(contaIdStr); // Converte para Long
+                conta.setConta_id(contaId); // Define o conta_id no objeto ModelContas
+            } catch (NumberFormatException e) {
+                request.setAttribute("msg", "O campo 'conta_id' deve ser um número válido.");
+                request.getRequestDispatcher("erro.jsp").forward(request, response);
+                return;
+            }
+        }
+
+
+        System.out.println("Conta ID: " + contaId);
+        System.out.println("Número do Pedido: " + numeroPedidoStr);
+        System.out.println("Empresa: " + empresa);
+        System.out.println("Itens: " + itens);
+        System.out.println("Valor: " + valor);
+        System.out.println("Data de Pedido: " + dataDePedidoStr);
+        System.out.println("Data de Pagamento: " + dataDePagamentoStr);
+        System.out.println("Status: " + status);
+
+
+        // Salvar ou atualizar conta no banco
         try {
-            daoContas.gravarConta(conta);
-            request.setAttribute("msg", "Conta gravada com sucesso!");
+            if (contaId != null && daoContas.existeContaId(contaId)) {
+                // Atualiza a conta existente
+                daoContas.atualizarConta(conta);
+                request.setAttribute("msg", "Conta atualizada com sucesso!");
+            } else {
+                // Insere uma nova conta
+                daoContas.gravarConta(conta);
+                request.setAttribute("msg", "Conta gravada com sucesso!");
+            }
+
             request.getRequestDispatcher("principal/contas.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("msg", "Erro ao gravar conta: " + e.getMessage());
@@ -114,14 +149,24 @@ public class ServletContas extends HttpServlet {
 
 
 
+
+
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lista para armazenar as contas a pagar que vencem nos próximos 7 dias
-        List<ModelContas> contas;
+        List<ModelContas> contasVencendo;
+        List<ModelContas> todasContas;
+
         try {
             // Chama o método para buscar contas que vencem em 7 dias e estão "A PAGAR"
-            contas = daoContas.buscarContasVencendoEm7Dias();
-            request.setAttribute("contas", contas); // Passa as contas para o JSP
+            contasVencendo = daoContas.buscarContasVencendoEm7Dias();
+            request.setAttribute("contasVencendo", contasVencendo); // Passa as contas vencendo para o JSP
+
+            // Chama o método para listar todas as contas
+            todasContas = daoContas.listarContas();
+            request.setAttribute("todasContas", todasContas); // Passa todas as contas para o JSP
+
         } catch (SQLException e) {
             // Em caso de erro, define a mensagem e redireciona para a página de erro
             request.setAttribute("msg", "Erro ao buscar contas: " + e.getMessage());
@@ -132,6 +177,8 @@ public class ServletContas extends HttpServlet {
         // Redireciona para o JSP onde a lista de contas será exibida
         request.getRequestDispatcher("/principal/contas.jsp").forward(request, response);
     }
+
+
 
 
 }

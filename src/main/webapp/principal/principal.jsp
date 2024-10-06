@@ -191,6 +191,7 @@
                                             <th>Empresa</th>
                                             <th>Itens</th>
                                             <th>Valor</th>
+                                            <th>Data de Pedido</th>
                                             <th>Data de Pagamento</th>
 
                                         </tr>
@@ -204,9 +205,9 @@
                                                         <td><c:out value="${conta.empresa}"/></td>
                                                         <td><c:out value="${conta.itens}"/></td>
                                                         <td><fmt:formatNumber value="${conta.valor}" type="currency" currencySymbol="R$" /></td>
-                                                        <td><c:out value="${conta.data_de_pedido}"/></td>
-                                                        <td><c:out value="${conta.data_de_pagamento}"/></td>
-                                                        <td><button class="btn btn-primary" onclick="editarConta(this)">EDITAR</button></td>
+                                                        <td><fmt:formatDate value="${conta.data_de_pedido}" pattern="dd/MM/yyyy"/></td>
+                                                        <td><fmt:formatDate value="${conta.data_de_pagamento}" pattern="dd/MM/yyyy"/></td>
+
                                                     </tr>
                                                 </c:forEach>
                                             </c:when>

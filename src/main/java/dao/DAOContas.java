@@ -44,6 +44,41 @@ public class DAOContas {
         }
     }
 
+    public boolean existeContaId(Long contaId) {
+        // Lógica para verificar se o conta_id já existe no banco de dados
+        String sql = "SELECT COUNT(*) FROM contas WHERE conta_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, contaId); // Usando setLong para Long
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Retorna true se o conta_id existir
+            }
+        } catch (SQLException e) {
+            // Tratamento de exceção
+        }
+        return false; // Retorna false se ocorrer qualquer erro
+    }
+
+    public void atualizarConta(ModelContas conta) {
+        // Lógica para atualizar a conta no banco de dados
+        String sql = "UPDATE contas SET empresa = ?, itens = ?, valor = ?, data_de_pedido = ?, data_de_pagamento = ?, status = ? WHERE conta_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, conta.getEmpresa());
+            stmt.setString(2, conta.getItens());
+            stmt.setDouble(3, conta.getValor());
+            stmt.setDate(4, conta.getData_de_pedido());
+            stmt.setDate(5, conta.getData_de_pagamento());
+            stmt.setString(6, conta.getStatus());
+            stmt.setLong(7, conta.getConta_id()); // Usando setLong para Long
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            // Tratamento de exceção
+        }
+    }
+
+
+
+
     public List<ModelContas> buscarContasVencendoEm7Dias() throws SQLException {
         List<ModelContas> contas = new ArrayList<>();
         String sql = "SELECT * FROM contas WHERE data_de_pagamento BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '7 days' AND status = 'A PAGAR'";
@@ -68,4 +103,32 @@ public class DAOContas {
         }
         return contas;
     }
+
+    public List<ModelContas> listarContas() throws SQLException {
+        List<ModelContas> contas = new ArrayList<>();
+        String sql = "SELECT * FROM contas ORDER BY CASE WHEN status = 'A PAGAR' THEN 0 ELSE 1 END";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ModelContas conta = new ModelContas();
+                conta.setConta_id(rs.getLong("conta_id"));
+                conta.setNumero_pedido(rs.getInt("numero_pedido"));
+                conta.setEmpresa(rs.getString("empresa"));
+                conta.setItens(rs.getString("itens"));
+                conta.setValor(rs.getDouble("valor"));
+                conta.setData_de_pedido(rs.getDate("data_de_pedido"));
+                conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
+                conta.setStatus(rs.getString("status"));
+                contas.add(conta);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar contas: " + e.getMessage());
+            throw e; // Repropaga a exceção
+        }
+        return contas;
+    }
+
+
+
 }

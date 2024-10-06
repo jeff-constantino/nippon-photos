@@ -36,6 +36,11 @@ public class ModelVendas implements Serializable {
 
     private String ribbon;
 
+    private int ft_total;
+
+    private int enc_total;
+
+    private int dig_total;
 
 
 
@@ -220,5 +225,27 @@ public Boolean novaVenda(){
         this.usuario_cad_id = usuario_cad_id;
     }
 
+    public int getFt_total() {
+        return ft_total;
+    }
 
+    public void setFt_total(int ft_total) {
+        this.ft_total = ft_total;
+    }
+
+    public int getEnc_total() {
+        return enc_total;
+    }
+
+    public void setEnc_total(int enc_total) {
+        this.enc_total = enc_total;
+    }
+
+    public int getDig_total() {
+        return dig_total;
+    }
+
+    public void setDig_total(int dig_total) {
+        this.dig_total = dig_total;
+    }
 }

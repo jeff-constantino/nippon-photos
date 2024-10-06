@@ -1,5 +1,7 @@
 <%@ page import="model.ModelLogin" %>
-<%@ page import="model.ModelVendas" %><%--
+<%@ page import="model.ModelVendas" %>
+<%@ page import="model.ModelContas" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: Jeff Constantino
   Date: 15/09/2024
@@ -7,6 +9,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -172,23 +176,59 @@
             </div>
         </div>
     </div>
-    <div class="row ">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">PAGINA INICIAL</h4>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                        </table>
+                <div class="row ">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">CONTAS A PAGAR</h4>
+
+                                <div class="table-responsive">
+                                    <h2>Contas que vencem em 7 dias</h2>
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Número do Pedido</th>
+                                            <th>Empresa</th>
+                                            <th>Itens</th>
+                                            <th>Valor</th>
+                                            <th>Data de Pagamento</th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:choose>
+                                            <c:when test="${not empty contasVencendo}">
+                                                <c:forEach var="conta" items="${contasVencendo}">
+                                                    <tr>
+                                                        <td><c:out value="${conta.numero_pedido}"/></td>
+                                                        <td><c:out value="${conta.empresa}"/></td>
+                                                        <td><c:out value="${conta.itens}"/></td>
+                                                        <td><fmt:formatNumber value="${conta.valor}" type="currency" currencySymbol="R$" /></td>
+                                                        <td><c:out value="${conta.data_de_pedido}"/></td>
+                                                        <td><c:out value="${conta.data_de_pagamento}"/></td>
+                                                        <td><button class="btn btn-primary" onclick="editarConta(this)">EDITAR</button></td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <tr>
+                                                    <td colspan="6">Nenhuma conta vencendo em 7 dias.</td>
+                                                </tr>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+
+
             </div>
-        </div>
-    </div>
-
-
-</div>
 <!-- content-wrapper ends -->
 <!-- partial:partials/_footer.html -->
 <jsp:include page="footer.jsp"></jsp:include>
@@ -199,7 +239,8 @@
 <!-- page-body-wrapper ends -->
 </div>
 <script type="text/javascript">
-    $(function () {
+
+       $(function () {
 
         $("#dataVenda").datepicker({
             dateFormat: 'dd/mm/yy',

@@ -14,6 +14,7 @@ public class ModelLogin implements Serializable{
     private String senha;
     private String status;
     private String vendas;
+    private String vales;
 
 
     public Boolean isNovo(){
@@ -72,9 +73,19 @@ public class ModelLogin implements Serializable{
     }
 
 
+    public String getVendas() {
+        return vendas;
+    }
 
+    public void setVendas() {
+        this.vendas = vendas;
+    }
 
+    public String getVales() {
+        return vales;
+    }
 
-
-
+    public void setVales(String vales) {
+        this.vales = vales;
+    }
 }

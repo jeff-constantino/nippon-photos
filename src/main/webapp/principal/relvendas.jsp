@@ -35,7 +35,7 @@
                               <div class="card-body">
                                   <h4 class="card-title">Relatório de Vendas:</h4>
 
-                                  <form action="<%= request.getContextPath() %>/ServletVendas" method="get" id="formBuscarVenda" name="formBuscarVenda">
+                                  <form action="<%= request.getContextPath() %>/ServletVendas" method="get" id="formDataVenda" name="formDataVenda">
                                      <input type="hidden" name="acao"value="imprimirRelatorioVendas">
                                       <div class="form-row align-items-center">
                                           <div class="col-auto">

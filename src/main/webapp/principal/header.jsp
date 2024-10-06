@@ -37,4 +37,26 @@
     <link rel="shortcut icon" href="<%= request.getContextPath() %>/assets/images/favicon.png" />
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+    <script>
+        window.onload = function() {
+            fetch('ServletContas?action=buscarContasVencendoEm7Dias')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro na rede: ' + response.status);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    const container = document.getElementById('contasVencendoContainer');
+                    if (container) {
+                        container.innerHTML = data; // Adiciona os dados retornados
+                    } else {
+                        console.error('Elemento com ID "contasVencendoContainer" não encontrado.');
+                    }
+                })
+                .catch(error => console.error('Erro ao buscar contas:', error));
+        };
+    </script>
 </head>

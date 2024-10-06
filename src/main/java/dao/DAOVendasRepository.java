@@ -1,6 +1,5 @@
 package dao;
 
-import com.sun.source.tree.WhileLoopTree;
 import connection.SingleConnectionBanco;
 import model.ModelLogin;
 import model.ModelVendas;
@@ -38,8 +37,9 @@ public class DAOVendasRepository {
 
     public ModelVendas gravarVenda(ModelVendas modelVendas, Long userLogado) throws Exception {
         String sql = "INSERT INTO vendas(vendedor_id, nome, prod1_din, prod1_deb, prod1_cred, prod1_pix, "
-                + "prod2_din, prod2_deb, prod2_cred, prod2_pix, prod3_din, prod3_deb, prod3_cred, prod3_pix, sobras, data_venda, ribbon) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "prod2_din, prod2_deb, prod2_cred, prod2_pix, prod3_din, prod3_deb, prod3_cred, prod3_pix, "
+                + "ft_total, enc_total, dig_total, sobras, data_venda, ribbon) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             // Define os parâmetros
@@ -60,7 +60,17 @@ public class DAOVendasRepository {
             preparedSql.setInt(13, modelVendas.getProd3_cred());
             preparedSql.setInt(14, modelVendas.getProd3_pix());
 
-            preparedSql.setInt(15, modelVendas.getSobras());
+            // Calcula os totais
+            int ft_total = modelVendas.getProd1_din() + modelVendas.getProd1_deb() + modelVendas.getProd1_cred() + modelVendas.getProd1_pix();
+            int enc_total = modelVendas.getProd2_din() + modelVendas.getProd2_deb() + modelVendas.getProd2_cred() + modelVendas.getProd2_pix();
+            int dig_total = modelVendas.getProd3_din() + modelVendas.getProd3_deb() + modelVendas.getProd3_cred() + modelVendas.getProd3_pix();
+
+            // Define os novos parâmetros para os totais
+            preparedSql.setInt(15, ft_total);
+            preparedSql.setInt(16, enc_total);
+            preparedSql.setInt(17, dig_total);
+
+            preparedSql.setInt(18, modelVendas.getSobras());
 
             // Verifica se a data_venda não é nula
             if (modelVendas.getData_venda() == null) {
@@ -68,10 +78,10 @@ public class DAOVendasRepository {
             }
 
             // Define a data corretamente no formato SQL
-            preparedSql.setDate(16, new java.sql.Date(modelVendas.getData_venda().getTime()));
+            preparedSql.setDate(19, new java.sql.Date(modelVendas.getData_venda().getTime()));
 
             // Adicionando o parâmetro do ribbon
-            preparedSql.setString(17, modelVendas.getRibbon());
+            preparedSql.setString(20, modelVendas.getRibbon());
 
             // Executa a inserção
             preparedSql.executeUpdate();
@@ -92,10 +102,12 @@ public class DAOVendasRepository {
 
 
 
+
     public ModelVendas atualizarVenda(Long venda_id, ModelVendas modelVendas, Long userLogado) throws Exception {
         String sql = "UPDATE vendas SET nome = ?, vendedor_id = ?, prod1_din = ?, prod1_deb = ?, prod1_cred = ?, prod1_pix = ?, "
                 + "prod2_din = ?, prod2_deb = ?, prod2_cred = ?, prod2_pix = ?, prod3_din = ?, prod3_deb = ?, prod3_cred = ?, "
-                + "prod3_pix = ?, data_venda = ?, sobras = ?, ribbon = ? WHERE venda_id = ?";
+                + "prod3_pix = ?, ft_total = ?, enc_total = ?, dig_total = ?, data_venda = ?, sobras = ?, ribbon = ? "
+                + "WHERE venda_id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             // Define os parâmetros
@@ -116,21 +128,31 @@ public class DAOVendasRepository {
             statement.setInt(13, modelVendas.getProd3_cred());
             statement.setInt(14, modelVendas.getProd3_pix());
 
+            // Calcula os totais
+            int ft_total = modelVendas.getProd1_din() + modelVendas.getProd1_deb() + modelVendas.getProd1_cred() + modelVendas.getProd1_pix();
+            int enc_total = modelVendas.getProd2_din() + modelVendas.getProd2_deb() + modelVendas.getProd2_cred() + modelVendas.getProd2_pix();
+            int dig_total = modelVendas.getProd3_din() + modelVendas.getProd3_deb() + modelVendas.getProd3_cred() + modelVendas.getProd3_pix();
+
+            // Define os novos parâmetros dos totais
+            statement.setInt(15, ft_total);
+            statement.setInt(16, enc_total);
+            statement.setInt(17, dig_total);
+
             // Verifica se a data_venda não é nula
             if (modelVendas.getData_venda() == null) {
                 throw new IllegalArgumentException("O parâmetro 'data_venda' não pode ser nulo.");
             }
 
             // Define a data corretamente no formato SQL
-            statement.setDate(15, new java.sql.Date(modelVendas.getData_venda().getTime()));
+            statement.setDate(18, new java.sql.Date(modelVendas.getData_venda().getTime()));
 
-            statement.setInt(16, modelVendas.getSobras());
+            statement.setInt(19, modelVendas.getSobras());
 
             // Adicionando o parâmetro do ribbon
-            statement.setString(17, modelVendas.getRibbon());
+            statement.setString(20, modelVendas.getRibbon());
 
             // Condições para atualização
-            statement.setLong(18, venda_id);
+            statement.setLong(21, venda_id);
 
             // Executa a atualização
             statement.executeUpdate();
@@ -139,6 +161,7 @@ public class DAOVendasRepository {
 
         return this.consultaVenda(venda_id, userLogado);
     }
+
 
     public List<ModelVendas> consultaVendasRel() throws Exception {
         List<ModelVendas> modelVendasList = new ArrayList<>();

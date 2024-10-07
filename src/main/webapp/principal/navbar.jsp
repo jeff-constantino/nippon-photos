@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <nav class="navbar p-0 fixed-top d-flex flex-row">
     <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo-mini" href="<%= request.getContextPath() %>/principal/principal.jsp"><img src="<%= request.getContextPath() %>/assets/images/logo-mini.svg" alt="Nippon Photos" /></a>
+        <a class="navbar-brand brand-logo-mini" href="<%= request.getContextPath() %>/ServletPrincipal"><img src="<%= request.getContextPath() %>/assets/images/logo-mini.svg" alt="Nippon Photos" /></a>
     </div>
     <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">

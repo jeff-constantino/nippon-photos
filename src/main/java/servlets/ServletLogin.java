@@ -26,15 +26,25 @@ public class ServletLogin extends HttpServlet {
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao");
-        if ( acao != null && !acao.isEmpty() && acao.equals("logout") ) {
-            request.getSession().invalidate();
-            RequestDispatcher redirecionar = request.getRequestDispatcher("index.jsp");
-            redirecionar.forward(request, response);
-        }else {
 
-            doPost(request, response);
+        // Se a ação for logout, invalida a sessão e redireciona para a página de login
+        if (acao != null && acao.equals("logout")) {
+            request.getSession().invalidate(); // Invalida a sessão
+            response.sendRedirect(request.getContextPath() + "/index.jsp"); // Redireciona para a página de login
+            return;
         }
+
+        // Verifica se o usuário já está logado
+        if (request.getSession().getAttribute("usuario") != null) {
+            // Redireciona para a página principal se já estiver logado
+            response.sendRedirect(request.getContextPath() + "/principal/principal.jsp");
+            return;
+        }
+
+        // Se nenhuma ação foi especificada, chama doPost para processar o login
+        doPost(request, response);
     }
+
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

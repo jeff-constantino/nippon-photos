@@ -20,7 +20,7 @@
         <jsp:include page="navbar.jsp"></jsp:include>
  <!-- partial -->
         <div class="main-panel">
-            <div class="content-wrapper">
+            <div class="content-wrapper" style="min-height: calc(98vh - 100px);">
                 <div class="row">
 
                 </div>

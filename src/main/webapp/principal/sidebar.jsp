@@ -8,8 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-        <a class="sidebar-brand brand-logo" href="<%= request.getContextPath() %>/principal/principal.jsp"><img src="<%= request.getContextPath() %>/assets/images/logo.svg" alt="logo" /></a>
-        <a class="sidebar-brand brand-logo-mini" href="<%= request.getContextPath() %>/principal/principal.jsp"><img src="<%= request.getContextPath() %>/assets/images/logo-mini.svg" alt="logo" /></a>
+        <a class="sidebar-brand brand-logo" href="<%= request.getContextPath() %>/ServletPrincipal"><img src="<%= request.getContextPath() %>/assets/images/logo.svg" alt="logo" /></a>
+        <a class="sidebar-brand brand-logo-mini" href="<%= request.getContextPath() %>/ServletPrincipal"><img src="<%= request.getContextPath() %>/assets/images/logo-mini.svg" alt="logo" /></a>
     </div>
     <br>
     <div class="dropdown-divider"></div>
@@ -30,10 +30,10 @@
             </div>
         </li>
         <li class="nav-item nav-category">
-            <span class="nav-link" href="<%= request.getContextPath() %>/principal/principal.jsp">ADMINISTRAÇÃO</span>
+            <span class="nav-link" href="<%= request.getContextPath() %>/ServletPrincipal">ADMINISTRAÇÃO</span>
         </li>
         <li class="nav-item menu-items">
-            <a class="nav-link" href="<%= request.getContextPath() %>/principal/principal.jsp">
+            <a class="nav-link" href="<%= request.getContextPath() %>/ServletPrincipal">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>

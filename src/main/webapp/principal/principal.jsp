@@ -26,7 +26,7 @@
         <jsp:include page="navbar.jsp"></jsp:include>
         <!-- partial -->
         <div class="main-panel">
-            <div class="content-wrapper">
+            <div class="content-wrapper" style="min-height: calc(92vh - 70px);">
                 <div class="row">
 
                 </div>
@@ -180,10 +180,8 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">CONTAS A PAGAR</h4>
-
-                                <div class="table-responsive">
-                                    <h2>Contas que vencem em 7 dias</h2>
+                                 <div class="table-responsive">
+                                     <h2 class="text-center">CONTAS A PAGAR</h2>
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                         <tr>
@@ -213,7 +211,7 @@
                                             </c:when>
                                             <c:otherwise>
                                                 <tr>
-                                                    <td colspan="6">Nenhuma conta vencendo em 7 dias.</td>
+                                                    <td colspan="6">Nenhuma conta vencendo nos próximos 7 dias.</td>
                                                 </tr>
                                             </c:otherwise>
                                         </c:choose>

@@ -25,24 +25,88 @@ public class DAOContas {
             stmt.setString(2, conta.getEmpresa());
             stmt.setString(3, conta.getItens());
             stmt.setDouble(4, conta.getValor());
-            stmt.setDate(5, new java.sql.Date(conta.getData_de_pedido().getTime())); // Converte para java.sql.Date
-            stmt.setDate(6, new java.sql.Date(conta.getData_de_pagamento().getTime())); // Converte para java.sql.Date
+
+            // Verifica se data_de_pedido não é null
+            if (conta.getData_de_pedido() != null) {
+                stmt.setDate(5, new java.sql.Date(conta.getData_de_pedido().getTime()));
+            } else {
+                stmt.setNull(5, java.sql.Types.DATE); // Seta como null no banco
+            }
+
+            // Verifica se data_de_pagamento não é null
+            if (conta.getData_de_pagamento() != null) {
+                stmt.setDate(6, new java.sql.Date(conta.getData_de_pagamento().getTime()));
+            } else {
+                stmt.setNull(6, java.sql.Types.DATE); // Seta como null no banco
+            }
+
             stmt.setString(7, conta.getStatus().toUpperCase());
 
             stmt.executeUpdate();
 
-            // Se você precisar do ID gerado, pode usar isso:
             ResultSet generatedKeys = stmt.getGeneratedKeys();
             if (generatedKeys.next()) {
-                conta.setConta_id(generatedKeys.getLong(1)); // Atualiza o modelo com o id gerado
+                conta.setConta_id(generatedKeys.getLong(1));
             }
 
-            connection.commit(); // Confirma a transação
+            connection.commit();
         } catch (SQLException e) {
-            connection.rollback(); // Faz rollback em caso de erro
+            connection.rollback();
             throw new Exception("Erro ao gravar conta: " + e.getMessage(), e);
         }
     }
+
+    public void atualizarConta(ModelContas conta) {
+        if (conta.getConta_id() == null) {
+            throw new IllegalArgumentException("ID da conta não pode ser nulo.");
+        }
+
+        String sql = "UPDATE contas SET empresa = ?, itens = ?, valor = ?, data_de_pedido = ?, data_de_pagamento = ?, status = ? WHERE conta_id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, conta.getEmpresa());
+            stmt.setString(2, conta.getItens());
+            stmt.setDouble(3, conta.getValor());
+
+            // Verifica se data_de_pedido não é null
+            if (conta.getData_de_pedido() != null) {
+                stmt.setDate(4, new java.sql.Date(conta.getData_de_pedido().getTime()));
+            } else {
+                stmt.setNull(4, java.sql.Types.DATE);
+            }
+
+            // Verifica se data_de_pagamento não é null
+            if (conta.getData_de_pagamento() != null) {
+                stmt.setDate(5, new java.sql.Date(conta.getData_de_pagamento().getTime()));
+            } else {
+                stmt.setNull(5, java.sql.Types.DATE);
+            }
+
+            stmt.setString(6, conta.getStatus());
+            stmt.setLong(7, conta.getConta_id());
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                // Adiciona o commit aqui
+                connection.commit(); // Commit para confirmar a transação
+                System.out.println("Atualização bem-sucedida, linhas afetadas: " + rowsAffected);
+            } else {
+                System.out.println("Nenhuma linha foi atualizada.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                // Se houver um erro, faz o rollback
+                connection.rollback();
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+        }
+    }
+
+
+
+
 
     public boolean existeContaId(Long contaId) {
         // Lógica para verificar se o conta_id já existe no banco de dados
@@ -59,21 +123,31 @@ public class DAOContas {
         return false; // Retorna false se ocorrer qualquer erro
     }
 
-    public void atualizarConta(ModelContas conta) {
-        // Lógica para atualizar a conta no banco de dados
-        String sql = "UPDATE contas SET empresa = ?, itens = ?, valor = ?, data_de_pedido = ?, data_de_pagamento = ?, status = ? WHERE conta_id = ?";
+
+
+    public ModelContas buscarContaPorId(Long contaId) throws SQLException {
+        ModelContas conta = null;
+        String sql = "SELECT * FROM contas WHERE conta_id = ?";
+
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, conta.getEmpresa());
-            stmt.setString(2, conta.getItens());
-            stmt.setDouble(3, conta.getValor());
-            stmt.setDate(4, conta.getData_de_pedido());
-            stmt.setDate(5, conta.getData_de_pagamento());
-            stmt.setString(6, conta.getStatus());
-            stmt.setLong(7, conta.getConta_id()); // Usando setLong para Long
-            stmt.executeUpdate();
+            stmt.setLong(1, contaId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                conta = new ModelContas();
+                conta.setConta_id(rs.getLong("conta_id"));
+                conta.setNumero_pedido(rs.getInt("numero_pedido"));
+                conta.setEmpresa(rs.getString("empresa"));
+                conta.setItens(rs.getString("itens"));
+                conta.setValor(rs.getDouble("valor"));
+                conta.setData_de_pedido(rs.getDate("data_de_pedido"));
+                conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
+                conta.setStatus(rs.getString("status"));
+            }
         } catch (SQLException e) {
-            // Tratamento de exceção
+            System.err.println("Erro ao buscar conta: " + e.getMessage());
+            throw e;
         }
+        return conta;
     }
 
 

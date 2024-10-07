@@ -335,25 +335,26 @@
                                 <div class="table-responsive">
 
 
-                                    <form action="<%= request.getContextPath() %>/ServletContas" method="post" id="Conta" name="lançarConta" style="overflow-x: hidden">
-                                        <input type="hidden" name="acao" value="atualizar">
-                                        <!-- Campo oculto para armazenar o ID da conta -->
+                                    <form action="<%= request.getContextPath() %>/ServletContas" method="post" style="overflow-x: hidden">
+
+
+
 
 
                                         <div class="row">
                                             <div class="col-3">
-                                                <label for="dataCompra">Data da Compra</label>
-                                                <input type="date" class="form-control" id="dataCompra2" name="dataCompra2" required
+                                                <label for="data_de_pedido2">Data da Compra</label>
+                                                <input type="date" class="form-control" id="data_de_pedido2" name="data_de_pedido" required
                                                        value="${formattedDataCompra != null ? formattedDataCompra : ''}">
                                             </div>
                                             <div class="col-3">
-                                                <label for="dataPagamento">Data de Pagamento</label>
-                                                <input type="date" class="form-control" id="dataPagamento2" name="dataPagamento2"
+                                                <label for="data_de_pagamento2">Data de Pagamento</label>
+                                                <input type="date" class="form-control" id="data_de_pagamento2" name="data_de_pagamento"
                                                        value="${formattedDataPagamento != null ? formattedDataPagamento : ''}">
                                             </div>
                                             <div class="col-2">
                                                 <label class="float-label">Nº PEDIDO:</label>
-                                                <input type="text" class="form-control" id="pedido2" name="pedido2" placeholder=""
+                                                <input type="text" class="form-control" id="pedido2" name="numero_pedido" placeholder=""
                                                        style="background-color: black"
                                                        value="${modelContas.numero_pedido != null ? modelContas.numero_pedido : ''}">
                                             </div>
@@ -369,6 +370,14 @@
                                         <div class="row">
                                             <div class="col">
                                                 <div class="row">
+                                                    <div class="col-6">
+                                                        <label class="float-label">EMPRESA:</label>
+                                                        <span class="form-bar"></span>
+                                                        <input type="text" class="form-control"
+                                                               id="empresa2" name="empresa" placeholder=""
+                                                               style="background-color: black;  text-transform: uppercase;"
+                                                               value="${modelContas.empresa != null ? modelContas.empresa : ''}">
+                                                    </div>
                                                     <div class="mb-3">
                                                         <label style="color: #f2a654">ITENS DO PEDIDO</label>
                                                         <textarea class="form-control"
@@ -405,12 +414,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
+
+
 
                                 <br>
 
                                 <div>
+                                    <input type="hidden" name="acao" value="atualizar">
                                     <button type="submit" class="btn btn-outline-success">Atualizar</button>
                                     <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparForm();">Limpar</button>
                                 </div>
@@ -429,12 +439,12 @@
                                                 <table class="table table-striped table-bordered">
                                                     <thead>
                                                     <tr>
-                                                        <th>Número do Pedido</th>
+                                                        <th>Nº Pedido</th>
                                                         <th>Empresa</th>
                                                         <th>Itens</th>
                                                         <th>Valor</th>
-                                                        <th>Data de Pedido</th>
-                                                        <th>Data de Pagamento</th>
+                                                        <th>Pedido</th>
+                                                        <th>Pagamento</th>
                                                         <th>Status</th>
                                                         <th>ID</th>
                                                         <th>Opções</th>
@@ -456,7 +466,8 @@
                                                                     <td><c:out value="${conta.conta_id}"/></td>
                                                                     <td>
 
-                                                                        <button class="btn btn-outline-primary" onclick="editarConta(this, '${conta.conta_id}', '${conta.data_de_pedido}', '${conta.data_de_pagamento}', '${conta.valor}', '${conta.status}', '${conta.itens}', '${conta.numero_pedido}')">Editar</button>
+                                                                        <button class="btn btn-outline-primary" onclick="editarConta(this, '${conta.conta_id}', '${conta.data_de_pedido}', '${conta.data_de_pagamento}', '${conta.valor}', '${conta.status}', '${conta.itens}', '${conta.numero_pedido}', '${conta.empresa}')">Editar</button>
+
 
                                                                     </td>
                                                                 </tr>
@@ -500,19 +511,23 @@
 
 <script>
 
-    function editarConta(button, conta_id, dataPedido, dataPagamento, valor, status, itens, numeroPedido) {
+    function editarConta(button, conta_id, dataPedido, dataPagamento, valor, status, itens, numeroPedido, empresa) {
         // Preencher os campos do formulário com os dados da conta
         document.getElementById('idPedido').value = conta_id; // ID da conta
-        document.getElementById('dataCompra2').value = formatarData(dataPedido); // Data de Pedido
-        document.getElementById('dataPagamento2').value = formatarData(dataPagamento); // Data de Pagamento
+        document.getElementById('data_de_pedido2').value = formatarData(dataPedido); // Data de Pedido
+        document.getElementById('data_de_pagamento2').value = formatarData(dataPagamento); // Data de Pagamento
         document.getElementById('pedido2').value = numeroPedido; // Número do Pedido
         document.getElementById('itens2').value = itens; // Itens do Pedido
         document.getElementById('valor2').value = valor; // Valor
         document.getElementById('status2').value = status; // Status
 
+        // Preencher o campo EMPRESA
+        document.getElementById('empresa2').value = empresa; // Preenche o campo EMPRESA
+
         // Caso precise manipular o valor bruto, descomente a linha abaixo
-        // document.getElementById('valorBruto2').value = valor; // Valor bruto, se necessário
+        document.getElementById('valorBruto2').value = valor; // Valor bruto, se necessário
     }
+
 
 
     // Função para formatar a data no formato 'yyyy-mm-dd' para o campo date
@@ -564,6 +579,7 @@
             document.getElementById('valorBruto2').value = valorSemFormatacao; // Atualiza o campo oculto para valor2
         }
     }
+
 
 
 

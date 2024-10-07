@@ -1,14 +1,17 @@
 package servlets;
 
 import dao.DAOContas;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelContas;
+import util.DateUtil;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -21,132 +24,111 @@ public class ServletContas extends HttpServlet {
         daoContas = new DAOContas();
     }
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Método doPost chamado.");
-
-        String contaIdStr = request.getParameter("conta_id"); // Capturando conta_id como String (pode ser nulo)
-        String numeroPedidoStr = request.getParameter("numero_pedido");
-        String empresa = request.getParameter("empresa");
-        String itens = request.getParameter("itens");
-        String valorBrutoStr = request.getParameter("valor"); // Aqui pegamos o valor sem formatação do campo oculto
-        String dataDePedidoStr = request.getParameter("data_de_pedido");
-        String dataDePagamentoStr = request.getParameter("data_de_pagamento");
-        String status = request.getParameter("status");
-
-        // Verificação de campos obrigatórios
-        if (numeroPedidoStr == null || numeroPedidoStr.trim().isEmpty()) {
-            request.setAttribute("msg", "O campo 'número do pedido' é obrigatório.");
-            request.getRequestDispatcher("erro.jsp").forward(request, response);
-            return;
-        }
-
-        if (empresa == null || empresa.trim().isEmpty()) {
-            request.setAttribute("msg", "O campo 'empresa' é obrigatório.");
-            request.getRequestDispatcher("erro.jsp").forward(request, response);
-            return;
-        }
-
-        // Verificação do valor
-        double valor;
         try {
-            valor = Double.parseDouble(valorBrutoStr); // Agora já está no formato correto sem formatação
-            if (valor < 0) {
-                throw new NumberFormatException("Valor deve ser positivo.");
+            String msg;
+
+            // Obtém os parâmetros do request
+            String conta_id = request.getParameter("idPedido"); // Altere para o nome correto, se necessário
+            String numero_pedido = request.getParameter("numero_pedido");
+            String empresa = request.getParameter("empresa");
+            String itens = request.getParameter("itens");
+            String valor = request.getParameter("valor");
+            String valor2 = request.getParameter("valor2");
+            String data_pedido = request.getParameter("data_de_pedido");
+            String data_pagamento = request.getParameter("data_de_pagamento");
+            String status = request.getParameter("status");
+            String acao = request.getParameter("acao");
+
+            ModelContas modelContas = new ModelContas();
+
+            // Seta os dados da conta
+            if (conta_id != null && !conta_id.isEmpty()) {
+                modelContas.setConta_id(Long.parseLong(conta_id));
             }
-        } catch (NumberFormatException e) {
-            request.setAttribute("msg", "O campo 'valor' deve ser um número válido.");
-            request.getRequestDispatcher("erro.jsp").forward(request, response);
-            return;
-        }
 
-        ModelContas conta = new ModelContas();
+            modelContas.setNumero_pedido(numero_pedido != null && !numero_pedido.isEmpty() ? Integer.parseInt(numero_pedido) : 0);
+            modelContas.setEmpresa(empresa);
+            modelContas.setItens(itens);
 
-        // Convertendo número do pedido
-        try {
-            conta.setNumero_pedido(Integer.parseInt(numeroPedidoStr));
-        } catch (NumberFormatException e) {
-            request.setAttribute("msg", "O campo 'número do pedido' deve ser um número inteiro.");
-            request.getRequestDispatcher("erro.jsp").forward(request, response);
-            return;
-        }
+            // Converte os valores, removendo formatações
+            double valorConvertido = converterValorParaDouble(valor);
+            double valor2Convertido = converterValorParaDouble(valor2);
 
-        conta.setEmpresa(empresa);
-        conta.setItens(itens);
-        conta.setValor(valor);
-
-        // Convertendo datas com verificação
-        if (dataDePedidoStr != null && !dataDePedidoStr.trim().isEmpty()) {
-            try {
-                conta.setData_de_pedido(java.sql.Date.valueOf(dataDePedidoStr));
-            } catch (IllegalArgumentException e) {
-                request.setAttribute("msg", "Data de pedido inválida.");
-                request.getRequestDispatcher("erro.jsp").forward(request, response);
-                return;
-            }
-        } else {
-            request.setAttribute("msg", "O campo 'data de pedido' é obrigatório.");
-            request.getRequestDispatcher("erro.jsp").forward(request, response);
-            return;
-        }
-
-        if (dataDePagamentoStr != null && !dataDePagamentoStr.isEmpty()) {
-            try {
-                conta.setData_de_pagamento(java.sql.Date.valueOf(dataDePagamentoStr));
-            } catch (IllegalArgumentException e) {
-                request.setAttribute("msg", "Data de pagamento inválida.");
-                request.getRequestDispatcher("erro.jsp").forward(request, response);
-                return;
-            }
-        }
-
-        conta.setStatus(status);
-
-        // Inicializa contaId como null
-        Long contaId = null;
-        if (contaIdStr != null && !contaIdStr.trim().isEmpty()) {
-            try {
-                contaId = Long.parseLong(contaIdStr); // Converte para Long
-                conta.setConta_id(contaId); // Define o conta_id no objeto ModelContas
-            } catch (NumberFormatException e) {
-                request.setAttribute("msg", "O campo 'conta_id' deve ser um número válido.");
-                request.getRequestDispatcher("erro.jsp").forward(request, response);
-                return;
-            }
-        }
-
-
-        System.out.println("Conta ID: " + contaId);
-        System.out.println("Número do Pedido: " + numeroPedidoStr);
-        System.out.println("Empresa: " + empresa);
-        System.out.println("Itens: " + itens);
-        System.out.println("Valor: " + valor);
-        System.out.println("Data de Pedido: " + dataDePedidoStr);
-        System.out.println("Data de Pagamento: " + dataDePagamentoStr);
-        System.out.println("Status: " + status);
-
-
-        // Salvar ou atualizar conta no banco
-        try {
-            if (contaId != null && daoContas.existeContaId(contaId)) {
-                // Atualiza a conta existente
-                daoContas.atualizarConta(conta);
-                request.setAttribute("msg", "Conta atualizada com sucesso!");
+            // Seta o valor dependendo da ação
+            if ("atualizar".equals(acao)) {
+                modelContas.setValor(valor2Convertido);
+                msg = "Conta atualizada com sucesso!";
             } else {
-                // Insere uma nova conta
-                daoContas.gravarConta(conta);
-                request.setAttribute("msg", "Conta gravada com sucesso!");
+                modelContas.setValor(valorConvertido);
+                msg = "Conta gravada com sucesso!";
             }
 
-            request.getRequestDispatcher("principal/contas.jsp").forward(request, response);
+            modelContas.setStatus(status != null ? status.toUpperCase() : null);
+
+            // Converte e seta as datas
+            if (data_pedido != null && !data_pedido.isEmpty()) {
+                try {
+                    modelContas.setData_de_pedido(Date.valueOf(data_pedido));
+                } catch (IllegalArgumentException e) {
+                    throw new ServletException("Data de pedido inválida: " + data_pedido);
+                }
+            }
+
+            if (data_pagamento != null && !data_pagamento.isEmpty()) {
+                try {
+                    modelContas.setData_de_pagamento(Date.valueOf(data_pagamento));
+                } catch (IllegalArgumentException e) {
+                    throw new ServletException("Data de pagamento inválida: " + data_pagamento);
+                }
+            }
+
+            // Verifica se o ID da conta é válido
+            if (modelContas.getConta_id() != null) {
+                System.out.println("ID da conta: " + modelContas.getConta_id());
+                System.out.println("Verificando se a conta existe no banco...");
+                if (daoContas.existeContaId(modelContas.getConta_id())) {
+                    System.out.println("Conta existe, atualizando...");
+                    daoContas.atualizarConta(modelContas);
+                } else {
+                    System.out.println("Conta não existe, gravando nova conta...");
+                    daoContas.gravarConta(modelContas);
+                }
+            } else {
+                System.out.println("ID da conta é nulo, gravando nova conta...");
+                daoContas.gravarConta(modelContas);
+            }
+
+            // Mantém os dados e mensagem na tela
+            request.setAttribute("msg", msg);
+            request.setAttribute("modelContas", modelContas);
+
+            // Redireciona para a servlet ServletContas após gravar ou atualizar
+            response.sendRedirect(request.getContextPath() + "/ServletContas");
+
         } catch (Exception e) {
-            request.setAttribute("msg", "Erro ao gravar conta: " + e.getMessage());
-            request.getRequestDispatcher("erro.jsp").forward(request, response);
+            e.printStackTrace();
+            RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");
+            request.setAttribute("msg", e.getMessage());
+            redirecionar.forward(request, response);
         }
     }
 
+    // Função para converter valor formatado para double
+    private double converterValorParaDouble(String valorFormatado) {
+        if (valorFormatado == null || valorFormatado.isEmpty()) {
+            return 0.0;
+        }
 
+        // Remove os pontos e substitui a vírgula por ponto
+        valorFormatado = valorFormatado.replace(".", "").replace(",", ".");
+        try {
+            return Double.parseDouble(valorFormatado);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Valor inválido: " + valorFormatado);
+        }
+    }
 
 
 
@@ -157,6 +139,8 @@ public class ServletContas extends HttpServlet {
         // Lista para armazenar as contas a pagar que vencem nos próximos 7 dias
         List<ModelContas> contasVencendo;
         List<ModelContas> todasContas;
+        String acao = request.getParameter("acao");
+        String icConta = request.getParameter("conta_id");
 
         try {
             // Chama o método para buscar contas que vencem em 7 dias e estão "A PAGAR"
@@ -166,6 +150,34 @@ public class ServletContas extends HttpServlet {
             // Chama o método para listar todas as contas
             todasContas = daoContas.listarContas();
             request.setAttribute("todasContas", todasContas); // Passa todas as contas para o JSP
+
+            // Se a ação não for especificada, chama a ação vendaDoDia automaticamente
+            if (acao == null || acao.isEmpty()) {
+                acao = "contasVencendo";
+            }
+
+            if (acao.equals("todasContas")) {
+                // Lógica para buscar as vendas do dia
+                List<ModelContas> listaDeContas = daoContas.listarContas();
+                request.setAttribute("listaDeContas", listaDeContas);
+                request.getRequestDispatcher("principal/contas.jsp").forward(request, response);
+                return;
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         } catch (SQLException e) {
             // Em caso de erro, define a mensagem e redireciona para a página de erro

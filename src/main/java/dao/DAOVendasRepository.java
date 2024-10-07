@@ -467,13 +467,22 @@ public class DAOVendasRepository {
     }
 
 
-    public void deleteVenda(long id) throws Exception{
-        String sql = "delete from vendas where venda_id = ?";
-        PreparedStatement preparedSql = connection.prepareStatement(sql);
-        preparedSql.setLong(1, id);
-        preparedSql.executeUpdate();
-        connection.commit();
+    public void deleteVenda(long id) throws Exception {
+        String sql = "DELETE FROM vendas WHERE venda_id = ?";
+        try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
+            preparedSql.setLong(1, id);
+            int rowsAffected = preparedSql.executeUpdate(); // Captura o número de linhas afetadas
+            connection.commit();
+
+            // Log ou verifique se a exclusão foi bem-sucedida
+            if (rowsAffected == 0) {
+                System.out.println("Nenhuma venda encontrada com o ID: " + id);
+            } else {
+                System.out.println("Venda com ID " + id + " excluída com sucesso!");
+            }
+        }
     }
+
 
 
 

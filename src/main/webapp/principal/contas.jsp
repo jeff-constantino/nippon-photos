@@ -417,173 +417,196 @@
 
 
 
-                                <br>
+                                        <br>
 
-                                <div>
-                                    <input type="hidden" name="acao" value="atualizar">
-                                    <button type="submit" class="btn btn-outline-success">Atualizar</button>
-                                    <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparForm();">Limpar</button>
+                                        <div>
+                                            <input type="hidden" name="acao" value="atualizar">
+                                            <button type="submit" class="btn btn-outline-success">Atualizar</button>
+                                            <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparForm();">Limpar</button>
+                                            <button type="button"
+                                                    class="btn btn-outline-danger waves-effect waves-light"
+                                                    onclick="deletaConta();">Excluir Conta
+                                            </button>
+                                        </div>
+                                    </form>
+
+
                                 </div>
-                                </form>
+                                <div class="row ">
+                                    <div class="col-12 grid-margin">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">CONTAS A PAGAR</h4>
+
+                                                <div class="table-responsive">
+                                                    <h2>Todas as Contas</h2>
+                                                    <table class="table table-striped table-bordered">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Nº Pedido</th>
+                                                            <th>Empresa</th>
+                                                            <th>Itens</th>
+                                                            <th>Valor</th>
+                                                            <th>Pedido</th>
+                                                            <th>Pagamento</th>
+                                                            <th>Status</th>
+                                                            <th>ID</th>
+                                                            <th>Opções</th>
+
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <c:choose>
+                                                            <c:when test="${not empty todasContas}">
+                                                                <c:forEach var="conta" items="${todasContas}">
+                                                                    <tr>
+                                                                        <td><c:out value="${conta.numero_pedido}"/></td>
+                                                                        <td><c:out value="${conta.empresa}"/></td>
+                                                                        <td><c:out value="${conta.itens}"/></td>
+                                                                        <td><fmt:formatNumber value="${conta.valor}" type="currency" currencySymbol="R$" /></td>
+                                                                        <td><fmt:formatDate value="${conta.data_de_pedido}" pattern="dd/MM/yyyy"/></td>
+                                                                        <td><fmt:formatDate value="${conta.data_de_pagamento}" pattern="dd/MM/yyyy"/></td>
+                                                                        <td><c:out value="${conta.status}"/></td>
+                                                                        <td><c:out value="${conta.conta_id}"/></td>
+                                                                        <td>
+
+                                                                            <button class="btn btn-outline-primary" onclick="editarConta(this, '${conta.conta_id}', '${conta.data_de_pedido}', '${conta.data_de_pagamento}', '${conta.valor}', '${conta.status}', '${conta.itens}', '${conta.numero_pedido}', '${conta.empresa}')">Editar</button>
 
 
-                            </div>
-                            <div class="row ">
-                                <div class="col-12 grid-margin">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h4 class="card-title">CONTAS A PAGAR</h4>
-
-                                            <div class="table-responsive">
-                                                <h2>Todas as Contas</h2>
-                                                <table class="table table-striped table-bordered">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Nº Pedido</th>
-                                                        <th>Empresa</th>
-                                                        <th>Itens</th>
-                                                        <th>Valor</th>
-                                                        <th>Pedido</th>
-                                                        <th>Pagamento</th>
-                                                        <th>Status</th>
-                                                        <th>ID</th>
-                                                        <th>Opções</th>
-
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <c:choose>
-                                                        <c:when test="${not empty todasContas}">
-                                                            <c:forEach var="conta" items="${todasContas}">
+                                                                        </td>
+                                                                    </tr>
+                                                                </c:forEach>
+                                                            </c:when>
+                                                            <c:otherwise>
                                                                 <tr>
-                                                                    <td><c:out value="${conta.numero_pedido}"/></td>
-                                                                    <td><c:out value="${conta.empresa}"/></td>
-                                                                    <td><c:out value="${conta.itens}"/></td>
-                                                                    <td><fmt:formatNumber value="${conta.valor}" type="currency" currencySymbol="R$" /></td>
-                                                                    <td><fmt:formatDate value="${conta.data_de_pedido}" pattern="dd/MM/yyyy"/></td>
-                                                                    <td><fmt:formatDate value="${conta.data_de_pagamento}" pattern="dd/MM/yyyy"/></td>
-                                                                    <td><c:out value="${conta.status}"/></td>
-                                                                    <td><c:out value="${conta.conta_id}"/></td>
-                                                                    <td>
-
-                                                                        <button class="btn btn-outline-primary" onclick="editarConta(this, '${conta.conta_id}', '${conta.data_de_pedido}', '${conta.data_de_pagamento}', '${conta.valor}', '${conta.status}', '${conta.itens}', '${conta.numero_pedido}', '${conta.empresa}')">Editar</button>
-
-
-                                                                    </td>
+                                                                    <td colspan="7">Nenhuma conta encontrada.</td>
                                                                 </tr>
-                                                            </c:forEach>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <tr>
-                                                                <td colspan="7">Nenhuma conta encontrada.</td>
-                                                            </tr>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
+
                             </div>
-
-
                         </div>
                     </div>
+
+
                 </div>
-
-
+                <!-- content-wrapper ends -->
+                <!-- partial:partials/_footer.html -->
+                <jsp:include page="footer.jsp"></jsp:include>
+                <!-- partial -->
             </div>
-            <!-- content-wrapper ends -->
-            <!-- partial:partials/_footer.html -->
-            <jsp:include page="footer.jsp"></jsp:include>
-            <!-- partial -->
+            <!-- main-panel ends -->
         </div>
-        <!-- main-panel ends -->
+        <!-- page-body-wrapper ends -->
     </div>
-    <!-- page-body-wrapper ends -->
-</div>
-<!-- container-scroller -->
-<!-- plugins:js -->
-<jsp:include page="pluginsJS.jsp"></jsp:include>
-<!-- End custom js for this page -->
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <jsp:include page="pluginsJS.jsp"></jsp:include>
+    <!-- End custom js for this page -->
 
-<script>
+    <script>
 
-    function editarConta(button, conta_id, dataPedido, dataPagamento, valor, status, itens, numeroPedido, empresa) {
-        // Preencher os campos do formulário com os dados da conta
-        document.getElementById('idPedido').value = conta_id; // ID da conta
-        document.getElementById('data_de_pedido2').value = formatarData(dataPedido); // Data de Pedido
-        document.getElementById('data_de_pagamento2').value = formatarData(dataPagamento); // Data de Pagamento
-        document.getElementById('pedido2').value = numeroPedido; // Número do Pedido
-        document.getElementById('itens2').value = itens; // Itens do Pedido
-        document.getElementById('valor2').value = valor; // Valor
-        document.getElementById('status2').value = status; // Status
+        function editarConta(button, conta_id, dataPedido, dataPagamento, valor, status, itens, numeroPedido, empresa) {
+            // Preencher os campos do formulário com os dados da conta
+            document.getElementById('idPedido').value = conta_id; // ID da conta
+            document.getElementById('data_de_pedido2').value = formatarData(dataPedido); // Data de Pedido
+            document.getElementById('data_de_pagamento2').value = formatarData(dataPagamento); // Data de Pagamento
+            document.getElementById('pedido2').value = numeroPedido; // Número do Pedido
+            document.getElementById('itens2').value = itens; // Itens do Pedido
+            document.getElementById('valor2').value = valor; // Valor
+            document.getElementById('status2').value = status; // Status
 
-        // Preencher o campo EMPRESA
-        document.getElementById('empresa2').value = empresa; // Preenche o campo EMPRESA
+            // Preencher o campo EMPRESA
+            document.getElementById('empresa2').value = empresa; // Preenche o campo EMPRESA
 
-        // Caso precise manipular o valor bruto, descomente a linha abaixo
-        document.getElementById('valorBruto2').value = valor; // Valor bruto, se necessário
-    }
-
-
-
-    // Função para formatar a data no formato 'yyyy-mm-dd' para o campo date
-    function formatarData(data) {
-        const partes = data.split('/');
-        return partes[2] + '-' + partes[1] + '-' + partes[0]; // Converte 'dd/MM/yyyy' para 'yyyy-MM-dd'
-    }
-
-
-
-
-
-
-
-
-    function formatarData(data) {
-        // Função para formatar a data no formato 'yyyy-MM-dd' (necessário para input type="date")
-        var partes = data.split('/');
-        if (partes.length === 3) {
-            return `${partes[2]}-${partes[1]}-${partes[0]}`; // Converte 'dd/MM/yyyy' para 'yyyy-MM-dd'
-        }
-        return data;
-    }
-
-
-    function formatarValor(input) {
-        // Remove caracteres não numéricos
-        let valor = input.value.replace(/\D/g, '');
-
-        // Formata o valor para exibição
-        if (valor) {
-            valor = (valor / 100).toFixed(2); // Converte para formato decimal
-            valor = valor.replace('.', ','); // Troca ponto por vírgula
-
-            // Adiciona separadores de milhar
-            valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            // Caso precise manipular o valor bruto, descomente a linha abaixo
+            document.getElementById('valorBruto2').value = valor; // Valor bruto, se necessário
         }
 
-        // Atualiza o campo de exibição
-        input.value = valor;
 
-        // Atualiza o campo oculto com o valor sem formatação
-        const valorSemFormatacao = valor.replace(/\./g, '').replace(',', '.'); // Remove formatação e usa ponto como separador decimal
 
-        // Atualiza o campo oculto correspondente
-        if (input.id === "valorExibido") {
-            document.getElementById('valorBruto').value = valorSemFormatacao; // Atualiza o campo oculto para valorExibido
-        } else if (input.id === "valor2") {
-            document.getElementById('valorBruto2').value = valorSemFormatacao; // Atualiza o campo oculto para valor2
+        // Função para formatar a data no formato 'yyyy-mm-dd' para o campo date
+        function formatarData(data) {
+            const partes = data.split('/');
+            return partes[2] + '-' + partes[1] + '-' + partes[0]; // Converte 'dd/MM/yyyy' para 'yyyy-MM-dd'
         }
-    }
 
 
 
 
-</script>
+
+
+
+
+        function formatarData(data) {
+            // Função para formatar a data no formato 'yyyy-MM-dd' (necessário para input type="date")
+            var partes = data.split('/');
+            if (partes.length === 3) {
+                return `${partes[2]}-${partes[1]}-${partes[0]}`; // Converte 'dd/MM/yyyy' para 'yyyy-MM-dd'
+            }
+            return data;
+        }
+
+
+        function formatarValor(input) {
+            // Remove caracteres não numéricos
+            let valor = input.value.replace(/\D/g, '');
+
+            // Formata o valor para exibição
+            if (valor) {
+                valor = (valor / 100).toFixed(2); // Converte para formato decimal
+                valor = valor.replace('.', ','); // Troca ponto por vírgula
+
+                // Adiciona separadores de milhar
+                valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            }
+
+            // Atualiza o campo de exibição
+            input.value = valor;
+
+            // Atualiza o campo oculto com o valor sem formatação
+            const valorSemFormatacao = valor.replace(/\./g, '').replace(',', '.'); // Remove formatação e usa ponto como separador decimal
+
+            // Atualiza o campo oculto correspondente
+            if (input.id === "valorExibido") {
+                document.getElementById('valorBruto').value = valorSemFormatacao; // Atualiza o campo oculto para valorExibido
+            } else if (input.id === "valor2") {
+                document.getElementById('valorBruto2').value = valorSemFormatacao; // Atualiza o campo oculto para valor2
+            }
+        }
+
+        function deletaConta() {
+            const contaID = document.getElementById('idPedido').value; // Obtém o ID da conta
+            if (confirm("Tem certeza que deseja excluir a conta " + contaID + "?")) {
+                $.ajax({
+                    method: 'GET', // Mudando para GET
+                    url: '<%= request.getContextPath() %>/ServletContas',
+                    data: {acao: 'deletar', conta_id: contaID}, // Usando conta_id
+                    success: function (response) {
+                        alert("Conta excluída com sucesso!");
+                        location.reload(); // Atualiza a página
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        alert('Erro ao excluir a conta: ' + xhr.responseText);
+                    }
+                });
+            }
+        }
+
+
+
+
+
+    </script>
 
 
 

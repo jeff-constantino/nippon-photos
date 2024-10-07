@@ -202,7 +202,13 @@ public class DAOContas {
         }
         return contas;
     }
-
+    public void deleteConta(long id) throws Exception{
+        String sql = "delete from contas where conta_id = ?";
+        PreparedStatement preparedSql = connection.prepareStatement(sql);
+        preparedSql.setLong(1, id);
+        preparedSql.executeUpdate();
+        connection.commit();
+    }
 
 
 }

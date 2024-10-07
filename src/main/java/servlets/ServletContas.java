@@ -136,11 +136,10 @@ public class ServletContas extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Lista para armazenar as contas a pagar que vencem nos próximos 7 dias
         List<ModelContas> contasVencendo;
         List<ModelContas> todasContas;
         String acao = request.getParameter("acao");
-        String icConta = request.getParameter("conta_id");
+        String contaId = request.getParameter("conta_id"); // Obtém o ID da conta
 
         try {
             // Chama o método para buscar contas que vencem em 7 dias e estão "A PAGAR"
@@ -151,44 +150,34 @@ public class ServletContas extends HttpServlet {
             todasContas = daoContas.listarContas();
             request.setAttribute("todasContas", todasContas); // Passa todas as contas para o JSP
 
-            // Se a ação não for especificada, chama a ação vendaDoDia automaticamente
-            if (acao == null || acao.isEmpty()) {
-                acao = "contasVencendo";
+            if (acao != null && acao.equals("deletar")) {
+                if (contaId != null && !contaId.isEmpty()) {
+                    // Use o ID que foi recebido na requisição
+                    long idParaExcluir = Long.parseLong(contaId);
+                    try {
+                        daoContas.deleteConta(idParaExcluir); // Chama o método de exclusão
+                        request.setAttribute("msg", "Conta com ID " + idParaExcluir + " excluída com sucesso!");
+                    } catch (Exception e) {
+                        request.setAttribute("msg", "Erro ao excluir conta: " + e.getMessage());
+                    }
+                } else {
+                    request.setAttribute("msg", "Erro: o ID da conta não foi encontrado.");
+                }
             }
-
-            if (acao.equals("todasContas")) {
-                // Lógica para buscar as vendas do dia
-                List<ModelContas> listaDeContas = daoContas.listarContas();
-                request.setAttribute("listaDeContas", listaDeContas);
-                request.getRequestDispatcher("principal/contas.jsp").forward(request, response);
-                return;
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         } catch (SQLException e) {
-            // Em caso de erro, define a mensagem e redireciona para a página de erro
             request.setAttribute("msg", "Erro ao buscar contas: " + e.getMessage());
             request.getRequestDispatcher("erro.jsp").forward(request, response);
-            return; // Retorna para não continuar o processamento
+            return;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
         // Redireciona para o JSP onde a lista de contas será exibida
         request.getRequestDispatcher("/principal/contas.jsp").forward(request, response);
     }
+
+
 
 
 

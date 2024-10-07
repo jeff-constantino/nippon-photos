@@ -22,7 +22,7 @@
         <jsp:include page="navbar.jsp"></jsp:include>
         <!-- partial -->
         <div class="main-panel">
-            <div class="content-wrapper">
+            <div class="content-wrapper"  style="min-height: calc(100vh - 70px);">
               <div class="row">
                     <div class="col-xl-12">
 

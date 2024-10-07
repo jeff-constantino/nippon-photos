@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 public class ModelConfig {
     private Long idConf;  // Adicionado o atributo id
     private BigDecimal prod1_valor;
+    private BigDecimal prod1_valor2;
     private BigDecimal prod2_valor;
     private BigDecimal prod3_valor;
     private BigDecimal comissao;
@@ -17,6 +18,7 @@ public class ModelConfig {
         return "ModelConfig{" +
                 "idConf=" + idConf +
                 ", prod1_valor=" + prod1_valor +
+                ", prod1_valor2=" + prod1_valor2 +
                 ", prod2_valor=" + prod2_valor +
                 ", prod3_valor=" + prod3_valor +
                 ", comissao=" + comissao +
@@ -29,6 +31,14 @@ public class ModelConfig {
 
 // Getters e Setters
 
+
+    public BigDecimal getProd1_valor2() {
+        return prod1_valor2;
+    }
+
+    public void setProd1_valor2(BigDecimal prod1_valor2) {
+        this.prod1_valor2 = prod1_valor2;
+    }
 
     public Long getIdConf() {
         return idConf;

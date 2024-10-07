@@ -183,7 +183,7 @@
 
                                                                                         <div>
                                                                                             <button class="btn btn-outline-success waves-effect waves-light">Salvar</button>
-                                                                                            <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparForm();">Limpar</button>
+                                                                                            <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparFormLancar();">Limpar</button>
                                                                                         </div>
                                                                                     </form>
 
@@ -225,16 +225,16 @@
                                         <div class="d-flex d-sm-block d-md-flex align-items-center">
                                             <!--INSERIR BOTÃO 2 AQUI-->
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal2">
-                                                <h4>Desempenho</h4>
+                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalListContas">
+                                                <h4>Todas as Contas</h4>
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="modal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-xl">
+                                            <div class="modal fade" id="modalListContas" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-xl modal-dialog-scrollable">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticRanking">RANKING</h5>
+                                                            <h5 class="modal-title" id="staticRanking">TODAS AS CONTAS</h5>
 
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
@@ -242,7 +242,44 @@
                                                             <div class="container-fluid">
                                                                 <div class="row">
                                                                     <div class="col-lg-6 grid-margin stretch-card">
-                                                                        <H5>CORPO DO RANKING</H5>
+
+                                                                        <table class="table table-striped table-bordered">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th>Nº Pedido</th>
+                                                                                <th>Empresa</th>
+                                                                                <th>Itens</th>
+                                                                                <th>Valor</th>
+                                                                                <th>Pedido</th>
+                                                                                <th>Pagamento</th>
+                                                                                <th>Status</th>
+                                                                                <th>ID</th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            <c:choose>
+                                                                                <c:when test="${not empty todasContas}"> <!-- Aqui você pode querer chamar um método que retorna todas as contas -->
+                                                                                    <c:forEach var="conta" items="${todasContas}">
+                                                                                        <tr>
+                                                                                            <td><c:out value="${conta.numero_pedido}"/></td>
+                                                                                            <td><c:out value="${conta.empresa}"/></td>
+                                                                                            <td><c:out value="${conta.itens}"/></td>
+                                                                                            <td><fmt:formatNumber value="${conta.valor}" type="currency" currencySymbol="R$" /></td>
+                                                                                            <td><fmt:formatDate value="${conta.data_de_pedido}" pattern="dd/MM/yyyy"/></td>
+                                                                                            <td><fmt:formatDate value="${conta.data_de_pagamento}" pattern="dd/MM/yyyy"/></td>
+                                                                                            <td><c:out value="${conta.status}"/></td>
+                                                                                            <td><c:out value="${conta.conta_id}"/></td>
+                                                                                        </tr>
+                                                                                    </c:forEach>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <tr>
+                                                                                        <td colspan="8">Nenhuma conta encontrada.</td>
+                                                                                    </tr>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                            </tbody>
+                                                                        </table>
                                                                     </div>
 
 
@@ -335,7 +372,7 @@
                                 <div class="table-responsive">
 
 
-                                    <form action="<%= request.getContextPath() %>/ServletContas" method="post" style="overflow-x: hidden">
+                                    <form action="<%= request.getContextPath() %>/ServletContas" method="post" style="overflow-x: hidden" id="formContas">
 
 
 
@@ -422,7 +459,7 @@
                                         <div>
                                             <input type="hidden" name="acao" value="atualizar">
                                             <button type="submit" class="btn btn-outline-success">Atualizar</button>
-                                            <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparForm();">Limpar</button>
+                                            <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparFormContas();">Limpar</button>
                                             <button type="button"
                                                     class="btn btn-outline-danger waves-effect waves-light"
                                                     onclick="deletaConta();">Excluir Conta
@@ -436,13 +473,13 @@
                                     <div class="col-12 grid-margin">
                                         <div class="card">
                                             <div class="card-body">
-                                                <h4 class="card-title">CONTAS A PAGAR</h4>
 
                                                 <div class="table-responsive">
-                                                    <h2>Todas as Contas</h2>
+                                                    <h2 style="text-align: center">CONTAS DOS ÚLTIMOS 60 DIAS</h2>
                                                     <table class="table table-striped table-bordered">
                                                         <thead>
                                                         <tr>
+                                                            <th>Opções</th>
                                                             <th>Nº Pedido</th>
                                                             <th>Empresa</th>
                                                             <th>Itens</th>
@@ -451,15 +488,18 @@
                                                             <th>Pagamento</th>
                                                             <th>Status</th>
                                                             <th>ID</th>
-                                                            <th>Opções</th>
+
 
                                                         </tr>
                                                         </thead>
                                                         <tbody>
                                                         <c:choose>
-                                                            <c:when test="${not empty todasContas}">
-                                                                <c:forEach var="conta" items="${todasContas}">
+                                                            <c:when test="${not empty contasRecentes}">
+                                                                <c:forEach var="conta" items="${contasRecentes}">
                                                                     <tr>
+                                                                        <td>
+                                                                            <button class="btn btn-outline-primary" onclick="editarConta(this, '${conta.conta_id}', '${conta.data_de_pedido}', '${conta.data_de_pagamento}', '${conta.valor}', '${conta.status}', '${conta.itens}', '${conta.numero_pedido}', '${conta.empresa}')">Editar</button>
+                                                                        </td>
                                                                         <td><c:out value="${conta.numero_pedido}"/></td>
                                                                         <td><c:out value="${conta.empresa}"/></td>
                                                                         <td><c:out value="${conta.itens}"/></td>
@@ -468,12 +508,6 @@
                                                                         <td><fmt:formatDate value="${conta.data_de_pagamento}" pattern="dd/MM/yyyy"/></td>
                                                                         <td><c:out value="${conta.status}"/></td>
                                                                         <td><c:out value="${conta.conta_id}"/></td>
-                                                                        <td>
-
-                                                                            <button class="btn btn-outline-primary" onclick="editarConta(this, '${conta.conta_id}', '${conta.data_de_pedido}', '${conta.data_de_pagamento}', '${conta.valor}', '${conta.status}', '${conta.itens}', '${conta.numero_pedido}', '${conta.empresa}')">Editar</button>
-
-
-                                                                        </td>
                                                                     </tr>
                                                                 </c:forEach>
                                                             </c:when>
@@ -484,6 +518,7 @@
                                                             </c:otherwise>
                                                         </c:choose>
                                                         </tbody>
+
                                                     </table>
                                                 </div>
 
@@ -603,9 +638,15 @@
         }
 
 
+        function limparFormContas() {
+            // Limpa os campos do formulário
+            $('#formContas')[0].reset();
+        }
 
-
-
+        function limparFormLancar() {
+            // Limpa os campos do formulário
+            $('#lançarConta')[0].reset();
+        }
     </script>
 
 

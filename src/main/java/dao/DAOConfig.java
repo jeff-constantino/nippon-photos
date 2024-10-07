@@ -27,15 +27,16 @@ public class DAOConfig {
     }
 
     private ModelConfig inserirConfig(ModelConfig modelConfig) throws Exception {
-        String sql = "INSERT INTO public.configuracao(prod1_valor, prod2_valor, prod3_valor, comissao, prod1_nome, prod2_nome, prod3_nome) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO public.configuracao(prod1_valor,prod1_valor2, prod2_valor, prod3_valor, comissao, prod1_nome, prod2_nome, prod3_nome) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedSql = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedSql.setBigDecimal(1, modelConfig.getProd1_valor());
-            preparedSql.setBigDecimal(2, modelConfig.getProd2_valor());
-            preparedSql.setBigDecimal(3, modelConfig.getProd3_valor());
-            preparedSql.setBigDecimal(4, modelConfig.getComissao());
-            preparedSql.setString(5, modelConfig.getProd1_nome());
-            preparedSql.setString(6, modelConfig.getProd2_nome());
-            preparedSql.setString(7, modelConfig.getProd3_nome());
+            preparedSql.setBigDecimal(2, modelConfig.getProd1_valor2());
+            preparedSql.setBigDecimal(3, modelConfig.getProd2_valor());
+            preparedSql.setBigDecimal(4, modelConfig.getProd3_valor());
+            preparedSql.setBigDecimal(5, modelConfig.getComissao());
+            preparedSql.setString(6, modelConfig.getProd1_nome());
+            preparedSql.setString(7, modelConfig.getProd2_nome());
+            preparedSql.setString(8, modelConfig.getProd3_nome());
 
             preparedSql.executeUpdate();
             ResultSet generatedKeys = preparedSql.getGeneratedKeys();
@@ -53,16 +54,17 @@ public class DAOConfig {
     }
 
     private ModelConfig atualizarConfig(ModelConfig modelConfig) throws Exception {
-        String sql = "UPDATE public.configuracao SET prod1_valor = ?, prod2_valor = ?, prod3_valor = ?, comissao = ?, prod1_nome = ?, prod2_nome = ?, prod3_nome = ? WHERE \"idConf\" = ?";
+        String sql = "UPDATE public.configuracao SET prod1_valor = ?, prod1_valor2 = ?, prod2_valor = ?, prod3_valor = ?, comissao = ?, prod1_nome = ?, prod2_nome = ?, prod3_nome = ? WHERE \"idConf\" = ?";
         try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
-            preparedSql.setBigDecimal(1, modelConfig.getProd1_valor());
-            preparedSql.setBigDecimal(2, modelConfig.getProd2_valor());
-            preparedSql.setBigDecimal(3, modelConfig.getProd3_valor());
-            preparedSql.setBigDecimal(4, modelConfig.getComissao());
-            preparedSql.setString(5, modelConfig.getProd1_nome());
-            preparedSql.setString(6, modelConfig.getProd2_nome());
-            preparedSql.setString(7, modelConfig.getProd3_nome());
-            preparedSql.setLong(8, modelConfig.getIdConf()); // idConf deve ser referenciado com aspas
+            preparedSql.setBigDecimal(1, modelConfig.getProd1_valor()); // prod1_valor
+            preparedSql.setBigDecimal(2, modelConfig.getProd1_valor2()); // prod1_valor2
+            preparedSql.setBigDecimal(3, modelConfig.getProd2_valor()); // prod2_valor
+            preparedSql.setBigDecimal(4, modelConfig.getProd3_valor()); // prod3_valor
+            preparedSql.setBigDecimal(5, modelConfig.getComissao()); // comissao
+            preparedSql.setString(6, modelConfig.getProd1_nome()); // prod1_nome
+            preparedSql.setString(7, modelConfig.getProd2_nome()); // prod2_nome
+            preparedSql.setString(8, modelConfig.getProd3_nome()); // prod3_nome
+            preparedSql.setLong(9, modelConfig.getIdConf()); // idConf
 
             preparedSql.executeUpdate();
             connection.commit();
@@ -73,6 +75,7 @@ public class DAOConfig {
 
         return modelConfig; // Retorna o modelo atualizado
     }
+
 
 
     public boolean validarConfig(Long idConf) throws Exception {
@@ -95,6 +98,7 @@ public class DAOConfig {
                 modelConfig = new ModelConfig();
                 modelConfig.setIdConf(resultSet.getLong("idConf"));
                 modelConfig.setProd1_valor(resultSet.getBigDecimal("prod1_valor"));
+                modelConfig.setProd1_valor2(resultSet.getBigDecimal("prod1_valor2"));
                 modelConfig.setProd2_valor(resultSet.getBigDecimal("prod2_valor"));
                 modelConfig.setProd3_valor(resultSet.getBigDecimal("prod3_valor"));
                 modelConfig.setComissao(resultSet.getBigDecimal("comissao"));
@@ -116,6 +120,7 @@ public class DAOConfig {
                 modelConfig.setIdConf(resultSet.getLong("idConf"));
                 modelConfig.setProd1_nome(resultSet.getString("prod1_nome"));
                 modelConfig.setProd1_valor(resultSet.getBigDecimal("prod1_valor"));
+                modelConfig.setProd1_valor2(resultSet.getBigDecimal("prod1_valor2"));
                 modelConfig.setProd2_nome(resultSet.getString("prod2_nome"));
                 modelConfig.setProd2_valor(resultSet.getBigDecimal("prod2_valor"));
                 modelConfig.setProd3_nome(resultSet.getString("prod3_nome"));
@@ -137,14 +142,15 @@ public class DAOConfig {
 
             while (resultSet.next()) {
                 ModelConfig modelConfig = new ModelConfig();
-                modelConfig.setIdConf(resultSet.getLong("idConf")); // Verifique se o nome da coluna está correto
-                modelConfig.setProd1_nome(resultSet.getString("prod1_nome")); // Verifique o nome da coluna
-                modelConfig.setProd1_valor(resultSet.getBigDecimal("prod1_valor")); // Verifique o nome da coluna
-                modelConfig.setProd2_nome(resultSet.getString("prod2_nome")); // Verifique o nome da coluna
-                modelConfig.setProd2_valor(resultSet.getBigDecimal("prod2_valor")); // Verifique o nome da coluna
-                modelConfig.setProd3_nome(resultSet.getString("prod3_nome")); // Verifique o nome da coluna
-                modelConfig.setProd3_valor(resultSet.getBigDecimal("prod3_valor")); // Verifique o nome da coluna
-                modelConfig.setComissao(resultSet.getBigDecimal("comissao")); // Verifique o nome da coluna
+                modelConfig.setIdConf(resultSet.getLong("idConf"));
+                modelConfig.setProd1_nome(resultSet.getString("prod1_nome"));
+                modelConfig.setProd1_valor(resultSet.getBigDecimal("prod1_valor"));
+                modelConfig.setProd1_valor2(resultSet.getBigDecimal("prod1_valor2"));
+                modelConfig.setProd2_nome(resultSet.getString("prod2_nome"));
+                modelConfig.setProd2_valor(resultSet.getBigDecimal("prod2_valor"));
+                modelConfig.setProd3_nome(resultSet.getString("prod3_nome"));
+                modelConfig.setProd3_valor(resultSet.getBigDecimal("prod3_valor"));
+                modelConfig.setComissao(resultSet.getBigDecimal("comissao"));
 
                 listaConfigs.add(modelConfig);
             }

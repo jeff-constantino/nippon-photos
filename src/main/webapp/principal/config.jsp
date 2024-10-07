@@ -22,27 +22,39 @@
                             <div class="card-body">
                                 <form id="configForm" method="post" action="<%= request.getContextPath() %>/ServletConfig" >
 
-                                <div class="row mb-3">
-                                    <div class="col-sm-1">
-                                        <label class="float-label">ID:</label>
-                                        <span class="form-bar"></span>
-                                        <input type="text" class="form-control" id="idConf" name="idConf" placeholder="" value="${modelConfig.idConf}" readonly>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-auto">
-                                            <span id="msg" style="color:#f2a654">${msg}</span>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-1">
+                                            <label class="float-label">ID:</label>
+                                            <span class="form-bar"></span>
+                                            <input type="text" class="form-control" id="idConf" name="idConf" placeholder="" value="${modelConfig.idConf}" readonly>
                                         </div>
-                                    </div>
+
+                                        <div class="row">
+                                            <div class="col-auto">
+                                                <span id="msg" style="color:#f2a654">${msg}</span>
+                                            </div>
+                                        </div>
+
                                         <div class="col-4">
                                             <label for="prod1_nome">Produto 1 Nome</label>
                                             <input type="text" class="form-control" id="prod1_nome" name="prod1_nome" required value="${modelConfig.prod1_nome}">
                                         </div>
+
                                         <div class="col-4">
-                                            <label for="prod1_valor">Produto 1 Valor</label>
-                                            <input type="text" class="form-control" id="prod1_valor" name="prod1_valor" required value="${modelConfig.prod1_valor}">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label for="prod1_valor">Produto 1 Valor</label>
+                                                    <input type="text" class="form-control" id="prod1_valor" name="prod1_valor" required value="${modelConfig.prod1_valor}">
+                                                </div>
+
+                                                <div class="col-6">
+                                                    <label for="prod1_valor2">Produto 1 Valor 2</label>
+                                                    <input type="text" class="form-control" id="prod1_valor2" name="prod1_valor2" required value="${modelConfig.prod1_valor2}">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
                                     <div class="row mb-3">
                                         <div class="col-4">
                                             <label for="prod2_nome">Produto 2 Nome</label>
@@ -53,6 +65,7 @@
                                             <input type="text" class="form-control" id="prod2_valor" name="prod2_valor" required value="${modelConfig.prod2_valor}">
                                         </div>
                                     </div>
+
                                     <div class="row mb-3">
                                         <div class="col-4">
                                             <label for="prod3_nome">Produto 3 Nome</label>
@@ -63,16 +76,18 @@
                                             <input type="text" class="form-control" id="prod3_valor" name="prod3_valor" required value="${modelConfig.prod3_valor}">
                                         </div>
                                     </div>
+
                                     <div class="row mb-3">
                                         <div class="col-4">
                                             <label for="comissao">Comissão</label>
                                             <input type="text" class="form-control" id="comissao" name="comissao" required value="${modelConfig.comissao}">
                                         </div>
                                     </div>
+
                                     <button type="submit" class="btn btn-outline-success">Salvar</button>
 
-
                                 </form>
+
                             </div>
                         </div>
                     </div>
@@ -86,41 +101,53 @@
                                     <table class="table table-bordered">
                                         <thead>
                                         <tr>
+                                            <th>Ações</th>
                                             <th>ID</th>
                                             <th>Produto 1 Nome</th>
                                             <th>Produto 1 Valor</th>
+                                            <th>Produto 1 Valor 2</th>
                                             <th>Produto 2 Nome</th>
                                             <th>Produto 2 Valor</th>
                                             <th>Produto 3 Nome</th>
                                             <th>Produto 3 Valor</th>
                                             <th>Comissão</th>
-                                            <th>Ações</th>
+
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <c:forEach items="${configs}" var="modelConf">
                                             <tr>
+                                                <td>
+                                                    <a class="btn btn-outline-success waves-effect waves-light"
+                                                       href="javascript:void(0);"
+                                                       onclick="gerenciarConfig(
+                                                           ${modelConf.idConf},
+                                                               '${modelConf.prod1_nome}',
+                                                               '${modelConf.prod1_valor}',
+                                                               '${modelConf.prod1_valor2}',
+                                                               '${modelConf.prod2_nome}',
+                                                               '${modelConf.prod2_valor}',
+                                                               '${modelConf.prod3_nome}',
+                                                               '${modelConf.prod3_valor}',
+                                                               '${modelConf.comissao}')">
+                                                        Editar
+                                                    </a>
+                                                </td>
                                                 <td><c:out value="${modelConf.idConf}"/></td>
                                                 <td><c:out value="${modelConf.prod1_nome}"/></td>
                                                 <td><c:out value="${modelConf.prod1_valor}"/></td>
+                                                <td><c:out value="${modelConf.prod1_valor2}"/></td>
                                                 <td><c:out value="${modelConf.prod2_nome}"/></td>
                                                 <td><c:out value="${modelConf.prod2_valor}"/></td>
                                                 <td><c:out value="${modelConf.prod3_nome}"/></td>
                                                 <td><c:out value="${modelConf.prod3_valor}"/></td>
                                                 <td><c:out value="${modelConf.comissao}"/></td>
-                                                <td>
-                                                    <a class="btn btn-outline-success waves-effect waves-light"
-                                                       href="javascript:void(0);"
-                                                       onclick="gerenciarConfig(${modelConf.idConf}, '${modelConf.prod1_nome}', '${modelConf.prod1_valor}', '${modelConf.prod2_nome}', '${modelConf.prod2_valor}', '${modelConf.prod3_nome}', '${modelConf.prod3_valor}')">
-                                                        Editar
-                                                    </a>
-
-                                                </td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
-                                    </table>
-                                </c:if>
+
+
+                                    </c:if>
                                 <c:if test="${empty configs}">
                                     <p>Nenhuma configuração encontrada.</p>
                                 </c:if>
@@ -138,15 +165,18 @@
 <jsp:include page="pluginsJS.jsp"></jsp:include>
 
 <script>
-    function gerenciarConfig(idConf, prod1_nome, prod1_valor, prod2_nome, prod2_valor, prod3_nome, prod3_valor) {
-        document.getElementById('configForm').elements['idConf'].value = idConf; // Preenche o idConf
-        document.getElementById('configForm').elements['prod1_nome'].value = prod1_nome; // Preenche o nome do produto 1
-        document.getElementById('configForm').elements['prod1_valor'].value = prod1_valor; // Preenche o valor do produto 1
-        document.getElementById('configForm').elements['prod2_nome'].value = prod2_nome; // Preenche o nome do produto 2
-        document.getElementById('configForm').elements['prod2_valor'].value = prod2_valor; // Preenche o valor do produto 2
-        document.getElementById('configForm').elements['prod3_nome'].value = prod3_nome; // Preenche o nome do produto 3
-        document.getElementById('configForm').elements['prod3_valor'].value = prod3_valor; // Preenche o valor do produto 3
+    function gerenciarConfig(idConf, prod1_nome, prod1_valor, prod1_valor2, prod2_nome, prod2_valor, prod3_nome, prod3_valor, comissao) {
+        document.getElementById('idConf').value = idConf;
+        document.getElementById('prod1_nome').value = prod1_nome;
+        document.getElementById('prod1_valor').value = prod1_valor;
+        document.getElementById('prod1_valor2').value = prod1_valor2;
+        document.getElementById('prod2_nome').value = prod2_nome;
+        document.getElementById('prod2_valor').value = prod2_valor;
+        document.getElementById('prod3_nome').value = prod3_nome;
+        document.getElementById('prod3_valor').value = prod3_valor;
+        document.getElementById('comissao').value = comissao;
     }
+
 
 
 

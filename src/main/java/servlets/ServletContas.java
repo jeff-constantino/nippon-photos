@@ -138,8 +138,9 @@ public class ServletContas extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<ModelContas> contasVencendo;
         List<ModelContas> todasContas;
+        List<ModelContas> contasRecentes;
         String acao = request.getParameter("acao");
-        String contaId = request.getParameter("conta_id"); // Obtém o ID da conta
+        String contaId = request.getParameter("conta_id");
 
         try {
             // Chama o método para buscar contas que vencem em 7 dias e estão "A PAGAR"
@@ -150,9 +151,12 @@ public class ServletContas extends HttpServlet {
             todasContas = daoContas.listarContas();
             request.setAttribute("todasContas", todasContas); // Passa todas as contas para o JSP
 
+            // Busca apenas as contas dos últimos 60 dias
+            contasRecentes = daoContas.buscarContasRecentes();
+            request.setAttribute("contasRecentes", contasRecentes); // Usa um novo atributo "contasRecentes"
+
             if (acao != null && acao.equals("deletar")) {
                 if (contaId != null && !contaId.isEmpty()) {
-                    // Use o ID que foi recebido na requisição
                     long idParaExcluir = Long.parseLong(contaId);
                     try {
                         daoContas.deleteConta(idParaExcluir); // Chama o método de exclusão
@@ -176,6 +180,7 @@ public class ServletContas extends HttpServlet {
         // Redireciona para o JSP onde a lista de contas será exibida
         request.getRequestDispatcher("/principal/contas.jsp").forward(request, response);
     }
+
 
 
 

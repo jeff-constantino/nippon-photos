@@ -151,6 +151,30 @@ public class DAOContas {
     }
 
 
+    public List<ModelContas> buscarContasRecentes() throws SQLException {
+        List<ModelContas> contasRecentes = new ArrayList<>();
+        String sql = "SELECT * FROM contas WHERE data_de_pedido >= NOW() - INTERVAL '60 days' ORDER BY data_de_pedido DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ModelContas conta = new ModelContas();
+                conta.setConta_id(rs.getLong("conta_id"));
+                conta.setNumero_pedido(rs.getInt("numero_pedido"));
+                conta.setEmpresa(rs.getString("empresa"));
+                conta.setItens(rs.getString("itens"));
+                conta.setValor(rs.getDouble("valor"));
+                conta.setData_de_pedido(rs.getDate("data_de_pedido"));
+                conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
+                conta.setStatus(rs.getString("status"));
+                contasRecentes.add(conta);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar contas recentes: " + e.getMessage());
+            throw e; // Repropaga a exceção
+        }
+        return contasRecentes;
+    }
 
 
     public List<ModelContas> buscarContasVencendoEm7Dias() throws SQLException {

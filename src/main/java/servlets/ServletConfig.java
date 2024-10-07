@@ -56,6 +56,7 @@ public class ServletConfig extends HttpServlet {
 
             // Definindo valores de produtos e comissões
             modelConfig.setProd1_valor(parseBigDecimal(request.getParameter("prod1_valor")));
+            modelConfig.setProd1_valor2(parseBigDecimal(request.getParameter("prod1_valor2")));
             modelConfig.setProd2_valor(parseBigDecimal(request.getParameter("prod2_valor")));
             modelConfig.setProd3_valor(parseBigDecimal(request.getParameter("prod3_valor")));
             modelConfig.setComissao(parseBigDecimal(request.getParameter("comissao")));
@@ -65,11 +66,13 @@ public class ServletConfig extends HttpServlet {
 
             // Obtendo valores de configuração para cada produto
             BigDecimal valorProd1 = modelConfig.getProd1_valor();
+            BigDecimal valorProd1_2 = modelConfig.getProd1_valor2();
             BigDecimal valorProd2 = modelConfig.getProd2_valor();
             BigDecimal valorProd3 = modelConfig.getProd3_valor();
 
             // Adicionando os valores ao request
             request.setAttribute("valorProd1", valorProd1);
+            request.setAttribute("valorProd1_2", valorProd1_2);
             request.setAttribute("valorProd2", valorProd2);
             request.setAttribute("valorProd3", valorProd3);
 
@@ -87,11 +90,15 @@ public class ServletConfig extends HttpServlet {
     private BigDecimal parseBigDecimal(String value) {
         if (value != null && !value.isEmpty()) {
             try {
+                // Trocar vírgula por ponto se necessário
+                value = value.replace(",", ".");
                 return new BigDecimal(value);
             } catch (NumberFormatException e) {
+                e.printStackTrace(); // Adicione log para depuração
                 return BigDecimal.ZERO; // Retorna 0 em caso de erro de conversão
             }
         }
-        return BigDecimal.ZERO;
+        return BigDecimal.ZERO; // Retorna 0 se o valor estiver vazio
     }
+
 }

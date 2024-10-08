@@ -80,7 +80,7 @@
 
                                     </div>
 
-                               
+
                         </div>
                     </div>
 
@@ -102,6 +102,7 @@
 
                                             <th scope="col">Id Venda</th>
                                             <th scope="col">NOME</th>
+                                            <th scope="col">DATA</th>
                                             <th scope="col">Ft Din</th>
                                             <th scope="col">Ft Deb</th>
                                             <th scope="col">Ft Cred</th>
@@ -118,7 +119,7 @@
                                             <th scope="col">Dig Pix</th>
 
                                             <th scope="col">Sobras</th>
-                                            <th scope="col">DATA</th>
+
 
 
                                         </tr>
@@ -133,7 +134,10 @@
                                                     <c:out value="${mv.nome}"></c:out>
                                                 </td>
 
-
+                                                <td>
+                                                    <c:out value="${mv.data_venda}"></c:out>
+                                                </td>
+                                                
                                                 <td>
                                                     <c:out value="${mv.prod1_din}"></c:out>
                                                 </td>
@@ -176,9 +180,7 @@
                                                 <td>
                                                     <c:out value="${mv.sobras}"></c:out>
                                                 </td>
-                                                <td>
-                                                    <c:out value="${mv.data_venda}"></c:out>
-                                                </td>
+
 
 
                                             </tr>

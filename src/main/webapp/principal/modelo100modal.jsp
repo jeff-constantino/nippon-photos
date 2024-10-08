@@ -1,3 +1,4 @@
+
 <%@ page import="model.ModelLogin" %>
 <%@ page import="model.ModelVendas" %><%--
   Created by IntelliJ IDEA.
@@ -22,7 +23,7 @@
         <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper" style="min-height: calc(100vh - 70px);">
-              <div class="row">
+                <div class="row">
                     <div class="col-xl-12">
 
 
@@ -36,7 +37,7 @@
 
                                     <h4 class="card-title">Vendas do Dia</h4>
 
-<%--PAGINA PRINCIPAL                  --%>
+                                    <%--PAGINA PRINCIPAL                  --%>
 
                                 </div>
                             </div>

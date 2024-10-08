@@ -67,16 +67,32 @@ import java.util.List;
             }
 
             if ("gerenciarVenda".equals(acao) && idVenda != null && !idVenda.isEmpty()) {
-                // Busca a venda específica pelo ID
-                ModelVendas modelVendasConsulta = daoVendas.buscarVendaPorId(Long.parseLong(idVenda));
+                try {
+                    Long id = Long.parseLong(idVenda);
+                    ModelVendas modelVendasConsulta = daoVendas.buscarVendaPorId(id);
 
-                if (modelVendasConsulta != null) {
-                    // Envia os dados da venda para o JSP
-                    request.setAttribute("modelVendasConsulta", modelVendasConsulta);
+                    if (modelVendasConsulta != null) {
+                        // Após recuperar a data da venda
+                        if (modelVendasConsulta.getData_venda() != null) {
+                            String formattedDataVenda = DateUtil.formatDate(modelVendasConsulta.getData_venda());
+                            request.setAttribute("formattedDataVenda", formattedDataVenda);
+                        }
+
+                        request.setAttribute("modelVendasConsulta", modelVendasConsulta);
+                        request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
+                        return;
+                    } else {
+                        request.setAttribute("msg", "Venda não encontrada.");
+                        request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    request.setAttribute("msg", "ID de venda inválido.");
                     request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
                     return;
                 }
             }
+
 
             if (acao != null && !acao.isEmpty()) {
                 // Ação para listar vendas do dia

@@ -34,7 +34,7 @@
                                         <div class="d-flex d-sm-block d-md-flex align-items-center">
 <!-- Modal -->
                                             <div class="modal fade" id="modalData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-xl">
+                                                <div class="modal-dialog modal-xl mt-5">
                                                     <div class="modal-content">
                                                           <div class="modal-body">
                                                             <c:if test="${not empty msg}">
@@ -137,7 +137,7 @@
                                                 <td>
                                                     <c:out value="${mv.data_venda}"></c:out>
                                                 </td>
-                                                
+
                                                 <td>
                                                     <c:out value="${mv.prod1_din}"></c:out>
                                                 </td>

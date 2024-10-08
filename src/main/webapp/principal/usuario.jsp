@@ -47,7 +47,7 @@
                                             <!-- Modal -->
 
                                             <div class="modal fade" id="modalCad" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-xl">
+                                                <div class="modal-dialog modal-xl mt-5">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="staticBackdropLabel">Cadastro de Funcionário     </h5>
@@ -170,7 +170,7 @@
 
                                             <!-- Modal -->
                                             <div class="modal fade" id="modalBusca" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-xl">
+                                                <div class="modal-dialog modal-xl mt-5">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" >Pesquisa de Funcionário     </h5>
@@ -289,7 +289,7 @@
 
                                             <!-- Modal -->
                                             <div class="modal fade" id="modal3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-xl">
+                                                <div class="modal-dialog modal-xl mt-5">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="staticFinalizar">FINALIZAR</h5>

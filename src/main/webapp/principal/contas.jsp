@@ -209,9 +209,7 @@
                                         </div>
 
                                     </div>
-                                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                                        <i class="icon-lg mdi mdi-hexagon-multiple text-warning ml-auto" type="button"  data-bs-toggle="modal" data-bs-target="#modalPDV" ></i>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -231,7 +229,7 @@
 
                                             <!-- Modal -->
                                             <div class="modal fade" id="modalListContas" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                                                <div class="modal-dialog modal-xl mt-5 modal-dialog-scrollable ">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="staticRanking">TODAS AS CONTAS</h5>
@@ -300,9 +298,7 @@
                                         </div>
 
                                     </div>
-                                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                                        <i class="icon-lg mdi mdi-account-star text-success ml-auto" type="button"  data-bs-toggle="modal" data-bs-target="#modal2" ></i>
-                                    </div>
+
                                 </div>
                             </div>
 
@@ -317,12 +313,12 @@
                                         <div class="d-flex d-sm-block d-md-flex align-items-center">
                                             <!--INSERIR BOTÃO 3 AQUI-->
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal3">
-                                                <h4>Finalizar Dia</h4>
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDespesas">
+                                                <h4>Lançar Despesas</h4>
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="modal3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal fade" id="modalDespesas" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -332,32 +328,91 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="container-fluid">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 grid-margin stretch-card">
-                                                                        <H5>CORPO DA FINALIZAÇÃO</H5>
+                                                                <div class="page-body">
+
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <!-- Basic Form Inputs card start -->
+                                                                            <div class="card">
+                                                                                <div class="card-block">
+
+                                                                        <form action="<%= request.getContextPath() %>/ServletContas" method="post" id="lançarDespesa" name="lançarDespesa">
+                                                                            <input type="hidden" name="acaoDespesa" value="gravarDespesa" />
+                                                                            <input type="hidden" id="valorOriginal" name="valorOriginal">
+
+                                                                            <div class="container mt-4">
+                                                                                <div class="row">
+                                                                                    <div class="col-12">
+                                                                                        <span style="color:#1ad76b;">${msg}</span>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="row mb-3">
+                                                                                    <div class="col-4">
+                                                                                        <label for="data_despesa">Data da Despesa</label>
+                                                                                        <input type="date" class="form-control" id="data_despesa" name="data_despesa" required
+                                                                                               value="${formattedDataCompra != null ? formattedDataCompra : ''}">
+                                                                                    </div>
+
+                                                                                    <div class="col-8">
+                                                                                        <label for="nome_despesa" class="form-label">Despesa:</label>
+                                                                                        <input type="text" class="form-control" id="nome_despesa" name="nome_despesa" placeholder=""
+                                                                                               style="background-color: black; text-transform: uppercase;"
+                                                                                               value="${modelDespesas.nome_despesa != null ? modelDespesas.nome_despesa : ''}">
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="row mb-3">
+                                                                                    <div class="col-12">
+                                                                                        <label style="color: #f2a654;">Descrição</label>
+                                                                                        <textarea class="form-control" rows="5" style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase;"
+                                                                                                  id="descricao_despesa" name="descricao_despesa" required>
+                                                                                            ${modelDespesas.descricao_despesa != null ? modelDespesas.descricao_despesa : ''}
+                                                                                        </textarea>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="row mb-3">
+                                                                                    <div class="col-6">
+                                                                                        <label style="color: #f2a654;">VALOR</label>
+                                                                                        <div class="input-group">
+                                                                                            <div class="input-group-prepend">
+                                                                                                <span class="input-group-text" style="color: #f2a654; font-weight: bold">R$</span>
+                                                                                            </div>
+                                                                                            <input type="text" class="form-control" style="background-color: #f2a654; color: black; font-weight: bold"
+                                                                                                   id="valor_despesa" name="valor_despesa" required oninput="formatarValor(this);"
+                                                                                                   value="${modelDespesas.valor_despesa != null ? modelDespesas.valor_despesa : ''}">
+                                                                                            <input type="hidden" id="valorBruto3" name="valor" value="">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="row">
+                                                                                    <div class="col-12 mt-3">
+                                                                                        <button type="submit" class="btn btn-outline-success waves-effect waves-light">Salvar</button>
+                                                                                        <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparFormLancar();">Limpar</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </form>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
-
-
-
-
                                                                 </div>
-
                                                             </div>
-
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>
-                                                            <button type="button" class="btn btn-outline-warning">ENVIAR</button>
                                                         </div>
+
                                                     </div>
-                                                </div>
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                                        <i class="icon-lg mdi mdi-power text-danger ml-auto" type="button"  data-bs-toggle="modal" data-bs-target="#modal3" ></i>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>

@@ -13931,6 +13931,7 @@ textarea.is-invalid.tt-hint, .select2-container--default .select2-selection--sin
   height: calc(100% - var(--bs-modal-margin) * 2);
 }
 .modal-dialog-scrollable .modal-content {
+  margin-top: 100px; /* Altere o valor conforme necessário */
   max-height: 100%;
   overflow: hidden;
 }
@@ -22820,7 +22821,7 @@ dl li {
 
 /* Modals */
 .modal .modal-dialog {
-  margin-top: 100px;
+  margin-top: 20px;
 }
 .modal .modal-dialog .modal-content .modal-header {
   padding: 25px 26px;

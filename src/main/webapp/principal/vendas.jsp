@@ -1002,6 +1002,7 @@
                                                 <table class="table" id="tabelaVendaDia">
                                                     <thead>
                                                     <tr>
+                                                        <th scope="col">Opções</th>
                                                         <th scope="col">Nome</th>
                                                         <th scope="col">Ft Din</th>
                                                         <th scope="col">Ft Deb</th>
@@ -1020,7 +1021,7 @@
                                                         <th scope="col">ID Vendedor</th>
                                                         <th scope="col">Data</th>
                                                         <th scope="col">ID Venda</th>
-                                                        <th scope="col">Ações</th>
+
                                                     </tr>
                                                     </thead>
 
@@ -1029,6 +1030,10 @@
                                                         <c:when test="${not empty listaVendasDoDia}">
                                                             <c:forEach var="vd" items="${listaVendasDoDia}">
                                                                 <tr>
+                                                                    <td>
+                                                                        <a class="btn btn-outline-success waves-effect waves-light"
+                                                                           href="<%= request.getContextPath() %>/ServletVendas?acao=gerenciarVenda&venda_id=${vd.venda_id}">Gerenciar</a>
+                                                                    </td>
                                                                     <td><c:out value="${vd.nome}"/></td>
                                                                     <td><c:out value="${vd.prod1_din}"/></td>
                                                                     <td><c:out value="${vd.prod1_deb}"/></td>
@@ -1050,10 +1055,7 @@
 
                                                                     <td><c:out value="${vd.venda_id}"/></td>
 
-                                                                    <td>
-                                                                        <a class="btn btn-outline-success waves-effect waves-light"
-                                                                           href="<%= request.getContextPath() %>/ServletVendas?acao=gerenciarVenda&venda_id=${vd.venda_id}">Gerenciar</a>
-                                                                    </td>
+
                                                                 </tr>
                                                             </c:forEach>
                                                         </c:when>

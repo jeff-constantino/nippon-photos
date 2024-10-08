@@ -78,7 +78,7 @@
             <div class="collapse" id="relatorio">
                 <ul class="nav flex-column sub-menu">
 
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/principal/relvendas.jsp">Vendas</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletRelVenda">Vendas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Contas e Despesas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">DRE</a></li>
                 </ul>

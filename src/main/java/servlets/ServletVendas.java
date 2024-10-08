@@ -36,16 +36,16 @@ import java.util.List;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
         try {
             String acao = request.getParameter("acao");
             String idVenda = request.getParameter("venda_id"); // Pega o ID da venda para gerenciar
+
 
             // Se a ação não for especificada, chama a ação vendaDoDia automaticamente
             if (acao == null || acao.isEmpty()) {
                 acao = "vendaDoDia";
             }
+
             if ("buscarValoresProdutos".equals(acao)) {
                 // Supondo que você tenha uma instância do DAOConfig
                 List<ModelConfig> configs = daoConfig.consultarTodasConfigs();
@@ -58,7 +58,7 @@ import java.util.List;
                 return;
             }
 
-            if (acao.equals("vendaDoDia")) {
+            if ("vendaDoDia".equals(acao)) {
                 // Lógica para buscar as vendas do dia
                 List<ModelVendas> listaVendasDoDia = daoVendas.vendaDia();
                 request.setAttribute("listaVendasDoDia", listaVendasDoDia);
@@ -66,8 +66,7 @@ import java.util.List;
                 return;
             }
 
-            // Nova ação: Gerenciar Venda
-            if (acao.equals("gerenciarVenda") && idVenda != null && !idVenda.isEmpty()) {
+            if ("gerenciarVenda".equals(acao) && idVenda != null && !idVenda.isEmpty()) {
                 // Busca a venda específica pelo ID
                 ModelVendas modelVendasConsulta = daoVendas.buscarVendaPorId(Long.parseLong(idVenda));
 
@@ -82,9 +81,7 @@ import java.util.List;
             if (acao != null && !acao.isEmpty()) {
                 // Ação para listar vendas do dia
                 if (acao.equals("vendaDoDia")) {
-
                     List<ModelVendas> listaVendasDoDia = daoVendas.vendaDia(); // Chama o método que busca vendas do dia
-
                     request.setAttribute("listaVendasDoDia", listaVendasDoDia); // Define a lista como atributo
                     request.getRequestDispatcher("principal/vendas.jsp").forward(request, response); // Redireciona para o JSP
                     return; // Sai do método
@@ -106,7 +103,6 @@ import java.util.List;
                     List<ModelLogin> dadosJsonUser = new ArrayList<>();
                     try {
                         dadosJsonUser = daoVendas.consultaFuncionarioList(nome);
-
                     } catch (Exception e) {
                         System.err.println("Erro na busca: " + e.getMessage());
                         // Responde com erro em formato JSON
@@ -144,20 +140,7 @@ import java.util.List;
                         daoVendas.deleteVenda(Long.parseLong(venda_id));
                         response.getWriter().write("Venda Excluída!");
                     }
-                    // AÇÃO PARA RELATORIO DE VENDAS
-                } else if (acao.equals("imprimirRelatorioVendas")) {
-                    String dataInicial = request.getParameter("dataInicial");
-                    String dataFinal = request.getParameter("dataFinal");
-
-                    if (dataFinal == null || dataFinal.isEmpty() && dataFinal == null || dataFinal.isEmpty()) {
-                        request.setAttribute("listaVendas", daoVendas.consultaVendasRel());
-                    } else {
-                        request.setAttribute("listaVendas", daoVendas.consultaVendasRel(dataInicial, dataFinal));
-                    }
-
-                    request.setAttribute("dataInicial", dataInicial);
-                    request.setAttribute("dataFinal", dataFinal);
-                    request.getRequestDispatcher("/principal/relvendas.jsp").forward(request, response);
+                    // AÇÃO PARA RELATÓRIO DE VENDAS
                 }
                 // Ação de buscar para editar venda
                 else if (acao.equalsIgnoreCase("CadVenda")) {

@@ -218,22 +218,32 @@
 <!-- plugins:js -->
 <jsp:include page="pluginsJS.jsp"></jsp:include>
 <!-- End custom js for this page -->
+<!-- Modal HTML -->
+<div class="modal" id="msgModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;"> <!-- Borda preta -->
+            <div class="modal-header" style="border-bottom: none;">
 
+                <!-- Removido o botão "X" -->
+            </div>
+            <div class="modal-body" style="color: black;">
+                <p style="font-size: 1.5em; text-align: center">${msg}</p> <!-- Mensagem aqui -->
+            </div>
+            <div class="modal-footer" style="border-top: none;">
+                <h1 class="modal-title" style="color: black; font-size: 0.8em;">aperte ESC para fechar</h1>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
-    window.onload = function() {
-        fetch('ServletRelVenda')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('resultado').innerHTML = data;
-            })
-            .catch(error => console.error('Erro:', error));
-    }
-    // Inicializa o tooltip com um delay reduzido para aparecer mais rápido
-    $(document).ready(function(){
-        $('#tooltipButton').tooltip({
-            delay: { "show": 100, "hide": 100 } // O tooltip vai aparecer em 100ms
-        });
+    $(document).ready(function() {
+        var msg = "${msg}";
+        if (msg) {
+            $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+        }
     });
+
+
 </script>
 </body>
 </html>

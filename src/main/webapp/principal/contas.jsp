@@ -309,7 +309,7 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <span style="color: fuchsia">${msg}</span>
+                                <span style="color:#1ad76b; text-align: center">${msg}</span>
                                 <h4 class="card-title">PAGINA INICIAL</h4>
                                 <div class="table-responsive">
 
@@ -490,7 +490,38 @@
     <jsp:include page="pluginsJS.jsp"></jsp:include>
     <!-- End custom js for this page -->
 
-    <script>
+
+
+        <!-- Modal HTML -->
+        <div class="modal" id="msgModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;"> <!-- Borda preta -->
+                    <div class="modal-header" style="border-bottom: none;">
+
+                        <!-- Removido o botão "X" -->
+                    </div>
+                    <div class="modal-body" style="color: black;">
+                        <p style="font-size: 1.5em; text-align: center">${msg}</p> <!-- Mensagem aqui -->
+                    </div>
+                    <div class="modal-footer" style="border-top: none;">
+                        <h1 class="modal-title" style="color: black; font-size: 0.8em;">aperte ESC para fechar</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <script>
+
+
+            $(document).ready(function() {
+                var msg = "${msg}";
+                if (msg) {
+                    $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+                }
+            });
+
 
         function editarConta(button, conta_id, dataPedido, dataPagamento, valor, status, itens, numeroPedido, empresa) {
             // Preencher os campos do formulário com os dados da conta

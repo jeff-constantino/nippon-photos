@@ -49,7 +49,7 @@
                                                                   <div class="container mt-4">
                                                                       <div class="row">
                                                                           <div class="col-12">
-                                                                              <span style="color:#1ad76b;">${msg}</span>
+                                                                              <span style="color:#1ad76b; text-align: center">${msg}</span>
                                                                           </div>
                                                                       </div>
 
@@ -190,7 +190,7 @@
                                 <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#modalListDespesas">
                                     <h4>Todas as Contas</h4>
                                 </button><div>
-                                <span style="color: fuchsia">${msg}</span>
+                                <span style="color:#1ad76b; text-align: center">${msg}</span>
                             </div>
                                 <h4 class="card-title" style="text-align: center">Informações da Despesa</h4>
                                 <div>
@@ -259,7 +259,34 @@
 <jsp:include page="pluginsJS.jsp"></jsp:include>
 <!-- End custom js for this page -->
 
+
+<!-- Modal HTML -->
+<div class="modal" id="msgModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;"> <!-- Borda preta -->
+            <div class="modal-header" style="border-bottom: none;">
+
+                <!-- Removido o botão "X" -->
+            </div>
+            <div class="modal-body" style="color: black;">
+                <p style="font-size: 1.5em; text-align: center">${msg}</p> <!-- Mensagem aqui -->
+            </div>
+            <div class="modal-footer" style="border-top: none;">
+                <h1 class="modal-title" style="color: black; font-size: 0.8em;">aperte ESC para fechar</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+
+    $(document).ready(function() {
+        var msg = "${msg}";
+        if (msg) {
+            $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+        }
+    });
+
     function formatarValor(input) {
         // Remove caracteres não numéricos exceto vírgulas e pontos
         let valor = input.value.replace(/\D/g, '');

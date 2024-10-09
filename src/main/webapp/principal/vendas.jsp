@@ -57,7 +57,7 @@
                                                                 <button type="submit" class="btn btn-outline-success">Buscar</button>
                                                             </div>
                                                             <div>
-                                                                <span id="msg" style="color:#f2a654">${msg}</span>
+                                                                <span id="msg" style="color:fuchsia">${msg}</span>
                                                             </div>
                                                         </div>
                                                     </form>
@@ -85,7 +85,7 @@
 
                                                         <div class="row">
                                                             <div class="col-auto">
-                                                                <span span style="color:#f2a654">${msg}</span>
+                                                                <span style="color: fuchsia">${msg}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -170,7 +170,7 @@
                                                                                 </div>
                                                                                 <div class="col-6">
                                                                                     <div class="col-auto">
-                                                                                        <span style="color:#1ad76b">${msg}</span>
+                                                                                        <span style="color: fuchsia">${msg}</span>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="row">
@@ -551,7 +551,7 @@
                                                                 </div>
                                                                 <div class="col-6">
                                                                     <div class="col-auto">
-                                                                        <span style="color:#1ad76b">${msg}</span>
+                                                                        <span style="color: fuchsia">${msg}</span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">

@@ -53,7 +53,8 @@
             <div class="collapse" id="financeiro">
                 <ul class="nav flex-column sub-menu">
 
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletContas">Contas e Despesas</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletContas">Contas</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletDespesas">Despesas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Vendas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Cartões e Pix</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Salários</a></li>

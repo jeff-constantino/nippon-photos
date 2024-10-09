@@ -38,7 +38,9 @@
                                                     <div class="modal-content">
                                                           <div class="modal-body">
                                                             <c:if test="${not empty msg}">
-                                                                <div class="alert alert-info">${msg}</div>
+                                                                <div>
+                                                                    <span style="color: fuchsia">${msg}</span>
+                                                                </div>
                                                             </c:if>
                                                             <form action="<%= request.getContextPath() %>/ServletRelVenda" method="get" id="formDataVenda" name="formDataVenda">
                                                                 <input type="hidden" name="acao" value="imprimirRelatorioVendas">

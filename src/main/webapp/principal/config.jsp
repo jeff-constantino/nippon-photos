@@ -31,7 +31,7 @@
 
                                         <div class="row">
                                             <div class="col-auto">
-                                                <span id="msg" style="color:#f2a654">${msg}</span>
+                                                <span style="color: fuchsia">${msg}</span>
                                             </div>
                                         </div>
 

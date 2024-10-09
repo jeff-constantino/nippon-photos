@@ -60,7 +60,7 @@
 
                                                                 <div class="row">
                                                                     <div class="col-auto">
-                                                                        <span span style="color:#f2a654">${msg}</span>
+                                                                        <span style="color: fuchsia">${msg}</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -183,7 +183,7 @@
 
                                                                 <div class="row">
                                                                     <div class="col-auto">
-                                                                        <span span style="color:#f2a654">${msg}</span>
+                                                                        <span style="color: fuchsia">${msg}</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -333,7 +333,7 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body" >
-                                <h4 class="card-title">FUNCIONÁRIOS</h4> <span style="color: #f2a654" id="msg">${msg}</span>
+                                <h4 class="card-title">FUNCIONÁRIOS</h4> <span style="color: fuchsia">${msg}</span>
                                 <div class="table-responsive"style="overflow-x: hidden">
                                     <table class="table" >
                                         <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->

@@ -218,7 +218,7 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR
+                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR
                                                             </button>
                                                             <%--FIM MODAL BUSCA--%>
                                                         </div>
@@ -429,7 +429,7 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR
+                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR
                                                             </button>
                                                             <%--FIM MODAL BUSCA--%>
                                                         </div>
@@ -641,7 +641,7 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR
+                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR
                                                             </button>
                                                             <%--FIM MODAL BUSCA--%>
                                                         </div>

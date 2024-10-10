@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @WebServlet("/ServletConfig")
-public class ServletConfig extends HttpServlet {
+public class ServletConfig extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
     private DAOConfig daoConfig;
 
@@ -25,6 +25,8 @@ public class ServletConfig extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        System.out.println("Método doGet chamado na ServletConfig");
 
         try {
             List<ModelConfig> configs = daoConfig.consultarTodasConfigs(); // Recupera todas as configurações
@@ -54,12 +56,12 @@ public class ServletConfig extends HttpServlet {
             modelConfig.setProd2_nome(request.getParameter("prod2_nome"));
             modelConfig.setProd3_nome(request.getParameter("prod3_nome"));
 
-            // Definindo valores de produtos e comissões
+            // Definindo valores de produtos
             modelConfig.setProd1_valor(parseBigDecimal(request.getParameter("prod1_valor")));
             modelConfig.setProd1_valor2(parseBigDecimal(request.getParameter("prod1_valor2")));
             modelConfig.setProd2_valor(parseBigDecimal(request.getParameter("prod2_valor")));
             modelConfig.setProd3_valor(parseBigDecimal(request.getParameter("prod3_valor")));
-            modelConfig.setComissao(parseBigDecimal(request.getParameter("comissao")));
+
 
             // Grava ou atualiza a configuração no banco de dados
             modelConfig = daoConfig.gravarConfig(modelConfig); // Ajuste este método para que ele possa gravar ou atualizar

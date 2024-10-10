@@ -84,7 +84,7 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>
+                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
                                                             <button type="button" class="btn btn-outline-warning">ENVIAR</button>
                                                         </div>
                                                     </div>
@@ -138,7 +138,7 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>
+                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
                                                             <button type="button" class="btn btn-outline-warning">ENVIAR</button>
                                                         </div>
                                                     </div>
@@ -193,7 +193,7 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>
+                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
                                                             <button type="button" class="btn btn-outline-warning">ENVIAR</button>
                                                         </div>
                                                     </div>

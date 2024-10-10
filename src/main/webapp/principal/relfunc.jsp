@@ -37,11 +37,7 @@
                                                 <div class="modal-dialog modal-xl mt-5">
                                                     <div class="modal-content">
                                                           <div class="modal-body">
-                                                            <c:if test="${not empty msg}">
-                                                                <div>
-                                                                    <span style="color:#1ad76b; text-align: center">${msg}</span>
-                                                                </div>
-                                                            </c:if>
+
                                                             <form action="<%= request.getContextPath() %>/ServletFuncionario" method="get" id="formVendaTotal" name="formVendaTotal">
                                                                 <input type="hidden" name="acao" value="imprimirVendasFuncionario">
                                                                 <div class="form-row align-items-center">
@@ -73,7 +69,7 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>
+                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -95,6 +91,11 @@
                                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalData">
                                     <h4>Gerar Relatório</h4>
                                 </button>
+                                <c:if test="${not empty msg}">
+                                    <div>
+                                        <span style="color:#1ad76b; text-align: center">${msg}</span>
+                                    </div>
+                                </c:if>
                                 <h4 class="card-title" STYLE="text-align: center">VENDAS TOTAIS POR FUNCIONÁRIO</h4>
 
                                 <div style="height: 300px; overflow-y: auto ">

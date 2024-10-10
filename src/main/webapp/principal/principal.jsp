@@ -98,7 +98,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-outline-light"
-                                                        data-bs-dismiss="modal">SAIR
+                                                        data-bs-dismiss="modal">FECHAR
                                                 </button>
                                                 <button type="button" class="btn btn-outline-warning">ENVIAR</button>
                                             </div>
@@ -157,7 +157,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-outline-light"
-                                                        data-bs-dismiss="modal">SAIR
+                                                        data-bs-dismiss="modal">FECHAR
                                                 </button>
                                                 <button type="button" class="btn btn-outline-warning">ENVIAR</button>
                                             </div>
@@ -182,8 +182,8 @@
                             <div class="card-body">
                                  <div class="table-responsive">
                                      <h2 class="text-center">CONTAS A PAGAR</h2>
-                                    <table class="table table-striped table-bordered">
-                                        <thead>
+                                    <table class="table table-bordered">
+                                        <thead class="thead-light">
                                         <tr>
                                             <th>Número do Pedido</th>
                                             <th>Empresa</th>

@@ -94,6 +94,71 @@ public class DAORelatorio {
     }
 
 
+    public List<ModelVendas> consultarVendasFuncionario(String funcionarioId, String dataInicial, String dataFinal) throws Exception {
+        List<ModelVendas> modelVendasFuncionarioList = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder("SELECT l.nome, ")
+                .append("SUM(COALESCE(v.ft_total::INTEGER, 0)) AS foto_total, ")
+                .append("SUM(COALESCE(v.enc_total::INTEGER, 0)) AS encarte_total, ")
+                .append("SUM(COALESCE(v.dig_total::INTEGER, 0)) AS digital_total, ")
+                .append("SUM(COALESCE(v.sobras::INTEGER, 0)) AS sobras_total ")
+                .append("FROM vendas v ")
+                .append("INNER JOIN model_login l ON v.vendedor_id = l.id ")
+                .append("WHERE l.status = 'Ativo' ");
+
+        if (funcionarioId != null && !funcionarioId.isEmpty()) {
+            sql.append(" AND l.id = ?");
+        }
+
+        if (dataInicial != null && !dataInicial.isEmpty() && dataFinal != null && !dataFinal.isEmpty()) {
+            sql.append(" AND v.data_venda BETWEEN TO_DATE(?, 'YYYY-MM-DD') AND TO_DATE(?, 'YYYY-MM-DD')");
+        }
+
+        sql.append(" GROUP BY l.nome ORDER BY l.nome");
+
+        try (PreparedStatement preparedSql = connection.prepareStatement(sql.toString())) {
+            int index = 1;
+
+            if (funcionarioId != null && !funcionarioId.isEmpty()) {
+                preparedSql.setLong(index++, Long.parseLong(funcionarioId));
+            }
+
+            if (dataInicial != null && !dataInicial.isEmpty() && dataFinal != null && !dataFinal.isEmpty()) {
+                preparedSql.setString(index++, dataInicial);
+                preparedSql.setString(index++, dataFinal);
+            }
+
+            ResultSet resultado = preparedSql.executeQuery();
+
+            while (resultado.next()) {
+                ModelVendas modelVendaFuncionario = new ModelVendas();
+
+                // Definindo apenas os campos necessários
+                modelVendaFuncionario.setNome(resultado.getString("nome"));
+                modelVendaFuncionario.setFt_total(resultado.getInt("foto_total"));
+                modelVendaFuncionario.setEnc_total(resultado.getInt("encarte_total"));
+                modelVendaFuncionario.setDig_total(resultado.getInt("digital_total"));
+                modelVendaFuncionario.setSobras(resultado.getInt("sobras_total"));
+
+                // Adicionando o objeto na lista
+                modelVendasFuncionarioList.add(modelVendaFuncionario);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao consultar vendas: " + e.getMessage());
+        }
+
+        return modelVendasFuncionarioList;
+    }
+
+
+
+
+
+
+
+
 
 
     public List<ModelLogin> buscaFuncionariosAtivos() throws Exception {

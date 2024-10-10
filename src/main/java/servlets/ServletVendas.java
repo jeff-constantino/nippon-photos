@@ -211,7 +211,7 @@ import java.util.List;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String msg = "Operação realizada com sucesso!";
+            String msg = "Venda Gravada com Sucesso!";
 
             // Obtém os parâmetros do request
             String venda_id = request.getParameter("venda_id");

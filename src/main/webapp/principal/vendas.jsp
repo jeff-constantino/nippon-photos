@@ -56,9 +56,7 @@
                                                                 <input type="text" class="form-control" id="venda_id" name="venda_id" required placeholder="Digite o ID da venda" />
                                                                 <button type="submit" class="btn btn-outline-success">Buscar</button>
                                                             </div>
-                                                            <div>
-                                                                <span style="color:#1ad76b; text-align: center">${msg}</span>
-                                                            </div>
+
                                                         </div>
                                                     </form>
                                                 </div>
@@ -1296,7 +1294,10 @@
         });
 
 
-
+        // Obtém a data atual
+        const today = new Date().toISOString().split('T')[0];
+        // Define o valor do campo de data como a data atual
+        document.getElementById('outer_dataVenda').value = today;
 
 
     </SCRIPT>

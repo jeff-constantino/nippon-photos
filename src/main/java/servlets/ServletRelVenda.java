@@ -49,6 +49,7 @@ public class ServletRelVenda extends ServletGenericUtil {
                 vendasList = relatorio.consultarVendas(funcionarioId, dataInicial, dataFinal);
             }
 
+
             // Envia os dados de vendas de volta para o JSP
             request.setAttribute("vendasList", vendasList);
             request.setAttribute("dataInicial", dataInicial);

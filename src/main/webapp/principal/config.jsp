@@ -396,11 +396,11 @@
                                                                                 <input type="text" class="form-control" id="conf1_valor_geral" name="conf1_valor" required value="${modelConfig.conf1_valor}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf1_qtd">Quantidade</label>
+                                                                                <label for="conf1_qtd_geral">Quantidade</label>
                                                                                 <input type="text" class="form-control" id="conf1_qtd_geral" name="conf1_qtd" required value="${modelConfig.conf1_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf1_custo">Custo Unitário</label>
+                                                                                <label for="conf1_custo_geral">Custo Unitário</label>
                                                                                 <input type="text" class="form-control" id="conf1_custo_geral" name="conf1_custo" required value="${modelConfig.conf1_custo}">
                                                                             </div>
                                                                         </div>
@@ -415,11 +415,11 @@
                                                                                 <input type="text" class="form-control" id="conf2_valor_geral" name="conf2_valor" required value="${modelConfig.conf2_valor}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf2_qtd">Quantidade</label>
+                                                                                <label for="conf2_qtd_geral">Quantidade</label>
                                                                                 <input type="text" class="form-control" id="conf2_qtd_geral" name="conf2_qtd" required value="${modelConfig.conf2_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf2_custo">Custo Unitário</label>
+                                                                                <label for="conf2_custo_geral">Custo Unitário</label>
                                                                                 <input type="text" class="form-control" id="conf2_custo_geral" name="conf2_custo" required value="${modelConfig.conf2_custo}">
                                                                             </div>
                                                                         </div>
@@ -434,11 +434,11 @@
                                                                                 <input type="text" class="form-control" id="conf3_valor_geral" name="conf3_valor" required value="${modelConfig.conf3_valor}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf3_qtd">Quantidade</label>
+                                                                                <label for="conf3_qtd_geral">Quantidade</label>
                                                                                 <input type="text" class="form-control" id="conf3_qtd_geral" name="conf3_qtd" required value="${modelConfig.conf3_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf3_custo">Custo Unitário</label>
+                                                                                <label for="conf3_custo_geral">Custo Unitário</label>
                                                                                 <input type="text" class="form-control" id="conf3_custo_geral" name="conf3_custo" required value="${modelConfig.conf3_custo}">
                                                                             </div>
                                                                         </div>
@@ -521,6 +521,7 @@
                                                                 data-bs-target="#modalProd"
                                                                 onclick="gerenciarConfig(
                                                                     ${modelConf.idConf},
+                                                                        '${modelConf.conf_name}',
                                                                         '${modelConf.conf1_nome}',
                                                                         '${modelConf.conf1_valor}',
                                                                         '${modelConf.conf1_valor2}',
@@ -532,6 +533,7 @@
                                                              </a>
                                                          </td>
                                                          <td><c:out value="${modelConf.idConf}"/></td>
+                                                         <td hidden="hidden"><c:out value="${modelConf.conf_name}"/></td>
                                                          <td><c:out value="${modelConf.conf1_nome}"/></td>
                                                          <td><c:out value="${modelConf.conf1_valor}"/></td>
                                                          <td><c:out value="${modelConf.conf1_valor2}"/></td>
@@ -587,13 +589,21 @@
                                             <tr>
                                                 <th>Ações</th>
                                                 <th>ID</th>
+                                                <th hidden="hidden">Nome</th>
                                                 <th>Produto 1</th>
-                                                <th>Valor 1</th>
-                                                <th>Valor 2</th>
+                                                <th>Valor</th>
+                                                <th>Quantidade</th>
+                                                <th>Custo Unitário</th>
+
                                                 <th>Produto 2</th>
                                                 <th>Valor</th>
+                                                <th>Quantidade</th>
+                                                <th>Custo Unitário</th>
+
                                                 <th>Produto 3</th>
                                                 <th>Valor</th>
+                                                <th>Quantidade</th>
+                                                <th>Custo Unitário</th>
 
 
                                             </tr>
@@ -608,26 +618,40 @@
                                                                href="javascript:void(0);"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#modalMat"
-                                                               onclick="gerenciarConfig(
+                                                               onclick="gerenciarMat(
                                                                    ${modelConf.idConf},
+                                                                       '${modelConf.conf_name}',
                                                                        '${modelConf.conf1_nome}',
                                                                        '${modelConf.conf1_valor}',
-                                                                       '${modelConf.conf1_valor2}',
+                                                                       '${modelConf.conf1_qtd}',
+                                                                       '${modelConf.conf1_custo}',
                                                                        '${modelConf.conf2_nome}',
                                                                        '${modelConf.conf2_valor}',
+                                                                       '${modelConf.conf2_qtd}',
+                                                                       '${modelConf.conf2_custo}',
                                                                        '${modelConf.conf3_nome}',
-                                                                       '${modelConf.conf3_valor}')">
-                                                                Editar
+                                                                       '${modelConf.conf3_valor}',
+                                                                       '${modelConf.conf3_qtd}',
+                                                                       '${modelConf.conf3_custo}')">
+                                                            Editar
                                                             </a>
                                                         </td>
                                                         <td><c:out value="${modelConf.idConf}"/></td>
                                                         <td><c:out value="${modelConf.conf1_nome}"/></td>
                                                         <td><c:out value="${modelConf.conf1_valor}"/></td>
-                                                        <td><c:out value="${modelConf.conf1_valor2}"/></td>
+                                                        <td><c:out value="${modelConf.conf1_qtd}"/></td>
+                                                        <td><c:out value="${modelConf.conf1_custo}"/></td>
+
                                                         <td><c:out value="${modelConf.conf2_nome}"/></td>
                                                         <td><c:out value="${modelConf.conf2_valor}"/></td>
+                                                        <td><c:out value="${modelConf.conf2_qtd}"/></td>
+                                                        <td><c:out value="${modelConf.conf2_custo}"/></td>
+
                                                         <td><c:out value="${modelConf.conf3_nome}"/></td>
                                                         <td><c:out value="${modelConf.conf3_valor}"/></td>
+                                                        <td><c:out value="${modelConf.conf3_qtd}"/></td>
+                                                        <td><c:out value="${modelConf.conf3_custo}"/></td>
+
                                                     </tr>
                                                 </c:if>
                                             </c:forEach>
@@ -697,15 +721,21 @@
                                                                href="javascript:void(0);"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#modalGeral"
-                                                               onclick="gerenciarConfig(
+                                                               onclick="gerenciarGeral(
                                                                    ${modelConf.idConf},
+                                                                       '${modelConf.conf_name}',
                                                                        '${modelConf.conf1_nome}',
                                                                        '${modelConf.conf1_valor}',
-                                                                       '${modelConf.conf1_valor2}',
+                                                                       '${modelConf.conf1_qtd}',
+                                                                       '${modelConf.conf1_custo}',
                                                                        '${modelConf.conf2_nome}',
                                                                        '${modelConf.conf2_valor}',
+                                                                       '${modelConf.conf2_qtd}',
+                                                                       '${modelConf.conf2_custo}',
                                                                        '${modelConf.conf3_nome}',
-                                                                       '${modelConf.conf3_valor}')">
+                                                                       '${modelConf.conf3_valor}',
+                                                                       '${modelConf.conf3_qtd}',
+                                                                       '${modelConf.conf3_custo}')">
                                                                 Editar
                                                             </a>
                                                         </td>
@@ -777,83 +807,80 @@
 
 
 
-    function gerenciarConfig(idConf, conf_name, conf1_nome, conf1_valor, conf1_valor2, conf1_qtd, conf1_custo, conf2_nome, conf2_valor, conf2_qtd, conf2_custo, conf3_nome, conf3_valor, conf3_qtd, conf3_custo) {
+
+    function gerenciarConfig(idConf, conf_name, conf1_nome, conf1_valor, conf1_valor2, conf2_nome, conf2_valor, conf3_nome, conf3_valor) {
         // Preencher o campo idConf
         document.getElementById('idConf').value = idConf; // Campo que irá receber o idConf
         document.getElementById('conf_name').value = conf_name; // Campo para conf_name
 
+        console.log("Valores recebidos na função gerenciarConfig:");
+        console.log("idConf:", idConf);
+        console.log("conf1_nome:", conf1_nome);
+        console.log("conf1_valor:", conf1_valor);
+        console.log("conf1_valor2:", conf1_valor2);
 
-        console.log('idConf:', idConf);
-        console.log('conf_name:', conf_name);
-        console.log('conf1_nome:', conf1_nome);
-        console.log('conf1_valor:', conf1_valor);
-        console.log('conf1_valor2:', conf1_valor2);
-        console.log('conf1_qtd:', conf1_qtd);
-        console.log('conf1_custo:', conf1_custo);
-        console.log('conf2_nome:', conf2_nome);
-        console.log('conf2_valor:', conf2_valor);
-        console.log('conf2_qtd:', conf2_qtd);
-        console.log('conf2_custo:', conf2_custo);
-        console.log('conf3_nome:', conf3_nome);
-        console.log('conf3_valor:', conf3_valor);
-        console.log('conf3_qtd:', conf3_qtd);
-        console.log('conf3_custo:', conf3_custo);
+        // Preencher os campos para idConf === 1
+        document.getElementById('conf1_nome').value = conf1_nome;
+        document.getElementById('conf1_valor').value = conf1_valor;
+        document.getElementById('conf1_valor2').value = conf1_valor2;
 
-
-
-
-
-        // Preencher os campos com base no idConf
-        if (idConf === 1) {
-            document.getElementById('idConf').value =idConf;
-            document.getElementById('conf_name').value = conf_name;
-            document.getElementById('conf1_nome').value = conf1_nome;
-            document.getElementById('conf1_valor').value = conf1_valor;
-            document.getElementById('conf1_valor2').value = conf1_valor2;
-            document.getElementById('conf1_qtd').value = conf1_qtd; // Campo para quantidade do conf1
-            document.getElementById('conf1_custo').value = conf1_custo; // Campo para custo do conf1
-            document.getElementById('conf2_nome').value = conf2_nome;
-            document.getElementById('conf2_valor').value = conf2_valor;
-            document.getElementById('conf2_qtd').value = conf2_qtd; // Campo para quantidade do conf2
-            document.getElementById('conf2_custo').value = conf2_custo; // Campo para custo do conf2
-            document.getElementById('conf3_nome').value = conf3_nome;
-            document.getElementById('conf3_valor').value = conf3_valor;
-            document.getElementById('conf3_qtd').value = conf3_qtd; // Campo para quantidade do conf3
-            document.getElementById('conf3_custo').value = conf3_custo; // Campo para custo do conf3
-        } else if (idConf === 2) {
-            document.getElementById('idConf_mat').value =idConf;
-            document.getElementById('conf_name_mat').value = conf_name;
-            document.getElementById('conf1_nome_mat').value = conf1_nome;
-            document.getElementById('conf1_valor_mat').value = conf1_valor;
-
-            document.getElementById('conf1_qtd_mat').value = conf1_qtd; // Campo para quantidade do conf1
-            document.getElementById('conf1_custo_mat').value = conf1_custo; // Campo para custo do conf1
-            document.getElementById('conf2_nome_mat').value = conf2_nome;
-            document.getElementById('conf2_valor_mat').value = conf2_valor;
-            document.getElementById('conf2_qtd_mat').value = conf2_qtd; // Campo para quantidade do conf2
-            document.getElementById('conf2_custo_mat').value = conf2_custo; // Campo para custo do conf2
-            document.getElementById('conf3_nome_mat').value = conf3_nome;
-            document.getElementById('conf3_valor_mat').value = conf3_valor;
-            document.getElementById('conf3_qtd_mat').value = conf3_qtd; // Campo para quantidade do conf3
-            document.getElementById('conf3_custo_mat').value = conf3_custo; // Campo para custo do conf3
-        } else if (idConf === 3) {
-            document.getElementById('idConf_geral').value =idConf;
-            document.getElementById('conf_name_geral').value = conf_name;
-            document.getElementById('conf1_nome_geral').value = conf1_nome;
-            document.getElementById('conf1_valor_geral').value = conf1_valor;
-            document.getElementById('conf1_valor2').value = conf1_valor2;
-            document.getElementById('conf1_qtd_geral').value = conf1_qtd; // Campo para quantidade do conf1
-            document.getElementById('conf1_custo_geral').value = conf1_custo; // Campo para custo do conf1
-            document.getElementById('conf2_nome_geral').value = conf2_nome;
-            document.getElementById('conf2_valor_geral').value = conf2_valor;
-            document.getElementById('conf2_qtd_geral').value = conf2_qtd; // Campo para quantidade do conf2
-            document.getElementById('conf2_custo_geral').value = conf2_custo; // Campo para custo do conf2
-            document.getElementById('conf3_nome_geral').value = conf3_nome;
-            document.getElementById('conf3_valor_geral').value = conf3_valor;
-            document.getElementById('conf3_qtd_geral').value = conf3_qtd; // Campo para quantidade do conf3
-            document.getElementById('conf3_custo_geral').value = conf3_custo; // Campo para custo do conf3
-        }
+        // Preencher os campos para conf2 e conf3
+        document.getElementById('conf2_nome').value = conf2_nome;
+        document.getElementById('conf2_valor').value = conf2_valor;
+        document.getElementById('conf3_nome').value = conf3_nome;
+        document.getElementById('conf3_valor').value = conf3_valor;
     }
+
+    function gerenciarMat(idConf,conf_name, conf1_nome, conf1_valor, conf1_qtd, conf1_custo, conf2_nome, conf2_valor, conf2_qtd, conf2_custo, conf3_nome, conf3_valor, conf3_qtd, conf3_custo) {
+
+        document.getElementById('idConf_mat').value = idConf; // Campo que irá receber o idConf
+        document.getElementById('conf_name_mat').value =conf_name;
+
+        document.getElementById('conf1_nome_mat').value = conf1_nome;
+        document.getElementById('conf1_valor_mat').value = conf1_valor;
+        document.getElementById('conf1_qtd_mat').value = conf1_qtd; // Verifique se o ID está correto
+        document.getElementById('conf1_custo_mat').value = conf1_custo; // Campo para custo do conf1
+
+        document.getElementById('conf2_nome_mat').value = conf2_nome;
+        document.getElementById('conf2_valor_mat').value = conf2_valor;
+        document.getElementById('conf2_qtd_mat').value = conf2_qtd; // Verifique se o ID está correto
+        document.getElementById('conf2_custo_mat').value = conf2_custo; // Campo para custo do conf2
+
+        document.getElementById('conf3_nome_mat').value = conf3_nome;
+        document.getElementById('conf3_valor_mat').value = conf3_valor;
+        document.getElementById('conf3_qtd_mat').value = conf3_qtd; // Verifique se o ID está correto
+        document.getElementById('conf3_custo_mat').value = conf3_custo; // Campo para custo do conf3
+    }
+
+    function gerenciarGeral(idConf, conf_name, conf1_nome, conf1_valor, conf1_qtd, conf1_custo, conf2_nome, conf2_valor, conf2_qtd, conf2_custo, conf3_nome, conf3_valor, conf3_qtd, conf3_custo) {
+        // Preencher o campo idConf
+        document.getElementById('idConf_geral').value = idConf; // Campo que irá receber o idConf
+        document.getElementById('conf_name_geral').value = conf_name; // Campo para conf_name
+
+        console.log("Valores recebidos na função gerenciarGeral:");
+        console.log("idConf:", idConf);
+        console.log("conf1_nome:", conf1_nome);
+        console.log("conf1_valor:", conf1_valor);
+        console.log("conf1_qtd:", conf1_qtd); // Este deve ser o correto
+        console.log("conf1_custo:", conf1_custo); // Este deve ser o custo
+
+        // Preencher os campos para idConf === 3
+        document.getElementById('conf1_nome_geral').value = conf1_nome;
+        document.getElementById('conf1_valor_geral').value = conf1_valor;
+        document.getElementById('conf1_qtd_geral').value = conf1_qtd; // Verifique se o ID está correto
+        document.getElementById('conf1_custo_geral').value = conf1_custo; // Campo para custo do conf1
+
+        document.getElementById('conf2_nome_geral').value = conf2_nome;
+        document.getElementById('conf2_valor_geral').value = conf2_valor;
+        document.getElementById('conf2_qtd_geral').value = conf2_qtd; // Verifique se o ID está correto
+        document.getElementById('conf2_custo_geral').value = conf2_custo; // Campo para custo do conf2
+
+        document.getElementById('conf3_nome_geral').value = conf3_nome;
+        document.getElementById('conf3_valor_geral').value = conf3_valor;
+        document.getElementById('conf3_qtd_geral').value = conf3_qtd; // Verifique se o ID está correto
+        document.getElementById('conf3_custo_geral').value = conf3_custo; // Campo para custo do conf3
+    }
+
 
 
 

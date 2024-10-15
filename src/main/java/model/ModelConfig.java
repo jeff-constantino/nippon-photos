@@ -21,6 +21,26 @@ public class ModelConfig {
     private int conf2_qtd;
     private int conf3_qtd;
 
+    @Override
+    public String toString() {
+        return "ModelConfig{" +
+                "idConf=" + idConf +
+                ", conf1_valor=" + conf1_valor +
+                ", conf1_valor2=" + conf1_valor2 +
+                ", conf2_valor=" + conf2_valor +
+                ", conf3_valor=" + conf3_valor +
+                ", conf1_custo=" + conf1_custo +
+                ", conf2_custo=" + conf2_custo +
+                ", conf3_custo=" + conf3_custo +
+                ", conf1_nome='" + conf1_nome + '\'' +
+                ", conf2_nome='" + conf2_nome + '\'' +
+                ", conf3_nome='" + conf3_nome + '\'' +
+                ", conf_name='" + conf_name + '\'' +
+                ", conf1_qtd=" + conf1_qtd +
+                ", conf2_qtd=" + conf2_qtd +
+                ", conf3_qtd=" + conf3_qtd +
+                '}';
+    }
 
     public String getConf_name() {
         return conf_name;

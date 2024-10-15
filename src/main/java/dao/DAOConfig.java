@@ -63,7 +63,7 @@ public class DAOConfig {
     }
 
     private ModelConfig atualizarConfig(ModelConfig modelConfig) throws Exception {
-        String sql = "UPDATE public.configuracao SET conf1_valor = ?, conf1_valor2 = ?, conf2_valor = ?, conf3_valor = ?, conf1_nome = ?, conf2_nome = ?, conf3_nome = ?, conf_name = ?, conf1_qtd = ?, conf2_qtd = ?, conf3_qtd = ?, conf1_custo = ?, conf2_custo = ?, conf3_custo = ? WHERE idConf = ?";
+        String sql = "UPDATE public.configuracao SET conf1_valor = ?, conf1_valor2 = ?, conf2_valor = ?, conf3_valor = ?, conf1_nome = ?, conf2_nome = ?, conf3_nome = ?, conf_name = ?, conf1_qtd = ?, conf2_qtd = ?, conf3_qtd = ?, conf1_custo = ?, conf2_custo = ?, conf3_custo = ? WHERE \"idConf\" = ?";
         try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
             preparedSql.setBigDecimal(1, modelConfig.getConf1_valor());
             preparedSql.setBigDecimal(2, modelConfig.getConf1_valor2());

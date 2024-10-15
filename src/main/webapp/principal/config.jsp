@@ -262,11 +262,11 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_valor_mat">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf1_valor_mat" name="conf1_valor" required value="${modelConfig.conf1_valor}">
+                                                                                <input type="text" class="form-control" id="conf1_valor_mat" name="conf1_valor" required value="${modelConfig.conf1_valor}"  oninput="calcularCustoUnitario('conf1')" >
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_qtd_mat">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf1_qtd_mat" name="conf1_qtd" required value="${modelConfig.conf1_qtd}">
+                                                                                <input type="text" class="form-control" id="conf1_qtd_mat" name="conf1_qtd" required value="${modelConfig.conf1_qtd}"  oninput="calcularCustoUnitario('conf1')">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_custo_mat">Custo Unitário</label>
@@ -281,11 +281,11 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_valor_mat">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf2_valor_mat" name="conf2_valor" required value="${modelConfig.conf2_valor}">
+                                                                                <input type="text" class="form-control" id="conf2_valor_mat" name="conf2_valor" required value="${modelConfig.conf2_valor}"  oninput="calcularCustoUnitario('conf2')">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_qtd_mat">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf2_qtd_mat" name="conf2_qtd" required value="${modelConfig.conf2_qtd}">
+                                                                                <input type="text" class="form-control" id="conf2_qtd_mat" name="conf2_qtd" required value="${modelConfig.conf2_qtd}"  oninput="calcularCustoUnitario('conf2')">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_custo_mat">Custo Unitário</label>
@@ -300,15 +300,15 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_valor_mat">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf3_valor_mat" name="conf3_valor" required value="${modelConfig.conf3_valor}">
+                                                                                <input type="text" class="form-control" id="conf3_valor_mat" name="conf3_valor" required value="${modelConfig.conf3_valor}"  oninput="calcularCustoUnitario('conf3')">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_qtd_mat">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf3_qtd_mat" name="conf3_qtd" required value="${modelConfig.conf3_qtd}">
+                                                                                <input type="text" class="form-control" id="conf3_qtd_mat" name="conf3_qtd" required value="${modelConfig.conf3_qtd}"  oninput="calcularCustoUnitario('conf3')">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_custo_mat">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf3_custo_mat" name="conf3_custo" required value="${modelConfig.conf3_custo}">
+                                                                                <input type="text" class="form-control" id="conf3_custo_mat" name="conf3_custo" required value="${modelConfig.conf3_custo}" >
                                                                             </div>
                                                                         </div>
 
@@ -393,11 +393,11 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_valor">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf1_valor_geral" name="conf1_valor" required value="${modelConfig.conf1_valor}">
+                                                                                <input type="text" class="form-control" id="conf1_valor_geral" name="conf1_valor" required value="${modelConfig.conf1_valor}" oninput="calcularCustoUnitario('conf1')">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_qtd_geral">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf1_qtd_geral" name="conf1_qtd" required value="${modelConfig.conf1_qtd}">
+                                                                                <input type="text" class="form-control" id="conf1_qtd_geral" name="conf1_qtd" required value="${modelConfig.conf1_qtd}" oninput="calcularCustoUnitario('conf1')">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_custo_geral">Custo Unitário</label>
@@ -412,11 +412,11 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_valor">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf2_valor_geral" name="conf2_valor" required value="${modelConfig.conf2_valor}">
+                                                                                <input type="text" class="form-control" id="conf2_valor_geral" name="conf2_valor" required value="${modelConfig.conf2_valor}" oninput="calcularCustoUnitario('conf2')">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_qtd_geral">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf2_qtd_geral" name="conf2_qtd" required value="${modelConfig.conf2_qtd}">
+                                                                                <input type="text" class="form-control" id="conf2_qtd_geral" name="conf2_qtd" required value="${modelConfig.conf2_qtd}" oninput="calcularCustoUnitario('conf2')">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_custo_geral">Custo Unitário</label>
@@ -431,11 +431,11 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_valor">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf3_valor_geral" name="conf3_valor" required value="${modelConfig.conf3_valor}">
+                                                                                <input type="text" class="form-control" id="conf3_valor_geral" name="conf3_valor" required value="${modelConfig.conf3_valor}" oninput="calcularCustoUnitario('conf3')">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_qtd_geral">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf3_qtd_geral" name="conf3_qtd" required value="${modelConfig.conf3_qtd}">
+                                                                                <input type="text" class="form-control" id="conf3_qtd_geral" name="conf3_qtd" required value="${modelConfig.conf3_qtd}" oninput="calcularCustoUnitario('conf3')">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_custo_geral">Custo Unitário</label>
@@ -881,8 +881,31 @@
         document.getElementById('conf3_custo_geral').value = conf3_custo; // Campo para custo do conf3
     }
 
+    function calcularCustoUnitario(conf) {
+        const valor = parseFloat(document.getElementById(`${conf}_valor`).value) || 0; // Obtém o valor ou 0 se vazio
+        const quantidade = parseFloat(document.getElementById(`${conf}_qtd`).value) || 1; // Evita divisão por zero
+
+        const custoUnitario = (quantidade > 0) ? (valor / quantidade) : 0; // Divide o valor pela quantidade
+
+        document.getElementById(`${conf}_custo`).value = custoUnitario.toFixed(2); // Atualiza o campo de custo unitário
+    }
 
 
+    function formatarValor(input) {
+        let valor = parseFloat(input.value.replace('.', '').replace(',', '.'));
+        if (!isNaN(valor)) {
+            input.value = valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById(input.id + '_hidden').value = valor; // Atualiza o campo oculto com o valor original
+        } else {
+            input.value = ''; // Limpa o campo se o valor não for válido
+            document.getElementById(input.id + '_hidden').value = ''; // Limpa o campo oculto
+        }
+    }
+
+    // Adiciona um evento de submissão ao formulário
+    document.getElementById('formConfig').addEventListener('submit', function() {
+        // Aqui você pode adicionar qualquer lógica extra se necessário
+    });
 
 </SCRIPT>
 

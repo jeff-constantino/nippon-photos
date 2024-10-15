@@ -329,7 +329,7 @@
                                                     <td>
                                                         <a class="btn btn-outline-success waves-effect waves-light"
                                                            href="javascript:void(0);"
-                                                           onclick="gerenciarConfig(
+                                                           onclick="gerenciar(
                                                                ${modelConf.idConf},
                                                                    '${modelConf.prod1_nome}',
                                                                    '${modelConf.prod1_valor}',

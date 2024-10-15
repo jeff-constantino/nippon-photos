@@ -342,7 +342,7 @@
                                                            href="javascript:void(0);"
                                                            data-bs-toggle="modal"
                                                            data-bs-target="#modalProd"
-                                                           onclick="gerenciarConfig(
+                                                           onclick="gerenciar(
                                                                ${modelConf.idConf},
                                                                    '${modelConf.prod1_nome}',
                                                                    '${modelConf.prod1_valor}',

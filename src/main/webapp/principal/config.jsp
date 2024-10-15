@@ -39,11 +39,11 @@
                                                     <h4>Configurações de Produtos</h4>
                                                 </button>
 
-                                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal2">
+                                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalMat">
                                                     <h4>Configurações de Materiais</h4>
                                                 </button>
 
-                                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal3">
+                                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalGeral">
                                                     <h4>Configurações Gerais</h4>
                                                 </button>
                                             </div>
@@ -73,7 +73,7 @@
                                                 <div class="modal-dialog modal-xl mt-5">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticBackdropLabel">Vendas do dia</h5>
+                                                            <h5 class="modal-title" id="staticBackdropLabel">Configuração de Produtos</h5>
 
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
@@ -90,7 +90,6 @@
                                                                                 <span style="color:#1ad76b; text-align: center">${msg}</span>
                                                                             </div>
                                                                         </div>
-
                                                                         <div class="row mb-3">
                                                                             <div class="col-sm-1">
                                                                                 <label class="float-label">ID:</label>
@@ -102,29 +101,42 @@
 
 
                                                                             <div class="col-4">
-                                                                                <label for="prod1_nome">Produto 1 Nome</label>
-                                                                                <input type="text" class="form-control" id="prod1_nome"
-                                                                                       name="prod1_nome" required
-                                                                                       value="${modelConfig.prod1_nome}">
+                                                                                <label for="conf1_nome">Configuração</label>
+                                                                                <input type="text" class="form-control" id="conf_name"
+                                                                                       name="conf_name" required
+                                                                                       value="${modelConfig.conf_name}" style="color: black" readonly>
+                                                                            </div>
+
+
+                                                                        </div>
+
+                                                                        <div class="row mb-3">
+
+
+                                                                            <div class="col-4">
+                                                                                <label for="conf1_nome">Produto 1 Nome</label>
+                                                                                <input type="text" class="form-control" id="conf1_nome"
+                                                                                       name="conf1_nome" required
+                                                                                       value="${modelConfig.conf1_nome}">
                                                                             </div>
 
                                                                             <div class="col-4">
                                                                                 <div class="row">
                                                                                     <div class="col-6">
-                                                                                        <label for="prod1_valor">Produto 1 Valor</label>
+                                                                                        <label for="conf1_valor">Valor</label>
                                                                                         <input type="text" class="form-control"
-                                                                                               id="prod1_valor" name="prod1_valor"
+                                                                                               id="conf1_valor" name="conf1_valor"
                                                                                                required
-                                                                                               value="${modelConfig.prod1_valor}">
+                                                                                               value="${modelConfig.conf1_valor}">
                                                                                     </div>
 
                                                                                     <div class="col-6">
-                                                                                        <label for="prod1_valor2">Produto 1 Valor
+                                                                                        <label for="conf1_valor2">Valor
                                                                                             2</label>
                                                                                         <input type="text" class="form-control"
-                                                                                               id="prod1_valor2" name="prod1_valor2"
+                                                                                               id="conf1_valor2" name="conf1_valor2"
                                                                                                required
-                                                                                               value="${modelConfig.prod1_valor2}">
+                                                                                               value="${modelConfig.conf1_valor2}">
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -132,31 +144,31 @@
 
                                                                         <div class="row mb-3">
                                                                             <div class="col-4">
-                                                                                <label for="prod2_nome">Produto 2 Nome</label>
-                                                                                <input type="text" class="form-control" id="prod2_nome"
-                                                                                       name="prod2_nome" required
-                                                                                       value="${modelConfig.prod2_nome}">
+                                                                                <label for="conf2_nome">Produto 2 Nome</label>
+                                                                                <input type="text" class="form-control" id="conf2_nome"
+                                                                                       name="conf2_nome" required
+                                                                                       value="${modelConfig.conf2_nome}">
                                                                             </div>
                                                                             <div class="col-4">
-                                                                                <label for="prod2_valor">Produto 2 Valor</label>
-                                                                                <input type="text" class="form-control" id="prod2_valor"
-                                                                                       name="prod2_valor" required
-                                                                                       value="${modelConfig.prod2_valor}">
+                                                                                <label for="conf2_valor">Valor</label>
+                                                                                <input type="text" class="form-control" id="conf2_valor"
+                                                                                       name="conf2_valor" required
+                                                                                       value="${modelConfig.conf2_valor}">
                                                                             </div>
                                                                         </div>
 
                                                                         <div class="row mb-3">
                                                                             <div class="col-4">
-                                                                                <label for="prod3_nome">Produto 3 Nome</label>
-                                                                                <input type="text" class="form-control" id="prod3_nome"
-                                                                                       name="prod3_nome" required
-                                                                                       value="${modelConfig.prod3_nome}">
+                                                                                <label for="conf3_nome">Produto 3 Nome</label>
+                                                                                <input type="text" class="form-control" id="conf3_nome"
+                                                                                       name="conf3_nome" required
+                                                                                       value="${modelConfig.conf3_nome}">
                                                                             </div>
                                                                             <div class="col-4">
-                                                                                <label for="prod3_valor">Produto 3 Valor</label>
-                                                                                <input type="text" class="form-control" id="prod3_valor"
-                                                                                       name="prod3_valor" required
-                                                                                       value="${modelConfig.prod3_valor}">
+                                                                                <label for="conf3_valor">Valor</label>
+                                                                                <input type="text" class="form-control" id="conf3_valor"
+                                                                                       name="conf3_valor" required
+                                                                                       value="${modelConfig.conf3_valor}">
                                                                             </div>
                                                                         </div>
                                                                         <button type="submit" class="btn btn-outline-success">Salvar
@@ -208,20 +220,102 @@
 
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="modal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal fade" id="modalMat" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl mt-5">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticRanking">RANKING</h5>
+                                                            <h5 class="modal-title" id="staticRanking">Configurações de Materiais</h5>
 
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="container-fluid">
                                                                 <div class="row">
-                                                                    <div class="col-lg-6 grid-margin stretch-card">
-                                                                        <H5>CORPO DO RANKING</H5>
-                                                                    </div>
+
+
+                                                                    <form id="configFormMat" method="post" action="<%= request.getContextPath() %>/ServletConfig">
+
+                                                                        <div class="row">
+                                                                            <div class="col-auto">
+                                                                                <span style="color:#1ad76b; text-align: center">${msg}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-sm-1">
+                                                                                <label class="float-label">ID:</label>
+                                                                                <span class="form-bar"></span>
+                                                                                <input type="text" class="form-control" style="background-color: black" id="idConf_mat"
+                                                                                       name="idConf" placeholder="" value="${modelConfig.idConf}" readonly>
+                                                                            </div>
+
+                                                                            <div class="col-4">
+                                                                                <label for="conf_name_mat">Configuração</label>
+                                                                                <input type="text" class="form-control" id="conf_name_mat"
+                                                                                       name="conf_name" required value="${modelConfig.conf_name}" style="color: black" readonly>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row mb-4 d-flex">
+                                                                            <div class="col-3">
+                                                                                <label for="conf1_nome_mat">Produto 1</label>
+                                                                                <input type="text" class="form-control" id="conf1_nome_mat" name="conf1_nome" required value="${modelConfig.conf1_nome}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf1_valor_mat">Valor</label>
+                                                                                <input type="text" class="form-control" id="conf1_valor_mat" name="conf1_valor" required value="${modelConfig.conf1_valor}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf1_qtd_mat">Quantidade</label>
+                                                                                <input type="text" class="form-control" id="conf1_qtd_mat" name="conf1_qtd" required value="${modelConfig.conf1_qtd}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf1_custo_mat">Custo Unitário</label>
+                                                                                <input type="text" class="form-control" id="conf1_custo_mat" name="conf1_custo" required value="${modelConfig.conf1_custo}">
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row mb-4 d-flex">
+                                                                            <div class="col-3">
+                                                                                <label for="conf2_nome_mat">Produto 2</label>
+                                                                                <input type="text" class="form-control" id="conf2_nome_mat" name="conf2_nome" required value="${modelConfig.conf2_nome}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf2_valor_mat">Valor</label>
+                                                                                <input type="text" class="form-control" id="conf2_valor_mat" name="conf2_valor" required value="${modelConfig.conf2_valor}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf2_qtd_mat">Quantidade</label>
+                                                                                <input type="text" class="form-control" id="conf2_qtd_mat" name="conf2_qtd" required value="${modelConfig.conf2_qtd}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf2_custo_mat">Custo Unitário</label>
+                                                                                <input type="text" class="form-control" id="conf2_custo_mat" name="conf2_custo" required value="${modelConfig.conf2_custo}">
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row mb-4 d-flex">
+                                                                            <div class="col-3">
+                                                                                <label for="conf3_nome_mat">Produto 3</label>
+                                                                                <input type="text" class="form-control" id="conf3_nome_mat" name="conf3_nome" required value="${modelConfig.conf3_nome}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf3_valor_mat">Valor</label>
+                                                                                <input type="text" class="form-control" id="conf3_valor_mat" name="conf3_valor" required value="${modelConfig.conf3_valor}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf3_qtd_mat">Quantidade</label>
+                                                                                <input type="text" class="form-control" id="conf3_qtd_mat" name="conf3_qtd" required value="${modelConfig.conf3_qtd}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf3_custo_mat">Custo Unitário</label>
+                                                                                <input type="text" class="form-control" id="conf3_custo_mat" name="conf3_custo" required value="${modelConfig.conf3_custo}">
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <button type="submit" class="btn btn-outline-success">Salvar</button>
+
+                                                                    </form>
+
 
 
 
@@ -256,20 +350,102 @@
 
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="modal3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal fade" id="modalGeral" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl mt-5">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticFinalizar">FINALIZAR</h5>
+                                                            <h5 class="modal-title" id="staticFinalizar">Configurações Gerais</h5>
 
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="container-fluid">
                                                                 <div class="row">
-                                                                    <div class="col-lg-6 grid-margin stretch-card">
-                                                                        <H5>CORPO DA FINALIZAÇÃO</H5>
-                                                                    </div>
+                                                                    <form id="configFormGeral" method="post" action="<%= request.getContextPath() %>/ServletConfig">
+
+                                                                        <div class="row">
+                                                                            <div class="col-auto">
+                                                                                <span style="color:#1ad76b; text-align: center">${msg}</span>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-sm-1">
+                                                                                <label class="float-label">ID:</label>
+                                                                                <span class="form-bar"></span>
+                                                                                <input type="text" class="form-control" style="background-color: black" id="idConf_geral"
+                                                                                       name="idConf" placeholder=""
+                                                                                       value="${modelConfig.idConf}" readonly>
+                                                                            </div>
+
+                                                                            <div class="col-4">
+                                                                                <label for="conf_name_geral">Configuração</label>
+                                                                                <input type="text" class="form-control" id="conf_name_geral"
+                                                                                       name="conf_name" required
+                                                                                       value="${modelConfig.conf_name}" style="color: black" readonly>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row mb-4 d-flex">
+                                                                            <div class="col-3">
+                                                                                <label for="conf1_nome">Produto 1</label>
+                                                                                <input type="text" class="form-control" id="conf1_nome_geral" name="conf1_nome" required value="${modelConfig.conf1_nome}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf1_valor">Valor</label>
+                                                                                <input type="text" class="form-control" id="conf1_valor_geral" name="conf1_valor" required value="${modelConfig.conf1_valor}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf1_qtd">Quantidade</label>
+                                                                                <input type="text" class="form-control" id="conf1_qtd_geral" name="conf1_qtd" required value="${modelConfig.conf1_qtd}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf1_custo">Custo Unitário</label>
+                                                                                <input type="text" class="form-control" id="conf1_custo_geral" name="conf1_custo" required value="${modelConfig.conf1_custo}">
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row mb-4 d-flex">
+                                                                            <div class="col-3">
+                                                                                <label for="conf2_nome">Produto 2</label>
+                                                                                <input type="text" class="form-control" id="conf2_nome_geral" name="conf2_nome" required value="${modelConfig.conf2_nome}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf2_valor">Valor</label>
+                                                                                <input type="text" class="form-control" id="conf2_valor_geral" name="conf2_valor" required value="${modelConfig.conf2_valor}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf2_qtd">Quantidade</label>
+                                                                                <input type="text" class="form-control" id="conf2_qtd_geral" name="conf2_qtd" required value="${modelConfig.conf2_qtd}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf2_custo">Custo Unitário</label>
+                                                                                <input type="text" class="form-control" id="conf2_custo_geral" name="conf2_custo" required value="${modelConfig.conf2_custo}">
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="row mb-4 d-flex">
+                                                                            <div class="col-3">
+                                                                                <label for="conf3_nome">Produto 3</label>
+                                                                                <input type="text" class="form-control" id="conf3_nome_geral" name="conf3_nome" required value="${modelConfig.conf3_nome}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf3_valor">Valor</label>
+                                                                                <input type="text" class="form-control" id="conf3_valor_geral" name="conf3_valor" required value="${modelConfig.conf3_valor}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf3_qtd">Quantidade</label>
+                                                                                <input type="text" class="form-control" id="conf3_qtd_geral" name="conf3_qtd" required value="${modelConfig.conf3_qtd}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf3_custo">Custo Unitário</label>
+                                                                                <input type="text" class="form-control" id="conf3_custo_geral" name="conf3_custo" required value="${modelConfig.conf3_custo}">
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <button type="submit" class="btn btn-outline-success">Salvar</button>
+
+                                                                    </form>
 
 
 
@@ -294,7 +470,6 @@
                     </div>
                 </div>
 
-<%--BLOCO 1                --%>
                 <style>
                     .minha-tabela {
                         border-collapse: collapse; /* Remove espaço entre as bordas */
@@ -334,36 +509,38 @@
 
                                              </tr>
 
+                                             <!-- Bloco 1 -->
                                              <tbody>
                                              <c:forEach items="${configs}" var="modelConf">
-                                                 <tr>
-                                                     <td>
-                                                         <a class="btn btn-outline-success waves-effect waves-light"
-                                                            href="javascript:void(0);"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#modalProd"
-                                                            onclick="gerenciarConfig(
-                                                                ${modelConf.idConf},
-                                                                    '${modelConf.prod1_nome}',
-                                                                    '${modelConf.prod1_valor}',
-                                                                    '${modelConf.prod1_valor2}',
-                                                                    '${modelConf.prod2_nome}',
-                                                                    '${modelConf.prod2_valor}',
-                                                                    '${modelConf.prod3_nome}',
-                                                                    '${modelConf.prod3_valor}')">
-                                                             Editar
-                                                         </a>
-                                                     </td>
-                                                     <td><c:out value="${modelConf.idConf}"/></td>
-                                                     <td><c:out value="${modelConf.prod1_nome}"/></td>
-                                                     <td><c:out value="${modelConf.prod1_valor}"/></td>
-                                                     <td><c:out value="${modelConf.prod1_valor2}"/></td>
-                                                     <td><c:out value="${modelConf.prod2_nome}"/></td>
-                                                     <td><c:out value="${modelConf.prod2_valor}"/></td>
-                                                     <td><c:out value="${modelConf.prod3_nome}"/></td>
-                                                     <td><c:out value="${modelConf.prod3_valor}"/></td>
-
-                                                 </tr>
+                                                 <c:if test="${modelConf.idConf == 1}">
+                                                     <tr>
+                                                         <td>
+                                                             <a class="btn btn-outline-success waves-effect waves-light"
+                                                                href="javascript:void(0);"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#modalProd"
+                                                                onclick="gerenciarConfig(
+                                                                    ${modelConf.idConf},
+                                                                        '${modelConf.conf1_nome}',
+                                                                        '${modelConf.conf1_valor}',
+                                                                        '${modelConf.conf1_valor2}',
+                                                                        '${modelConf.conf2_nome}',
+                                                                        '${modelConf.conf2_valor}',
+                                                                        '${modelConf.conf3_nome}',
+                                                                        '${modelConf.conf3_valor}')">
+                                                                 Editar
+                                                             </a>
+                                                         </td>
+                                                         <td><c:out value="${modelConf.idConf}"/></td>
+                                                         <td><c:out value="${modelConf.conf1_nome}"/></td>
+                                                         <td><c:out value="${modelConf.conf1_valor}"/></td>
+                                                         <td><c:out value="${modelConf.conf1_valor2}"/></td>
+                                                         <td><c:out value="${modelConf.conf2_nome}"/></td>
+                                                         <td><c:out value="${modelConf.conf2_valor}"/></td>
+                                                         <td><c:out value="${modelConf.conf3_nome}"/></td>
+                                                         <td><c:out value="${modelConf.conf3_valor}"/></td>
+                                                     </tr>
+                                                 </c:if>
                                              </c:forEach>
                                              </tbody>
 
@@ -381,15 +558,87 @@
                 </div>
 
 
-            <%--BLOCO 2--%>
+
+                <style>
+                    .minha-tabela {
+                        border-collapse: collapse; /* Remove espaço entre as bordas */
+                        width: 100%; /* Opcional: para garantir que a tabela ocupe toda a largura */
+                    }
+
+                    .minha-tabela td, .minha-tabela th {
+                        padding: 2px; /* Diminui o padding das células */
+                        vertical-align: middle; /* Alinha verticalmente ao meio */
+                        font-size: 14px; /* Ajusta o tamanho da fonte (opcional) */
+                    }
+                </style>
+
                 <div class="row ">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">MATERIAL</h4>
+                                <h4 class="card-title" style="text-align: center">MATERIAIS</h4>
                                 <div class="table-responsive">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
+                                    <table class="table table-bordered minha-tabela">
+                                        <thead class="thead-light">
+
+                                        <c:if test="${not empty configs}">
+                                        <table class="table table-bordered">
+
+                                            <tr>
+                                                <th>Ações</th>
+                                                <th>ID</th>
+                                                <th>Produto 1</th>
+                                                <th>Valor 1</th>
+                                                <th>Valor 2</th>
+                                                <th>Produto 2</th>
+                                                <th>Valor</th>
+                                                <th>Produto 3</th>
+                                                <th>Valor</th>
+
+
+                                            </tr>
+
+                                            <!-- Bloco 2 -->
+                                            <tbody>
+                                            <c:forEach items="${configs}" var="modelConf">
+                                                <c:if test="${modelConf.idConf == 2}">
+                                                    <tr>
+                                                        <td>
+                                                            <a class="btn btn-outline-success waves-effect waves-light"
+                                                               href="javascript:void(0);"
+                                                               data-bs-toggle="modal"
+                                                               data-bs-target="#modalMat"
+                                                               onclick="gerenciarConfig(
+                                                                   ${modelConf.idConf},
+                                                                       '${modelConf.conf1_nome}',
+                                                                       '${modelConf.conf1_valor}',
+                                                                       '${modelConf.conf1_valor2}',
+                                                                       '${modelConf.conf2_nome}',
+                                                                       '${modelConf.conf2_valor}',
+                                                                       '${modelConf.conf3_nome}',
+                                                                       '${modelConf.conf3_valor}')">
+                                                                Editar
+                                                            </a>
+                                                        </td>
+                                                        <td><c:out value="${modelConf.idConf}"/></td>
+                                                        <td><c:out value="${modelConf.conf1_nome}"/></td>
+                                                        <td><c:out value="${modelConf.conf1_valor}"/></td>
+                                                        <td><c:out value="${modelConf.conf1_valor2}"/></td>
+                                                        <td><c:out value="${modelConf.conf2_nome}"/></td>
+                                                        <td><c:out value="${modelConf.conf2_valor}"/></td>
+                                                        <td><c:out value="${modelConf.conf3_nome}"/></td>
+                                                        <td><c:out value="${modelConf.conf3_valor}"/></td>
+                                                    </tr>
+                                                </c:if>
+                                            </c:forEach>
+                                            </tbody>
+
+
+                                            </c:if>
+                                            <c:if test="${empty configs}">
+                                            <p>Nenhuma configuração encontrada.</p>
+                                            </c:if>
+                                        </thead>
                                     </table>
                                 </div>
                             </div>
@@ -397,16 +646,88 @@
                     </div>
                 </div>
 
-                <%--BLOCO 3--%>
+
+
+                <style>
+                    .minha-tabela {
+                        border-collapse: collapse; /* Remove espaço entre as bordas */
+                        width: 100%; /* Opcional: para garantir que a tabela ocupe toda a largura */
+                    }
+
+                    .minha-tabela td, .minha-tabela th {
+                        padding: 2px; /* Diminui o padding das células */
+                        vertical-align: middle; /* Alinha verticalmente ao meio */
+                        font-size: 14px; /* Ajusta o tamanho da fonte (opcional) */
+                    }
+                </style>
 
                 <div class="row ">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">GERAIS</h4>
+                                <h4 class="card-title" style="text-align: center">GERAL</h4>
                                 <div class="table-responsive">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
+                                    <table class="table table-bordered minha-tabela">
+                                        <thead class="thead-light">
+
+                                        <c:if test="${not empty configs}">
+                                        <table class="table table-bordered">
+
+                                            <tr>
+                                                <th>Ações</th>
+                                                <th>ID</th>
+                                                <th>Produto 1</th>
+                                                <th>Valor 1</th>
+                                                <th>Valor 2</th>
+                                                <th>Produto 2</th>
+                                                <th>Valor</th>
+                                                <th>Produto 3</th>
+                                                <th>Valor</th>
+
+
+                                            </tr>
+
+                                            <!-- Bloco 3 -->
+                                            <tbody>
+                                            <c:forEach items="${configs}" var="modelConf">
+                                                <c:if test="${modelConf.idConf == 3}">
+                                                    <tr>
+                                                        <td>
+                                                            <a class="btn btn-outline-success waves-effect waves-light"
+                                                               href="javascript:void(0);"
+                                                               data-bs-toggle="modal"
+                                                               data-bs-target="#modalGeral"
+                                                               onclick="gerenciarConfig(
+                                                                   ${modelConf.idConf},
+                                                                       '${modelConf.conf1_nome}',
+                                                                       '${modelConf.conf1_valor}',
+                                                                       '${modelConf.conf1_valor2}',
+                                                                       '${modelConf.conf2_nome}',
+                                                                       '${modelConf.conf2_valor}',
+                                                                       '${modelConf.conf3_nome}',
+                                                                       '${modelConf.conf3_valor}')">
+                                                                Editar
+                                                            </a>
+                                                        </td>
+                                                        <td><c:out value="${modelConf.idConf}"/></td>
+                                                        <td><c:out value="${modelConf.conf1_nome}"/></td>
+                                                        <td><c:out value="${modelConf.conf1_valor}"/></td>
+                                                        <td><c:out value="${modelConf.conf1_valor2}"/></td>
+                                                        <td><c:out value="${modelConf.conf2_nome}"/></td>
+                                                        <td><c:out value="${modelConf.conf2_valor}"/></td>
+                                                        <td><c:out value="${modelConf.conf3_nome}"/></td>
+                                                        <td><c:out value="${modelConf.conf3_valor}"/></td>
+                                                    </tr>
+                                                </c:if>
+                                            </c:forEach>
+                                            </tbody>
+
+
+                                            </c:if>
+                                            <c:if test="${empty configs}">
+                                            <p>Nenhuma configuração encontrada.</p>
+                                            </c:if>
+                                        </thead>
                                     </table>
                                 </div>
                             </div>
@@ -456,17 +777,85 @@
 
 
 
-    function gerenciarConfig(idConf, prod1_nome, prod1_valor, prod1_valor2, prod2_nome, prod2_valor, prod3_nome, prod3_valor, comissao) {
-        document.getElementById('idConf').value = idConf;
-        document.getElementById('prod1_nome').value = prod1_nome;
-        document.getElementById('prod1_valor').value = prod1_valor;
-        document.getElementById('prod1_valor2').value = prod1_valor2;
-        document.getElementById('prod2_nome').value = prod2_nome;
-        document.getElementById('prod2_valor').value = prod2_valor;
-        document.getElementById('prod3_nome').value = prod3_nome;
-        document.getElementById('prod3_valor').value = prod3_valor;
-        document.getElementById('comissao').value = comissao;
+    function gerenciarConfig(idConf, conf_name, conf1_nome, conf1_valor, conf1_valor2, conf1_qtd, conf1_custo, conf2_nome, conf2_valor, conf2_qtd, conf2_custo, conf3_nome, conf3_valor, conf3_qtd, conf3_custo) {
+        // Preencher o campo idConf
+        document.getElementById('idConf').value = idConf; // Campo que irá receber o idConf
+        document.getElementById('conf_name').value = conf_name; // Campo para conf_name
+
+
+        console.log('idConf:', idConf);
+        console.log('conf_name:', conf_name);
+        console.log('conf1_nome:', conf1_nome);
+        console.log('conf1_valor:', conf1_valor);
+        console.log('conf1_valor2:', conf1_valor2);
+        console.log('conf1_qtd:', conf1_qtd);
+        console.log('conf1_custo:', conf1_custo);
+        console.log('conf2_nome:', conf2_nome);
+        console.log('conf2_valor:', conf2_valor);
+        console.log('conf2_qtd:', conf2_qtd);
+        console.log('conf2_custo:', conf2_custo);
+        console.log('conf3_nome:', conf3_nome);
+        console.log('conf3_valor:', conf3_valor);
+        console.log('conf3_qtd:', conf3_qtd);
+        console.log('conf3_custo:', conf3_custo);
+
+
+
+
+
+        // Preencher os campos com base no idConf
+        if (idConf === 1) {
+            document.getElementById('idConf').value =idConf;
+            document.getElementById('conf_name').value = conf_name;
+            document.getElementById('conf1_nome').value = conf1_nome;
+            document.getElementById('conf1_valor').value = conf1_valor;
+            document.getElementById('conf1_valor2').value = conf1_valor2;
+            document.getElementById('conf1_qtd').value = conf1_qtd; // Campo para quantidade do conf1
+            document.getElementById('conf1_custo').value = conf1_custo; // Campo para custo do conf1
+            document.getElementById('conf2_nome').value = conf2_nome;
+            document.getElementById('conf2_valor').value = conf2_valor;
+            document.getElementById('conf2_qtd').value = conf2_qtd; // Campo para quantidade do conf2
+            document.getElementById('conf2_custo').value = conf2_custo; // Campo para custo do conf2
+            document.getElementById('conf3_nome').value = conf3_nome;
+            document.getElementById('conf3_valor').value = conf3_valor;
+            document.getElementById('conf3_qtd').value = conf3_qtd; // Campo para quantidade do conf3
+            document.getElementById('conf3_custo').value = conf3_custo; // Campo para custo do conf3
+        } else if (idConf === 2) {
+            document.getElementById('idConf_mat').value =idConf;
+            document.getElementById('conf_name_mat').value = conf_name;
+            document.getElementById('conf1_nome_mat').value = conf1_nome;
+            document.getElementById('conf1_valor_mat').value = conf1_valor;
+
+            document.getElementById('conf1_qtd_mat').value = conf1_qtd; // Campo para quantidade do conf1
+            document.getElementById('conf1_custo_mat').value = conf1_custo; // Campo para custo do conf1
+            document.getElementById('conf2_nome_mat').value = conf2_nome;
+            document.getElementById('conf2_valor_mat').value = conf2_valor;
+            document.getElementById('conf2_qtd_mat').value = conf2_qtd; // Campo para quantidade do conf2
+            document.getElementById('conf2_custo_mat').value = conf2_custo; // Campo para custo do conf2
+            document.getElementById('conf3_nome_mat').value = conf3_nome;
+            document.getElementById('conf3_valor_mat').value = conf3_valor;
+            document.getElementById('conf3_qtd_mat').value = conf3_qtd; // Campo para quantidade do conf3
+            document.getElementById('conf3_custo_mat').value = conf3_custo; // Campo para custo do conf3
+        } else if (idConf === 3) {
+            document.getElementById('idConf_geral').value =idConf;
+            document.getElementById('conf_name_geral').value = conf_name;
+            document.getElementById('conf1_nome_geral').value = conf1_nome;
+            document.getElementById('conf1_valor_geral').value = conf1_valor;
+            document.getElementById('conf1_valor2').value = conf1_valor2;
+            document.getElementById('conf1_qtd_geral').value = conf1_qtd; // Campo para quantidade do conf1
+            document.getElementById('conf1_custo_geral').value = conf1_custo; // Campo para custo do conf1
+            document.getElementById('conf2_nome_geral').value = conf2_nome;
+            document.getElementById('conf2_valor_geral').value = conf2_valor;
+            document.getElementById('conf2_qtd_geral').value = conf2_qtd; // Campo para quantidade do conf2
+            document.getElementById('conf2_custo_geral').value = conf2_custo; // Campo para custo do conf2
+            document.getElementById('conf3_nome_geral').value = conf3_nome;
+            document.getElementById('conf3_valor_geral').value = conf3_valor;
+            document.getElementById('conf3_qtd_geral').value = conf3_qtd; // Campo para quantidade do conf3
+            document.getElementById('conf3_custo_geral').value = conf3_custo; // Campo para custo do conf3
+        }
     }
+
+
 
 </SCRIPT>
 

@@ -1,10 +1,8 @@
 package servlets;
 
 import dao.DAOConfig;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelConfig;
@@ -52,31 +50,45 @@ public class ServletConfig extends ServletGenericUtil {
                 modelConfig.setIdConf(Long.parseLong(idConfParam)); // Converter para Long
             }
 
-            modelConfig.setProd1_nome(request.getParameter("prod1_nome"));
-            modelConfig.setProd2_nome(request.getParameter("prod2_nome"));
-            modelConfig.setProd3_nome(request.getParameter("prod3_nome"));
+            modelConfig.setConf1_nome(request.getParameter("conf1_nome"));
+            modelConfig.setConf2_nome(request.getParameter("conf2_nome"));
+            modelConfig.setConf3_nome(request.getParameter("conf3_nome"));
+            modelConfig.setConf_name(request.getParameter("conf_name"));
 
-            // Definindo valores de produtos
-            modelConfig.setProd1_valor(parseBigDecimal(request.getParameter("prod1_valor")));
-            modelConfig.setProd1_valor2(parseBigDecimal(request.getParameter("prod1_valor2")));
-            modelConfig.setProd2_valor(parseBigDecimal(request.getParameter("prod2_valor")));
-            modelConfig.setProd3_valor(parseBigDecimal(request.getParameter("prod3_valor")));
+            // Definindo valores de configurações
+            modelConfig.setConf1_valor(parseBigDecimal(request.getParameter("conf1_valor")));
+            modelConfig.setConf1_valor2(parseBigDecimal(request.getParameter("conf1_valor2")));
+            modelConfig.setConf2_valor(parseBigDecimal(request.getParameter("conf2_valor")));
+            modelConfig.setConf3_valor(parseBigDecimal(request.getParameter("conf3_valor")));
+            modelConfig.setConf1_custo(parseBigDecimal(request.getParameter("conf1_custo")));
+            modelConfig.setConf2_custo(parseBigDecimal(request.getParameter("conf2_custo")));
+            modelConfig.setConf3_custo(parseBigDecimal(request.getParameter("conf3_custo")));
 
+
+            modelConfig.setConf1_qtd(Integer.parseInt(request.getParameter("conf1_qtd")));
+            modelConfig.setConf2_qtd(Integer.parseInt(request.getParameter("conf2_qtd")));
+            modelConfig.setConf3_qtd(Integer.parseInt(request.getParameter("conf3_qtd")));
 
             // Grava ou atualiza a configuração no banco de dados
             modelConfig = daoConfig.gravarConfig(modelConfig); // Ajuste este método para que ele possa gravar ou atualizar
 
-            // Obtendo valores de configuração para cada produto
-            BigDecimal valorProd1 = modelConfig.getProd1_valor();
-            BigDecimal valorProd1_2 = modelConfig.getProd1_valor2();
-            BigDecimal valorProd2 = modelConfig.getProd2_valor();
-            BigDecimal valorProd3 = modelConfig.getProd3_valor();
+            // Obtendo valores de configuração para cada item
+            BigDecimal valorConf1 = modelConfig.getConf1_valor();
+            BigDecimal valorConf1_2 = modelConfig.getConf1_valor2();
+            BigDecimal valorConf2 = modelConfig.getConf2_valor();
+            BigDecimal valorConf3 = modelConfig.getConf3_valor();
+            BigDecimal valorConf1_custo = modelConfig.getConf1_custo();
+            BigDecimal valorConf2_custo = modelConfig.getConf2_custo();
+            BigDecimal valorConf3_custo = modelConfig.getConf3_custo();
 
             // Adicionando os valores ao request
-            request.setAttribute("valorProd1", valorProd1);
-            request.setAttribute("valorProd1_2", valorProd1_2);
-            request.setAttribute("valorProd2", valorProd2);
-            request.setAttribute("valorProd3", valorProd3);
+            request.setAttribute("valorConf1", valorConf1);
+            request.setAttribute("valorConf1_2", valorConf1_2);
+            request.setAttribute("valorConf2", valorConf2);
+            request.setAttribute("valorConf3", valorConf3);
+            request.setAttribute("valorConf1_custo", valorConf1_custo);
+            request.setAttribute("valorConf2_custo", valorConf2_custo);
+            request.setAttribute("valorConf3_custo", valorConf3_custo);
 
             // Redireciona para o método doGet para carregar os dados atualizados
             doGet(request, response); // Chama o método doGet para recuperar os dados da configuração
@@ -86,8 +98,6 @@ public class ServletConfig extends ServletGenericUtil {
             request.getRequestDispatcher("erro.jsp").forward(request, response);
         }
     }
-
-
 
     private BigDecimal parseBigDecimal(String value) {
         if (value != null && !value.isEmpty()) {

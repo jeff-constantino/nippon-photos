@@ -50,10 +50,10 @@ public class ServletConfig extends ServletGenericUtil {
                 modelConfig.setIdConf(Long.parseLong(idConfParam)); // Converter para Long
             }
 
-            modelConfig.setConf1_nome(safeParseString(request.getParameter("conf1_nome")));
-            modelConfig.setConf2_nome(safeParseString(request.getParameter("conf2_nome")));
-            modelConfig.setConf3_nome(safeParseString(request.getParameter("conf3_nome")));
-            modelConfig.setConf_name(safeParseString(request.getParameter("conf_name")));
+            modelConfig.setConf1_nome(request.getParameter("conf1_nome"));
+            modelConfig.setConf2_nome(request.getParameter("conf2_nome"));
+            modelConfig.setConf3_nome(request.getParameter("conf3_nome"));
+            modelConfig.setConf_name(request.getParameter("conf_name"));
 
             // Definindo valores de configurações
             modelConfig.setConf1_valor(parseBigDecimal(request.getParameter("conf1_valor")));
@@ -64,10 +64,10 @@ public class ServletConfig extends ServletGenericUtil {
             modelConfig.setConf2_custo(parseBigDecimal(request.getParameter("conf2_custo")));
             modelConfig.setConf3_custo(parseBigDecimal(request.getParameter("conf3_custo")));
 
-            // Definindo valores de quantidade
-            modelConfig.setConf1_qtd(safeParseInt(request.getParameter("conf1_qtd")));
-            modelConfig.setConf2_qtd(safeParseInt(request.getParameter("conf2_qtd")));
-            modelConfig.setConf3_qtd(safeParseInt(request.getParameter("conf3_qtd")));
+
+            modelConfig.setConf1_qtd(Integer.parseInt(request.getParameter("conf1_qtd")));
+            modelConfig.setConf2_qtd(Integer.parseInt(request.getParameter("conf2_qtd")));
+            modelConfig.setConf3_qtd(Integer.parseInt(request.getParameter("conf3_qtd")));
 
             // Grava ou atualiza a configuração no banco de dados
             modelConfig = daoConfig.gravarConfig(modelConfig); // Ajuste este método para que ele possa gravar ou atualizar
@@ -98,17 +98,6 @@ public class ServletConfig extends ServletGenericUtil {
             request.getRequestDispatcher("erro.jsp").forward(request, response);
         }
     }
-
-    // Método auxiliar para tratar parâmetros inteiros
-    private Integer safeParseInt(String parameter) {
-        return (parameter != null && !parameter.trim().isEmpty()) ? Integer.parseInt(parameter) : 0;
-    }
-
-    // Método auxiliar para tratar parâmetros de string
-    private String safeParseString(String parameter) {
-        return (parameter != null && !parameter.trim().isEmpty()) ? parameter : null;
-    }
-
 
     private BigDecimal parseBigDecimal(String value) {
         if (value != null && !value.isEmpty()) {

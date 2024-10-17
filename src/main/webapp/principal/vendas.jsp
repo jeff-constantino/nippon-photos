@@ -1078,7 +1078,6 @@
 
         function buscarValor(produtoId) {
             const quantidade = document.getElementById(produtoId).value;
-            console.log('Quantidade digitada para', produtoId, ':', quantidade); // Log da quantidade digitada
 
             // Verifica se o array de produtos está vazio
             if (produtos.length === 0) {
@@ -1158,7 +1157,6 @@
         // Funções para o modal
         function buscarValorModal(produtoId) {
             const quantidade = document.getElementById(produtoId).value;
-            console.log('Quantidade digitada para', produtoId, ':', quantidade); // Log da quantidade digitada
 
             if (produtos.length === 0) {
                 const xhr = new XMLHttpRequest();
@@ -1180,7 +1178,6 @@
         }
 
         function calcularValorModal(quantidade, produtoId) {
-            console.log('Recalculando valor para a quantidade:', quantidade, 'do produto:', produtoId);
 
             const prod = produtos[0];
 

@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
@@ -127,7 +128,7 @@
                                                                                         <input type="text" class="form-control"
                                                                                                id="conf1_valor" name="conf1_valor"
                                                                                                required
-                                                                                               value="${modelConfig.conf1_valor}">
+                                                                                               value="${modelConfig.conf1_valor}" onkeyup="aplicarMascara(this)">
                                                                                     </div>
 
                                                                                     <div class="col-6">
@@ -136,7 +137,7 @@
                                                                                         <input type="text" class="form-control"
                                                                                                id="conf1_valor2" name="conf1_valor2"
                                                                                                required
-                                                                                               value="${modelConfig.conf1_valor2}">
+                                                                                               value="${modelConfig.conf1_valor2}" onkeyup="aplicarMascara(this)">
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -153,7 +154,7 @@
                                                                                 <label for="conf2_valor">Valor</label>
                                                                                 <input type="text" class="form-control" id="conf2_valor"
                                                                                        name="conf2_valor" required
-                                                                                       value="${modelConfig.conf2_valor}">
+                                                                                       value="${modelConfig.conf2_valor}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                         </div>
 
@@ -168,7 +169,7 @@
                                                                                 <label for="conf3_valor">Valor</label>
                                                                                 <input type="text" class="form-control" id="conf3_valor"
                                                                                        name="conf3_valor" required
-                                                                                       value="${modelConfig.conf3_valor}">
+                                                                                       value="${modelConfig.conf3_valor}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                         </div>
                                                                         <button type="submit" class="btn btn-outline-success">Salvar
@@ -240,6 +241,7 @@
                                                                                 <span style="color:#1ad76b; text-align: center">${msg}</span>
                                                                             </div>
                                                                         </div>
+
                                                                         <div class="row mb-3">
                                                                             <div class="col-sm-1">
                                                                                 <label class="float-label">ID:</label>
@@ -262,15 +264,15 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_valor_mat">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf1_valor_mat" name="conf1_valor" required value="${modelConfig.conf1_valor}"  oninput="calcularCustoUnitario('conf1')" >
+                                                                                <input type="text" class="form-control" id="conf1_valor_mat" name="conf1_valor" required value="${modelConfig.conf1_valor}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_qtd_mat">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf1_qtd_mat" name="conf1_qtd" required value="${modelConfig.conf1_qtd}"  oninput="calcularCustoUnitario('conf1')">
+                                                                                <input type="text" class="form-control" id="conf1_qtd_mat" name="conf1_qtd" required value="${modelConfig.conf1_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_custo_mat">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf1_custo_mat" name="conf1_custo" required value="${modelConfig.conf1_custo}">
+                                                                                <input type="text" class="form-control" id="conf1_custo_mat" name="conf1_custo" required value="${modelConfig.conf1_custo}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                         </div>
 
@@ -281,15 +283,15 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_valor_mat">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf2_valor_mat" name="conf2_valor" required value="${modelConfig.conf2_valor}"  oninput="calcularCustoUnitario('conf2')">
+                                                                                <input type="text" class="form-control" id="conf2_valor_mat" name="conf2_valor" required value="${modelConfig.conf2_valor}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_qtd_mat">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf2_qtd_mat" name="conf2_qtd" required value="${modelConfig.conf2_qtd}"  oninput="calcularCustoUnitario('conf2')">
+                                                                                <input type="text" class="form-control" id="conf2_qtd_mat" name="conf2_qtd" required value="${modelConfig.conf2_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_custo_mat">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf2_custo_mat" name="conf2_custo" required value="${modelConfig.conf2_custo}">
+                                                                                <input type="text" class="form-control" id="conf2_custo_mat" name="conf2_custo" required value="${modelConfig.conf2_custo}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                         </div>
 
@@ -300,21 +302,23 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_valor_mat">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf3_valor_mat" name="conf3_valor" required value="${modelConfig.conf3_valor}"  oninput="calcularCustoUnitario('conf3')">
+                                                                                <input type="text" class="form-control" id="conf3_valor_mat" name="conf3_valor" required value="${modelConfig.conf3_valor}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_qtd_mat">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf3_qtd_mat" name="conf3_qtd" required value="${modelConfig.conf3_qtd}"  oninput="calcularCustoUnitario('conf3')">
+                                                                                <input type="text" class="form-control" id="conf3_qtd_mat" name="conf3_qtd" required value="${modelConfig.conf3_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_custo_mat">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf3_custo_mat" name="conf3_custo" required value="${modelConfig.conf3_custo}" >
+                                                                                <input type="text" class="form-control" id="conf3_custo_mat" name="conf3_custo" required value="${modelConfig.conf3_custo}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                         </div>
 
                                                                         <button type="submit" class="btn btn-outline-success">Salvar</button>
 
                                                                     </form>
+
+
 
 
 
@@ -393,15 +397,15 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_valor">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf1_valor_geral" name="conf1_valor" required value="${modelConfig.conf1_valor}" oninput="calcularCustoUnitario('conf1')">
+                                                                                <input type="text" class="form-control" id="conf1_valor_geral" name="conf1_valor" required value="${modelConfig.conf1_valor}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_qtd_geral">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf1_qtd_geral" name="conf1_qtd" required value="${modelConfig.conf1_qtd}" oninput="calcularCustoUnitario('conf1')">
+                                                                                <input type="text" class="form-control" id="conf1_qtd_geral" name="conf1_qtd" required value="${modelConfig.conf1_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_custo_geral">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf1_custo_geral" name="conf1_custo" required value="${modelConfig.conf1_custo}">
+                                                                                <input type="text" class="form-control" id="conf1_custo_geral" name="conf1_custo" required value="${modelConfig.conf1_custo}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                         </div>
 
@@ -412,15 +416,15 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_valor">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf2_valor_geral" name="conf2_valor" required value="${modelConfig.conf2_valor}" oninput="calcularCustoUnitario('conf2')">
+                                                                                <input type="text" class="form-control" id="conf2_valor_geral" name="conf2_valor" required value="${modelConfig.conf2_valor}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_qtd_geral">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf2_qtd_geral" name="conf2_qtd" required value="${modelConfig.conf2_qtd}" oninput="calcularCustoUnitario('conf2')">
+                                                                                <input type="text" class="form-control" id="conf2_qtd_geral" name="conf2_qtd" required value="${modelConfig.conf2_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_custo_geral">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf2_custo_geral" name="conf2_custo" required value="${modelConfig.conf2_custo}">
+                                                                                <input type="text" class="form-control" id="conf2_custo_geral" name="conf2_custo" required value="${modelConfig.conf2_custo}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                         </div>
 
@@ -431,15 +435,15 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_valor">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf3_valor_geral" name="conf3_valor" required value="${modelConfig.conf3_valor}" oninput="calcularCustoUnitario('conf3')">
+                                                                                <input type="text" class="form-control" id="conf3_valor_geral" name="conf3_valor" required value="${modelConfig.conf3_valor}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_qtd_geral">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf3_qtd_geral" name="conf3_qtd" required value="${modelConfig.conf3_qtd}" oninput="calcularCustoUnitario('conf3')">
+                                                                                <input type="text" class="form-control" id="conf3_qtd_geral" name="conf3_qtd" required value="${modelConfig.conf3_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_custo_geral">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf3_custo_geral" name="conf3_custo" required value="${modelConfig.conf3_custo}">
+                                                                                <input type="text" class="form-control" id="conf3_custo_geral" name="conf3_custo" required value="${modelConfig.conf3_custo}" onkeyup="aplicarMascara(this)">
                                                                             </div>
                                                                         </div>
 
@@ -535,12 +539,15 @@
                                                          <td><c:out value="${modelConf.idConf}"/></td>
                                                          <td hidden="hidden"><c:out value="${modelConf.conf_name}"/></td>
                                                          <td><c:out value="${modelConf.conf1_nome}"/></td>
-                                                         <td><c:out value="${modelConf.conf1_valor}"/></td>
-                                                         <td><c:out value="${modelConf.conf1_valor2}"/></td>
+
+                                                         <!-- Formatação do valor com JSTL -->
+                                                         <td><fmt:formatNumber value="${modelConf.conf1_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                         <td><fmt:formatNumber value="${modelConf.conf1_valor2}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                          <td><c:out value="${modelConf.conf2_nome}"/></td>
-                                                         <td><c:out value="${modelConf.conf2_valor}"/></td>
+                                                         <td><fmt:formatNumber value="${modelConf.conf2_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                          <td><c:out value="${modelConf.conf3_nome}"/></td>
-                                                         <td><c:out value="${modelConf.conf3_valor}"/></td>
+                                                         <td><fmt:formatNumber value="${modelConf.conf3_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+
                                                      </tr>
                                                  </c:if>
                                              </c:forEach>
@@ -638,19 +645,20 @@
                                                         </td>
                                                         <td><c:out value="${modelConf.idConf}"/></td>
                                                         <td><c:out value="${modelConf.conf1_nome}"/></td>
-                                                        <td><c:out value="${modelConf.conf1_valor}"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf1_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                         <td><c:out value="${modelConf.conf1_qtd}"/></td>
-                                                        <td><c:out value="${modelConf.conf1_custo}"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf1_custo}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
 
                                                         <td><c:out value="${modelConf.conf2_nome}"/></td>
-                                                        <td><c:out value="${modelConf.conf2_valor}"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf2_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                         <td><c:out value="${modelConf.conf2_qtd}"/></td>
-                                                        <td><c:out value="${modelConf.conf2_custo}"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf2_custo}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
 
                                                         <td><c:out value="${modelConf.conf3_nome}"/></td>
-                                                        <td><c:out value="${modelConf.conf3_valor}"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf3_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                         <td><c:out value="${modelConf.conf3_qtd}"/></td>
-                                                        <td><c:out value="${modelConf.conf3_custo}"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf3_custo}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+
 
                                                     </tr>
                                                 </c:if>
@@ -741,12 +749,13 @@
                                                         </td>
                                                         <td><c:out value="${modelConf.idConf}"/></td>
                                                         <td><c:out value="${modelConf.conf1_nome}"/></td>
-                                                        <td><c:out value="${modelConf.conf1_valor}"/></td>
-                                                        <td><c:out value="${modelConf.conf1_valor2}"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf1_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf1_valor2}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                         <td><c:out value="${modelConf.conf2_nome}"/></td>
-                                                        <td><c:out value="${modelConf.conf2_valor}"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf2_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                         <td><c:out value="${modelConf.conf3_nome}"/></td>
-                                                        <td><c:out value="${modelConf.conf3_valor}"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf3_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+
                                                     </tr>
                                                 </c:if>
                                             </c:forEach>
@@ -891,21 +900,120 @@
     }
 
 
-    function formatarValor(input) {
-        let valor = parseFloat(input.value.replace('.', '').replace(',', '.'));
-        if (!isNaN(valor)) {
-            input.value = valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            document.getElementById(input.id + '_hidden').value = valor; // Atualiza o campo oculto com o valor original
-        } else {
-            input.value = ''; // Limpa o campo se o valor não for válido
-            document.getElementById(input.id + '_hidden').value = ''; // Limpa o campo oculto
+    // FORMATAÇÃO DE VALORES
+
+    function Formatar(valor) {
+        const v = ((valor.replace(/\D/g, '') / 100).toFixed(2) + '').split('.');
+
+        const m = v[0].split('').reverse().join('').match(/.{1,3}/g);
+
+        for (let i = 0; i < m.length; i++) {
+            m[i] = m[i].split('').reverse().join('');
         }
+
+        const r = m.reverse().join('.');
+
+        return 'R$ ' + r + ',' + v[1];
     }
 
-    // Adiciona um evento de submissão ao formulário
-    document.getElementById('formConfig').addEventListener('submit', function() {
-        // Aqui você pode adicionar qualquer lógica extra se necessário
+    function aplicarMascara(campo) {
+        let valor = campo.value;
+        campo.value = Formatar(valor);
+    }
+
+    function RemoverFormatacao(valor) {
+        return valor.replace(/[^0-9,]/g, '').replace(',', '.');
+    }
+
+    document.getElementById("configFormMat").onsubmit = function () {
+        // Remover formatação dos valores e custos antes de submeter o formulário
+        document.getElementById('conf1_valor_mat').value = RemoverFormatacao(document.getElementById('conf1_valor_mat').value);
+        document.getElementById('conf1_custo_mat').value = RemoverFormatacao(document.getElementById('conf1_custo_mat').value);
+
+        document.getElementById('conf2_valor_mat').value = RemoverFormatacao(document.getElementById('conf2_valor_mat').value);
+        document.getElementById('conf2_custo_mat').value = RemoverFormatacao(document.getElementById('conf2_custo_mat').value);
+
+        document.getElementById('conf3_valor_mat').value = RemoverFormatacao(document.getElementById('conf3_valor_mat').value);
+        document.getElementById('conf3_custo_mat').value = RemoverFormatacao(document.getElementById('conf3_custo_mat').value);
+    };
+// FIM FORMATAÇÃO FORM2
+
+// FORMATAÇÃO FORM 1
+    // Função para remover a formatação antes do envio do formulário
+    document.getElementById("configForm").addEventListener("submit", function(event) {
+        // Conf1 Valor
+        var conf1Valor = document.getElementById("conf1_valor").value;
+        conf1Valor = conf1Valor.replace(/[^\d,]/g, '').replace(',', '.'); // Remove qualquer formatação e troca vírgula por ponto
+        document.getElementById("conf1_valor").value = conf1Valor;
+
+        // Conf1 Valor 2
+        var conf1Valor2 = document.getElementById("conf1_valor2").value;
+        conf1Valor2 = conf1Valor2.replace(/[^\d,]/g, '').replace(',', '.'); // Remove formatação
+        document.getElementById("conf1_valor2").value = conf1Valor2;
+
+        // Conf2 Valor
+        var conf2Valor = document.getElementById("conf2_valor").value;
+        conf2Valor = conf2Valor.replace(/[^\d,]/g, '').replace(',', '.');
+        document.getElementById("conf2_valor").value = conf2Valor;
+
+        // Conf3 Valor
+        var conf3Valor = document.getElementById("conf3_valor").value;
+        conf3Valor = conf3Valor.replace(/[^\d,]/g, '').replace(',', '.');
+        document.getElementById("conf3_valor").value = conf3Valor;
     });
+    function RemoverFormatacao(valor) {
+        return valor.replace(/[^0-9,]/g, '').replace(',', '.');
+    }
+
+    document.getElementById("configForm").addEventListener("submit", function(event) {
+        // Remover formatação dos valores antes de submeter o formulário
+        document.getElementById("conf1_valor").value = RemoverFormatacao(document.getElementById("conf1_valor").value);
+        document.getElementById("conf1_valor2").value = RemoverFormatacao(document.getElementById("conf1_valor2").value);
+        document.getElementById("conf2_valor").value = RemoverFormatacao(document.getElementById("conf2_valor").value);
+        document.getElementById("conf3_valor").value = RemoverFormatacao(document.getElementById("conf3_valor").value);
+    });
+// FIM FORMATAÇÃO FORM1
+
+
+    // FORMATAÇÃO FORM 3
+
+    // Função para remover a formatação antes do envio do formulário
+    function Formatar(valor) {
+        const v = ((valor.replace(/\D/g, '') / 100).toFixed(2) + '').split('.');
+
+        const m = v[0].split('').reverse().join('').match(/.{1,3}/g);
+
+        for (let i = 0; i < m.length; i++) {
+            m[i] = m[i].split('').reverse().join('');
+        }
+
+        const r = m.reverse().join('.');
+
+        return 'R$ ' + r + ',' + v[1];
+    }
+
+    function aplicarMascara(campo) {
+        let valor = campo.value;
+        campo.value = Formatar(valor);
+    }
+
+    function RemoverFormatacao(valor) {
+        return valor.replace(/[^0-9,]/g, '').replace(',', '.');
+    }
+
+    document.getElementById("configFormGeral").onsubmit = function () {
+        // Remover formatação dos valores antes de submeter o formulário
+        document.getElementById('conf1_valor_geral').value = RemoverFormatacao(document.getElementById('conf1_valor_geral').value);
+        document.getElementById('conf2_valor_geral').value = RemoverFormatacao(document.getElementById('conf2_valor_geral').value);
+        document.getElementById('conf3_valor_geral').value = RemoverFormatacao(document.getElementById('conf3_valor_geral').value);
+
+        // Adicione as linhas abaixo para outros campos, se necessário
+        document.getElementById('conf1_custo_geral').value = RemoverFormatacao(document.getElementById('conf1_custo_geral').value);
+        document.getElementById('conf2_custo_geral').value = RemoverFormatacao(document.getElementById('conf2_custo_geral').value);
+        document.getElementById('conf3_custo_geral').value = RemoverFormatacao(document.getElementById('conf3_custo_geral').value);
+    };
+
+
 
 </SCRIPT>
 

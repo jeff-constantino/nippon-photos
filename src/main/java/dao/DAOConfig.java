@@ -3,6 +3,7 @@ package dao;
 import connection.SingleConnectionBanco;
 import model.ModelConfig;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,43 +28,53 @@ public class DAOConfig {
     }
 
     private ModelConfig inserirConfig(ModelConfig modelConfig) throws Exception {
-        String sql = "INSERT INTO public.configuracao(conf1_valor, conf1_valor2, conf2_valor, conf3_valor, conf1_nome, conf2_nome, conf3_nome, conf_name, conf1_qtd, conf2_qtd, conf3_qtd, conf1_custo, conf2_custo, conf3_custo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO public.configuracao(conf1_valor, conf1_valor2, conf2_valor, conf3_valor, conf1_nome, conf2_nome, conf3_nome, conf_name, conf1_qtd, conf2_qtd, conf3_qtd, conf1_custo, conf2_custo, conf3_custo, conf4_nome, conf4_valor, conf4_custo, conf4_qtd) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (PreparedStatement preparedSql = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            preparedSql.setBigDecimal(1, modelConfig.getConf1_valor());
-            preparedSql.setBigDecimal(2, modelConfig.getConf1_valor2());
-            preparedSql.setBigDecimal(3, modelConfig.getConf2_valor());
-            preparedSql.setBigDecimal(4, modelConfig.getConf3_valor());
+            preparedSql.setBigDecimal(1, modelConfig.getConf1_valor() != null ? modelConfig.getConf1_valor() : BigDecimal.ZERO);
+            preparedSql.setBigDecimal(2, modelConfig.getConf1_valor2() != null ? modelConfig.getConf1_valor2() : BigDecimal.ZERO);
+            preparedSql.setBigDecimal(3, modelConfig.getConf2_valor() != null ? modelConfig.getConf2_valor() : BigDecimal.ZERO);
+            preparedSql.setBigDecimal(4, modelConfig.getConf3_valor() != null ? modelConfig.getConf3_valor() : BigDecimal.ZERO);
+
             preparedSql.setString(5, modelConfig.getConf1_nome());
             preparedSql.setString(6, modelConfig.getConf2_nome());
             preparedSql.setString(7, modelConfig.getConf3_nome());
-
             preparedSql.setString(8, modelConfig.getConf_name());
+
             preparedSql.setInt(9, modelConfig.getConf1_qtd());
             preparedSql.setInt(10, modelConfig.getConf2_qtd());
             preparedSql.setInt(11, modelConfig.getConf3_qtd());
-            preparedSql.setBigDecimal(12, modelConfig.getConf1_custo());
-            preparedSql.setBigDecimal(13, modelConfig.getConf2_custo());
-            preparedSql.setBigDecimal(14, modelConfig.getConf3_custo());
 
+            preparedSql.setBigDecimal(12, modelConfig.getConf1_custo() != null ? modelConfig.getConf1_custo() : BigDecimal.ZERO);
+            preparedSql.setBigDecimal(13, modelConfig.getConf2_custo() != null ? modelConfig.getConf2_custo() : BigDecimal.ZERO);
+            preparedSql.setBigDecimal(14, modelConfig.getConf3_custo() != null ? modelConfig.getConf3_custo() : BigDecimal.ZERO);
 
+            // Aqui você deve ter certeza de que conf4_nome, conf4_valor, conf4_custo e conf4_qtd são necessários
+            preparedSql.setString(15, modelConfig.getConf4_nome() != null ? modelConfig.getConf4_nome() : "");
+            preparedSql.setBigDecimal(16, modelConfig.getConf4_valor() != null ? modelConfig.getConf4_valor() : BigDecimal.ZERO);
+            preparedSql.setBigDecimal(17, modelConfig.getConf4_custo() != null ? modelConfig.getConf4_custo() : BigDecimal.ZERO);
+            preparedSql.setInt(18, modelConfig.getConf4_qtd()); // Este é o 18º parâmetro
 
             preparedSql.executeUpdate();
-            ResultSet generatedKeys = preparedSql.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                modelConfig.setIdConf(generatedKeys.getLong(1)); // Definir o id gerado
+
+            // Caso precise obter a chave gerada
+            try (ResultSet generatedKeys = preparedSql.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    modelConfig.setIdConf(generatedKeys.getLong(1)); // Supondo que idConf seja uma coluna auto-increment
+                }
             }
-
-            connection.commit();
         } catch (SQLException e) {
-            connection.rollback(); // Faz rollback em caso de erro
-            throw new Exception("Erro ao gravar configuração: " + e.getMessage(), e);
+            // Logar o erro para análise
+            System.err.println("Erro de SQL: " + e.getMessage());
+            throw e; // Rethrow ou tratar o erro como desejar
         }
-
-        return modelConfig; // Retorna o modelo atualizado com o idConf
+        return modelConfig;
     }
 
+
     private ModelConfig atualizarConfig(ModelConfig modelConfig) throws Exception {
-        String sql = "UPDATE public.configuracao SET conf1_valor = ?, conf1_valor2 = ?, conf2_valor = ?, conf3_valor = ?, conf1_nome = ?, conf2_nome = ?, conf3_nome = ?, conf_name = ?, conf1_qtd = ?, conf2_qtd = ?, conf3_qtd = ?, conf1_custo = ?, conf2_custo = ?, conf3_custo = ? WHERE \"idConf\" = ?";
+        String sql = "UPDATE public.configuracao SET conf1_valor = ?, conf1_valor2 = ?, conf2_valor = ?, conf3_valor = ?, conf1_nome = ?, conf2_nome = ?, conf3_nome = ?, conf_name = ?, conf1_qtd = ?, conf2_qtd = ?, conf3_qtd = ?, conf1_custo = ?, conf2_custo = ?, conf3_custo = ?, conf4_nome = ?, conf4_valor = ?, conf4_qtd = ?, conf4_custo = ? WHERE \"idConf\" = ?";
+
         try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
             preparedSql.setBigDecimal(1, modelConfig.getConf1_valor());
             preparedSql.setBigDecimal(2, modelConfig.getConf1_valor2());
@@ -78,9 +89,14 @@ public class DAOConfig {
             preparedSql.setInt(11, modelConfig.getConf3_qtd());
             preparedSql.setBigDecimal(12, modelConfig.getConf1_custo());
             preparedSql.setBigDecimal(13, modelConfig.getConf2_custo());
-            preparedSql.setBigDecimal(14, modelConfig.getConf3_custo()); // Corrigido
+            preparedSql.setBigDecimal(14, modelConfig.getConf3_custo());
+            preparedSql.setString(15, modelConfig.getConf4_nome());
 
-            preparedSql.setLong(15, modelConfig.getIdConf()); // Usando idConf no final
+            // Converter conf4_valor se necessário
+            preparedSql.setBigDecimal(16, modelConfig.getConf4_valor()); // Certifique-se que é BigDecimal
+            preparedSql.setInt(17, modelConfig.getConf4_qtd());
+            preparedSql.setBigDecimal(18, modelConfig.getConf4_custo());
+            preparedSql.setLong(19, modelConfig.getIdConf()); // Usando idConf no final
 
             preparedSql.executeUpdate();
             connection.commit();
@@ -91,6 +107,7 @@ public class DAOConfig {
 
         return modelConfig;
     }
+
 
 
 
@@ -123,6 +140,11 @@ public class DAOConfig {
                 modelConfig.setConf3_valor(resultSet.getBigDecimal("conf3_valor"));
                 modelConfig.setConf3_qtd(resultSet.getInt("conf3_qtd"));
                 modelConfig.setConf3_custo(resultSet.getBigDecimal("conf3_custo"));
+
+                modelConfig.setConf4_nome(resultSet.getString("conf4_nome"));
+                modelConfig.setConf4_valor(resultSet.getBigDecimal("conf4_valor"));
+                modelConfig.setConf4_qtd(resultSet.getInt("conf4_qtd"));
+                modelConfig.setConf4_custo(resultSet.getBigDecimal("conf4_custo"));
             }
         }
 

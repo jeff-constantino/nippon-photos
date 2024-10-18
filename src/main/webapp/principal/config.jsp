@@ -128,7 +128,7 @@
                                                                                         <input type="text" class="form-control"
                                                                                                id="conf1_valor" name="conf1_valor"
                                                                                                required
-                                                                                               value="${modelConfig.conf1_valor}" onkeyup="aplicarMascara(this)">
+                                                                                               value="${modelConfig.conf1_valor}"">
                                                                                     </div>
 
                                                                                     <div class="col-6">
@@ -137,7 +137,7 @@
                                                                                         <input type="text" class="form-control"
                                                                                                id="conf1_valor2" name="conf1_valor2"
                                                                                                required
-                                                                                               value="${modelConfig.conf1_valor2}" onkeyup="aplicarMascara(this)">
+                                                                                               value="${modelConfig.conf1_valor2}"">
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -154,7 +154,7 @@
                                                                                 <label for="conf2_valor">Valor</label>
                                                                                 <input type="text" class="form-control" id="conf2_valor"
                                                                                        name="conf2_valor" required
-                                                                                       value="${modelConfig.conf2_valor}" onkeyup="aplicarMascara(this)">
+                                                                                       value="${modelConfig.conf2_valor}"">
                                                                             </div>
                                                                         </div>
 
@@ -169,7 +169,7 @@
                                                                                 <label for="conf3_valor">Valor</label>
                                                                                 <input type="text" class="form-control" id="conf3_valor"
                                                                                        name="conf3_valor" required
-                                                                                       value="${modelConfig.conf3_valor}" onkeyup="aplicarMascara(this)">
+                                                                                       value="${modelConfig.conf3_valor}"">
                                                                             </div>
                                                                         </div>
                                                                         <button type="submit" class="btn btn-outline-success">Salvar
@@ -264,7 +264,7 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_valor_mat">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf1_valor_mat" name="conf1_valor" required value="${modelConfig.conf1_valor}" onkeyup="aplicarMascara(this)">
+                                                                                <input type="text" class="form-control" id="conf1_valor_mat" name="conf1_valor" required value="${modelConfig.conf1_valor}">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_qtd_mat">Quantidade</label>
@@ -272,7 +272,7 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_custo_mat">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf1_custo_mat" name="conf1_custo" required value="${modelConfig.conf1_custo}" onkeyup="aplicarMascara(this)">
+                                                                                <input type="text" class="form-control" id="conf1_custo_mat" name="conf1_custo" required value="${modelConfig.conf1_custo}">
                                                                             </div>
                                                                         </div>
 
@@ -283,7 +283,7 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_valor_mat">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf2_valor_mat" name="conf2_valor" required value="${modelConfig.conf2_valor}" onkeyup="aplicarMascara(this)">
+                                                                                <input type="text" class="form-control" id="conf2_valor_mat" name="conf2_valor" required value="${modelConfig.conf2_valor}">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_qtd_mat">Quantidade</label>
@@ -291,7 +291,7 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_custo_mat">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf2_custo_mat" name="conf2_custo" required value="${modelConfig.conf2_custo}" onkeyup="aplicarMascara(this)">
+                                                                                <input type="text" class="form-control" id="conf2_custo_mat" name="conf2_custo" required value="${modelConfig.conf2_custo}">
                                                                             </div>
                                                                         </div>
 
@@ -302,7 +302,7 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_valor_mat">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf3_valor_mat" name="conf3_valor" required value="${modelConfig.conf3_valor}" onkeyup="aplicarMascara(this)">
+                                                                                <input type="text" class="form-control" id="conf3_valor_mat" name="conf3_valor" required value="${modelConfig.conf3_valor}">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_qtd_mat">Quantidade</label>
@@ -310,7 +310,7 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_custo_mat">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf3_custo_mat" name="conf3_custo" required value="${modelConfig.conf3_custo}" onkeyup="aplicarMascara(this)">
+                                                                                <input type="text" class="form-control" id="conf3_custo_mat" name="conf3_custo" required value="${modelConfig.conf3_custo}">
                                                                             </div>
                                                                         </div>
 
@@ -397,16 +397,9 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf1_valor">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf1_valor_geral" name="conf1_valor" required value="${modelConfig.conf1_valor}" onkeyup="aplicarMascara(this)">
+                                                                                <input type="text" class="form-control" id="conf1_valor_geral" name="conf1_valor" required value="${modelConfig.conf1_valor}">
                                                                             </div>
-                                                                            <div class="col-3">
-                                                                                <label for="conf1_qtd_geral">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf1_qtd_geral" name="conf1_qtd" required value="${modelConfig.conf1_qtd}">
-                                                                            </div>
-                                                                            <div class="col-3">
-                                                                                <label for="conf1_custo_geral">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf1_custo_geral" name="conf1_custo" required value="${modelConfig.conf1_custo}" onkeyup="aplicarMascara(this)">
-                                                                            </div>
+
                                                                         </div>
 
                                                                         <div class="row mb-4 d-flex">
@@ -416,16 +409,9 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_valor">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf2_valor_geral" name="conf2_valor" required value="${modelConfig.conf2_valor}" onkeyup="aplicarMascara(this)">
+                                                                                <input type="text" class="form-control" id="conf2_valor_geral" name="conf2_valor" required value="${modelConfig.conf2_valor}">
                                                                             </div>
-                                                                            <div class="col-3">
-                                                                                <label for="conf2_qtd_geral">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf2_qtd_geral" name="conf2_qtd" required value="${modelConfig.conf2_qtd}">
-                                                                            </div>
-                                                                            <div class="col-3">
-                                                                                <label for="conf2_custo_geral">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf2_custo_geral" name="conf2_custo" required value="${modelConfig.conf2_custo}" onkeyup="aplicarMascara(this)">
-                                                                            </div>
+
                                                                         </div>
 
                                                                         <div class="row mb-4 d-flex">
@@ -435,16 +421,20 @@
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_valor">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf3_valor_geral" name="conf3_valor" required value="${modelConfig.conf3_valor}" onkeyup="aplicarMascara(this)">
+                                                                                <input type="text" class="form-control" id="conf3_valor_geral" name="conf3_valor" required value="${modelConfig.conf3_valor}">
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="row mb-4 d-flex">
+                                                                            <div class="col-3">
+                                                                                <label for="conf4_nome_geral">Produto 4</label>
+                                                                                <input type="text" class="form-control" id="conf4_nome_geral" name="conf3_nome" required value="${modelConfig.conf4_nome}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf3_qtd_geral">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf3_qtd_geral" name="conf3_qtd" required value="${modelConfig.conf3_qtd}">
+                                                                                <label for="conf4_valor_geral">Valor</label>
+                                                                                <input type="text" class="form-control" id="conf4_valor_geral" name="conf3_valor" required value="${modelConfig.conf4_valor}">
                                                                             </div>
-                                                                            <div class="col-3">
-                                                                                <label for="conf3_custo_geral">Custo Unitário</label>
-                                                                                <input type="text" class="form-control" id="conf3_custo_geral" name="conf3_custo" required value="${modelConfig.conf3_custo}" onkeyup="aplicarMascara(this)">
-                                                                            </div>
+
                                                                         </div>
 
                                                                         <button type="submit" class="btn btn-outline-success">Salvar</button>
@@ -710,7 +700,7 @@
                                                 <th>ID</th>
                                                 <th>Produto 1</th>
                                                 <th>Valor 1</th>
-                                                <th>Valor 2</th>
+
                                                 <th>Produto 2</th>
                                                 <th>Valor</th>
                                                 <th>Produto 3</th>
@@ -734,23 +724,20 @@
                                                                        '${modelConf.conf_name}',
                                                                        '${modelConf.conf1_nome}',
                                                                        '${modelConf.conf1_valor}',
-                                                                       '${modelConf.conf1_qtd}',
-                                                                       '${modelConf.conf1_custo}',
+
+
                                                                        '${modelConf.conf2_nome}',
                                                                        '${modelConf.conf2_valor}',
-                                                                       '${modelConf.conf2_qtd}',
-                                                                       '${modelConf.conf2_custo}',
+
                                                                        '${modelConf.conf3_nome}',
-                                                                       '${modelConf.conf3_valor}',
-                                                                       '${modelConf.conf3_qtd}',
-                                                                       '${modelConf.conf3_custo}')">
+                                                                       '${modelConf.conf3_valor}'
+                                                                       )">
                                                                 Editar
                                                             </a>
                                                         </td>
                                                         <td><c:out value="${modelConf.idConf}"/></td>
                                                         <td><c:out value="${modelConf.conf1_nome}"/></td>
                                                         <td><fmt:formatNumber value="${modelConf.conf1_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf1_valor2}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                         <td><c:out value="${modelConf.conf2_nome}"/></td>
                                                         <td><fmt:formatNumber value="${modelConf.conf2_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                         <td><c:out value="${modelConf.conf3_nome}"/></td>
@@ -900,118 +887,171 @@
     }
 
 
-    // FORMATAÇÃO DE VALORES
 
-    function Formatar(valor) {
-        const v = ((valor.replace(/\D/g, '') / 100).toFixed(2) + '').split('.');
 
-        const m = v[0].split('').reverse().join('').match(/.{1,3}/g);
+    $("#conf1_valor").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+    $("#conf1_valor2").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+    $("#conf2_valor").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+    $("#conf3_valor").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
 
-        for (let i = 0; i < m.length; i++) {
-            m[i] = m[i].split('').reverse().join('');
-        }
 
-        const r = m.reverse().join('.');
+    $("#conf1_valor_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+    $("#conf2_valor_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+    $("#conf3_valor_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+    $("#conf1_custo_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+    $("#conf2_custo_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+    $("#conf3_custo_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
 
-        return 'R$ ' + r + ',' + v[1];
+
+
+
+
+
+
+
+    function removerMascara(valor) {
+        return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '');
     }
 
-    function aplicarMascara(campo) {
-        let valor = campo.value;
-        campo.value = Formatar(valor);
-    }
+    $("#configForm").on("submit", function(e) {
+        console.log($("#conf1_valor").val());
 
-    function RemoverFormatacao(valor) {
-        return valor.replace(/[^0-9,]/g, '').replace(',', '.');
-    }
+        $("#conf1_valor").val(removerMascara($("#conf1_valor").val()));
+        $("#conf1_valor2").val(removerMascara($("#conf1_valor2").val()));
+        $("#conf2_valor").val(removerMascara($("#conf2_valor").val()));
+        $("#conf3_valor").val(removerMascara($("#conf3_valor").val()));
 
-    document.getElementById("configFormMat").onsubmit = function () {
-        // Remover formatação dos valores e custos antes de submeter o formulário
-        document.getElementById('conf1_valor_mat').value = RemoverFormatacao(document.getElementById('conf1_valor_mat').value);
-        document.getElementById('conf1_custo_mat').value = RemoverFormatacao(document.getElementById('conf1_custo_mat').value);
 
-        document.getElementById('conf2_valor_mat').value = RemoverFormatacao(document.getElementById('conf2_valor_mat').value);
-        document.getElementById('conf2_custo_mat').value = RemoverFormatacao(document.getElementById('conf2_custo_mat').value);
 
-        document.getElementById('conf3_valor_mat').value = RemoverFormatacao(document.getElementById('conf3_valor_mat').value);
-        document.getElementById('conf3_custo_mat').value = RemoverFormatacao(document.getElementById('conf3_custo_mat').value);
-    };
-// FIM FORMATAÇÃO FORM2
-
-// FORMATAÇÃO FORM 1
-    // Função para remover a formatação antes do envio do formulário
-    document.getElementById("configForm").addEventListener("submit", function(event) {
-        // Conf1 Valor
-        var conf1Valor = document.getElementById("conf1_valor").value;
-        conf1Valor = conf1Valor.replace(/[^\d,]/g, '').replace(',', '.'); // Remove qualquer formatação e troca vírgula por ponto
-        document.getElementById("conf1_valor").value = conf1Valor;
-
-        // Conf1 Valor 2
-        var conf1Valor2 = document.getElementById("conf1_valor2").value;
-        conf1Valor2 = conf1Valor2.replace(/[^\d,]/g, '').replace(',', '.'); // Remove formatação
-        document.getElementById("conf1_valor2").value = conf1Valor2;
-
-        // Conf2 Valor
-        var conf2Valor = document.getElementById("conf2_valor").value;
-        conf2Valor = conf2Valor.replace(/[^\d,]/g, '').replace(',', '.');
-        document.getElementById("conf2_valor").value = conf2Valor;
-
-        // Conf3 Valor
-        var conf3Valor = document.getElementById("conf3_valor").value;
-        conf3Valor = conf3Valor.replace(/[^\d,]/g, '').replace(',', '.');
-        document.getElementById("conf3_valor").value = conf3Valor;
     });
-    function RemoverFormatacao(valor) {
-        return valor.replace(/[^0-9,]/g, '').replace(',', '.');
-    }
 
-    document.getElementById("configForm").addEventListener("submit", function(event) {
-        // Remover formatação dos valores antes de submeter o formulário
-        document.getElementById("conf1_valor").value = RemoverFormatacao(document.getElementById("conf1_valor").value);
-        document.getElementById("conf1_valor2").value = RemoverFormatacao(document.getElementById("conf1_valor2").value);
-        document.getElementById("conf2_valor").value = RemoverFormatacao(document.getElementById("conf2_valor").value);
-        document.getElementById("conf3_valor").value = RemoverFormatacao(document.getElementById("conf3_valor").value);
+    $("#configFormMat").on("submit", function(e) {
+        console.log($("#conf1_valor_mat").val());
+        $("#conf1_valor_mat").val(removerMascara($("#conf1_valor_mat").val()));
+        $("#conf2_valor_mat").val(removerMascara($("#conf2_valor_mat").val()));
+        $("#conf3_valor_mat").val(removerMascara($("#conf3_valor_mat").val()));
+        $("#conf1_custo_mat").val(removerMascara($("#conf1_custo_mat").val()));
+        $("#conf2_custo_mat").val(removerMascara($("#conf2_custo_mat").val()));
+        $("#conf3_custo_mat").val(removerMascara($("#conf3_custo_mat").val()));
+
+
     });
-// FIM FORMATAÇÃO FORM1
 
 
-    // FORMATAÇÃO FORM 3
 
-    // Função para remover a formatação antes do envio do formulário
-    function Formatar(valor) {
-        const v = ((valor.replace(/\D/g, '') / 100).toFixed(2) + '').split('.');
 
-        const m = v[0].split('').reverse().join('').match(/.{1,3}/g);
-
-        for (let i = 0; i < m.length; i++) {
-            m[i] = m[i].split('').reverse().join('');
-        }
-
-        const r = m.reverse().join('.');
-
-        return 'R$ ' + r + ',' + v[1];
-    }
-
-    function aplicarMascara(campo) {
-        let valor = campo.value;
-        campo.value = Formatar(valor);
-    }
-
-    function RemoverFormatacao(valor) {
-        return valor.replace(/[^0-9,]/g, '').replace(',', '.');
-    }
-
-    document.getElementById("configFormGeral").onsubmit = function () {
-        // Remover formatação dos valores antes de submeter o formulário
-        document.getElementById('conf1_valor_geral').value = RemoverFormatacao(document.getElementById('conf1_valor_geral').value);
-        document.getElementById('conf2_valor_geral').value = RemoverFormatacao(document.getElementById('conf2_valor_geral').value);
-        document.getElementById('conf3_valor_geral').value = RemoverFormatacao(document.getElementById('conf3_valor_geral').value);
-
-        // Adicione as linhas abaixo para outros campos, se necessário
-        document.getElementById('conf1_custo_geral').value = RemoverFormatacao(document.getElementById('conf1_custo_geral').value);
-        document.getElementById('conf2_custo_geral').value = RemoverFormatacao(document.getElementById('conf2_custo_geral').value);
-        document.getElementById('conf3_custo_geral').value = RemoverFormatacao(document.getElementById('conf3_custo_geral').value);
-    };
+//     // FORMATAÇÃO DE VALORES
+//
+//     function Formatar(valor) {
+//         const v = ((valor.replace(/\D/g, '') / 100).toFixed(2) + '').split('.');
+//
+//         const m = v[0].split('').reverse().join('').match(/.{1,3}/g);
+//
+//         for (let i = 0; i < m.length; i++) {
+//             m[i] = m[i].split('').reverse().join('');
+//         }
+//
+//         const r = m.reverse().join('.');
+//
+//         return 'R$ ' + r + ',' + v[1];
+//     }
+//
+//     function aplicarMascara(campo) {
+//         let valor = campo.value;
+//         campo.value = Formatar(valor);
+//     }
+//
+//     function RemoverFormatacao(valor) {
+//         return valor.replace(/[^0-9,]/g, '').replace(',', '.');
+//     }
+//
+//     document.getElementById("configFormMat").onsubmit = function () {
+//         // Remover formatação dos valores e custos antes de submeter o formulário
+//         document.getElementById('conf1_valor_mat').value = RemoverFormatacao(document.getElementById('conf1_valor_mat').value);
+//         document.getElementById('conf1_custo_mat').value = RemoverFormatacao(document.getElementById('conf1_custo_mat').value);
+//
+//         document.getElementById('conf2_valor_mat').value = RemoverFormatacao(document.getElementById('conf2_valor_mat').value);
+//         document.getElementById('conf2_custo_mat').value = RemoverFormatacao(document.getElementById('conf2_custo_mat').value);
+//
+//         document.getElementById('conf3_valor_mat').value = RemoverFormatacao(document.getElementById('conf3_valor_mat').value);
+//         document.getElementById('conf3_custo_mat').value = RemoverFormatacao(document.getElementById('conf3_custo_mat').value);
+//     };
+// // FIM FORMATAÇÃO FORM2
+//
+// // FORMATAÇÃO FORM 1
+//     // Função para remover a formatação antes do envio do formulário
+//     document.getElementById("configForm").addEventListener("submit", function(event) {
+//         // Conf1 Valor
+//         var conf1Valor = document.getElementById("conf1_valor").value;
+//         conf1Valor = conf1Valor.replace(/[^\d,]/g, '').replace(',', '.'); // Remove qualquer formatação e troca vírgula por ponto
+//         document.getElementById("conf1_valor").value = conf1Valor;
+//
+//         // Conf1 Valor 2
+//         var conf1Valor2 = document.getElementById("conf1_valor2").value;
+//         conf1Valor2 = conf1Valor2.replace(/[^\d,]/g, '').replace(',', '.'); // Remove formatação
+//         document.getElementById("conf1_valor2").value = conf1Valor2;
+//
+//         // Conf2 Valor
+//         var conf2Valor = document.getElementById("conf2_valor").value;
+//         conf2Valor = conf2Valor.replace(/[^\d,]/g, '').replace(',', '.');
+//         document.getElementById("conf2_valor").value = conf2Valor;
+//
+//         // Conf3 Valor
+//         var conf3Valor = document.getElementById("conf3_valor").value;
+//         conf3Valor = conf3Valor.replace(/[^\d,]/g, '').replace(',', '.');
+//         document.getElementById("conf3_valor").value = conf3Valor;
+//     });
+//     function RemoverFormatacao(valor) {
+//         return valor.replace(/[^0-9,]/g, '').replace(',', '.');
+//     }
+//
+//     document.getElementById("configForm").addEventListener("submit", function(event) {
+//         // Remover formatação dos valores antes de submeter o formulário
+//         document.getElementById("conf1_valor").value = RemoverFormatacao(document.getElementById("conf1_valor").value);
+//         document.getElementById("conf1_valor2").value = RemoverFormatacao(document.getElementById("conf1_valor2").value);
+//         document.getElementById("conf2_valor").value = RemoverFormatacao(document.getElementById("conf2_valor").value);
+//         document.getElementById("conf3_valor").value = RemoverFormatacao(document.getElementById("conf3_valor").value);
+//     });
+// // FIM FORMATAÇÃO FORM1
+//
+//
+//     // FORMATAÇÃO FORM 3
+//
+//     // Função para remover a formatação antes do envio do formulário
+//     function Formatar(valor) {
+//         const v = ((valor.replace(/\D/g, '') / 100).toFixed(2) + '').split('.');
+//
+//         const m = v[0].split('').reverse().join('').match(/.{1,3}/g);
+//
+//         for (let i = 0; i < m.length; i++) {
+//             m[i] = m[i].split('').reverse().join('');
+//         }
+//
+//         const r = m.reverse().join('.');
+//
+//         return 'R$ ' + r + ',' + v[1];
+//     }
+//
+//     function aplicarMascara(campo) {
+//         let valor = campo.value;
+//         campo.value = Formatar(valor);
+//     }
+//
+//     function RemoverFormatacao(valor) {
+//         return valor.replace(/[^0-9,]/g, '').replace(',', '.');
+//     }
+//
+//     document.getElementById("configFormGeral").onsubmit = function () {
+//         // Remover formatação dos valores antes de submeter o formulário
+//         document.getElementById('conf1_valor_geral').value = RemoverFormatacao(document.getElementById('conf1_valor_geral').value);
+//         document.getElementById('conf2_valor_geral').value = RemoverFormatacao(document.getElementById('conf2_valor_geral').value);
+//         document.getElementById('conf3_valor_geral').value = RemoverFormatacao(document.getElementById('conf3_valor_geral').value);
+//
+//         // Adicione as linhas abaixo para outros campos, se necessário
+//         document.getElementById('conf1_custo_geral').value = RemoverFormatacao(document.getElementById('conf1_custo_geral').value);
+//         document.getElementById('conf2_custo_geral').value = RemoverFormatacao(document.getElementById('conf2_custo_geral').value);
+//         document.getElementById('conf3_custo_geral').value = RemoverFormatacao(document.getElementById('conf3_custo_geral').value);
+//     };
 
 
 

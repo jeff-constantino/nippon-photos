@@ -1114,19 +1114,19 @@
                     case 'outer_prod1_deb':
                     case 'outer_prod1_cred':
                     case 'outer_prod1_pix':
-                        valorProduto = parseFloat(prod.prod1_valor);
+                        valorProduto = parseFloat(prod.conf1_valor);
                         break;
                     case 'outer_prod2_din':
                     case 'outer_prod2_deb':
                     case 'outer_prod2_cred':
                     case 'outer_prod2_pix':
-                        valorProduto = parseFloat(prod.prod2_valor);
+                        valorProduto = parseFloat(prod.conf2_valor);
                         break;
                     case 'outer_prod3_din':
                     case 'outer_prod3_deb':
                     case 'outer_prod3_cred':
                     case 'outer_prod3_pix':
-                        valorProduto = parseFloat(prod.prod3_valor);
+                        valorProduto = parseFloat(prod.conf3_valor);
                         break;
                     default:
                         console.log('Produto não encontrado');
@@ -1189,19 +1189,19 @@
                     case 'prod1_deb':
                     case 'prod1_cred':
                     case 'prod1_pix':
-                        valorProduto = parseFloat(prod.prod1_valor);
+                        valorProduto = parseFloat(prod.conf1_valor);
                         break;
                     case 'prod2_din':
                     case 'prod2_deb':
                     case 'prod2_cred':
                     case 'prod2_pix':
-                        valorProduto = parseFloat(prod.prod2_valor);
+                        valorProduto = parseFloat(prod.conf2_valor);
                         break;
                     case 'prod3_din':
                     case 'prod3_deb':
                     case 'prod3_cred':
                     case 'prod3_pix':
-                        valorProduto = parseFloat(prod.prod3_valor);
+                        valorProduto = parseFloat(prod.conf3_valor);
                         break;
                     default:
                         console.log('Produto não encontrado');
@@ -1243,7 +1243,7 @@
                 // Habilitar todos os campos e restaurar a cor de fundo original
                 fieldsToDisable.forEach(function(field) {
                     field.disabled = false;
-                    field.style.backgroundColor = "#f2a654"; // Restaura a cor de fundo padrão
+                    field.style.backgroundColor = "#00d25b"; // Restaura a cor de fundo padrão
                 });
             }
         }

@@ -98,7 +98,7 @@
                                 </c:if>
                                 <h4 class="card-title" STYLE="text-align: center">VENDAS TOTAIS POR FUNCIONÁRIO</h4>
 
-                                <div style="height: 300px; overflow-y: auto ">
+                                <div  style="overflow-x: hidden; overflow-y: hidden;">
                                     <table class="table" id="tabelarelvendas">
                                         <thead>
                                         <tr>
@@ -137,6 +137,14 @@
                                         </tbody>
 
                                     </table>
+                                    <!-- Controles de paginação -->
+                                    <div class="pagination">
+
+                                        <c:forEach var="i" begin="1" end="${totalPaginas}">
+                                            <a href="ServletFuncionario?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
+                                        </c:forEach>
+
+                                    </div>
 
                                 </div>
                                 <div class="table-responsive">

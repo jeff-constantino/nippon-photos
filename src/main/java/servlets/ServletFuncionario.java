@@ -27,20 +27,32 @@ public class ServletFuncionario extends ServletGenericUtil{
 
         try {
             // Instancia o DAO para buscar os funcionários ativos
-            DAORelatorio relatorio = new DAORelatorio(); // Ou DAO específico de login
-            DAOFuncionario funcionario = new DAOFuncionario();
+            DAORelatorio relatorio = new DAORelatorio();
             List<ModelLogin> funcionariosAtivos = relatorio.buscaFuncionariosAtivos();
 
             List<ModelVendas> vendasFuncionarioList = new ArrayList<>();
+            RequestDispatcher dispatcher;
 
             // Verifica se a ação é imprimir as vendas do funcionário
             if ("imprimirVendasFuncionario".equals(acao)) {
-                // Busca as vendas com base nos filtros
-                vendasFuncionarioList = relatorio.consultarVendasFuncionario(funcionarioId, dataInicial, dataFinal);
+                int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
+                int resultadosPorPagina = 10; // ou qualquer número que você preferir
+                int offset = (paginaAtual - 1) * resultadosPorPagina;
+
+                // Busque as vendas com base nos filtros, passando o offset e o limit
+                vendasFuncionarioList = relatorio.consultarVendasFuncionario(funcionarioId, dataInicial, dataFinal, offset, resultadosPorPagina);
+
+                // Obtenha o total de resultados para a paginação
+                int totalResultados = relatorio.contarVendasFuncionario(funcionarioId, dataInicial, dataFinal);
+                int totalPaginas = (int) Math.ceil((double) totalResultados / resultadosPorPagina);
+
+                // Adiciona as listas e as informações de paginação no request
+                request.setAttribute("vendasFuncionarioList", vendasFuncionarioList);
+                request.setAttribute("paginaAtual", paginaAtual);
+                request.setAttribute("totalPaginas", totalPaginas);
             }
 
             // Envia os dados de vendas de volta para o JSP
-            request.setAttribute("vendasFuncionarioList", vendasFuncionarioList);
             request.setAttribute("dataInicial", dataInicial);
             request.setAttribute("dataFinal", dataFinal);
             request.setAttribute("funcionarioId", funcionarioId);
@@ -49,7 +61,7 @@ public class ServletFuncionario extends ServletGenericUtil{
             request.setAttribute("funcionariosAtivos", funcionariosAtivos);
 
             // Redireciona para a página JSP com os resultados
-            RequestDispatcher dispatcher = request.getRequestDispatcher("principal/relfunc.jsp");
+            dispatcher = request.getRequestDispatcher("principal/relfunc.jsp");
             dispatcher.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,5 +71,6 @@ public class ServletFuncionario extends ServletGenericUtil{
             dispatcher.forward(request, response);
         }
     }
+
 
 }

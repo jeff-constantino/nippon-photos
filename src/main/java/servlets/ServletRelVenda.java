@@ -39,29 +39,51 @@ public class ServletRelVenda extends ServletGenericUtil {
 
         try {
             // Instancia o DAO para buscar os funcionários ativos
-            DAORelatorio relatorio = new DAORelatorio(); // Ou DAO específico de login
+            DAORelatorio relatorio = new DAORelatorio();
             List<ModelLogin> funcionariosAtivos = relatorio.buscaFuncionariosAtivos();
 
             List<ModelVendas> vendasList = new ArrayList<>();
+            RequestDispatcher dispatcher;
 
             if ("imprimirRelatorioVendas".equals(acao)) {
-                // Busca de vendas com base nos filtros
-                vendasList = relatorio.consultarVendas(funcionarioId, dataInicial, dataFinal);
+                int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
+                int registrosPorPagina = 10;
+                int offset = (paginaAtual - 1) * registrosPorPagina;
+
+                // Busca de vendas com paginação
+                vendasList = relatorio.consultarVendas(funcionarioId, dataInicial, dataFinal, offset, registrosPorPagina);
+
+                // Adiciona vendasList no request para o JSP
+                request.setAttribute("vendasList", vendasList);
+
+                // Lógica para cálculo de total de páginas
+                int totalVendas = relatorio.contarVendas(funcionarioId, dataInicial, dataFinal); // Método para contar registros
+                int totalPaginas = (int) Math.ceil(totalVendas / (double) registrosPorPagina);
+
+                // Adiciona totalPaginas e paginaAtual no request
+                request.setAttribute("totalPaginas", totalPaginas);
+                request.setAttribute("paginaAtual", paginaAtual);
+
+                // Redireciona para a página JSP correta
+                dispatcher = request.getRequestDispatcher("principal/relvendas.jsp");
+            } else {
+                // Lógica alternativa caso a ação não seja "imprimirRelatorioVendas"
+                // Envia os dados de vendas de volta para o JSP
+                request.setAttribute("vendasList", vendasList);
+                request.setAttribute("dataInicial", dataInicial);
+                request.setAttribute("dataFinal", dataFinal);
+                request.setAttribute("funcionarioId", funcionarioId);
+
+                // Envia a lista de funcionários ativos para o JSP
+                request.setAttribute("funcionariosAtivos", funcionariosAtivos);
+
+                // Redireciona para a página JSP com os resultados
+                dispatcher = request.getRequestDispatcher("principal/relvendas.jsp");
             }
 
-
-            // Envia os dados de vendas de volta para o JSP
-            request.setAttribute("vendasList", vendasList);
-            request.setAttribute("dataInicial", dataInicial);
-            request.setAttribute("dataFinal", dataFinal);
-            request.setAttribute("funcionarioId", funcionarioId);
-
-            // Envia a lista de funcionários ativos para o JSP
-            request.setAttribute("funcionariosAtivos", funcionariosAtivos);
-
-            // Redireciona para a página JSP com os resultados
-            RequestDispatcher dispatcher = request.getRequestDispatcher("principal/relvendas.jsp");
+            // Realiza o redirecionamento em um único ponto
             dispatcher.forward(request, response);
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("msg", "Erro ao buscar vendas: " + e.getMessage());
@@ -69,6 +91,7 @@ public class ServletRelVenda extends ServletGenericUtil {
             dispatcher.forward(request, response);
         }
     }
+
 }
 
 

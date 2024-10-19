@@ -24,12 +24,13 @@ public class ServletContas extends ServletGenericUtil {
     }
 
     @Override
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String msg;
+            String msg = ""; // Inicializa a mensagem
 
             // Obtém os parâmetros do request
-            String conta_id = request.getParameter("idPedido"); // Altere para o nome correto, se necessário
+            String conta_id = request.getParameter("idPedido");
             String numero_pedido = request.getParameter("numero_pedido");
             String empresa = request.getParameter("empresa");
             String itens = request.getParameter("itens");
@@ -83,6 +84,26 @@ public class ServletContas extends ServletGenericUtil {
                 }
             }
 
+            // Parte isolada para dar baixa
+            if ("baixar".equals(acao)) {
+                if (numero_pedido != null && !numero_pedido.isEmpty()) {
+                    try {
+                        daoContas.atualizarStatusPorNumeroPedido(Integer.parseInt(numero_pedido));
+                        msg = "Conta baixada como PAGO com sucesso!";
+                    } catch (NumberFormatException e) {
+                        msg = "Número do pedido inválido: " + numero_pedido;
+                    } catch (SQLException e) {
+                        msg = "Erro ao atualizar a conta: " + e.getMessage();
+                    }
+                } else {
+                    msg = "Número do pedido não fornecido para baixar.";
+                }
+                // Retorna aqui após dar baixa, evitando outras operações
+                request.setAttribute("msg", msg);
+                response.sendRedirect(request.getContextPath() + "/ServletContas");
+                return; // Adiciona um return para parar a execução após dar baixa
+            }
+
             // Verifica se o ID da conta é válido
             if (modelContas.getConta_id() != null) {
                 System.out.println("ID da conta: " + modelContas.getConta_id());
@@ -113,6 +134,9 @@ public class ServletContas extends ServletGenericUtil {
             redirecionar.forward(request, response);
         }
     }
+
+
+
 
     // Função para converter valor formatado para double
     private double converterValorParaDouble(String valorFormatado) {

@@ -242,7 +242,7 @@ public class DAOVendasRepository {
 
             // Define o parâmetro do nome, se necessário
             if (nomeFuncionario != null && !nomeFuncionario.isEmpty()) {
-                preparedSql.setString(index++, "%" + nomeFuncionario.toUpperCase() + "%");
+                preparedSql.setString(index++, "%" + nomeFuncionario + "%");
             }
 
             // Define os parâmetros de data, se necessário

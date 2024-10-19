@@ -40,7 +40,7 @@ public class DAOContas {
                 stmt.setNull(6, java.sql.Types.DATE); // Seta como null no banco
             }
 
-            stmt.setString(7, conta.getStatus().toUpperCase());
+            stmt.setString(7, conta.getStatus());
 
             stmt.executeUpdate();
 
@@ -233,6 +233,28 @@ public class DAOContas {
         preparedSql.executeUpdate();
         connection.commit();
     }
+    public void atualizarStatusPorNumeroPedido(int numeroPedido) throws Exception {
+        String sql = "UPDATE contas SET status = ? WHERE numero_pedido = ?";
 
+        try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
+            // Define o novo status
+            preparedSql.setString(1, "PAGO"); // ou outro status que você deseje definir
+            preparedSql.setInt(2, numeroPedido);
+
+            // Executa a atualização
+            int rowsAffected = preparedSql.executeUpdate();
+
+            // Verifica se a atualização foi bem-sucedida
+            if (rowsAffected == 0) {
+                throw new SQLException("Nenhuma conta encontrada com o número do pedido: " + numeroPedido);
+            }
+
+            // Realiza o commit da transação
+            connection.commit();
+        } catch (SQLException e) {
+            connection.rollback(); // Reverte a transação em caso de erro
+            throw new Exception("Erro ao atualizar o status da conta: " + e.getMessage());
+        }
+    }
 
 }

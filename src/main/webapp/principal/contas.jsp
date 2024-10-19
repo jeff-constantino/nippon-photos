@@ -642,26 +642,27 @@
         <!-- Modal HTML -->
         <div class="modal" id="msgModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
-                <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;">
+                <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;"> <!-- Borda preta -->
                     <div class="modal-header" style="border-bottom: none;">
-                        <h5 class="modal-title">Mensagem</h5>
+
+                        <!-- Removido o botão "X" -->
                     </div>
                     <div class="modal-body" style="color: black;">
                         <p style="font-size: 1.5em; text-align: center">${msg}</p> <!-- Mensagem aqui -->
                     </div>
                     <div class="modal-footer" style="border-top: none;">
-                        <h1 class="modal-title" style="color: black; font-size: 0.8em;">Aperte ESC para fechar</h1>
+                        <h1 class="modal-title" style="color: black; font-size: 0.8em;">aperte ESC para fechar</h1>
                     </div>
                 </div>
             </div>
         </div>
-
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <script>
 
 
-            $(document).ready(function () {
+
+            $(document).ready(function() {
                 var msg = "${msg}";
                 if (msg) {
                     $('#msgModal').modal('show'); // Exibe o modal com a mensagem

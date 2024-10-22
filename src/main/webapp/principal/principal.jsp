@@ -67,7 +67,7 @@
                             <div class="d-flex d-sm-block d-md-flex align-items-center">
                                 <!--INSERIR BOTÃO 2 AQUI-->
                                 <!-- Button trigger modal -->
-                                <a class="nav-link" href="<%= request.getContextPath() %>/ServletFechaDia" style="font-size: large;color: #97282c; font-weight: bold"> Finalizar Dia </a>
+                                <a class="nav-link" href="<%= request.getContextPath() %>/ServletFechaDia" style="font-size: large;color: red; font-weight: bold"> Finalizar Dia </a>
 
                                 <!-- Modal -->
 

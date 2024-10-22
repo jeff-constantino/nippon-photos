@@ -118,7 +118,6 @@
                                         <h4>Finalizar Dia</h4>
                                     </button>
 
-                                    <h4 class="card-title">Vendas do Dia</h4>
 
                                     <%--PAGINA PRINCIPAL                  --%>
 
@@ -162,13 +161,12 @@
                                             </div>
 
                                             <div class="col-2">
-                                                <label class="float-label">TOTAL DE
-                                                    FOTOS:</label>
+                                                <label class="float-label">TOTAL DE FOTOS :</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="total_total" name="total_total"
                                                        placeholder=""
-                                                        style="text-align: center; background-color: white; color: black"
+                                                        style="text-align: center; background-color: #f2a654; color: black"
                                                        disabled>
                                             </div>
                                         </div>
@@ -197,7 +195,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               disabled id="total_ft_din"
+                                                               readonly id="total_ft_din"
                                                                name="total_ft_din"
                                                                value="${fechamento != null ? fechamento.total_ft_din : ''}">
                                                     </div>
@@ -209,7 +207,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               disabled id="total_ft_deb"
+                                                               readonly id="total_ft_deb"
                                                                name="total_ft_deb"
                                                                value="${fechamento != null ? fechamento.total_ft_deb : ''}">
                                                     </div>
@@ -221,7 +219,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               disabled id="total_ft_cred"
+                                                               readonly id="total_ft_cred"
                                                                name="total_ft_cred"
                                                                value="${fechamento != null ? fechamento.total_ft_cred : ''}">
                                                     </div>
@@ -233,11 +231,33 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               disabled id="total_ft_pix"
+                                                               readonly id="total_ft_pix"
                                                                name="total_ft_pix"
                                                                value="${fechamento != null ? fechamento.total_ft_pix : ''}">
                                                     </div>
+
+                                                    <div class="col-6">
+                                                        <label style="color: #f2a654">SOBRAS</label>
+                                                        <input type="number"
+                                                               class="form-control"
+                                                               placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               readonly id="sobras"
+                                                               name="sobras"
+                                                               value="${fechamento.sobras}">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label style="color: white">Descontos</label>
+                                                        <input type="number"
+                                                               class="form-control"
+                                                               placeholder=""
+                                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                                id="desconto"
+                                                               name="desconto"
+                                                               value="${fechamento.desconto}">
+                                                    </div>
                                                 </div>
+
                                             </div>
 
                                             <!-- Inputs para ENCARTE -->
@@ -250,7 +270,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
-                                                               disabled id="total_enc_din"
+                                                               readonly id="total_enc_din"
                                                                name="total_enc_din"
                                                                value="${fechamento != null ? fechamento.total_enc_din : ''}">
                                                     </div>
@@ -262,7 +282,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
-                                                               disabled id="total_enc_deb"
+                                                               readonly id="total_enc_deb"
                                                                name="total_enc_deb"
                                                                value="${fechamento != null ? fechamento.total_enc_deb : ''}">
                                                     </div>
@@ -274,7 +294,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
-                                                               disabled id="total_enc_cred"
+                                                               readonly id="total_enc_cred"
                                                                name="total_enc_cred"
                                                                value="${fechamento != null ? fechamento.total_enc_cred : ''}">
                                                     </div>
@@ -286,7 +306,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
-                                                               disabled id="total_enc_pix"
+                                                               readonly id="total_enc_pix"
                                                                name="total_enc_pix"
                                                                value="${fechamento != null ? fechamento.total_enc_pix : ''}">
                                                     </div>
@@ -303,7 +323,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
-                                                               disabled id="total_dig_din"
+                                                               readonly id="total_dig_din"
                                                                name="total_dig_din"
                                                                value="${fechamento != null ? fechamento.total_dig_din : ''}">
                                                     </div>
@@ -315,7 +335,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
-                                                               disabled id="total_dig_deb"
+                                                               readonly id="total_dig_deb"
                                                                name="total_dig_deb"
                                                                value="${fechamento != null ? fechamento.total_dig_deb : ''}">
                                                     </div>
@@ -327,7 +347,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
-                                                               disabled id="total_dig_cred"
+                                                               readonly id="total_dig_cred"
                                                                name="total_dig_cred"
                                                                value="${fechamento != null ? fechamento.total_dig_cred : ''}">
                                                     </div>
@@ -339,12 +359,13 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
-                                                               disabled id="total_dig_pix"
+                                                               readonly id="total_dig_pix"
                                                                name="total_dig_pix"
                                                                value="${fechamento != null ? fechamento.total_dig_pix : ''}">
                                                     </div>
 
                                                 </div>
+
 
                                             </div>
  <%--  Ribbons--%>
@@ -360,14 +381,14 @@
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 1 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                disabled id="ribbon_1_conf" name="ribbon_1_conf" value="${fechamento.total_ribbon_1}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 2 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                disabled id="ribbon_2_conf" name="ribbon_2_conf" value="${fechamento.total_ribbon_2}">
                                                     </div>
 
@@ -379,8 +400,8 @@
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="dif_ribbon_1" name="dif_ribbon_1" disabled>
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               id="dif_ribbon_1" name="dif_ribbon_1" readonly>
 
 
 
@@ -395,8 +416,8 @@
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="dif_ribbon_2" name="dif_ribbon_2" disabled>
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               id="dif_ribbon_2" name="dif_ribbon_2" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -406,14 +427,14 @@
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 3 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                disabled id="ribbon_3_conf" name="ribbon_3_conf" value="${fechamento.total_ribbon_3}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 4 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                disabled id="ribbon_4_conf" name="ribbon_4_conf" value="${fechamento.total_ribbon_4}">
                                                     </div>
 
@@ -425,8 +446,8 @@
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="dif_ribbon_3" name="dif_ribbon_3" disabled>
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               id="dif_ribbon_3" name="dif_ribbon_3" readonly>
                                                     </div>
 
                                                     <div class="col-6">
@@ -437,8 +458,8 @@
 
                                                         <label style="color: white">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="dif_ribbon_4" name="dif_ribbon_4" disabled>
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               id="dif_ribbon_4" name="dif_ribbon_4" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -448,14 +469,14 @@
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 5 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                disabled id="ribbon_5_conf" name="ribbon_5_conf" value="${fechamento.total_ribbon_5}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 6 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                disabled id="ribbon_6_conf" name="ribbon_6_conf" value="${fechamento.total_ribbon_6}">
                                                     </div>
 
@@ -467,8 +488,8 @@
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="dif_ribbon_5" name="dif_ribbon_5" disabled>
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               id="dif_ribbon_5" name="dif_ribbon_5" readonly>
                                                     </div>
 
                                                     <div class="col-6">
@@ -479,25 +500,28 @@
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="dif_ribbon_6" name="dif_ribbon_6" disabled>
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               id="dif_ribbon_6" name="dif_ribbon_6" readonly>
                                                     </div>
                                                 </div>
                                             </div>
 
                                         </div>
-                                        <div class="row mt-3">
-                                            <div class="col-lg-12 text-center">
-                                                <h5 style="color: white">TOTAL REVELADO NO DIA</h5>
+                                        <div class="row mt-3 text-center d-flex justify-content-center">
+                                            <div class="col-auto">
+                                                <h5 style="color: white">TOTAL REVELADO</h5>
+                                                <input type="number" class="form-control"
+                                                       style="text-align: center; background-color: #f2a654; color: black; font-weight: bold; width: 150px;"
+                                                       id="total_rev" name="total_rev" readonly>
                                             </div>
-                                            <div class="col-lg-12 text-center">
-                                                <div class="col-2 d-inline-block">
-                                                    <input type="number" class="form-control" placeholder=""
-                                                           style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                           id="total_rev" name="total_rev" disabled>
-                                                </div>
+                                            <div class="col-auto">
+                                                <h5 style="color: white">TOTAL INFORMADO</h5>
+                                                <input type="number" class="form-control"
+                                                       style="text-align: center; background-color: #f2a654; color: black; font-weight: bold; width: 150px;"
+                                                       id="total_inf" name="total_inf" readonly>
                                             </div>
                                         </div>
+
 
 
                                         <div class="row mt-3">
@@ -616,7 +640,25 @@
             document.getElementById('total_total').value = total;
         }
 
-        // Chamar a função ao carregar a página
+
+
+
+        function calcularTotalInformado() {
+            // Pegando os valores dos campos de input como inteiros
+            var totalDin = parseInt(document.getElementById("total_ft_din").value) || 0;
+            var totalDeb = parseInt(document.getElementById("total_ft_deb").value) || 0;
+            var totalCred = parseInt(document.getElementById("total_ft_cred").value) || 0;
+            var totalPix = parseInt(document.getElementById("total_ft_pix").value) || 0;
+            var sobras = parseInt(document.getElementById("sobras").value) || 0;
+
+            // Somando todos os valores inteiros
+            var totalInf = totalDin + totalDeb + totalCred + totalPix + sobras;
+
+            // Definindo o valor no input 'total_inf' (como inteiro)
+            document.getElementById("total_inf").value = totalInf;
+        }
+
+
 
 
 
@@ -686,7 +728,11 @@
             atualizarDiferencas(); // Inicializa as diferenças
             calcularTotalDif(); // Inicializa o total de revisões
             calcularTotalFotos();
+            calcularTotalInformado();
         };
+
+
+
 
     </SCRIPT>
 </body>

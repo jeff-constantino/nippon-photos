@@ -513,9 +513,7 @@ public class DAOVendasRepository {
 
             // Log ou verifique se a exclusão foi bem-sucedida
             if (rowsAffected == 0) {
-                System.out.println("Nenhuma venda encontrada com o ID: " + id);
             } else {
-                System.out.println("Venda com ID " + id + " excluída com sucesso!");
             }
         }
     }

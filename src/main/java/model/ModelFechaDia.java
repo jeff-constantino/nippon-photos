@@ -31,10 +31,83 @@ public class ModelFechaDia implements Serializable {
     private int total_ribbon_5;
     private int total_ribbon_6;
     private int sobras;
+    private int difRibbon1;
+    private int difRibbon2;
+    private int difRibbon3;
+    private int difRibbon4;
+    private int difRibbon5;
+    private int difRibbon6;
 
     private BigDecimal desconto;
 
     private String observacao;
+
+    private int total_revelado;
+    private int total_informado;
+
+    public int getTotal_revelado() {
+        return total_revelado;
+    }
+
+    public void setTotal_revelado(int total_revelado) {
+        this.total_revelado = total_revelado;
+    }
+
+    public int getTotal_informado() {
+        return total_informado;
+    }
+
+    public void setTotal_informado(int total_informado) {
+        this.total_informado = total_informado;
+    }
+
+    public int getDifRibbon1() {
+        return difRibbon1;
+    }
+
+    public void setDifRibbon1(int difRibbon1) {
+        this.difRibbon1 = difRibbon1;
+    }
+
+    public int getDifRibbon2() {
+        return difRibbon2;
+    }
+
+    public void setDifRibbon2(int difRibbon2) {
+        this.difRibbon2 = difRibbon2;
+    }
+
+    public int getDifRibbon3() {
+        return difRibbon3;
+    }
+
+    public void setDifRibbon3(int difRibbon3) {
+        this.difRibbon3 = difRibbon3;
+    }
+
+    public int getDifRibbon4() {
+        return difRibbon4;
+    }
+
+    public void setDifRibbon4(int difRibbon4) {
+        this.difRibbon4 = difRibbon4;
+    }
+
+    public int getDifRibbon5() {
+        return difRibbon5;
+    }
+
+    public void setDifRibbon5(int difRibbon5) {
+        this.difRibbon5 = difRibbon5;
+    }
+
+    public int getDifRibbon6() {
+        return difRibbon6;
+    }
+
+    public void setDifRibbon6(int difRibbon6) {
+        this.difRibbon6 = difRibbon6;
+    }
 
     public int getSobras() {
         return sobras;

@@ -132,7 +132,7 @@
                                             <span class="form-bar"></span>
                                             <input type="text" class="form-control" id="FechaId"
                                                    name="id" placeholder=""
-                                                   style="background-color: black" readonly
+                                                   style="text-align: center; background-color: black" readonly
                                                    value="${fechamento != null ? fechamento.id : ''}">
                                         </div>
                                         <div class="col-6">
@@ -157,7 +157,7 @@
                                                 <input type="text" class="form-control"
                                                        id="observacao" name="observacao"
                                                        placeholder=""
-                                                       style="background-color: black" readonly
+                                                        style="text-align: center; background-color: white; color: black"
                                                        value="${fechamento != null ? fechamento.observacao : ''}">
                                             </div>
 
@@ -168,7 +168,7 @@
                                                 <input type="text" class="form-control"
                                                        id="total_total" name="total_total"
                                                        placeholder=""
-                                                       style="background-color: white; color: black"
+                                                        style="text-align: center; background-color: white; color: black"
                                                        disabled>
                                             </div>
                                         </div>
@@ -196,7 +196,7 @@
                                                         <input type="number"
                                                                class="form-control"
                                                                placeholder=""
-                                                               style="background-color: #f2a654; color: black; font-weight: bold"
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                disabled id="total_ft_din"
                                                                name="total_ft_din"
                                                                value="${fechamento != null ? fechamento.total_ft_din : ''}">
@@ -208,7 +208,7 @@
                                                         <input type="number"
                                                                class="form-control"
                                                                placeholder=""
-                                                               style="background-color: #f2a654; color: black; font-weight: bold"
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                disabled id="total_ft_deb"
                                                                name="total_ft_deb"
                                                                value="${fechamento != null ? fechamento.total_ft_deb : ''}">
@@ -220,7 +220,7 @@
                                                         <input type="number"
                                                                class="form-control"
                                                                placeholder=""
-                                                               style="background-color: #f2a654; color: black; font-weight: bold"
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                disabled id="total_ft_cred"
                                                                name="total_ft_cred"
                                                                value="${fechamento != null ? fechamento.total_ft_cred : ''}">
@@ -232,7 +232,7 @@
                                                         <input type="number"
                                                                class="form-control"
                                                                placeholder=""
-                                                               style="background-color: #f2a654; color: black; font-weight: bold"
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                disabled id="total_ft_pix"
                                                                name="total_ft_pix"
                                                                value="${fechamento != null ? fechamento.total_ft_pix : ''}">
@@ -249,7 +249,7 @@
                                                         <input type="number"
                                                                class="form-control"
                                                                placeholder=""
-                                                               style="background-color: #73b307; color: black; font-weight: bold"
+                                                               style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
                                                                disabled id="total_enc_din"
                                                                name="total_enc_din"
                                                                value="${fechamento != null ? fechamento.total_enc_din : ''}">
@@ -261,7 +261,7 @@
                                                         <input type="number"
                                                                class="form-control"
                                                                placeholder=""
-                                                               style="background-color: #73b307; color: black; font-weight: bold"
+                                                               style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
                                                                disabled id="total_enc_deb"
                                                                name="total_enc_deb"
                                                                value="${fechamento != null ? fechamento.total_enc_deb : ''}">
@@ -273,7 +273,7 @@
                                                         <input type="number"
                                                                class="form-control"
                                                                placeholder=""
-                                                               style="background-color: #73b307; color: black; font-weight: bold"
+                                                               style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
                                                                disabled id="total_enc_cred"
                                                                name="total_enc_cred"
                                                                value="${fechamento != null ? fechamento.total_enc_cred : ''}">
@@ -285,7 +285,7 @@
                                                         <input type="number"
                                                                class="form-control"
                                                                placeholder=""
-                                                               style="background-color: #73b307; color: black; font-weight: bold"
+                                                               style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
                                                                disabled id="total_enc_pix"
                                                                name="total_enc_pix"
                                                                value="${fechamento != null ? fechamento.total_enc_pix : ''}">
@@ -302,7 +302,7 @@
                                                         <input type="number"
                                                                class="form-control"
                                                                placeholder=""
-                                                               style="background-color: fuchsia; color: black; font-weight: bold"
+                                                               style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
                                                                disabled id="total_dig_din"
                                                                name="total_dig_din"
                                                                value="${fechamento != null ? fechamento.total_dig_din : ''}">
@@ -314,7 +314,7 @@
                                                         <input type="number"
                                                                class="form-control"
                                                                placeholder=""
-                                                               style="background-color: fuchsia; color: black; font-weight: bold"
+                                                               style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
                                                                disabled id="total_dig_deb"
                                                                name="total_dig_deb"
                                                                value="${fechamento != null ? fechamento.total_dig_deb : ''}">
@@ -326,7 +326,7 @@
                                                         <input type="number"
                                                                class="form-control"
                                                                placeholder=""
-                                                               style="background-color: fuchsia; color: black; font-weight: bold"
+                                                               style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
                                                                disabled id="total_dig_cred"
                                                                name="total_dig_cred"
                                                                value="${fechamento != null ? fechamento.total_dig_cred : ''}">
@@ -338,7 +338,7 @@
                                                         <input type="number"
                                                                class="form-control"
                                                                placeholder=""
-                                                               style="background-color: fuchsia; color: black; font-weight: bold"
+                                                               style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
                                                                disabled id="total_dig_pix"
                                                                name="total_dig_pix"
                                                                value="${fechamento != null ? fechamento.total_dig_pix : ''}">
@@ -360,37 +360,43 @@
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 1 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                disabled id="ribbon_1_conf" name="ribbon_1_conf" value="${fechamento.total_ribbon_1}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 2 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                disabled id="ribbon_2_conf" name="ribbon_2_conf" value="${fechamento.total_ribbon_2}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 1 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
-                                                               disabled id="ribbon_1" name="ribbon_1">
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="ribbon_1_atual" name="ribbon_1_atual">
+
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
-                                                               id="dif_ribbon_1" name="dif_ribbon_1" readonly>
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="dif_ribbon_1" name="dif_ribbon_1" disabled>
+
+
+
+
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 2 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
-                                                               disabled id="ribbon_2" name="ribbon_2">
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="ribbon_2_atual" name="ribbon_2_atual">
+
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
-                                                               id="dif_ribbon_2" name="dif_ribbon_2" readonly>
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="dif_ribbon_2" name="dif_ribbon_2" disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -400,37 +406,39 @@
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 3 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                disabled id="ribbon_3_conf" name="ribbon_3_conf" value="${fechamento.total_ribbon_3}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 4 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                disabled id="ribbon_4_conf" name="ribbon_4_conf" value="${fechamento.total_ribbon_4}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 3 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
-                                                               disabled id="ribbon_3" name="ribbon_3">
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="ribbon_3_atual" name="ribbon_3_atual">
+
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
-                                                               id="dif_ribbon_3" name="dif_ribbon_3" readonly>
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="dif_ribbon_3" name="dif_ribbon_3" disabled>
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 4 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
-                                                               disabled id="ribbon_4" name="ribbon_4">
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="ribbon_4_atual" name="ribbon_4_atual">
+
                                                         <label style="color: white">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
-                                                               id="dif_ribbon_4" name="dif_ribbon_4" readonly>
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="dif_ribbon_4" name="dif_ribbon_4" disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -440,48 +448,62 @@
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 5 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                disabled id="ribbon_5_conf" name="ribbon_5_conf" value="${fechamento.total_ribbon_5}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 6 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                disabled id="ribbon_6_conf" name="ribbon_6_conf" value="${fechamento.total_ribbon_6}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 5 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
-                                                               disabled id="ribbon_5" name="ribbon_5">
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="ribbon_5_atual" name="ribbon_5_atual">
+
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
-                                                               id="dif_ribbon_5" name="dif_ribbon_5" readonly>
+                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="dif_ribbon_5" name="dif_ribbon_5" disabled>
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 6 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
-                                                               disabled id="ribbon_6" name="ribbon_6">
+                                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="ribbon_6_atual" name="ribbon_6_atual">
+
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               style="background-color: white; color: black; font-weight: bold"
-                                                               id="dif_ribbon_6" name="dif_ribbon_6" readonly>
+                                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="dif_ribbon_6" name="dif_ribbon_6" disabled>
                                                     </div>
                                                 </div>
                                             </div>
 
                                         </div>
+                                        <div class="row mt-3">
+                                            <div class="col-lg-12 text-center">
+                                                <h5 style="color: white">TOTAL REVELADO NO DIA</h5>
+                                            </div>
+                                            <div class="col-lg-12 text-center">
+                                                <div class="col-2 d-inline-block">
+                                                    <input type="number" class="form-control" placeholder=""
+                                                           style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                           id="total_rev" name="total_rev" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
 
 
                                         <div class="row mt-3">
                                             <div class="col-4">
-                                                <input type="submit" class="btn btn-primary"
-                                                       value="Atualizar Fechamento">
+                                                <input type="submit" class="btn btn-outline-success"
+                                                       value="Realizar Fechamento">
                                             </div>
                                         </div>
 
@@ -491,6 +513,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
 
@@ -533,6 +556,138 @@
                 $('#msgModal').modal('show'); // Exibe o modal com a mensagem
             }
         });
+
+
+        function calcularDiferencas() {
+            // Ribbon 1
+            const ribbon1Conf = parseFloat(document.getElementById('ribbon_1_conf').value) || 0;
+            const ribbon1Atual = parseFloat(document.getElementById('ribbon_1_atual').value) || 0;
+            document.getElementById('dif_ribbon_1').value = ribbon1Conf - ribbon1Atual;
+
+            // Ribbon 2
+            const ribbon2Conf = parseFloat(document.getElementById('ribbon_2_conf').value) || 0;
+            const ribbon2Atual = parseFloat(document.getElementById('ribbon_2_atual').value) || 0;
+            document.getElementById('dif_ribbon_2').value = ribbon2Conf - ribbon2Atual;
+
+            // Ribbon 3
+            const ribbon3Conf = parseFloat(document.getElementById('ribbon_3_conf').value) || 0;
+            const ribbon3Atual = parseFloat(document.getElementById('ribbon_3_atual').value) || 0;
+            document.getElementById('dif_ribbon_3').value = ribbon3Conf - ribbon3Atual;
+
+            // Ribbon 4
+            const ribbon4Conf = parseFloat(document.getElementById('ribbon_4_conf').value) || 0;
+            const ribbon4Atual = parseFloat(document.getElementById('ribbon_4_atual').value) || 0;
+            document.getElementById('dif_ribbon_4').value = ribbon4Conf - ribbon4Atual;
+
+            // Ribbon 5
+            const ribbon5Conf = parseFloat(document.getElementById('ribbon_5_conf').value) || 0;
+            const ribbon5Atual = parseFloat(document.getElementById('ribbon_5_atual').value) || 0;
+            document.getElementById('dif_ribbon_5').value = ribbon5Conf - ribbon5Atual;
+
+            // Ribbon 6
+            const ribbon6Conf = parseFloat(document.getElementById('ribbon_6_conf').value) || 0;
+            const ribbon6Atual = parseFloat(document.getElementById('ribbon_6_atual').value) || 0;
+            document.getElementById('dif_ribbon_6').value = ribbon6Conf - ribbon6Atual;
+        }
+
+        // Adiciona event listeners para os campos _atual
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('ribbon_1_atual').addEventListener('input', calcularDiferencas);
+            document.getElementById('ribbon_2_atual').addEventListener('input', calcularDiferencas);
+            document.getElementById('ribbon_3_atual').addEventListener('input', calcularDiferencas);
+            document.getElementById('ribbon_4_atual').addEventListener('input', calcularDiferencas);
+            document.getElementById('ribbon_5_atual').addEventListener('input', calcularDiferencas);
+            document.getElementById('ribbon_6_atual').addEventListener('input', calcularDiferencas);
+
+            // Chama a função ao carregar a página para calcular as diferenças iniciais
+            calcularDiferencas();
+        });
+
+
+        // Função para calcular o total de fotos
+        function calcularTotalFotos() {
+            const totalFtDin = parseFloat(document.getElementById('total_ft_din').value) || 0;
+            const totalFtDeb = parseFloat(document.getElementById('total_ft_deb').value) || 0;
+            const totalFtCred = parseFloat(document.getElementById('total_ft_cred').value) || 0;
+            const totalFtPix = parseFloat(document.getElementById('total_ft_pix').value) || 0;
+
+            const total = totalFtDin + totalFtDeb + totalFtCred + totalFtPix;
+
+            document.getElementById('total_total').value = total;
+        }
+
+        // Chamar a função ao carregar a página
+
+
+
+
+        // Função para calcular o total de diferenças
+        function calcularTotalDif() {
+            const difRibbon1 = parseFloat(document.getElementById('dif_ribbon_1').value) || 0;
+            const difRibbon2 = parseFloat(document.getElementById('dif_ribbon_2').value) || 0;
+            const difRibbon3 = parseFloat(document.getElementById('dif_ribbon_3').value) || 0;
+            const difRibbon4 = parseFloat(document.getElementById('dif_ribbon_4').value) || 0;
+            const difRibbon5 = parseFloat(document.getElementById('dif_ribbon_5').value) || 0;
+            const difRibbon6 = parseFloat(document.getElementById('dif_ribbon_6').value) || 0;
+
+            const total = difRibbon1 + difRibbon2 + difRibbon3 + difRibbon4 + difRibbon5 + difRibbon6;
+
+            document.getElementById('total_rev').value = total;
+        }
+
+        // Função para atualizar as diferenças quando os campos _atual forem alterados
+        function atualizarDiferencas() {
+            const ribbon1Conf = parseFloat(document.getElementById('ribbon_1_conf').value) || 0;
+            const ribbon1Atual = parseFloat(document.getElementById('ribbon_1_atual').value) || 0;
+            document.getElementById('dif_ribbon_1').value = ribbon1Conf - ribbon1Atual;
+
+            const ribbon2Conf = parseFloat(document.getElementById('ribbon_2_conf').value) || 0;
+            const ribbon2Atual = parseFloat(document.getElementById('ribbon_2_atual').value) || 0;
+            document.getElementById('dif_ribbon_2').value = ribbon2Conf - ribbon2Atual;
+
+            const ribbon3Conf = parseFloat(document.getElementById('ribbon_3_conf').value) || 0;
+            const ribbon3Atual = parseFloat(document.getElementById('ribbon_3_atual').value) || 0;
+            document.getElementById('dif_ribbon_3').value = ribbon3Conf - ribbon3Atual;
+
+            const ribbon4Conf = parseFloat(document.getElementById('ribbon_4_conf').value) || 0;
+            const ribbon4Atual = parseFloat(document.getElementById('ribbon_4_atual').value) || 0;
+            document.getElementById('dif_ribbon_4').value = ribbon4Conf - ribbon4Atual;
+
+            const ribbon5Conf = parseFloat(document.getElementById('ribbon_5_conf').value) || 0;
+            const ribbon5Atual = parseFloat(document.getElementById('ribbon_5_atual').value) || 0;
+            document.getElementById('dif_ribbon_5').value = ribbon5Conf - ribbon5Atual;
+
+            const ribbon6Conf = parseFloat(document.getElementById('ribbon_6_conf').value) || 0;
+            const ribbon6Atual = parseFloat(document.getElementById('ribbon_6_atual').value) || 0;
+            document.getElementById('dif_ribbon_6').value = ribbon6Conf - ribbon6Atual;
+
+            // Atualiza a soma total de diferenças
+            calcularTotalDif();
+        }
+
+        // Adicionando listeners para os campos _atual
+        document.getElementById('ribbon_1_atual').addEventListener('input', atualizarDiferencas);
+        document.getElementById('ribbon_2_atual').addEventListener('input', atualizarDiferencas);
+        document.getElementById('ribbon_3_atual').addEventListener('input', atualizarDiferencas);
+        document.getElementById('ribbon_4_atual').addEventListener('input', atualizarDiferencas);
+        document.getElementById('ribbon_5_atual').addEventListener('input', atualizarDiferencas);
+        document.getElementById('ribbon_6_atual').addEventListener('input', atualizarDiferencas);
+
+        // Adicionando listeners para os campos dif_
+        document.getElementById('dif_ribbon_1').addEventListener('input', calcularTotalDif);
+        document.getElementById('dif_ribbon_2').addEventListener('input', calcularTotalDif);
+        document.getElementById('dif_ribbon_3').addEventListener('input', calcularTotalDif);
+        document.getElementById('dif_ribbon_4').addEventListener('input', calcularTotalDif);
+        document.getElementById('dif_ribbon_5').addEventListener('input', calcularTotalDif);
+        document.getElementById('dif_ribbon_6').addEventListener('input', calcularTotalDif);
+
+        // Chamar a função ao carregar a página para inicializar o total
+        window.onload = function() {
+            atualizarDiferencas(); // Inicializa as diferenças
+            calcularTotalDif(); // Inicializa o total de revisões
+            calcularTotalFotos();
+        };
+
     </SCRIPT>
 </body>
 </html>

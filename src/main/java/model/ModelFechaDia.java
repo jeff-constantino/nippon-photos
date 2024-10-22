@@ -38,12 +38,68 @@ public class ModelFechaDia implements Serializable {
     private int difRibbon5;
     private int difRibbon6;
 
+    private int old_ribbon_1;
+    private int old_ribbon_2;
+    private int old_ribbon_3;
+    private int old_ribbon_4;
+    private int old_ribbon_5;
+    private int old_ribbon_6;
+
     private BigDecimal desconto;
 
     private String observacao;
 
     private int total_revelado;
     private int total_informado;
+
+
+    public int getOld_ribbon_1() {
+        return old_ribbon_1;
+    }
+
+    public void setOld_ribbon_1(int old_ribbon_1) {
+        this.old_ribbon_1 = old_ribbon_1;
+    }
+
+    public int getOld_ribbon_2() {
+        return old_ribbon_2;
+    }
+
+    public void setOld_ribbon_2(int old_ribbon_2) {
+        this.old_ribbon_2 = old_ribbon_2;
+    }
+
+    public int getOld_ribbon_3() {
+        return old_ribbon_3;
+    }
+
+    public void setOld_ribbon_3(int old_ribbon_3) {
+        this.old_ribbon_3 = old_ribbon_3;
+    }
+
+    public int getOld_ribbon_4() {
+        return old_ribbon_4;
+    }
+
+    public void setOld_ribbon_4(int old_ribbon_4) {
+        this.old_ribbon_4 = old_ribbon_4;
+    }
+
+    public int getOld_ribbon_5() {
+        return old_ribbon_5;
+    }
+
+    public void setOld_ribbon_5(int old_ribbon_5) {
+        this.old_ribbon_5 = old_ribbon_5;
+    }
+
+    public int getOld_ribbon_6() {
+        return old_ribbon_6;
+    }
+
+    public void setOld_ribbon_6(int old_ribbon_6) {
+        this.old_ribbon_6 = old_ribbon_6;
+    }
 
     public int getTotal_revelado() {
         return total_revelado;

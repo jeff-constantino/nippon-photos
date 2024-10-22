@@ -30,11 +30,19 @@ public class ModelFechaDia implements Serializable {
     private int total_ribbon_4;
     private int total_ribbon_5;
     private int total_ribbon_6;
+    private int sobras;
 
     private BigDecimal desconto;
 
     private String observacao;
 
+    public int getSobras() {
+        return sobras;
+    }
+
+    public void setSobras(int sobras) {
+        this.sobras = sobras;
+    }
 
     public int getTotal_ribbon_6() {
         return total_ribbon_6;

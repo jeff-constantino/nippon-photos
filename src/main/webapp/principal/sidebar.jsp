@@ -53,6 +53,7 @@
             <div class="collapse" id="financeiro">
                 <ul class="nav flex-column sub-menu">
 
+                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletFechaDia">Fechamento Diário</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletContas">Contas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletDespesas">Despesas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Vendas</a></li>

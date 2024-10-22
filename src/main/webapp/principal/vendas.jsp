@@ -67,7 +67,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="modal fade" id="modalBuscaFuncionario" data-bs-backdrop="static" data-bs-keyboard="false"
+                                    <div class="modal fade" id="modalLancaVenda" data-bs-backdrop="static" data-bs-keyboard="false"
                                          tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-xl mt-5">
                                             <div class="modal-content">
@@ -526,7 +526,7 @@
 
 
                                                     <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
-                                                            data-bs-target="#modalBuscaFuncionario">
+                                                            data-bs-target="#modalLancaVenda">
                                                         <h4>Lançamentos</h4>
                                                     </button>
                                                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
@@ -1056,7 +1056,7 @@
             document.getElementById('vendedor').value = nome;
 
             // Rola até o fim do modal
-            var modal = $('#modalBuscaFuncionario'); // Substitua pelo ID do seu modal
+            var modal = $('#modalLancaVenda'); // Substitua pelo ID do seu modal
             modal.animate({scrollTop: modal[0].scrollHeight}, 1000); // Rola suavemente para o fim em 1 segundo
         }
 
@@ -1291,10 +1291,12 @@
         });
 
 
-        // Obtém a data atual
-        const today = new Date().toISOString().split('T')[0];
-        // Define o valor do campo de data como a data atual
-        document.getElementById('outer_dataVenda').value = today;
+        // Obtém a data atual no fuso horário local
+        const today = new Date();
+        const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+        // Define o valor do campo de data como a data local
+        document.getElementById('outer_dataVenda').value = localDate;
+
 
 
     </SCRIPT>

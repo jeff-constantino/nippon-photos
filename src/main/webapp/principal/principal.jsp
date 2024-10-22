@@ -67,114 +67,23 @@
                             <div class="d-flex d-sm-block d-md-flex align-items-center">
                                 <!--INSERIR BOTÃO 2 AQUI-->
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                                        data-bs-target="#modal2">
-                                    <h4>Desempenho</h4>
-                                </button>
+                                <a class="nav-link" href="<%= request.getContextPath() %>/ServletFechaDia" style="font-size: large;color: #97282c; font-weight: bold"> Finalizar Dia </a>
 
                                 <!-- Modal -->
-                                <div class="modal fade" id="modal2" data-bs-backdrop="static" data-bs-keyboard="false"
-                                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-xl mt-5">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="staticRanking">RANKING</h5>
 
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="container-fluid">
-                                                    <div class="row">
-                                                        <div class="col-lg-6 grid-margin stretch-card">
-                                                            <H5>CORPO DO RANKING</H5>
-                                                        </div>
-
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-light"
-                                                        data-bs-dismiss="modal">FECHAR
-                                                </button>
-                                                <button type="button" class="btn btn-outline-warning">ENVIAR</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                         </div>
                         <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                            <i class="icon-lg mdi mdi-account-star text-success ml-auto" type="button"
-                               data-bs-toggle="modal" data-bs-target="#modal2"></i>
+                            <a class="icon-lg mdi mdi-power text-danger ml-auto"
+                               href="<%= request.getContextPath() %>/ServletFechaDia"></a>
                         </div>
                     </div>
                 </div>
 
             </div>
         </div>
-        <div class="col-sm-4 grid-margin">
-            <div class="card">
-                <div class="card-body">
 
-                    <div class="row">
-                        <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                            <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                <!--INSERIR BOTÃO 3 AQUI-->
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                        data-bs-target="#modal3">
-                                    <h4>Finalizar Dia</h4>
-                                </button>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="modal3" data-bs-backdrop="static" data-bs-keyboard="false"
-                                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-xl mt-5">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="staticFinalizar">FINALIZAR</h5>
-
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="container-fluid">
-                                                    <div class="row">
-                                                        <div class="col-lg-6 grid-margin stretch-card">
-                                                            <H5>CORPO DA FINALIZAÇÃO</H5>
-                                                        </div>
-
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-light"
-                                                        data-bs-dismiss="modal">FECHAR
-                                                </button>
-                                                <button type="button" class="btn btn-outline-warning">ENVIAR</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                            <i class="icon-lg mdi mdi-power text-danger ml-auto" type="button" data-bs-toggle="modal"
-                               data-bs-target="#modal3"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
                 <div class="row ">
                     <div class="col-12 grid-margin">

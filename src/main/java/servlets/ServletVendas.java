@@ -58,13 +58,13 @@ import java.util.List;
                 return;
             }
 
-            if ("vendaDoDia".equals(acao)) {
-                // Lógica para buscar as vendas do dia
-                List<ModelVendas> listaVendasDoDia = daoVendas.vendaDia();
-                request.setAttribute("listaVendasDoDia", listaVendasDoDia);
-                request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
-                return;
-            }
+//            if ("vendaDoDia".equals(acao)) {
+//                // Lógica para buscar as vendas do dia
+//                List<ModelVendas> listaVendasDoDia = daoVendas.vendaDia();
+//                request.setAttribute("listaVendasDoDia", listaVendasDoDia);
+//                request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
+//                return;
+//            }
 
             if ("gerenciarVenda".equals(acao) && idVenda != null && !idVenda.isEmpty()) {
                 try {

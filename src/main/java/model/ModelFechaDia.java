@@ -219,4 +219,34 @@ public class ModelFechaDia implements Serializable {
     public void setObservacao(String observacao) {
         this.observacao = observacao;
     }
+
+
+    @Override
+    public String toString() {
+        return "ModelFechaDia{" +
+                "id=" + id +
+                ", data_fechamento=" + data_fechamento +
+                ", total_ft_din=" + total_ft_din +
+                ", total_ft_deb=" + total_ft_deb +
+                ", total_ft_cred=" + total_ft_cred +
+                ", total_ft_pix=" + total_ft_pix +
+                ", total_enc_din=" + total_enc_din +
+                ", total_enc_deb=" + total_enc_deb +
+                ", total_enc_cred=" + total_enc_cred +
+                ", total_enc_pix=" + total_enc_pix +
+                ", total_dig_din=" + total_dig_din +
+                ", total_dig_deb=" + total_dig_deb +
+                ", total_dig_cred=" + total_dig_cred +
+                ", total_dig_pix=" + total_dig_pix +
+                ", total_ribbon_1=" + total_ribbon_1 +
+                ", total_ribbon_2=" + total_ribbon_2 +
+                ", total_ribbon_3=" + total_ribbon_3 +
+                ", total_ribbon_4=" + total_ribbon_4 +
+                ", total_ribbon_5=" + total_ribbon_5 +
+                ", total_ribbon_6=" + total_ribbon_6 +
+                ", sobras=" + sobras +
+                ", desconto=" + desconto +
+                ", observacao='" + observacao + '\'' +
+                '}';
+    }
 }

@@ -43,23 +43,23 @@
 
 
     <style>
-        .pagination a.page-link {
-            margin: 0 5px; /* Adiciona espaço horizontal de 5px entre os links */
-            padding: 8px 12px; /* Define o padding dentro dos links para aumentar o clique */
-            text-decoration: none;
-            border: 1px solid #ddd; /* Adiciona uma borda ao redor dos links */
-            color: #007bff;
-        }
+        /*.pagination a.page-link {*/
+        /*    margin: 0 5px; !* Adiciona espaço horizontal de 5px entre os links *!*/
+        /*    padding: 8px 12px; !* Define o padding dentro dos links para aumentar o clique *!*/
+        /*    text-decoration: none;*/
+        /*    border: 1px solid #ddd; !* Adiciona uma borda ao redor dos links *!*/
+        /*    color: #007bff;*/
+        /*}*/
 
-        .pagination a.page-link.active {
-            background-color: #007bff;
-            color: white; /* Deixa o link da página ativa com cores diferentes */
-        }
+        /*.pagination a.page-link.active {*/
+        /*    background-color: #007bff;*/
+        /*    color: white; !* Deixa o link da página ativa com cores diferentes *!*/
+        /*}*/
 
-        .pagination a.page-link:hover {
-            background-color: #ddd; /* Adiciona um efeito de hover */
-            color: #007bff;
-        }
+        /*.pagination a.page-link:hover {*/
+        /*    background-color: #ddd; !* Adiciona um efeito de hover *!*/
+        /*    color: #007bff;*/
+        /*}*/
     </style>
 
 

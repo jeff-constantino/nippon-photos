@@ -1,6 +1,9 @@
 
 <%@ page import="model.ModelLogin" %>
-<%@ page import="model.ModelVendas" %><%--
+<%@ page import="model.ModelVendas" %>
+<%@ page import="dao.DAOFechaDia" %>
+<%@ page import="model.ModelFechaDia" %>
+<%--
   Created by IntelliJ IDEA.
   User: Jeff Constantino
   Date: 15/09/2024
@@ -200,13 +203,34 @@
                                                        value="${fechamento.observacao}">
                                             </div>
 
+                                            <%
+                                                ModelFechaDia fechamento = (ModelFechaDia) request.getAttribute("fechamento");
+                                                // Inicializar totalFotos e totalInformado como 0 para evitar NullPointerException
+                                                int totalFotos = 0;
+                                                int totalInformado = 0;
+
+                                                if (fechamento != null) {
+                                                    // Obtém os valores do fechamento
+                                                    int totalFtDin = fechamento.getTotal_ft_din();
+                                                    int totalFtDeb = fechamento.getTotal_ft_deb();
+                                                    int totalFtCred = fechamento.getTotal_ft_cred();
+                                                    int totalFtPix = fechamento.getTotal_ft_pix();
+
+                                                    // Realizar a soma das fotos
+                                                    totalFotos = totalFtDin + totalFtDeb + totalFtCred + totalFtPix;
+
+                                                    // Calcular o total informado somando totalFotos e fechamento.sobras
+                                                    totalInformado = totalFotos + fechamento.getSobras();
+                                                }
+                                            %>
+
                                             <div class="col-2">
                                                 <label class="float-label">TOTAL DE FOTOS :</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="total_total" name="total_total"
-                                                       placeholder=""
-                                                        style="text-align: center; background-color: #f2a654; color: black"
+                                                       placeholder="" value="<%= totalFotos %>"
+                                                       style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                        disabled>
                                             </div>
                                         </div>
@@ -422,14 +446,14 @@
                                                         <label style="color: #f2a654">Ribbon 1 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                 style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                                readonly id="ribbon_1_conf" name="ribbon_1_conf" value="${fechamento.old_ribbon_1}">
+                                                               tabindex="-1" readonly id="ribbon_1_conf" name="ribbon_1_conf" value="${fechamento.old_ribbon_1}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 2 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                 style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                                 readonly id="ribbon_2_conf" name="ribbon_2_conf" value="${fechamento.old_ribbon_2}">
+                                                                  tabindex="-1" readonly id="ribbon_2_conf" name="ribbon_2_conf" value="${fechamento.old_ribbon_2}">
                                                     </div>
 
                                                     <div class="col-6">
@@ -441,7 +465,7 @@
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                 readonly style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               readonly id="dif_ribbon_1" name="dif_ribbon_1" >
+                                                                tabindex="-1" readonly id="dif_ribbon_1" name="dif_ribbon_1" >
 
 
 
@@ -457,7 +481,7 @@
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                 style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                                readonly id="dif_ribbon_2" name="dif_ribbon_2" readonly>
+                                                                 tabindex="-1" readonly id="dif_ribbon_2" name="dif_ribbon_2" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -468,14 +492,14 @@
                                                         <label style="color: #f2a654">Ribbon 3 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                 style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                                 readonly id="ribbon_3_conf" name="ribbon_3_conf" value="${fechamento.old_ribbon_3}">
+                                                                  tabindex="-1" readonly id="ribbon_3_conf" name="ribbon_3_conf" value="${fechamento.old_ribbon_3}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 4 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                 style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                                readonly id="ribbon_4_conf" name="ribbon_4_conf" value="${fechamento.old_ribbon_4}">
+                                                                 tabindex="-1" readonly id="ribbon_4_conf" name="ribbon_4_conf" value="${fechamento.old_ribbon_4}">
                                                     </div>
 
                                                     <div class="col-6">
@@ -487,7 +511,7 @@
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                 style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                                readonly id="dif_ribbon_3" name="dif_ribbon_3" readonly>
+                                                                 tabindex="-1" readonly id="dif_ribbon_3" name="dif_ribbon_3" readonly>
                                                     </div>
 
                                                     <div class="col-6">
@@ -499,7 +523,7 @@
                                                         <label style="color: white">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                 style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                                readonly id="dif_ribbon_4" name="dif_ribbon_4" readonly>
+                                                                 tabindex="-1" readonly id="dif_ribbon_4" name="dif_ribbon_4" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -510,14 +534,14 @@
                                                         <label style="color: #f2a654">Ribbon 5 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                 style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                                 readonly id="ribbon_5_conf" name="ribbon_5_conf" value="${fechamento.old_ribbon_5}">
+                                                                  tabindex="-1" readonly id="ribbon_5_conf" name="ribbon_5_conf" value="${fechamento.old_ribbon_5}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 6 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                 style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                                 readonly id="ribbon_6_conf" name="ribbon_6_conf" value="${fechamento.old_ribbon_6}">
+                                                                  tabindex="-1" readonly id="ribbon_6_conf" name="ribbon_6_conf" value="${fechamento.old_ribbon_6}">
                                                     </div>
 
                                                     <div class="col-6">
@@ -529,7 +553,7 @@
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                 style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                                readonly id="dif_ribbon_5" name="dif_ribbon_5" readonly>
+                                                                 tabindex="-1" readonly id="dif_ribbon_5" name="dif_ribbon_5" readonly>
                                                     </div>
 
                                                     <div class="col-6">
@@ -541,7 +565,7 @@
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                                readonly id="dif_ribbon_6" name="dif_ribbon_6" readonly>
+                                                                 tabindex="-1" readonly id="dif_ribbon_6" name="dif_ribbon_6" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -557,7 +581,7 @@
                                             <div class="col-auto">
                                                 <h5 style="color: white">TOTAL INFORMADO</h5>
                                                 <input type="number" class="form-control"
-                                                       style="text-align: center; background-color: #f2a654; color: black; font-weight: bold; width: 150px;"
+                                                       style="text-align: center; background-color: #f2a654; color: black; font-weight: bold; width: 150px;" value="<%= totalInformado %>"
                                                        id="total_inf" name="total_inf" readonly>
                                             </div>
                                         </div>
@@ -628,70 +652,13 @@
         window.onload = function() {
             atualizarDiferencas(); // Inicializa as diferenças
             calcularTotalDif(); // Inicializa o total de revisões
-            calcularTotalFotos();
-            calcularTotalInformado();
+            calcularDiferencas()
+
         };
 
-        function calcularTotalFotos() {
-
-            // Obtém os elementos de input pelo ID
-            const totalDinheiro = document.getElementById('total_ft_din').value;
-            const totalDebito = document.getElementById('total_ft_deb').value;
-            const totalCredito = document.getElementById('total_ft_cred').value;
-            const totalPix = document.getElementById('total_ft_pix').value;
-
-            // Converte os valores para números, tratando valores vazios ou não numéricos
-            const totalDinheiroNum = parseFloat(totalDinheiro) || 0;
-            const totalDebitoNum = parseFloat(totalDebito) || 0;
-            const totalCreditoNum = parseFloat(totalCredito) || 0;
-            const totalPixNum = parseFloat(totalPix) || 0;
-            console.log('Valor do total_total:', document.getElementById('total_total').value);
-            // Calcula o total
-            const totalFotos = totalDinheiroNum + totalDebitoNum + totalCreditoNum + totalPixNum;
-
-            // Formata o resultado com duas casas decimais
-            const totalFotosFormatado = totalFotos.toFixed(2);
-
-            // Exibe o resultado no input com ID "total_total"
-            document.getElementById('total_total').value = totalFotosFormatado;
-        }
 
 
 
-
-        function calcularTotalInformado() {
-            // Pegando os valores dos campos de input como inteiros
-            var totalDin = parseInt(document.getElementById("total_ft_din").value) || 0;
-            var totalDeb = parseInt(document.getElementById("total_ft_deb").value) || 0;
-            var totalCred = parseInt(document.getElementById("total_ft_cred").value) || 0;
-            var totalPix = parseInt(document.getElementById("total_ft_pix").value) || 0;
-            var sobras = parseInt(document.getElementById("sobras").value) || 0;
-
-            // Somando todos os valores inteiros
-            var totalInf = totalDin + totalDeb + totalCred + totalPix + sobras;
-
-            // Definindo o valor no input 'total_inf' (como inteiro)
-            document.getElementById("total_inf").value = totalInf;
-        }
-
-
-
-
-
-
-        // Função para calcular o total de diferenças
-        function calcularTotalDif() {
-            const difRibbon1 = parseFloat(document.getElementById('dif_ribbon_1').value) || 0;
-            const difRibbon2 = parseFloat(document.getElementById('dif_ribbon_2').value) || 0;
-            const difRibbon3 = parseFloat(document.getElementById('dif_ribbon_3').value) || 0;
-            const difRibbon4 = parseFloat(document.getElementById('dif_ribbon_4').value) || 0;
-            const difRibbon5 = parseFloat(document.getElementById('dif_ribbon_5').value) || 0;
-            const difRibbon6 = parseFloat(document.getElementById('dif_ribbon_6').value) || 0;
-
-            const total = difRibbon1 + difRibbon2 + difRibbon3 + difRibbon4 + difRibbon5 + difRibbon6;
-
-            document.getElementById('total_rev').value = total;
-        }
 
 
         function calcularDiferencas() {
@@ -726,64 +693,6 @@
             document.getElementById('dif_ribbon_6').value = ribbon6Conf - ribbon6Atual;
         }
 
-        // Adiciona event listeners para os campos _atual
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('ribbon_1_atual').addEventListener('input', calcularDiferencas);
-            document.getElementById('ribbon_2_atual').addEventListener('input', calcularDiferencas);
-            document.getElementById('ribbon_3_atual').addEventListener('input', calcularDiferencas);
-            document.getElementById('ribbon_4_atual').addEventListener('input', calcularDiferencas);
-            document.getElementById('ribbon_5_atual').addEventListener('input', calcularDiferencas);
-            document.getElementById('ribbon_6_atual').addEventListener('input', calcularDiferencas);
-
-            // Chama a função ao carregar a página para calcular as diferenças iniciais
-            calcularDiferencas();
-        });
-
-
-        // Função para calcular o total de fotos
-        function calcularTotalFotos() {
-            // Obtém os elementos de input pelo ID
-            const totalDinheiro = document.getElementById('total_ft_din').value;
-            const totalDebito = document.getElementById('total_ft_deb').value;
-            const totalCredito = document.getElementById('total_ft_cred').value;
-            const totalPix = document.getElementById('total_ft_pix').value;
-
-            // Converte os valores para números
-            const totalDinheiroNum = parseFloat(totalDinheiro);
-            const totalDebitoNum = parseFloat(totalDebito);
-            const totalCreditoNum = parseFloat(totalCredito);
-            const totalPixNum = parseFloat(totalPix);
-
-            // Calcula o total
-            const totalFotos = totalDinheiroNum + totalDebitoNum + totalCreditoNum + totalPixNum;
-
-            // Exibe o resultado no input com ID "total_total"
-            document.getElementById('total_total').value = totalFotos;
-        }
-
-
-
-
-        function calcularTotalInformado() {
-            // Pegando os valores dos campos de input como inteiros
-            var totalDin = parseInt(document.getElementById("total_ft_din").value) || 0;
-            var totalDeb = parseInt(document.getElementById("total_ft_deb").value) || 0;
-            var totalCred = parseInt(document.getElementById("total_ft_cred").value) || 0;
-            var totalPix = parseInt(document.getElementById("total_ft_pix").value) || 0;
-            var sobras = parseInt(document.getElementById("sobras").value) || 0;
-
-            // Somando todos os valores inteiros
-            var totalInf = totalDin + totalDeb + totalCred + totalPix + sobras;
-
-            // Definindo o valor no input 'total_inf' (como inteiro)
-            document.getElementById("total_inf").value = totalInf;
-        }
-
-
-
-
-
-
         // Função para calcular o total de diferenças
         function calcularTotalDif() {
             const difRibbon1 = parseFloat(document.getElementById('dif_ribbon_1').value) || 0;
@@ -797,6 +706,52 @@
 
             document.getElementById('total_rev').value = total;
         }
+        // Adiciona event listeners para os campos _atual
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('ribbon_1_atual').addEventListener('input', calcularDiferencas);
+            document.getElementById('ribbon_2_atual').addEventListener('input', calcularDiferencas);
+            document.getElementById('ribbon_3_atual').addEventListener('input', calcularDiferencas);
+            document.getElementById('ribbon_4_atual').addEventListener('input', calcularDiferencas);
+            document.getElementById('ribbon_5_atual').addEventListener('input', calcularDiferencas);
+            document.getElementById('ribbon_6_atual').addEventListener('input', calcularDiferencas);
+
+            // Chama a função ao carregar a página para calcular as diferenças iniciais
+            calcularDiferencas();
+        });
+        // Adicionando listeners para os campos _atual
+        document.getElementById('ribbon_1_atual').addEventListener('input', atualizarDiferencas);
+        document.getElementById('ribbon_2_atual').addEventListener('input', atualizarDiferencas);
+        document.getElementById('ribbon_3_atual').addEventListener('input', atualizarDiferencas);
+        document.getElementById('ribbon_4_atual').addEventListener('input', atualizarDiferencas);
+        document.getElementById('ribbon_5_atual').addEventListener('input', atualizarDiferencas);
+        document.getElementById('ribbon_6_atual').addEventListener('input', atualizarDiferencas);
+
+        // Adicionando listeners para os campos dif_
+        document.getElementById('dif_ribbon_1').addEventListener('input', calcularTotalDif);
+        document.getElementById('dif_ribbon_2').addEventListener('input', calcularTotalDif);
+        document.getElementById('dif_ribbon_3').addEventListener('input', calcularTotalDif);
+        document.getElementById('dif_ribbon_4').addEventListener('input', calcularTotalDif);
+        document.getElementById('dif_ribbon_5').addEventListener('input', calcularTotalDif);
+        document.getElementById('dif_ribbon_6').addEventListener('input', calcularTotalDif);
+
+        // Chamar a função quando qualquer campo que participa do cálculo for alterado
+        document.getElementById('total_ft_din').addEventListener('input', calcularTotalFotos);
+        document.getElementById('total_ft_deb').addEventListener('input', calcularTotalFotos);
+        document.getElementById('total_ft_cred').addEventListener('input', calcularTotalFotos);
+        document.getElementById('total_ft_pix').addEventListener('input', calcularTotalFotos);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Função para atualizar as diferenças quando os campos _atual forem alterados
         function atualizarDiferencas() {
@@ -824,25 +779,12 @@
             const ribbon6Atual = parseFloat(document.getElementById('ribbon_6_atual').value) || 0;
             document.getElementById('dif_ribbon_6').value = ribbon6Conf - ribbon6Atual;
 
+
+
+
             // Atualiza a soma total de diferenças
             calcularTotalDif();
         }
-
-        // Adicionando listeners para os campos _atual
-        document.getElementById('ribbon_1_atual').addEventListener('input', atualizarDiferencas);
-        document.getElementById('ribbon_2_atual').addEventListener('input', atualizarDiferencas);
-        document.getElementById('ribbon_3_atual').addEventListener('input', atualizarDiferencas);
-        document.getElementById('ribbon_4_atual').addEventListener('input', atualizarDiferencas);
-        document.getElementById('ribbon_5_atual').addEventListener('input', atualizarDiferencas);
-        document.getElementById('ribbon_6_atual').addEventListener('input', atualizarDiferencas);
-
-        // Adicionando listeners para os campos dif_
-        document.getElementById('dif_ribbon_1').addEventListener('input', calcularTotalDif);
-        document.getElementById('dif_ribbon_2').addEventListener('input', calcularTotalDif);
-        document.getElementById('dif_ribbon_3').addEventListener('input', calcularTotalDif);
-        document.getElementById('dif_ribbon_4').addEventListener('input', calcularTotalDif);
-        document.getElementById('dif_ribbon_5').addEventListener('input', calcularTotalDif);
-        document.getElementById('dif_ribbon_6').addEventListener('input', calcularTotalDif);
 
 
 

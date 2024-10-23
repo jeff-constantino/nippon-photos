@@ -149,7 +149,8 @@ public class ServletFechaDia extends ServletGenericUtil {
             fechamento.setTotal_dig_cred(parseOrDefault(request.getParameter("total_dig_cred"), 0));
             fechamento.setTotal_dig_pix(parseOrDefault(request.getParameter("total_dig_pix"), 0));
             fechamento.setSobras(Integer.parseInt(request.getParameter("sobras")));
-            // Definindo os valores do ribbon
+
+// Definindo os valores do ribbon
             fechamento.setTotal_ribbon_1(parseOrDefault(request.getParameter("ribbon_1_atual"), 0));
             fechamento.setTotal_ribbon_2(parseOrDefault(request.getParameter("ribbon_2_atual"), 0));
             fechamento.setTotal_ribbon_3(parseOrDefault(request.getParameter("ribbon_3_atual"), 0));
@@ -157,7 +158,7 @@ public class ServletFechaDia extends ServletGenericUtil {
             fechamento.setTotal_ribbon_5(parseOrDefault(request.getParameter("ribbon_5_atual"), 0));
             fechamento.setTotal_ribbon_6(parseOrDefault(request.getParameter("ribbon_6_atual"), 0));
 
-            // Definindo as diferenças do ribbon
+// Definindo as diferenças do ribbon
             fechamento.setDifRibbon1(parseOrDefault(request.getParameter("dif_ribbon_1"), 0));
             fechamento.setDifRibbon2(parseOrDefault(request.getParameter("dif_ribbon_2"), 0));
             fechamento.setDifRibbon3(parseOrDefault(request.getParameter("dif_ribbon_3"), 0));
@@ -165,9 +166,18 @@ public class ServletFechaDia extends ServletGenericUtil {
             fechamento.setDifRibbon5(parseOrDefault(request.getParameter("dif_ribbon_5"), 0));
             fechamento.setDifRibbon6(parseOrDefault(request.getParameter("dif_ribbon_6"), 0));
 
-            // Recuperar total_revelado e total_informado
+// Recuperar total_revelado e total_informado
             fechamento.setTotal_revelado(parseOrDefault(request.getParameter("total_rev"), 0));
             fechamento.setTotal_informado(parseOrDefault(request.getParameter("total_inf"), 0));
+
+// Adicionando os campos old_ribbon
+            fechamento.setOld_ribbon_1(parseOrDefault(request.getParameter("old_ribbon_1"), 0));
+            fechamento.setOld_ribbon_2(parseOrDefault(request.getParameter("old_ribbon_2"), 0));
+            fechamento.setOld_ribbon_3(parseOrDefault(request.getParameter("old_ribbon_3"), 0));
+            fechamento.setOld_ribbon_4(parseOrDefault(request.getParameter("old_ribbon_4"), 0));
+            fechamento.setOld_ribbon_5(parseOrDefault(request.getParameter("old_ribbon_5"), 0));
+            fechamento.setOld_ribbon_6(parseOrDefault(request.getParameter("old_ribbon_6"), 0));
+
 
             // Outros campos
             String descontoString = request.getParameter("desconto");

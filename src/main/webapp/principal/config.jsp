@@ -10,6 +10,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <jsp:include page="header.jsp"></jsp:include>
 
 <body>
@@ -128,7 +129,7 @@
                                                                                         <input type="text" class="form-control"
                                                                                                id="conf1_valor" name="conf1_valor"
                                                                                                required
-                                                                                               value="${modelConfig.conf1_valor}"">
+                                                                                               value="${modelConfig.conf1_valor}">
                                                                                     </div>
 
                                                                                     <div class="col-6">
@@ -137,7 +138,7 @@
                                                                                         <input type="text" class="form-control"
                                                                                                id="conf1_valor2" name="conf1_valor2"
                                                                                                required
-                                                                                               value="${modelConfig.conf1_valor2}"">
+                                                                                               value="${modelConfig.conf1_valor2}">
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -154,7 +155,7 @@
                                                                                 <label for="conf2_valor">Valor</label>
                                                                                 <input type="text" class="form-control" id="conf2_valor"
                                                                                        name="conf2_valor" required
-                                                                                       value="${modelConfig.conf2_valor}"">
+                                                                                       value="${modelConfig.conf2_valor}">
                                                                             </div>
                                                                         </div>
 
@@ -169,7 +170,7 @@
                                                                                 <label for="conf3_valor">Valor</label>
                                                                                 <input type="text" class="form-control" id="conf3_valor"
                                                                                        name="conf3_valor" required
-                                                                                       value="${modelConfig.conf3_valor}"">
+                                                                                       value="${modelConfig.conf3_valor}">
                                                                             </div>
                                                                         </div>
                                                                         <button type="submit" class="btn btn-outline-success">Salvar
@@ -886,9 +887,6 @@
         document.getElementById(`${conf}_custo`).value = custoUnitario.toFixed(2); // Atualiza o campo de custo unitário
     }
 
-
-
-
     $("#conf1_valor").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
     $("#conf1_valor2").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
     $("#conf2_valor").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
@@ -902,19 +900,11 @@
     $("#conf2_custo_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
     $("#conf3_custo_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
 
-
-
-
-
-
-
-
     function removerMascara(valor) {
         return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '');
     }
 
     $("#configForm").on("submit", function(e) {
-        console.log($("#conf1_valor").val());
 
         $("#conf1_valor").val(removerMascara($("#conf1_valor").val()));
         $("#conf1_valor2").val(removerMascara($("#conf1_valor2").val()));
@@ -924,6 +914,7 @@
 
 
     });
+
 
     $("#configFormMat").on("submit", function(e) {
         console.log($("#conf1_valor_mat").val());
@@ -939,119 +930,6 @@
 
 
 
-
-//     // FORMATAÇÃO DE VALORES
-//
-//     function Formatar(valor) {
-//         const v = ((valor.replace(/\D/g, '') / 100).toFixed(2) + '').split('.');
-//
-//         const m = v[0].split('').reverse().join('').match(/.{1,3}/g);
-//
-//         for (let i = 0; i < m.length; i++) {
-//             m[i] = m[i].split('').reverse().join('');
-//         }
-//
-//         const r = m.reverse().join('.');
-//
-//         return 'R$ ' + r + ',' + v[1];
-//     }
-//
-//     function aplicarMascara(campo) {
-//         let valor = campo.value;
-//         campo.value = Formatar(valor);
-//     }
-//
-//     function RemoverFormatacao(valor) {
-//         return valor.replace(/[^0-9,]/g, '').replace(',', '.');
-//     }
-//
-//     document.getElementById("configFormMat").onsubmit = function () {
-//         // Remover formatação dos valores e custos antes de submeter o formulário
-//         document.getElementById('conf1_valor_mat').value = RemoverFormatacao(document.getElementById('conf1_valor_mat').value);
-//         document.getElementById('conf1_custo_mat').value = RemoverFormatacao(document.getElementById('conf1_custo_mat').value);
-//
-//         document.getElementById('conf2_valor_mat').value = RemoverFormatacao(document.getElementById('conf2_valor_mat').value);
-//         document.getElementById('conf2_custo_mat').value = RemoverFormatacao(document.getElementById('conf2_custo_mat').value);
-//
-//         document.getElementById('conf3_valor_mat').value = RemoverFormatacao(document.getElementById('conf3_valor_mat').value);
-//         document.getElementById('conf3_custo_mat').value = RemoverFormatacao(document.getElementById('conf3_custo_mat').value);
-//     };
-// // FIM FORMATAÇÃO FORM2
-//
-// // FORMATAÇÃO FORM 1
-//     // Função para remover a formatação antes do envio do formulário
-//     document.getElementById("configForm").addEventListener("submit", function(event) {
-//         // Conf1 Valor
-//         var conf1Valor = document.getElementById("conf1_valor").value;
-//         conf1Valor = conf1Valor.replace(/[^\d,]/g, '').replace(',', '.'); // Remove qualquer formatação e troca vírgula por ponto
-//         document.getElementById("conf1_valor").value = conf1Valor;
-//
-//         // Conf1 Valor 2
-//         var conf1Valor2 = document.getElementById("conf1_valor2").value;
-//         conf1Valor2 = conf1Valor2.replace(/[^\d,]/g, '').replace(',', '.'); // Remove formatação
-//         document.getElementById("conf1_valor2").value = conf1Valor2;
-//
-//         // Conf2 Valor
-//         var conf2Valor = document.getElementById("conf2_valor").value;
-//         conf2Valor = conf2Valor.replace(/[^\d,]/g, '').replace(',', '.');
-//         document.getElementById("conf2_valor").value = conf2Valor;
-//
-//         // Conf3 Valor
-//         var conf3Valor = document.getElementById("conf3_valor").value;
-//         conf3Valor = conf3Valor.replace(/[^\d,]/g, '').replace(',', '.');
-//         document.getElementById("conf3_valor").value = conf3Valor;
-//     });
-//     function RemoverFormatacao(valor) {
-//         return valor.replace(/[^0-9,]/g, '').replace(',', '.');
-//     }
-//
-//     document.getElementById("configForm").addEventListener("submit", function(event) {
-//         // Remover formatação dos valores antes de submeter o formulário
-//         document.getElementById("conf1_valor").value = RemoverFormatacao(document.getElementById("conf1_valor").value);
-//         document.getElementById("conf1_valor2").value = RemoverFormatacao(document.getElementById("conf1_valor2").value);
-//         document.getElementById("conf2_valor").value = RemoverFormatacao(document.getElementById("conf2_valor").value);
-//         document.getElementById("conf3_valor").value = RemoverFormatacao(document.getElementById("conf3_valor").value);
-//     });
-// // FIM FORMATAÇÃO FORM1
-//
-//
-//     // FORMATAÇÃO FORM 3
-//
-//     // Função para remover a formatação antes do envio do formulário
-//     function Formatar(valor) {
-//         const v = ((valor.replace(/\D/g, '') / 100).toFixed(2) + '').split('.');
-//
-//         const m = v[0].split('').reverse().join('').match(/.{1,3}/g);
-//
-//         for (let i = 0; i < m.length; i++) {
-//             m[i] = m[i].split('').reverse().join('');
-//         }
-//
-//         const r = m.reverse().join('.');
-//
-//         return 'R$ ' + r + ',' + v[1];
-//     }
-//
-//     function aplicarMascara(campo) {
-//         let valor = campo.value;
-//         campo.value = Formatar(valor);
-//     }
-//
-//     function RemoverFormatacao(valor) {
-//         return valor.replace(/[^0-9,]/g, '').replace(',', '.');
-//     }
-//
-//     document.getElementById("configFormGeral").onsubmit = function () {
-//         // Remover formatação dos valores antes de submeter o formulário
-//         document.getElementById('conf1_valor_geral').value = RemoverFormatacao(document.getElementById('conf1_valor_geral').value);
-//         document.getElementById('conf2_valor_geral').value = RemoverFormatacao(document.getElementById('conf2_valor_geral').value);
-//         document.getElementById('conf3_valor_geral').value = RemoverFormatacao(document.getElementById('conf3_valor_geral').value);
-//
-//         // Adicione as linhas abaixo para outros campos, se necessário
-//         document.getElementById('conf1_custo_geral').value = RemoverFormatacao(document.getElementById('conf1_custo_geral').value);
-//         document.getElementById('conf2_custo_geral').value = RemoverFormatacao(document.getElementById('conf2_custo_geral').value);
-//         document.getElementById('conf3_custo_geral').value = RemoverFormatacao(document.getElementById('conf3_custo_geral').value);
-//     };
 
 
 

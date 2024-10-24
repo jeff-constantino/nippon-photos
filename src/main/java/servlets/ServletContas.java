@@ -29,13 +29,14 @@ public class ServletContas extends ServletGenericUtil {
         try {
             String msg = ""; // Inicializa a mensagem
 
-            // Obtém os parâmetros do request
+// Obtém os parâmetros do request
             String conta_id = request.getParameter("idPedido");
             String numero_pedido = request.getParameter("numero_pedido");
             String empresa = request.getParameter("empresa");
+            String empresa2 = request.getParameter("empresa2");
             String itens = request.getParameter("itens");
-            String valor = request.getParameter("valor");
-            String valor2 = request.getParameter("valor2");
+            String valor1 = request.getParameter("conf1_valor"); // valor1 já vem sem máscara
+            String valor2 = request.getParameter("conf1_valor2"); // valor2 já vem sem máscara
             String data_pedido = request.getParameter("data_de_pedido");
             String data_pagamento = request.getParameter("data_de_pagamento");
             String status = request.getParameter("status");
@@ -43,7 +44,7 @@ public class ServletContas extends ServletGenericUtil {
 
             ModelContas modelContas = new ModelContas();
 
-            // Seta os dados da conta
+// Seta os dados da conta
             if (conta_id != null && !conta_id.isEmpty()) {
                 modelContas.setConta_id(Long.parseLong(conta_id));
             }
@@ -52,18 +53,21 @@ public class ServletContas extends ServletGenericUtil {
             modelContas.setEmpresa(empresa);
             modelContas.setItens(itens);
 
-            // Converte os valores, removendo formatações
-            double valorConvertido = converterValorParaDouble(valor);
-            double valor2Convertido = converterValorParaDouble(valor2);
+// Converte os valores para double
+            double valor1Convertido = valor1 != null && !valor1.isEmpty() ? Double.parseDouble(valor1) : 0.0;
+            double valor2Convertido = valor2 != null && !valor2.isEmpty() ? Double.parseDouble(valor2) : 0.0;
 
-            // Seta o valor dependendo da ação
+// Seta o valor dependendo da ação (gravar ou atualizar)
             if ("atualizar".equals(acao)) {
-                modelContas.setValor(valor2Convertido);
+                modelContas.setValor(valor2Convertido); // Atualiza com o valor2
+                modelContas.setEmpresa(empresa2);
                 msg = "Conta atualizada com sucesso!";
             } else {
-                modelContas.setValor(valorConvertido);
+                modelContas.setValor(valor1Convertido); // Grava com o valor1
+                modelContas.setEmpresa(empresa);
                 msg = "Conta gravada com sucesso!";
             }
+
 
             modelContas.setStatus(status != null ? status.toUpperCase() : null);
 
@@ -104,20 +108,16 @@ public class ServletContas extends ServletGenericUtil {
                 return; // Adiciona um return para parar a execução após dar baixa
             }
 
-            // Verifica se o ID da conta é válido
+            // Verifica se o ID da conta é válido para decidir entre atualização ou criação
             if (modelContas.getConta_id() != null) {
-                System.out.println("ID da conta: " + modelContas.getConta_id());
-                System.out.println("Verificando se a conta existe no banco...");
                 if (daoContas.existeContaId(modelContas.getConta_id())) {
                     System.out.println("Conta existe, atualizando...");
-                    daoContas.atualizarConta(modelContas);
+                    daoContas.atualizarConta(modelContas); // Atualiza conta existente
                 } else {
-                    System.out.println("Conta não existe, gravando nova conta...");
-                    daoContas.gravarConta(modelContas);
+                    daoContas.gravarConta(modelContas); // Grava nova conta
                 }
             } else {
-                System.out.println("ID da conta é nulo, gravando nova conta...");
-                daoContas.gravarConta(modelContas);
+                daoContas.gravarConta(modelContas); // Grava nova conta se não houver ID
             }
 
             // Mantém os dados e mensagem na tela
@@ -135,23 +135,6 @@ public class ServletContas extends ServletGenericUtil {
         }
     }
 
-
-
-
-    // Função para converter valor formatado para double
-    private double converterValorParaDouble(String valorFormatado) {
-        if (valorFormatado == null || valorFormatado.isEmpty()) {
-            return 0.0;
-        }
-
-        // Remove os pontos e substitui a vírgula por ponto
-        valorFormatado = valorFormatado.replace(".", "").replace(",", ".");
-        try {
-            return Double.parseDouble(valorFormatado);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Valor inválido: " + valorFormatado);
-        }
-    }
 
 
 

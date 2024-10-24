@@ -202,6 +202,7 @@ public class DAOContas {
         return contas;
     }
 
+
     public List<ModelContas> listarContas() throws SQLException {
         List<ModelContas> contas = new ArrayList<>();
         String sql = "SELECT * FROM contas ORDER BY CASE WHEN status = 'A PAGAR' THEN 0 ELSE 1 END";

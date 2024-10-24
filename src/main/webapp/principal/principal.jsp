@@ -90,7 +90,7 @@
                         <div class="card">
                             <div class="card-body">
                                  <div class="table-responsive">
-                                     <h2 class="text-center">CONTAS A PAGAR</h2>
+                                     <h2 class="text-center">CONTAS A PAGAR NOS PRÓXIMOS 7 DIAS</h2>
                                     <table class="table table-bordered">
                                         <thead class="thead-light">
                                         <tr>

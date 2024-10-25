@@ -7,13 +7,15 @@ public class ModelContas implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long conta_id;
-    private int numero_pedido;
+    private Long numero_pedido;
     private String empresa;
     private String itens;
     private double valor;
     private Date data_de_pedido;
     private Date data_de_pagamento;
     private String status;
+    private String dataDePedidoFormatada; // Adicionando o campo para data formatada
+    private String dataDePagamentoFormatada; // Adicionando o campo para data formatada
 
     // Getters and Setters
     public Long getConta_id() {
@@ -24,11 +26,11 @@ public class ModelContas implements Serializable {
         this.conta_id = conta_id;
     }
 
-    public int getNumero_pedido() {
+    public Long getNumero_pedido() {
         return numero_pedido;
     }
 
-    public void setNumero_pedido(int numero_pedido) {
+    public void setNumero_pedido(Long numero_pedido) {
         this.numero_pedido = numero_pedido;
     }
 
@@ -78,5 +80,21 @@ public class ModelContas implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getDataDePedidoFormatada() {
+        return dataDePedidoFormatada;
+    }
+
+    public void setDataDePedidoFormatada(String dataDePedidoFormatada) {
+        this.dataDePedidoFormatada = dataDePedidoFormatada;
+    }
+
+    public String getDataDePagamentoFormatada() {
+        return dataDePagamentoFormatada;
+    }
+
+    public void setDataDePagamentoFormatada(String dataDePagamentoFormatada) {
+        this.dataDePagamentoFormatada = dataDePagamentoFormatada;
     }
 }

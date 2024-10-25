@@ -1,5 +1,6 @@
 package servlets;
 
+import com.google.gson.Gson;
 import dao.DAOContas;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -8,11 +9,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelContas;
+import model.ResponseData;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+
+import static util.DateUtil.formatDate;
 
 @WebServlet("/ServletContas")
 public class ServletContas extends ServletGenericUtil {
@@ -29,7 +36,7 @@ public class ServletContas extends ServletGenericUtil {
         try {
             String msg = ""; // Inicializa a mensagem
 
-// Obtém os parâmetros do request
+            // Obtém os parâmetros do request
             String conta_id = request.getParameter("idPedido");
             String numero_pedido = request.getParameter("numero_pedido");
             String empresa = request.getParameter("empresa");
@@ -44,20 +51,21 @@ public class ServletContas extends ServletGenericUtil {
 
             ModelContas modelContas = new ModelContas();
 
-// Seta os dados da conta
+            // Seta os dados da conta
             if (conta_id != null && !conta_id.isEmpty()) {
                 modelContas.setConta_id(Long.parseLong(conta_id));
             }
 
-            modelContas.setNumero_pedido(numero_pedido != null && !numero_pedido.isEmpty() ? Integer.parseInt(numero_pedido) : 0);
+            // Mudar de Integer para Long
+            modelContas.setNumero_pedido(numero_pedido != null && !numero_pedido.isEmpty() ? Long.parseLong(numero_pedido) : 0L);
             modelContas.setEmpresa(empresa);
             modelContas.setItens(itens);
 
-// Converte os valores para double
+            // Converte os valores para double
             double valor1Convertido = valor1 != null && !valor1.isEmpty() ? Double.parseDouble(valor1) : 0.0;
             double valor2Convertido = valor2 != null && !valor2.isEmpty() ? Double.parseDouble(valor2) : 0.0;
 
-// Seta o valor dependendo da ação (gravar ou atualizar)
+            // Seta o valor dependendo da ação (gravar ou atualizar)
             if ("atualizar".equals(acao)) {
                 modelContas.setValor(valor2Convertido); // Atualiza com o valor2
                 modelContas.setEmpresa(empresa2);
@@ -67,7 +75,6 @@ public class ServletContas extends ServletGenericUtil {
                 modelContas.setEmpresa(empresa);
                 msg = "Conta gravada com sucesso!";
             }
-
 
             modelContas.setStatus(status != null ? status.toUpperCase() : null);
 
@@ -92,7 +99,7 @@ public class ServletContas extends ServletGenericUtil {
             if ("baixar".equals(acao)) {
                 if (numero_pedido != null && !numero_pedido.isEmpty()) {
                     try {
-                        daoContas.atualizarStatusPorNumeroPedido(Integer.parseInt(numero_pedido));
+                        daoContas.atualizarStatusPorNumeroPedido(Long.parseLong(numero_pedido)); // Mudar para Long
                         msg = "Conta baixada como PAGO com sucesso!";
                     } catch (NumberFormatException e) {
                         msg = "Número do pedido inválido: " + numero_pedido;
@@ -137,9 +144,6 @@ public class ServletContas extends ServletGenericUtil {
 
 
 
-
-
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<ModelContas> contasVencendo;
@@ -147,15 +151,72 @@ public class ServletContas extends ServletGenericUtil {
         List<ModelContas> contasRecentes;
         String acao = request.getParameter("acao");
         String contaId = request.getParameter("conta_id");
+        String paginaParam = request.getParameter("pagina");
+        int pagina = 1; // Página padrão
+        int tamanho = 10; // Tamanho padrão para a paginação
+
+        if (paginaParam != null && !paginaParam.isEmpty()) {
+            pagina = Integer.parseInt(paginaParam); // Pega a página solicitada
+        }
+        if ("imprimirRelatorioContas".equals(acao)) {
+            int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
+            int registrosPorPagina = 10; // Defina a quantidade de registros por página
+
+            List<ModelContas> contasList;
+            try {
+                contasList = daoContas.listarContas(paginaAtual, registrosPorPagina);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                response.getWriter().write("Erro ao buscar contas.");
+                return;
+            }
+
+            // Gera o HTML da tabela
+            StringBuilder html = new StringBuilder();
+            html.append("<table class='table table-striped table-bordered' style='color: #f2a654;'>")
+                    .append("<thead>")
+                    .append("<tr>")
+                    .append("</tr>")
+                    .append("</thead>")
+                    .append("<tbody>");
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            for (ModelContas conta : contasList) {
+                html.append("<tr>")
+                        .append("<td>").append(conta.getConta_id()).append("</td>")
+                        .append("<td>").append(conta.getNumero_pedido()).append("</td>")
+                        .append("<td>").append(conta.getEmpresa()).append("</td>")
+                        .append("<td>").append(conta.getItens()).append("</td>")
+                        .append("<td>").append(conta.getValor()).append("</td>")
+                        .append("<td>").append(formatDate(conta.getData_de_pedido())).append("</td>")
+                        .append("<td>").append(formatDate(conta.getData_de_pagamento())).append("</td>")
+                        .append("<td>").append(conta.getStatus()).append("</td>")
+                        .append("</tr>");
+            }
+
+            html.append("</tbody>")
+                    .append("</table>");
+
+            // Escreve o HTML gerado na resposta
+            response.setContentType("text/html");
+            response.getWriter().write(html.toString());
+            return; // Evita a execução do código abaixo
+        }
 
         try {
             // Chama o método para buscar contas que vencem em 7 dias e estão "A PAGAR"
             contasVencendo = daoContas.buscarContasVencendoEm7Dias();
             request.setAttribute("contasVencendo", contasVencendo); // Passa as contas vencendo para o JSP
 
-            // Chama o método para listar todas as contas
-            todasContas = daoContas.listarContas();
+            // Chama o método para listar todas as contas com paginação
+            todasContas = daoContas.listarContas(pagina, tamanho);
             request.setAttribute("todasContas", todasContas); // Passa todas as contas para o JSP
+
+            // Contar total de contas para a paginação
+            int totalContas = daoContas.contarTotalContas();
+            int totalPaginas = (int) Math.ceil((double) totalContas / tamanho);
+            request.setAttribute("totalPaginas", totalPaginas);
+            request.setAttribute("paginaAtual", pagina);
 
             // Busca apenas as contas dos últimos 60 dias
             contasRecentes = daoContas.buscarContasRecentes();
@@ -187,5 +248,18 @@ public class ServletContas extends ServletGenericUtil {
         request.getRequestDispatcher("/principal/contas.jsp").forward(request, response);
     }
 
+    // Método para formatar a data
+    private String formatDate(Date date) {
+        if (date != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            return dateFormat.format(date);
+        }
+        return ""; // Retorna uma string vazia se a data for nula
+    }
+
+
 
 }
+
+
+

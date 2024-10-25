@@ -51,7 +51,7 @@ public class DAOLoginRepository {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 ModelContas conta = new ModelContas();
-                conta.setNumero_pedido(rs.getInt("numero_pedido"));
+                conta.setNumero_pedido(rs.getLong("numero_pedido"));
                 conta.setEmpresa(rs.getString("empresa"));
                 conta.setItens(rs.getString("itens"));
                 conta.setValor(rs.getDouble("valor"));

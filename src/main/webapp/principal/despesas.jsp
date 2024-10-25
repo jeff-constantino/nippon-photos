@@ -188,7 +188,7 @@
                                     <h4>Lançar Despesas</h4>
                                 </button>
                                 <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#modalListDespesas">
-                                    <h4>Todas as Contas</h4>
+                                    <h4>Todas as Despesas</h4>
                                 </button><div>
                                 <span style="color:#1ad76b; text-align: center">${msg}</span>
                             </div>

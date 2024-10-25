@@ -21,7 +21,7 @@ public class DAOContas {
         String sql = "INSERT INTO contas (numero_pedido, empresa, itens, valor, data_de_pedido, data_de_pagamento, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, conta.getNumero_pedido());
+            stmt.setLong(1, conta.getNumero_pedido());
             stmt.setString(2, conta.getEmpresa());
             stmt.setString(3, conta.getItens());
             stmt.setDouble(4, conta.getValor());
@@ -135,7 +135,7 @@ public class DAOContas {
             if (rs.next()) {
                 conta = new ModelContas();
                 conta.setConta_id(rs.getLong("conta_id"));
-                conta.setNumero_pedido(rs.getInt("numero_pedido"));
+                conta.setNumero_pedido(rs.getLong("numero_pedido"));
                 conta.setEmpresa(rs.getString("empresa"));
                 conta.setItens(rs.getString("itens"));
                 conta.setValor(rs.getDouble("valor"));
@@ -160,7 +160,7 @@ public class DAOContas {
             while (rs.next()) {
                 ModelContas conta = new ModelContas();
                 conta.setConta_id(rs.getLong("conta_id"));
-                conta.setNumero_pedido(rs.getInt("numero_pedido"));
+                conta.setNumero_pedido(rs.getLong("numero_pedido"));
                 conta.setEmpresa(rs.getString("empresa"));
                 conta.setItens(rs.getString("itens"));
                 conta.setValor(rs.getDouble("valor"));
@@ -186,7 +186,7 @@ public class DAOContas {
             while (rs.next()) {
                 ModelContas conta = new ModelContas();
                 conta.setConta_id(rs.getLong("conta_id"));
-                conta.setNumero_pedido(rs.getInt("numero_pedido"));
+                conta.setNumero_pedido(rs.getLong("numero_pedido"));
                 conta.setEmpresa(rs.getString("empresa"));
                 conta.setItens(rs.getString("itens"));
                 conta.setValor(rs.getDouble("valor"));
@@ -203,16 +203,19 @@ public class DAOContas {
     }
 
 
-    public List<ModelContas> listarContas() throws SQLException {
+    public List<ModelContas> listarContas(int pagina, int tamanho) throws SQLException {
         List<ModelContas> contas = new ArrayList<>();
-        String sql = "SELECT * FROM contas ORDER BY CASE WHEN status = 'A PAGAR' THEN 0 ELSE 1 END";
+        String sql = "SELECT * FROM contas ORDER BY data_de_pedido DESC LIMIT ? OFFSET ?";
+        int offset = (pagina - 1) * tamanho;
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, tamanho);
+            stmt.setInt(2, offset);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 ModelContas conta = new ModelContas();
                 conta.setConta_id(rs.getLong("conta_id"));
-                conta.setNumero_pedido(rs.getInt("numero_pedido"));
+                conta.setNumero_pedido(rs.getLong("numero_pedido"));
                 conta.setEmpresa(rs.getString("empresa"));
                 conta.setItens(rs.getString("itens"));
                 conta.setValor(rs.getDouble("valor"));
@@ -227,6 +230,18 @@ public class DAOContas {
         }
         return contas;
     }
+
+    public int contarTotalContas() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM contas";
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
     public void deleteConta(long id) throws Exception{
         String sql = "delete from contas where conta_id = ?";
         PreparedStatement preparedSql = connection.prepareStatement(sql);
@@ -234,13 +249,13 @@ public class DAOContas {
         preparedSql.executeUpdate();
         connection.commit();
     }
-    public void atualizarStatusPorNumeroPedido(int numeroPedido) throws Exception {
+    public void atualizarStatusPorNumeroPedido(Long numeroPedido) throws Exception {
         String sql = "UPDATE contas SET status = ? WHERE numero_pedido = ?";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
             // Define o novo status
             preparedSql.setString(1, "PAGO"); // ou outro status que você deseje definir
-            preparedSql.setInt(2, numeroPedido);
+            preparedSql.setLong(2, numeroPedido);
 
             // Executa a atualização
             int rowsAffected = preparedSql.executeUpdate();
@@ -257,5 +272,6 @@ public class DAOContas {
             throw new Exception("Erro ao atualizar o status da conta: " + e.getMessage());
         }
     }
+
 
 }

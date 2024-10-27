@@ -150,12 +150,15 @@ public class DAODespesas {
 
         return despesasList;
     }
-    public List<ModelDespesas> listarTodasDespesas() throws SQLException {
+    public List<ModelDespesas> listarTodasDespesas(int pagina, int tamanho) throws SQLException {
         List<ModelDespesas> todasDespesasList = new ArrayList<>();
 
-        String sql = "SELECT * FROM despesas ORDER BY data_despesa DESC";
+        String sql = "SELECT * FROM despesas ORDER BY data_despesa DESC LIMIT ? OFFSET ?";
+        int offset = (pagina - 1) * tamanho;
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, tamanho);
+            stmt.setInt(2, offset);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -174,7 +177,16 @@ public class DAODespesas {
 
         return todasDespesasList;
     }
-
+    public int contarTotalDespesas() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM despesas";
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
 
 
 

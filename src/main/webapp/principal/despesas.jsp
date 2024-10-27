@@ -115,52 +115,54 @@
                                                 <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                                     <div class="d-flex d-sm-block d-md-flex align-items-center">
                                                         <div class="modal fade" id="modalListDespesas" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-xl mt-5 modal-dialog-scrollable">
-                                                                <div class="modal-content">
+                                                            <div class="modal-dialog modal-xl" style="height: 100vh; width: auto; max-width: none;"> <!-- Altura total da viewport e largura ajustável -->
+                                                                <div class="modal-content" style="height: 100%; margin: 0;"> <!-- Altura total do modal -->
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" id="staticRanking">TODAS AS DESPESAS</h5>
+                                                                        <h5 class="modal-title" id="staticRanking">TODAS AS CONTAS</h5>
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                     </div>
-                                                                    <div class="modal-body">
-                                                                        <div class="container-fluid">
-                                                                            <h3>Todas as Despesas</h3>
-                                                                            <div class="table-responsive"> <!-- Adicionando a classe table-responsive -->
-                                                                                <table class="table table-striped table-hover"> <!-- Classe table-hover para melhorar a interatividade -->
-                                                                                    <thead>
-                                                                                    <tr>
-                                                                                        <th>ID</th>
-                                                                                        <th>Nome</th>
-                                                                                        <th>Descrição</th>
-                                                                                        <th>Valor</th>
-                                                                                        <th>Data</th>
-                                                                                        <th>Ações</th> <!-- Coluna para os botões -->
-                                                                                    </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                    <c:forEach items="${todasDespesasList}" var="despesa">
-                                                                                        <tr>
-                                                                                            <td><c:out value="${despesa.id_despesa}"/></td>
-                                                                                            <td><c:out value="${despesa.nome_despesa}"/></td>
-                                                                                            <td><c:out value="${despesa.descricao_despesa}"/></td>
-                                                                                            <td><fmt:formatNumber value="${despesa.valor_despesa}" type="currency" currencySymbol="R$" /></td>
-                                                                                            <td><fmt:formatDate value="${despesa.data_despesa}" pattern="dd/MM/yyyy"/></td>
-                                                                                            <td>
-                                                                                                <form method="post" action="<%= request.getContextPath() %>/ServletDespesas">
-                                                                                                    <input type="hidden" name="acao" value="excluirDespesa" />
-                                                                                                    <input type="hidden" name="id_despesa" value="${despesa.id_despesa}" />
-                                                                                                    <button type="submit" class="btn btn-danger btn-sm">Excluir</button> <!-- Botão menor -->
-                                                                                                </form>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </c:forEach>
-                                                                                    </tbody>
-                                                                                </table>
-                                                                            </div>
+                                                                    <div class="modal-body" style="height: calc(100% - 56px); overflow:  hidden;"> <!-- Ajusta altura do corpo do modal e remove rolagem -->
+                                                                        <div class="container-fluid h-100"> <!-- Altura total do container -->
+
+                                                                            <form id="modalDespesas" action="ServletDespesas" method="get">
+<%--                                                                                <input type="hidden" name="acao" value="imprimirRelatorioDespesas">--%>
+                                                                                <input type="hidden" name="pagina" id="pagina" value="1"> <!-- ID para manipulação via JavaScript -->
+                                                                                <div class="row h-100"> <!-- Altura total para a linha -->
+                                                                                    <div class="col-lg-12 grid-margin stretch-card h-100"> <!-- Altura total para a coluna -->
+                                                                                        <div class="table-responsive h-100"> <!-- Altura total para a tabela -->
+                                                                                            <table class="table table-striped table-bordered" id="tabelaContas">
+                                                                                                <thead>
+                                                                                                <tr>
+                                                                                                    <th>ID</th>
+                                                                                                    <th>Nome</th>
+                                                                                                    <th>Descrição</th>
+                                                                                                    <th>Valor</th>
+                                                                                                    <th>Data</th>
+                                                                                                    <th>Ações</th> <!-- Coluna para os botões -->
+                                                                                                </tr>
+                                                                                                </thead>
+                                                                                                <tbody id="tabelaContasBody">
+                                                                                                <!-- As linhas da tabela serão inseridas aqui via AJAX -->
+                                                                                                </tbody>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </form>
+
+
                                                                         </div>
                                                                     </div>
+                                                                    <!-- Paginação -->
+                                                                    <div class="pagination">
+
+                                                                        <c:forEach var="i" begin="1" end="${totalPaginas}">
+                                                                            <a href="#" class="btn btn-outline-primary page-link" data-pagina="${i}">${i}</a>
+                                                                        </c:forEach>
+
+                                                                    </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
-                                                                        <button type="button" class="btn btn-outline-warning">ENVIAR</button>
+                                                                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -220,7 +222,7 @@
                                                 <td><fmt:formatNumber value="${despesa.valor_despesa}" type="currency" currencySymbol="R$" /></td>
                                                 <td><fmt:formatDate value="${despesa.data_despesa}" pattern="dd/MM/yyyy"/></td> <!-- Formata a data -->
                                                 <td>
-                                                    <form method="post" action="<%= request.getContextPath() %>/ServletDespesas">
+                                                    <form method="get" action="<%= request.getContextPath() %>/ServletDespesas">
                                                         <input type="hidden" name="acao" value="excluirDespesa" />
                                                         <input type="hidden" name="id_despesa" value="${despesa.id_despesa}" />
                                                         <button type="submit" class="btn btn-danger">Excluir</button>
@@ -364,7 +366,35 @@
         }
     }
 
+    function carregarDespesas(pagina = 1) {
+        $.ajax({
+            url: 'ServletDespesas',
+            method: 'GET',
+            data: {
+                acao: 'imprimirRelatorioDespesas',
+                pagina: pagina // Passando a página atual
+            },
+            success: function(data) {
+                $('#modalListDespesas tbody').html(data); // Atualiza apenas o tbody com os dados retornados
+                $('#pagina').val(pagina); // Atualiza o valor da página no formulário oculto, se necessário
+            },
+            error: function() {
+                console.error('Erro ao carregar despesas.');
+            }
+        });
+    }
 
+    // Evento para abrir o modal e carregar as despesas apenas ao abrir
+    $('#modalListDespesas').on('shown.bs.modal', function() {
+        carregarDespesas(); // Carrega as despesas ao abrir o modal
+    });
+
+    // Lógica para a paginação
+    $(document).on('click', '.pagination a', function(event) {
+        event.preventDefault(); // Impede o comportamento padrão do link
+        const pagina = $(this).data('pagina'); // Obtém o número da página
+        carregarDespesas(pagina); // Chama a função correta para carregar as despesas
+    });
 
 
 </script>

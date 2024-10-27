@@ -339,7 +339,7 @@
                                                     <c:forEach var="i" begin="1" end="${totalPaginas}">
                                                         <a href="#" class="btn btn-outline-primary page-link" data-pagina="${i}">${i}</a>
                                                     </c:forEach>
-                                                   
+
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>

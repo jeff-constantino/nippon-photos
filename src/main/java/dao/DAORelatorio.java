@@ -265,9 +265,10 @@ public class DAORelatorio {
 
 
 
-    public List<ModelLogin> buscaFuncionariosAtivos() throws Exception {
-        List<ModelLogin> funcionariosAtivos = new ArrayList<>();
-        String sql = "SELECT id, nome FROM model_login WHERE status = 'Ativo'";
+    public List<ModelLogin> buscaFuncionarios() throws Exception {
+        List<ModelLogin> funcionarios = new ArrayList<>();
+        System.out.println("Funcionários encontrados: " + funcionarios.size());  // Adicione isso para debug
+        String sql = "SELECT id, nome, status FROM model_login ORDER BY  status = 'Ativo' DESC";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql);
              ResultSet resultado = preparedSql.executeQuery()) {
@@ -276,12 +277,13 @@ public class DAORelatorio {
                 ModelLogin funcionario = new ModelLogin();
                 funcionario.setId(resultado.getLong("id")); // Supondo que você tenha um método setId em ModelLogin
                 funcionario.setNome(resultado.getString("nome")); // Supondo que você tenha um método setNome em ModelLogin
-                funcionariosAtivos.add(funcionario);
+                funcionario.setStatus(resultado.getString("status")); // Supondo que você tenha um método setStatus
+                funcionarios.add(funcionario);
             }
         } catch (SQLException e) {
             e.printStackTrace(); // Logar o erro
-            throw new Exception("Erro ao buscar funcionários ativos: " + e.getMessage());
+            throw new Exception("Erro ao buscar funcionários : " + e.getMessage());
         }
-        return funcionariosAtivos;
+        return funcionarios;
     }
 }

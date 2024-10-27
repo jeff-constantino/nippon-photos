@@ -57,10 +57,12 @@
                                                                         <label>Funcionário</label>
                                                                         <select class="form-control" id="funcionarioId" name="funcionarioId">
                                                                             <option value="">Selecione um Funcionário</option>
-                                                                            <c:forEach var="funcionario" items="${funcionariosAtivos}">
+                                                                            <c:forEach var="funcionario" items="${funcionarios}">
                                                                                 <option value="${funcionario.id}"
-                                                                                        <c:if test="${funcionario.id == funcionarioId}">selected</c:if>
-                                                                                >${funcionario.nome}</option>
+                                                                                        class="${funcionario.status == 'Ativo' ? 'text-success' : 'text-danger'}"
+                                                                                        <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
+                                                                                        ${funcionario.nome}
+                                                                                </option>
                                                                             </c:forEach>
                                                                         </select>
 
@@ -97,102 +99,102 @@
                                 </button>
                                 <h4 class="card-title" STYLE="text-align: center">RELATÓRIO DE VENDAS</h4>
 
-                                <div  style="overflow-x: hidden; overflow-y: hidden;">
+                                <div  style="overflow-x: auto; overflow-y: hidden;">
+                                    <%-- Inicializando as variáveis de soma para cada coluna --%>
+                                    <c:set var="totalProd1Din" value="0" />
+                                    <c:set var="totalProd1Deb" value="0" />
+                                    <c:set var="totalProd1Cred" value="0" />
+                                    <c:set var="totalProd1Pix" value="0" />
+                                    <c:set var="totalProd2Din" value="0" />
+                                    <c:set var="totalProd2Deb" value="0" />
+                                    <c:set var="totalProd2Cred" value="0" />
+                                    <c:set var="totalProd2Pix" value="0" />
+                                    <c:set var="totalProd3Din" value="0" />
+                                    <c:set var="totalProd3Deb" value="0" />
+                                    <c:set var="totalProd3Cred" value="0" />
+                                    <c:set var="totalProd3Pix" value="0" />
+                                    <c:set var="totalSobras" value="0" />
+
                                     <table class="table" id="tabelarelvendas">
                                         <thead>
                                         <tr>
 
-                                            <th scope="col">Id Venda</th>
                                             <th scope="col">NOME</th>
                                             <th scope="col">DATA</th>
                                             <th scope="col">Ft Din</th>
                                             <th scope="col">Ft Deb</th>
                                             <th scope="col">Ft Cred</th>
                                             <th scope="col">Ft Pix</th>
-
                                             <th scope="col">Enc Din</th>
                                             <th scope="col">Enc Deb</th>
                                             <th scope="col">Enc Cred</th>
                                             <th scope="col">Enc Pix</th>
-
                                             <th scope="col">Dig Din</th>
                                             <th scope="col">Dig Deb</th>
                                             <th scope="col">Dig Cred</th>
                                             <th scope="col">Dig Pix</th>
-
                                             <th scope="col">Sobras</th>
-
-
-
+                                            <th scope="col">Id Venda</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <c:forEach items="${vendasList}" var="mv">
                                             <tr>
-                                                <td>
-                                                    <c:out value="${mv.venda_id}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.nome}"></c:out>
-                                                </td>
-
-                                                <td>
-                                                    <c:out value="${mv.data_venda}"></c:out>
-                                                </td>
-
-                                                <td>
-                                                    <c:out value="${mv.prod1_din}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.prod1_deb}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.prod1_cred}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.prod1_pix}"></c:out>
-                                                </td>
-
-
-                                                <td>
-                                                    <c:out value="${mv.prod2_din}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.prod2_deb}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.prod2_cred}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.prod2_pix}"></c:out>
-                                                </td>
-
-                                                <td>
-                                                    <c:out value="${mv.prod3_din}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.prod3_deb}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.prod3_cred}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.prod3_pix}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.sobras}"></c:out>
-                                                </td>
-
-
-
+                                                <td><c:out value="${mv.nome}" /></td>
+                                                <td><c:out value="${mv.data_venda}" /></td>
+                                                <td><c:out value="${mv.prod1_din}" /></td>
+                                                <td><c:out value="${mv.prod1_deb}" /></td>
+                                                <td><c:out value="${mv.prod1_cred}" /></td>
+                                                <td><c:out value="${mv.prod1_pix}" /></td>
+                                                <td><c:out value="${mv.prod2_din}" /></td>
+                                                <td><c:out value="${mv.prod2_deb}" /></td>
+                                                <td><c:out value="${mv.prod2_cred}" /></td>
+                                                <td><c:out value="${mv.prod2_pix}" /></td>
+                                                <td><c:out value="${mv.prod3_din}" /></td>
+                                                <td><c:out value="${mv.prod3_deb}" /></td>
+                                                <td><c:out value="${mv.prod3_cred}" /></td>
+                                                <td><c:out value="${mv.prod3_pix}" /></td>
+                                                <td><c:out value="${mv.sobras}" /></td>
+                                                <td><c:out value="${mv.venda_id}" /></td>
                                             </tr>
 
+                                            <%-- Acumulando os valores para cada coluna --%>
+                                            <c:set var="totalProd1Din" value="${totalProd1Din + mv.prod1_din}"  />
+                                            <c:set var="totalProd1Deb" value="${totalProd1Deb + mv.prod1_deb}" />
+                                            <c:set var="totalProd1Cred" value="${totalProd1Cred + mv.prod1_cred}" />
+                                            <c:set var="totalProd1Pix" value="${totalProd1Pix + mv.prod1_pix}" />
+                                            <c:set var="totalProd2Din" value="${totalProd2Din + mv.prod2_din}" />
+                                            <c:set var="totalProd2Deb" value="${totalProd2Deb + mv.prod2_deb}" />
+                                            <c:set var="totalProd2Cred" value="${totalProd2Cred + mv.prod2_cred}" />
+                                            <c:set var="totalProd2Pix" value="${totalProd2Pix + mv.prod2_pix}" />
+                                            <c:set var="totalProd3Din" value="${totalProd3Din + mv.prod3_din}" />
+                                            <c:set var="totalProd3Deb" value="${totalProd3Deb + mv.prod3_deb}" />
+                                            <c:set var="totalProd3Cred" value="${totalProd3Cred + mv.prod3_cred}" />
+                                            <c:set var="totalProd3Pix" value="${totalProd3Pix + mv.prod3_pix}" />
+                                            <c:set var="totalSobras" value="${totalSobras + mv.sobras}" />
                                         </c:forEach>
 
-
-
+                                        <%-- Exibindo os totais em uma linha ao final da tabela --%>
+                                        <tr>
+                                            <td colspan="2" style="color: #f2a654"><strong>Total:</strong></td>
+                                            <td style="color: #f2a654"><c:out value="${totalProd1Din}" /></td>
+                                            <td style="color: #f2a654"><c:out value="${totalProd1Deb}" /></td>
+                                            <td style="color: #f2a654"><c:out value="${totalProd1Cred}" /></td>
+                                            <td style="color: #f2a654"><c:out value="${totalProd1Pix}" /></td>
+                                            <td style="color: #f2a654"><c:out value="${totalProd2Din}" /></td>
+                                            <td style="color: #f2a654"><c:out value="${totalProd2Deb}" /></td>
+                                            <td style="color: #f2a654"><c:out value="${totalProd2Cred}" /></td>
+                                            <td style="color: #f2a654"><c:out value="${totalProd2Pix}" /></td>
+                                            <td style="color: #f2a654"><c:out value="${totalProd3Din}" /></td>
+                                            <td style="color: #f2a654"><c:out value="${totalProd3Deb}" /></td>
+                                            <td style="color: #f2a654"><c:out value="${totalProd3Cred}" /></td>
+                                            <td style="color: #f2a654"><c:out value="${totalProd3Pix}" /></td>
+                                            <td style="color: #f2a654"><c:out value="${totalSobras}" /></td>
+                                            <td></td>
+                                        </tr>
                                         </tbody>
                                     </table>
+
                                     <!-- Controles de paginação -->
                                     <div class="pagination">
 
@@ -267,12 +269,7 @@
             })
             .catch(error => console.error('Erro:', error));
     }
-    // Inicializa o tooltip com um delay reduzido para aparecer mais rápido
-    $(document).ready(function(){
-        $('#tooltipButton').tooltip({
-            delay: { "show": 100, "hide": 100 } // O tooltip vai aparecer em 100ms
-        });
-    });
+
 </script>
 </body>
 </html>

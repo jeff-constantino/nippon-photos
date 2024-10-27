@@ -26,9 +26,9 @@ public class ServletFuncionario extends ServletGenericUtil{
         String funcionarioId = request.getParameter("funcionarioId");
 
         try {
-            // Instancia o DAO para buscar os funcionários ativos
+            // Instancia o DAO para buscar os funcionários
             DAORelatorio relatorio = new DAORelatorio();
-            List<ModelLogin> funcionariosAtivos = relatorio.buscaFuncionariosAtivos();
+            List<ModelLogin> funcionarios = relatorio.buscaFuncionarios();
 
             List<ModelVendas> vendasFuncionarioList = new ArrayList<>();
             RequestDispatcher dispatcher;
@@ -57,8 +57,8 @@ public class ServletFuncionario extends ServletGenericUtil{
             request.setAttribute("dataFinal", dataFinal);
             request.setAttribute("funcionarioId", funcionarioId);
 
-            // Envia a lista de funcionários ativos para o JSP
-            request.setAttribute("funcionariosAtivos", funcionariosAtivos);
+            // Envia a lista de funcionários  para o JSP
+            request.setAttribute("funcionarios", funcionarios);
 
             // Redireciona para a página JSP com os resultados
             dispatcher = request.getRequestDispatcher("principal/relfunc.jsp");

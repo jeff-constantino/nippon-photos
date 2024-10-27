@@ -30,20 +30,25 @@ public class ServletRelVenda extends ServletGenericUtil {
     }
 
     @Override
+    // Obtendo os parâmetros da requisição
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Obtendo os parâmetros da requisição
         String acao = request.getParameter("acao");
         String dataInicial = request.getParameter("dataInicial");
         String dataFinal = request.getParameter("dataFinal");
         String funcionarioId = request.getParameter("funcionarioId");
+        String status = request.getParameter("status");
 
         try {
-            // Instancia o DAO para buscar os funcionários ativos
+            // Instancia o DAO para buscar os funcionários (incluindo inativos se necessário)
             DAORelatorio relatorio = new DAORelatorio();
-            List<ModelLogin> funcionariosAtivos = relatorio.buscaFuncionariosAtivos();
+            List<ModelLogin> funcionarios = relatorio.buscaFuncionarios();
 
+            // Adiciona lista de funcionários ao request para que esteja sempre disponível no JSP
+            request.setAttribute("funcionarios", funcionarios);
+
+            // Inicializa a lista de vendas
             List<ModelVendas> vendasList = new ArrayList<>();
-            RequestDispatcher dispatcher;
 
             if ("imprimirRelatorioVendas".equals(acao)) {
                 int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
@@ -57,31 +62,21 @@ public class ServletRelVenda extends ServletGenericUtil {
                 request.setAttribute("vendasList", vendasList);
 
                 // Lógica para cálculo de total de páginas
-                int totalVendas = relatorio.contarVendas(funcionarioId, dataInicial, dataFinal); // Método para contar registros
+                int totalVendas = relatorio.contarVendas(funcionarioId, dataInicial, dataFinal);
                 int totalPaginas = (int) Math.ceil(totalVendas / (double) registrosPorPagina);
 
                 // Adiciona totalPaginas e paginaAtual no request
                 request.setAttribute("totalPaginas", totalPaginas);
                 request.setAttribute("paginaAtual", paginaAtual);
-
-                // Redireciona para a página JSP correta
-                dispatcher = request.getRequestDispatcher("principal/relvendas.jsp");
-            } else {
-                // Lógica alternativa caso a ação não seja "imprimirRelatorioVendas"
-                // Envia os dados de vendas de volta para o JSP
-                request.setAttribute("vendasList", vendasList);
-                request.setAttribute("dataInicial", dataInicial);
-                request.setAttribute("dataFinal", dataFinal);
-                request.setAttribute("funcionarioId", funcionarioId);
-
-                // Envia a lista de funcionários ativos para o JSP
-                request.setAttribute("funcionariosAtivos", funcionariosAtivos);
-
-                // Redireciona para a página JSP com os resultados
-                dispatcher = request.getRequestDispatcher("principal/relvendas.jsp");
             }
 
-            // Realiza o redirecionamento em um único ponto
+            // Adiciona os filtros ao request para que sejam preservados no JSP
+            request.setAttribute("dataInicial", dataInicial);
+            request.setAttribute("dataFinal", dataFinal);
+            request.setAttribute("funcionarioId", funcionarioId);
+
+            // Encaminha para o JSP
+            RequestDispatcher dispatcher = request.getRequestDispatcher("principal/relvendas.jsp");
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
@@ -91,6 +86,7 @@ public class ServletRelVenda extends ServletGenericUtil {
             dispatcher.forward(request, response);
         }
     }
+
 
 }
 

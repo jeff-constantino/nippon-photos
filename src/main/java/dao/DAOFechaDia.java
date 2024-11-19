@@ -1,12 +1,15 @@
 package dao;
 
 import connection.SingleConnectionBanco;
+import model.ModelConfig;
 import model.ModelFechaDia;
 
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class DAOFechaDia {
@@ -108,6 +111,31 @@ public class DAOFechaDia {
 
         return modelFechaDia;
     }
+    public List<ModelConfig> consultarValor() throws Exception {
+        List<ModelConfig> listaConfigs = new ArrayList<>();
+        String query = "SELECT conf1_valor, conf2_valor, conf3_valor FROM public.configuracao WHERE \"idConf\" = 1";
+
+        try (PreparedStatement preparedSql = connection.prepareStatement(query);
+             ResultSet resultSet = preparedSql.executeQuery()) {
+
+            while (resultSet.next()) {
+                ModelConfig modelConfig = new ModelConfig();
+
+                modelConfig.setConf1_valor(resultSet.getBigDecimal("conf1_valor"));
+                modelConfig.setConf2_valor(resultSet.getBigDecimal("conf2_valor"));
+                modelConfig.setConf3_valor(resultSet.getBigDecimal("conf3_valor"));
+
+                listaConfigs.add(modelConfig);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao consultar configurações: " + e.getMessage());
+            throw e; // Repropaga a exceção para ser tratada na camada superior
+        }
+
+        return listaConfigs;
+    }
+
 
     public void gravarFechamento(ModelFechaDia fechamento) {
         // Verifica se o fechamento já existe

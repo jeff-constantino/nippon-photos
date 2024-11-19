@@ -46,6 +46,15 @@ public class ModelFechaDia implements Serializable {
     private int old_ribbon_6;
 
     private BigDecimal desconto;
+    private BigDecimal valor_din;
+    private BigDecimal valor_deb;
+    private BigDecimal valor_cred;
+    private BigDecimal valor_pix;
+    private BigDecimal valor_din_real;
+    private BigDecimal valor_deb_real;
+    private BigDecimal valor_cred_real;
+    private BigDecimal valor_pix_real;
+
 
     private String observacao;
 
@@ -100,6 +109,41 @@ public class ModelFechaDia implements Serializable {
     public void setOld_ribbon_6(int old_ribbon_6) {
         this.old_ribbon_6 = old_ribbon_6;
     }
+
+    public BigDecimal getValor_din() {
+        return valor_din;
+    }
+
+    public void setValor_din(BigDecimal valor_din) {
+        this.valor_din = valor_din;
+    }
+
+    public BigDecimal getValor_deb() {
+        return valor_deb;
+    }
+
+    public void setValor_deb(BigDecimal valor_deb) {
+        this.valor_deb = valor_deb;
+    }
+
+    public BigDecimal getValor_cred() {
+        return valor_cred;
+    }
+
+    public void setValor_cred(BigDecimal valor_cred) {
+        this.valor_cred = valor_cred;
+    }
+
+    public BigDecimal getValor_pix() {
+        return valor_pix;
+    }
+
+    public void setValor_pix(BigDecimal valor_pix) {
+        this.valor_pix = valor_pix;
+    }
+
+
+
 
     public int getTotal_revelado() {
         return total_revelado;
@@ -350,32 +394,5 @@ public class ModelFechaDia implements Serializable {
     }
 
 
-    @Override
-    public String toString() {
-        return "ModelFechaDia{" +
-                "id=" + id +
-                ", data_fechamento=" + data_fechamento +
-                ", total_ft_din=" + total_ft_din +
-                ", total_ft_deb=" + total_ft_deb +
-                ", total_ft_cred=" + total_ft_cred +
-                ", total_ft_pix=" + total_ft_pix +
-                ", total_enc_din=" + total_enc_din +
-                ", total_enc_deb=" + total_enc_deb +
-                ", total_enc_cred=" + total_enc_cred +
-                ", total_enc_pix=" + total_enc_pix +
-                ", total_dig_din=" + total_dig_din +
-                ", total_dig_deb=" + total_dig_deb +
-                ", total_dig_cred=" + total_dig_cred +
-                ", total_dig_pix=" + total_dig_pix +
-                ", total_ribbon_1=" + total_ribbon_1 +
-                ", total_ribbon_2=" + total_ribbon_2 +
-                ", total_ribbon_3=" + total_ribbon_3 +
-                ", total_ribbon_4=" + total_ribbon_4 +
-                ", total_ribbon_5=" + total_ribbon_5 +
-                ", total_ribbon_6=" + total_ribbon_6 +
-                ", sobras=" + sobras +
-                ", desconto=" + desconto +
-                ", observacao='" + observacao + '\'' +
-                '}';
-    }
+
 }

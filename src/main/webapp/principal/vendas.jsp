@@ -1455,65 +1455,7 @@
         }
 
 
-        function toggleInputs(selectId, fieldsToDisable) {
-            var ribbonSelect = document.getElementById(selectId);
 
-            if (ribbonSelect.value === "15x20") {
-                // Desabilitar todos os campos e alterar a cor de fundo para cinza
-                fieldsToDisable.forEach(function (field) {
-                    field.disabled = true;
-                    field.style.backgroundColor = "black"; // Cor de fundo cinza
-                });
-            } else if (ribbonSelect.value === "10x15") {
-                // Habilitar todos os campos e restaurar a cor de fundo original
-                fieldsToDisable.forEach(function (field) {
-                    field.disabled = false;
-                    field.style.backgroundColor = "#00d25b"; // Restaura a cor de fundo padrão
-                });
-            }
-        }
-
-        function setupToggle() {
-            // Inicializa os campos no carregamento da página com base no valor inicial
-            toggleInputs("ribbon", [
-                document.getElementById("prod2_din"),
-                document.getElementById("prod2_deb"),
-                document.getElementById("prod2_cred"),
-                document.getElementById("prod2_pix")
-            ]);
-
-            toggleInputs("ribbon2", [
-                document.getElementById("outer_prod2_din"),
-                document.getElementById("outer_prod2_deb"),
-                document.getElementById("outer_prod2_cred"),
-                document.getElementById("outer_prod2_pix")
-            ]);
-        }
-
-        // Executa a função ao carregar a página
-        window.onload = function () {
-            setupToggle();
-        };
-
-        // Adiciona o event listener para o select "ribbon"
-        document.getElementById("ribbon").addEventListener("change", function () {
-            toggleInputs("ribbon", [
-                document.getElementById("prod2_din"),
-                document.getElementById("prod2_deb"),
-                document.getElementById("prod2_cred"),
-                document.getElementById("prod2_pix")
-            ]);
-        });
-
-        // Adiciona o event listener para o select "ribbon2"
-        document.getElementById("ribbon2").addEventListener("change", function () {
-            toggleInputs("ribbon2", [
-                document.getElementById("outer_prod2_din"),
-                document.getElementById("outer_prod2_deb"),
-                document.getElementById("outer_prod2_cred"),
-                document.getElementById("outer_prod2_pix")
-            ]);
-        });
 
 
         // Obtém a data atual no fuso horário local

@@ -1,6 +1,7 @@
 
 package servlets;
 
+import com.google.gson.Gson;
 import dao.DAOConfig;
 import dao.DAOFechaDia;
 import jakarta.servlet.RequestDispatcher;
@@ -8,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.ModelConfig;
 import model.ModelFechaDia;
 
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @WebServlet("/ServletFechaDia")
 public class ServletFechaDia extends ServletGenericUtil {
@@ -60,6 +63,7 @@ public class ServletFechaDia extends ServletGenericUtil {
 
         // Inicializa o DAO
         DAOFechaDia daoFechaDia = new DAOFechaDia();
+
 
         // Lógica para "buscarfechamento"
         if ("buscarfechamento".equals(acao)) {
@@ -111,6 +115,26 @@ public class ServletFechaDia extends ServletGenericUtil {
                     } else {
                         request.setAttribute("msg", "Nenhum fechamento encontrado para a data informada."); // Mensagem caso não encontre
                     }
+
+                    // Agora, também executa a busca dos valores dos produtos
+                    try {
+
+                        List<ModelConfig> configs = daoFechaDia.consultarValor();
+                        ModelConfig config = configs.isEmpty() ? null : configs.get(0);  // Pega a primeira configuração
+
+// Passa os valores de configuração para o JSP
+                        request.setAttribute("conf1_valor", config.getConf1_valor());
+                        request.setAttribute("conf2_valor", config.getConf2_valor());
+                        request.setAttribute("conf3_valor", config.getConf3_valor());
+
+
+                    } catch (Exception e) {
+                        // Loga a exceção para análise posterior
+                        e.printStackTrace();
+                        // Envia uma resposta de erro ao cliente
+                        request.setAttribute("produtosErro", "Erro ao buscar valores dos produtos.");
+                    }
+
                 } catch (IllegalArgumentException e) {
                     request.setAttribute("msg", "Data inválida: " + e.getMessage());
                 } catch (Exception e) {
@@ -123,9 +147,10 @@ public class ServletFechaDia extends ServletGenericUtil {
             request.setAttribute("msg", "Ação não reconhecida."); // Mensagem para ações não reconhecidas
         }
 
-        // Encaminha a requisição para a página JSP
+// Encaminha a requisição para a página JSP
         RequestDispatcher dispatcher = request.getRequestDispatcher("principal/fechadia.jsp");
         dispatcher.forward(request, response);
+
     }
 
 
@@ -236,4 +261,3 @@ public class ServletFechaDia extends ServletGenericUtil {
         }
     }
 }
-

@@ -24,7 +24,7 @@ public class ServletConfig extends ServletGenericUtil {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        System.out.println("Método doGet chamado na ServletConfig");
+
 
         try {
             List<ModelConfig> configs = daoConfig.consultarTodasConfigs(); // Recupera todas as configurações

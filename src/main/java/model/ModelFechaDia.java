@@ -393,6 +393,88 @@ public class ModelFechaDia implements Serializable {
         this.observacao = observacao;
     }
 
+    public BigDecimal getValor_din_real() {
+        return valor_din_real;
+    }
 
+    public void setValor_din_real(BigDecimal valor_din_real) {
+        this.valor_din_real = valor_din_real;
+    }
+
+    public BigDecimal getValor_deb_real() {
+        return valor_deb_real;
+    }
+
+    public void setValor_deb_real(BigDecimal valor_deb_real) {
+        this.valor_deb_real = valor_deb_real;
+    }
+
+    public BigDecimal getValor_cred_real() {
+        return valor_cred_real;
+    }
+
+    public void setValor_cred_real(BigDecimal valor_cred_real) {
+        this.valor_cred_real = valor_cred_real;
+    }
+
+    public BigDecimal getValor_pix_real() {
+        return valor_pix_real;
+    }
+
+    public void setValor_pix_real(BigDecimal valor_pix_real) {
+        this.valor_pix_real = valor_pix_real;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ModelFechaDia {" +
+                "\nid=" + id +
+                ",\ndata_fechamento=" + data_fechamento +
+                ",\ntotal_ft_din=" + total_ft_din +
+                ",\ntotal_ft_deb=" + total_ft_deb +
+                ",\ntotal_ft_cred=" + total_ft_cred +
+                ",\ntotal_ft_pix=" + total_ft_pix +
+                ",\ntotal_enc_din=" + total_enc_din +
+                ",\ntotal_enc_deb=" + total_enc_deb +
+                ",\ntotal_enc_cred=" + total_enc_cred +
+                ",\ntotal_enc_pix=" + total_enc_pix +
+                ",\ntotal_dig_din=" + total_dig_din +
+                ",\ntotal_dig_deb=" + total_dig_deb +
+                ",\ntotal_dig_cred=" + total_dig_cred +
+                ",\ntotal_dig_pix=" + total_dig_pix +
+                ",\ntotal_ribbon_1=" + total_ribbon_1 +
+                ",\ntotal_ribbon_2=" + total_ribbon_2 +
+                ",\ntotal_ribbon_3=" + total_ribbon_3 +
+                ",\ntotal_ribbon_4=" + total_ribbon_4 +
+                ",\ntotal_ribbon_5=" + total_ribbon_5 +
+                ",\ntotal_ribbon_6=" + total_ribbon_6 +
+                ",\nsobras=" + sobras +
+                ",\ndifRibbon1=" + difRibbon1 +
+                ",\ndifRibbon2=" + difRibbon2 +
+                ",\ndifRibbon3=" + difRibbon3 +
+                ",\ndifRibbon4=" + difRibbon4 +
+                ",\ndifRibbon5=" + difRibbon5 +
+                ",\ndifRibbon6=" + difRibbon6 +
+                ",\nold_ribbon_1=" + old_ribbon_1 +
+                ",\nold_ribbon_2=" + old_ribbon_2 +
+                ",\nold_ribbon_3=" + old_ribbon_3 +
+                ",\nold_ribbon_4=" + old_ribbon_4 +
+                ",\nold_ribbon_5=" + old_ribbon_5 +
+                ",\nold_ribbon_6=" + old_ribbon_6 +
+                ",\ndesconto=" + desconto +
+                ",\nvalor_din=" + valor_din +
+                ",\nvalor_deb=" + valor_deb +
+                ",\nvalor_cred=" + valor_cred +
+                ",\nvalor_pix=" + valor_pix +
+                ",\nvalor_din_real=" + valor_din_real +
+                ",\nvalor_deb_real=" + valor_deb_real +
+                ",\nvalor_cred_real=" + valor_cred_real +
+                ",\nvalor_pix_real=" + valor_pix_real +
+                ",\nobservacao='" + observacao + '\'' +
+                ",\ntotal_revelado=" + total_revelado +
+                ",\ntotal_informado=" + total_informado +
+                "\n}";
+    }
 
 }

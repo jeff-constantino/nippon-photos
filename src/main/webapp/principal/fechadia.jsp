@@ -446,7 +446,7 @@
                                                         <label style="color: #f2a654">Ribbon 1 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_1_conf" name="ribbon_1_conf" value="${fechamento.old_ribbon_1}">
+                                                               tabindex="-1" readonly id="ribbon_1_conf" name="old_ribbon_1" value="${fechamento.old_ribbon_1}">
                                                     </div>
 
                                                     <div class="col-6">
@@ -719,13 +719,11 @@
     <!-- Modal HTML -->
     <div class="modal" id="msgModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;"> <!-- Borda preta -->
+            <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;">
                 <div class="modal-header" style="border-bottom: none;">
-
-                    <!-- Removido o botão "X" -->
                 </div>
                 <div class="modal-body" style="color: black;">
-                    <p style="font-size: 1.5em; text-align: center">${msg}</p> <!-- Mensagem aqui -->
+                    <p style="font-size: 1.5em; text-align: center">${msg}</p>
                 </div>
                 <div class="modal-footer" style="border-top: none;">
                     <h1 class="modal-title" style="color: black; font-size: 0.8em;">aperte ESC para fechar</h1>
@@ -890,7 +888,7 @@
         const conf2_valor = parseFloat("${conf2_valor}") || 0;
         const conf3_valor = parseFloat("${conf3_valor}") || 0;
 
-      
+
 
         // Função para calcular e exibir os resultados
         function calcularValores() {
@@ -900,15 +898,11 @@
             const fotos_cred = parseFloat(document.getElementById("_total_ft_cred").value || 0);
             const fotos_pix = parseFloat(document.getElementById("_total_ft_pix").value || 0);
 
-
-
             // ENCARTES
             const encartes_din = parseFloat(document.getElementById("_total_enc_din").value || 0);
             const encartes_deb = parseFloat(document.getElementById("_total_enc_deb").value || 0);
             const encartes_cred = parseFloat(document.getElementById("_total_enc_cred").value || 0);
             const encartes_pix = parseFloat(document.getElementById("_total_enc_pix").value || 0);
-
-
 
             // DIGITAIS
             const digitais_din = parseFloat(document.getElementById("_total_dig_din").value || 0);
@@ -916,14 +910,19 @@
             const digitais_cred = parseFloat(document.getElementById("_total_dig_cred").value || 0);
             const digitais_pix = parseFloat(document.getElementById("_total_dig_pix").value || 0);
 
-
+            // Valor do desconto
+            const desconto = parseFloat(document.getElementById("desconto").value || 0);
 
             // Totais por tipo de pagamento
-            const total_dinheiro = (fotos_din * conf1_valor) + (encartes_din * conf2_valor) + (digitais_din * conf3_valor);
+            const total_dinheiro =
+                (fotos_din * conf1_valor) +
+                (encartes_din * conf2_valor) +
+                (digitais_din * conf3_valor) -
+                desconto;
+
             const total_debito = (fotos_deb * conf1_valor) + (encartes_deb * conf2_valor) + (digitais_deb * conf3_valor);
             const total_credito = (fotos_cred * conf1_valor) + (encartes_cred * conf2_valor) + (digitais_cred * conf3_valor);
             const total_pix = (fotos_pix * conf1_valor) + (encartes_pix * conf2_valor) + (digitais_pix * conf3_valor);
-
 
             // Exibindo os valores nos campos correspondentes
             document.getElementById("valor_din").value = total_dinheiro.toFixed(2);
@@ -932,8 +931,10 @@
             document.getElementById("valor_pix").value = total_pix.toFixed(2);
         }
 
-        // Chama a função para calcular os valores quando a página é carregada
-        window.onload = calcularValores;
+        // Adiciona um listener ao campo de desconto
+        document.getElementById("desconto").addEventListener("input", calcularValores);
+
+
 
 
     </SCRIPT>

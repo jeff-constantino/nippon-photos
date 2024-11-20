@@ -72,11 +72,33 @@ public class ServletFechaDia extends ServletGenericUtil {
                 String dataParam = request.getParameter("data_fechamento");
                 Date dataFechamento = Date.valueOf(dataParam); // Certifique-se de que o formato está correto
 
-                // Chame o DAO para buscar os dados de fechamento
+                // Chama o DAO para buscar os dados de fechamento
                 ModelFechaDia fechamento = daoFechaDia.buscarFechamento(dataFechamento); // Passando a data como argumento
 
                 // Adiciona o fechamento na requisição
                 request.setAttribute("fechamento", fechamento);
+                System.out.println(fechamento.toString());
+
+                // Agora, também executa a busca dos valores dos produtos
+                try {
+                    List<ModelConfig> configs = daoFechaDia.consultarValor();
+                    ModelConfig config = configs.isEmpty() ? null : configs.get(0);  // Pega a primeira configuração
+
+                    // Passa os valores de configuração para o JSP
+                    if (config != null) {
+                        request.setAttribute("conf1_valor", config.getConf1_valor());
+                        request.setAttribute("conf2_valor", config.getConf2_valor());
+                        request.setAttribute("conf3_valor", config.getConf3_valor());
+                    } else {
+                        request.setAttribute("produtosErro", "Nenhuma configuração encontrada.");
+                    }
+
+                } catch (Exception e) {
+                    // Loga a exceção para análise posterior
+                    e.printStackTrace();
+                    // Envia uma resposta de erro ao cliente
+                    request.setAttribute("produtosErro", "Erro ao buscar valores dos produtos.");
+                }
 
             } catch (IllegalArgumentException e) {
                 // Tratamento de erro de data inválida
@@ -96,6 +118,7 @@ public class ServletFechaDia extends ServletGenericUtil {
             dispatcher.forward(request, response);
             return; // Interrompe a execução após o forward
         }
+
 
         // Se a ação for buscaData
         if ("buscaData".equals(acao)) {
@@ -202,6 +225,16 @@ public class ServletFechaDia extends ServletGenericUtil {
             fechamento.setOld_ribbon_4(parseOrDefault(request.getParameter("old_ribbon_4"), 0));
             fechamento.setOld_ribbon_5(parseOrDefault(request.getParameter("old_ribbon_5"), 0));
             fechamento.setOld_ribbon_6(parseOrDefault(request.getParameter("old_ribbon_6"), 0));
+
+            // Recuperar valores dos novos campos
+            fechamento.setValor_din(parseOrDefault(request.getParameter("valor_din"), BigDecimal.ZERO));
+            fechamento.setValor_deb(parseOrDefault(request.getParameter("valor_deb"), BigDecimal.ZERO));
+            fechamento.setValor_cred(parseOrDefault(request.getParameter("valor_cred"), BigDecimal.ZERO));
+            fechamento.setValor_pix(parseOrDefault(request.getParameter("valor_pix"), BigDecimal.ZERO));
+            fechamento.setValor_din_real(parseOrDefault(request.getParameter("valor_din_real"), BigDecimal.ZERO));
+            fechamento.setValor_deb_real(parseOrDefault(request.getParameter("valor_deb_real"), BigDecimal.ZERO));
+            fechamento.setValor_cred_real(parseOrDefault(request.getParameter("valor_cred_real"), BigDecimal.ZERO));
+            fechamento.setValor_pix_real(parseOrDefault(request.getParameter("valor_pix_real"), BigDecimal.ZERO));
 
 
             // Outros campos

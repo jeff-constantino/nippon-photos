@@ -5,6 +5,7 @@ import model.ModelConfig;
 import model.ModelFechaDia;
 
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -161,8 +162,9 @@ public class DAOFechaDia {
                 "total_ribbon_5, total_ribbon_6, total_revelado, total_informado, " +
                 "desconto, observacao, dif_ribbon_1, dif_ribbon_2, dif_ribbon_3, dif_ribbon_4, " +
                 "dif_ribbon_5, dif_ribbon_6, sobras, old_ribbon_1, old_ribbon_2, old_ribbon_3, " + // Novas colunas
-                "old_ribbon_4, old_ribbon_5, old_ribbon_6) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "old_ribbon_4, old_ribbon_5, old_ribbon_6, " + // Novas colunas
+                "valor_din, valor_deb, valor_cred, valor_pix, valor_din_real, valor_deb_real, valor_cred_real, valor_pix_real) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             // Definindo os parâmetros da inserção
@@ -202,6 +204,14 @@ public class DAOFechaDia {
             pstmt.setInt(34, fechamento.getOld_ribbon_4()); // old_ribbon_4
             pstmt.setInt(35, fechamento.getOld_ribbon_5()); // old_ribbon_5
             pstmt.setInt(36, fechamento.getOld_ribbon_6()); // old_ribbon_6
+            pstmt.setBigDecimal(37, fechamento.getValor_din()); // valor_din
+            pstmt.setBigDecimal(38, fechamento.getValor_deb()); // valor_deb
+            pstmt.setBigDecimal(39, fechamento.getValor_cred()); // valor_cred
+            pstmt.setBigDecimal(40, fechamento.getValor_pix()); // valor_pix
+            pstmt.setBigDecimal(41, fechamento.getValor_din_real()); // valor_din_real
+            pstmt.setBigDecimal(42, fechamento.getValor_deb_real()); // valor_deb_real
+            pstmt.setBigDecimal(43, fechamento.getValor_cred_real()); // valor_cred_real
+            pstmt.setBigDecimal(44, fechamento.getValor_pix_real()); // valor_pix_real
 
             // Executa a inserção
             pstmt.executeUpdate();
@@ -211,6 +221,7 @@ public class DAOFechaDia {
             rollbackConnection();
         }
     }
+
 
 
 
@@ -224,58 +235,73 @@ public class DAOFechaDia {
                 "desconto = ?, observacao = ?, " +
                 "dif_ribbon_1 = ?, dif_ribbon_2 = ?, dif_ribbon_3 = ?, dif_ribbon_4 = ?, " +
                 "dif_ribbon_5 = ?, dif_ribbon_6 = ?, " +
-                "sobras = ?, " + // Adicionado sobras
+                "sobras = ?, " +
                 "old_ribbon_1 = ?, old_ribbon_2 = ?, old_ribbon_3 = ?, old_ribbon_4 = ?, " + // Novas colunas
-                "old_ribbon_5 = ?, old_ribbon_6 = ? " +
+                "old_ribbon_5 = ?, old_ribbon_6 = ?, " + // Novas colunas
+                "valor_din = ?, valor_deb = ?, valor_cred = ?, valor_pix = ?, valor_din_real = ?, valor_deb_real = ?, " +
+                "valor_cred_real = ?, valor_pix_real = ? " +
                 "WHERE data_fechamento = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            // Definindo os parâmetros da atualização
-            pstmt.setInt(1, fechamento.getTotal_ft_din()); // total_ft_din
-            pstmt.setInt(2, fechamento.getTotal_ft_deb()); // total_ft_deb
-            pstmt.setInt(3, fechamento.getTotal_ft_cred()); // total_ft_cred
-            pstmt.setInt(4, fechamento.getTotal_ft_pix()); // total_ft_pix
-            pstmt.setInt(5, fechamento.getTotal_enc_din()); // total_enc_din
-            pstmt.setInt(6, fechamento.getTotal_enc_deb()); // total_enc_deb
-            pstmt.setInt(7, fechamento.getTotal_enc_cred()); // total_enc_cred
-            pstmt.setInt(8, fechamento.getTotal_enc_pix()); // total_enc_pix
-            pstmt.setInt(9, fechamento.getTotal_dig_din()); // total_dig_din
-            pstmt.setInt(10, fechamento.getTotal_dig_deb()); // total_dig_deb
-            pstmt.setInt(11, fechamento.getTotal_dig_cred()); // total_dig_cred
-            pstmt.setInt(12, fechamento.getTotal_dig_pix()); // total_dig_pix
-            pstmt.setInt(13, fechamento.getTotal_ribbon_1()); // total_ribbon_1
-            pstmt.setInt(14, fechamento.getTotal_ribbon_2()); // total_ribbon_2
-            pstmt.setInt(15, fechamento.getTotal_ribbon_3()); // total_ribbon_3
-            pstmt.setInt(16, fechamento.getTotal_ribbon_4()); // total_ribbon_4
-            pstmt.setInt(17, fechamento.getTotal_ribbon_5()); // total_ribbon_5
-            pstmt.setInt(18, fechamento.getTotal_ribbon_6()); // total_ribbon_6
-            pstmt.setInt(19, fechamento.getTotal_revelado()); // total_revelado
-            pstmt.setInt(20, fechamento.getTotal_informado()); // total_informado
-            pstmt.setBigDecimal(21, fechamento.getDesconto()); // desconto
-            pstmt.setString(22, fechamento.getObservacao()); // observacao
-            pstmt.setInt(23, fechamento.getDifRibbon1()); // dif_ribbon_1
-            pstmt.setInt(24, fechamento.getDifRibbon2()); // dif_ribbon_2
-            pstmt.setInt(25, fechamento.getDifRibbon3()); // dif_ribbon_3
-            pstmt.setInt(26, fechamento.getDifRibbon4()); // dif_ribbon_4
-            pstmt.setInt(27, fechamento.getDifRibbon5()); // dif_ribbon_5
-            pstmt.setInt(28, fechamento.getDifRibbon6()); // dif_ribbon_6
-            pstmt.setInt(29, fechamento.getSobras()); // sobras
-            pstmt.setInt(30, fechamento.getOld_ribbon_1()); // old_ribbon_1
-            pstmt.setInt(31, fechamento.getOld_ribbon_2()); // old_ribbon_2
-            pstmt.setInt(32, fechamento.getOld_ribbon_3()); // old_ribbon_3
-            pstmt.setInt(33, fechamento.getOld_ribbon_4()); // old_ribbon_4
-            pstmt.setInt(34, fechamento.getOld_ribbon_5()); // old_ribbon_5
-            pstmt.setInt(35, fechamento.getOld_ribbon_6()); // old_ribbon_6
-            pstmt.setDate(36, Date.valueOf(fechamento.getData_fechamento().toLocalDate())); // data_fechamento
+            // Verifica se o valor não é zero e, caso contrário, define como 0
+            pstmt.setInt(1, fechamento.getTotal_ft_din() != 0 ? fechamento.getTotal_ft_din() : 0); // total_ft_din
+            pstmt.setInt(2, fechamento.getTotal_ft_deb() != 0 ? fechamento.getTotal_ft_deb() : 0); // total_ft_deb
+            pstmt.setInt(3, fechamento.getTotal_ft_cred() != 0 ? fechamento.getTotal_ft_cred() : 0); // total_ft_cred
+            pstmt.setInt(4, fechamento.getTotal_ft_pix() != 0 ? fechamento.getTotal_ft_pix() : 0); // total_ft_pix
+            pstmt.setInt(5, fechamento.getTotal_enc_din() != 0 ? fechamento.getTotal_enc_din() : 0); // total_enc_din
+            pstmt.setInt(6, fechamento.getTotal_enc_deb() != 0 ? fechamento.getTotal_enc_deb() : 0); // total_enc_deb
+            pstmt.setInt(7, fechamento.getTotal_enc_cred() != 0 ? fechamento.getTotal_enc_cred() : 0); // total_enc_cred
+            pstmt.setInt(8, fechamento.getTotal_enc_pix() != 0 ? fechamento.getTotal_enc_pix() : 0); // total_enc_pix
+            pstmt.setInt(9, fechamento.getTotal_dig_din() != 0 ? fechamento.getTotal_dig_din() : 0); // total_dig_din
+            pstmt.setInt(10, fechamento.getTotal_dig_deb() != 0 ? fechamento.getTotal_dig_deb() : 0); // total_dig_deb
+            pstmt.setInt(11, fechamento.getTotal_dig_cred() != 0 ? fechamento.getTotal_dig_cred() : 0); // total_dig_cred
+            pstmt.setInt(12, fechamento.getTotal_dig_pix() != 0 ? fechamento.getTotal_dig_pix() : 0); // total_dig_pix
+            pstmt.setInt(13, fechamento.getTotal_ribbon_1() != 0 ? fechamento.getTotal_ribbon_1() : 0); // total_ribbon_1
+            pstmt.setInt(14, fechamento.getTotal_ribbon_2() != 0 ? fechamento.getTotal_ribbon_2() : 0); // total_ribbon_2
+            pstmt.setInt(15, fechamento.getTotal_ribbon_3() != 0 ? fechamento.getTotal_ribbon_3() : 0); // total_ribbon_3
+            pstmt.setInt(16, fechamento.getTotal_ribbon_4() != 0 ? fechamento.getTotal_ribbon_4() : 0); // total_ribbon_4
+            pstmt.setInt(17, fechamento.getTotal_ribbon_5() != 0 ? fechamento.getTotal_ribbon_5() : 0); // total_ribbon_5
+            pstmt.setInt(18, fechamento.getTotal_ribbon_6() != 0 ? fechamento.getTotal_ribbon_6() : 0); // total_ribbon_6
+            pstmt.setInt(19, fechamento.getTotal_revelado() != 0 ? fechamento.getTotal_revelado() : 0); // total_revelado
+            pstmt.setInt(20, fechamento.getTotal_informado() != 0 ? fechamento.getTotal_informado() : 0); // total_informado
+            pstmt.setBigDecimal(21, fechamento.getDesconto() != null ? fechamento.getDesconto() : BigDecimal.ZERO); // desconto
+            pstmt.setString(22, fechamento.getObservacao() != null ? fechamento.getObservacao() : ""); // observacao
+            pstmt.setInt(23, fechamento.getDifRibbon1() != 0 ? fechamento.getDifRibbon1() : 0); // dif_ribbon_1
+            pstmt.setInt(24, fechamento.getDifRibbon2() != 0 ? fechamento.getDifRibbon2() : 0); // dif_ribbon_2
+            pstmt.setInt(25, fechamento.getDifRibbon3() != 0 ? fechamento.getDifRibbon3() : 0); // dif_ribbon_3
+            pstmt.setInt(26, fechamento.getDifRibbon4() != 0 ? fechamento.getDifRibbon4() : 0); // dif_ribbon_4
+            pstmt.setInt(27, fechamento.getDifRibbon5() != 0 ? fechamento.getDifRibbon5() : 0); // dif_ribbon_5
+            pstmt.setInt(28, fechamento.getDifRibbon6() != 0 ? fechamento.getDifRibbon6() : 0); // dif_ribbon_6
+            pstmt.setInt(29, fechamento.getSobras() != 0 ? fechamento.getSobras() : 0); // sobras
+            pstmt.setInt(30, fechamento.getOld_ribbon_1() != 0 ? fechamento.getOld_ribbon_1() : 0); // old_ribbon_1
+            pstmt.setInt(31, fechamento.getOld_ribbon_2() != 0 ? fechamento.getOld_ribbon_2() : 0); // old_ribbon_2
+            pstmt.setInt(32, fechamento.getOld_ribbon_3() != 0 ? fechamento.getOld_ribbon_3() : 0); // old_ribbon_3
+            pstmt.setInt(33, fechamento.getOld_ribbon_4() != 0 ? fechamento.getOld_ribbon_4() : 0); // old_ribbon_4
+            pstmt.setInt(34, fechamento.getOld_ribbon_5() != 0 ? fechamento.getOld_ribbon_5() : 0); // old_ribbon_5
+            pstmt.setInt(35, fechamento.getOld_ribbon_6() != 0 ? fechamento.getOld_ribbon_6() : 0); // old_ribbon_6
+            pstmt.setBigDecimal(36, fechamento.getValor_din() != null ? fechamento.getValor_din() : BigDecimal.ZERO); // valor_din
+            pstmt.setBigDecimal(37, fechamento.getValor_deb() != null ? fechamento.getValor_deb() : BigDecimal.ZERO); // valor_deb
+            pstmt.setBigDecimal(38, fechamento.getValor_cred() != null ? fechamento.getValor_cred() : BigDecimal.ZERO); // valor_cred
+            pstmt.setBigDecimal(39, fechamento.getValor_pix() != null ? fechamento.getValor_pix() : BigDecimal.ZERO); // valor_pix
+            pstmt.setBigDecimal(40, fechamento.getValor_din_real() != null ? fechamento.getValor_din_real() : BigDecimal.ZERO); // valor_din_real
+            pstmt.setBigDecimal(41, fechamento.getValor_deb_real() != null ? fechamento.getValor_deb_real() : BigDecimal.ZERO); // valor_deb_real
+            pstmt.setBigDecimal(42, fechamento.getValor_cred_real() != null ? fechamento.getValor_cred_real() : BigDecimal.ZERO); // valor_cred_real
+            pstmt.setBigDecimal(43, fechamento.getValor_pix_real() != null ? fechamento.getValor_pix_real() : BigDecimal.ZERO); // valor_pix_real
+            Date.valueOf(fechamento.getData_fechamento().toLocalDate()); // data_fechamento
 
-            // Executa a atualização
             pstmt.executeUpdate();
-            connection.commit(); // Commit das mudanças
         } catch (SQLException e) {
+            try {
+                connection.rollback(); // Rollback em caso de erro
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
-            rollbackConnection();
         }
     }
+
+
+
 
 
 
@@ -363,6 +389,17 @@ public class DAOFechaDia {
 
                     fechamento.setTotal_revelado(resultSet.getInt("total_revelado"));
                     fechamento.setTotal_informado(resultSet.getInt("total_informado"));
+
+                    // Novos campos de valor
+                    fechamento.setValor_din(resultSet.getBigDecimal("valor_din"));
+                    fechamento.setValor_deb(resultSet.getBigDecimal("valor_deb"));
+                    fechamento.setValor_cred(resultSet.getBigDecimal("valor_cred"));
+                    fechamento.setValor_pix(resultSet.getBigDecimal("valor_pix"));
+
+                    fechamento.setValor_din_real(resultSet.getBigDecimal("valor_din_real"));
+                    fechamento.setValor_deb_real(resultSet.getBigDecimal("valor_deb_real"));
+                    fechamento.setValor_cred_real(resultSet.getBigDecimal("valor_cred_real"));
+                    fechamento.setValor_pix_real(resultSet.getBigDecimal("valor_pix_real"));
                 }
             }
         }

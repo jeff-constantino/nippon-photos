@@ -1,0 +1,193 @@
+***********************************************************************
+trigger para automatizar maiusculas no postgresql
+
+
+CREATE OR REPLACE FUNCTION trg_all_upper()
+  RETURNS trigger
+  LANGUAGE plpgsql AS
+$func$
+DECLARE
+   -- basic character types, possibly add citext, domains or custom types
+   _typ   CONSTANT regtype[] := '{text, bpchar, varchar}';
+   _sql   text;
+   _found bool;
+BEGIN
+   SELECT INTO _sql, _found
+          'SELECT ' || string_agg(
+              CASE WHEN a.atttypid = ANY(_typ)
+              THEN format ('upper(%1$s)::%2$s AS %1$s'
+                         , a.col, a.atttypid::regtype)
+              ELSE col END
+            , ', ') || ' FROM (SELECT ($1).*) t'
+        , bool_or(a.atttypid = ANY(_typ))
+   FROM  (
+      SELECT a.atttypid, quote_ident(attname) AS col
+      FROM   pg_attribute a
+      WHERE  a.attrelid = TG_RELID  -- object ID of table that fired trigger
+      AND    a.attnum >= 1          -- exclude tableoid & friends
+      AND    NOT a.attisdropped     -- exclude dropped columns
+      ORDER  BY a.attnum
+      ) a;
+
+   -- RAISE NOTICE '%', _sql;  -- debug
+   IF _found THEN
+      EXECUTE _sql USING NEW INTO NEW;
+   END IF;
+
+   RETURN NEW;
+END
+$func$;
+
+
+____________________________________2 parte executa depois_______________
+
+CREATE TRIGGER all_upper_bef_insupd
+BEFORE INSERT OR UPDATE ON *nome da tabela*
+FOR EACH ROW EXECUTE FUNCTION trg_all_upper();
+
+
+***********************************************************************
+
+
+
+***********************************************************************
+retornar para servlet ao inves da página :
+ao invés disso :
+            request.getRequestDispatcher("principal/PAGINA.jsp").forward(request, response);
+
+USA ASSIM:
+response.sendRedirect(request.getContextPath() + "/Servlet.....");
+***********************************************************************
+
+
+
+
+
+***********************************************************************
+FORMATAÇÃO VALORES:
+para tables <c if =
+<td><fmt:formatNumber value="${conta.valor}"
+                      type="currency"
+                      currencySymbol="R$"/></td>
+
+
+//Pega o id do input para aplicar a mask:
+$("#input").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+
+function removerMascara(valor) {
+    return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '');
+}
+// PEGA O ID DO FORM PARA REMOVER A MASK AO ENVIAR:
+$("#id Form").on("submit", function(e) {
+    var valor1 = removerMascara($("#conf1_valor").val());
+
+    $("#input").val(valor1);
+
+});
+FIM FORMATAÇÃO VALORES
+
+***********************************************************************
+
+
+
+***********************************************************************
+MODAL PARA MSG:
+
+$(document).ready(function() {
+    var msg = "${msg}";
+    if (msg) {
+        $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+    }
+});
+
+
+<SCRIPT type="text/javascript">
+
+    $(document).ready(function() {
+        var msg = "${msg}";
+        if (msg) {
+            $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+        }
+    });
+<SCRIPT> FIM DO MODAL PARA MSG
+
+***********************************************************************
+
+
+***********************************************************************
+DEFINIR A DATA INICIAL COMO A DE HOJE....
+<script>
+    // Obtém a data atual
+    const today = new Date().toISOString().split('T')[0];
+    // Define o valor do campo de data como a data atual
+    document.getElementById('outer_dataVenda').value = today;
+</script>
+FIM DA DATA INICIAL
+*************************************************************
+
+
+***********************************************************************
+paginar
+
+jsp :
+<!-- Controles de paginação -->
+<div class="pagination">
+    <c:if test="${paginaAtual > 1}">
+        <a href="ServletVendas?acao=imprimirRelatorioVendas&pagina=${paginaAtual - 1}" class="page-link">&laquo; Anterior</a>
+    </c:if>
+
+    <c:forEach var="i" begin="1" end="${totalPaginas}">
+        <a href="ServletVendas?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
+    </c:forEach>
+
+header :
+<style>
+    .pagination a.page-link {
+        margin: 0 5px; /* Adiciona espaço horizontal de 5px entre os links */
+        padding: 8px 12px; /* Define o padding dentro dos links para aumentar o clique */
+        text-decoration: none;
+        border: 1px solid #ddd; /* Adiciona uma borda ao redor dos links */
+        color: #007bff;
+    }
+
+    .pagination a.page-link.active {
+        background-color: #007bff;
+        color: white; /* Deixa o link da página ativa com cores diferentes */
+    }
+
+    .pagination a.page-link:hover {
+        background-color: #ddd; /* Adiciona um efeito de hover */
+        color: #007bff;
+    }
+</style>
+
+Servlet :
+if ("imprimirRelatorioVendas".equals(acao)) {
+    int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
+    int registrosPorPagina = 10;
+    int offset = (paginaAtual - 1) * registrosPorPagina;
+
+    // Busca de vendas com paginação
+    vendasList = relatorio.consultarVendas(funcionarioId, dataInicial, dataFinal, offset, registrosPorPagina);
+
+    // Adiciona vendasList no request para o JSP
+    request.setAttribute("vendasList", vendasList);
+
+    // Lógica para cálculo de total de páginas
+    int totalVendas = relatorio.contarVendas(funcionarioId, dataInicial, dataFinal); // Método para contar registros
+    int totalPaginas = (int) Math.ceil(totalVendas / (double) registrosPorPagina);
+
+    // Adiciona totalPaginas e paginaAtual no request
+    request.setAttribute("totalPaginas", totalPaginas);
+    request.setAttribute("paginaAtual", paginaAtual);
+
+    // Redireciona para a página JSP correta
+    dispatcher = request.getRequestDispatcher("principal/relvendas.jsp");
+}
+
+dao:
+// Ordenação e paginação
+sql.append(" ORDER BY v.venda_id DESC LIMIT ? OFFSET ?");
+
+fim paginação
+***********************************************************************

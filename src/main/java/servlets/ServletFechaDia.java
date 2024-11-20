@@ -65,6 +65,7 @@ public class ServletFechaDia extends ServletGenericUtil {
         DAOFechaDia daoFechaDia = new DAOFechaDia();
 
 
+
         // Lógica para "buscarfechamento"
         if ("buscarfechamento".equals(acao)) {
             try {

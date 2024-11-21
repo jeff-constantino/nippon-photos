@@ -10,7 +10,28 @@ public class ModelDespesas {
     private String descricao_despesa;
     private double valor_despesa;
     private Date data_despesa;
+    private String pagamento_despesa;
 
+
+    @Override
+    public String toString() {
+        return "ModelDespesas{" +
+                "id_despesa=" + id_despesa +
+                ", nome_despesa='" + nome_despesa + '\'' +
+                ", descricao_despesa='" + descricao_despesa + '\'' +
+                ", valor_despesa=" + valor_despesa +
+                ", data_despesa=" + data_despesa +
+                ", pagamento_despesa='" + pagamento_despesa + '\'' +
+                '}';
+    }
+
+    public String getPagamento_despesa() {
+        return pagamento_despesa;
+    }
+
+    public void setPagamento_despesa(String pagamento_despesa) {
+        this.pagamento_despesa = pagamento_despesa;
+    }
 
     public Date getData_despesa() {
         return data_despesa;

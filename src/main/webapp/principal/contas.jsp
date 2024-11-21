@@ -233,6 +233,28 @@
                                                                                                         </option>
                                                                                                     </select>
                                                                                                 </div>
+                                                                                                <div class="col-3">
+                                                                                                    <label>FORMA DE PAGAMENTO</label>
+                                                                                                    <select class="form-select" id="pagamento" name="pagamento"
+                                                                                                            required>
+                                                                                                        <option style="color: #0a58ca"
+                                                                                                                value="---------" ${contas.pagamento == '---------' ? 'selected' : ''}>
+                                                                                                            ---------
+                                                                                                        </option>
+                                                                                                        <option style="color:white"
+                                                                                                                value="dinheiro" ${contas.pagamento == 'DINHEIRO' ? 'selected' : ''}>
+                                                                                                            DINHEIRO
+                                                                                                        </option>
+                                                                                                        <option style="color: #DAA520"
+                                                                                                                value="cartao" ${contas.pagamento == 'CARTAO' ? 'selected' : ''}>
+                                                                                                            CARTÃO
+                                                                                                        </option>
+                                                                                                        <option style="color: #00d25b"
+                                                                                                                value="pix" ${contas.pagamento == 'PIX' ? 'selected' : ''}>
+                                                                                                            PIX
+                                                                                                        </option>
+                                                                                                    </select>
+                                                                                                </div>
 
                                                                                             </div>
                                                                                         </div>
@@ -319,6 +341,7 @@
                                                                                 <th>Data de Pedido</th>
                                                                                 <th>Data de Pagamento</th>
                                                                                 <th>Status</th>
+                                                                                <th>Pagamento</th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody id="tabelaContasBody">
@@ -474,7 +497,7 @@
                                                                    value="${contas.empresa}">
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label style="color: #f2a654">ITENS DO PEDIDO</label>
+                                                            <label >ITENS DO PEDIDO</label>
                                                             <textarea class="form-control"
                                                                       style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase;"
                                                                       id="itens2" name="itens"
@@ -482,7 +505,7 @@
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-3">
-                                                                <label style="color: #f2a654">VALOR</label>
+                                                                <label>VALOR</label>
                                                                 <div class="input-group">
                                                                     <div class="input-group-prepend">
                                                                         <span class="input-group-text"
@@ -506,6 +529,29 @@
                                                                     <option style="color: #bf3322"
                                                                             value="A PAGAR" ${contas.status == 'A PAGAR' ? 'selected' : ''}>
                                                                         A PAGAR
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-3">
+                                                                <label>FORMA DE PAGAMENTO</label>
+                                                                <select class="form-select" id="pagamento2" name="pagamento"
+                                                                        required>
+                                                                    <option style="color: #0a58ca"
+                                                                            value="---------" ${contas.pagamento == '---------' ? 'selected' : ''}>
+                                                                        ---------
+                                                                    </option>
+                                                                    <option style="color:white"
+                                                                            value="dinheiro" ${contas.pagamento == 'DINHEIRO' ? 'selected' : ''}>
+                                                                        DINHEIRO
+                                                                    </option>
+                                                                    <option style="color: #DAA520"
+                                                                            value="cartao" ${contas.pagamento == 'CARTAO' ? 'selected' : ''}>
+                                                                        CARTÃO
+                                                                    </option>
+                                                                    <option style="color: #00d25b"
+                                                                            value="pix" ${contas.pagamento == 'PIX' ? 'selected' : ''}>
+                                                                        PIX
                                                                     </option>
                                                                 </select>
                                                             </div>
@@ -552,6 +598,7 @@
                                                                 <th>Pedido</th>
                                                                 <th>Pagamento</th>
                                                                 <th>Status</th>
+                                                                <th>Pagamento</th>
                                                                 <th>ID</th>
 
 
@@ -564,7 +611,7 @@
                                                                         <tr>
                                                                             <td>
                                                                                 <button class="btn btn-outline-primary"
-                                                                                        onclick="editarConta(this, '${contas.data_de_pedido}', '${contas.data_de_pagamento}', '${contas.numero_pedido}', '${contas.conta_id}', '${contas.empresa}', '${contas.itens}', '${contas.valor}', '${contas.status}',)">
+                                                                                        onclick="editarConta(this, '${contas.data_de_pedido}', '${contas.data_de_pagamento}', '${contas.numero_pedido}', '${contas.conta_id}', '${contas.empresa}', '${contas.itens}', '${contas.valor}', '${contas.status}', '${contas.pagamento}',)">
                                                                                     Editar
                                                                                 </button>
                                                                             </td>
@@ -582,6 +629,7 @@
                                                                                     value="${contas.data_de_pagamento}"
                                                                                     pattern="dd/MM/yyyy"/></td>
                                                                             <td><c:out value="${contas.status}"/></td>
+                                                                            <td><c:out value="${contas.pagamento}"/></td>
                                                                             <td><c:out value="${contas.conta_id}"/></td>
                                                                         </tr>
                                                                     </c:forEach>
@@ -712,16 +760,17 @@
             return data;
         }
 
-        function editarConta(button, dataPedido, dataPagamento, numeroPedido, conta_id, empresa, itens, valor, status) {
-            // Preencher os campos do formulário com os dados da conta
-            document.getElementById('data_de_pedido2').value = formatarData(dataPedido); // Data de Pedido
-            document.getElementById('data_de_pagamento2').value = formatarData(dataPagamento); // Data de Pagamento
-            document.getElementById('pedido2').value = numeroPedido; // Número do Pedido
-            document.getElementById('idPedido').value = conta_id; // ID da conta
-            document.getElementById('empresa2').value = empresa; // Preenche o campo EMPRESA
-            document.getElementById('itens2').value = itens; // Itens do Pedido
-            document.getElementById('conf1_valor2').value = valor; // Valor
-            document.getElementById('status2').value = status; // Status
+        function editarConta(button, dataPedido, dataPagamento, numeroPedido, conta_id, empresa, itens, valor, status, pagamento) {
+
+            document.getElementById('data_de_pedido2').value = formatarData(dataPedido);
+            document.getElementById('data_de_pagamento2').value = formatarData(dataPagamento);
+            document.getElementById('pedido2').value = numeroPedido;
+            document.getElementById('idPedido').value = conta_id;
+            document.getElementById('empresa2').value = empresa;
+            document.getElementById('itens2').value = itens;
+            document.getElementById('conf1_valor2').value = valor;
+            document.getElementById('status2').value = status;
+            document.getElementById('pagamento2').value = pagamento;
 
 
         }

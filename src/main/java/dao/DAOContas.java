@@ -18,7 +18,7 @@ public class DAOContas {
     }
 
     public void gravarConta(ModelContas conta) throws Exception {
-        String sql = "INSERT INTO contas (numero_pedido, empresa, itens, valor, data_de_pedido, data_de_pagamento, status) VALUES (?, UPPER(?), UPPER(?), ?, ?, ?, UPPER(?))";
+        String sql = "INSERT INTO contas (numero_pedido, empresa, itens, valor, data_de_pedido, data_de_pagamento, status,pagamento) VALUES (?, UPPER(?), UPPER(?), ?, ?, ?, UPPER(?), UPPER(?))";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, conta.getNumero_pedido());
@@ -41,6 +41,8 @@ public class DAOContas {
             }
 
             stmt.setString(7, conta.getStatus());
+            stmt.setString(8, conta.getPagamento());
+
 
             stmt.executeUpdate();
 
@@ -61,7 +63,7 @@ public class DAOContas {
             throw new IllegalArgumentException("ID da conta não pode ser nulo.");
         }
 
-        String sql = "UPDATE contas SET empresa = UPPER(?), itens = UPPER(?), valor = ?, data_de_pedido = ?, data_de_pagamento = ?, status = UPPER(?) WHERE conta_id = ?";
+        String sql = "UPDATE contas SET empresa = UPPER(?), itens = UPPER(?), valor = ?, data_de_pedido = ?, data_de_pagamento = ?, status = UPPER(?), pagamento = UPPER(?) WHERE conta_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, conta.getEmpresa());
@@ -83,7 +85,8 @@ public class DAOContas {
             }
 
             stmt.setString(6, conta.getStatus());
-            stmt.setLong(7, conta.getConta_id());
+            stmt.setString(7, conta.getPagamento());
+            stmt.setLong(8, conta.getConta_id());
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -167,6 +170,7 @@ public class DAOContas {
                 conta.setData_de_pedido(rs.getDate("data_de_pedido"));
                 conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
                 conta.setStatus(rs.getString("status"));
+                conta.setPagamento(rs.getString("pagamento"));
                 contasRecentes.add(conta);
             }
         } catch (SQLException e) {
@@ -193,6 +197,7 @@ public class DAOContas {
                 conta.setData_de_pedido(rs.getDate("data_de_pedido"));
                 conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
                 conta.setStatus(rs.getString("status"));
+                conta.setPagamento(rs.getString("pagamento"));
                 contas.add(conta);
             }
         } catch (SQLException e) {
@@ -222,6 +227,7 @@ public class DAOContas {
                 conta.setData_de_pedido(rs.getDate("data_de_pedido"));
                 conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
                 conta.setStatus(rs.getString("status"));
+                conta.setPagamento(rs.getString("pagamento"));
                 contas.add(conta);
             }
         } catch (SQLException e) {

@@ -19,20 +19,21 @@ public class DAODespesas {
 
     // Método para gravar uma nova despesa
     public void gravarDespesa(ModelDespesas despesas) throws Exception {
-        String sql = "INSERT INTO despesas (nome_despesa, descricao_despesa, valor_despesa, data_despesa) VALUES (UPPER(?), UPPER(?), ?, ?)";
+        String sql = "INSERT INTO despesas (nome_despesa, descricao_despesa, valor_despesa, pagamento_despesa, data_despesa) VALUES (UPPER(?), UPPER(?), ?, UPPER(?), ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, despesas.getNome_despesa());
             stmt.setString(2, despesas.getDescricao_despesa());
             stmt.setDouble(3, despesas.getValor_despesa());
+            stmt.setString(4, despesas.getPagamento_despesa());
 
             // Verifica se data_despesa não é null
             if (despesas.getData_despesa() != null) {
-                stmt.setDate(4, new java.sql.Date(despesas.getData_despesa().getTime())); // Corrigido para a posição 4
+                stmt.setDate(5, new java.sql.Date(despesas.getData_despesa().getTime())); // Corrigido para a posição 4
             } else {
-                stmt.setNull(4, java.sql.Types.DATE); // Seta como null no banco na posição 4
+                stmt.setNull(5, java.sql.Types.DATE); // Seta como null no banco na posição 4
             }
-
+            System.out.println(despesas);
             stmt.executeUpdate();
 
             // Recupera a chave gerada automaticamente (ID)
@@ -54,18 +55,19 @@ public class DAODespesas {
             throw new IllegalArgumentException("ID da despesa não pode ser nulo.");
         }
 
-        String sql = "UPDATE despesas SET nome_despesa = UPPER(?), descricao_despesa = UPPER(?), valor_despesa = ?, data_despesa = ? WHERE id_despesa = ?";
+        String sql = "UPDATE despesas SET nome_despesa = UPPER(?), descricao_despesa = UPPER(?), valor_despesa = ?, pagamento_despesa = UPPER(?), data_despesa = ? WHERE id_despesa = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, despesas.getNome_despesa());
             stmt.setString(2, despesas.getDescricao_despesa());
             stmt.setDouble(3, despesas.getValor_despesa());
+            stmt.setString(4, despesas.getPagamento_despesa());
 
             // Verifica se data_despesa não é null
             if (despesas.getData_despesa() != null) {
-                stmt.setDate(4, new java.sql.Date(despesas.getData_despesa().getTime()));
+                stmt.setDate(5, new java.sql.Date(despesas.getData_despesa().getTime()));
             } else {
-                stmt.setNull(4, java.sql.Types.DATE);
+                stmt.setNull(5, java.sql.Types.DATE);
             }
 
             // Corrigido o índice para definir o ID corretamente
@@ -140,6 +142,7 @@ public class DAODespesas {
                 despesa.setNome_despesa(rs.getString("nome_despesa"));
                 despesa.setDescricao_despesa(rs.getString("descricao_despesa"));
                 despesa.setValor_despesa(rs.getDouble("valor_despesa"));
+                despesa.setPagamento_despesa(rs.getString("pagamento_despesa"));
                 despesa.setData_despesa(rs.getDate("data_despesa"));
                 despesasList.add(despesa);
             }
@@ -167,6 +170,7 @@ public class DAODespesas {
                 despesa.setNome_despesa(rs.getString("nome_despesa"));
                 despesa.setDescricao_despesa(rs.getString("descricao_despesa"));
                 despesa.setValor_despesa(rs.getDouble("valor_despesa"));
+                despesa.setPagamento_despesa(rs.getString("pagamento_despesa"));
                 despesa.setData_despesa(rs.getDate("data_despesa"));
                 todasDespesasList.add(despesa);
             }

@@ -66,6 +66,7 @@ public class ServletDespesas extends ServletGenericUtil {
                         .append("<td>").append(despesas.getDescricao_despesa()).append("</td>")
                         .append("<td>").append(despesas.getValor_despesa()).append("</td>")
                         .append("<td>").append(formatDate(despesas.getData_despesa())).append("</td>")
+                        .append("<td>").append(despesas.getPagamento_despesa()).append("</td>")
                         .append("<td>")
                         .append("<form method='get' action='").append(request.getContextPath()).append("/ServletDespesas'>")
                         .append("<input type='hidden' name='acao' value='excluirDespesa' />")
@@ -145,6 +146,7 @@ public class ServletDespesas extends ServletGenericUtil {
                 String descricaoDespesa = request.getParameter("descricao_despesa");
                 double valorDespesa = Double.parseDouble(request.getParameter("valor_despesa"));
                 String dataString = request.getParameter("data_despesa");
+                String pagamentoDespesa = request.getParameter("pagamento_despesa");
 
                 // Converter a string da data para java.util.Date
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -158,6 +160,7 @@ public class ServletDespesas extends ServletGenericUtil {
                 novaDespesa.setDescricao_despesa(descricaoDespesa);
                 novaDespesa.setValor_despesa(valorDespesa);
                 novaDespesa.setData_despesa(dataDespesa);
+                novaDespesa.setPagamento_despesa(pagamentoDespesa);
 
                 daoDespesas.gravarDespesa(novaDespesa);
                 msg = "Despesa gravada com sucesso!";
@@ -170,6 +173,7 @@ public class ServletDespesas extends ServletGenericUtil {
 
         // Configura a mensagem no request e redireciona de volta para a página de despesas
         request.getSession().setAttribute("msg", msg);
-        response.sendRedirect(request.getContextPath() + "/principal/despesas.jsp");
+//        response.sendRedirect(request.getContextPath() + "/principal/despesas.jsp");
+        response.sendRedirect(request.getContextPath() + "/ServletDespesas");
     }
 }

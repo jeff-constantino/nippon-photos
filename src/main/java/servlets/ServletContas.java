@@ -1,25 +1,18 @@
 package servlets;
 
-import com.google.gson.Gson;
 import dao.DAOContas;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelContas;
-import model.ResponseData;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-
-import static util.DateUtil.formatDate;
 
 @WebServlet("/ServletContas")
 public class ServletContas extends ServletGenericUtil {
@@ -47,7 +40,9 @@ public class ServletContas extends ServletGenericUtil {
             String data_pedido = request.getParameter("data_de_pedido");
             String data_pagamento = request.getParameter("data_de_pagamento");
             String status = request.getParameter("status");
+            String pagamento = request.getParameter("pagamento");
             String acao = request.getParameter("acao");
+
 
             ModelContas modelContas = new ModelContas();
 
@@ -77,6 +72,7 @@ public class ServletContas extends ServletGenericUtil {
             }
 
             modelContas.setStatus(status != null ? status.toUpperCase() : null);
+            modelContas.setPagamento(pagamento != null ? pagamento.toUpperCase() : null);
 
             // Converte e seta as datas
             if (data_pedido != null && !data_pedido.isEmpty()) {
@@ -191,6 +187,7 @@ public class ServletContas extends ServletGenericUtil {
                         .append("<td>").append(formatDate(conta.getData_de_pedido())).append("</td>")
                         .append("<td>").append(formatDate(conta.getData_de_pagamento())).append("</td>")
                         .append("<td>").append(conta.getStatus()).append("</td>")
+                        .append("<td>").append(conta.getPagamento()).append("</td>")
                         .append("</tr>");
             }
 

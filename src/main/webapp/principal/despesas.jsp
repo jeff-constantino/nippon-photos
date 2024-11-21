@@ -55,13 +55,13 @@
 
                                                                       <div class="row mb-3">
                                                                           <div class="col-4">
-                                                                              <label for="data_despesa">Data da Despesa</label>
+                                                                              <label for="data_despesa">DATA DA DESPESA</label>
                                                                               <input type="date" class="form-control" id="data_despesa" name="data_despesa" required
                                                                                      value="${formattedDataCompra != null ? formattedDataCompra : ''}">
                                                                           </div>
 
                                                                           <div class="col-8">
-                                                                              <label for="nome_despesa" class="form-label">Despesa:</label>
+                                                                              <label for="nome_despesa" class="form-label">DESPESA:</label>
                                                                               <input type="text" class="form-control" id="nome_despesa" name="nome_despesa" placeholder=""
                                                                                      style="background-color: black; text-transform: uppercase;"
                                                                                      value="${modelDespesas.nome_despesa != null ? modelDespesas.nome_despesa : ''}">
@@ -70,8 +70,8 @@
 
                                                                       <div class="row mb-3">
                                                                           <div class="col-12">
-                                                                              <label style="color: #f2a654;">Descrição</label>
-                                                                              <textarea class="form-control" rows="5" style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase;"
+                                                                              <label>DESCRIÇÃO</label>
+                                                                              <textarea class="form-control" style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase;"
                                                                                         id="descricao_despesa" name="descricao_despesa" required>
                                                                                   ${modelDespesas.descricao_despesa != null ? modelDespesas.descricao_despesa : ''}
                                                                               </textarea>
@@ -80,7 +80,7 @@
 
                                                                       <div class="row mb-3">
                                                                           <div class="col-6">
-                                                                              <label style="color: #f2a654;">VALOR</label>
+                                                                              <label>VALOR</label>
                                                                               <div class="input-group">
                                                                                   <div class="input-group-prepend">
                                                                                       <span class="input-group-text" style="color: #f2a654; font-weight: bold">R$</span>
@@ -90,6 +90,28 @@
                                                                                          value="${modelDespesas.valor_despesa != null ? modelDespesas.valor_despesa : ''}">
                                                                                   <input type="hidden" id="valorBruto" name="valor_despesa" value="">
                                                                               </div>
+                                                                          </div>
+                                                                          <div class="col-3">
+                                                                              <label>FORMA DE PAGAMENTO</label>
+                                                                              <select class="form-select" id="pagamentoDespesa" name="pagamento_despesa"
+                                                                                      required>
+                                                                                  <option style="color: #0a58ca"
+                                                                                          value="---------" ${modelDespesas.pagamento_despesa == '---------' ? 'selected' : ''}>
+                                                                                      ---------
+                                                                                  </option>
+                                                                                  <option style="color:white"
+                                                                                          value="dinheiro" ${modelDespesas.pagamento_despesa == 'DINHEIRO' ? 'selected' : ''}>
+                                                                                      DINHEIRO
+                                                                                  </option>
+                                                                                  <option style="color: #DAA520"
+                                                                                          value="cartao" ${modelDespesas.pagamento_despesa == 'CARTAO' ? 'selected' : ''}>
+                                                                                      CARTÃO
+                                                                                  </option>
+                                                                                  <option style="color: #00d25b"
+                                                                                          value="pix" ${modelDespesas.pagamento_despesa == 'PIX' ? 'selected' : ''}>
+                                                                                      PIX
+                                                                                  </option>
+                                                                              </select>
                                                                           </div>
                                                                       </div>
 
@@ -138,7 +160,8 @@
                                                                                                     <th>Descrição</th>
                                                                                                     <th>Valor</th>
                                                                                                     <th>Data</th>
-                                                                                                    <th>Ações</th> <!-- Coluna para os botões -->
+                                                                                                    <th>Forma de Pagamento</th>
+                                                                                                    <th>Opções</th> <!-- Coluna para os botões -->
                                                                                                 </tr>
                                                                                                 </thead>
                                                                                                 <tbody id="tabelaContasBody">
@@ -205,12 +228,13 @@
                                     <table class="table" id="tabelareldespesas">
                                         <thead>
                                         <tr>
-                                            <th scope="col">Opções</th>
                                             <th scope="col">Id Despesa</th>
                                             <th scope="col">Nome Despesa</th>
                                             <th scope="col">Descrição</th>
                                             <th scope="col">Valor</th>
                                             <th scope="col">Data</th>
+                                            <th scope="col">Forma de Pagamento</th>
+                                            <th scope="col">Opções</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -219,8 +243,12 @@
                                                 <td><c:out value="${despesa.id_despesa}"/></td>
                                                 <td><c:out value="${despesa.nome_despesa}"/></td>
                                                 <td><c:out value="${despesa.descricao_despesa}"/></td>
+
                                                 <td><fmt:formatNumber value="${despesa.valor_despesa}" type="currency" currencySymbol="R$" /></td>
+
                                                 <td><fmt:formatDate value="${despesa.data_despesa}" pattern="dd/MM/yyyy"/></td> <!-- Formata a data -->
+                                                <td><c:out value="${despesa.pagamento_despesa}"/></td>
+
                                                 <td>
                                                     <form method="get" action="<%= request.getContextPath() %>/ServletDespesas">
                                                         <input type="hidden" name="acao" value="excluirDespesa" />
@@ -309,12 +337,7 @@
     }
 
 
-    // Inicializa o tooltip com um delay reduzido para aparecer mais rápido
-    $(document).ready(function(){
-        $('#tooltipButton').tooltip({
-            delay: { "show": 100, "hide": 100 } // O tooltip vai aparecer em 100ms
-        });
-    });
+
 
 
     function limparGravarDespesa() {

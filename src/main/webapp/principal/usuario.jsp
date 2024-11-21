@@ -344,7 +344,7 @@
                                                 <div class="col-sm-1">
                                                     <label class="float-label" >ID:</label>
                                                     <span class="form-bar"></span>
-                                                    <input type="text" class="form-control" id="id" name="id" placeholder="" readonly value="${modelLogin.id}">
+                                                    <input type="text" class="form-control" id="id" name="id" placeholder="" style="background-color: black" readonly value="${modelLogin.id}">
                                                 </div>
                                                 <div class="col-8">
                                                     <label class="float-label">NOME:</label>

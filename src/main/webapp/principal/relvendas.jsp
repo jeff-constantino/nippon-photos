@@ -57,12 +57,23 @@
                                                                         <label>Funcionário</label>
                                                                         <select class="form-control" id="funcionarioId" name="funcionarioId">
                                                                             <option value="">Selecione um Funcionário</option>
-                                                                            <c:forEach var="funcionario" items="${funcionarios}">
-                                                                                <option value="${funcionario.id}"
-                                                                                        class="${funcionario.status == 'Ativo' ? 'text-success' : 'text-danger'}"
-                                                                                        <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
-                                                                                        ${funcionario.nome}
-                                                                                </option>
+                                                                            <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                                <c:if test="${funcionario.status == 'ATIVO'}">
+                                                                                    <option value="${funcionario.id}"
+                                                                                            class="text-success"
+                                                                                            <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
+                                                                                            ${funcionario.nome}
+                                                                                    </option>
+                                                                                </c:if>
+                                                                            </c:forEach>
+                                                                            <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                                <c:if test="${funcionario.status != 'ATIVO'}">
+                                                                                    <option value="${funcionario.id}"
+                                                                                            class="text-danger"
+                                                                                            <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
+                                                                                            ${funcionario.nome}
+                                                                                    </option>
+                                                                                </c:if>
                                                                             </c:forEach>
                                                                         </select>
 

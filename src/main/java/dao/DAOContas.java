@@ -18,7 +18,7 @@ public class DAOContas {
     }
 
     public void gravarConta(ModelContas conta) throws Exception {
-        String sql = "INSERT INTO contas (numero_pedido, empresa, itens, valor, data_de_pedido, data_de_pagamento, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO contas (numero_pedido, empresa, itens, valor, data_de_pedido, data_de_pagamento, status) VALUES (?, UPPER(?), UPPER(?), ?, ?, ?, UPPER(?))";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, conta.getNumero_pedido());
@@ -61,7 +61,7 @@ public class DAOContas {
             throw new IllegalArgumentException("ID da conta não pode ser nulo.");
         }
 
-        String sql = "UPDATE contas SET empresa = ?, itens = ?, valor = ?, data_de_pedido = ?, data_de_pagamento = ?, status = ? WHERE conta_id = ?";
+        String sql = "UPDATE contas SET empresa = UPPER(?), itens = UPPER(?), valor = ?, data_de_pedido = ?, data_de_pagamento = ?, status = UPPER(?) WHERE conta_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, conta.getEmpresa());

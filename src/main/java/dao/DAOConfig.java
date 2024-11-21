@@ -28,7 +28,8 @@ public class DAOConfig {
     }
 
     private ModelConfig inserirConfig(ModelConfig modelConfig) throws Exception {
-        String sql = "INSERT INTO public.configuracao(conf1_valor, conf1_valor2, conf2_valor, conf3_valor, conf1_nome, conf2_nome, conf3_nome, conf_name, conf1_qtd, conf2_qtd, conf3_qtd, conf1_custo, conf2_custo, conf3_custo, conf4_nome, conf4_valor, conf4_custo, conf4_qtd) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO public.configuracao(conf1_valor, conf1_valor2, conf2_valor, conf3_valor, conf1_nome, conf2_nome, conf3_nome, conf_name, conf1_qtd, conf2_qtd, conf3_qtd, conf1_custo, conf2_custo, conf3_custo, conf4_nome, conf4_valor, conf4_custo, conf4_qtd) " +
+                                                                                                                  "VALUES (?, ?, ?, ?, UPPER(?), UPPER(?), UPPER(?), UPPER(?), ?, ?, ?, ?, ?, ?, UPPER(?), ?, ?, ?)";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             preparedSql.setBigDecimal(1, modelConfig.getConf1_valor() != null ? modelConfig.getConf1_valor() : BigDecimal.ZERO);
@@ -73,7 +74,7 @@ public class DAOConfig {
 
 
     private ModelConfig atualizarConfig(ModelConfig modelConfig) throws Exception {
-        String sql = "UPDATE public.configuracao SET conf1_valor = ?, conf1_valor2 = ?, conf2_valor = ?, conf3_valor = ?, conf1_nome = ?, conf2_nome = ?, conf3_nome = ?, conf_name = ?, conf1_qtd = ?, conf2_qtd = ?, conf3_qtd = ?, conf1_custo = ?, conf2_custo = ?, conf3_custo = ?, conf4_nome = ?, conf4_valor = ?, conf4_qtd = ?, conf4_custo = ? WHERE \"idConf\" = ?";
+        String sql = "UPDATE public.configuracao SET conf1_valor = ?, conf1_valor2 = ?, conf2_valor = ?, conf3_valor = ?, conf1_nome = UPPER(?), conf2_nome = UPPER(?), conf3_nome = UPPER(?), conf_name = UPPER(?), conf1_qtd = ?, conf2_qtd = ?, conf3_qtd = ?, conf1_custo = ?, conf2_custo = ?, conf3_custo = ?, conf4_nome = UPPER(?), conf4_valor = ?, conf4_qtd = ?, conf4_custo = ? WHERE \"idConf\" = ?";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
             preparedSql.setBigDecimal(1, modelConfig.getConf1_valor());

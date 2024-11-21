@@ -161,10 +161,10 @@ public class DAOFechaDia {
                 "total_ribbon_1, total_ribbon_2, total_ribbon_3, total_ribbon_4, " +
                 "total_ribbon_5, total_ribbon_6, total_revelado, total_informado, " +
                 "desconto, observacao, dif_ribbon_1, dif_ribbon_2, dif_ribbon_3, dif_ribbon_4, " +
-                "dif_ribbon_5, dif_ribbon_6, sobras, old_ribbon_1, old_ribbon_2, old_ribbon_3, " + // Novas colunas
-                "old_ribbon_4, old_ribbon_5, old_ribbon_6, " + // Novas colunas
+                "dif_ribbon_5, dif_ribbon_6, sobras, old_ribbon_1, old_ribbon_2, old_ribbon_3, " +
+                "old_ribbon_4, old_ribbon_5, old_ribbon_6, " +
                 "valor_din, valor_deb, valor_cred, valor_pix, valor_din_real, valor_deb_real, valor_cred_real, valor_pix_real) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, UPPER(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             // Definindo os parâmetros da inserção
@@ -232,7 +232,7 @@ public class DAOFechaDia {
                 "total_dig_din = ?, total_dig_deb = ?, total_dig_cred = ?, total_dig_pix = ?, " +
                 "total_ribbon_1 = ?, total_ribbon_2 = ?, total_ribbon_3 = ?, total_ribbon_4 = ?, " +
                 "total_ribbon_5 = ?, total_ribbon_6 = ?, total_revelado = ?, total_informado = ?, " +
-                "desconto = ?, observacao = ?, " +
+                "desconto = ?, observacao = UPPER(?), " +
                 "dif_ribbon_1 = ?, dif_ribbon_2 = ?, dif_ribbon_3 = ?, dif_ribbon_4 = ?, " +
                 "dif_ribbon_5 = ?, dif_ribbon_6 = ?, " +
                 "sobras = ?, " +

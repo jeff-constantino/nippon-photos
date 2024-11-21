@@ -39,7 +39,7 @@ public class DAOVendasRepository {
         String sql = "INSERT INTO vendas(vendedor_id, nome, prod1_din, prod1_deb, prod1_cred, prod1_pix, "
                 + "prod2_din, prod2_deb, prod2_cred, prod2_pix, prod3_din, prod3_deb, prod3_cred, prod3_pix, "
                 + "ft_total, enc_total, dig_total, sobras, data_venda, ribbon) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "VALUES (?, UPPER(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             // Define os parâmetros
@@ -104,7 +104,7 @@ public class DAOVendasRepository {
 
 
     public ModelVendas atualizarVenda(Long venda_id, ModelVendas modelVendas, Long userLogado) throws Exception {
-        String sql = "UPDATE vendas SET nome = ?, vendedor_id = ?, prod1_din = ?, prod1_deb = ?, prod1_cred = ?, prod1_pix = ?, "
+        String sql = "UPDATE vendas SET nome = UPPER(?), vendedor_id = ?, prod1_din = ?, prod1_deb = ?, prod1_cred = ?, prod1_pix = ?, "
                 + "prod2_din = ?, prod2_deb = ?, prod2_cred = ?, prod2_pix = ?, prod3_din = ?, prod3_deb = ?, prod3_cred = ?, "
                 + "prod3_pix = ?, ft_total = ?, enc_total = ?, dig_total = ?, data_venda = ?, sobras = ?, ribbon = ? "
                 + "WHERE venda_id = ?";
@@ -201,7 +201,7 @@ public class DAOVendasRepository {
     }
     public List<ModelLogin> buscaFuncionariosAtivos() throws Exception {
         List<ModelLogin> funcionariosAtivos = new ArrayList<>();
-        String sql = "SELECT id, nome FROM model_login WHERE status = 'Ativo'";
+        String sql = "SELECT id, nome FROM model_login WHERE UPPER(status) = 'ATIVO'";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql);
              ResultSet resultado = preparedSql.executeQuery()) {
@@ -223,7 +223,7 @@ public class DAOVendasRepository {
         List<ModelVendas> modelVendasList = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT v.* FROM vendas v ")
                 .append("INNER JOIN model_login l ON v.vendedor_id = l.id ")
-                .append("WHERE l.status = 'Ativo'");
+                .append("WHERE UPPER(l.status) = 'ATIVO'");
 
         // Adiciona a condição para o nome do funcionário, se fornecido
         if (nomeFuncionario != null && !nomeFuncionario.isEmpty()) {

@@ -25,7 +25,7 @@ public class DAOUsuarioRepository {
 
         if (objeto.isNovo()) {
 
-            String sql = "INSERT INTO model_login (nome,status, usuario_id) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO model_login (nome,status, usuario_id) VALUES (UPPER(?), UPPER(?), ?)";
             PreparedStatement preparedSql = connection.prepareStatement(sql);
             preparedSql.setString(1, objeto.getNome());
             preparedSql.setString(2, objeto.getStatus());
@@ -34,7 +34,7 @@ public class DAOUsuarioRepository {
 
             connection.commit();
         } else {
-            String sql = "UPDATE model_login SET nome = ?, status =? WHERE id = " + objeto.getId() + "";
+            String sql = "UPDATE model_login SET nome = UPPER(?), status =UPPER(?) WHERE id = " + objeto.getId() + "";
 
             PreparedStatement preparedSql = connection.prepareStatement(sql);
 

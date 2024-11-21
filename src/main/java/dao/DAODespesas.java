@@ -19,7 +19,7 @@ public class DAODespesas {
 
     // Método para gravar uma nova despesa
     public void gravarDespesa(ModelDespesas despesas) throws Exception {
-        String sql = "INSERT INTO despesas (nome_despesa, descricao_despesa, valor_despesa, data_despesa) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO despesas (nome_despesa, descricao_despesa, valor_despesa, data_despesa) VALUES (UPPER(?), UPPER(?), ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, despesas.getNome_despesa());
@@ -54,7 +54,7 @@ public class DAODespesas {
             throw new IllegalArgumentException("ID da despesa não pode ser nulo.");
         }
 
-        String sql = "UPDATE despesas SET nome_despesa = ?, descricao_despesa = ?, valor_despesa = ?, data_despesa = ? WHERE id_despesa = ?";
+        String sql = "UPDATE despesas SET nome_despesa = UPPER(?), descricao_despesa = UPPER(?), valor_despesa = ?, data_despesa = ? WHERE id_despesa = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, despesas.getNome_despesa());

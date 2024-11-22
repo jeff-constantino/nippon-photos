@@ -453,7 +453,7 @@
                                                         <label style="color: #f2a654">Ribbon 2 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_2_conf" name="ribbon_2_conf" value="${fechamento.old_ribbon_2}">
+                                                               tabindex="-1" readonly id="ribbon_2_conf" name="old_ribbon_2" value="${fechamento.old_ribbon_2}">
                                                     </div>
 
                                                     <div class="col-6">
@@ -492,14 +492,14 @@
                                                         <label style="color: #f2a654">Ribbon 3 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_3_conf" name="ribbon_3_conf" value="${fechamento.old_ribbon_3}">
+                                                               tabindex="-1" readonly id="ribbon_3_conf" name="old_ribbon_3" value="${fechamento.old_ribbon_3}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 4 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_4_conf" name="ribbon_4_conf" value="${fechamento.old_ribbon_4}">
+                                                               tabindex="-1" readonly id="ribbon_4_conf" name="old_ribbon_4" value="${fechamento.old_ribbon_4}">
                                                     </div>
 
                                                     <div class="col-6">
@@ -534,14 +534,14 @@
                                                         <label style="color: #f2a654">Ribbon 5 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_5_conf" name="ribbon_5_conf" value="${fechamento.old_ribbon_5}">
+                                                               tabindex="-1" readonly id="ribbon_5_conf" name="old_ribbon_5" value="${fechamento.old_ribbon_5}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 6 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_6_conf" name="ribbon_6_conf" value="${fechamento.old_ribbon_6}">
+                                                               tabindex="-1" readonly id="ribbon_6_conf" name="old_ribbon_6" value="${fechamento.old_ribbon_6}">
                                                     </div>
 
                                                     <div class="col-6">

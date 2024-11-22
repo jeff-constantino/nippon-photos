@@ -155,7 +155,7 @@ public class DAOFechaDia {
 
 
     private void inserirFechamento(ModelFechaDia fechamento) {
-        String sql = "INSERT INTO fecha_dia (data_fechamento, total_ft_din, total_ft_deb, total_ft_cred, total_ft_pix, " +
+        String sqlFechaDia = "INSERT INTO fecha_dia (data_fechamento, total_ft_din, total_ft_deb, total_ft_cred, total_ft_pix, " +
                 "total_enc_din, total_enc_deb, total_enc_cred, total_enc_pix, " +
                 "total_dig_din, total_dig_deb, total_dig_cred, total_dig_pix, " +
                 "total_ribbon_1, total_ribbon_2, total_ribbon_3, total_ribbon_4, " +
@@ -164,57 +164,77 @@ public class DAOFechaDia {
                 "dif_ribbon_5, dif_ribbon_6, sobras, old_ribbon_1, old_ribbon_2, old_ribbon_3, " +
                 "old_ribbon_4, old_ribbon_5, old_ribbon_6, " +
                 "valor_din, valor_deb, valor_cred, valor_pix, valor_din_real, valor_deb_real, valor_cred_real, valor_pix_real) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, UPPER(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, UPPER(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            // Definindo os parâmetros da inserção
-            pstmt.setDate(1, Date.valueOf(fechamento.getData_fechamento().toLocalDate())); // data_fechamento
-            pstmt.setInt(2, fechamento.getTotal_ft_din()); // total_ft_din
-            pstmt.setInt(3, fechamento.getTotal_ft_deb()); // total_ft_deb
-            pstmt.setInt(4, fechamento.getTotal_ft_cred()); // total_ft_cred
-            pstmt.setInt(5, fechamento.getTotal_ft_pix()); // total_ft_pix
-            pstmt.setInt(6, fechamento.getTotal_enc_din()); // total_enc_din
-            pstmt.setInt(7, fechamento.getTotal_enc_deb()); // total_enc_deb
-            pstmt.setInt(8, fechamento.getTotal_enc_cred()); // total_enc_cred
-            pstmt.setInt(9, fechamento.getTotal_enc_pix()); // total_enc_pix
-            pstmt.setInt(10, fechamento.getTotal_dig_din()); // total_dig_din
-            pstmt.setInt(11, fechamento.getTotal_dig_deb()); // total_dig_deb
-            pstmt.setInt(12, fechamento.getTotal_dig_cred()); // total_dig_cred
-            pstmt.setInt(13, fechamento.getTotal_dig_pix()); // total_dig_pix
-            pstmt.setInt(14, fechamento.getTotal_ribbon_1()); // total_ribbon_1
-            pstmt.setInt(15, fechamento.getTotal_ribbon_2()); // total_ribbon_2
-            pstmt.setInt(16, fechamento.getTotal_ribbon_3()); // total_ribbon_3
-            pstmt.setInt(17, fechamento.getTotal_ribbon_4()); // total_ribbon_4
-            pstmt.setInt(18, fechamento.getTotal_ribbon_5()); // total_ribbon_5
-            pstmt.setInt(19, fechamento.getTotal_ribbon_6()); // total_ribbon_6
-            pstmt.setInt(20, fechamento.getTotal_revelado()); // total_revelado
-            pstmt.setInt(21, fechamento.getTotal_informado()); // total_informado
-            pstmt.setBigDecimal(22, fechamento.getDesconto()); // desconto
-            pstmt.setString(23, fechamento.getObservacao()); // observacao
-            pstmt.setInt(24, fechamento.getDifRibbon1()); // dif_ribbon_1
-            pstmt.setInt(25, fechamento.getDifRibbon2()); // dif_ribbon_2
-            pstmt.setInt(26, fechamento.getDifRibbon3()); // dif_ribbon_3
-            pstmt.setInt(27, fechamento.getDifRibbon4()); // dif_ribbon_4
-            pstmt.setInt(28, fechamento.getDifRibbon5()); // dif_ribbon_5
-            pstmt.setInt(29, fechamento.getDifRibbon6()); // dif_ribbon_6
-            pstmt.setInt(30, fechamento.getSobras()); // sobras
-            pstmt.setInt(31, fechamento.getOld_ribbon_1()); // old_ribbon_1
-            pstmt.setInt(32, fechamento.getOld_ribbon_2()); // old_ribbon_2
-            pstmt.setInt(33, fechamento.getOld_ribbon_3()); // old_ribbon_3
-            pstmt.setInt(34, fechamento.getOld_ribbon_4()); // old_ribbon_4
-            pstmt.setInt(35, fechamento.getOld_ribbon_5()); // old_ribbon_5
-            pstmt.setInt(36, fechamento.getOld_ribbon_6()); // old_ribbon_6
-            pstmt.setBigDecimal(37, fechamento.getValor_din()); // valor_din
-            pstmt.setBigDecimal(38, fechamento.getValor_deb()); // valor_deb
-            pstmt.setBigDecimal(39, fechamento.getValor_cred()); // valor_cred
-            pstmt.setBigDecimal(40, fechamento.getValor_pix()); // valor_pix
-            pstmt.setBigDecimal(41, fechamento.getValor_din_real()); // valor_din_real
-            pstmt.setBigDecimal(42, fechamento.getValor_deb_real()); // valor_deb_real
-            pstmt.setBigDecimal(43, fechamento.getValor_cred_real()); // valor_cred_real
-            pstmt.setBigDecimal(44, fechamento.getValor_pix_real()); // valor_pix_real
+        String sqlConfDia = "INSERT INTO conf_dia (data_fechamento, valor_din, valor_din_real, valor_deb, valor_deb_real, " +
+                "valor_cred, valor_cred_real, valor_pix, valor_pix_real, observacao) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            // Executa a inserção
-            pstmt.executeUpdate();
+        try (PreparedStatement pstmtFechaDia = connection.prepareStatement(sqlFechaDia);
+             PreparedStatement pstmtConfDia = connection.prepareStatement(sqlConfDia)) {
+
+            // Definindo os parâmetros para a inserção na tabela fecha_dia
+            pstmtFechaDia.setDate(1, Date.valueOf(fechamento.getData_fechamento().toLocalDate())); // data_fechamento
+            pstmtFechaDia.setInt(2, fechamento.getTotal_ft_din()); // total_ft_din
+            pstmtFechaDia.setInt(3, fechamento.getTotal_ft_deb()); // total_ft_deb
+            pstmtFechaDia.setInt(4, fechamento.getTotal_ft_cred()); // total_ft_cred
+            pstmtFechaDia.setInt(5, fechamento.getTotal_ft_pix()); // total_ft_pix
+            pstmtFechaDia.setInt(6, fechamento.getTotal_enc_din()); // total_enc_din
+            pstmtFechaDia.setInt(7, fechamento.getTotal_enc_deb()); // total_enc_deb
+            pstmtFechaDia.setInt(8, fechamento.getTotal_enc_cred()); // total_enc_cred
+            pstmtFechaDia.setInt(9, fechamento.getTotal_enc_pix()); // total_enc_pix
+            pstmtFechaDia.setInt(10, fechamento.getTotal_dig_din()); // total_dig_din
+            pstmtFechaDia.setInt(11, fechamento.getTotal_dig_deb()); // total_dig_deb
+            pstmtFechaDia.setInt(12, fechamento.getTotal_dig_cred()); // total_dig_cred
+            pstmtFechaDia.setInt(13, fechamento.getTotal_dig_pix()); // total_dig_pix
+            pstmtFechaDia.setInt(14, fechamento.getTotal_ribbon_1()); // total_ribbon_1
+            pstmtFechaDia.setInt(15, fechamento.getTotal_ribbon_2()); // total_ribbon_2
+            pstmtFechaDia.setInt(16, fechamento.getTotal_ribbon_3()); // total_ribbon_3
+            pstmtFechaDia.setInt(17, fechamento.getTotal_ribbon_4()); // total_ribbon_4
+            pstmtFechaDia.setInt(18, fechamento.getTotal_ribbon_5()); // total_ribbon_5
+            pstmtFechaDia.setInt(19, fechamento.getTotal_ribbon_6()); // total_ribbon_6
+            pstmtFechaDia.setInt(20, fechamento.getTotal_revelado()); // total_revelado
+            pstmtFechaDia.setInt(21, fechamento.getTotal_informado()); // total_informado
+            pstmtFechaDia.setBigDecimal(22, fechamento.getDesconto()); // desconto
+            pstmtFechaDia.setString(23, fechamento.getObservacao()); // observacao
+            pstmtFechaDia.setInt(24, fechamento.getDifRibbon1()); // dif_ribbon_1
+            pstmtFechaDia.setInt(25, fechamento.getDifRibbon2()); // dif_ribbon_2
+            pstmtFechaDia.setInt(26, fechamento.getDifRibbon3()); // dif_ribbon_3
+            pstmtFechaDia.setInt(27, fechamento.getDifRibbon4()); // dif_ribbon_4
+            pstmtFechaDia.setInt(28, fechamento.getDifRibbon5()); // dif_ribbon_5
+            pstmtFechaDia.setInt(29, fechamento.getDifRibbon6()); // dif_ribbon_6
+            pstmtFechaDia.setInt(30, fechamento.getSobras()); // sobras
+            pstmtFechaDia.setInt(31, fechamento.getOld_ribbon_1()); // old_ribbon_1
+            pstmtFechaDia.setInt(32, fechamento.getOld_ribbon_2()); // old_ribbon_2
+            pstmtFechaDia.setInt(33, fechamento.getOld_ribbon_3()); // old_ribbon_3
+            pstmtFechaDia.setInt(34, fechamento.getOld_ribbon_4()); // old_ribbon_4
+            pstmtFechaDia.setInt(35, fechamento.getOld_ribbon_5()); // old_ribbon_5
+            pstmtFechaDia.setInt(36, fechamento.getOld_ribbon_6()); // old_ribbon_6
+            pstmtFechaDia.setBigDecimal(37, fechamento.getValor_din()); // valor_din
+            pstmtFechaDia.setBigDecimal(38, fechamento.getValor_deb()); // valor_deb
+            pstmtFechaDia.setBigDecimal(39, fechamento.getValor_cred()); // valor_cred
+            pstmtFechaDia.setBigDecimal(40, fechamento.getValor_pix()); // valor_pix
+            pstmtFechaDia.setBigDecimal(41, fechamento.getValor_din_real()); // valor_din_real
+            pstmtFechaDia.setBigDecimal(42, fechamento.getValor_deb_real()); // valor_deb_real
+            pstmtFechaDia.setBigDecimal(43, fechamento.getValor_cred_real()); // valor_cred_real
+            pstmtFechaDia.setBigDecimal(44, fechamento.getValor_pix_real()); // valor_pix_real
+
+            // Definindo os parâmetros para a inserção na tabela conf_dia
+            pstmtConfDia.setDate(1, Date.valueOf(fechamento.getData_fechamento().toLocalDate())); // data_fechamento
+            pstmtConfDia.setBigDecimal(2, fechamento.getValor_din()); // valor_din
+            pstmtConfDia.setBigDecimal(3, fechamento.getValor_din_real()); // valor_din_real
+            pstmtConfDia.setBigDecimal(4, fechamento.getValor_deb()); // valor_deb
+            pstmtConfDia.setBigDecimal(5, fechamento.getValor_deb_real()); // valor_deb_real
+            pstmtConfDia.setBigDecimal(6, fechamento.getValor_cred()); // valor_cred
+            pstmtConfDia.setBigDecimal(7, fechamento.getValor_cred_real()); // valor_cred_real
+            pstmtConfDia.setBigDecimal(8, fechamento.getValor_pix()); // valor_pix
+            pstmtConfDia.setBigDecimal(9, fechamento.getValor_pix_real()); // valor_pix_real
+             pstmtConfDia.setString(10, fechamento.getObservacao()); // observacao
+
+            // Executa as inserções
+            pstmtFechaDia.executeUpdate();
+            pstmtConfDia.executeUpdate();
+
             connection.commit(); // Commit das mudanças
         } catch (SQLException e) {
             e.printStackTrace();

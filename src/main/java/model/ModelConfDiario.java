@@ -24,6 +24,216 @@ public class ModelConfDiario implements Serializable {
     private BigDecimal valor_total_dia;
     private String observacao;
     private Date data_fechamento;
+    private int total_revelado;
+    private int total_informado;
+    private BigDecimal valor_deb_24h;
+    private BigDecimal valor_cred_24h;
+
+    private int total_ribbon_1;
+    private int total_ribbon_2;
+    private int total_ribbon_3;
+    private int total_ribbon_4;
+    private int total_ribbon_5;
+    private int total_ribbon_6;
+    private int sobras;
+    private int difRibbon1;
+    private int difRibbon2;
+    private int difRibbon3;
+    private int difRibbon4;
+    private int difRibbon5;
+    private int difRibbon6;
+
+    private int old_ribbon_1;
+    private int old_ribbon_2;
+    private int old_ribbon_3;
+    private int old_ribbon_4;
+    private int old_ribbon_5;
+    private int old_ribbon_6;
+
+
+    public int getTotal_ribbon_1() {
+        return total_ribbon_1;
+    }
+
+    public void setTotal_ribbon_1(int total_ribbon_1) {
+        this.total_ribbon_1 = total_ribbon_1;
+    }
+
+    public int getTotal_ribbon_2() {
+        return total_ribbon_2;
+    }
+
+    public void setTotal_ribbon_2(int total_ribbon_2) {
+        this.total_ribbon_2 = total_ribbon_2;
+    }
+
+    public int getTotal_ribbon_3() {
+        return total_ribbon_3;
+    }
+
+    public void setTotal_ribbon_3(int total_ribbon_3) {
+        this.total_ribbon_3 = total_ribbon_3;
+    }
+
+    public int getTotal_ribbon_4() {
+        return total_ribbon_4;
+    }
+
+    public void setTotal_ribbon_4(int total_ribbon_4) {
+        this.total_ribbon_4 = total_ribbon_4;
+    }
+
+    public int getTotal_ribbon_5() {
+        return total_ribbon_5;
+    }
+
+    public void setTotal_ribbon_5(int total_ribbon_5) {
+        this.total_ribbon_5 = total_ribbon_5;
+    }
+
+    public int getTotal_ribbon_6() {
+        return total_ribbon_6;
+    }
+
+    public void setTotal_ribbon_6(int total_ribbon_6) {
+        this.total_ribbon_6 = total_ribbon_6;
+    }
+
+    public int getSobras() {
+        return sobras;
+    }
+
+    public void setSobras(int sobras) {
+        this.sobras = sobras;
+    }
+
+    public int getDifRibbon1() {
+        return difRibbon1;
+    }
+
+    public void setDifRibbon1(int difRibbon1) {
+        this.difRibbon1 = difRibbon1;
+    }
+
+    public int getDifRibbon2() {
+        return difRibbon2;
+    }
+
+    public void setDifRibbon2(int difRibbon2) {
+        this.difRibbon2 = difRibbon2;
+    }
+
+    public int getDifRibbon3() {
+        return difRibbon3;
+    }
+
+    public void setDifRibbon3(int difRibbon3) {
+        this.difRibbon3 = difRibbon3;
+    }
+
+    public int getDifRibbon4() {
+        return difRibbon4;
+    }
+
+    public void setDifRibbon4(int difRibbon4) {
+        this.difRibbon4 = difRibbon4;
+    }
+
+    public int getDifRibbon5() {
+        return difRibbon5;
+    }
+
+    public void setDifRibbon5(int difRibbon5) {
+        this.difRibbon5 = difRibbon5;
+    }
+
+    public int getDifRibbon6() {
+        return difRibbon6;
+    }
+
+    public void setDifRibbon6(int difRibbon6) {
+        this.difRibbon6 = difRibbon6;
+    }
+
+    public int getOld_ribbon_1() {
+        return old_ribbon_1;
+    }
+
+    public void setOld_ribbon_1(int old_ribbon_1) {
+        this.old_ribbon_1 = old_ribbon_1;
+    }
+
+    public int getOld_ribbon_2() {
+        return old_ribbon_2;
+    }
+
+    public void setOld_ribbon_2(int old_ribbon_2) {
+        this.old_ribbon_2 = old_ribbon_2;
+    }
+
+    public int getOld_ribbon_3() {
+        return old_ribbon_3;
+    }
+
+    public void setOld_ribbon_3(int old_ribbon_3) {
+        this.old_ribbon_3 = old_ribbon_3;
+    }
+
+    public int getOld_ribbon_4() {
+        return old_ribbon_4;
+    }
+
+    public void setOld_ribbon_4(int old_ribbon_4) {
+        this.old_ribbon_4 = old_ribbon_4;
+    }
+
+    public int getOld_ribbon_5() {
+        return old_ribbon_5;
+    }
+
+    public void setOld_ribbon_5(int old_ribbon_5) {
+        this.old_ribbon_5 = old_ribbon_5;
+    }
+
+    public int getOld_ribbon_6() {
+        return old_ribbon_6;
+    }
+
+    public void setOld_ribbon_6(int old_ribbon_6) {
+        this.old_ribbon_6 = old_ribbon_6;
+    }
+
+    public BigDecimal getValor_deb_24h() {
+        return valor_deb_24h;
+    }
+
+    public void setValor_deb_24h(BigDecimal valor_deb_24h) {
+        this.valor_deb_24h = valor_deb_24h;
+    }
+
+    public BigDecimal getValor_cred_24h() {
+        return valor_cred_24h;
+    }
+
+    public void setValor_cred_24h(BigDecimal valor_cred_24h) {
+        this.valor_cred_24h = valor_cred_24h;
+    }
+
+    public int getTotal_revelado() {
+        return total_revelado;
+    }
+
+    public void setTotal_revelado(int total_revelado) {
+        this.total_revelado = total_revelado;
+    }
+
+    public int getTotal_informado() {
+        return total_informado;
+    }
+
+    public void setTotal_informado(int total_informado) {
+        this.total_informado = total_informado;
+    }
 
     public long getId() {
         return id;

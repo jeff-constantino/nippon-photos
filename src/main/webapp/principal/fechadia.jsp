@@ -35,7 +35,7 @@
                             <div class="modal-dialog modal-xl mt-5">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Lançamento de vendas </h5>
+                                        <h5 class="modal-title">FECHAMENTO DIÁRIO </h5>
 
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
@@ -317,7 +317,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="desconto"
-                                                               name="desconto"
+                                                               name="desconto" required
                                                                value="${fechamento.desconto}">
                                                     </div>
                                                 </div>
@@ -646,7 +646,7 @@
                                                        id="valor_din_real" name="valor_din_real"
                                                        placeholder="" value=""
                                                        style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                >
+                                                required>
                                             </div>
                                             <div class="col-2">
                                                 <label class="float-label">DÉBITO NA CONTA :</label>
@@ -655,7 +655,7 @@
                                                        id="valor_deb_real" name="valor_deb_real"
                                                        placeholder="" value=""
                                                        style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                >
+                                                required>
                                             </div>
 
                                             <div class="col-2">
@@ -665,7 +665,7 @@
                                                        id="valor_cred_real" name="valor_cred_real"
                                                        placeholder="" value=""
                                                        style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                >
+                                               required >
                                             </div>
 
                                             <div class="col-2">
@@ -675,7 +675,7 @@
                                                        id="valor_pix_real" name="valor_pix_real"
                                                        placeholder="" value=""
                                                        style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                >
+                                                required>
                                             </div>
 
                                         </div>

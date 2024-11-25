@@ -54,6 +54,8 @@
                 <ul class="nav flex-column sub-menu">
 
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletFechaDia">Fechamento Diário</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletConfDiario">Conferência Diária</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="">Fechamento do Mês</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletContas">Contas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletDespesas">Despesas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Vendas</a></li>

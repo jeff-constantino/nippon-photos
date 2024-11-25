@@ -78,7 +78,7 @@ public class ServletFechaDia extends ServletGenericUtil {
 
                 // Adiciona o fechamento na requisição
                 request.setAttribute("fechamento", fechamento);
-                System.out.println(fechamento.toString());
+
 
                 // Agora, também executa a busca dos valores dos produtos
                 try {

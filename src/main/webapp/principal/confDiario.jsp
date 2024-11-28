@@ -484,6 +484,11 @@
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="ribbon_1_atual" name="ribbon_1_atual" value="${conf_diario.total_ribbon_1}">
 
+                                                        <label style="color: #f2a654">Revelado 1</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="rev_ribbon1" name="rev_ribbon1" readonly>
+
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                readonly style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
@@ -499,6 +504,11 @@
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="ribbon_2_atual" name="ribbon_2_atual" value="${conf_diario.total_ribbon_2}">
+
+                                                        <label style="color: #f2a654">Revelado 2</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="rev_ribbon2" name="rev_ribbon2" readonly>
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -530,6 +540,11 @@
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="ribbon_3_atual" name="ribbon_3_atual" value="${conf_diario.total_ribbon_3}">
 
+                                                        <label style="color: #f2a654">Revelado 3</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="rev_ribbon3" name="rev_ribbon3" readonly>
+
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
@@ -542,7 +557,12 @@
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="ribbon_4_atual" name="ribbon_4_atual" value="${conf_diario.total_ribbon_4}">
 
-                                                        <label style="color: white">Diferença</label>
+                                                        <label style="color: #f2a654">Revelado 4</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="rev_ribbon4" name="rev_ribbon4" readonly>
+
+                                                        <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                tabindex="-1" readonly id="dif_ribbon_4" name="dif_ribbon_4" readonly>
@@ -572,6 +592,11 @@
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="ribbon_5_atual" name="ribbon_5_atual" value="${conf_diario.total_ribbon_5}">
 
+                                                        <label style="color: #f2a654">Revelado 5</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="rev_ribbon5" name="rev_ribbon5" readonly>
+
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
@@ -583,6 +608,64 @@
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="ribbon_6_atual" name="ribbon_6_atual" value="${conf_diario.total_ribbon_6}">
+
+                                                        <label style="color: #f2a654">Revelado 6</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="rev_ribbon6" name="rev_ribbon6" readonly>
+
+                                                        <label style="color: #f2a654">Diferença</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="dif_ribbon_6" name="dif_ribbon_6" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+<%--SOBRAS E TOTAIS--%>
+                                            <div class="col-4">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <label style="color: #f2a654">SOBRAS</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="sobras" name="sobras" value="${conf_diario.sobras}">
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label style="color: #f2a654">TOTAL DIFERENÇAS</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="total_dif" name="total_dif" value="${conf_diario.old_ribbon_6}">
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label style="color: #f2a654">Ribbon 5 Atual</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="ribbon_5_atual" name="ribbon_5_atual" value="${conf_diario.total_ribbon_5}">
+
+                                                        <label style="color: #f2a654">Revelado 5</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="rev_ribbon5" name="rev_ribbon5" readonly>
+
+                                                        <label style="color: #f2a654">Diferença</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="dif_ribbon_5" name="dif_ribbon_5" readonly>
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label style="color: #f2a654">Ribbon 6 Atual</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                                               id="ribbon_6_atual" name="ribbon_6_atual" value="${conf_diario.total_ribbon_6}">
+
+                                                        <label style="color: #f2a654">Revelado 6</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="rev_ribbon6" name="rev_ribbon6" readonly>
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -753,32 +836,38 @@
         // Ribbon 1
         const ribbon1Conf = parseFloat(document.getElementById('ribbon_1_conf').value) || 0;
         const ribbon1Atual = parseFloat(document.getElementById('ribbon_1_atual').value) || 0;
-        document.getElementById('dif_ribbon_1').value = ribbon1Conf - ribbon1Atual;
+        const ribbon1Rev = parseFloat(document.getElementById('rev_ribbon1').value) || 0;
+        document.getElementById('dif_ribbon_1').value = ribbon1Conf - (ribbon1Rev + ribbon1Atual);
 
         // Ribbon 2
         const ribbon2Conf = parseFloat(document.getElementById('ribbon_2_conf').value) || 0;
         const ribbon2Atual = parseFloat(document.getElementById('ribbon_2_atual').value) || 0;
-        document.getElementById('dif_ribbon_2').value = ribbon2Conf - ribbon2Atual;
+        const ribbon2Rev = parseFloat(document.getElementById('rev_ribbon2').value) || 0;
+        document.getElementById('dif_ribbon_2').value = ribbon2Conf - ( ribbon2Rev + ribbon2Atual);
 
         // Ribbon 3
         const ribbon3Conf = parseFloat(document.getElementById('ribbon_3_conf').value) || 0;
         const ribbon3Atual = parseFloat(document.getElementById('ribbon_3_atual').value) || 0;
-        document.getElementById('dif_ribbon_3').value = ribbon3Conf - ribbon3Atual;
+        const ribbon3Rev = parseFloat(document.getElementById('rev_ribbon3').value) || 0;
+        document.getElementById('dif_ribbon_3').value = ribbon3Conf - ( ribbon3Rev + ribbon3Atual);
 
         // Ribbon 4
         const ribbon4Conf = parseFloat(document.getElementById('ribbon_4_conf').value) || 0;
         const ribbon4Atual = parseFloat(document.getElementById('ribbon_4_atual').value) || 0;
-        document.getElementById('dif_ribbon_4').value = ribbon4Conf - ribbon4Atual;
+        const ribbon4Rev = parseFloat(document.getElementById('rev_ribbon4').value) || 0;
+        document.getElementById('dif_ribbon_4').value = ribbon4Conf - ( ribbon4Rev + ribbon4Atual);
 
         // Ribbon 5
         const ribbon5Conf = parseFloat(document.getElementById('ribbon_5_conf').value) || 0;
         const ribbon5Atual = parseFloat(document.getElementById('ribbon_5_atual').value) || 0;
-        document.getElementById('dif_ribbon_5').value = ribbon5Conf - ribbon5Atual;
+        const ribbon5Rev = parseFloat(document.getElementById('rev_ribbon5').value) || 0;
+        document.getElementById('dif_ribbon_5').value = ribbon5Conf - ( ribbon5Rev + ribbon5Atual);
 
         // Ribbon 6
         const ribbon6Conf = parseFloat(document.getElementById('ribbon_6_conf').value) || 0;
         const ribbon6Atual = parseFloat(document.getElementById('ribbon_6_atual').value) || 0;
-        document.getElementById('dif_ribbon_6').value = ribbon6Conf - ribbon6Atual;
+        const ribbon6Rev = parseFloat(document.getElementById('rev_ribbon6').value) || 0;
+        document.getElementById('dif_ribbon_6').value = ribbon6Conf - (ribbon6Rev + ribbon6Atual);
     }
 
     // Função para calcular o total de diferenças
@@ -792,7 +881,7 @@
 
         const total = difRibbon1 + difRibbon2 + difRibbon3 + difRibbon4 + difRibbon5 + difRibbon6;
 
-        document.getElementById('total_rev').value = total;
+        document.getElementById('total_dif').value = total;
     }
     // Adiciona event listeners para os campos _atual
     document.addEventListener('DOMContentLoaded', function () {

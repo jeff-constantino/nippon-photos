@@ -462,10 +462,10 @@
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="ribbon_1_atual" name="ribbon_1_atual" value="${fechamento.total_ribbon_1}">
 
-                                                        <label style="color: #f2a654">Diferença</label>
+                                                        <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                readonly style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="dif_ribbon_1" name="dif_ribbon_1" >
+                                                               tabindex="-1" readonly id="rev_ribbon1" name="rev_ribbon1" >
 
 
 
@@ -478,10 +478,10 @@
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="ribbon_2_atual" name="ribbon_2_atual" value="${fechamento.total_ribbon_2}">
 
-                                                        <label style="color: #f2a654">Diferença</label>
+                                                        <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="dif_ribbon_2" name="dif_ribbon_2" readonly>
+                                                               tabindex="-1" readonly id="rev_ribbon2" name="rev_ribbon2" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -508,10 +508,10 @@
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="ribbon_3_atual" name="ribbon_3_atual" value="${fechamento.total_ribbon_3}">
 
-                                                        <label style="color: #f2a654">Diferença</label>
+                                                        <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="dif_ribbon_3" name="dif_ribbon_3" readonly>
+                                                               tabindex="-1" readonly id="rev_ribbon3" name="rev_ribbon3" readonly>
                                                     </div>
 
                                                     <div class="col-6">
@@ -520,10 +520,10 @@
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="ribbon_4_atual" name="ribbon_4_atual" value="${fechamento.total_ribbon_4}">
 
-                                                        <label style="color: white">Diferença</label>
+                                                        <label style="color: white">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="dif_ribbon_4" name="dif_ribbon_4" readonly>
+                                                               tabindex="-1" readonly id="rev_ribbon4" name="rev_ribbon4" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -550,10 +550,10 @@
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="ribbon_5_atual" name="ribbon_5_atual" value="${fechamento.total_ribbon_5}">
 
-                                                        <label style="color: #f2a654">Diferença</label>
+                                                        <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="dif_ribbon_5" name="dif_ribbon_5" readonly>
+                                                               tabindex="-1" readonly id="rev_ribbon5" name="rev_ribbon5" readonly>
                                                     </div>
 
                                                     <div class="col-6">
@@ -562,10 +562,10 @@
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="ribbon_6_atual" name="ribbon_6_atual" value="${fechamento.total_ribbon_6}">
 
-                                                        <label style="color: #f2a654">Diferença</label>
+                                                        <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="dif_ribbon_6" name="dif_ribbon_6" readonly>
+                                                               tabindex="-1" readonly id="rev_ribbon6" name="rev_ribbon6" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -637,48 +637,9 @@
                                         </div>
 
 
-                                        <div  class="row mt-3 text-center d-flex justify-content-center">
-                                            <div class="col-2">
 
-                                                <label class="float-label">DINHEIRO ENTREGUE:</label>
-                                                <span class="form-bar"></span>
-                                                <input type="text" class="form-control"
-                                                       id="valor_din_real" name="valor_din_real"
-                                                       placeholder="" value=""
-                                                       style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                required>
-                                            </div>
-                                            <div class="col-2">
-                                                <label class="float-label">DÉBITO NA CONTA :</label>
-                                                <span class="form-bar"></span>
-                                                <input type="text" class="form-control"
-                                                       id="valor_deb_real" name="valor_deb_real"
-                                                       placeholder="" value=""
-                                                       style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                required>
-                                            </div>
 
-                                            <div class="col-2">
-                                                <label class="float-label">CRÉDITO NA CONTA :</label>
-                                                <span class="form-bar"></span>
-                                                <input type="text" class="form-control"
-                                                       id="valor_cred_real" name="valor_cred_real"
-                                                       placeholder="" value=""
-                                                       style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               required >
-                                            </div>
 
-                                            <div class="col-2">
-                                                <label class="float-label">PIX NA CONTA:</label>
-                                                <span class="form-bar"></span>
-                                                <input type="text" class="form-control"
-                                                       id="valor_pix_real" name="valor_pix_real"
-                                                       placeholder="" value=""
-                                                       style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                required>
-                                            </div>
-
-                                        </div>
 
 
 
@@ -743,7 +704,7 @@
 
         // Chamar a função ao carregar a página para inicializar o total
         window.onload = function() {
-            atualizarDiferencas(); // Inicializa as diferenças
+            atualizarDiferencas(); // Inicializa as Revelados
             calcularTotalDif(); // Inicializa o total de revisões
             calcularDiferencas()
 
@@ -758,44 +719,44 @@
             // Ribbon 1
             const ribbon1Conf = parseFloat(document.getElementById('ribbon_1_conf').value) || 0;
             const ribbon1Atual = parseFloat(document.getElementById('ribbon_1_atual').value) || 0;
-            document.getElementById('dif_ribbon_1').value = ribbon1Conf - ribbon1Atual;
+            document.getElementById('rev_ribbon1').value = ribbon1Conf - ribbon1Atual;
 
             // Ribbon 2
             const ribbon2Conf = parseFloat(document.getElementById('ribbon_2_conf').value) || 0;
             const ribbon2Atual = parseFloat(document.getElementById('ribbon_2_atual').value) || 0;
-            document.getElementById('dif_ribbon_2').value = ribbon2Conf - ribbon2Atual;
+            document.getElementById('rev_ribbon2').value = ribbon2Conf - ribbon2Atual;
 
             // Ribbon 3
             const ribbon3Conf = parseFloat(document.getElementById('ribbon_3_conf').value) || 0;
             const ribbon3Atual = parseFloat(document.getElementById('ribbon_3_atual').value) || 0;
-            document.getElementById('dif_ribbon_3').value = ribbon3Conf - ribbon3Atual;
+            document.getElementById('rev_ribbon3').value = ribbon3Conf - ribbon3Atual;
 
             // Ribbon 4
             const ribbon4Conf = parseFloat(document.getElementById('ribbon_4_conf').value) || 0;
             const ribbon4Atual = parseFloat(document.getElementById('ribbon_4_atual').value) || 0;
-            document.getElementById('dif_ribbon_4').value = ribbon4Conf - ribbon4Atual;
+            document.getElementById('rev_ribbon4').value = ribbon4Conf - ribbon4Atual;
 
             // Ribbon 5
             const ribbon5Conf = parseFloat(document.getElementById('ribbon_5_conf').value) || 0;
             const ribbon5Atual = parseFloat(document.getElementById('ribbon_5_atual').value) || 0;
-            document.getElementById('dif_ribbon_5').value = ribbon5Conf - ribbon5Atual;
+            document.getElementById('rev_ribbon5').value = ribbon5Conf - ribbon5Atual;
 
             // Ribbon 6
             const ribbon6Conf = parseFloat(document.getElementById('ribbon_6_conf').value) || 0;
             const ribbon6Atual = parseFloat(document.getElementById('ribbon_6_atual').value) || 0;
-            document.getElementById('dif_ribbon_6').value = ribbon6Conf - ribbon6Atual;
+            document.getElementById('rev_ribbon6').value = ribbon6Conf - ribbon6Atual;
         }
 
-        // Função para calcular o total de diferenças
+        // Função para calcular o total de Revelados
         function calcularTotalDif() {
-            const difRibbon1 = parseFloat(document.getElementById('dif_ribbon_1').value) || 0;
-            const difRibbon2 = parseFloat(document.getElementById('dif_ribbon_2').value) || 0;
-            const difRibbon3 = parseFloat(document.getElementById('dif_ribbon_3').value) || 0;
-            const difRibbon4 = parseFloat(document.getElementById('dif_ribbon_4').value) || 0;
-            const difRibbon5 = parseFloat(document.getElementById('dif_ribbon_5').value) || 0;
-            const difRibbon6 = parseFloat(document.getElementById('dif_ribbon_6').value) || 0;
+            const revRibbon1 = parseFloat(document.getElementById('rev_ribbon1').value) || 0;
+            const revRibbon2 = parseFloat(document.getElementById('rev_ribbon2').value) || 0;
+            const revRibbon3 = parseFloat(document.getElementById('rev_ribbon3').value) || 0;
+            const revRibbon4 = parseFloat(document.getElementById('rev_ribbon4').value) || 0;
+            const revRibbon5 = parseFloat(document.getElementById('rev_ribbon5').value) || 0;
+            const revRibbon6 = parseFloat(document.getElementById('rev_ribbon6').value) || 0;
 
-            const total = difRibbon1 + difRibbon2 + difRibbon3 + difRibbon4 + difRibbon5 + difRibbon6;
+            const total = revRibbon1 + revRibbon2 + revRibbon3 + revRibbon4 + revRibbon5 + revRibbon6;
 
             document.getElementById('total_rev').value = total;
         }
@@ -808,7 +769,7 @@
             document.getElementById('ribbon_5_atual').addEventListener('input', calcularDiferencas);
             document.getElementById('ribbon_6_atual').addEventListener('input', calcularDiferencas);
 
-            // Chama a função ao carregar a página para calcular as diferenças iniciais
+            // Chama a função ao carregar a página para calcular as Revelados iniciais
             calcularDiferencas();
         });
         // Adicionando listeners para os campos _atual
@@ -819,13 +780,13 @@
         document.getElementById('ribbon_5_atual').addEventListener('input', atualizarDiferencas);
         document.getElementById('ribbon_6_atual').addEventListener('input', atualizarDiferencas);
 
-        // Adicionando listeners para os campos dif_
-        document.getElementById('dif_ribbon_1').addEventListener('input', calcularTotalDif);
-        document.getElementById('dif_ribbon_2').addEventListener('input', calcularTotalDif);
-        document.getElementById('dif_ribbon_3').addEventListener('input', calcularTotalDif);
-        document.getElementById('dif_ribbon_4').addEventListener('input', calcularTotalDif);
-        document.getElementById('dif_ribbon_5').addEventListener('input', calcularTotalDif);
-        document.getElementById('dif_ribbon_6').addEventListener('input', calcularTotalDif);
+        // Adicionando listeners para os campos rev_
+        document.getElementById('rev_ribbon1').addEventListener('input', calcularTotalDif);
+        document.getElementById('rev_ribbon2').addEventListener('input', calcularTotalDif);
+        document.getElementById('rev_ribbon3').addEventListener('input', calcularTotalDif);
+        document.getElementById('rev_ribbon4').addEventListener('input', calcularTotalDif);
+        document.getElementById('rev_ribbon5').addEventListener('input', calcularTotalDif);
+        document.getElementById('rev_ribbon6').addEventListener('input', calcularTotalDif);
 
         // // Chamar a função quando qualquer campo que participa do cálculo for alterado
         // document.getElementById('total_ft_din').addEventListener('input', calcularTotalFotos);
@@ -833,36 +794,36 @@
         // document.getElementById('total_ft_cred').addEventListener('input', calcularTotalFotos);
         // document.getElementById('total_ft_pix').addEventListener('input', calcularTotalFotos);
 
-        // Função para atualizar as diferenças quando os campos _atual forem alterados
+        // Função para atualizar as Revelados quando os campos _atual forem alterados
         function atualizarDiferencas() {
             const ribbon1Conf = parseFloat(document.getElementById('ribbon_1_conf').value) || 0;
             const ribbon1Atual = parseFloat(document.getElementById('ribbon_1_atual').value) || 0;
-            document.getElementById('dif_ribbon_1').value = ribbon1Conf - ribbon1Atual;
+            document.getElementById('rev_ribbon1').value = ribbon1Conf - ribbon1Atual;
 
             const ribbon2Conf = parseFloat(document.getElementById('ribbon_2_conf').value) || 0;
             const ribbon2Atual = parseFloat(document.getElementById('ribbon_2_atual').value) || 0;
-            document.getElementById('dif_ribbon_2').value = ribbon2Conf - ribbon2Atual;
+            document.getElementById('rev_ribbon2').value = ribbon2Conf - ribbon2Atual;
 
             const ribbon3Conf = parseFloat(document.getElementById('ribbon_3_conf').value) || 0;
             const ribbon3Atual = parseFloat(document.getElementById('ribbon_3_atual').value) || 0;
-            document.getElementById('dif_ribbon_3').value = ribbon3Conf - ribbon3Atual;
+            document.getElementById('rev_ribbon3').value = ribbon3Conf - ribbon3Atual;
 
             const ribbon4Conf = parseFloat(document.getElementById('ribbon_4_conf').value) || 0;
             const ribbon4Atual = parseFloat(document.getElementById('ribbon_4_atual').value) || 0;
-            document.getElementById('dif_ribbon_4').value = ribbon4Conf - ribbon4Atual;
+            document.getElementById('rev_ribbon4').value = ribbon4Conf - ribbon4Atual;
 
             const ribbon5Conf = parseFloat(document.getElementById('ribbon_5_conf').value) || 0;
             const ribbon5Atual = parseFloat(document.getElementById('ribbon_5_atual').value) || 0;
-            document.getElementById('dif_ribbon_5').value = ribbon5Conf - ribbon5Atual;
+            document.getElementById('rev_ribbon5').value = ribbon5Conf - ribbon5Atual;
 
             const ribbon6Conf = parseFloat(document.getElementById('ribbon_6_conf').value) || 0;
             const ribbon6Atual = parseFloat(document.getElementById('ribbon_6_atual').value) || 0;
-            document.getElementById('dif_ribbon_6').value = ribbon6Conf - ribbon6Atual;
+            document.getElementById('rev_ribbon6').value = ribbon6Conf - ribbon6Atual;
 
 
 
 
-            // Atualiza a soma total de diferenças
+            // Atualiza a soma total de Revelados
             calcularTotalDif();
         }
 

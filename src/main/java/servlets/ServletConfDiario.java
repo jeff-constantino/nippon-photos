@@ -110,12 +110,46 @@ public class ServletConfDiario extends HttpServlet {
             confDiario.setValor_descontos(new BigDecimal(request.getParameter("valor_descontos")));
             confDiario.setValor_total_dia(new BigDecimal(request.getParameter("valor_total_dia")));
             confDiario.setObservacao(request.getParameter("observacao"));
+
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             confDiario.setData_fechamento(Date.valueOf(LocalDate.parse(request.getParameter("data_fechamento"), formatter)));
             confDiario.setTotal_revelado(Integer.parseInt(request.getParameter("total_revelado")));
             confDiario.setTotal_informado(Integer.parseInt(request.getParameter("total_informado")));
             confDiario.setValor_deb_24h(new BigDecimal(request.getParameter("valor_deb_24h")));
             confDiario.setValor_cred_24h(new BigDecimal(request.getParameter("valor_cred_24h")));
+
+            // Campos adicionais de ribbon e sobras
+            confDiario.setTotal_ribbon_1(Integer.parseInt(request.getParameter("total_ribbon_1")));
+            confDiario.setTotal_ribbon_2(Integer.parseInt(request.getParameter("total_ribbon_2")));
+            confDiario.setTotal_ribbon_3(Integer.parseInt(request.getParameter("total_ribbon_3")));
+            confDiario.setTotal_ribbon_4(Integer.parseInt(request.getParameter("total_ribbon_4")));
+            confDiario.setTotal_ribbon_5(Integer.parseInt(request.getParameter("total_ribbon_5")));
+            confDiario.setTotal_ribbon_6(Integer.parseInt(request.getParameter("total_ribbon_6")));
+            confDiario.setSobras(Integer.parseInt(request.getParameter("sobras")));
+
+            // Diferenças de ribbon
+            confDiario.setDifRibbon1(Integer.parseInt(request.getParameter("difRibbon1")));
+            confDiario.setDifRibbon2(Integer.parseInt(request.getParameter("difRibbon2")));
+            confDiario.setDifRibbon3(Integer.parseInt(request.getParameter("difRibbon3")));
+            confDiario.setDifRibbon4(Integer.parseInt(request.getParameter("difRibbon4")));
+            confDiario.setDifRibbon5(Integer.parseInt(request.getParameter("difRibbon5")));
+            confDiario.setDifRibbon6(Integer.parseInt(request.getParameter("difRibbon6")));
+
+            // Old ribbons
+            confDiario.setOld_ribbon_1(Integer.parseInt(request.getParameter("old_ribbon_1")));
+            confDiario.setOld_ribbon_2(Integer.parseInt(request.getParameter("old_ribbon_2")));
+            confDiario.setOld_ribbon_3(Integer.parseInt(request.getParameter("old_ribbon_3")));
+            confDiario.setOld_ribbon_4(Integer.parseInt(request.getParameter("old_ribbon_4")));
+            confDiario.setOld_ribbon_5(Integer.parseInt(request.getParameter("old_ribbon_5")));
+            confDiario.setOld_ribbon_6(Integer.parseInt(request.getParameter("old_ribbon_6")));
+
+            // Revisão de ribbons
+            confDiario.setRev_ribbon1(Integer.parseInt(request.getParameter("rev_ribbon1")));
+            confDiario.setRev_ribbon2(Integer.parseInt(request.getParameter("rev_ribbon2")));
+            confDiario.setRev_ribbon3(Integer.parseInt(request.getParameter("rev_ribbon3")));
+            confDiario.setRev_ribbon4(Integer.parseInt(request.getParameter("rev_ribbon4")));
+            confDiario.setRev_ribbon5(Integer.parseInt(request.getParameter("rev_ribbon5")));
+            confDiario.setRev_ribbon6(Integer.parseInt(request.getParameter("rev_ribbon6")));
 
             // Chama o método atualizar do DAO
             daoConfDiario.atualizarConfiguracao(confDiario);
@@ -127,4 +161,5 @@ public class ServletConfDiario extends HttpServlet {
 
         response.sendRedirect(request.getContextPath() + "/ServletConfDiario");
     }
+
 }

@@ -45,15 +45,19 @@ public class ModelFechaDia implements Serializable {
     private int old_ribbon_5;
     private int old_ribbon_6;
 
+    private int rev_ribbon1;
+    private int rev_ribbon2;
+    private int rev_ribbon3;
+    private int rev_ribbon4;
+    private int rev_ribbon5;
+    private int rev_ribbon6;
+
     private BigDecimal desconto;
     private BigDecimal valor_din;
     private BigDecimal valor_deb;
     private BigDecimal valor_cred;
     private BigDecimal valor_pix;
-    private BigDecimal valor_din_real;
-    private BigDecimal valor_deb_real;
-    private BigDecimal valor_cred_real;
-    private BigDecimal valor_pix_real;
+
 
 
     private String observacao;
@@ -61,6 +65,53 @@ public class ModelFechaDia implements Serializable {
     private int total_revelado;
     private int total_informado;
 
+    public int getRev_ribbon1() {
+        return rev_ribbon1;
+    }
+
+    public void setRev_ribbon1(int rev_ribbon1) {
+        this.rev_ribbon1 = rev_ribbon1;
+    }
+
+    public int getRev_ribbon2() {
+        return rev_ribbon2;
+    }
+
+    public void setRev_ribbon2(int rev_ribbon2) {
+        this.rev_ribbon2 = rev_ribbon2;
+    }
+
+    public int getRev_ribbon3() {
+        return rev_ribbon3;
+    }
+
+    public void setRev_ribbon3(int rev_ribbon3) {
+        this.rev_ribbon3 = rev_ribbon3;
+    }
+
+    public int getRev_ribbon4() {
+        return rev_ribbon4;
+    }
+
+    public void setRev_ribbon4(int rev_ribbon4) {
+        this.rev_ribbon4 = rev_ribbon4;
+    }
+
+    public int getRev_ribbon5() {
+        return rev_ribbon5;
+    }
+
+    public void setRev_ribbon5(int rev_ribbon5) {
+        this.rev_ribbon5 = rev_ribbon5;
+    }
+
+    public int getRev_ribbon6() {
+        return rev_ribbon6;
+    }
+
+    public void setRev_ribbon6(int rev_ribbon6) {
+        this.rev_ribbon6 = rev_ribbon6;
+    }
 
     public int getOld_ribbon_1() {
         return old_ribbon_1;
@@ -393,37 +444,7 @@ public class ModelFechaDia implements Serializable {
         this.observacao = observacao;
     }
 
-    public BigDecimal getValor_din_real() {
-        return valor_din_real;
-    }
 
-    public void setValor_din_real(BigDecimal valor_din_real) {
-        this.valor_din_real = valor_din_real;
-    }
-
-    public BigDecimal getValor_deb_real() {
-        return valor_deb_real;
-    }
-
-    public void setValor_deb_real(BigDecimal valor_deb_real) {
-        this.valor_deb_real = valor_deb_real;
-    }
-
-    public BigDecimal getValor_cred_real() {
-        return valor_cred_real;
-    }
-
-    public void setValor_cred_real(BigDecimal valor_cred_real) {
-        this.valor_cred_real = valor_cred_real;
-    }
-
-    public BigDecimal getValor_pix_real() {
-        return valor_pix_real;
-    }
-
-    public void setValor_pix_real(BigDecimal valor_pix_real) {
-        this.valor_pix_real = valor_pix_real;
-    }
 
 
     @Override
@@ -467,10 +488,6 @@ public class ModelFechaDia implements Serializable {
                 ",\nvalor_deb=" + valor_deb +
                 ",\nvalor_cred=" + valor_cred +
                 ",\nvalor_pix=" + valor_pix +
-                ",\nvalor_din_real=" + valor_din_real +
-                ",\nvalor_deb_real=" + valor_deb_real +
-                ",\nvalor_cred_real=" + valor_cred_real +
-                ",\nvalor_pix_real=" + valor_pix_real +
                 ",\nobservacao='" + observacao + '\'' +
                 ",\ntotal_revelado=" + total_revelado +
                 ",\ntotal_informado=" + total_informado +

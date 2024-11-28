@@ -50,6 +50,69 @@ public class ModelConfDiario implements Serializable {
     private int old_ribbon_5;
     private int old_ribbon_6;
 
+    private int rev_ribbon1;
+    private int rev_ribbon2;
+    private int rev_ribbon3;
+    private int rev_ribbon4;
+    private int rev_ribbon5;
+    private int rev_ribbon6;
+    private int total_dif;
+
+    public int getTotal_dif() {
+        return total_dif;
+    }
+
+    public void setTotal_dif(int total_dif) {
+        this.total_dif = total_dif;
+    }
+
+    public int getRev_ribbon1() {
+        return rev_ribbon1;
+    }
+
+    public void setRev_ribbon1(int rev_ribbon1) {
+        this.rev_ribbon1 = rev_ribbon1;
+    }
+
+    public int getRev_ribbon2() {
+        return rev_ribbon2;
+    }
+
+    public void setRev_ribbon2(int rev_ribbon2) {
+        this.rev_ribbon2 = rev_ribbon2;
+    }
+
+    public int getRev_ribbon3() {
+        return rev_ribbon3;
+    }
+
+    public void setRev_ribbon3(int rev_ribbon3) {
+        this.rev_ribbon3 = rev_ribbon3;
+    }
+
+    public int getRev_ribbon4() {
+        return rev_ribbon4;
+    }
+
+    public void setRev_ribbon4(int rev_ribbon4) {
+        this.rev_ribbon4 = rev_ribbon4;
+    }
+
+    public int getRev_ribbon5() {
+        return rev_ribbon5;
+    }
+
+    public void setRev_ribbon5(int rev_ribbon5) {
+        this.rev_ribbon5 = rev_ribbon5;
+    }
+
+    public int getRev_ribbon6() {
+        return rev_ribbon6;
+    }
+
+    public void setRev_ribbon6(int rev_ribbon6) {
+        this.rev_ribbon6 = rev_ribbon6;
+    }
 
     public int getTotal_ribbon_1() {
         return total_ribbon_1;

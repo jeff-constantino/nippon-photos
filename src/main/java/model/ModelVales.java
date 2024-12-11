@@ -14,7 +14,15 @@ public class ModelVales implements Serializable {
     private LocalDate data; // Alterado para LocalDate
     private String observacao;
     private BigDecimal valor;
+    private String forma_pagamento;
 
+    public String getForma_pagamento() {
+        return forma_pagamento;
+    }
+
+    public void setForma_pagamento(String forma_pagamento) {
+        this.forma_pagamento = forma_pagamento;
+    }
 
     public long getId_funcionario() {
         return id_funcionario;

@@ -10,12 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelLogin;
 import model.ModelVales;
-import model.ModelVendas;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -30,15 +28,38 @@ public class ServletVales extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Busca os funcionários usando DAORelatorio
+            // Verifica se a ação é para excluir um vale
+            String acao = request.getParameter("acao");
+
+            if ("excluirVale".equals(acao)) {
+                // Obtém o idVale da URL
+                String idValeStr = request.getParameter("idVale");
+                if (idValeStr != null && !idValeStr.isEmpty()) {
+                    long idVale = Long.parseLong(idValeStr);
+
+                    // Chama o método excluirVale do DAO
+                    DAOVales daoVales = new DAOVales();
+                    boolean excluiu = daoVales.excluirVale(idVale);
+
+                    if (excluiu) {
+                        request.setAttribute("msg", "Vale excluído com sucesso.");
+                    } else {
+                        request.setAttribute("msg", "Erro ao excluir o vale.");
+                    }
+                } else {
+                    request.setAttribute("msg", "ID do vale não encontrado.");
+                }
+            }
+
+            // Busca os funcionários e os vales novamente após a exclusão
             DAORelatorio relatorio = new DAORelatorio();
             List<ModelLogin> funcionarios = relatorio.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);
 
-            // Busca os vales dos últimos 30 dias usando DAOVales
+            // Busca os vales dos últimos 30 dias
             DAOVales daoVales = new DAOVales();
             List<ModelVales> valesList = daoVales.buscarValesUltimos30Dias();
-            request.setAttribute("vales", valesList);  // Nome do atributo ajustado
+            request.setAttribute("vales", valesList); // Nome do atributo ajustado
 
             // Encaminha para o JSP
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/vales.jsp");
@@ -46,12 +67,13 @@ public class ServletVales extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("msg", "Erro ao buscar dados: " + e.getMessage());
-            request.setAttribute("vales", new ArrayList<>());  // Garante que a lista será exibida, mesmo vazia
+            request.setAttribute("msg", "Erro ao processar a solicitação: " + e.getMessage());
+            request.setAttribute("vales", new ArrayList<>()); // Garante que a lista será exibida, mesmo vazia
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/vales.jsp");
             dispatcher.forward(request, response);
         }
     }
+
 
 
 
@@ -68,6 +90,7 @@ public class ServletVales extends HttpServlet {
                 String data = request.getParameter("data");
                 String observacao = request.getParameter("observacao");
                 String valor = request.getParameter("valor");
+                String formaPagamento = request.getParameter("forma_pagamento");
 
                 // Cria um objeto ModelVales e configura os valores
                 ModelVales vale = new ModelVales();
@@ -81,6 +104,7 @@ public class ServletVales extends HttpServlet {
                 vale.setData(LocalDate.parse(data));
                 vale.setObservacao(observacao);
                 vale.setValor(new BigDecimal(valor));
+                vale.setForma_pagamento(formaPagamento);
 
                 // Chama o método para inserir o vale
                 DAOVales daoVales = new DAOVales();

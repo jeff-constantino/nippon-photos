@@ -14,27 +14,36 @@ public class ModelControleRibbon implements Serializable {
     private int total_ribbon_5;
     private int total_ribbon_6;
 
-    private int rev_ribbon1;
-    private int rev_ribbon2;
-    private int rev_ribbon3;
-    private int rev_ribbon4;
-    private int rev_ribbon5;
-    private int rev_ribbon6;
+    private int rev_ribbon_1;
+    private int rev_ribbon_2;
+    private int rev_ribbon_3;
+    private int rev_ribbon_4;
+    private int rev_ribbon_5;
+    private int rev_ribbon_6;
 
-    private int difRibbon1;
-    private int difRibbon2;
-    private int difRibbon3;
-    private int difRibbon4;
-    private int difRibbon5;
-    private int difRibbon6;
+    private int dif_ribbon_1;
+    private int dif_ribbon_2;
+    private int dif_ribbon_3;
+    private int dif_ribbon_4;
+    private int dif_ribbon_5;
+    private int dif_ribbon_6;
 
-    private int troca_ribbon1;
-    private int troca_ribbon2;
-    private int troca_ribbon3;
-    private int troca_ribbon4;
-    private int troca_ribbon5;
-    private int troca_ribbon6;
+    private int troca_ribbon_1;
+    private int troca_ribbon_2;
+    private int troca_ribbon_3;
+    private int troca_ribbon_4;
+    private int troca_ribbon_5;
+    private int troca_ribbon_6;
+private String observacao_ribbon;
 
+
+    public String getObservacao_ribbon() {
+        return observacao_ribbon;
+    }
+
+    public void setObservacao_ribbon(String observacao_ribbon) {
+        this.observacao_ribbon = observacao_ribbon;
+    }
 
     public long getIdControle() {
         return idControle;
@@ -100,147 +109,147 @@ public class ModelControleRibbon implements Serializable {
         this.total_ribbon_6 = total_ribbon_6;
     }
 
-    public int getRev_ribbon1() {
-        return rev_ribbon1;
+    public int getRev_ribbon_1() {
+        return rev_ribbon_1;
     }
 
-    public void setRev_ribbon1(int rev_ribbon1) {
-        this.rev_ribbon1 = rev_ribbon1;
+    public void setRev_ribbon_1(int rev_ribbon_1) {
+        this.rev_ribbon_1 = rev_ribbon_1;
     }
 
-    public int getRev_ribbon2() {
-        return rev_ribbon2;
+    public int getRev_ribbon_2() {
+        return rev_ribbon_2;
     }
 
-    public void setRev_ribbon2(int rev_ribbon2) {
-        this.rev_ribbon2 = rev_ribbon2;
+    public void setRev_ribbon_2(int rev_ribbon_2) {
+        this.rev_ribbon_2 = rev_ribbon_2;
     }
 
-    public int getRev_ribbon3() {
-        return rev_ribbon3;
+    public int getRev_ribbon_3() {
+        return rev_ribbon_3;
     }
 
-    public void setRev_ribbon3(int rev_ribbon3) {
-        this.rev_ribbon3 = rev_ribbon3;
+    public void setRev_ribbon_3(int rev_ribbon_3) {
+        this.rev_ribbon_3 = rev_ribbon_3;
     }
 
-    public int getRev_ribbon4() {
-        return rev_ribbon4;
+    public int getRev_ribbon_4() {
+        return rev_ribbon_4;
     }
 
-    public void setRev_ribbon4(int rev_ribbon4) {
-        this.rev_ribbon4 = rev_ribbon4;
+    public void setRev_ribbon_4(int rev_ribbon_4) {
+        this.rev_ribbon_4 = rev_ribbon_4;
     }
 
-    public int getRev_ribbon5() {
-        return rev_ribbon5;
+    public int getRev_ribbon_5() {
+        return rev_ribbon_5;
     }
 
-    public void setRev_ribbon5(int rev_ribbon5) {
-        this.rev_ribbon5 = rev_ribbon5;
+    public void setRev_ribbon_5(int rev_ribbon_5) {
+        this.rev_ribbon_5 = rev_ribbon_5;
     }
 
-    public int getRev_ribbon6() {
-        return rev_ribbon6;
+    public int getRev_ribbon_6() {
+        return rev_ribbon_6;
     }
 
-    public void setRev_ribbon6(int rev_ribbon6) {
-        this.rev_ribbon6 = rev_ribbon6;
+    public void setRev_ribbon_6(int rev_ribbon_6) {
+        this.rev_ribbon_6 = rev_ribbon_6;
     }
 
-    public int getDifRibbon1() {
-        return difRibbon1;
+    public int getDif_ribbon_1() {
+        return dif_ribbon_1;
     }
 
-    public void setDifRibbon1(int difRibbon1) {
-        this.difRibbon1 = difRibbon1;
+    public void setDif_ribbon_1(int dif_ribbon_1) {
+        this.dif_ribbon_1 = dif_ribbon_1;
     }
 
-    public int getDifRibbon2() {
-        return difRibbon2;
+    public int getDif_ribbon_2() {
+        return dif_ribbon_2;
     }
 
-    public void setDifRibbon2(int difRibbon2) {
-        this.difRibbon2 = difRibbon2;
+    public void setDif_ribbon_2(int dif_ribbon_2) {
+        this.dif_ribbon_2 = dif_ribbon_2;
     }
 
-    public int getDifRibbon3() {
-        return difRibbon3;
+    public int getDif_ribbon_3() {
+        return dif_ribbon_3;
     }
 
-    public void setDifRibbon3(int difRibbon3) {
-        this.difRibbon3 = difRibbon3;
+    public void setDif_ribbon_3(int dif_ribbon_3) {
+        this.dif_ribbon_3 = dif_ribbon_3;
     }
 
-    public int getDifRibbon4() {
-        return difRibbon4;
+    public int getDif_ribbon_4() {
+        return dif_ribbon_4;
     }
 
-    public void setDifRibbon4(int difRibbon4) {
-        this.difRibbon4 = difRibbon4;
+    public void setDif_ribbon_4(int dif_ribbon_4) {
+        this.dif_ribbon_4 = dif_ribbon_4;
     }
 
-    public int getDifRibbon5() {
-        return difRibbon5;
+    public int getDif_ribbon_5() {
+        return dif_ribbon_5;
     }
 
-    public void setDifRibbon5(int difRibbon5) {
-        this.difRibbon5 = difRibbon5;
+    public void setDif_ribbon_5(int dif_ribbon_5) {
+        this.dif_ribbon_5 = dif_ribbon_5;
     }
 
-    public int getDifRibbon6() {
-        return difRibbon6;
+    public int getDif_ribbon_6() {
+        return dif_ribbon_6;
     }
 
-    public void setDifRibbon6(int difRibbon6) {
-        this.difRibbon6 = difRibbon6;
+    public void setDif_ribbon_6(int dif_ribbon_6) {
+        this.dif_ribbon_6 = dif_ribbon_6;
     }
 
-    public int getTroca_ribbon1() {
-        return troca_ribbon1;
+    public int getTroca_ribbon_1() {
+        return troca_ribbon_1;
     }
 
-    public void setTroca_ribbon1(int troca_ribbon1) {
-        this.troca_ribbon1 = troca_ribbon1;
+    public void setTroca_ribbon_1(int troca_ribbon_1) {
+        this.troca_ribbon_1 = troca_ribbon_1;
     }
 
-    public int getTroca_ribbon2() {
-        return troca_ribbon2;
+    public int getTroca_ribbon_2() {
+        return troca_ribbon_2;
     }
 
-    public void setTroca_ribbon2(int troca_ribbon2) {
-        this.troca_ribbon2 = troca_ribbon2;
+    public void setTroca_ribbon_2(int troca_ribbon_2) {
+        this.troca_ribbon_2 = troca_ribbon_2;
     }
 
-    public int getTroca_ribbon3() {
-        return troca_ribbon3;
+    public int getTroca_ribbon_3() {
+        return troca_ribbon_3;
     }
 
-    public void setTroca_ribbon3(int troca_ribbon3) {
-        this.troca_ribbon3 = troca_ribbon3;
+    public void setTroca_ribbon_3(int troca_ribbon_3) {
+        this.troca_ribbon_3 = troca_ribbon_3;
     }
 
-    public int getTroca_ribbon4() {
-        return troca_ribbon4;
+    public int getTroca_ribbon_4() {
+        return troca_ribbon_4;
     }
 
-    public void setTroca_ribbon4(int troca_ribbon4) {
-        this.troca_ribbon4 = troca_ribbon4;
+    public void setTroca_ribbon_4(int troca_ribbon_4) {
+        this.troca_ribbon_4 = troca_ribbon_4;
     }
 
-    public int getTroca_ribbon5() {
-        return troca_ribbon5;
+    public int getTroca_ribbon_5() {
+        return troca_ribbon_5;
     }
 
-    public void setTroca_ribbon5(int troca_ribbon5) {
-        this.troca_ribbon5 = troca_ribbon5;
+    public void setTroca_ribbon_5(int troca_ribbon_5) {
+        this.troca_ribbon_5 = troca_ribbon_5;
     }
 
-    public int getTroca_ribbon6() {
-        return troca_ribbon6;
+    public int getTroca_ribbon_6() {
+        return troca_ribbon_6;
     }
 
-    public void setTroca_ribbon6(int troca_ribbon6) {
-        this.troca_ribbon6 = troca_ribbon6;
+    public void setTroca_ribbon_6(int troca_ribbon_6) {
+        this.troca_ribbon_6 = troca_ribbon_6;
     }
 }

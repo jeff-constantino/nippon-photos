@@ -465,7 +465,7 @@
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                readonly style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon1" name="rev_ribbon1" >
+                                                               tabindex="-1" readonly id="rev_ribbon_1" name="rev_ribbon_1" >
 
 
 
@@ -481,7 +481,7 @@
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon2" name="rev_ribbon2" readonly>
+                                                               tabindex="-1" readonly id="rev_ribbon_2" name="rev_ribbon_2" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -511,7 +511,7 @@
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon3" name="rev_ribbon3" readonly>
+                                                               tabindex="-1" readonly id="rev_ribbon_3" name="rev_ribbon_3" readonly>
                                                     </div>
 
                                                     <div class="col-6">
@@ -523,7 +523,7 @@
                                                         <label style="color: white">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon4" name="rev_ribbon4" readonly>
+                                                               tabindex="-1" readonly id="rev_ribbon_4" name="rev_ribbon_4" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -553,7 +553,7 @@
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon5" name="rev_ribbon5" readonly>
+                                                               tabindex="-1" readonly id="rev_ribbon_5" name="rev_ribbon_5" readonly>
                                                     </div>
 
                                                     <div class="col-6">
@@ -565,7 +565,7 @@
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon6" name="rev_ribbon6" readonly>
+                                                               tabindex="-1" readonly id="rev_ribbon_6" name="rev_ribbon_6" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -719,42 +719,42 @@
             // Ribbon 1
             const ribbon1Conf = parseFloat(document.getElementById('ribbon_1_conf').value) || 0;
             const ribbon1Atual = parseFloat(document.getElementById('ribbon_1_atual').value) || 0;
-            document.getElementById('rev_ribbon1').value = ribbon1Conf - ribbon1Atual;
+            document.getElementById('rev_ribbon_1').value = ribbon1Conf - ribbon1Atual;
 
             // Ribbon 2
             const ribbon2Conf = parseFloat(document.getElementById('ribbon_2_conf').value) || 0;
             const ribbon2Atual = parseFloat(document.getElementById('ribbon_2_atual').value) || 0;
-            document.getElementById('rev_ribbon2').value = ribbon2Conf - ribbon2Atual;
+            document.getElementById('rev_ribbon_2').value = ribbon2Conf - ribbon2Atual;
 
             // Ribbon 3
             const ribbon3Conf = parseFloat(document.getElementById('ribbon_3_conf').value) || 0;
             const ribbon3Atual = parseFloat(document.getElementById('ribbon_3_atual').value) || 0;
-            document.getElementById('rev_ribbon3').value = ribbon3Conf - ribbon3Atual;
+            document.getElementById('rev_ribbon_3').value = ribbon3Conf - ribbon3Atual;
 
             // Ribbon 4
             const ribbon4Conf = parseFloat(document.getElementById('ribbon_4_conf').value) || 0;
             const ribbon4Atual = parseFloat(document.getElementById('ribbon_4_atual').value) || 0;
-            document.getElementById('rev_ribbon4').value = ribbon4Conf - ribbon4Atual;
+            document.getElementById('rev_ribbon_4').value = ribbon4Conf - ribbon4Atual;
 
             // Ribbon 5
             const ribbon5Conf = parseFloat(document.getElementById('ribbon_5_conf').value) || 0;
             const ribbon5Atual = parseFloat(document.getElementById('ribbon_5_atual').value) || 0;
-            document.getElementById('rev_ribbon5').value = ribbon5Conf - ribbon5Atual;
+            document.getElementById('rev_ribbon_5').value = ribbon5Conf - ribbon5Atual;
 
             // Ribbon 6
             const ribbon6Conf = parseFloat(document.getElementById('ribbon_6_conf').value) || 0;
             const ribbon6Atual = parseFloat(document.getElementById('ribbon_6_atual').value) || 0;
-            document.getElementById('rev_ribbon6').value = ribbon6Conf - ribbon6Atual;
+            document.getElementById('rev_ribbon_6').value = ribbon6Conf - ribbon6Atual;
         }
 
         // Função para calcular o total de Revelados
         function calcularTotalDif() {
-            const revRibbon1 = parseFloat(document.getElementById('rev_ribbon1').value) || 0;
-            const revRibbon2 = parseFloat(document.getElementById('rev_ribbon2').value) || 0;
-            const revRibbon3 = parseFloat(document.getElementById('rev_ribbon3').value) || 0;
-            const revRibbon4 = parseFloat(document.getElementById('rev_ribbon4').value) || 0;
-            const revRibbon5 = parseFloat(document.getElementById('rev_ribbon5').value) || 0;
-            const revRibbon6 = parseFloat(document.getElementById('rev_ribbon6').value) || 0;
+            const revRibbon1 = parseFloat(document.getElementById('rev_ribbon_1').value) || 0;
+            const revRibbon2 = parseFloat(document.getElementById('rev_ribbon_2').value) || 0;
+            const revRibbon3 = parseFloat(document.getElementById('rev_ribbon_3').value) || 0;
+            const revRibbon4 = parseFloat(document.getElementById('rev_ribbon_4').value) || 0;
+            const revRibbon5 = parseFloat(document.getElementById('rev_ribbon_5').value) || 0;
+            const revRibbon6 = parseFloat(document.getElementById('rev_ribbon_6').value) || 0;
 
             const total = revRibbon1 + revRibbon2 + revRibbon3 + revRibbon4 + revRibbon5 + revRibbon6;
 
@@ -781,12 +781,12 @@
         document.getElementById('ribbon_6_atual').addEventListener('input', atualizarDiferencas);
 
         // Adicionando listeners para os campos rev_
-        document.getElementById('rev_ribbon1').addEventListener('input', calcularTotalDif);
-        document.getElementById('rev_ribbon2').addEventListener('input', calcularTotalDif);
-        document.getElementById('rev_ribbon3').addEventListener('input', calcularTotalDif);
-        document.getElementById('rev_ribbon4').addEventListener('input', calcularTotalDif);
-        document.getElementById('rev_ribbon5').addEventListener('input', calcularTotalDif);
-        document.getElementById('rev_ribbon6').addEventListener('input', calcularTotalDif);
+        document.getElementById('rev_ribbon_1').addEventListener('input', calcularTotalDif);
+        document.getElementById('rev_ribbon_2').addEventListener('input', calcularTotalDif);
+        document.getElementById('rev_ribbon_3').addEventListener('input', calcularTotalDif);
+        document.getElementById('rev_ribbon_4').addEventListener('input', calcularTotalDif);
+        document.getElementById('rev_ribbon_5').addEventListener('input', calcularTotalDif);
+        document.getElementById('rev_ribbon_6').addEventListener('input', calcularTotalDif);
 
         // // Chamar a função quando qualquer campo que participa do cálculo for alterado
         // document.getElementById('total_ft_din').addEventListener('input', calcularTotalFotos);
@@ -798,27 +798,27 @@
         function atualizarDiferencas() {
             const ribbon1Conf = parseFloat(document.getElementById('ribbon_1_conf').value) || 0;
             const ribbon1Atual = parseFloat(document.getElementById('ribbon_1_atual').value) || 0;
-            document.getElementById('rev_ribbon1').value = ribbon1Conf - ribbon1Atual;
+            document.getElementById('rev_ribbon_1').value = ribbon1Conf - ribbon1Atual;
 
             const ribbon2Conf = parseFloat(document.getElementById('ribbon_2_conf').value) || 0;
             const ribbon2Atual = parseFloat(document.getElementById('ribbon_2_atual').value) || 0;
-            document.getElementById('rev_ribbon2').value = ribbon2Conf - ribbon2Atual;
+            document.getElementById('rev_ribbon_2').value = ribbon2Conf - ribbon2Atual;
 
             const ribbon3Conf = parseFloat(document.getElementById('ribbon_3_conf').value) || 0;
             const ribbon3Atual = parseFloat(document.getElementById('ribbon_3_atual').value) || 0;
-            document.getElementById('rev_ribbon3').value = ribbon3Conf - ribbon3Atual;
+            document.getElementById('rev_ribbon_3').value = ribbon3Conf - ribbon3Atual;
 
             const ribbon4Conf = parseFloat(document.getElementById('ribbon_4_conf').value) || 0;
             const ribbon4Atual = parseFloat(document.getElementById('ribbon_4_atual').value) || 0;
-            document.getElementById('rev_ribbon4').value = ribbon4Conf - ribbon4Atual;
+            document.getElementById('rev_ribbon_4').value = ribbon4Conf - ribbon4Atual;
 
             const ribbon5Conf = parseFloat(document.getElementById('ribbon_5_conf').value) || 0;
             const ribbon5Atual = parseFloat(document.getElementById('ribbon_5_atual').value) || 0;
-            document.getElementById('rev_ribbon5').value = ribbon5Conf - ribbon5Atual;
+            document.getElementById('rev_ribbon_5').value = ribbon5Conf - ribbon5Atual;
 
             const ribbon6Conf = parseFloat(document.getElementById('ribbon_6_conf').value) || 0;
             const ribbon6Atual = parseFloat(document.getElementById('ribbon_6_atual').value) || 0;
-            document.getElementById('rev_ribbon6').value = ribbon6Conf - ribbon6Atual;
+            document.getElementById('rev_ribbon_6').value = ribbon6Conf - ribbon6Atual;
 
 
 

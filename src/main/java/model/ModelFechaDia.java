@@ -31,12 +31,6 @@ public class ModelFechaDia implements Serializable {
     private int total_ribbon_5;
     private int total_ribbon_6;
     private int sobras;
-    private int difRibbon1;
-    private int difRibbon2;
-    private int difRibbon3;
-    private int difRibbon4;
-    private int difRibbon5;
-    private int difRibbon6;
 
     private int old_ribbon_1;
     private int old_ribbon_2;
@@ -45,12 +39,20 @@ public class ModelFechaDia implements Serializable {
     private int old_ribbon_5;
     private int old_ribbon_6;
 
-    private int rev_ribbon1;
-    private int rev_ribbon2;
-    private int rev_ribbon3;
-    private int rev_ribbon4;
-    private int rev_ribbon5;
-    private int rev_ribbon6;
+    private int rev_ribbon_1;
+    private int rev_ribbon_2;
+    private int rev_ribbon_3;
+    private int rev_ribbon_4;
+    private int rev_ribbon_5;
+    private int rev_ribbon_6;
+
+
+    private int dif_ribbon_1;
+    private int dif_ribbon_2;
+    private int dif_ribbon_3;
+    private int dif_ribbon_4;
+    private int dif_ribbon_5;
+    private int dif_ribbon_6;
 
     private BigDecimal desconto;
     private BigDecimal valor_din;
@@ -65,53 +67,9 @@ public class ModelFechaDia implements Serializable {
     private int total_revelado;
     private int total_informado;
 
-    public int getRev_ribbon1() {
-        return rev_ribbon1;
-    }
 
-    public void setRev_ribbon1(int rev_ribbon1) {
-        this.rev_ribbon1 = rev_ribbon1;
-    }
 
-    public int getRev_ribbon2() {
-        return rev_ribbon2;
-    }
 
-    public void setRev_ribbon2(int rev_ribbon2) {
-        this.rev_ribbon2 = rev_ribbon2;
-    }
-
-    public int getRev_ribbon3() {
-        return rev_ribbon3;
-    }
-
-    public void setRev_ribbon3(int rev_ribbon3) {
-        this.rev_ribbon3 = rev_ribbon3;
-    }
-
-    public int getRev_ribbon4() {
-        return rev_ribbon4;
-    }
-
-    public void setRev_ribbon4(int rev_ribbon4) {
-        this.rev_ribbon4 = rev_ribbon4;
-    }
-
-    public int getRev_ribbon5() {
-        return rev_ribbon5;
-    }
-
-    public void setRev_ribbon5(int rev_ribbon5) {
-        this.rev_ribbon5 = rev_ribbon5;
-    }
-
-    public int getRev_ribbon6() {
-        return rev_ribbon6;
-    }
-
-    public void setRev_ribbon6(int rev_ribbon6) {
-        this.rev_ribbon6 = rev_ribbon6;
-    }
 
     public int getOld_ribbon_1() {
         return old_ribbon_1;
@@ -193,8 +151,101 @@ public class ModelFechaDia implements Serializable {
         this.valor_pix = valor_pix;
     }
 
+    public int getRev_ribbon_1() {
+        return rev_ribbon_1;
+    }
 
+    public void setRev_ribbon_1(int rev_ribbon_1) {
+        this.rev_ribbon_1 = rev_ribbon_1;
+    }
 
+    public int getRev_ribbon_2() {
+        return rev_ribbon_2;
+    }
+
+    public void setRev_ribbon_2(int rev_ribbon_2) {
+        this.rev_ribbon_2 = rev_ribbon_2;
+    }
+
+    public int getRev_ribbon_3() {
+        return rev_ribbon_3;
+    }
+
+    public void setRev_ribbon_3(int rev_ribbon_3) {
+        this.rev_ribbon_3 = rev_ribbon_3;
+    }
+
+    public int getRev_ribbon_4() {
+        return rev_ribbon_4;
+    }
+
+    public void setRev_ribbon_4(int rev_ribbon_4) {
+        this.rev_ribbon_4 = rev_ribbon_4;
+    }
+
+    public int getRev_ribbon_5() {
+        return rev_ribbon_5;
+    }
+
+    public void setRev_ribbon_5(int rev_ribbon_5) {
+        this.rev_ribbon_5 = rev_ribbon_5;
+    }
+
+    public int getRev_ribbon_6() {
+        return rev_ribbon_6;
+    }
+
+    public void setRev_ribbon_6(int rev_ribbon_6) {
+        this.rev_ribbon_6 = rev_ribbon_6;
+    }
+
+    public int getDif_ribbon_1() {
+        return dif_ribbon_1;
+    }
+
+    public void setDif_ribbon_1(int dif_ribbon_1) {
+        this.dif_ribbon_1 = dif_ribbon_1;
+    }
+
+    public int getDif_ribbon_2() {
+        return dif_ribbon_2;
+    }
+
+    public void setDif_ribbon_2(int dif_ribbon_2) {
+        this.dif_ribbon_2 = dif_ribbon_2;
+    }
+
+    public int getDif_ribbon_3() {
+        return dif_ribbon_3;
+    }
+
+    public void setDif_ribbon_3(int dif_ribbon_3) {
+        this.dif_ribbon_3 = dif_ribbon_3;
+    }
+
+    public int getDif_ribbon_4() {
+        return dif_ribbon_4;
+    }
+
+    public void setDif_ribbon_4(int dif_ribbon_4) {
+        this.dif_ribbon_4 = dif_ribbon_4;
+    }
+
+    public int getDif_ribbon_5() {
+        return dif_ribbon_5;
+    }
+
+    public void setDif_ribbon_5(int dif_ribbon_5) {
+        this.dif_ribbon_5 = dif_ribbon_5;
+    }
+
+    public int getDif_ribbon_6() {
+        return dif_ribbon_6;
+    }
+
+    public void setDif_ribbon_6(int dif_ribbon_6) {
+        this.dif_ribbon_6 = dif_ribbon_6;
+    }
 
     public int getTotal_revelado() {
         return total_revelado;
@@ -212,53 +263,7 @@ public class ModelFechaDia implements Serializable {
         this.total_informado = total_informado;
     }
 
-    public int getDifRibbon1() {
-        return difRibbon1;
-    }
 
-    public void setDifRibbon1(int difRibbon1) {
-        this.difRibbon1 = difRibbon1;
-    }
-
-    public int getDifRibbon2() {
-        return difRibbon2;
-    }
-
-    public void setDifRibbon2(int difRibbon2) {
-        this.difRibbon2 = difRibbon2;
-    }
-
-    public int getDifRibbon3() {
-        return difRibbon3;
-    }
-
-    public void setDifRibbon3(int difRibbon3) {
-        this.difRibbon3 = difRibbon3;
-    }
-
-    public int getDifRibbon4() {
-        return difRibbon4;
-    }
-
-    public void setDifRibbon4(int difRibbon4) {
-        this.difRibbon4 = difRibbon4;
-    }
-
-    public int getDifRibbon5() {
-        return difRibbon5;
-    }
-
-    public void setDifRibbon5(int difRibbon5) {
-        this.difRibbon5 = difRibbon5;
-    }
-
-    public int getDifRibbon6() {
-        return difRibbon6;
-    }
-
-    public void setDifRibbon6(int difRibbon6) {
-        this.difRibbon6 = difRibbon6;
-    }
 
     public int getSobras() {
         return sobras;
@@ -445,53 +450,56 @@ public class ModelFechaDia implements Serializable {
     }
 
 
-
-
     @Override
     public String toString() {
-        return "ModelFechaDia {" +
-                "\nid=" + id +
-                ",\ndata_fechamento=" + data_fechamento +
-                ",\ntotal_ft_din=" + total_ft_din +
-                ",\ntotal_ft_deb=" + total_ft_deb +
-                ",\ntotal_ft_cred=" + total_ft_cred +
-                ",\ntotal_ft_pix=" + total_ft_pix +
-                ",\ntotal_enc_din=" + total_enc_din +
-                ",\ntotal_enc_deb=" + total_enc_deb +
-                ",\ntotal_enc_cred=" + total_enc_cred +
-                ",\ntotal_enc_pix=" + total_enc_pix +
-                ",\ntotal_dig_din=" + total_dig_din +
-                ",\ntotal_dig_deb=" + total_dig_deb +
-                ",\ntotal_dig_cred=" + total_dig_cred +
-                ",\ntotal_dig_pix=" + total_dig_pix +
-                ",\ntotal_ribbon_1=" + total_ribbon_1 +
-                ",\ntotal_ribbon_2=" + total_ribbon_2 +
-                ",\ntotal_ribbon_3=" + total_ribbon_3 +
-                ",\ntotal_ribbon_4=" + total_ribbon_4 +
-                ",\ntotal_ribbon_5=" + total_ribbon_5 +
-                ",\ntotal_ribbon_6=" + total_ribbon_6 +
-                ",\nsobras=" + sobras +
-                ",\ndifRibbon1=" + difRibbon1 +
-                ",\ndifRibbon2=" + difRibbon2 +
-                ",\ndifRibbon3=" + difRibbon3 +
-                ",\ndifRibbon4=" + difRibbon4 +
-                ",\ndifRibbon5=" + difRibbon5 +
-                ",\ndifRibbon6=" + difRibbon6 +
-                ",\nold_ribbon_1=" + old_ribbon_1 +
-                ",\nold_ribbon_2=" + old_ribbon_2 +
-                ",\nold_ribbon_3=" + old_ribbon_3 +
-                ",\nold_ribbon_4=" + old_ribbon_4 +
-                ",\nold_ribbon_5=" + old_ribbon_5 +
-                ",\nold_ribbon_6=" + old_ribbon_6 +
-                ",\ndesconto=" + desconto +
-                ",\nvalor_din=" + valor_din +
-                ",\nvalor_deb=" + valor_deb +
-                ",\nvalor_cred=" + valor_cred +
-                ",\nvalor_pix=" + valor_pix +
-                ",\nobservacao='" + observacao + '\'' +
-                ",\ntotal_revelado=" + total_revelado +
-                ",\ntotal_informado=" + total_informado +
-                "\n}";
+        return "ModelFechaDia{" +
+                "id=" + id +
+                ", data_fechamento=" + data_fechamento +
+                ", total_ft_din=" + total_ft_din +
+                ", total_ft_deb=" + total_ft_deb +
+                ", total_ft_cred=" + total_ft_cred +
+                ", total_ft_pix=" + total_ft_pix +
+                ", total_enc_din=" + total_enc_din +
+                ", total_enc_deb=" + total_enc_deb +
+                ", total_enc_cred=" + total_enc_cred +
+                ", total_enc_pix=" + total_enc_pix +
+                ", total_dig_din=" + total_dig_din +
+                ", total_dig_deb=" + total_dig_deb +
+                ", total_dig_cred=" + total_dig_cred +
+                ", total_dig_pix=" + total_dig_pix +
+                ", total_ribbon_1=" + total_ribbon_1 +
+                ", total_ribbon_2=" + total_ribbon_2 +
+                ", total_ribbon_3=" + total_ribbon_3 +
+                ", total_ribbon_4=" + total_ribbon_4 +
+                ", total_ribbon_5=" + total_ribbon_5 +
+                ", total_ribbon_6=" + total_ribbon_6 +
+                ", sobras=" + sobras +
+                ", old_ribbon_1=" + old_ribbon_1 +
+                ", old_ribbon_2=" + old_ribbon_2 +
+                ", old_ribbon_3=" + old_ribbon_3 +
+                ", old_ribbon_4=" + old_ribbon_4 +
+                ", old_ribbon_5=" + old_ribbon_5 +
+                ", old_ribbon_6=" + old_ribbon_6 +
+                ", rev_ribbon_1=" + rev_ribbon_1 +
+                ", rev_ribbon_2=" + rev_ribbon_2 +
+                ", rev_ribbon_3=" + rev_ribbon_3 +
+                ", rev_ribbon_4=" + rev_ribbon_4 +
+                ", rev_ribbon_5=" + rev_ribbon_5 +
+                ", rev_ribbon_6=" + rev_ribbon_6 +
+                ", dif_ribbon_1=" + dif_ribbon_1 +
+                ", dif_ribbon_2=" + dif_ribbon_2 +
+                ", dif_ribbon_3=" + dif_ribbon_3 +
+                ", dif_ribbon_4=" + dif_ribbon_4 +
+                ", dif_ribbon_5=" + dif_ribbon_5 +
+                ", dif_ribbon_6=" + dif_ribbon_6 +
+                ", desconto=" + desconto +
+                ", valor_din=" + valor_din +
+                ", valor_deb=" + valor_deb +
+                ", valor_cred=" + valor_cred +
+                ", valor_pix=" + valor_pix +
+                ", observacao='" + observacao + '\'' +
+                ", total_revelado=" + total_revelado +
+                ", total_informado=" + total_informado +
+                '}';
     }
-
 }

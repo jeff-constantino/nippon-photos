@@ -61,8 +61,7 @@
                     <li class="nav-item"> <a class="nav-link" href="">Vendas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Cartões e Pix</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Salários</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="">Vales</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="">Fechamento do Mês</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletVales">Vales</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Ranking de Funcionários</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/principal/deathnote.jsp">Death Note</a></li>
                 </ul>

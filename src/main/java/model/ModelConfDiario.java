@@ -20,9 +20,10 @@ public class ModelConfDiario implements Serializable {
     private BigDecimal valor_pix_dif;
     private BigDecimal valor_despesa_total;
     private BigDecimal valor_vale_total;
-    private BigDecimal valor_descontos;
+    private BigDecimal desconto;
     private BigDecimal valor_total_dia;
     private String observacao;
+    private String observacao_ribbon;
     private Date data_fechamento;
     private int total_revelado;
     private int total_informado;
@@ -36,12 +37,12 @@ public class ModelConfDiario implements Serializable {
     private int total_ribbon_5;
     private int total_ribbon_6;
     private int sobras;
-    private int difRibbon1;
-    private int difRibbon2;
-    private int difRibbon3;
-    private int difRibbon4;
-    private int difRibbon5;
-    private int difRibbon6;
+    private int dif_ribbon_1;
+    private int dif_ribbon_2;
+    private int dif_ribbon_3;
+    private int dif_ribbon_4;
+    private int dif_ribbon_5;
+    private int dif_ribbon_6;
 
     private int old_ribbon_1;
     private int old_ribbon_2;
@@ -50,13 +51,25 @@ public class ModelConfDiario implements Serializable {
     private int old_ribbon_5;
     private int old_ribbon_6;
 
-    private int rev_ribbon1;
-    private int rev_ribbon2;
-    private int rev_ribbon3;
-    private int rev_ribbon4;
-    private int rev_ribbon5;
-    private int rev_ribbon6;
+    private int rev_ribbon_1;
+    private int rev_ribbon_2;
+    private int rev_ribbon_3;
+    private int rev_ribbon_4;
+    private int rev_ribbon_5;
+    private int rev_ribbon_6;
     private int total_dif;
+
+
+
+
+
+    public String getObservacao_ribbon() {
+        return observacao_ribbon;
+    }
+
+    public void setObservacao_ribbon(String observacao_ribbon) {
+        this.observacao_ribbon = observacao_ribbon;
+    }
 
     public int getTotal_dif() {
         return total_dif;
@@ -66,52 +79,52 @@ public class ModelConfDiario implements Serializable {
         this.total_dif = total_dif;
     }
 
-    public int getRev_ribbon1() {
-        return rev_ribbon1;
+    public int getRev_ribbon_1() {
+        return rev_ribbon_1;
     }
 
-    public void setRev_ribbon1(int rev_ribbon1) {
-        this.rev_ribbon1 = rev_ribbon1;
+    public void setRev_ribbon_1(int rev_ribbon_1) {
+        this.rev_ribbon_1 = rev_ribbon_1;
     }
 
-    public int getRev_ribbon2() {
-        return rev_ribbon2;
+    public int getRev_ribbon_2() {
+        return rev_ribbon_2;
     }
 
-    public void setRev_ribbon2(int rev_ribbon2) {
-        this.rev_ribbon2 = rev_ribbon2;
+    public void setRev_ribbon_2(int rev_ribbon_2) {
+        this.rev_ribbon_2 = rev_ribbon_2;
     }
 
-    public int getRev_ribbon3() {
-        return rev_ribbon3;
+    public int getRev_ribbon_3() {
+        return rev_ribbon_3;
     }
 
-    public void setRev_ribbon3(int rev_ribbon3) {
-        this.rev_ribbon3 = rev_ribbon3;
+    public void setRev_ribbon_3(int rev_ribbon_3) {
+        this.rev_ribbon_3 = rev_ribbon_3;
     }
 
-    public int getRev_ribbon4() {
-        return rev_ribbon4;
+    public int getRev_ribbon_4() {
+        return rev_ribbon_4;
     }
 
-    public void setRev_ribbon4(int rev_ribbon4) {
-        this.rev_ribbon4 = rev_ribbon4;
+    public void setRev_ribbon_4(int rev_ribbon_4) {
+        this.rev_ribbon_4 = rev_ribbon_4;
     }
 
-    public int getRev_ribbon5() {
-        return rev_ribbon5;
+    public int getRev_ribbon_5() {
+        return rev_ribbon_5;
     }
 
-    public void setRev_ribbon5(int rev_ribbon5) {
-        this.rev_ribbon5 = rev_ribbon5;
+    public void setRev_ribbon_5(int rev_ribbon_5) {
+        this.rev_ribbon_5 = rev_ribbon_5;
     }
 
-    public int getRev_ribbon6() {
-        return rev_ribbon6;
+    public int getRev_ribbon_6() {
+        return rev_ribbon_6;
     }
 
-    public void setRev_ribbon6(int rev_ribbon6) {
-        this.rev_ribbon6 = rev_ribbon6;
+    public void setRev_ribbon_6(int rev_ribbon_6) {
+        this.rev_ribbon_6 = rev_ribbon_6;
     }
 
     public int getTotal_ribbon_1() {
@@ -170,52 +183,52 @@ public class ModelConfDiario implements Serializable {
         this.sobras = sobras;
     }
 
-    public int getDifRibbon1() {
-        return difRibbon1;
+    public int getDif_ribbon_1() {
+        return dif_ribbon_1;
     }
 
-    public void setDifRibbon1(int difRibbon1) {
-        this.difRibbon1 = difRibbon1;
+    public void setDif_ribbon_1(int dif_ribbon_1) {
+        this.dif_ribbon_1 = dif_ribbon_1;
     }
 
-    public int getDifRibbon2() {
-        return difRibbon2;
+    public int getDif_ribbon_2() {
+        return dif_ribbon_2;
     }
 
-    public void setDifRibbon2(int difRibbon2) {
-        this.difRibbon2 = difRibbon2;
+    public void setDif_ribbon_2(int dif_ribbon_2) {
+        this.dif_ribbon_2 = dif_ribbon_2;
     }
 
-    public int getDifRibbon3() {
-        return difRibbon3;
+    public int getDif_ribbon_3() {
+        return dif_ribbon_3;
     }
 
-    public void setDifRibbon3(int difRibbon3) {
-        this.difRibbon3 = difRibbon3;
+    public void setDif_ribbon_3(int dif_ribbon_3) {
+        this.dif_ribbon_3 = dif_ribbon_3;
     }
 
-    public int getDifRibbon4() {
-        return difRibbon4;
+    public int getDif_ribbon_4() {
+        return dif_ribbon_4;
     }
 
-    public void setDifRibbon4(int difRibbon4) {
-        this.difRibbon4 = difRibbon4;
+    public void setDif_ribbon_4(int dif_ribbon_4) {
+        this.dif_ribbon_4 = dif_ribbon_4;
     }
 
-    public int getDifRibbon5() {
-        return difRibbon5;
+    public int getDif_ribbon_5() {
+        return dif_ribbon_5;
     }
 
-    public void setDifRibbon5(int difRibbon5) {
-        this.difRibbon5 = difRibbon5;
+    public void setDif_ribbon_5(int dif_ribbon_5) {
+        this.dif_ribbon_5 = dif_ribbon_5;
     }
 
-    public int getDifRibbon6() {
-        return difRibbon6;
+    public int getDif_ribbon_6() {
+        return dif_ribbon_6;
     }
 
-    public void setDifRibbon6(int difRibbon6) {
-        this.difRibbon6 = difRibbon6;
+    public void setDif_ribbon_6(int dif_ribbon_6) {
+        this.dif_ribbon_6 = dif_ribbon_6;
     }
 
     public int getOld_ribbon_1() {
@@ -418,12 +431,12 @@ public class ModelConfDiario implements Serializable {
         this.valor_vale_total = valor_vale_total;
     }
 
-    public BigDecimal getValor_descontos() {
-        return valor_descontos;
+    public BigDecimal getDesconto() {
+        return desconto;
     }
 
-    public void setValor_descontos(BigDecimal valor_descontos) {
-        this.valor_descontos = valor_descontos;
+    public void setDesconto(BigDecimal desconto) {
+        this.desconto = desconto;
     }
 
     public BigDecimal getValor_total_dia() {
@@ -448,5 +461,62 @@ public class ModelConfDiario implements Serializable {
 
     public void setData_fechamento(Date data_fechamento) {
         this.data_fechamento = data_fechamento;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ModelConfDiario{" +
+                "id=" + id +
+                ", valor_din=" + valor_din +
+                ", valor_din_real=" + valor_din_real +
+                ", valor_din_dif=" + valor_din_dif +
+                ", valor_deb=" + valor_deb +
+                ", valor_deb_real=" + valor_deb_real +
+                ", valor_deb_dif=" + valor_deb_dif +
+                ", valor_cred=" + valor_cred +
+                ", valor_cred_real=" + valor_cred_real +
+                ", valor_cred_dif=" + valor_cred_dif +
+                ", valor_pix=" + valor_pix +
+                ", valor_pix_real=" + valor_pix_real +
+                ", valor_pix_dif=" + valor_pix_dif +
+                ", valor_despesa_total=" + valor_despesa_total +
+                ", valor_vale_total=" + valor_vale_total +
+                ", desconto=" + desconto +
+                ", valor_total_dia=" + valor_total_dia +
+                ", observacao='" + observacao + '\'' +
+                ", observacao_ribbon='" + observacao_ribbon + '\'' +
+                ", data_fechamento=" + data_fechamento +
+                ", total_revelado=" + total_revelado +
+                ", total_informado=" + total_informado +
+                ", valor_deb_24h=" + valor_deb_24h +
+                ", valor_cred_24h=" + valor_cred_24h +
+                ", total_ribbon_1=" + total_ribbon_1 +
+                ", total_ribbon_2=" + total_ribbon_2 +
+                ", total_ribbon_3=" + total_ribbon_3 +
+                ", total_ribbon_4=" + total_ribbon_4 +
+                ", total_ribbon_5=" + total_ribbon_5 +
+                ", total_ribbon_6=" + total_ribbon_6 +
+                ", sobras=" + sobras +
+                ", dif_ribbon_1=" + dif_ribbon_1 +
+                ", dif_ribbon_2=" + dif_ribbon_2 +
+                ", dif_ribbon_3=" + dif_ribbon_3 +
+                ", dif_ribbon_4=" + dif_ribbon_4 +
+                ", dif_ribbon_5=" + dif_ribbon_5 +
+                ", dif_ribbon_6=" + dif_ribbon_6 +
+                ", old_ribbon_1=" + old_ribbon_1 +
+                ", old_ribbon_2=" + old_ribbon_2 +
+                ", old_ribbon_3=" + old_ribbon_3 +
+                ", old_ribbon_4=" + old_ribbon_4 +
+                ", old_ribbon_5=" + old_ribbon_5 +
+                ", old_ribbon_6=" + old_ribbon_6 +
+                ", rev_ribbon_1=" + rev_ribbon_1 +
+                ", rev_ribbon_2=" + rev_ribbon_2 +
+                ", rev_ribbon_3=" + rev_ribbon_3 +
+                ", rev_ribbon_4=" + rev_ribbon_4 +
+                ", rev_ribbon_5=" + rev_ribbon_5 +
+                ", rev_ribbon_6=" + rev_ribbon_6 +
+                ", total_dif=" + total_dif +
+                '}';
     }
 }

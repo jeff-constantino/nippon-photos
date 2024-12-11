@@ -88,4 +88,19 @@ public class ModelLogin implements Serializable{
     public void setVales(String vales) {
         this.vales = vales;
     }
+
+
+    @Override
+    public String toString() {
+        return "ModelLogin{" +
+                "id=" + id +
+                ", Nome='" + Nome + '\'' +
+                ", Email='" + Email + '\'' +
+                ", login='" + login + '\'' +
+                ", senha='" + senha + '\'' +
+                ", status='" + status + '\'' +
+                ", vendas='" + vendas + '\'' +
+                ", vales='" + vales + '\'' +
+                '}';
+    }
 }

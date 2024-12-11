@@ -1,7 +1,6 @@
 
 package servlets;
 
-import com.google.gson.Gson;
 import dao.DAOConfig;
 import dao.DAOFechaDia;
 import jakarta.servlet.RequestDispatcher;
@@ -136,6 +135,7 @@ public class ServletFechaDia extends ServletGenericUtil {
                     // Verifica se o fechamento foi encontrado
                     if (fechamento != null) {
                         request.setAttribute("fechamento", fechamento);
+                        System.out.println(fechamento);
                     } else {
                         request.setAttribute("msg", "Nenhum fechamento encontrado para a data informada."); // Mensagem caso não encontre
                     }
@@ -150,6 +150,8 @@ public class ServletFechaDia extends ServletGenericUtil {
                         request.setAttribute("conf1_valor", config.getConf1_valor());
                         request.setAttribute("conf2_valor", config.getConf2_valor());
                         request.setAttribute("conf3_valor", config.getConf3_valor());
+
+
 
 
                     } catch (Exception e) {
@@ -208,12 +210,12 @@ public class ServletFechaDia extends ServletGenericUtil {
             fechamento.setTotal_ribbon_6(parseOrDefault(request.getParameter("ribbon_6_atual"), 0));
 
             // Definindo as diferenças do ribbon
-            fechamento.setDifRibbon1(parseOrDefault(request.getParameter("dif_ribbon_1"), 0));
-            fechamento.setDifRibbon2(parseOrDefault(request.getParameter("dif_ribbon_2"), 0));
-            fechamento.setDifRibbon3(parseOrDefault(request.getParameter("dif_ribbon_3"), 0));
-            fechamento.setDifRibbon4(parseOrDefault(request.getParameter("dif_ribbon_4"), 0));
-            fechamento.setDifRibbon5(parseOrDefault(request.getParameter("dif_ribbon_5"), 0));
-            fechamento.setDifRibbon6(parseOrDefault(request.getParameter("dif_ribbon_6"), 0));
+            fechamento.setDif_ribbon_1(parseOrDefault(request.getParameter("dif_ribbon_1"), 0));
+            fechamento.setDif_ribbon_2(parseOrDefault(request.getParameter("dif_ribbon_2"), 0));
+            fechamento.setDif_ribbon_3(parseOrDefault(request.getParameter("dif_ribbon_3"), 0));
+            fechamento.setDif_ribbon_4(parseOrDefault(request.getParameter("dif_ribbon_4"), 0));
+            fechamento.setDif_ribbon_5(parseOrDefault(request.getParameter("dif_ribbon_5"), 0));
+            fechamento.setDif_ribbon_6(parseOrDefault(request.getParameter("dif_ribbon_6"), 0));
 
             // Recuperar total_revelado e total_informado
             fechamento.setTotal_revelado(parseOrDefault(request.getParameter("total_rev"), 0));
@@ -235,12 +237,12 @@ public class ServletFechaDia extends ServletGenericUtil {
 
 
             // Recuperando os campos rev_ribbon
-            fechamento.setRev_ribbon1(parseOrDefault(request.getParameter("rev_ribbon1"), 0));
-            fechamento.setRev_ribbon2(parseOrDefault(request.getParameter("rev_ribbon2"), 0));
-            fechamento.setRev_ribbon3(parseOrDefault(request.getParameter("rev_ribbon3"), 0));
-            fechamento.setRev_ribbon4(parseOrDefault(request.getParameter("rev_ribbon4"), 0));
-            fechamento.setRev_ribbon5(parseOrDefault(request.getParameter("rev_ribbon5"), 0));
-            fechamento.setRev_ribbon6(parseOrDefault(request.getParameter("rev_ribbon6"), 0));
+            fechamento.setRev_ribbon_1(parseOrDefault(request.getParameter("rev_ribbon_1"), 0));
+            fechamento.setRev_ribbon_2(parseOrDefault(request.getParameter("rev_ribbon_2"), 0));
+            fechamento.setRev_ribbon_3(parseOrDefault(request.getParameter("rev_ribbon_3"), 0));
+            fechamento.setRev_ribbon_4(parseOrDefault(request.getParameter("rev_ribbon_4"), 0));
+            fechamento.setRev_ribbon_5(parseOrDefault(request.getParameter("rev_ribbon_5"), 0));
+            fechamento.setRev_ribbon_6(parseOrDefault(request.getParameter("rev_ribbon_6"), 0));
 
             // Outros campos
             String descontoString = request.getParameter("desconto");

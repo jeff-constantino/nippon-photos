@@ -44,7 +44,7 @@ public class DAODespesas {
 
             connection.commit(); // Confirma a transação
         } catch (SQLException e) {
-            connection.rollback(); // Desfaz a transação em caso de erro
+
             throw new Exception("Erro ao gravar Despesa: " + e.getMessage(), e);
         }
     }
@@ -70,25 +70,21 @@ public class DAODespesas {
                 stmt.setNull(5, java.sql.Types.DATE);
             }
 
-            // Corrigido o índice para definir o ID corretamente
-            stmt.setLong(5, despesas.getId_despesa());
+            // Define o ID da despesa corretamente
+            stmt.setLong(6, despesas.getId_despesa());
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
-                connection.commit(); // Commit para confirmar a transação
                 System.out.println("Atualização bem-sucedida, linhas afetadas: " + rowsAffected);
             } else {
                 System.out.println("Nenhuma linha foi atualizada.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            try {
-                connection.rollback(); // Rollback em caso de erro
-            } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace();
-            }
+            throw new Exception("Erro ao atualizar a despesa: " + e.getMessage(), e);
         }
     }
+
 
     // Método para verificar se uma despesa com o ID existe
     public boolean existeDespesaId(Long despesaId) {
@@ -115,12 +111,12 @@ public class DAODespesas {
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                connection.commit(); // Confirma a transação
+                System.out.println("Exclusão bem-sucedida, linhas afetadas: " + rowsAffected);
             } else {
                 throw new SQLException("Nenhuma despesa foi excluída.");
             }
         } catch (SQLException e) {
-            connection.rollback(); // Rollback em caso de erro
+            e.printStackTrace();
             throw new SQLException("Erro ao excluir despesa", e);
         }
     }

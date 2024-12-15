@@ -7,12 +7,12 @@ public class ModelControleRibbon implements Serializable {
 
     private long idControle;
     private Date data_ribbon;
-    private int total_ribbon_1;
-    private int total_ribbon_2;
-    private int total_ribbon_3;
-    private int total_ribbon_4;
-    private int total_ribbon_5;
-    private int total_ribbon_6;
+    private int ribbon_1_atual;
+    private int ribbon_2_atual;
+    private int ribbon_3_atual;
+    private int ribbon_4_atual;
+    private int ribbon_5_atual;
+    private int ribbon_6_atual;
 
     private int rev_ribbon_1;
     private int rev_ribbon_2;
@@ -61,52 +61,52 @@ private String observacao_ribbon;
         this.data_ribbon = data_ribbon;
     }
 
-    public int getTotal_ribbon_1() {
-        return total_ribbon_1;
+    public int getRibbon_1_atual() {
+        return ribbon_1_atual;
     }
 
-    public void setTotal_ribbon_1(int total_ribbon_1) {
-        this.total_ribbon_1 = total_ribbon_1;
+    public void setRibbon_1_atual(int ribbon_1_atual) {
+        this.ribbon_1_atual = ribbon_1_atual;
     }
 
-    public int getTotal_ribbon_2() {
-        return total_ribbon_2;
+    public int getRibbon_2_atual() {
+        return ribbon_2_atual;
     }
 
-    public void setTotal_ribbon_2(int total_ribbon_2) {
-        this.total_ribbon_2 = total_ribbon_2;
+    public void setRibbon_2_atual(int ribbon_2_atual) {
+        this.ribbon_2_atual = ribbon_2_atual;
     }
 
-    public int getTotal_ribbon_3() {
-        return total_ribbon_3;
+    public int getRibbon_3_atual() {
+        return ribbon_3_atual;
     }
 
-    public void setTotal_ribbon_3(int total_ribbon_3) {
-        this.total_ribbon_3 = total_ribbon_3;
+    public void setRibbon_3_atual(int ribbon_3_atual) {
+        this.ribbon_3_atual = ribbon_3_atual;
     }
 
-    public int getTotal_ribbon_4() {
-        return total_ribbon_4;
+    public int getRibbon_4_atual() {
+        return ribbon_4_atual;
     }
 
-    public void setTotal_ribbon_4(int total_ribbon_4) {
-        this.total_ribbon_4 = total_ribbon_4;
+    public void setRibbon_4_atual(int ribbon_4_atual) {
+        this.ribbon_4_atual = ribbon_4_atual;
     }
 
-    public int getTotal_ribbon_5() {
-        return total_ribbon_5;
+    public int getRibbon_5_atual() {
+        return ribbon_5_atual;
     }
 
-    public void setTotal_ribbon_5(int total_ribbon_5) {
-        this.total_ribbon_5 = total_ribbon_5;
+    public void setRibbon_5_atual(int ribbon_5_atual) {
+        this.ribbon_5_atual = ribbon_5_atual;
     }
 
-    public int getTotal_ribbon_6() {
-        return total_ribbon_6;
+    public int getRibbon_6_atual() {
+        return ribbon_6_atual;
     }
 
-    public void setTotal_ribbon_6(int total_ribbon_6) {
-        this.total_ribbon_6 = total_ribbon_6;
+    public void setRibbon_6_atual(int ribbon_6_atual) {
+        this.ribbon_6_atual = ribbon_6_atual;
     }
 
     public int getRev_ribbon_1() {

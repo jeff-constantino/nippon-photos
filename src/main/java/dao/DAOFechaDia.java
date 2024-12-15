@@ -17,6 +17,22 @@ public class DAOFechaDia {
         connection = SingleConnectionBanco.getConnection();
     }
 
+    public boolean existeVendaParaData(Date data) {
+        String query = "SELECT COUNT(*) FROM vendas WHERE data_venda = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setDate(1, data);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next() && resultSet.getInt(1) > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public ModelFechaDia consultarFechamentoPorData(Date data_fechamento) throws Exception {
         ModelFechaDia modelFechaDia = new ModelFechaDia();
 
@@ -66,7 +82,7 @@ public class DAOFechaDia {
 
         // Consulta os ribbons diretamente na tabela controle_ribbon
         String ribbonSql = "SELECT old_ribbon_1, old_ribbon_2, old_ribbon_3, old_ribbon_4, old_ribbon_5, old_ribbon_6, " +
-                "total_ribbon_1, total_ribbon_2, total_ribbon_3, total_ribbon_4, total_ribbon_5, total_ribbon_6 " +
+                "ribbon_1_atual, ribbon_2_atual, ribbon_3_atual, ribbon_4_atual, ribbon_5_atual, ribbon_6_atual " +
                 "FROM controle_ribbon " +
                 "ORDER BY data_ribbon DESC " +
                 "LIMIT 1";
@@ -75,18 +91,13 @@ public class DAOFechaDia {
         try (PreparedStatement preparedRibbonSql = connection.prepareStatement(ribbonSql)) {
             ResultSet resultadoRibbon = preparedRibbonSql.executeQuery();
             if (resultadoRibbon.next()) {
-//                modelFechaDia.setTotal_ribbon_1(resultadoRibbon.getInt("old_ribbon_1"));
-//                modelFechaDia.setTotal_ribbon_2(resultadoRibbon.getInt("old_ribbon_2"));
-//                modelFechaDia.setTotal_ribbon_3(resultadoRibbon.getInt("old_ribbon_3"));
-//                modelFechaDia.setTotal_ribbon_4(resultadoRibbon.getInt("old_ribbon_4"));
-//                modelFechaDia.setTotal_ribbon_5(resultadoRibbon.getInt("old_ribbon_5"));
-//                modelFechaDia.setTotal_ribbon_6(resultadoRibbon.getInt("old_ribbon_6"));
-                modelFechaDia.setOld_ribbon_1(resultadoRibbon.getInt("total_ribbon_1"));
-                modelFechaDia.setOld_ribbon_2(resultadoRibbon.getInt("total_ribbon_2"));
-                modelFechaDia.setOld_ribbon_3(resultadoRibbon.getInt("total_ribbon_3"));
-                modelFechaDia.setOld_ribbon_4(resultadoRibbon.getInt("total_ribbon_4"));
-                modelFechaDia.setOld_ribbon_5(resultadoRibbon.getInt("total_ribbon_5"));
-                modelFechaDia.setOld_ribbon_6(resultadoRibbon.getInt("total_ribbon_6"));
+
+                modelFechaDia.setOld_ribbon_1(resultadoRibbon.getInt("ribbon_1_atual"));
+                modelFechaDia.setOld_ribbon_2(resultadoRibbon.getInt("ribbon_2_atual"));
+                modelFechaDia.setOld_ribbon_3(resultadoRibbon.getInt("ribbon_3_atual"));
+                modelFechaDia.setOld_ribbon_4(resultadoRibbon.getInt("ribbon_4_atual"));
+                modelFechaDia.setOld_ribbon_5(resultadoRibbon.getInt("ribbon_5_atual"));
+                modelFechaDia.setOld_ribbon_6(resultadoRibbon.getInt("ribbon_6_atual"));
             }
         } catch (SQLException e) {
             throw new Exception("Erro ao consultar ribbons na tabela controle_ribbon: " + e.getMessage());
@@ -143,21 +154,21 @@ public class DAOFechaDia {
     public void inserirFechamento(ModelFechaDia fechamento) {
         String sqlFechaDia = "INSERT INTO fecha_dia (data_fechamento, total_ft_din, total_ft_deb, total_ft_cred, total_ft_pix, " +
                 "total_enc_din, total_enc_deb, total_enc_cred, total_enc_pix, total_dig_din, total_dig_deb, total_dig_cred, " +
-                "total_dig_pix, total_ribbon_1, total_ribbon_2, total_ribbon_3, total_ribbon_4, total_ribbon_5, total_ribbon_6, " +
+                "total_dig_pix, ribbon_1_atual, ribbon_2_atual, ribbon_3_atual, ribbon_4_atual, ribbon_5_atual, ribbon_6_atual, " +
                 "total_revelado, total_informado, desconto, observacao, rev_ribbon_1, rev_ribbon_2, rev_ribbon_3, rev_ribbon_4, " +
                 "rev_ribbon_5, rev_ribbon_6, sobras, old_ribbon_1, old_ribbon_2, old_ribbon_3, old_ribbon_4, old_ribbon_5, old_ribbon_6, " +
                 "valor_din, valor_deb, valor_cred, valor_pix) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, UPPER(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?)";
 
         String sqlConfDia = "INSERT INTO conf_dia (data_fechamento, valor_din,  valor_deb, " +
-                "valor_cred, valor_pix, observacao, total_ribbon_1, total_ribbon_2, total_ribbon_3, " +
-                "total_ribbon_4, total_ribbon_5, total_ribbon_6, total_revelado, total_informado, desconto, sobras, rev_ribbon_1, " +
+                "valor_cred, valor_pix, observacao, ribbon_1_atual, ribbon_2_atual, ribbon_3_atual, " +
+                "ribbon_4_atual, ribbon_5_atual, ribbon_6_atual, total_revelado, total_informado, desconto, sobras, rev_ribbon_1, " +
                 "rev_ribbon_2, rev_ribbon_3, rev_ribbon_4, rev_ribbon_5, rev_ribbon_6, old_ribbon_1, old_ribbon_2, old_ribbon_3, " +
                 "old_ribbon_4, old_ribbon_5, old_ribbon_6) " +
                 "VALUES (?, ?, ?, ?, ?, UPPER(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        String sqlControleRibbon = "INSERT INTO controle_ribbon (data_ribbon, total_ribbon_1, total_ribbon_2, total_ribbon_3, " +
-                "total_ribbon_4, total_ribbon_5, total_ribbon_6, rev_ribbon_1, rev_ribbon_2, rev_ribbon_3, rev_ribbon_4, rev_ribbon_5, " +
+        String sqlControleRibbon = "INSERT INTO controle_ribbon (data_ribbon, ribbon_1_atual, ribbon_2_atual, ribbon_3_atual, " +
+                "ribbon_4_atual, ribbon_5_atual, ribbon_6_atual, rev_ribbon_1, rev_ribbon_2, rev_ribbon_3, rev_ribbon_4, rev_ribbon_5, " +
                 "rev_ribbon_6, dif_ribbon_1, dif_ribbon_2, dif_ribbon_3, dif_ribbon_4, dif_ribbon_5, dif_ribbon_6, old_ribbon_1, old_ribbon_2, old_ribbon_3, " +
                 "old_ribbon_4, old_ribbon_5, old_ribbon_6,sobras) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
@@ -182,12 +193,12 @@ public class DAOFechaDia {
             pstmtFechaDia.setInt(11, fechamento.getTotal_dig_deb());
             pstmtFechaDia.setInt(12, fechamento.getTotal_dig_cred());
             pstmtFechaDia.setInt(13, fechamento.getTotal_dig_pix());
-            pstmtFechaDia.setInt(14, fechamento.getTotal_ribbon_1());
-            pstmtFechaDia.setInt(15, fechamento.getTotal_ribbon_2());
-            pstmtFechaDia.setInt(16, fechamento.getTotal_ribbon_3());
-            pstmtFechaDia.setInt(17, fechamento.getTotal_ribbon_4());
-            pstmtFechaDia.setInt(18, fechamento.getTotal_ribbon_5());
-            pstmtFechaDia.setInt(19, fechamento.getTotal_ribbon_6());
+            pstmtFechaDia.setInt(14, fechamento.getRibbon_1_atual());
+            pstmtFechaDia.setInt(15, fechamento.getRibbon_2_atual());
+            pstmtFechaDia.setInt(16, fechamento.getRibbon_3_atual());
+            pstmtFechaDia.setInt(17, fechamento.getRibbon_4_atual());
+            pstmtFechaDia.setInt(18, fechamento.getRibbon_5_atual());
+            pstmtFechaDia.setInt(19, fechamento.getRibbon_6_atual());
             pstmtFechaDia.setInt(20, fechamento.getTotal_revelado());
             pstmtFechaDia.setInt(21, fechamento.getTotal_informado());
             pstmtFechaDia.setBigDecimal(22, fechamento.getDesconto());
@@ -218,12 +229,12 @@ public class DAOFechaDia {
             pstmtConfDia.setBigDecimal(4, fechamento.getValor_cred());
             pstmtConfDia.setBigDecimal(5, fechamento.getValor_pix());
             pstmtConfDia.setString(6, fechamento.getObservacao());
-            pstmtConfDia.setInt(7, fechamento.getTotal_ribbon_1());
-            pstmtConfDia.setInt(8, fechamento.getTotal_ribbon_2());
-            pstmtConfDia.setInt(9, fechamento.getTotal_ribbon_3());
-            pstmtConfDia.setInt(10, fechamento.getTotal_ribbon_4());
-            pstmtConfDia.setInt(11, fechamento.getTotal_ribbon_5());
-            pstmtConfDia.setInt(12, fechamento.getTotal_ribbon_6());
+            pstmtConfDia.setInt(7, fechamento.getRibbon_1_atual());
+            pstmtConfDia.setInt(8, fechamento.getRibbon_2_atual());
+            pstmtConfDia.setInt(9, fechamento.getRibbon_3_atual());
+            pstmtConfDia.setInt(10, fechamento.getRibbon_4_atual());
+            pstmtConfDia.setInt(11, fechamento.getRibbon_5_atual());
+            pstmtConfDia.setInt(12, fechamento.getRibbon_6_atual());
             pstmtConfDia.setInt(13, fechamento.getTotal_revelado());
             pstmtConfDia.setInt(14, fechamento.getTotal_informado());
             pstmtConfDia.setBigDecimal(15, fechamento.getDesconto());
@@ -244,12 +255,12 @@ public class DAOFechaDia {
 
             // Inserção na tabela controle_ribbon
             pstmtControleRibbon.setDate(1, Date.valueOf(fechamento.getData_fechamento().toLocalDate()));
-            pstmtControleRibbon.setInt(2, fechamento.getTotal_ribbon_1());
-            pstmtControleRibbon.setInt(3, fechamento.getTotal_ribbon_2());
-            pstmtControleRibbon.setInt(4, fechamento.getTotal_ribbon_3());
-            pstmtControleRibbon.setInt(5, fechamento.getTotal_ribbon_4());
-            pstmtControleRibbon.setInt(6, fechamento.getTotal_ribbon_5());
-            pstmtControleRibbon.setInt(7, fechamento.getTotal_ribbon_6());
+            pstmtControleRibbon.setInt(2, fechamento.getRibbon_1_atual());
+            pstmtControleRibbon.setInt(3, fechamento.getRibbon_2_atual());
+            pstmtControleRibbon.setInt(4, fechamento.getRibbon_3_atual());
+            pstmtControleRibbon.setInt(5, fechamento.getRibbon_4_atual());
+            pstmtControleRibbon.setInt(6, fechamento.getRibbon_5_atual());
+            pstmtControleRibbon.setInt(7, fechamento.getRibbon_6_atual());
             pstmtControleRibbon.setInt(8, fechamento.getRev_ribbon_1());
             pstmtControleRibbon.setInt(9, fechamento.getRev_ribbon_2());
             pstmtControleRibbon.setInt(10, fechamento.getRev_ribbon_3());
@@ -300,8 +311,8 @@ public class DAOFechaDia {
         String sqlFechaDia = "UPDATE fecha_dia SET total_ft_din = ?, total_ft_deb = ?, total_ft_cred = ?, total_ft_pix = ?, " +
                 "total_enc_din = ?, total_enc_deb = ?, total_enc_cred = ?, total_enc_pix = ?, " +
                 "total_dig_din = ?, total_dig_deb = ?, total_dig_cred = ?, total_dig_pix = ?, " +
-                "total_ribbon_1 = ?, total_ribbon_2 = ?, total_ribbon_3 = ?, total_ribbon_4 = ?, " +
-                "total_ribbon_5 = ?, total_ribbon_6 = ?, total_revelado = ?, total_informado = ?, " +
+                "ribbon_1_atual = ?, ribbon_2_atual = ?, ribbon_3_atual = ?, ribbon_4_atual = ?, " +
+                "ribbon_5_atual = ?, ribbon_6_atual = ?, total_revelado = ?, total_informado = ?, " +
                 "desconto = ?, observacao = UPPER(?), rev_ribbon_1 = ?, rev_ribbon_2 = ?, rev_ribbon_3 = ?, rev_ribbon_4 = ?, " +
                 "rev_ribbon_5 = ?, rev_ribbon_6 = ?, sobras = ?, old_ribbon_1 = ?, old_ribbon_2 = ?, old_ribbon_3 = ?, " +
                 "old_ribbon_4 = ?, old_ribbon_5 = ?, old_ribbon_6 = ?, " +
@@ -309,15 +320,15 @@ public class DAOFechaDia {
                 "WHERE data_fechamento = ?";
 
         String sqlConfDia = "UPDATE conf_dia SET valor_din = ?, valor_deb = ?, valor_cred = ?, valor_pix = ?, observacao = UPPER(?), " +
-                "total_ribbon_1 = ?, total_ribbon_2 = ?, total_ribbon_3 = ?, total_ribbon_4 = ?, " +
-                "total_ribbon_5 = ?, total_ribbon_6 = ?, total_revelado = ?, total_informado = ?, " +
+                "ribbon_1_atual = ?, ribbon_2_atual = ?, ribbon_3_atual = ?, ribbon_4_atual = ?, " +
+                "ribbon_5_atual = ?, ribbon_6_atual = ?, total_revelado = ?, total_informado = ?, " +
                 "desconto = ?, sobras = ?, rev_ribbon_1 = ?, rev_ribbon_2 = ?, rev_ribbon_3 = ?, rev_ribbon_4 = ?, " +
                 "rev_ribbon_5 = ?, rev_ribbon_6 = ?, old_ribbon_1 = ?, old_ribbon_2 = ?, old_ribbon_3 = ?, " +
                 "old_ribbon_4 = ?, old_ribbon_5 = ?, old_ribbon_6 = ? " +
                 "WHERE data_fechamento = ?";
 
-        String sqlControleRibbon = "UPDATE controle_ribbon SET total_ribbon_1 = ?, total_ribbon_2 = ?, total_ribbon_3 = ?, " +
-                "total_ribbon_4 = ?, total_ribbon_5 = ?, total_ribbon_6 = ?, " +
+        String sqlControleRibbon = "UPDATE controle_ribbon SET ribbon_1_atual = ?, ribbon_2_atual = ?, ribbon_3_atual = ?, " +
+                "ribbon_4_atual = ?, ribbon_5_atual = ?, ribbon_6_atual = ?, " +
                 "rev_ribbon_1 = ?, rev_ribbon_2 = ?, rev_ribbon_3 = ?, rev_ribbon_4 = ?, rev_ribbon_5 = ?, rev_ribbon_6 = ?, " +
                 "dif_ribbon_1 = ?, dif_ribbon_2 = ?, dif_ribbon_3 = ?, dif_ribbon_4 = ?, dif_ribbon_5 = ?, dif_ribbon_6 = ? " +
                 "WHERE data_ribbon = ?";
@@ -339,12 +350,12 @@ public class DAOFechaDia {
             pstmtFechaDia.setInt(10, fechamento.getTotal_dig_deb());
             pstmtFechaDia.setInt(11, fechamento.getTotal_dig_cred());
             pstmtFechaDia.setInt(12, fechamento.getTotal_dig_pix());
-            pstmtFechaDia.setInt(13, fechamento.getTotal_ribbon_1());
-            pstmtFechaDia.setInt(14, fechamento.getTotal_ribbon_2());
-            pstmtFechaDia.setInt(15, fechamento.getTotal_ribbon_3());
-            pstmtFechaDia.setInt(16, fechamento.getTotal_ribbon_4());
-            pstmtFechaDia.setInt(17, fechamento.getTotal_ribbon_5());
-            pstmtFechaDia.setInt(18, fechamento.getTotal_ribbon_6());
+            pstmtFechaDia.setInt(13, fechamento.getRibbon_1_atual());
+            pstmtFechaDia.setInt(14, fechamento.getRibbon_2_atual());
+            pstmtFechaDia.setInt(15, fechamento.getRibbon_3_atual());
+            pstmtFechaDia.setInt(16, fechamento.getRibbon_4_atual());
+            pstmtFechaDia.setInt(17, fechamento.getRibbon_5_atual());
+            pstmtFechaDia.setInt(18, fechamento.getRibbon_6_atual());
             pstmtFechaDia.setInt(19, fechamento.getTotal_revelado());
             pstmtFechaDia.setInt(20, fechamento.getTotal_informado());
             pstmtFechaDia.setBigDecimal(21, fechamento.getDesconto());
@@ -374,12 +385,12 @@ public class DAOFechaDia {
             pstmtConfDia.setBigDecimal(3, fechamento.getValor_cred());
             pstmtConfDia.setBigDecimal(4, fechamento.getValor_pix());
             pstmtConfDia.setString(5, fechamento.getObservacao());
-            pstmtConfDia.setInt(6, fechamento.getTotal_ribbon_1());
-            pstmtConfDia.setInt(7, fechamento.getTotal_ribbon_2());
-            pstmtConfDia.setInt(8, fechamento.getTotal_ribbon_3());
-            pstmtConfDia.setInt(9, fechamento.getTotal_ribbon_4());
-            pstmtConfDia.setInt(10, fechamento.getTotal_ribbon_5());
-            pstmtConfDia.setInt(11, fechamento.getTotal_ribbon_6());
+            pstmtConfDia.setInt(6, fechamento.getRibbon_1_atual());
+            pstmtConfDia.setInt(7, fechamento.getRibbon_2_atual());
+            pstmtConfDia.setInt(8, fechamento.getRibbon_3_atual());
+            pstmtConfDia.setInt(9, fechamento.getRibbon_4_atual());
+            pstmtConfDia.setInt(10, fechamento.getRibbon_5_atual());
+            pstmtConfDia.setInt(11, fechamento.getRibbon_6_atual());
             pstmtConfDia.setInt(12, fechamento.getTotal_revelado());
             pstmtConfDia.setInt(13, fechamento.getTotal_informado());
             pstmtConfDia.setBigDecimal(14, fechamento.getDesconto());
@@ -399,12 +410,12 @@ public class DAOFechaDia {
             pstmtConfDia.setDate(28, Date.valueOf(fechamento.getData_fechamento().toLocalDate()));
 
             // Atualização na tabela controle_ribbon
-            pstmtControleRibbon.setInt(1, fechamento.getTotal_ribbon_1());
-            pstmtControleRibbon.setInt(2, fechamento.getTotal_ribbon_2());
-            pstmtControleRibbon.setInt(3, fechamento.getTotal_ribbon_3());
-            pstmtControleRibbon.setInt(4, fechamento.getTotal_ribbon_4());
-            pstmtControleRibbon.setInt(5, fechamento.getTotal_ribbon_5());
-            pstmtControleRibbon.setInt(6, fechamento.getTotal_ribbon_6());
+            pstmtControleRibbon.setInt(1, fechamento.getRibbon_1_atual());
+            pstmtControleRibbon.setInt(2, fechamento.getRibbon_2_atual());
+            pstmtControleRibbon.setInt(3, fechamento.getRibbon_3_atual());
+            pstmtControleRibbon.setInt(4, fechamento.getRibbon_4_atual());
+            pstmtControleRibbon.setInt(5, fechamento.getRibbon_5_atual());
+            pstmtControleRibbon.setInt(6, fechamento.getRibbon_6_atual());
             pstmtControleRibbon.setInt(7, fechamento.getRev_ribbon_1());
             pstmtControleRibbon.setInt(8, fechamento.getRev_ribbon_2());
             pstmtControleRibbon.setInt(9, fechamento.getRev_ribbon_3());
@@ -491,12 +502,12 @@ public class DAOFechaDia {
                     fechamento.setTotal_dig_cred(resultSet.getInt("total_dig_cred"));
                     fechamento.setTotal_dig_pix(resultSet.getInt("total_dig_pix"));
 
-                    fechamento.setTotal_ribbon_1(resultSet.getInt("total_ribbon_1"));
-                    fechamento.setTotal_ribbon_2(resultSet.getInt("total_ribbon_2"));
-                    fechamento.setTotal_ribbon_3(resultSet.getInt("total_ribbon_3"));
-                    fechamento.setTotal_ribbon_4(resultSet.getInt("total_ribbon_4"));
-                    fechamento.setTotal_ribbon_5(resultSet.getInt("total_ribbon_5"));
-                    fechamento.setTotal_ribbon_6(resultSet.getInt("total_ribbon_6"));
+                    fechamento.setRibbon_1_atual(resultSet.getInt("ribbon_1_atual"));
+                    fechamento.setRibbon_2_atual(resultSet.getInt("ribbon_2_atual"));
+                    fechamento.setRibbon_3_atual(resultSet.getInt("ribbon_3_atual"));
+                    fechamento.setRibbon_4_atual(resultSet.getInt("ribbon_4_atual"));
+                    fechamento.setRibbon_5_atual(resultSet.getInt("ribbon_5_atual"));
+                    fechamento.setRibbon_6_atual(resultSet.getInt("ribbon_6_atual"));
 
                     // Adicionando os novos campos old_ribbon
                     fechamento.setOld_ribbon_1(resultSet.getInt("old_ribbon_1"));

@@ -2,10 +2,9 @@ package dao;
 
 import connection.SingleConnectionBanco;
 import model.ModelConfDiario;
-import model.ModelFechaDia;
 
+import java.math.BigDecimal;
 import java.sql.*;
-import java.util.Calendar;
 
 public class DAOConfDiario {
 
@@ -17,6 +16,21 @@ public class DAOConfDiario {
 
 
 //
+public boolean existeConferenciaParaData(Date dataFechamento) {
+    String query = "SELECT COUNT(*) FROM conf_dia WHERE data_fechamento = ? AND valor_din_real IS NOT NULL";
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setDate(1, dataFechamento);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next() && resultSet.getInt(1) > 0) {
+            return true;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
 
     public void atualizarConfiguracao(ModelConfDiario confDiario) throws SQLException {
         String sqlConfDia = "UPDATE conf_dia SET " +
@@ -25,18 +39,22 @@ public class DAOConfDiario {
                 "valor_cred = ?, valor_cred_real = ?, valor_cred_dif = ?, " +
                 "valor_pix = ?, valor_pix_real = ?, valor_pix_dif = ?, " +
                 "valor_despesa_total = ?, valor_vale_total = ?, desconto = ?, " +
-                "valor_total_dia = ?, observacao = UPPER(?), total_revelado = ?, total_informado = ?, " +
-                "valor_deb_24h = ?, valor_cred_24h = ?, total_ribbon_1 = ?, total_ribbon_2 = ?, total_ribbon_3 = ?, " +
-                "total_ribbon_4 = ?, total_ribbon_5 = ?, total_ribbon_6 = ?, sobras = ?, dif_ribbon_1 = ?, dif_ribbon_2 = ?, " +
+                "venda_total_dia = ?, observacao = UPPER(?), total_revelado = ?, total_informado = ?, " +
+                "valor_deb_24h = ?, valor_cred_24h = ?, ribbon_1_atual = ?, ribbon_2_atual = ?, ribbon_3_atual = ?, " +
+                "ribbon_4_atual = ?, ribbon_5_atual = ?, ribbon_6_atual = ?, sobras = ?, dif_ribbon_1 = ?, dif_ribbon_2 = ?, " +
                 "dif_ribbon_3 = ?, dif_ribbon_4 = ?, dif_ribbon_5 = ?, dif_ribbon_6 = ?, " +
                 "old_ribbon_1 = ?, old_ribbon_2 = ?, old_ribbon_3 = ?, old_ribbon_4 = ?, old_ribbon_5 = ?, old_ribbon_6 = ?, " +
                 "rev_ribbon_1 = ?, rev_ribbon_2 = ?, rev_ribbon_3 = ?, rev_ribbon_4 = ?, rev_ribbon_5 = ?, rev_ribbon_6 = ?, " +
-                "total_dif = ? " +
-                "WHERE data_fechamento = ?";
+                "total_dif = ?, observacao_ribbon = UPPER(?) " +
+                "WHERE data_fechamento = ? ";
 
         String sqlControleRibbon = "UPDATE controle_ribbon SET " +
-                "observacao_ribbon = ?, total_dif = ? " +
-                "WHERE data_ribbon = ?";
+                "observacao_ribbon = UPPER(?), total_dif = ?, ribbon_1_atual = ?, ribbon_2_atual = ?, ribbon_3_atual = ?," +
+                "ribbon_4_atual = ?, ribbon_5_atual = ?, ribbon_6_atual = ?, sobras = ?," +
+                "dif_ribbon_1 = ?, dif_ribbon_2 = ?, dif_ribbon_3 = ?, dif_ribbon_4 = ?, dif_ribbon_5 = ?, dif_ribbon_6 = ?," +
+                "old_ribbon_1 = ?, old_ribbon_2 = ?, old_ribbon_3 = ?, old_ribbon_4 = ?, old_ribbon_5 = ?, old_ribbon_6 = ?," +
+                "rev_ribbon_1 = ?, rev_ribbon_2 = ?, rev_ribbon_3 = ?, rev_ribbon_4 = ?, rev_ribbon_5 = ?, rev_ribbon_6 = ? " +
+                "WHERE data_ribbon = ? ";
 
         try (PreparedStatement psConfDia = connection.prepareStatement(sqlConfDia);
              PreparedStatement psControleRibbon = connection.prepareStatement(sqlControleRibbon)) {
@@ -57,18 +75,18 @@ public class DAOConfDiario {
             psConfDia.setBigDecimal(13, confDiario.getValor_despesa_total());
             psConfDia.setBigDecimal(14, confDiario.getValor_vale_total());
             psConfDia.setBigDecimal(15, confDiario.getDesconto());
-            psConfDia.setBigDecimal(16, confDiario.getValor_total_dia());
+            psConfDia.setBigDecimal(16, confDiario.getVenda_total_dia());
             psConfDia.setString(17, confDiario.getObservacao());
             psConfDia.setInt(18, confDiario.getTotal_revelado());
             psConfDia.setInt(19, confDiario.getTotal_informado());
             psConfDia.setBigDecimal(20, confDiario.getValor_deb_24h());
             psConfDia.setBigDecimal(21, confDiario.getValor_cred_24h());
-            psConfDia.setInt(22, confDiario.getTotal_ribbon_1());
-            psConfDia.setInt(23, confDiario.getTotal_ribbon_2());
-            psConfDia.setInt(24, confDiario.getTotal_ribbon_3());
-            psConfDia.setInt(25, confDiario.getTotal_ribbon_4());
-            psConfDia.setInt(26, confDiario.getTotal_ribbon_5());
-            psConfDia.setInt(27, confDiario.getTotal_ribbon_6());
+            psConfDia.setInt(22, confDiario.getRibbon_1_atual());
+            psConfDia.setInt(23, confDiario.getRibbon_2_atual());
+            psConfDia.setInt(24, confDiario.getRibbon_3_atual());
+            psConfDia.setInt(25, confDiario.getRibbon_4_atual());
+            psConfDia.setInt(26, confDiario.getRibbon_5_atual());
+            psConfDia.setInt(27, confDiario.getRibbon_6_atual());
             psConfDia.setInt(28, confDiario.getSobras());
             psConfDia.setInt(29, confDiario.getDif_ribbon_1());
             psConfDia.setInt(30, confDiario.getDif_ribbon_2());
@@ -89,23 +107,50 @@ public class DAOConfDiario {
             psConfDia.setInt(45, confDiario.getRev_ribbon_5());
             psConfDia.setInt(46, confDiario.getRev_ribbon_6());
             psConfDia.setInt(47, confDiario.getTotal_dif());
-            psConfDia.setDate(48, confDiario.getData_fechamento());
+            psConfDia.setString(48, confDiario.getObservacao_ribbon());
+            psConfDia.setDate(49, java.sql.Date.valueOf(confDiario.getData_fechamento()));
 
             psConfDia.executeUpdate();
 
             // Configuração para controle_ribbon
             psControleRibbon.setString(1, confDiario.getObservacao_ribbon());
             psControleRibbon.setInt(2, confDiario.getTotal_dif());
-            psControleRibbon.setDate(3, confDiario.getData_fechamento());
+            psControleRibbon.setInt(3, confDiario.getRibbon_1_atual());
+            psControleRibbon.setInt(4, confDiario.getRibbon_2_atual());
+            psControleRibbon.setInt(5, confDiario.getRibbon_3_atual());
+            psControleRibbon.setInt(6, confDiario.getRibbon_4_atual());
+            psControleRibbon.setInt(7, confDiario.getRibbon_5_atual());
+            psControleRibbon.setInt(8, confDiario.getRibbon_6_atual());
+            psControleRibbon.setInt(9, confDiario.getSobras());
+            psControleRibbon.setInt(10, confDiario.getDif_ribbon_1());
+            psControleRibbon.setInt(11, confDiario.getDif_ribbon_2());
+            psControleRibbon.setInt(12, confDiario.getDif_ribbon_3());
+            psControleRibbon.setInt(13, confDiario.getDif_ribbon_4());
+            psControleRibbon.setInt(14, confDiario.getDif_ribbon_5());
+            psControleRibbon.setInt(15, confDiario.getDif_ribbon_6());
+            psControleRibbon.setInt(16, confDiario.getOld_ribbon_1());
+            psControleRibbon.setInt(17, confDiario.getOld_ribbon_2());
+            psControleRibbon.setInt(18, confDiario.getOld_ribbon_3());
+            psControleRibbon.setInt(19, confDiario.getOld_ribbon_4());
+            psControleRibbon.setInt(20, confDiario.getOld_ribbon_5());
+            psControleRibbon.setInt(21, confDiario.getOld_ribbon_6());
+            psControleRibbon.setInt(22, confDiario.getRev_ribbon_1());
+            psControleRibbon.setInt(23, confDiario.getRev_ribbon_2());
+            psControleRibbon.setInt(24, confDiario.getRev_ribbon_3());
+            psControleRibbon.setInt(25, confDiario.getRev_ribbon_4());
+            psControleRibbon.setInt(26, confDiario.getRev_ribbon_5());
+            psControleRibbon.setInt(27, confDiario.getRev_ribbon_6());
+            psControleRibbon.setDate(28, java.sql.Date.valueOf(confDiario.getData_fechamento()));
+
 
             psControleRibbon.executeUpdate();
+
+            // Commit após as atualizações bem-sucedidas
+            connection.commit();
         } catch (SQLException e) {
             throw new SQLException("Erro ao atualizar as tabelas conf_dia e controle_ribbon: " + e.getMessage(), e);
         }
     }
-
-
-
 
 
 
@@ -137,38 +182,30 @@ public class DAOConfDiario {
                 conf.setValor_pix(rs.getBigDecimal("valor_pix"));
                 conf.setValor_pix_real(rs.getBigDecimal("valor_pix_real"));
                 conf.setValor_pix_dif(rs.getBigDecimal("valor_pix_dif"));
-                conf.setValor_despesa_total(rs.getBigDecimal("valor_despesa_total"));
-                conf.setValor_vale_total(rs.getBigDecimal("valor_vale_total"));
                 conf.setDesconto(rs.getBigDecimal("desconto"));
-                conf.setValor_total_dia(rs.getBigDecimal("valor_total_dia"));
+                conf.setVenda_total_dia(rs.getBigDecimal("venda_total_dia"));
                 conf.setObservacao(rs.getString("observacao"));
-                conf.setData_fechamento(rs.getDate("data_fechamento"));
+                conf.setData_fechamento(rs.getDate("data_fechamento").toLocalDate());
                 conf.setTotal_revelado(rs.getInt("total_revelado"));
                 conf.setTotal_informado(rs.getInt("total_informado"));
                 conf.setValor_deb_24h(rs.getBigDecimal("valor_deb_24h"));
                 conf.setValor_cred_24h(rs.getBigDecimal("valor_cred_24h"));
-
-
-// Novos campos adicionados
-
-
             }
         }
 
-        // 2ª Consulta: Buscar dados da tabela fecha_dia
+        // 2ª Consulta: Buscar dados da tabela controle_ribbon
         String sqlControleRibbon = "SELECT * FROM controle_ribbon WHERE data_ribbon = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sqlControleRibbon)) {
             stmt.setDate(1, new java.sql.Date(dataFechamento.getTime())); // Conversão para SQL Date
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next() && conf != null) { // Verificando se o objeto conf já foi preenchido
-                // Preenchendo os dados da tabela fecha_dia (Ribbon e outros campos)
-                conf.setTotal_ribbon_1(rs.getInt("total_ribbon_1"));
-                conf.setTotal_ribbon_2(rs.getInt("total_ribbon_2"));
-                conf.setTotal_ribbon_3(rs.getInt("total_ribbon_3"));
-                conf.setTotal_ribbon_4(rs.getInt("total_ribbon_4"));
-                conf.setTotal_ribbon_5(rs.getInt("total_ribbon_5"));
-                conf.setTotal_ribbon_6(rs.getInt("total_ribbon_6"));
+                conf.setRibbon_1_atual(rs.getInt("ribbon_1_atual"));
+                conf.setRibbon_2_atual(rs.getInt("ribbon_2_atual"));
+                conf.setRibbon_3_atual(rs.getInt("ribbon_3_atual"));
+                conf.setRibbon_4_atual(rs.getInt("ribbon_4_atual"));
+                conf.setRibbon_5_atual(rs.getInt("ribbon_5_atual"));
+                conf.setRibbon_6_atual(rs.getInt("ribbon_6_atual"));
                 conf.setSobras(rs.getInt("sobras"));
                 conf.setDif_ribbon_1(rs.getInt("dif_ribbon_1"));
                 conf.setDif_ribbon_2(rs.getInt("dif_ribbon_2"));
@@ -176,14 +213,12 @@ public class DAOConfDiario {
                 conf.setDif_ribbon_4(rs.getInt("dif_ribbon_4"));
                 conf.setDif_ribbon_5(rs.getInt("dif_ribbon_5"));
                 conf.setDif_ribbon_6(rs.getInt("dif_ribbon_6"));
-
                 conf.setOld_ribbon_1(rs.getInt("old_ribbon_1"));
                 conf.setOld_ribbon_2(rs.getInt("old_ribbon_2"));
                 conf.setOld_ribbon_3(rs.getInt("old_ribbon_3"));
                 conf.setOld_ribbon_4(rs.getInt("old_ribbon_4"));
                 conf.setOld_ribbon_5(rs.getInt("old_ribbon_5"));
                 conf.setOld_ribbon_6(rs.getInt("old_ribbon_6"));
-
                 conf.setRev_ribbon_1(rs.getInt("rev_ribbon_1"));
                 conf.setRev_ribbon_2(rs.getInt("rev_ribbon_2"));
                 conf.setRev_ribbon_3(rs.getInt("rev_ribbon_3"));
@@ -192,21 +227,105 @@ public class DAOConfDiario {
                 conf.setRev_ribbon_6(rs.getInt("rev_ribbon_6"));
                 conf.setTotal_dif(rs.getInt("total_dif"));
                 conf.setObservacao_ribbon(rs.getString("observacao_ribbon"));
-
             }
         }
 
-//        // 3ª Consulta: Buscar dados da tabela despesas
-    String sqlDespesa = "SELECT * FROM despesas WHERE data_despesa = ?";
-    try (PreparedStatement stmt = connection.prepareStatement(sqlDespesa)) { // Corrigindo aqui
-        stmt.setDate(1, new java.sql.Date(dataFechamento.getTime())); // Conversão para SQL Date
-        ResultSet rs = stmt.executeQuery();
+        // 3ª Consulta: Buscar soma das despesas para o mesmo dia
+        String sqlDespesa = "SELECT SUM(valor_despesa) AS valor_despesa_total FROM despesas WHERE data_despesa = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sqlDespesa)) {
+            stmt.setDate(1, new java.sql.Date(dataFechamento.getTime()));
+            ResultSet rs = stmt.executeQuery();
 
-        if (rs.next() && conf != null) { // Verificando se o objeto conf já foi preenchido
-            // Preenchendo os dados da tabela despesas
-            conf.setValor_despesa_total(rs.getBigDecimal("valor_despesa"));
+            if (rs.next() && conf != null) {
+                BigDecimal valorDespesaTotal = rs.getBigDecimal("valor_despesa_total");
+                conf.setValor_despesa_total(valorDespesaTotal == null ? BigDecimal.ZERO : valorDespesaTotal);
+            }
         }
+
+// 4ª Consulta: Buscar soma dos vales para o mesmo dia
+        String sqlVale = "SELECT SUM(valor) AS valor_vale_total FROM vales WHERE data = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sqlVale)) {
+            stmt.setDate(1, new java.sql.Date(dataFechamento.getTime()));
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next() && conf != null) {
+                BigDecimal valorValeTotal = rs.getBigDecimal("valor_vale_total");
+                conf.setValor_vale_total(valorValeTotal == null ? BigDecimal.ZERO : valorValeTotal);
+            }
+        }
+
+        return conf; // Retorna o objeto preenchido ou null caso não tenha encontrado dados
     }
+
+    public ModelConfDiario buscarConferenciaPorData(Date dataFechamento) throws SQLException {
+        // Criando um objeto para armazenar os dados
+        ModelConfDiario conf = null;
+
+        String sqlConfDia = "SELECT * FROM conf_dia WHERE data_fechamento = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sqlConfDia)) {
+            stmt.setDate(1, new java.sql.Date(dataFechamento.getTime())); // Conversão para SQL Date
+
+            // Usando try-with-resources para o ResultSet
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    conf = new ModelConfDiario();
+
+                    // Preenchendo os dados da tabela conf_dia
+                    conf.setId(rs.getLong("id"));
+                    conf.setValor_din(rs.getBigDecimal("valor_din"));
+                    conf.setValor_din_real(rs.getBigDecimal("valor_din_real"));
+                    conf.setValor_din_dif(rs.getBigDecimal("valor_din_dif"));
+                    conf.setValor_deb(rs.getBigDecimal("valor_deb"));
+                    conf.setValor_deb_real(rs.getBigDecimal("valor_deb_real"));
+                    conf.setValor_deb_dif(rs.getBigDecimal("valor_deb_dif"));
+                    conf.setValor_cred(rs.getBigDecimal("valor_cred"));
+                    conf.setValor_cred_real(rs.getBigDecimal("valor_cred_real"));
+                    conf.setValor_cred_dif(rs.getBigDecimal("valor_cred_dif"));
+                    conf.setValor_pix(rs.getBigDecimal("valor_pix"));
+                    conf.setValor_pix_real(rs.getBigDecimal("valor_pix_real"));
+                    conf.setValor_pix_dif(rs.getBigDecimal("valor_pix_dif"));
+                    conf.setValor_despesa_total(rs.getBigDecimal("valor_despesa_total"));
+                    conf.setValor_vale_total(rs.getBigDecimal("valor_vale_total"));
+                    conf.setDesconto(rs.getBigDecimal("desconto"));
+                    conf.setVenda_total_dia(rs.getBigDecimal("venda_total_dia"));
+                    conf.setObservacao(rs.getString("observacao"));
+                    conf.setData_fechamento(rs.getDate("data_fechamento").toLocalDate());
+                    conf.setTotal_revelado(rs.getInt("total_revelado"));
+                    conf.setTotal_informado(rs.getInt("total_informado"));
+                    conf.setValor_deb_24h(rs.getBigDecimal("valor_deb_24h"));
+                    conf.setValor_cred_24h(rs.getBigDecimal("valor_cred_24h"));
+                    conf.setRibbon_1_atual(rs.getInt("ribbon_1_atual"));
+                    conf.setRibbon_2_atual(rs.getInt("ribbon_2_atual"));
+                    conf.setRibbon_3_atual(rs.getInt("ribbon_3_atual"));
+                    conf.setRibbon_4_atual(rs.getInt("ribbon_4_atual"));
+                    conf.setRibbon_5_atual(rs.getInt("ribbon_5_atual"));
+                    conf.setRibbon_6_atual(rs.getInt("ribbon_6_atual"));
+                    conf.setSobras(rs.getInt("sobras"));
+                    conf.setDif_ribbon_1(rs.getInt("dif_ribbon_1"));
+                    conf.setDif_ribbon_2(rs.getInt("dif_ribbon_2"));
+                    conf.setDif_ribbon_3(rs.getInt("dif_ribbon_3"));
+                    conf.setDif_ribbon_4(rs.getInt("dif_ribbon_4"));
+                    conf.setDif_ribbon_5(rs.getInt("dif_ribbon_5"));
+                    conf.setDif_ribbon_6(rs.getInt("dif_ribbon_6"));
+                    conf.setOld_ribbon_1(rs.getInt("old_ribbon_1"));
+                    conf.setOld_ribbon_2(rs.getInt("old_ribbon_2"));
+                    conf.setOld_ribbon_3(rs.getInt("old_ribbon_3"));
+                    conf.setOld_ribbon_4(rs.getInt("old_ribbon_4"));
+                    conf.setOld_ribbon_5(rs.getInt("old_ribbon_5"));
+                    conf.setOld_ribbon_6(rs.getInt("old_ribbon_6"));
+                    conf.setRev_ribbon_1(rs.getInt("rev_ribbon_1"));
+                    conf.setRev_ribbon_2(rs.getInt("rev_ribbon_2"));
+                    conf.setRev_ribbon_3(rs.getInt("rev_ribbon_3"));
+                    conf.setRev_ribbon_4(rs.getInt("rev_ribbon_4"));
+                    conf.setRev_ribbon_5(rs.getInt("rev_ribbon_5"));
+                    conf.setRev_ribbon_6(rs.getInt("rev_ribbon_6"));
+                    conf.setTotal_dif(rs.getInt("total_dif"));
+                    conf.setObservacao_ribbon(rs.getString("observacao_ribbon"));
+                    conf.setValor_despesa_total(rs.getBigDecimal("valor_despesa_total"));
+                    conf.setValor_vale_total(rs.getBigDecimal("valor_vale_total"));
+                }
+            }
+        }
 
         return conf; // Retorna o objeto preenchido ou null caso não tenha encontrado dados
     }

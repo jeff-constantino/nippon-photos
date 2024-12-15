@@ -129,38 +129,43 @@ public class ServletFechaDia extends ServletGenericUtil {
                     // Converte a string da data para o tipo Date
                     Date data = Date.valueOf(dataFechamento);
 
-                    // Chama o DAO para consultar o fechamento por data
-                    ModelFechaDia fechamento = daoFechaDia.consultarFechamentoPorData(data);
-
-                    // Verifica se o fechamento foi encontrado
-                    if (fechamento != null) {
-                        request.setAttribute("fechamento", fechamento);
-                        System.out.println(fechamento);
+                    // Verifica se há vendas registradas para a data informada
+                    if (!daoFechaDia.existeVendaParaData(data)) {
+                        request.setAttribute("msg", "Nenhuma venda registrada para essa data");
                     } else {
-                        request.setAttribute("msg", "Nenhum fechamento encontrado para a data informada."); // Mensagem caso não encontre
-                    }
+                        // Verifica se já existe um fechamento para a data informada
+                        if (daoFechaDia.verificarExistenciaFechamento(data.toLocalDate())) {
+                            request.setAttribute("msg", "Já existe um fechamento para a data informada.");
+                        } else {
+                            // Chama o DAO para consultar o fechamento por data
+                            ModelFechaDia fechamento = daoFechaDia.consultarFechamentoPorData(data);
 
-                    // Agora, também executa a busca dos valores dos produtos
-                    try {
+                            // Verifica se o fechamento foi encontrado
+                            if (fechamento != null) {
+                                request.setAttribute("fechamento", fechamento);
+                                System.out.println(fechamento);
+                            } else {
+                                request.setAttribute("msg", "Nenhum fechamento encontrado para a data informada."); // Mensagem caso não encontre
+                            }
 
-                        List<ModelConfig> configs = daoFechaDia.consultarValor();
-                        ModelConfig config = configs.isEmpty() ? null : configs.get(0);  // Pega a primeira configuração
+                            // Agora, também executa a busca dos valores dos produtos
+                            try {
+
+                                List<ModelConfig> configs = daoFechaDia.consultarValor();
+                                ModelConfig config = configs.isEmpty() ? null : configs.get(0);  // Pega a primeira configuração
 
 // Passa os valores de configuração para o JSP
-                        request.setAttribute("conf1_valor", config.getConf1_valor());
-                        request.setAttribute("conf2_valor", config.getConf2_valor());
-                        request.setAttribute("conf3_valor", config.getConf3_valor());
-
-
-
-
-                    } catch (Exception e) {
-                        // Loga a exceção para análise posterior
-                        e.printStackTrace();
-                        // Envia uma resposta de erro ao cliente
-                        request.setAttribute("produtosErro", "Erro ao buscar valores dos produtos.");
+                                request.setAttribute("conf1_valor", config.getConf1_valor());
+                                request.setAttribute("conf2_valor", config.getConf2_valor());
+                                request.setAttribute("conf3_valor", config.getConf3_valor());
+                            } catch (Exception e) {
+                                // Loga a exceção para análise posterior
+                                e.printStackTrace();
+                                // Envia uma resposta de erro ao cliente
+                                request.setAttribute("produtosErro", "Erro ao buscar valores dos produtos.");
+                            }
+                        }
                     }
-
                 } catch (IllegalArgumentException e) {
                     request.setAttribute("msg", "Data inválida: " + e.getMessage());
                 } catch (Exception e) {
@@ -202,12 +207,12 @@ public class ServletFechaDia extends ServletGenericUtil {
             fechamento.setSobras(Integer.parseInt(request.getParameter("sobras")));
 
             // Definindo os valores do ribbon
-            fechamento.setTotal_ribbon_1(parseOrDefault(request.getParameter("ribbon_1_atual"), 0));
-            fechamento.setTotal_ribbon_2(parseOrDefault(request.getParameter("ribbon_2_atual"), 0));
-            fechamento.setTotal_ribbon_3(parseOrDefault(request.getParameter("ribbon_3_atual"), 0));
-            fechamento.setTotal_ribbon_4(parseOrDefault(request.getParameter("ribbon_4_atual"), 0));
-            fechamento.setTotal_ribbon_5(parseOrDefault(request.getParameter("ribbon_5_atual"), 0));
-            fechamento.setTotal_ribbon_6(parseOrDefault(request.getParameter("ribbon_6_atual"), 0));
+            fechamento.setRibbon_1_atual(parseOrDefault(request.getParameter("ribbon_1_atual"), 0));
+            fechamento.setRibbon_2_atual(parseOrDefault(request.getParameter("ribbon_2_atual"), 0));
+            fechamento.setRibbon_3_atual(parseOrDefault(request.getParameter("ribbon_3_atual"), 0));
+            fechamento.setRibbon_4_atual(parseOrDefault(request.getParameter("ribbon_4_atual"), 0));
+            fechamento.setRibbon_5_atual(parseOrDefault(request.getParameter("ribbon_5_atual"), 0));
+            fechamento.setRibbon_6_atual(parseOrDefault(request.getParameter("ribbon_6_atual"), 0));
 
             // Definindo as diferenças do ribbon
             fechamento.setDif_ribbon_1(parseOrDefault(request.getParameter("dif_ribbon_1"), 0));

@@ -35,17 +35,17 @@
 
 
                                         <div class="d-flex justify-content-between">
-                                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalBusca">
+                                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modal1">
                                                 <h4>Buscar Fechamento</h4>
                                             </button>
 
                                             <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal2">
-                                                <h4>Configurações de Materiais</h4>
+                                                <h4>Buscar Conferência</h4>
                                             </button>
 
-                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal3">
-                                                <h4>Configurações Gerais</h4>
-                                            </button>
+<%--                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal3">--%>
+<%--                                                <h4>Configurações Gerais</h4>--%>
+<%--                                            </button>--%>
                                         </div>
 
 
@@ -69,7 +69,7 @@
 
 
                                     <!-- Modal -->
-                                    <div class="modal fade" id="modalBusca" data-bs-backdrop="static"
+                                    <div class="modal fade" id="modal1" data-bs-backdrop="static"
                                          data-bs-keyboard="false"
                                          tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-xl mt-5">
@@ -105,7 +105,7 @@
                                                                                   method="get" id="formConfModal"
                                                                                   name="formConfModal">
                                                                                 <input type="hidden" name="acao"
-                                                                                       value="buscaConfDiario"/>
+                                                                                       value="buscaFechamentoDiario"/>
                                                                                 <div class="form-row align-items-center">
                                                                                     <div class="col-auto d-flex align-items-end">
                                                                                         <div class="mr-2">
@@ -115,7 +115,7 @@
                                                                                                    class="form-control"
                                                                                                    id="data_fechamento"
                                                                                                    name="data_fechamento"
-                                                                                                   value="${data_fechamento}">
+                                                                                                   value="">
                                                                                         </div>
                                                                                         <div>
                                                                                             <button type="submit"
@@ -171,22 +171,54 @@
                                         <div class="modal-dialog modal-xl mt-5">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="staticRanking">RANKING</h5>
+                                                    <h5 class="modal-title" id="staticRanking">BUSCAR CONFERÊNCIA</h5>
 
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="container-fluid">
-                                                        <div class="row">
-                                                            <div class="col-lg-6 grid-margin stretch-card">
-                                                                <H5>CORPO DO RANKING</H5>
+                                                        <div class="page-body">
+
+                                                            <div class="row">
+                                                                <div class="col-sm-12">
+
+                                                                    <div class="card">
+                                                                        <div class="card-block">
+                                                                            <form action="<%= request.getContextPath() %>/ServletConfDiario"
+                                                                                  method="get" id="buscaConfModal"
+                                                                                  name="buscaConfModal">
+                                                                                <input type="hidden" name="acao"
+                                                                                       value="buscaConfDiario"/>
+                                                                                <div class="form-row align-items-center">
+                                                                                    <div class="col-auto d-flex align-items-end">
+                                                                                        <div class="mr-2">
+                                                                                            <label for="data_conferencia">Data
+                                                                                                Fechamento</label>
+                                                                                            <input type="date"
+                                                                                                   class="form-control"
+                                                                                                   id="data_conferencia"
+                                                                                                   name="data_conferencia"
+                                                                                                   value="">
+                                                                                        </div>
+                                                                                        <div>
+                                                                                            <button type="submit"
+                                                                                                    class="btn btn-outline-success">
+                                                                                                Buscar Fechamento
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+
+                                                                            </form>
+
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
 
-
-
-
                                                         </div>
-
                                                     </div>
 
                                                 </div>
@@ -288,7 +320,7 @@
                                             </div>
                                             <div class="col-2">
 
-                                                <label class="float-label">DINHEIRO INF:</label>
+                                                <label style="color: #f2a654" class="float-label">DINHEIRO INF:</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_din" name="valor_din"
@@ -297,7 +329,7 @@
                                                        readonly>
                                             </div>
                                             <div class="col-2">
-                                                <label class="float-label">DÉBITO INF:</label>
+                                                <label style="color: #f2a654" class="float-label">DÉBITO INF:</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_deb" name="valor_deb"
@@ -307,7 +339,7 @@
                                             </div>
 
                                             <div class="col-2">
-                                                <label class="float-label">CRÉDITO INF:</label>
+                                                <label style="color: #f2a654" class="float-label">CRÉDITO INF:</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_cred" name="valor_cred"
@@ -317,7 +349,7 @@
                                             </div>
 
                                             <div class="col-2">
-                                                <label class="float-label">PIX INF:</label>
+                                                <label style="color: #f2a654" class="float-label">PIX INF:</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_pix" name="valor_pix"
@@ -396,41 +428,41 @@
                                         <div  class="row mt-3 text-center d-flex justify-content-center">
                                             <div class="col-2">
 
-                                                <label class="float-label">DINHEIRO:</label>
+                                                <label style="color: #f2a654" class="float-label">DINHEIRO DIF:</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_din_dif" name="valor_din_dif"
                                                        placeholder="" value="${conf_diario.valor_din_dif}"
                                                        style="text-align: center; background-color: black; color: white; font-weight: bold"
-                                                readonly>
+                                                readonly tabindex="-1">
                                             </div>
                                             <div class="col-2">
-                                                <label class="float-label">DÉBITO:</label>
+                                                <label style="color: #f2a654" class="float-label">DÉBITO DIF:</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_deb_dif" name="valor_deb_dif"
                                                        placeholder="" value="${conf_diario.valor_deb_dif}"
-                                                       style="text-align: center; background-color: black; color: white; font-weight: bold"READONLY
+                                                       style="text-align: center; background-color: black; color: white; font-weight: bold" READONLY tabindex="-1"
                                                 >
                                             </div>
 
                                             <div class="col-2">
-                                                <label class="float-label">CRÉDITO :</label>
+                                                <label style="color: #f2a654" class="float-label">CRÉDITO DIF:</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_cred_dif" name="valor_cred_dif"
                                                        placeholder="" value="${conf_diario.valor_cred_dif}"
-                                                       style="text-align: center; background-color: black; color: white; font-weight: bold"READONLY
+                                                       style="text-align: center; background-color: black; color: white; font-weight: bold" READONLY tabindex="-1"
                                                 >
                                             </div>
 
                                             <div class="col-2">
-                                                <label class="float-label">PIX:</label>
+                                                <label style="color: #f2a654" class="float-label">PIX DIF:</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_pix_dif" name="valor_pix_dif"
                                                        placeholder="" value="${conf_diario.valor_pix_dif}"
-                                                       style="text-align: center; background-color: black; color: white; font-weight: bold" READONLY
+                                                       style="text-align: center; background-color: black; color: white; font-weight: bold" READONLY tabindex="-1"
                                                 >
                                             </div>
 
@@ -488,10 +520,10 @@
                                                     </div>
 
                                                     <div class="col-6">
-                                                        <label style="color: #f2a654">Ribbon 1 Atual</label>
+                                                        <label>Ribbon 1 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_1_atual" name="ribbon_1_atual" value="${conf_diario.total_ribbon_1}">
+                                                               id="ribbon_1_atual" name="ribbon_1_atual" value="${conf_diario.ribbon_1_atual}">
 
                                                         <label style="color: #f2a654">Revelado 1</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -509,10 +541,10 @@
                                                     </div>
 
                                                     <div class="col-6">
-                                                        <label style="color: #f2a654">Ribbon 2 Atual</label>
+                                                        <label>Ribbon 2 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_2_atual" name="ribbon_2_atual" value="${conf_diario.total_ribbon_2}">
+                                                               id="ribbon_2_atual" name="ribbon_2_atual" value="${conf_diario.ribbon_2_atual}">
 
                                                         <label style="color: #f2a654">Revelado 2</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -544,10 +576,10 @@
                                                     </div>
 
                                                     <div class="col-6">
-                                                        <label style="color: #f2a654">Ribbon 3 Atual</label>
+                                                        <label>Ribbon 3 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_3_atual" name="ribbon_3_atual" value="${conf_diario.total_ribbon_3}">
+                                                               id="ribbon_3_atual" name="ribbon_3_atual" value="${conf_diario.ribbon_3_atual}">
 
                                                         <label style="color: #f2a654">Revelado 3</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -561,10 +593,10 @@
                                                     </div>
 
                                                     <div class="col-6">
-                                                        <label style="color: #f2a654">Ribbon 4 Atual</label>
+                                                        <label>Ribbon 4 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_4_atual" name="ribbon_4_atual" value="${conf_diario.total_ribbon_4}">
+                                                               id="ribbon_4_atual" name="ribbon_4_atual" value="${conf_diario.ribbon_4_atual}">
 
                                                         <label style="color: #f2a654">Revelado 4</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -596,10 +628,10 @@
                                                     </div>
 
                                                     <div class="col-6">
-                                                        <label style="color: #f2a654">Ribbon 5 Atual</label>
+                                                        <label>Ribbon 5 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_5_atual" name="ribbon_5_atual" value="${conf_diario.total_ribbon_5}">
+                                                               id="ribbon_5_atual" name="ribbon_5_atual" value="${conf_diario.ribbon_5_atual}">
 
                                                         <label style="color: #f2a654">Revelado 5</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -613,10 +645,10 @@
                                                     </div>
 
                                                     <div class="col-6">
-                                                        <label style="color: #f2a654">Ribbon 6 Atual</label>
+                                                        <label>Ribbon 6 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_6_atual" name="ribbon_6_atual" value="${conf_diario.total_ribbon_6}">
+                                                               id="ribbon_6_atual" name="ribbon_6_atual" value="${conf_diario.ribbon_6_atual}">
 
                                                         <label style="color: #f2a654">Revelado 6</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -634,21 +666,27 @@
 <%--SOBRAS E TOTAIS--%>
                                             <div class="col-12">
                                                 <div class="row">
-                                                    <div class="col-4">
+                                                    <div class="col-3">
                                                         <label style="color: #f2a654">SOBRAS</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                tabindex="-1" readonly id="sobras" name="sobras" value="${conf_diario.sobras}">
                                                     </div>
 
-                                                    <div class="col-4">
+                                                    <div class="col-3">
                                                         <label style="color: #f2a654">TOTAL REVELADO</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                tabindex="-1" readonly id="total_revelado" name="total_revelado" value="${conf_diario.total_revelado}">
                                                     </div>
+                                                    <div class="col-3">
+                                                        <label style="color: #f2a654">TOTAL REVELADO</label>
+                                                        <input type="number" class="form-control" placeholder=""
+                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1" readonly id="total_informado" name="total_informado" value="${conf_diario.total_informado}">
+                                                    </div>
 
-                                                    <div class="col-4">
+                                                    <div class="col-3">
                                                         <label style="color: #f2a654">DIFERENÇA RIBBONS</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
@@ -667,7 +705,7 @@
                                                     <label >OBSERVAÇÕES RIBBON</label>
                                                     <input class="form-control" placeholder=""
                                                            style="text-align: center; font-weight: bold"
-                                                           tabindex="-1"  id="observacao_ribbon" name="observacao_ribbon" value="${conf_diario.observacao_ribbon}">
+                                                           id="observacao_ribbon" name="observacao_ribbon" value="${conf_diario.observacao_ribbon}">
                                                 </div>
 
 
@@ -688,38 +726,49 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">DESPESAS E DESCONTOS</h4>
-                                <div class="table-responsive">
+                                <h4 class="card-title" style="text-align: center">RESUMO DO DIA</h4>
+                                <div class="table-responsive" style="overflow-x: hidden; overflow-y: hidden">
                                     <table class="table">
                                         <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                        <div  class="row mt-3 text-center d-flex justify-content-center">
+                                        <div class="row mt-3 text-center d-flex justify-content-center">
+                                            <!-- Linha 1: Data de Fechamento -->
+                                            <div class="col-12 mb-3 d-flex justify-content-center">
+                                                <div class="mr-2" style="max-width: 250px; width: 100%;">
+                                                    <label style="color: #f2a654">Data Fechamento</label>
+                                                    <input type="date"
+                                                           class="form-control"
+                                                           id="data_fechamento2"
+                                                           name="data_fechamento"
+                                                           style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                           value="${conf_diario.data_fechamento}" readonly tabindex="-1">
+                                                </div>
+                                            </div>
 
-
-                                            <div class="col-4" style="overflow-y: hidden; overflow-x: hidden">
-                                                <div class="row">
-                                                    <div class="col-6">
-                                                        <label style="color: #f2a654">DESCONTOS</label>
-                                                        <input type="number" class="form-control" placeholder=""
-                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="desconto" name="desconto" value="${conf_diario.desconto}">
-                                                    </div>
-
-                                                    <div class="col-6">
-                                                        <label style="color: #f2a654">DESPESAS</label>
-                                                        <input type="number" class="form-control" placeholder=""
-                                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="despesas" name="despesas" value="${conf_diario.valor_despesa_total}">
-                                                    </div>
-
-
-
-
-
-                                        </div>
-
-
+                                            <!-- Linha 2: Outros Itens -->
+                                            <div class="col-12 d-flex justify-content-between">
+                                                <div class="d-flex flex-column align-items-center me-2">
+                                                    <label style="color: #f2a654">DESCONTOS</label>
+                                                    <input type="number" class="form-control" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                           tabindex="-1" readonly id="desconto" name="desconto" value="${conf_diario.desconto}">
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center me-2">
+                                                    <label style="color: #f2a654">DESPESAS DO DIA</label>
+                                                    <input type="number" class="form-control" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                           tabindex="-1" readonly id="valor_despesa_total" name="valor_despesa_total" value="${conf_diario.valor_despesa_total}">
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center me-2">
+                                                    <label style="color: #f2a654">VALES DO DIA</label>
+                                                    <input type="number" class="form-control" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                           tabindex="-1" readonly id="valor_vale_total" name="valor_vale_total" value="${conf_diario.valor_vale_total}">
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <label style="color: #f2a654">VENDA TOTAL DO DIA</label>
+                                                    <input type="number" class="form-control" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                           tabindex="-1" readonly id="venda_total_dia" name="venda_total_dia" value="${conf_diario.venda_total_dia}">
+                                                </div>
                                             </div>
                                         </div>
+
                                     </table>
                                     <button class="btn btn-outline-success waves-effect waves-light"  type="submit">
                                         Atualizar
@@ -893,6 +942,35 @@
     };
 
 
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Seleciona os inputs
+        const valorDin = document.getElementById("valor_din");
+        const valorDeb = document.getElementById("valor_deb");
+        const valorCred = document.getElementById("valor_cred");
+        const valorPix = document.getElementById("valor_pix");
+        const venda_total_dia = document.getElementById("venda_total_dia");
+
+        // Função para calcular a soma
+        function calcularTotal() {
+            const din = parseFloat(valorDin.value) || 0;
+            const deb = parseFloat(valorDeb.value) || 0;
+            const cred = parseFloat(valorCred.value) || 0;
+            const pix = parseFloat(valorPix.value) || 0;
+
+            // Atualiza o valor total
+            const total = din + deb + cred + pix;
+            venda_total_dia.value = total.toFixed(2); // Formata com duas casas decimais
+        }
+
+        // Executa o cálculo no carregamento inicial
+        calcularTotal();
+
+        // Adiciona listeners caso os valores sejam alterados dinamicamente
+        [valorDin, valorDeb, valorCred, valorPix].forEach(input => {
+            input.addEventListener("input", calcularTotal);
+        });
+    });
 
 
 </SCRIPT>

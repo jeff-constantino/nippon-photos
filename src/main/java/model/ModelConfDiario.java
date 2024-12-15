@@ -3,8 +3,10 @@ package model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class ModelConfDiario implements Serializable {
+    private static final long serialVersionUID = 1L;
     private long id;
     private BigDecimal valor_din;
     private BigDecimal valor_din_real;
@@ -21,21 +23,21 @@ public class ModelConfDiario implements Serializable {
     private BigDecimal valor_despesa_total;
     private BigDecimal valor_vale_total;
     private BigDecimal desconto;
-    private BigDecimal valor_total_dia;
+    private BigDecimal venda_total_dia;
     private String observacao;
     private String observacao_ribbon;
-    private Date data_fechamento;
+    private LocalDate data_fechamento;
     private int total_revelado;
     private int total_informado;
     private BigDecimal valor_deb_24h;
     private BigDecimal valor_cred_24h;
 
-    private int total_ribbon_1;
-    private int total_ribbon_2;
-    private int total_ribbon_3;
-    private int total_ribbon_4;
-    private int total_ribbon_5;
-    private int total_ribbon_6;
+    private int ribbon_1_atual;
+    private int ribbon_2_atual;
+    private int ribbon_3_atual;
+    private int ribbon_4_atual;
+    private int ribbon_5_atual;
+    private int ribbon_6_atual;
     private int sobras;
     private int dif_ribbon_1;
     private int dif_ribbon_2;
@@ -127,53 +129,55 @@ public class ModelConfDiario implements Serializable {
         this.rev_ribbon_6 = rev_ribbon_6;
     }
 
-    public int getTotal_ribbon_1() {
-        return total_ribbon_1;
+    public int getRibbon_1_atual() {
+        return ribbon_1_atual;
     }
 
-    public void setTotal_ribbon_1(int total_ribbon_1) {
-        this.total_ribbon_1 = total_ribbon_1;
+    public void setRibbon_1_atual(int ribbon_1_atual) {
+        this.ribbon_1_atual = ribbon_1_atual;
     }
 
-    public int getTotal_ribbon_2() {
-        return total_ribbon_2;
+    public int getRibbon_2_atual() {
+        return ribbon_2_atual;
     }
 
-    public void setTotal_ribbon_2(int total_ribbon_2) {
-        this.total_ribbon_2 = total_ribbon_2;
+    public void setRibbon_2_atual(int ribbon_2_atual) {
+        this.ribbon_2_atual = ribbon_2_atual;
     }
 
-    public int getTotal_ribbon_3() {
-        return total_ribbon_3;
+    public int getRibbon_3_atual() {
+        return ribbon_3_atual;
     }
 
-    public void setTotal_ribbon_3(int total_ribbon_3) {
-        this.total_ribbon_3 = total_ribbon_3;
+    public void setRibbon_3_atual(int ribbon_3_atual) {
+        this.ribbon_3_atual = ribbon_3_atual;
     }
 
-    public int getTotal_ribbon_4() {
-        return total_ribbon_4;
+    public int getRibbon_4_atual() {
+        return ribbon_4_atual;
     }
 
-    public void setTotal_ribbon_4(int total_ribbon_4) {
-        this.total_ribbon_4 = total_ribbon_4;
+    public void setRibbon_4_atual(int ribbon_4_atual) {
+        this.ribbon_4_atual = ribbon_4_atual;
     }
 
-    public int getTotal_ribbon_5() {
-        return total_ribbon_5;
+    public int getRibbon_5_atual() {
+        return ribbon_5_atual;
     }
 
-    public void setTotal_ribbon_5(int total_ribbon_5) {
-        this.total_ribbon_5 = total_ribbon_5;
+    public void setRibbon_5_atual(int ribbon_5_atual) {
+        this.ribbon_5_atual = ribbon_5_atual;
     }
 
-    public int getTotal_ribbon_6() {
-        return total_ribbon_6;
+    public int getRibbon_6_atual() {
+        return ribbon_6_atual;
     }
 
-    public void setTotal_ribbon_6(int total_ribbon_6) {
-        this.total_ribbon_6 = total_ribbon_6;
+    public void setRibbon_6_atual(int ribbon_6_atual) {
+        this.ribbon_6_atual = ribbon_6_atual;
     }
+
+
 
     public int getSobras() {
         return sobras;
@@ -439,12 +443,12 @@ public class ModelConfDiario implements Serializable {
         this.desconto = desconto;
     }
 
-    public BigDecimal getValor_total_dia() {
-        return valor_total_dia;
+    public BigDecimal getVenda_total_dia() {
+        return venda_total_dia;
     }
 
-    public void setValor_total_dia(BigDecimal valor_total_dia) {
-        this.valor_total_dia = valor_total_dia;
+    public void setVenda_total_dia(BigDecimal venda_total_dia) {
+        this.venda_total_dia = venda_total_dia;
     }
 
     public String getObservacao() {
@@ -455,14 +459,13 @@ public class ModelConfDiario implements Serializable {
         this.observacao = observacao;
     }
 
-    public Date getData_fechamento() {
+    public LocalDate getData_fechamento() {
         return data_fechamento;
     }
 
-    public void setData_fechamento(Date data_fechamento) {
+    public void setData_fechamento(LocalDate data_fechamento) {
         this.data_fechamento = data_fechamento;
     }
-
 
     @Override
     public String toString() {
@@ -483,7 +486,7 @@ public class ModelConfDiario implements Serializable {
                 ", valor_despesa_total=" + valor_despesa_total +
                 ", valor_vale_total=" + valor_vale_total +
                 ", desconto=" + desconto +
-                ", valor_total_dia=" + valor_total_dia +
+                ", venda_total_dia=" + venda_total_dia +
                 ", observacao='" + observacao + '\'' +
                 ", observacao_ribbon='" + observacao_ribbon + '\'' +
                 ", data_fechamento=" + data_fechamento +
@@ -491,12 +494,12 @@ public class ModelConfDiario implements Serializable {
                 ", total_informado=" + total_informado +
                 ", valor_deb_24h=" + valor_deb_24h +
                 ", valor_cred_24h=" + valor_cred_24h +
-                ", total_ribbon_1=" + total_ribbon_1 +
-                ", total_ribbon_2=" + total_ribbon_2 +
-                ", total_ribbon_3=" + total_ribbon_3 +
-                ", total_ribbon_4=" + total_ribbon_4 +
-                ", total_ribbon_5=" + total_ribbon_5 +
-                ", total_ribbon_6=" + total_ribbon_6 +
+                ", ribbon_1_atual=" + ribbon_1_atual +
+                ", ribbon_2_atual=" + ribbon_2_atual +
+                ", ribbon_3_atual=" + ribbon_3_atual +
+                ", ribbon_4_atual=" + ribbon_4_atual +
+                ", ribbon_5_atual=" + ribbon_5_atual +
+                ", ribbon_6_atual=" + ribbon_6_atual +
                 ", sobras=" + sobras +
                 ", dif_ribbon_1=" + dif_ribbon_1 +
                 ", dif_ribbon_2=" + dif_ribbon_2 +

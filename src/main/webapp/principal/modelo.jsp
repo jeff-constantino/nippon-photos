@@ -468,7 +468,7 @@
                                                             <input type="number" class="form-control" placeholder=""
                                                                    style="background-color: white; color: black; font-weight: bold"
                                                                    disabled id="ribbon_1" name="ribbon_1"
-                                                                   value="${fechamento != null ? fechamento.total_ribbon_1 : ''}">
+                                                                   value="${fechamento != null ? fechamento._ribbon_1_atual : ''}">
 
                                                             <label style="color: #f2a654">Diferença</label>
                                                             <input type="number" class="form-control" placeholder=""
@@ -481,7 +481,7 @@
                                                             <input type="number" class="form-control" placeholder=""
                                                                    style="background-color: white; color: black; font-weight: bold"
                                                                    disabled id="ribbon_2" name="ribbon_2"
-                                                                   value="${fechamento != null ? fechamento.total_ribbon_2 : ''}">
+                                                                   value="${fechamento != null ? fechamento.ribbon_2_atual : ''}">
                                                             <label style="color: #f2a654">Diferença</label>
                                                             <input type="number" class="form-control" placeholder=""
                                                                    style="background-color: white; color: black; font-weight: bold"
@@ -514,7 +514,7 @@
                                                             <input type="number" class="form-control" placeholder=""
                                                                    style="background-color: white; color: black; font-weight: bold"
                                                                    disabled id="ribbon_3" name="ribbon_3"
-                                                                   value="${fechamento != null ? fechamento.total_ribbon_3 : ''}">
+                                                                   value="${fechamento != null ? fechamento.ribbon_3_atual : ''}">
                                                             <label style="color: #f2a654">Diferença</label>
                                                             <input type="number" class="form-control" placeholder=""
                                                                    style="background-color: white; color: black; font-weight: bold"
@@ -526,7 +526,7 @@
                                                             <input type="number" class="form-control" placeholder=""
                                                                    style="background-color: white; color: black; font-weight: bold"
                                                                    disabled id="ribbon_4" name="ribbon_4"
-                                                                   value="${fechamento != null ? fechamento.total_ribbon_4 : ''}">
+                                                                   value="${fechamento != null ? fechamento.ribbon_4_atual : ''}">
                                                             <label style="color: white">Diferença</label>
                                                             <input type="number" class="form-control" placeholder=""
                                                                    style="background-color: white; color: black; font-weight: bold"
@@ -559,7 +559,7 @@
                                                             <input type="number" class="form-control" placeholder=""
                                                                    style="background-color: white; color: black; font-weight: bold"
                                                                    disabled id="ribbon_5" name="ribbon_5"
-                                                                   value="${fechamento != null ? fechamento.total_ribbon_5 : ''}">
+                                                                   value="${fechamento != null ? fechamento.ribbon_5_atual : ''}">
                                                             <label style="color: f2a654">Diferença</label>
                                                             <input type="number" class="form-control" placeholder=""
                                                                    style="background-color: white; color: black; font-weight: bold"
@@ -571,7 +571,7 @@
                                                             <input type="number" class="form-control" placeholder=""
                                                                    style="background-color: white; color: black; font-weight: bold"
                                                                    disabled id="ribbon_6" name="ribbon_6"
-                                                                   value="${fechamento != null ? fechamento.total_ribbon_6 : ''}">
+                                                                   value="${fechamento != null ? fechamento.ribbon_6_atual : ''}">
                                                             <label style="color: f2a654">Diferença</label>
                                                             <input type="number" class="form-control" placeholder=""
                                                                    style="background-color: white; color: black; font-weight: bold"

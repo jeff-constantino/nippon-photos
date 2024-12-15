@@ -71,10 +71,10 @@
                                                                       <div class="row mb-3">
                                                                           <div class="col-12">
                                                                               <label>DESCRIÇÃO</label>
-                                                                              <textarea class="form-control" style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase;"
+                                                                              <input type="text" class="form-control" style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase;"
                                                                                         id="descricao_despesa" name="descricao_despesa" required>
                                                                                   ${modelDespesas.descricao_despesa != null ? modelDespesas.descricao_despesa : ''}
-                                                                              </textarea>
+                                                                              </input>
                                                                           </div>
                                                                       </div>
 

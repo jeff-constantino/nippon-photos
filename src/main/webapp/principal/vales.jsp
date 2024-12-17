@@ -141,7 +141,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalVales">
-                                    <h4>Gerar Relatório</h4>
+                                    <h4>Lançar Vale</h4>
                                 </button>
                                 <h4 class="card-title" STYLE="text-align: center">RELATÓRIO DE VALES</h4>
 

@@ -1,6 +1,6 @@
 package servlets;
 
-import dao.DAORelatorio;
+import dao.DAOFuncionario;
 import dao.DAOVales;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -52,7 +52,7 @@ public class ServletVales extends HttpServlet {
             }
 
             // Busca os funcionários e os vales novamente após a exclusão
-            DAORelatorio relatorio = new DAORelatorio();
+            DAOFuncionario relatorio = new DAOFuncionario();
             List<ModelLogin> funcionarios = relatorio.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);
 

@@ -27,10 +27,14 @@ public class ServletFuncionario extends ServletGenericUtil{
 
         try {
             // Instancia o DAO para buscar os funcionários
-            DAORelatorio relatorio = new DAORelatorio();
+            DAOFuncionario relatorio = new DAOFuncionario();
             List<ModelLogin> funcionarios = relatorio.buscaFuncionarios();
+            // Adiciona lista de funcionários ao request para que esteja sempre disponível no JSP
+            request.setAttribute("funcionarios", funcionarios);
 
             List<ModelVendas> vendasFuncionarioList = new ArrayList<>();
+
+
             RequestDispatcher dispatcher;
 
             // Verifica se a ação é imprimir as vendas do funcionário

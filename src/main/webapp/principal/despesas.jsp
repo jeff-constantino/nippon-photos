@@ -140,7 +140,7 @@
                                                             <div class="modal-dialog modal-xl" style="height: 100vh; width: auto; max-width: none;"> <!-- Altura total da viewport e largura ajustável -->
                                                                 <div class="modal-content" style="height: 100%; margin: 0;"> <!-- Altura total do modal -->
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title" id="staticRanking">TODAS AS CONTAS</h5>
+                                                                        <h5 class="modal-title" id="staticRanking">TODAS AS DESPESAS</h5>
                                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                     </div>
                                                                     <div class="modal-body" style="height: calc(100% - 56px); overflow:  hidden;"> <!-- Ajusta altura do corpo do modal e remove rolagem -->
@@ -212,7 +212,7 @@
                                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalDespesa">
                                     <h4>Lançar Despesas</h4>
                                 </button>
-                                <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#modalListDespesas">
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalListDespesas">
                                     <h4>Todas as Despesas</h4>
                                 </button><div>
                                 <span style="color:#1ad76b; text-align: center">${msg}</span>

@@ -58,12 +58,10 @@
                     <li class="nav-item"> <a class="nav-link" href="">Fechamento do Mês</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletContas">Contas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletDespesas">Despesas</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="">Vendas</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="">Cartões e Pix</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Salários</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletVales">Vales</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Ranking de Funcionários</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/principal/deathnote.jsp">Death Note</a></li>
+
                 </ul>
             </div>
         </li>
@@ -85,6 +83,7 @@
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletFuncionario">Funcionários</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Contas e Despesas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">DRE</a></li>
+
                 </ul>
             </div>
         </li>
@@ -101,9 +100,11 @@
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletUsuarioController?acao=listarUser"> Funcionários </a></li>
                                 <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletConfig"> Configurações </a></li>
+                                <li class="nav-item"> <a class="nav-link" href="">Cartões e Pix</a></li>
                                 <li class="nav-item"> <a class="nav-link" href=""> 404 </a></li>
                                 <li class="nav-item"> <a class="nav-link" href=""> 505 </a></li>
                                 <li class="nav-item"> <a class="nav-link" href=""> 606 </a></li>
+                                <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/principal/deathnote.jsp">Death Note</a></li>
                             </ul>
                         </div>
                     </li>

@@ -1,7 +1,7 @@
 package servlets;
 
 import dao.DAOConfig;
-import dao.DAORelatorio;
+import dao.DAOFuncionario;
 import dao.DAOUsuarioRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -18,7 +18,7 @@ import java.util.List;
 @WebServlet("/ServletRelVenda")
 public class ServletRelVenda extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
-    private DAORelatorio relatorio = new DAORelatorio();
+    private DAOFuncionario relatorio = new DAOFuncionario();
     private DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
 
     private DAOConfig daoConfig;
@@ -41,7 +41,7 @@ public class ServletRelVenda extends ServletGenericUtil {
 
         try {
             // Instancia o DAO para buscar os funcionários (incluindo inativos se necessário)
-            DAORelatorio relatorio = new DAORelatorio();
+            DAOFuncionario relatorio = new DAOFuncionario();
             List<ModelLogin> funcionarios = relatorio.buscaFuncionarios();
 
             // Adiciona lista de funcionários ao request para que esteja sempre disponível no JSP

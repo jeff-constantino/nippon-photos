@@ -53,10 +53,23 @@
                                                                         <label>Funcionário</label>
                                                                         <select class="form-control" id="funcionarioId" name="funcionarioId">
                                                                             <option value="">Selecione um Funcionário</option>
-                                                                            <c:forEach var="funcionario" items="${funcionariosAtivos}">
-                                                                                <option value="${funcionario.id}"
-                                                                                        <c:if test="${funcionario.id == funcionarioId}">selected</c:if>
-                                                                                >${funcionario.nome}</option>
+                                                                            <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                                <c:if test="${funcionario.status == 'ATIVO'}">
+                                                                                    <option value="${funcionario.id}"
+                                                                                            class="text-success"
+                                                                                            <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
+                                                                                            ${funcionario.nome}
+                                                                                    </option>
+                                                                                </c:if>
+                                                                            </c:forEach>
+                                                                            <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                                <c:if test="${funcionario.status != 'ATIVO'}">
+                                                                                    <option value="${funcionario.id}"
+                                                                                            class="text-danger"
+                                                                                            <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
+                                                                                            ${funcionario.nome}
+                                                                                    </option>
+                                                                                </c:if>
                                                                             </c:forEach>
                                                                         </select>
 
@@ -104,8 +117,8 @@
                                         <tr>
 
 
+                                            <th scope="col">ID</th>
                                             <th scope="col">NOME</th>
-
                                             <th scope="col">TODAL DE FOTOS</th>
                                             <th scope="col">TOTAL DE ENCARTES</th>
                                             <th scope="col">TOTAL DE DIGITAIS</th>
@@ -117,6 +130,9 @@
                                         <tbody>
                                         <c:forEach items="${vendasFuncionarioList}" var="mv">
                                             <tr>
+                                                <td>
+                                                    <c:out value="${mv.vendedor_id}"></c:out>
+                                                </td>
                                                 <td>
                                                     <c:out value="${mv.nome}"></c:out>
                                                 </td>
@@ -156,8 +172,142 @@
                         </div>
                     </div>
                 </div>
+<%--parte 2--%>
+
+                <div class="row ">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <c:if test="${not empty msg}">
+                                    <div>
+                                        <span style="color:#1ad76b; text-align: center">${msg}</span>
+                                    </div>
+                                </c:if>
+                                <h4 class="card-title" STYLE="text-align: center">HISTÓRICO DE CONDUTA</h4>
+
+                                <div  style="overflow-x: hidden; overflow-y: hidden;">
+                                    <table class="table" id="tabelafuncconduta">
+                                        <thead>
+                                        <tr>
+
+                                            <th scope="col">TODAL DE ATRASOS</th>
+                                            <th scope="col">TOTAL DE FALTAS</th>
+                                            <th scope="col">TOTAL DE ADVERTÊNCIAS</th>
+                                            <th scope="col">TOTAL DE SUSPENSÕES</th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach items="${}" var="hc">
+                                            <tr>
+
+                                                <td>
+                                                    <c:out value="${hc.atrasos_total}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${hc.faltas_total}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${hc.advertencias_total}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${hc.suspensoes_total}"></c:out>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+
+                                    </table>
+                                    <!-- Controles de paginação -->
+                                    <div class="pagination">
+
+                                        <c:forEach var="i" begin="1" end="${totalPaginas}">
+                                            <a href="ServletFuncionario?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
+                                        </c:forEach>
+
+                                    </div>
+
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<%-- 3 PARTE--%>
+                <div class="row ">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <c:if test="${not empty msg}">
+                                    <div>
+                                        <span style="color:#1ad76b; text-align: center">${msg}</span>
+                                    </div>
+                                </c:if>
+                                <h4 class="card-title" STYLE="text-align: center">FINANCEIRO</h4>
+
+                                <div  style="overflow-x: hidden; overflow-y: hidden;">
+                                    <table class="table" id="tabelafuncfinanceiro">
+                                        <thead>
+                                        <tr>
 
 
+                                            <th scope="col">NOME</th>
+
+                                            <th scope="col">TODAL DE ATRASOS</th>
+                                            <th scope="col">TOTAL DE FALTAS</th>
+                                            <th scope="col">TOTAL DE ADVERTÊNCIAS</th>
+                                            <th scope="col">TOTAL DE SUSPENSÕES</th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach items="${}" var="hc">
+                                            <tr>
+                                                <td>
+                                                    <c:out value="${hc.nome}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${hc.atrasos_total}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${hc.faltas_total}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${hc.advertencias_total}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${hc.suspensoes_total}"></c:out>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+
+                                    </table>
+                                    <!-- Controles de paginação -->
+                                    <div class="pagination">
+
+                                        <c:forEach var="i" begin="1" end="${totalPaginas}">
+                                            <a href="ServletFuncionario?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
+                                        </c:forEach>
+
+                                    </div>
+
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- content-wrapper ends -->
             <!-- partial:partials/_footer.html -->

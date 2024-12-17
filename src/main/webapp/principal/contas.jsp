@@ -447,7 +447,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <span style="color:#1ad76b; text-align: center">${msg}</span>
-                                    <h4 class="card-title">PAGINA INICIAL</h4>
+
                                     <div class="table-responsive">
 
 

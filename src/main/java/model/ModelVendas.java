@@ -248,4 +248,32 @@ public Boolean novaVenda(){
     public void setDig_total(int dig_total) {
         this.dig_total = dig_total;
     }
+
+    @Override
+    public String toString() {
+        return "ModelVendas{" +
+                "venda_id=" + venda_id +
+                ", nome='" + nome + '\'' +
+                ", prod1_din=" + prod1_din +
+                ", prod1_deb=" + prod1_deb +
+                ", prod1_cred=" + prod1_cred +
+                ", prod1_pix=" + prod1_pix +
+                ", prod2_din=" + prod2_din +
+                ", prod2_deb=" + prod2_deb +
+                ", prod2_cred=" + prod2_cred +
+                ", prod2_pix=" + prod2_pix +
+                ", prod3_din=" + prod3_din +
+                ", prod3_deb=" + prod3_deb +
+                ", prod3_cred=" + prod3_cred +
+                ", prod3_pix=" + prod3_pix +
+                ", sobras=" + sobras +
+                ", data_venda=" + data_venda +
+                ", vendedor_id=" + vendedor_id +
+                ", usuario_cad_id=" + usuario_cad_id +
+                ", ribbon='" + ribbon + '\'' +
+                ", ft_total=" + ft_total +
+                ", enc_total=" + enc_total +
+                ", dig_total=" + dig_total +
+                '}';
+    }
 }

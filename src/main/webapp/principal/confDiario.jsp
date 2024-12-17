@@ -39,7 +39,7 @@
                                                 <h4>Buscar Fechamento</h4>
                                             </button>
 
-                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal2">
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal2">
                                                 <h4>Buscar Conferência</h4>
                                             </button>
 

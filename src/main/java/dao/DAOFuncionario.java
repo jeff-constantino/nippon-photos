@@ -145,6 +145,7 @@ public class DAOFuncionario {
         List<ModelVendas> modelVendasFuncionarioList = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder("SELECT l.nome, ")
+
                 .append("SUM(COALESCE(v.ft_total::INTEGER, 0)) AS foto_total, ")
                 .append("SUM(COALESCE(v.enc_total::INTEGER, 0)) AS encarte_total, ")
                 .append("SUM(COALESCE(v.dig_total::INTEGER, 0)) AS digital_total, ")

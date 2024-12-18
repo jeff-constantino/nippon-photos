@@ -51,7 +51,7 @@
                                                                     </div>
                                                                     <div class="col-auto">
                                                                         <label>Funcionário</label>
-                                                                        <select class="form-control" id="funcionarioId" name="funcionarioId">
+                                                                        <select class="form-control" id="funcionarioId" name="funcionarioId" required>
                                                                             <option value="">Selecione um Funcionário</option>
                                                                             <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
                                                                                 <c:if test="${funcionario.status == 'ATIVO'}">
@@ -97,7 +97,7 @@
 
 
                 </div>
-                <div class="row ">
+                <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
@@ -109,60 +109,61 @@
                                         <span style="color:#1ad76b; text-align: center">${msg}</span>
                                     </div>
                                 </c:if>
-                                <h4 class="card-title" STYLE="text-align: center">VENDAS TOTAIS POR FUNCIONÁRIO</h4>
 
-                                <div  style="overflow-x: hidden; overflow-y: hidden;">
+                               
+                                <div class="row align-items-center mb-3">
+                                    <div class="col-2">
+                                        <label class="float-label">ID:</label>
+                                        <span class="form-bar"></span>
+                                        <input type="text" class="form-control" id="FechaId"
+                                               name="id" placeholder=""
+                                               style="text-align: center; background-color: black" readonly
+                                               value="${funcionarioId}">
+                                    </div>
+                                    <div class="col-auto">
+                                        <label for="data_fecha_mes">Data Fechamento:</label>
+                                        <input type="date" class="form-control"
+                                               id="data_fecha_mes"
+                                               name="data_fecha_mes"
+                                               value="${data_fecha_mes}">
+                                    </div>
+                                </div>
+
+                                <h4 class="card-title" style="text-align: center">VENDAS TOTAIS POR FUNCIONÁRIO</h4>
+
+                                <div style="overflow-x: hidden; overflow-y: hidden;">
                                     <table class="table" id="tabelarelvendas">
                                         <thead>
                                         <tr>
-
-
-                                            <th scope="col">ID</th>
                                             <th scope="col">NOME</th>
-                                            <th scope="col">TODAL DE FOTOS</th>
+                                            <th scope="col">TOTAL DE FOTOS</th>
                                             <th scope="col">TOTAL DE ENCARTES</th>
                                             <th scope="col">TOTAL DE DIGITAIS</th>
-
                                             <th scope="col">TOTAL DE SOBRAS</th>
-
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <c:forEach items="${vendasFuncionarioList}" var="mv">
                                             <tr>
-                                                <td>
-                                                    <c:out value="${mv.vendedor_id}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.nome}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.ft_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.enc_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.dig_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${mv.sobras}"></c:out>
-                                                </td>
+                                                <td><c:out value="${mv.nome}"></c:out></td>
+                                                <td><c:out value="${mv.ft_total}"></c:out></td>
+                                                <td><c:out value="${mv.enc_total}"></c:out></td>
+                                                <td><c:out value="${mv.dig_total}"></c:out></td>
+                                                <td><c:out value="${mv.sobras}"></c:out></td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
-
                                     </table>
+
                                     <!-- Controles de paginação -->
                                     <div class="pagination">
-
                                         <c:forEach var="i" begin="1" end="${totalPaginas}">
-                                            <a href="ServletFuncionario?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
+                                            <a href="ServletFuncionario?acao=imprimirRelatorioVendas&pagina=${i}"
+                                               class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
                                         </c:forEach>
-
                                     </div>
-
                                 </div>
+
                                 <div class="table-responsive">
                                     <table class="table">
                                         <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
@@ -172,18 +173,15 @@
                         </div>
                     </div>
                 </div>
-<%--parte 2--%>
+
+            <%--parte 2--%>
 
                 <div class="row ">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
 
-                                <c:if test="${not empty msg}">
-                                    <div>
-                                        <span style="color:#1ad76b; text-align: center">${msg}</span>
-                                    </div>
-                                </c:if>
+
                                 <h4 class="card-title" STYLE="text-align: center">HISTÓRICO DE CONDUTA</h4>
 
                                 <div  style="overflow-x: hidden; overflow-y: hidden;">
@@ -244,11 +242,7 @@
                         <div class="card">
                             <div class="card-body">
 
-                                <c:if test="${not empty msg}">
-                                    <div>
-                                        <span style="color:#1ad76b; text-align: center">${msg}</span>
-                                    </div>
-                                </c:if>
+
                                 <h4 class="card-title" STYLE="text-align: center">FINANCEIRO</h4>
 
                                 <div  style="overflow-x: hidden; overflow-y: hidden;">
@@ -308,6 +302,78 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <!-- Salário Bruto -->
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">SALÁRIO BRUTO</label>
+                                        <input type="number" class="form-control"
+                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                               tabindex="-1" id="salario_bruto" name="salario_bruto"
+                                               value="${fecha_mes.salario_bruto}">
+                                    </div>
+
+                                    <!-- Vales -->
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">VALES</label>
+                                        <input type="number" class="form-control"
+                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                               tabindex="-1" id="vales_mes" name="vales_mes"
+                                               value="${fecha_mes.vales_mes}">
+                                    </div>
+
+                                    <!-- INSS -->
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">INSS</label>
+                                        <input type="number" class="form-control"
+                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                               id="inss" name="inss" value="${fecha_mes.inss}">
+                                    </div>
+
+                                    <!-- FGTS -->
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">FGTS</label>
+                                        <input type="number" class="form-control"
+                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                               tabindex="-1" id="fgts" name="fgts"
+                                               value="${fecha_mes.fgts}">
+                                    </div>
+
+                                    <!-- Descontos Total -->
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">DESCONTOS TOTAL</label>
+                                        <input type="number" class="form-control"
+                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
+                                               id="descontos_mes" name="descontos_mes"
+                                               value="${fecha_mes.descontos_mes}">
+                                    </div>
+
+
+                                </div>
+                                <div class="row align-items-center">
+                                <!-- Salário Líquido -->
+                                <div class="col-3" STYLE="align-content: center">
+                                    <label style="color: #f2a654">SALÁRIO LIQUÍDO</label>
+                                    <input type="number" class="form-control" readonly
+                                           style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                           tabindex="-1" id="salario_liquido" name="salario_liquido"
+                                           value="${fecha_mes.salario_liquido}">
+
+                                </div>
+                                </div>
+                                <div class="table-responsive mt-3">
+                                    <table class="table">
+                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <!-- content-wrapper ends -->
             <!-- partial:partials/_footer.html -->

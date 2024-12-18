@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class ModelFuncionario implements Serializable {
@@ -9,6 +10,7 @@ public class ModelFuncionario implements Serializable {
 
     private long id;
     private String nome;
+    private LocalDate data_fecha_mes;
 
     private LocalTime atrasos;
     private int faltas;
@@ -25,10 +27,11 @@ public class ModelFuncionario implements Serializable {
     private BigDecimal vendas_digitais;
     private BigDecimal vendas_total;
 
-    private BigDecimal vales;
-    private BigDecimal descontos;
-    private BigDecimal inss;
-    private BigDecimal fgts;
-    private BigDecimal total_salario;
+    private BigDecimal vales_mes;
+    private BigDecimal descontos_mes;
+    private BigDecimal inss_mes;
+    private BigDecimal fgts_mes;
+    private BigDecimal salario_bruto;
+    private BigDecimal salario_liquido;
 
 }

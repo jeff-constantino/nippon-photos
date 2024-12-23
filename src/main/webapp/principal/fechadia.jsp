@@ -230,7 +230,7 @@
                                                 <input type="text" class="form-control"
                                                        id="total_total" name="total_total"
                                                        placeholder="" value="<%= totalFotos %>"
-                                                       style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                       tabindex="-1" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                        disabled>
                                             </div>
                                         </div>
@@ -260,7 +260,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                readonly id="total_ft_din"
-                                                               name="total_ft_din"
+                                                               tabindex="-1" name="total_ft_din"
                                                                value="${fechamento.total_ft_din}">
                                                     </div>
 
@@ -272,7 +272,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                readonly  id="_total_ft_deb"
-                                                               name="total_ft_deb"
+                                                               tabindex="-1"  name="total_ft_deb"
                                                                value="${fechamento.total_ft_deb}">
                                                     </div>
 
@@ -284,7 +284,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                readonly  id="_total_ft_cred"
-                                                               name="total_ft_cred"
+                                                               tabindex="-1"  name="total_ft_cred"
                                                                value="${fechamento.total_ft_cred}">
                                                     </div>
 
@@ -296,7 +296,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                readonly  id="_total_ft_pix"
-                                                               name="total_ft_pix"
+                                                               tabindex="-1" name="total_ft_pix"
                                                                value="${fechamento.total_ft_pix}">
                                                     </div>
 
@@ -307,7 +307,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                id="sobras"
-                                                               name="sobras"
+                                                               tabindex="-1" name="sobras"
                                                                value="${fechamento.sobras}">
                                                     </div>
                                                     <div class="col-6">
@@ -317,7 +317,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                                id="desconto"
-                                                               name="desconto" required
+                                                                name="desconto" required
                                                                value="${fechamento.desconto}">
                                                     </div>
                                                 </div>
@@ -335,7 +335,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
                                                                readonly  id="_total_enc_din"
-                                                               name="total_enc_din"
+                                                               tabindex="-1" name="total_enc_din"
                                                                value="${fechamento.total_enc_din}">
                                                     </div>
 
@@ -347,7 +347,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
                                                                readonly  id="_total_enc_deb"
-                                                               name="total_enc_deb"
+                                                               tabindex="-1" name="total_enc_deb"
                                                                value="${fechamento.total_enc_deb}">
                                                     </div>
 
@@ -359,7 +359,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
                                                                readonly  id="_total_enc_cred"
-                                                               name="total_enc_cred"
+                                                               tabindex="-1" name="total_enc_cred"
                                                                value="${fechamento.total_enc_cred}">
                                                     </div>
 
@@ -371,7 +371,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
                                                                readonly  id="_total_enc_pix"
-                                                               name="total_enc_pix"
+                                                               tabindex="-1" name="total_enc_pix"
                                                                value="${fechamento.total_enc_pix}">
                                                     </div>
                                                 </div>
@@ -388,7 +388,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
                                                                readonly  id="_total_dig_din"
-                                                               name="total_dig_din"
+                                                               tabindex="-1"  name="total_dig_din"
                                                                value="${fechamento.total_dig_din}">
                                                     </div>
 
@@ -400,7 +400,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
                                                                readonly  id="_total_dig_deb"
-                                                               name="total_dig_deb"
+                                                               tabindex="-1"  name="total_dig_deb"
                                                                value="${fechamento.total_dig_deb}">
                                                     </div>
 
@@ -412,7 +412,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
                                                                readonly  id="_total_dig_cred"
-                                                               name="total_dig_cred"
+                                                               tabindex="-1"  name="total_dig_cred"
                                                                value="${fechamento.total_dig_cred}">
                                                     </div>
 
@@ -424,7 +424,7 @@
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
                                                                readonly  id="_total_dig_pix"
-                                                               name="total_dig_pix"
+                                                               tabindex="-1" name="total_dig_pix"
                                                                value="${fechamento.total_dig_pix}">
                                                     </div>
 

@@ -82,26 +82,46 @@ public class DAOFechaDia {
 
         // Consulta os ribbons diretamente na tabela controle_ribbon
         String ribbonSql = "SELECT old_ribbon_1, old_ribbon_2, old_ribbon_3, old_ribbon_4, old_ribbon_5, old_ribbon_6, " +
-                "ribbon_1_atual, ribbon_2_atual, ribbon_3_atual, ribbon_4_atual, ribbon_5_atual, ribbon_6_atual " +
+                "ribbon_1_atual, ribbon_2_atual, ribbon_3_atual, ribbon_4_atual, ribbon_5_atual, ribbon_6_atual, " +
+                "fim_ribbon_1, fim_ribbon_2, fim_ribbon_3, fim_ribbon_4, fim_ribbon_5, fim_ribbon_6, " +
+                "troca_ribbon_1, troca_ribbon_2, troca_ribbon_3, troca_ribbon_4, troca_ribbon_5, troca_ribbon_6 " +
                 "FROM controle_ribbon " +
                 "ORDER BY data_ribbon DESC " +
                 "LIMIT 1";
 
-
         try (PreparedStatement preparedRibbonSql = connection.prepareStatement(ribbonSql)) {
             ResultSet resultadoRibbon = preparedRibbonSql.executeQuery();
             if (resultadoRibbon.next()) {
-
-                modelFechaDia.setOld_ribbon_1(resultadoRibbon.getInt("ribbon_1_atual"));
-                modelFechaDia.setOld_ribbon_2(resultadoRibbon.getInt("ribbon_2_atual"));
-                modelFechaDia.setOld_ribbon_3(resultadoRibbon.getInt("ribbon_3_atual"));
-                modelFechaDia.setOld_ribbon_4(resultadoRibbon.getInt("ribbon_4_atual"));
-                modelFechaDia.setOld_ribbon_5(resultadoRibbon.getInt("ribbon_5_atual"));
-                modelFechaDia.setOld_ribbon_6(resultadoRibbon.getInt("ribbon_6_atual"));
+                // Cálculo para cada ribbon com a fórmula: (ribbon_atual - fim_ribbon) + troca_ribbon
+                modelFechaDia.setOld_ribbon_1(
+                        (resultadoRibbon.getInt("ribbon_1_atual") - resultadoRibbon.getInt("fim_ribbon_1")) +
+                                resultadoRibbon.getInt("troca_ribbon_1")
+                );
+                modelFechaDia.setOld_ribbon_2(
+                        (resultadoRibbon.getInt("ribbon_2_atual") - resultadoRibbon.getInt("fim_ribbon_2")) +
+                                resultadoRibbon.getInt("troca_ribbon_2")
+                );
+                modelFechaDia.setOld_ribbon_3(
+                        (resultadoRibbon.getInt("ribbon_3_atual") - resultadoRibbon.getInt("fim_ribbon_3")) +
+                                resultadoRibbon.getInt("troca_ribbon_3")
+                );
+                modelFechaDia.setOld_ribbon_4(
+                        (resultadoRibbon.getInt("ribbon_4_atual") - resultadoRibbon.getInt("fim_ribbon_4")) +
+                                resultadoRibbon.getInt("troca_ribbon_4")
+                );
+                modelFechaDia.setOld_ribbon_5(
+                        (resultadoRibbon.getInt("ribbon_5_atual") - resultadoRibbon.getInt("fim_ribbon_5")) +
+                                resultadoRibbon.getInt("troca_ribbon_5")
+                );
+                modelFechaDia.setOld_ribbon_6(
+                        (resultadoRibbon.getInt("ribbon_6_atual") - resultadoRibbon.getInt("fim_ribbon_6")) +
+                                resultadoRibbon.getInt("troca_ribbon_6")
+                );
             }
         } catch (SQLException e) {
             throw new Exception("Erro ao consultar ribbons na tabela controle_ribbon: " + e.getMessage());
         }
+
 
         return modelFechaDia;
     }

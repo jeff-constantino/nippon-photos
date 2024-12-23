@@ -110,7 +110,7 @@
                                     </div>
                                 </c:if>
 
-                               
+
                                 <div class="row align-items-center mb-3">
                                     <div class="col-2">
                                         <label class="float-label">ID:</label>
@@ -129,11 +129,11 @@
                                     </div>
                                 </div>
 
-                                <h4 class="card-title" style="text-align: center">VENDAS TOTAIS POR FUNCIONÁRIO</h4>
+                                <h4 class="card-title" style="text-align: center">VENDAS TOTAIS DO FUNCIONÁRIO</h4>
 
                                 <div style="overflow-x: hidden; overflow-y: hidden;">
-                                    <table class="table" id="tabelarelvendas">
-                                        <thead>
+                                    <table class="table table-bordered" id="tabelafuncvendas">
+                                        <thead class="thead-light">
                                         <tr>
                                             <th scope="col">NOME</th>
                                             <th scope="col">TOTAL DE FOTOS</th>
@@ -185,8 +185,8 @@
                                 <h4 class="card-title" STYLE="text-align: center">HISTÓRICO DE CONDUTA</h4>
 
                                 <div  style="overflow-x: hidden; overflow-y: hidden;">
-                                    <table class="table" id="tabelafuncconduta">
-                                        <thead>
+                                    <table class="table table-bordered" id="tabelafuncconduta">
+                                        <thead class="thead-light">
                                         <tr>
 
                                             <th scope="col">TODAL DE ATRASOS</th>
@@ -246,8 +246,8 @@
                                 <h4 class="card-title" STYLE="text-align: center">FINANCEIRO</h4>
 
                                 <div  style="overflow-x: hidden; overflow-y: hidden;">
-                                    <table class="table" id="tabelafuncfinanceiro">
-                                        <thead>
+                                    <table class="table table-bordered" id="tabelafuncfinanceiro">
+                                        <thead class="thead-light">
                                         <tr>
 
 
@@ -307,63 +307,51 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row align-items-center">
-                                    <!-- Salário Bruto -->
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">SALÁRIO BRUTO</label>
-                                        <input type="number" class="form-control"
-                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               tabindex="-1" id="salario_bruto" name="salario_bruto"
-                                               value="${fecha_mes.salario_bruto}">
-                                    </div>
+                                    <table class="table table-bordered" id="tabelafuncfinanceiro2">
+                                        <thead class="thead-light">
+                                        <tr>
 
-                                    <!-- Vales -->
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">VALES</label>
-                                        <input type="number" class="form-control"
-                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               tabindex="-1" id="vales_mes" name="vales_mes"
-                                               value="${fecha_mes.vales_mes}">
-                                    </div>
+                                            <th scope="col">SALÁRIO BRUTO</th>
+                                            <th scope="col">VALES</th>
+                                            <th scope="col">INSS</th>
+                                            <th scope="col">FGTS</th>
 
-                                    <!-- INSS -->
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">INSS</label>
-                                        <input type="number" class="form-control"
-                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               id="inss" name="inss" value="${fecha_mes.inss}">
-                                    </div>
+                                            <th scope="col">DESCONTOS TOTAIS</th>
+                                            <th scope="col">SALÁRIO LIQUÍDO</th>
 
-                                    <!-- FGTS -->
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">FGTS</label>
-                                        <input type="number" class="form-control"
-                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               tabindex="-1" id="fgts" name="fgts"
-                                               value="${fecha_mes.fgts}">
-                                    </div>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach items="${}" var="hc">
+                                            <tr>
 
-                                    <!-- Descontos Total -->
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">DESCONTOS TOTAL</label>
-                                        <input type="number" class="form-control"
-                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               id="descontos_mes" name="descontos_mes"
-                                               value="${fecha_mes.descontos_mes}">
-                                    </div>
+                                                <td>
+                                                    <c:out value="${hc.salario_bruto}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${hc.vales_mes}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${hc.inss}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${hc.fgts}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${hc.descontos_mes}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${hc.salario_liquido}"></c:out>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+
+                                    </table>
 
 
                                 </div>
-                                <div class="row align-items-center">
-                                <!-- Salário Líquido -->
-                                <div class="col-3" STYLE="align-content: center">
-                                    <label style="color: #f2a654">SALÁRIO LIQUÍDO</label>
-                                    <input type="number" class="form-control" readonly
-                                           style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                           tabindex="-1" id="salario_liquido" name="salario_liquido"
-                                           value="${fecha_mes.salario_liquido}">
 
-                                </div>
-                                </div>
                                 <div class="table-responsive mt-3">
                                     <table class="table">
                                         <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->

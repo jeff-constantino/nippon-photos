@@ -28,7 +28,6 @@ public class DAOControleRibbon {
         return null;
     }
 
-    // Atualizar um controle existente
     public void atualizarControle(ModelControleRibbon controle) throws SQLException {
         String sql = "UPDATE controle_ribbon SET " +
                 "data_ribbon = ?, ribbon_1_atual = ?, ribbon_2_atual = ?, ribbon_3_atual = ?, ribbon_4_atual = ?, " +
@@ -37,13 +36,67 @@ public class DAOControleRibbon {
                 "dif_ribbon_3 = ?, dif_ribbon_4 = ?, dif_ribbon_5 = ?, dif_ribbon_6 = ?, troca_ribbon_1 = ?, " +
                 "troca_ribbon_2 = ?, troca_ribbon_3 = ?, troca_ribbon_4 = ?, troca_ribbon_5 = ?, troca_ribbon_6 = ?, " +
                 "fim_ribbon_1 = ?, fim_ribbon_2 = ?, fim_ribbon_3 = ?, fim_ribbon_4 = ?, fim_ribbon_5 = ?, fim_ribbon_6 = ?, " +
+                "old_ribbon_1 = ?, old_ribbon_2 = ?, old_ribbon_3 = ?, old_ribbon_4 = ?, old_ribbon_5 = ?, old_ribbon_6 = ?, " +
                 "observacao_ribbon = ? WHERE id_controle = ?";
         try (PreparedStatement pstUpdate = connection.prepareStatement(sql)) {
             setParametrosAtualizacao(pstUpdate, controle);
-            pstUpdate.setLong(34, controle.getIdControle());
+            pstUpdate.setLong(39, controle.getIdControle()); // Índice ajustado
+
+            // Executa a atualização
             pstUpdate.executeUpdate();
+
+            // Realiza o commit manual
+            connection.commit(); // Confirma a transação
+        } catch (SQLException e) {
+            // Caso haja erro, faz o rollback para reverter as alterações
+            connection.rollback();
+            throw e;
         }
     }
+
+
+    private void setParametrosAtualizacao(PreparedStatement pstUpdate, ModelControleRibbon controle) throws SQLException {
+        pstUpdate.setDate(1, controle.getData_ribbon());
+        pstUpdate.setInt(2, controle.getRibbon_1_atual());
+        pstUpdate.setInt(3, controle.getRibbon_2_atual());
+        pstUpdate.setInt(4, controle.getRibbon_3_atual());
+        pstUpdate.setInt(5, controle.getRibbon_4_atual());
+        pstUpdate.setInt(6, controle.getRibbon_5_atual());
+        pstUpdate.setInt(7, controle.getRibbon_6_atual());
+        pstUpdate.setInt(8, controle.getRev_ribbon_1());
+        pstUpdate.setInt(9, controle.getRev_ribbon_2());
+        pstUpdate.setInt(10, controle.getRev_ribbon_3());
+        pstUpdate.setInt(11, controle.getRev_ribbon_4());
+        pstUpdate.setInt(12, controle.getRev_ribbon_5());
+        pstUpdate.setInt(13, controle.getRev_ribbon_6());
+        pstUpdate.setInt(14, controle.getDif_ribbon_1());
+        pstUpdate.setInt(15, controle.getDif_ribbon_2());
+        pstUpdate.setInt(16, controle.getDif_ribbon_3());
+        pstUpdate.setInt(17, controle.getDif_ribbon_4());
+        pstUpdate.setInt(18, controle.getDif_ribbon_5());
+        pstUpdate.setInt(19, controle.getDif_ribbon_6());
+        pstUpdate.setInt(20, controle.getTroca_ribbon_1());
+        pstUpdate.setInt(21, controle.getTroca_ribbon_2());
+        pstUpdate.setInt(22, controle.getTroca_ribbon_3());
+        pstUpdate.setInt(23, controle.getTroca_ribbon_4());
+        pstUpdate.setInt(24, controle.getTroca_ribbon_5());
+        pstUpdate.setInt(25, controle.getTroca_ribbon_6());
+        pstUpdate.setInt(26, controle.getFim_ribbon_1());
+        pstUpdate.setInt(27, controle.getFim_ribbon_2());
+        pstUpdate.setInt(28, controle.getFim_ribbon_3());
+        pstUpdate.setInt(29, controle.getFim_ribbon_4());
+        pstUpdate.setInt(30, controle.getFim_ribbon_5());
+        pstUpdate.setInt(31, controle.getFim_ribbon_6());
+        pstUpdate.setInt(32, controle.getOld_ribbon_1());
+        pstUpdate.setInt(33, controle.getOld_ribbon_2());
+        pstUpdate.setInt(34, controle.getOld_ribbon_3());
+        pstUpdate.setInt(35, controle.getOld_ribbon_4());
+        pstUpdate.setInt(36, controle.getOld_ribbon_5());
+        pstUpdate.setInt(37, controle.getOld_ribbon_6());
+        pstUpdate.setString(38, controle.getObservacao_ribbon());
+    }
+
+
     public long buscarUltimoIdControle() throws SQLException {
         String sql = "SELECT id_controle FROM controle_ribbon ORDER BY id_controle DESC LIMIT 1";
         try (PreparedStatement pst = connection.prepareStatement(sql);
@@ -153,42 +206,7 @@ public class DAOControleRibbon {
         return controles;
     }
 
-    private void setParametrosAtualizacao(PreparedStatement pstUpdate, ModelControleRibbon controle) throws SQLException {
-        pstUpdate.setDate(1, controle.getData_ribbon());
-        pstUpdate.setInt(2, controle.getRibbon_1_atual());
-        pstUpdate.setInt(3, controle.getRibbon_2_atual());
-        pstUpdate.setInt(4, controle.getRibbon_3_atual());
-        pstUpdate.setInt(5, controle.getRibbon_4_atual());
-        pstUpdate.setInt(6, controle.getRibbon_5_atual());
-        pstUpdate.setInt(7, controle.getRibbon_6_atual());
-        pstUpdate.setInt(8, controle.getRev_ribbon_1());
-        pstUpdate.setInt(9, controle.getRev_ribbon_2());
-        pstUpdate.setInt(10, controle.getRev_ribbon_3());
-        pstUpdate.setInt(11, controle.getRev_ribbon_4());
-        pstUpdate.setInt(12, controle.getRev_ribbon_5());
-        pstUpdate.setInt(13, controle.getRev_ribbon_6());
-        pstUpdate.setInt(14, controle.getDif_ribbon_1());
-        pstUpdate.setInt(15, controle.getDif_ribbon_2());
-        pstUpdate.setInt(16, controle.getDif_ribbon_3());
-        pstUpdate.setInt(17, controle.getDif_ribbon_4());
-        pstUpdate.setInt(18, controle.getDif_ribbon_5());
-        pstUpdate.setInt(19, controle.getDif_ribbon_6());
-        pstUpdate.setInt(20, controle.getTroca_ribbon_1());
-        pstUpdate.setInt(21, controle.getTroca_ribbon_2());
-        pstUpdate.setInt(22, controle.getTroca_ribbon_3());
-        pstUpdate.setInt(23, controle.getTroca_ribbon_4());
-        pstUpdate.setInt(24, controle.getTroca_ribbon_5());
-        pstUpdate.setInt(25, controle.getTroca_ribbon_6());
-        pstUpdate.setInt(26, controle.getFim_ribbon_1());
-        pstUpdate.setInt(27, controle.getFim_ribbon_2());
-        pstUpdate.setInt(28, controle.getFim_ribbon_3());
-        pstUpdate.setInt(29, controle.getFim_ribbon_4());
-        pstUpdate.setInt(30, controle.getFim_ribbon_5());
-        pstUpdate.setInt(31, controle.getFim_ribbon_6());
-        pstUpdate.setString(32, controle.getObservacao_ribbon());
-        // Adicionando os campos old_ribbon
-        pstUpdate.setInt(33, controle.getOld_ribbon_1());
-    }
+
 
 
     private ModelControleRibbon montarControleRibbon(ResultSet rs) throws SQLException {

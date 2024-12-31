@@ -84,26 +84,7 @@
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody id="tabelaRibbonBody">
-<%--                                                                            <c:forEach items="${controleList}" var="ctr">--%>
-<%--                                                                            <tr>--%>
-<%--                                                                                <td>--%>
-<%--                                                                                    <button--%>
-<%--                                                                                            type="button"--%>
-<%--                                                                                            class="btn btn-primary"--%>
-<%--                                                                                            onclick="preencherFormularioRibbon(${ribbon})">--%>
-<%--                                                                                        Selecionar--%>
-<%--                                                                                    </button>--%>
-<%--                                                                                <td><c:out value="${ctr.idControle}" /></td>--%>
-<%--                                                                                <td><c:out value="${ctr.ribbon_1_atual}" /></td>--%>
-<%--                                                                                <td><c:out value="${ctr.ribbon_2_atual}" /></td>--%>
-<%--                                                                                <td><c:out value="${ctr.ribbon_3_atual}" /></td>--%>
-<%--                                                                                <td><c:out value="${ctr.ribbon_4_atual}" /></td>--%>
-<%--                                                                                <td><c:out value="${ctr.ribbon_5_atual}" /></td>--%>
-<%--                                                                                <td><c:out value="${ctr.ribbon_6_atual}" /></td>--%>
-
-<%--                                                                            </tr>--%>
-<%--                                                                            </c:forEach>--%>
-
+<%--
                                                                             </tbody>
                                                                         </table>
                                                                     </div>
@@ -279,9 +260,7 @@
  <%--  Ribbons--%>
 
                                             <div class="row mt-3">
-                                                <div class="col-lg-12 text-center">
-                                                    <h5 style="color: white">ÚLTIMO CONTROLE REGISTRADO</h5>
-                                                </div>
+
 
                                             </div>
                                             <div class="col-4">
@@ -625,7 +604,7 @@
 
 
         function enviarAtualizar() {
-            var form = document.getElementById('formBuscarcontrole');
+            var form = document.getElementById('formEditarcontrole');
             var input = document.createElement('input');
             input.type = 'hidden';
             input.name = 'acao';

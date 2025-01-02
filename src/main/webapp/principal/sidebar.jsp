@@ -14,21 +14,7 @@
     <br>
     <div class="dropdown-divider"></div>
     <ul class="nav">
-        <li class="nav-item profile">
-            <div class="profile-desc">
-                <div class="profile-pic">
-                    <div class="count-indicator">
-                        <img class="img-xs rounded-circle " src="<%= request.getContextPath() %>/assets/images/faces/face.jpg" alt="">
-                        <span class="count bg-success"></span>
-                    </div>
-                    <div class="profile-name">
-                        <h5 class="mb-0 font-weight-normal"><%=request.getSession().getAttribute("usuario") %></h5>
 
-                    </div>
-                </div>
-
-            </div>
-        </li>
         <li class="nav-item nav-category">
             <span class="nav-link" href="<%= request.getContextPath() %>/ServletPrincipal">ADMINISTRAÇÃO</span>
         </li>

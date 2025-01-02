@@ -65,7 +65,7 @@ public class ServletConfDiario extends HttpServlet {
             if (conf != null) {
                 // Armazena o objeto conf no request para ser acessado no JSP
                 request.setAttribute("conf_diario", conf);
-                System.out.println(conf.toString());
+
 
                 // Use forward em vez de sendRedirect
                 request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);
@@ -89,7 +89,7 @@ public class ServletConfDiario extends HttpServlet {
         if (conf != null) {
             // Armazena o objeto conf no request para ser acessado no JSP
             request.setAttribute("conf_diario", conf);
-            System.out.println(conf.toString());
+
 
             // Use forward em vez de sendRedirect
             request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);

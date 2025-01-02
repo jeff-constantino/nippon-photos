@@ -298,12 +298,13 @@
                         font-size: 14px; /* Ajusta o tamanho da fonte (opcional) */
                     }
                 </style>
-             <form id="formAtualizar" method="POST" action="<%= request.getContextPath() %>/ServletConfDiario">
+                <form id="formAtualizar" method="POST" action="<%= request.getContextPath() %>/ServletConfDiario">
 
                 <div class="row ">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
+
                                 <h4 class="card-title" style="text-align: center">VALORES</h4>
                                 <div class="table-responsive"  style="overflow-x: hidden;overflow-y: hidden">
                                     <table class="table">

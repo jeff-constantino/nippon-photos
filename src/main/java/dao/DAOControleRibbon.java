@@ -363,7 +363,7 @@ public class DAOControleRibbon {
 
 
     public List<ModelControleRibbon> listarRibbon(int pagina, int tamanho) throws SQLException {
-       
+
         List<ModelControleRibbon> controle = new ArrayList<>();
         String sql = "SELECT * FROM controle_ribbon ORDER BY data_ribbon DESC LIMIT ? OFFSET ?";
         int offset = (pagina - 1) * tamanho;

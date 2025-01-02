@@ -34,6 +34,7 @@ public class ServletControleRibbon extends ServletGenericUtil {
             ModelControleRibbon ultimoControle = daoControleRibbon.buscarUltimoControle();
             request.setAttribute("ultimoControle", ultimoControle);
 
+
             // Verificar se há uma mensagem na sessão
             String msg = (String) request.getSession().getAttribute("msg");
             if (msg != null) {

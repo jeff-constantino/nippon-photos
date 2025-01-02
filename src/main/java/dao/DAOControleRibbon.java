@@ -2,7 +2,6 @@ package dao;
 
 import connection.SingleConnectionBanco;
 import model.ModelControleRibbon;
-import model.ModelVendas;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,14 +18,26 @@ public class DAOControleRibbon {
     // Buscar o último controle registrado
     public ModelControleRibbon buscarUltimoControle() throws SQLException {
         String sql = "SELECT * FROM controle_ribbon ORDER BY data_ribbon DESC LIMIT 1";
+
         try (PreparedStatement pst = connection.prepareStatement(sql);
              ResultSet rs = pst.executeQuery()) {
+
+
             if (rs.next()) {
-                return montarControleRibbon(rs);
+
+                ModelControleRibbon controle = montarControleRibbon(rs);
+
+                return controle;
+            } else {
+
             }
+        } catch (SQLException e) {
+            System.err.println("Erro ao executar a consulta: " + e.getMessage());
+            throw e; // Relança a exceção para ser tratada pelo chamador
         }
         return null;
     }
+
 
     public void atualizarControle(ModelControleRibbon controle) throws SQLException {
         String sql = "UPDATE controle_ribbon SET " +
@@ -104,6 +115,7 @@ public class DAOControleRibbon {
             if (rs.next()) {
                 return rs.getLong("id_controle");
             }
+
         }
         throw new SQLException("Nenhum registro encontrado na tabela controle_ribbon.");
     }
@@ -337,7 +349,7 @@ public class DAOControleRibbon {
                 controles.setObservacao_ribbon(rs.getString("observacao_ribbon"));
 
                 modelControleRibbonList.add(controles);
-                System.out.println(controles.toString());
+
             }
 
         } catch (Exception e) {
@@ -351,7 +363,7 @@ public class DAOControleRibbon {
 
 
     public List<ModelControleRibbon> listarRibbon(int pagina, int tamanho) throws SQLException {
-        System.out.println("Método listarRibbon chamado!");
+       
         List<ModelControleRibbon> controle = new ArrayList<>();
         String sql = "SELECT * FROM controle_ribbon ORDER BY data_ribbon DESC LIMIT ? OFFSET ?";
         int offset = (pagina - 1) * tamanho;

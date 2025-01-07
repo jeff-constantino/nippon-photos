@@ -196,6 +196,8 @@
                     </div>
                 </div>
 
+
+
                 <!-- RANKING DE PRODUÇÃO -->
                 <div class="row">
                     <div class="col-12 grid-margin">
@@ -211,25 +213,27 @@
                                 <!-- Script para gerar o gráfico -->
                                 <script>
                                     const ctxProducao = document.getElementById('ProdChart').getContext('2d');
+
+                                    // Arrays para armazenar os dados
                                     var nomesProducao = [];
                                     var totalProducao = [];
 
-                                    // Preenchendo os dados a partir de vendasList no JSP
-                                    <c:if test="${not empty vendasList}">
+                                    // Preenchendo os dados do gráfico
                                     <c:forEach var="venda" items="${vendasList}">
-                                    nomesProducao.push("${venda.nome}");
-                                    totalProducao.push(${venda.totalProducao});
+                                    var producao = ${venda.totalProducao}; // Total de produção
+                                    nomesProducao.push("${venda.nome}"); // Nome do funcionário
+                                    totalProducao.push(producao); // Produção total
                                     </c:forEach>
-                                    </c:if>
 
-                                    // Processando e ordenando os dados para o gráfico
+                                    // Criando um array de objetos com o nome e a produção
                                     var producaoData = nomesProducao.map((nome, index) => {
                                         return { nome: nome, totalProducao: totalProducao[index] };
                                     });
 
+                                    // Ordenando o array de objetos pela produção de forma decrescente
                                     producaoData.sort((a, b) => b.totalProducao - a.totalProducao);
 
-                                    // Atualizando as arrays após ordenação
+                                    // Atualizando as arrays de nomes e produção após ordenação
                                     nomesProducao = producaoData.map(item => item.nome);
                                     totalProducao = producaoData.map(item => item.totalProducao);
 
@@ -237,50 +241,75 @@
                                     const prodChart = new Chart(ctxProducao, {
                                         type: 'bar', // Tipo de gráfico: 'bar' para barra
                                         data: {
-                                            labels: nomesProducao,  // Utilizando apenas os nomes no eixo X
+                                            labels: nomesProducao.map((nome, index) => {
+                                                return nome + " - " + totalProducao[index]; // Nome e produção na mesma linha
+                                            }),
                                             datasets: [{
                                                 label: 'Produção Total',
-                                                data: totalProducao,
+                                                data: totalProducao, // Dados de produção no eixo Y
                                                 backgroundColor: [
-                                                    'rgba(50,205,50)', 'rgba(54, 162, 235)', 'rgba(255, 206, 86)',
-                                                    'rgba(75, 192, 192)', 'rgba(153, 102, 255)', 'rgba(255, 99, 132)'
-                                                ],
+                                                    'rgba(50,205,50)', // Cor vibrante 1
+                                                    'rgba(54, 162, 235)', // Cor vibrante 2 (azul)
+                                                    'rgba(255, 206, 86)', // Cor vibrante 3 (amarelo)
+                                                    'rgba(75, 192, 192)', // Cor vibrante 4 (verde claro)
+                                                    'rgba(153, 102, 255)', // Cor vibrante 5 (roxo)
+                                                    'rgba(255, 99, 132)' // Cor vibrante 6 (laranja)
+                                                ], // Cores vibrantes para as barras
                                                 borderColor: [
-                                                    'rgba(107,142,35, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
-                                                    'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 99, 132, 1)'
-                                                ],
+                                                    'rgba(107,142,35, 1)', // Cor da borda vibrante 1
+                                                    'rgba(54, 162, 235, 1)', // Cor da borda vibrante 2
+                                                    'rgba(255, 206, 86, 1)', // Cor da borda vibrante 3
+                                                    'rgba(75, 192, 192, 1)', // Cor da borda vibrante 4
+                                                    'rgba(153, 102, 255, 1)', // Cor da borda vibrante 5
+                                                    'rgba(255, 99, 132, 1)' // Cor da borda vibrante 6
+                                                ], // Cores da borda das barras
                                                 borderWidth: 1
                                             }]
                                         },
                                         options: {
-                                            responsive: true,
-                                            maintainAspectRatio: false,
+                                            responsive: true, // Gráfico responsivo
+                                            maintainAspectRatio: false, // Permite que o gráfico se ajuste ao tamanho do contêiner
+                                            animation: {
+                                                duration: 1500, // Duração da animação
+                                                easing: 'easeInOutCubic' // Efeito de animação
+                                            },
                                             scales: {
                                                 y: {
-                                                    beginAtZero: false,
+                                                    beginAtZero: true, // O gráfico começa no 0
                                                     title: {
-                                                        display: true,
-                                                        text: 'Produção Total'
+                                                        display: false,
+                                                        text: 'Produção Total', // Título do eixo Y
+                                                        font: {
+                                                            size: 16
+                                                        }
+                                                    },
+                                                    ticks: {
+                                                        font: {
+                                                            size: 14, // Tamanho da fonte do eixo Y
+                                                            weight: 'bold'
+                                                        }
                                                     }
                                                 },
                                                 x: {
-                                                    title: { display: false },
-                                                }
-                                            },
-                                            tooltips: {
-                                                callbacks: {
-                                                    // Personalizando o tooltip para mostrar nome e produção
-                                                    label: function(tooltipItem, data) {
-                                                        const index = tooltipItem.index;
-                                                        const nome = nomesProducao[index];
-                                                        const producao = totalProducao[index];
-                                                        return nome + ': ' + producao; // Nome e produção no tooltip
+                                                    title: {
+                                                        display: false, // Título do eixo X oculto
+                                                    },
+                                                    ticks: {
+                                                        font: {
+                                                            size: 14, // Tamanho da fonte do eixo X
+                                                            weight: 'bold'
+                                                        }
                                                     }
                                                 }
                                             },
                                             plugins: {
                                                 legend: {
-                                                    labels: { font: { size: 14, weight: 'bold' } }
+                                                    labels: {
+                                                        font: {
+                                                            size: 14, // Tamanho da fonte da legenda
+                                                            weight: 'bold'
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -291,6 +320,8 @@
                         </div>
                     </div>
                 </div>
+
+
 
 
 

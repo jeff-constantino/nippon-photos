@@ -25148,4 +25148,10 @@ dl li {
 .blank-page {
   height: 89vh;
 }
+
+#vendasChart {
+  width: 100% !important;
+  height: 400px !important; /* Ou o valor que você preferir */
+}
+
 /*# sourceMappingURL=maps/style.css.map */

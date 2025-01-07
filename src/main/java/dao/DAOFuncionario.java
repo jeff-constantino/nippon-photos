@@ -41,8 +41,8 @@ public class DAOFuncionario {
             sql.append(" AND v.data_venda BETWEEN TO_DATE(?, 'YYYY-MM-DD') AND TO_DATE(?, 'YYYY-MM-DD')");
         }
 
-        // Ordenação: primeiro os ativos, depois por nome, e por último, as vendas em ordem decrescente
-        sql.append(" ORDER BY CASE WHEN l.status = 'Ativo' THEN 0 ELSE 1 END, l.nome, v.venda_id DESC LIMIT ? OFFSET ?");
+        // Ordenação: primeiro as vendas mais atuais
+        sql.append(" ORDER BY v.data_venda DESC LIMIT ? OFFSET ?");
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql.toString())) {
             int index = 1;
@@ -96,6 +96,65 @@ public class DAOFuncionario {
 
         return modelVendasList;
     }
+
+    public List<ModelVendas> consultarRanking(String dataInicial, String dataFinal, int offset, int limit) throws Exception {
+        List<ModelVendas> rankingList = new ArrayList<>();
+
+        // Constrói a consulta SQL para o ranking
+        StringBuilder sql = new StringBuilder(
+                "SELECT l.id AS vendedor_id, l.nome, \n" +
+                        "    SUM(v.prod1_din + v.prod1_deb + v.prod1_cred + v.prod1_pix) AS total_vendas, \n" +
+                        "    SUM(v.prod1_din + v.prod1_deb + v.prod1_cred + v.prod1_pix + v.sobras) AS total_producao \n" + // Somando as vendas + sobras para o ranking de produção
+                        "FROM vendas v \n" +
+                        "INNER JOIN model_login l ON v.vendedor_id = l.id \n" +
+                        "WHERE 1=1\n ");
+
+        // Adiciona condições de data, se fornecidas
+        if (dataInicial != null && !dataInicial.isEmpty() && dataFinal != null && !dataFinal.isEmpty()) {
+            sql.append(" AND v.data_venda BETWEEN TO_DATE(?, 'YYYY-MM-DD') AND TO_DATE(?, 'YYYY-MM-DD') ");
+        }
+
+        // Agrupa e ordena pelo total de vendas (descendente) para criar o ranking
+        sql.append(" GROUP BY l.id, l.nome ");
+        sql.append(" ORDER BY total_vendas DESC LIMIT ? OFFSET ?");
+
+        try (PreparedStatement preparedSql = connection.prepareStatement(sql.toString())) {
+            int index = 1;
+
+            // Define os parâmetros de data, se fornecidos
+            if (dataInicial != null && !dataInicial.isEmpty() && dataFinal != null && !dataFinal.isEmpty()) {
+                preparedSql.setString(index++, dataInicial);
+                preparedSql.setString(index++, dataFinal);
+            }
+
+            // Define o limit e offset para a paginação do ranking
+            preparedSql.setInt(index++, limit);   // Número máximo de registros por página
+            preparedSql.setInt(index++, offset); // Posição inicial (baseada na página)
+
+            // Executa a consulta
+            ResultSet resultado = preparedSql.executeQuery();
+
+            // Processa os resultados
+            while (resultado.next()) {
+                ModelVendas modelVenda = new ModelVendas();
+                modelVenda.setVendedor_id(resultado.getString("vendedor_id"));
+                modelVenda.setNome(resultado.getString("nome"));
+                modelVenda.setTotalFotosVendidas(resultado.getInt("total_vendas"));
+                modelVenda.setTotalProducao(resultado.getInt("total_producao")); // Adicionando o total de produção
+
+                rankingList.add(modelVenda);
+                System.out.println(rankingList.toString());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao consultar ranking: " + e.getMessage());
+        }
+
+        return rankingList;
+    }
+
+
 
     public int contarVendas(String funcionarioId, String dataInicial, String dataFinal) throws Exception {
         int totalRegistros = 0;

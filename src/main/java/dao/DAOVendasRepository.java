@@ -42,6 +42,7 @@ public class DAOVendasRepository {
                 + "VALUES (?, UPPER(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            connection.setAutoCommit(false); // Desabilita o auto-commit
             // Define os parâmetros
             preparedSql.setLong(1, modelVendas.getVendedor_id());
             preparedSql.setString(2, modelVendas.getNome());
@@ -110,6 +111,7 @@ public class DAOVendasRepository {
                 + "WHERE venda_id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            connection.setAutoCommit(false); // Desabilita o auto-commit
             // Define os parâmetros
             statement.setString(1, modelVendas.getNome());
             statement.setLong(2, modelVendas.getVendedor_id());

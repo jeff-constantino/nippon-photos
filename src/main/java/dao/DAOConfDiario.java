@@ -58,6 +58,7 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
 
         try (PreparedStatement psConfDia = connection.prepareStatement(sqlConfDia);
              PreparedStatement psControleRibbon = connection.prepareStatement(sqlControleRibbon)) {
+            connection.setAutoCommit(false); // Desabilita o auto-commit
 
             // Configuração para conf_dia
             psConfDia.setBigDecimal(1, confDiario.getValor_din());

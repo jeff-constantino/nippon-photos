@@ -387,7 +387,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
-                                                               readonly  id="_total_dig_din"
+                                                               readonly  id="total_dig_din"
                                                                tabindex="-1"  name="total_dig_din"
                                                                value="${fechamento.total_dig_din}">
                                                     </div>
@@ -399,7 +399,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
-                                                               readonly  id="_total_dig_deb"
+                                                               readonly  id="total_dig_deb"
                                                                tabindex="-1"  name="total_dig_deb"
                                                                value="${fechamento.total_dig_deb}">
                                                     </div>
@@ -411,7 +411,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
-                                                               readonly  id="_total_dig_cred"
+                                                               readonly  id="total_dig_cred"
                                                                tabindex="-1"  name="total_dig_cred"
                                                                value="${fechamento.total_dig_cred}">
                                                     </div>
@@ -423,7 +423,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
-                                                               readonly  id="_total_dig_pix"
+                                                               readonly  id="total_dig_pix"
                                                                tabindex="-1" name="total_dig_pix"
                                                                value="${fechamento.total_dig_pix}">
                                                     </div>
@@ -866,10 +866,10 @@
             const encartes_pix = parseFloat(document.getElementById("_total_enc_pix").value || 0);
 
             // DIGITAIS
-            const digitais_din = parseFloat(document.getElementById("_total_dig_din").value || 0);
-            const digitais_deb = parseFloat(document.getElementById("_total_dig_deb").value || 0);
-            const digitais_cred = parseFloat(document.getElementById("_total_dig_cred").value || 0);
-            const digitais_pix = parseFloat(document.getElementById("_total_dig_pix").value || 0);
+            const digitais_din = parseFloat(document.getElementById("total_dig_din").value || 0);
+            const digitais_deb = parseFloat(document.getElementById("total_dig_deb").value || 0);
+            const digitais_cred = parseFloat(document.getElementById("total_dig_cred").value || 0);
+            const digitais_pix = parseFloat(document.getElementById("total_dig_pix").value || 0);
 
             // Valor do desconto
             const desconto = parseFloat(document.getElementById("desconto").value || 0);

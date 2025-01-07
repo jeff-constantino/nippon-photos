@@ -71,7 +71,7 @@
 
                                                                                     <form class="form-material" id="formBuscaFuncionario1"
                                                                                           method="get"
-                                                                                          action="<%= request.getContextPath() %>/ServletVendas">
+                                                                                          action="<%= request.getContextPath() %>/ServletMedidaDisciplinar">
 
                                                                                         <div class="row">
 
@@ -125,8 +125,8 @@
 
                                                                                     </form>
 
-                                                                                    <form action="<%= request.getContextPath() %>/ServletVendas"
-                                                                                          method="post" id="formBuscarVenda" name="formBuscarVenda">
+                                                                                    <form action="<%= request.getContextPath() %>/ServletMedidaDisciplinar"
+                                                                                          method="post" id="formAdvertencia" name="formAdvertencia">
                                                                                         <input type="hidden" name="acao" value="">
 
                                                                                         <div class="col-6">
@@ -138,7 +138,7 @@
                                                                                             <div class="col-3">
                                                                                                 <label for="outer_dataVenda">Data da Advertência</label>
                                                                                                 <input type="date" class="form-control"
-                                                                                                       id="outer_dataVenda" name="dataVenda"
+                                                                                                       id="data_advertencia" name="data_advertencia"
                                                                                                        required
                                                                                                        value="${formattedDataVenda != null ? formattedDataVenda : ''}">
                                                                                             </div>
@@ -146,7 +146,7 @@
                                                                                                 <label class="float-label">ID:</label>
                                                                                                 <span class="form-bar"></span>
                                                                                                 <input type="text" class="form-control"
-                                                                                                       id="vendedor_id" name="vendedor_id"
+                                                                                                       id="id_advertencia" name="id"
                                                                                                        placeholder=""
                                                                                                        style="background-color: black" readonly
                                                                                                        value="${modelVendas.id}">
@@ -155,7 +155,7 @@
                                                                                                 <label class="float-label">FUNCIONÁRIO:</label>
                                                                                                 <span class="form-bar"></span>
                                                                                                 <input type="text" class="form-control"
-                                                                                                       id="vendedor" name="nome" placeholder=""
+                                                                                                       id="nome_advertencia" name="nome" placeholder=""
                                                                                                        style="background-color: black" readonly
                                                                                                        value="${modelVendas.nome}">
                                                                                             </div>
@@ -336,8 +336,8 @@
 
                                                                                     </form>
 
-                                                                                    <form action="<%= request.getContextPath() %>/ServletVendas"
-                                                                                          method="post" id="formBuscarVenda" name="formBuscarVenda">
+                                                                                    <form action="<%= request.getContextPath() %>/ServletMedidasDisciplinares"
+                                                                                          method="post" id="formFaltas" name="formFaltas">
                                                                                         <input type="hidden" name="acao" value="">
 
                                                                                         <div class="col-6">
@@ -349,7 +349,7 @@
                                                                                             <div class="col-3">
                                                                                                 <label for="outer_dataVenda">Data da Falta</label>
                                                                                                 <input type="date" class="form-control"
-                                                                                                       id="outer_dataVenda" name="dataVenda"
+                                                                                                       id="data_falta" name="data_falta"
                                                                                                        required
                                                                                                        value="${formattedDataVenda != null ? formattedDataVenda : ''}">
                                                                                             </div>
@@ -357,7 +357,7 @@
                                                                                                 <label class="float-label">ID:</label>
                                                                                                 <span class="form-bar"></span>
                                                                                                 <input type="text" class="form-control"
-                                                                                                       id="vendedor_id" name="vendedor_id"
+                                                                                                       id="id_falta" name="id"
                                                                                                        placeholder=""
                                                                                                        style="background-color: black" readonly
                                                                                                        value="${modelVendas.id}">
@@ -366,7 +366,7 @@
                                                                                                 <label class="float-label">FUNCIONÁRIO:</label>
                                                                                                 <span class="form-bar"></span>
                                                                                                 <input type="text" class="form-control"
-                                                                                                       id="vendedor" name="nome" placeholder=""
+                                                                                                       id="nome_falta" name="nome" placeholder=""
                                                                                                        style="background-color: black" readonly
                                                                                                        value="${modelVendas.nome}">
                                                                                             </div>
@@ -495,7 +495,7 @@
 
                                                                                     <form class="form-material" id="formBuscaFuncionario3"
                                                                                           method="get"
-                                                                                          action="<%= request.getContextPath() %>/ServletVendas">
+                                                                                          action="<%= request.getContextPath() %>/ServletMedidasDisciplinares">
 
                                                                                         <div class="row">
 
@@ -549,8 +549,8 @@
 
                                                                                     </form>
 
-                                                                                    <form action="<%= request.getContextPath() %>/ServletVendas"
-                                                                                          method="post" id="formBuscarVenda" name="formBuscarVenda">
+                                                                                    <form action="<%= request.getContextPath() %>/ServletMedidasDisciplinares"
+                                                                                          method="post" id="formSuspensao" name="formSuspensao">
                                                                                         <input type="hidden" name="acao" value="">
 
                                                                                         <div class="col-6">
@@ -560,9 +560,9 @@
                                                                                         </div>
                                                                                         <div class="row">
                                                                                             <div class="col-3">
-                                                                                                <label for="outer_dataVenda">Data da Falta</label>
+                                                                                                <label for="data_suspensao">Data da Suspensão</label>
                                                                                                 <input type="date" class="form-control"
-                                                                                                       id="outer_dataVenda" name="dataVenda"
+                                                                                                       id="data_suspensao" name="data_suspensao"
                                                                                                        required
                                                                                                        value="${formattedDataVenda != null ? formattedDataVenda : ''}">
                                                                                             </div>
@@ -570,7 +570,7 @@
                                                                                                 <label class="float-label">ID:</label>
                                                                                                 <span class="form-bar"></span>
                                                                                                 <input type="text" class="form-control"
-                                                                                                       id="vendedor_id" name="vendedor_id"
+                                                                                                       id="id_suspensao" name="id"
                                                                                                        placeholder=""
                                                                                                        style="background-color: black" readonly
                                                                                                        value="${modelVendas.id}">
@@ -579,9 +579,17 @@
                                                                                                 <label class="float-label">FUNCIONÁRIO:</label>
                                                                                                 <span class="form-bar"></span>
                                                                                                 <input type="text" class="form-control"
-                                                                                                       id="vendedor" name="nome" placeholder=""
+                                                                                                       id="nome_suspensao" name="nome" placeholder=""
                                                                                                        style="background-color: black" readonly
                                                                                                        value="${modelVendas.nome}">
+                                                                                            </div>
+                                                                                            <div class="col-sm-1">
+                                                                                                <label class="float-label">DIAS:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control"
+                                                                                                       id="dias_suspensao" name="susp_dias" placeholder=""
+                                                                                                       style="background-color: white; color: black; font-weight: bold"
+                                                                                                       value="${modelVendas.nome}" >
                                                                                             </div>
 
                                                                                         </div>
@@ -663,7 +671,7 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">DEATH NOTE</h4>
+                                <h4 class="card-title">Histórico Disciplinar</h4>
                                 <div class="table-responsive">
                                     <table class="table">
                                         <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->

@@ -13,9 +13,18 @@ public class ModelFuncionario implements Serializable {
     private LocalDate data_fecha_mes;
 
     private LocalTime atrasos;
-    private int faltas;
-    private int advertencias;
-    private int suspensoes;
+    private LocalTime horas_trabalhadas;
+    private LocalTime adc_noturno;
+    private LocalTime banco_horas;
+
+
+    private LocalDate data_falta;
+    private LocalDate data_adv;
+    private String adv_motivo;
+
+    private LocalDate data_suspensao;
+    private int susp_dias;
+    private String susp_motivo;
 
     private int total_fotos;
     private int total_encartes;

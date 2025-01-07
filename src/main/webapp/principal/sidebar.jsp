@@ -46,7 +46,7 @@
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletDespesas">Despesas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="principal/salarios.jsp">Salários</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletVales">Vales</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="">Ranking de Funcionários</a></li>
+
 
                 </ul>
             </div>
@@ -69,6 +69,7 @@
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletFuncionario">Funcionários</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Contas e Despesas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">DRE</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletRanking">Ranking de Funcionários</a></li>
 
                 </ul>
             </div>
@@ -90,7 +91,7 @@
                                 <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletControleRibbon"> Controle de Ribbon </a></li>
                                 <li class="nav-item"> <a class="nav-link" href=""> 505 </a></li>
                                 <li class="nav-item"> <a class="nav-link" href=""> 606 </a></li>
-                                <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/principal/deathnote.jsp">Death Note</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/principal/medidasDisciplinares.jsp">Medidas Disciplinares</a></li>
                             </ul>
                         </div>
                     </li>

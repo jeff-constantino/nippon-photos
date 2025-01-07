@@ -113,7 +113,7 @@ public class ServletConfDiario extends HttpServlet {
             atualizarConferencia(request, response);
 
             // Mensagem de sucesso enviada no redirecionamento
-            request.setAttribute("msg", "Configuração do dia atualizada com sucesso!");
+            request.setAttribute("msg", "Conferência do dia Confirmada com sucesso!");
             request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);
         } catch (Exception e) {
             // Em caso de erro, exibe a mensagem de erro
@@ -202,7 +202,7 @@ public class ServletConfDiario extends HttpServlet {
             daoConfDiario.atualizarConfiguracao(confDiario);
 
             // Passando a mensagem de sucesso para ser exibida após o redirecionamento
-            request.setAttribute("msg", "Configuração atualizada com sucesso!");
+            request.setAttribute("msg", "Conferência atualizada com sucesso!");
 
             // Não faça nada aqui, apenas retorne para o método doPost
         } catch (Exception e) {

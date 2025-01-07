@@ -42,6 +42,10 @@ public class ModelVendas implements Serializable {
 
     private int dig_total;
 
+    private int totalFotosVendidas ;
+    private int totalProducao;
+
+
 
 
 
@@ -59,6 +63,14 @@ public Boolean novaVenda(){
 }
 
 
+
+    public int getTotalProducao() {
+        return totalProducao;
+    }
+
+    public void setTotalProducao(int totalProducao) {
+        this.totalProducao = totalProducao;
+    }
 
     public Long getVenda_id() {
         return venda_id;
@@ -92,9 +104,13 @@ public Boolean novaVenda(){
         this.data_venda = data_venda;
     }
 
+    public int getTotalFotosVendidas() {
+        return totalFotosVendidas;
+    }
 
-
-
+    public void setTotalFotosVendidas(int totalFotosVendidas) {
+        this.totalFotosVendidas = totalFotosVendidas;
+    }
 
     public int getProd1_din() {
         return prod1_din;
@@ -249,6 +265,7 @@ public Boolean novaVenda(){
         this.dig_total = dig_total;
     }
 
+
     @Override
     public String toString() {
         return "ModelVendas{" +
@@ -274,6 +291,7 @@ public Boolean novaVenda(){
                 ", ft_total=" + ft_total +
                 ", enc_total=" + enc_total +
                 ", dig_total=" + dig_total +
+                ", totalFotosVendidas=" + totalFotosVendidas +
                 '}';
     }
 }

@@ -42,29 +42,28 @@
                                                                     <span style="color:#1ad76b; text-align: center">${msg}</span>
                                                                 </div>
                                                             </c:if>
-                                                            <form action="<%= request.getContextPath() %>/ServletRanking" method="get" id="formDataVenda" name="formDataVenda">
-                                                                <input type="hidden" name="acao" value="imprimirRelatorioVendas">
-                                                                <div class="form-row align-items-center">
-                                                                    <div class="col-auto">
-                                                                        <label for="dataInicial">Data Inicial</label>
-                                                                        <input type="date" class="form-control" id="dataInicial" name="dataInicial" value="${dataInicial}">
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <label for="dataFinal">Data Final</label>
-                                                                        <input type="date" class="form-control" id="dataFinal" name="dataFinal" value="${dataFinal}">
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <label>Funcionário</label>
+                                                              <form action="<%= request.getContextPath() %>/ServletRanking" method="get" id="formDataVenda" name="formDataVenda">
+                                                                  <input type="hidden" name="acao" value="imprimirRelatorioVendas">
+                                                                  <div class="form-row align-items-center">
+                                                                      <div class="col-auto">
+                                                                          <label for="dataInicial">Data Inicial</label>
+                                                                          <input type="date" class="form-control" id="dataInicial" name="dataInicial" value="${dataInicial}">
+                                                                      </div>
+                                                                      <div class="col-auto">
+                                                                          <label for="dataFinal">Data Final</label>
+                                                                          <input type="date" class="form-control" id="dataFinal" name="dataFinal" value="${dataFinal}">
+                                                                      </div>
+
+                                                                      <!-- Espaço vazio para alinhar o botão -->
+                                                                      <div class="col-auto">
+                                                                          <label for="ranking" class="invisible">Ranking</label>
+                                                                          <button type="submit" class="btn btn-primary form-control">Gerar Ranking</button>
+                                                                      </div>
+                                                                  </div>
+                                                              </form>
 
 
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-
-                                                        </div>
+                                                          </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
                                                         </div>
@@ -150,7 +149,7 @@
                                                 y: {
                                                     beginAtZero: false, // O gráfico começa no 0
                                                     title: {
-                                                        display: true,
+                                                        display: false,
                                                         text: 'Fotos Vendidas', // Título do eixo Y
                                                         font: {
                                                             size: 16
@@ -211,30 +210,26 @@
 
                                 <!-- Script para gerar o gráfico -->
                                 <script>
-                                    // Variáveis para o gráfico de produção
                                     const ctxProducao = document.getElementById('ProdChart').getContext('2d');
-
-                                    // Arrays para armazenar os dados
                                     var nomesProducao = [];
                                     var totalProducao = [];
 
-                                    // Verificação para garantir que vendasList não está vazio
+                                    // Preenchendo os dados a partir de vendasList no JSP
                                     <c:if test="${not empty vendasList}">
                                     <c:forEach var="venda" items="${vendasList}">
-                                    nomesProducao.push("${venda.nome}");          // Nome do funcionário
-                                    totalProducao.push(${venda.totalProducao});   // Total de produção (prod1 + sobras)
+                                    nomesProducao.push("${venda.nome}");
+                                    totalProducao.push(${venda.totalProducao});
                                     </c:forEach>
                                     </c:if>
 
-                                    // Combinando os dados em um array de objetos
+                                    // Processando e ordenando os dados para o gráfico
                                     var producaoData = nomesProducao.map((nome, index) => {
                                         return { nome: nome, totalProducao: totalProducao[index] };
                                     });
 
-                                    // Ordenando os dados pela produção de forma decrescente
                                     producaoData.sort((a, b) => b.totalProducao - a.totalProducao);
 
-                                    // Atualizando as arrays de nomes e produção após a ordenação
+                                    // Atualizando as arrays após ordenação
                                     nomesProducao = producaoData.map(item => item.nome);
                                     totalProducao = producaoData.map(item => item.totalProducao);
 
@@ -242,77 +237,50 @@
                                     const prodChart = new Chart(ctxProducao, {
                                         type: 'bar', // Tipo de gráfico: 'bar' para barra
                                         data: {
-                                            labels: nomesProducao.map((nome, index) => `${nome}\n(${totalProducao[index]})`), // Nome + Quantidade de produção
+                                            labels: nomesProducao,  // Utilizando apenas os nomes no eixo X
                                             datasets: [{
-                                                label: 'Produção Total', // Alterado o label
-                                                data: totalProducao, // Total de produção no eixo Y
+                                                label: 'Produção Total',
+                                                data: totalProducao,
                                                 backgroundColor: [
-                                                    'rgba(50,205,50)', // Cor vibrante 1
-                                                    'rgba(54, 162, 235)',   // Cor vibrante 2 (azul)
-                                                    'rgba(255, 206, 86)',   // Cor vibrante 3 (amarelo)
-                                                    'rgba(75, 192, 192)',   // Cor vibrante 4 (verde claro)
-                                                    'rgba(153, 102, 255)',  // Cor vibrante 5 (roxo)
-                                                    'rgba(255, 99, 132)'    // Cor vibrante 6 (laranja)
-                                                ], // Cores vibrantes para as barras
+                                                    'rgba(50,205,50)', 'rgba(54, 162, 235)', 'rgba(255, 206, 86)',
+                                                    'rgba(75, 192, 192)', 'rgba(153, 102, 255)', 'rgba(255, 99, 132)'
+                                                ],
                                                 borderColor: [
-                                                    'rgba(107,142,35, 1)',     // Cor da borda vibrante 1
-                                                    'rgba(54, 162, 235, 1)',     // Cor da borda vibrante 2
-                                                    'rgba(255, 206, 86, 1)',     // Cor da borda vibrante 3
-                                                    'rgba(75, 192, 192, 1)',     // Cor da borda vibrante 4
-                                                    'rgba(153, 102, 255, 1)',    // Cor da borda vibrante 5
-                                                    'rgba(255, 99, 132, 1)'      // Cor da borda vibrante 6
-                                                ], // Cores da borda das barras
+                                                    'rgba(107,142,35, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
+                                                    'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 99, 132, 1)'
+                                                ],
                                                 borderWidth: 1
                                             }]
                                         },
                                         options: {
-                                            responsive: true, // Gráfico responsivo
-                                            maintainAspectRatio: false, // Permite que o gráfico se ajuste ao tamanho do contêiner
-                                            animation: {
-                                                duration: 1500, // Duração da animação
-                                                easing: 'easeOutBounce' // Efeito de animação
-                                            },
+                                            responsive: true,
+                                            maintainAspectRatio: false,
                                             scales: {
                                                 y: {
-                                                    beginAtZero: false, // O gráfico começa no 0
+                                                    beginAtZero: false,
                                                     title: {
                                                         display: true,
-                                                        text: 'Produção Total', // Título do eixo Y
-                                                        font: {
-                                                            size: 16
-                                                        }
-                                                    },
-                                                    ticks: {
-                                                        font: {
-                                                            size: 14, // Tamanho da fonte do eixo Y
-                                                            weight: 'bold'
-                                                        }
+                                                        text: 'Produção Total'
                                                     }
                                                 },
                                                 x: {
-                                                    title: {
-                                                        display: false, // Título do eixo X oculto
-                                                    },
-                                                    ticks: {
-                                                        font: {
-                                                            size: 14, // Tamanho da fonte do eixo X
-                                                            weight: 'bold'
-                                                        },
-                                                        // Modificando os labels para mostrar nome + quantidade de produção
-                                                        callback: function(value, index, values) {
-                                                            return nomesProducao[index] + '\n(' + totalProducao[index] + ')'; // Nome + Quantidade de produção
-                                                        }
+                                                    title: { display: false },
+                                                }
+                                            },
+                                            tooltips: {
+                                                callbacks: {
+                                                    // Personalizando o tooltip para mostrar nome e produção
+                                                    label: function(tooltipItem, data) {
+                                                        const index = tooltipItem.index;
+                                                        const nome = nomesProducao[index];
+                                                        const producao = totalProducao[index];
+                                                        return nome + ': ' + producao; // Nome e produção no tooltip
                                                     }
                                                 }
                                             },
                                             plugins: {
                                                 legend: {
-                                                    labels: {
-                                                        font: {
-                                                            size: 14, // Tamanho da fonte da legenda
-                                                            weight: 'bold'
-                                                        }
-                                                    }
+                                                    labels: { font: { size: 14, weight: 'bold' } }
                                                 }
                                             }
                                         }
@@ -323,6 +291,9 @@
                         </div>
                     </div>
                 </div>
+
+
+
 
                 <!-- RANKING DE APROVEITAMENTO -->
                 <div class="row">
@@ -407,7 +378,7 @@
                                                 y: {
                                                     beginAtZero: true, // O gráfico começa no 0
                                                     title: {
-                                                        display: true,
+                                                        display: false,
                                                         text: 'Aproveitamento (%)', // Título do eixo Y
                                                         font: {
                                                             size: 16

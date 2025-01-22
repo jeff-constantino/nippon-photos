@@ -3,6 +3,7 @@ package dao;
 import connection.SingleConnectionBanco;
 import model.ModelControleRibbon;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,34 @@ public class DAOControleRibbon {
         return null;
     }
 
+    // Buscar os valores dos ribbons atuais
+    public List<BigDecimal> buscarRibbonAtual() throws SQLException {
+        List<BigDecimal> ribbonValues = new ArrayList<>();
+
+        String sql = "SELECT ribbon_1_atual, ribbon_2_atual, ribbon_3_atual, ribbon_4_atual, ribbon_5_atual, ribbon_6_atual FROM controle_ribbon ORDER BY data_ribbon DESC LIMIT 1";
+
+        try (PreparedStatement pst = connection.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+                // Adiciona os valores dos ribbons atuais na lista
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("ribbon_1_atual")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("ribbon_2_atual")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("ribbon_3_atual")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("ribbon_4_atual")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("ribbon_5_atual")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("ribbon_6_atual")));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao executar a consulta: " + e.getMessage());
+            throw e; // Relança a exceção para ser tratada pelo chamador
+        }
+
+        return ribbonValues;
+    }
+
+
 
     public void atualizarControle(ModelControleRibbon controle) throws SQLException {
         String sql = "UPDATE controle_ribbon SET " +
@@ -50,6 +79,7 @@ public class DAOControleRibbon {
                 "old_ribbon_1 = ?, old_ribbon_2 = ?, old_ribbon_3 = ?, old_ribbon_4 = ?, old_ribbon_5 = ?, old_ribbon_6 = ?, " +
                 "observacao_ribbon = ? WHERE id_controle = ?";
         try (PreparedStatement pstUpdate = connection.prepareStatement(sql)) {
+            connection.setAutoCommit(false); // Desabilita o auto-commit
             setParametrosAtualizacao(pstUpdate, controle);
             pstUpdate.setLong(39, controle.getIdControle()); // Índice ajustado
 

@@ -189,8 +189,33 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
                 conf.setData_fechamento(rs.getDate("data_fechamento").toLocalDate());
                 conf.setTotal_revelado(rs.getInt("total_revelado"));
                 conf.setTotal_informado(rs.getInt("total_informado"));
-                conf.setValor_deb_24h(rs.getBigDecimal("valor_deb_24h"));
-                conf.setValor_cred_24h(rs.getBigDecimal("valor_cred_24h"));
+
+                // Buscar o último valor não nulo para os campos valor_deb_24h e valor_cred_24h
+                if (rs.getBigDecimal("valor_deb_24h") == null) {
+                    String sqlUltimoValorDeb24h = "SELECT valor_deb_24h FROM conf_dia WHERE valor_deb_24h IS NOT NULL AND data_fechamento <= ? ORDER BY data_fechamento DESC LIMIT 1";
+                    try (PreparedStatement stmtUltimoValorDeb24h = connection.prepareStatement(sqlUltimoValorDeb24h)) {
+                        stmtUltimoValorDeb24h.setDate(1, new java.sql.Date(dataFechamento.getTime()));
+                        ResultSet rsUltimoValorDeb24h = stmtUltimoValorDeb24h.executeQuery();
+                        if (rsUltimoValorDeb24h.next()) {
+                            conf.setValor_deb_24h(rsUltimoValorDeb24h.getBigDecimal("valor_deb_24h"));
+                        }
+                    }
+                } else {
+                    conf.setValor_deb_24h(rs.getBigDecimal("valor_deb_24h"));
+                }
+
+                if (rs.getBigDecimal("valor_cred_24h") == null) {
+                    String sqlUltimoValorCred24h = "SELECT valor_cred_24h FROM conf_dia WHERE valor_cred_24h IS NOT NULL AND data_fechamento <= ? ORDER BY data_fechamento DESC LIMIT 1";
+                    try (PreparedStatement stmtUltimoValorCred24h = connection.prepareStatement(sqlUltimoValorCred24h)) {
+                        stmtUltimoValorCred24h.setDate(1, new java.sql.Date(dataFechamento.getTime()));
+                        ResultSet rsUltimoValorCred24h = stmtUltimoValorCred24h.executeQuery();
+                        if (rsUltimoValorCred24h.next()) {
+                            conf.setValor_cred_24h(rsUltimoValorCred24h.getBigDecimal("valor_cred_24h"));
+                        }
+                    }
+                } else {
+                    conf.setValor_cred_24h(rs.getBigDecimal("valor_cred_24h"));
+                }
             }
         }
 

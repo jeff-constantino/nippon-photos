@@ -43,8 +43,6 @@ public class FilterAutenticacao implements Filter {
             throws IOException, ServletException {
         try {
 
-
-
             HttpServletRequest req = (HttpServletRequest) request;
             HttpSession session = req.getSession();
 
@@ -62,10 +60,10 @@ public class FilterAutenticacao implements Filter {
                 return;/*para a execucao e redireciona ao login*/
             }else {
 
+                connection.setAutoCommit(false); // Setar autocommit para off
                 chain.doFilter(request, response);
+                connection.commit();/*deu tudo certo, comita as altera��es no BD*/
             }
-
-            connection.commit();/*deu tudo certo, comita as altera��es no BD*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,12 +83,11 @@ public class FilterAutenticacao implements Filter {
     public void init(FilterConfig fConfig) throws ServletException {
 
         connection = SingleConnectionBanco.getConnection();
-
-
-
-
-
-
+        try {
+            connection.setAutoCommit(false); // Setar autocommit para off
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }

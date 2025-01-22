@@ -65,6 +65,7 @@ public class ServletConfDiario extends HttpServlet {
             if (conf != null) {
                 // Armazena o objeto conf no request para ser acessado no JSP
                 request.setAttribute("conf_diario", conf);
+                System.out.println(conf.toString());
 
 
                 // Use forward em vez de sendRedirect
@@ -89,6 +90,7 @@ public class ServletConfDiario extends HttpServlet {
         if (conf != null) {
             // Armazena o objeto conf no request para ser acessado no JSP
             request.setAttribute("conf_diario", conf);
+
 
 
             // Use forward em vez de sendRedirect
@@ -161,8 +163,7 @@ public class ServletConfDiario extends HttpServlet {
             // Atribui valores numéricos inteiros
             confDiario.setTotal_revelado(Integer.parseInt(request.getParameter("total_revelado")));
             confDiario.setTotal_informado(Integer.parseInt(request.getParameter("total_informado")));
-            confDiario.setValor_deb_24h(new BigDecimal(request.getParameter("valor_deb_24h")));
-            confDiario.setValor_cred_24h(new BigDecimal(request.getParameter("valor_cred_24h")));
+
 
             // Campos adicionais de ribbon e sobras
             confDiario.setRibbon_1_atual(Integer.parseInt(request.getParameter("ribbon_1_atual")));

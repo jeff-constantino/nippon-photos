@@ -143,7 +143,7 @@ public class DAOFuncionario {
                 modelVenda.setTotalProducao(resultado.getInt("total_producao")); // Adicionando o total de produção
 
                 rankingList.add(modelVenda);
-                System.out.println(rankingList.toString());
+
             }
 
         } catch (Exception e) {

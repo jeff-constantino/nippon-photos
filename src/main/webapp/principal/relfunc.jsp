@@ -7,6 +7,9 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
@@ -120,14 +123,9 @@
                                                style="text-align: center; background-color: black" readonly
                                                value="${funcionarioId}">
                                     </div>
-                                    <div class="col-auto">
-                                        <label for="data_fecha_mes">Data Fechamento:</label>
-                                        <input type="date" class="form-control"
-                                               id="data_fecha_mes"
-                                               name="data_fecha_mes"
-                                               value="${data_fecha_mes}">
+
                                     </div>
-                                </div>
+
 
                                 <h4 class="card-title" style="text-align: center">VENDAS TOTAIS DO FUNCIONÁRIO</h4>
 
@@ -140,6 +138,7 @@
                                             <th scope="col">TOTAL DE ENCARTES</th>
                                             <th scope="col">TOTAL DE DIGITAIS</th>
                                             <th scope="col">TOTAL DE SOBRAS</th>
+                                            <th scope="col">APROVEITAMENTO</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -150,6 +149,18 @@
                                                 <td><c:out value="${mv.enc_total}"></c:out></td>
                                                 <td><c:out value="${mv.dig_total}"></c:out></td>
                                                 <td><c:out value="${mv.sobras}"></c:out></td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${mv.sobras + mv.ft_total > 0}">
+                                                            <fmt:formatNumber value="${(mv.ft_total * 100) / (mv.sobras + mv.ft_total)}" maxFractionDigits="2" />%
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            0%
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+
+
                                             </tr>
                                         </c:forEach>
                                         </tbody>

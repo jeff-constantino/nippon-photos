@@ -3,6 +3,7 @@ package servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import dao.DAOConfig;
+import dao.DAOControleRibbon;
 import dao.DAOUsuarioRepository;
 import dao.DAOVendasRepository;
 import jakarta.servlet.RequestDispatcher;
@@ -11,14 +12,18 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelConfig;
+import model.ModelControleRibbon;
 import model.ModelLogin;
 import model.ModelVendas;
 import util.DateUtil;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/ServletVendas")
     public class ServletVendas extends ServletGenericUtil {
@@ -27,11 +32,13 @@ import java.util.List;
     private DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
 
     private DAOConfig daoConfig;
+    private DAOControleRibbon daoControleRibbon;
 
     @Override
     public void init() throws ServletException {
         super.init();
         daoConfig = new DAOConfig(); // Instanciar o DAOConfig aqui
+        daoControleRibbon = new DAOControleRibbon();
     }
 
     @Override
@@ -49,14 +56,35 @@ import java.util.List;
             if ("buscarValoresProdutos".equals(acao)) {
                 // Supondo que você tenha uma instância do DAOConfig
                 List<ModelConfig> configs = daoConfig.consultarTodasConfigs();
+                List<BigDecimal> controles = daoControleRibbon.buscarRibbonAtual();
 
-                // Converte a lista de configurações em JSON
-                String jsonResponse = new Gson().toJson(configs); // Usando a biblioteca Gson
+                // Imprime os valores dos ribbons no console para verificação
+                System.out.println("quantidade dos Ribbons:");
+                for (BigDecimal controle : controles) {
+                    System.out.println(controle);  // Imprime cada valor de controle
+                }
+                // Imprime os valores das fotos no console para verificação
+                System.out.println("Valores das fotos:");
+                for (ModelConfig config : configs) {
+                    System.out.println(config);  // Imprime cada valor de controle
+                }
+
+
+
+                // Cria um mapa para adicionar as configurações e os valores dos ribbons
+                Map<String, Object> responseData = new HashMap<>();
+                responseData.put("configs", configs);
+                responseData.put("controles", controles);
+
+                // Converte o mapa em JSON
+                String jsonResponse = new Gson().toJson(responseData); // Usando a biblioteca Gson
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(jsonResponse);
                 return;
             }
+
+
 
 //            if ("vendaDoDia".equals(acao)) {
 //                // Lógica para buscar as vendas do dia

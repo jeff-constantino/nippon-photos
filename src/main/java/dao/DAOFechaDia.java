@@ -356,6 +356,7 @@ public class DAOFechaDia {
         try (PreparedStatement pstmtFechaDia = connection.prepareStatement(sqlFechaDia);
              PreparedStatement pstmtConfDia = connection.prepareStatement(sqlConfDia);
              PreparedStatement pstmtControleRibbon = connection.prepareStatement(sqlControleRibbon)) {
+            connection.setAutoCommit(false); // Desabilita o auto-commit
 
             // Atualização na tabela fecha_dia
             pstmtFechaDia.setInt(1, fechamento.getTotal_ft_din());
@@ -453,6 +454,7 @@ public class DAOFechaDia {
             pstmtFechaDia.executeUpdate();
             pstmtConfDia.executeUpdate();
             pstmtControleRibbon.executeUpdate();
+            connection.commit(); // Finaliza a transação
         } catch (SQLException e) {
             e.printStackTrace();
         }

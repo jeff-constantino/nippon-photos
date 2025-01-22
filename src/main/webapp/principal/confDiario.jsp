@@ -317,7 +317,7 @@
                                                        id="id" name="id"
                                                        placeholder="" value="${conf_diario.id}"
                                                        style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                       readonly>
+                                                       >
                                             </div>
                                             <div class="col-2">
 
@@ -327,7 +327,7 @@
                                                        id="valor_din" name="valor_din"
                                                        placeholder="" value="${conf_diario.valor_din}"
                                                        style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                       readonly>
+                                                       >
                                             </div>
                                             <div class="col-2">
                                                 <label style="color: #f2a654" class="float-label">DÉBITO INF:</label>
@@ -336,7 +336,7 @@
                                                        id="valor_deb" name="valor_deb"
                                                        placeholder="" value="${conf_diario.valor_deb}"
                                                        style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                       readonly>
+                                                       >
                                             </div>
 
                                             <div class="col-2">
@@ -346,7 +346,7 @@
                                                        id="valor_cred" name="valor_cred"
                                                        placeholder="" value="${conf_diario.valor_cred}"
                                                        style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                       readonly>
+                                                       >
                                             </div>
 
                                             <div class="col-2">
@@ -356,7 +356,7 @@
                                                        id="valor_pix" name="valor_pix"
                                                        placeholder="" value="${conf_diario.valor_pix}"
                                                        style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                       readonly>
+                                                       >
                                             </div>
 
                                         </div>
@@ -382,15 +382,7 @@
                                                        style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                 >
                                             </div>
-                                            <div class="col-2">
-                                                <label class="float-label">DÉBITO APÓS 24H:</label>
-                                                <span class="form-bar"></span>
-                                                <input type="text" class="form-control"
-                                                       id="valor_deb_24h" name="valor_deb_24h"
-                                                       placeholder="" value="${conf_diario.valor_deb_24h}" required
-                                                       style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                >
-                                            </div>
+
 
 
                                             <div class="col-2">
@@ -402,15 +394,7 @@
                                                        style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                 >
                                             </div>
-                                            <div class="col-2">
-                                                <label class="float-label">CRÉDITO APÓS 24H:</label>
-                                                <span class="form-bar"></span>
-                                                <input type="text" class="form-control"
-                                                       id="valor_cred_24h" name="valor_cred_24h"
-                                                       placeholder="" value="${conf_diario.valor_cred_24h}" required
-                                                       style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                >
-                                            </div>
+
 
 
                                             <div class="col-2">
@@ -435,7 +419,7 @@
                                                        id="valor_din_dif" name="valor_din_dif"
                                                        placeholder="" value="${conf_diario.valor_din_dif}"
                                                        style="text-align: center; background-color: black; color: white; font-weight: bold"
-                                                readonly tabindex="-1">
+                                                 tabindex="-1">
                                             </div>
                                             <div class="col-2">
                                                 <label style="color: #f2a654" class="float-label">DÉBITO DIF:</label>
@@ -443,7 +427,7 @@
                                                 <input type="text" class="form-control"
                                                        id="valor_deb_dif" name="valor_deb_dif"
                                                        placeholder="" value="${conf_diario.valor_deb_dif}"
-                                                       style="text-align: center; background-color: black; color: white; font-weight: bold" READONLY tabindex="-1"
+                                                       style="text-align: center; background-color: black; color: white; font-weight: bold"  tabindex="-1"
                                                 >
                                             </div>
 
@@ -453,7 +437,7 @@
                                                 <input type="text" class="form-control"
                                                        id="valor_cred_dif" name="valor_cred_dif"
                                                        placeholder="" value="${conf_diario.valor_cred_dif}"
-                                                       style="text-align: center; background-color: black; color: white; font-weight: bold" READONLY tabindex="-1"
+                                                       style="text-align: center; background-color: black; color: white; font-weight: bold"  tabindex="-1"
                                                 >
                                             </div>
 
@@ -463,7 +447,7 @@
                                                 <input type="text" class="form-control"
                                                        id="valor_pix_dif" name="valor_pix_dif"
                                                        placeholder="" value="${conf_diario.valor_pix_dif}"
-                                                       style="text-align: center; background-color: black; color: white; font-weight: bold" READONLY tabindex="-1"
+                                                       style="text-align: center; background-color: black; color: white; font-weight: bold"  tabindex="-1"
                                                 >
                                             </div>
 
@@ -510,14 +494,14 @@
                                                         <label style="color: #f2a654">Ribbon 1 Anterior</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_1_conf" name="old_ribbon_1" value="${conf_diario.old_ribbon_1}">
+                                                               tabindex="-1"  id="ribbon_1_conf" name="old_ribbon_1" value="${conf_diario.old_ribbon_1}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 2 Anterior</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_2_conf" name="old_ribbon_2" value="${conf_diario.old_ribbon_2}">
+                                                               tabindex="-1"  id="ribbon_2_conf" name="old_ribbon_2" value="${conf_diario.old_ribbon_2}">
                                                     </div>
 
                                                     <div class="col-6">
@@ -529,12 +513,12 @@
                                                         <label style="color: #f2a654">Revelado 1</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon_1" name="rev_ribbon_1" readonly value="${conf_diario.rev_ribbon_1}">
+                                                               tabindex="-1"  id="rev_ribbon_1" name="rev_ribbon_1"  value="${conf_diario.rev_ribbon_1}">
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               readonly style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="dif_ribbon_1" name="dif_ribbon_1" >
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1"  id="dif_ribbon_1" name="dif_ribbon_1" >
 
 
 
@@ -550,12 +534,12 @@
                                                         <label style="color: #f2a654">Revelado 2</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon_2" name="rev_ribbon_2" readonly value="${conf_diario.rev_ribbon_2}">
+                                                               tabindex="-1"  id="rev_ribbon_2" name="rev_ribbon_2"  value="${conf_diario.rev_ribbon_2}">
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="dif_ribbon_2" name="dif_ribbon_2" readonly>
+                                                               tabindex="-1"  id="dif_ribbon_2" name="dif_ribbon_2" >
                                                     </div>
                                                 </div>
                                             </div>
@@ -566,14 +550,14 @@
                                                         <label style="color: #f2a654">Ribbon 3 Anterior</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_3_conf" name="old_ribbon_3" value="${conf_diario.old_ribbon_3}">
+                                                               tabindex="-1"  id="ribbon_3_conf" name="old_ribbon_3" value="${conf_diario.old_ribbon_3}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 4 Anterior</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_4_conf" name="old_ribbon_4" value="${conf_diario.old_ribbon_4}">
+                                                               tabindex="-1"  id="ribbon_4_conf" name="old_ribbon_4" value="${conf_diario.old_ribbon_4}">
                                                     </div>
 
                                                     <div class="col-6">
@@ -585,12 +569,12 @@
                                                         <label style="color: #f2a654">Revelado 3</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon_3" name="rev_ribbon_3" readonly  value="${conf_diario.rev_ribbon_3}">
+                                                               tabindex="-1"  id="rev_ribbon_3" name="rev_ribbon_3"   value="${conf_diario.rev_ribbon_3}">
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="dif_ribbon_3" name="dif_ribbon_3" readonly>
+                                                               tabindex="-1"  id="dif_ribbon_3" name="dif_ribbon_3" >
                                                     </div>
 
                                                     <div class="col-6">
@@ -602,12 +586,12 @@
                                                         <label style="color: #f2a654">Revelado 4</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon_4" name="rev_ribbon_4" readonly  value="${conf_diario.rev_ribbon_4}">
+                                                               tabindex="-1"  id="rev_ribbon_4" name="rev_ribbon_4"   value="${conf_diario.rev_ribbon_4}">
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="dif_ribbon_4" name="dif_ribbon_4" readonly>
+                                                               tabindex="-1"  id="dif_ribbon_4" name="dif_ribbon_4" >
                                                     </div>
                                                 </div>
                                             </div>
@@ -618,14 +602,14 @@
                                                         <label style="color: #f2a654">Ribbon 5 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_5_conf" name="old_ribbon_5" value="${conf_diario.old_ribbon_5}">
+                                                               tabindex="-1"  id="ribbon_5_conf" name="old_ribbon_5" value="${conf_diario.old_ribbon_5}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 6 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_6_conf" name="old_ribbon_6" value="${conf_diario.old_ribbon_6}">
+                                                               tabindex="-1"  id="ribbon_6_conf" name="old_ribbon_6" value="${conf_diario.old_ribbon_6}">
                                                     </div>
 
                                                     <div class="col-6">
@@ -637,12 +621,12 @@
                                                         <label style="color: #f2a654">Revelado 5</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon_5" name="rev_ribbon_5" readonly value="${conf_diario.rev_ribbon_5}">
+                                                               tabindex="-1"  id="rev_ribbon_5" name="rev_ribbon_5"  value="${conf_diario.rev_ribbon_5}">
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="dif_ribbon_5" name="dif_ribbon_5" readonly>
+                                                               tabindex="-1"  id="dif_ribbon_5" name="dif_ribbon_5" >
                                                     </div>
 
                                                     <div class="col-6">
@@ -654,12 +638,12 @@
                                                         <label style="color: #f2a654">Revelado 6</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon_6" name="rev_ribbon_6" readonly  value="${conf_diario.rev_ribbon_6}">
+                                                               tabindex="-1"  id="rev_ribbon_6" name="rev_ribbon_6"   value="${conf_diario.rev_ribbon_6}">
 
                                                         <label style="color: #f2a654">Diferença</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="dif_ribbon_6" name="dif_ribbon_6" readonly>
+                                                               tabindex="-1"  id="dif_ribbon_6" name="dif_ribbon_6" >
                                                     </div>
                                                 </div>
                                             </div>
@@ -671,27 +655,27 @@
                                                         <label style="color: #f2a654">SOBRAS</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="sobras" name="sobras" value="${conf_diario.sobras}">
+                                                               tabindex="-1"  id="sobras" name="sobras" value="${conf_diario.sobras}">
                                                     </div>
 
                                                     <div class="col-3">
                                                         <label style="color: #f2a654">TOTAL REVELADO</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="total_revelado" name="total_revelado" value="${conf_diario.total_revelado}">
+                                                               tabindex="-1"  id="total_revelado" name="total_revelado" value="${conf_diario.total_revelado}">
                                                     </div>
                                                     <div class="col-3">
                                                         <label style="color: #f2a654">TOTAL REVELADO</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="total_informado" name="total_informado" value="${conf_diario.total_informado}">
+                                                               tabindex="-1"  id="total_informado" name="total_informado" value="${conf_diario.total_informado}">
                                                     </div>
 
                                                     <div class="col-3">
                                                         <label style="color: #f2a654">DIFERENÇA RIBBONS</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="total_dif" name="total_dif" value="${conf_diario.total_dif}">
+                                                               tabindex="-1"  id="total_dif" name="total_dif" value="${conf_diario.total_dif}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -741,7 +725,7 @@
                                                            id="data_fechamento2"
                                                            name="data_fechamento"
                                                            style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                           value="${conf_diario.data_fechamento}" readonly tabindex="-1">
+                                                           value="${conf_diario.data_fechamento}"  tabindex="-1">
                                                 </div>
                                             </div>
 
@@ -750,22 +734,22 @@
                                                 <div class="d-flex flex-column align-items-center me-2">
                                                     <label style="color: #f2a654">DESCONTOS</label>
                                                     <input type="number" class="form-control" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                           tabindex="-1" readonly id="desconto" name="desconto" value="${conf_diario.desconto}">
+                                                           tabindex="-1"  id="desconto" name="desconto" value="${conf_diario.desconto}">
                                                 </div>
                                                 <div class="d-flex flex-column align-items-center me-2">
                                                     <label style="color: #f2a654">DESPESAS DO DIA</label>
                                                     <input type="number" class="form-control" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                           tabindex="-1" readonly id="valor_despesa_total" name="valor_despesa_total" value="${conf_diario.valor_despesa_total}">
+                                                           tabindex="-1"  id="valor_despesa_total" name="valor_despesa_total" value="${conf_diario.valor_despesa_total}">
                                                 </div>
                                                 <div class="d-flex flex-column align-items-center me-2">
                                                     <label style="color: #f2a654">VALES DO DIA</label>
                                                     <input type="number" class="form-control" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                           tabindex="-1" readonly id="valor_vale_total" name="valor_vale_total" value="${conf_diario.valor_vale_total}">
+                                                           tabindex="-1"  id="valor_vale_total" name="valor_vale_total" value="${conf_diario.valor_vale_total}">
                                                 </div>
                                                 <div class="d-flex flex-column align-items-center">
                                                     <label style="color: #f2a654">VENDA TOTAL DO DIA</label>
                                                     <input type="number" class="form-control" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                           tabindex="-1" readonly id="venda_total_dia" name="venda_total_dia" value="${conf_diario.venda_total_dia}">
+                                                           tabindex="-1"  id="venda_total_dia" name="venda_total_dia" value="${conf_diario.venda_total_dia}">
                                                 </div>
                                             </div>
                                         </div>
@@ -827,6 +811,9 @@
 
 
     document.addEventListener('DOMContentLoaded', function () {
+        // Valores que vêm do banco de dados
+
+
         // Função para calcular a diferença e atualizar os campos
         function calcularDiferenças() {
             // Obtém os valores dos campos
@@ -835,20 +822,20 @@
 
             var valorDeb = parseFloat(document.getElementById('valor_deb').value.replace(',', '.')) || 0;
             var valorDebReal = parseFloat(document.getElementById('valor_deb_real').value.replace(',', '.')) || 0;
-            var valorDeb24h = parseFloat(document.getElementById('valor_deb_24h').value.replace(',', '.')) || 0;
+
 
             var valorCred = parseFloat(document.getElementById('valor_cred').value.replace(',', '.')) || 0;
             var valorCredReal = parseFloat(document.getElementById('valor_cred_real').value.replace(',', '.')) || 0;
-            var valorCred24h = parseFloat(document.getElementById('valor_cred_24h').value.replace(',', '.')) || 0;
+
 
             var valorPix = parseFloat(document.getElementById('valor_pix').value.replace(',', '.')) || 0;
             var valorPixReal = parseFloat(document.getElementById('valor_pix_real').value.replace(',', '.')) || 0;
 
             // Calcula as diferenças
-            var valorDinDif =  valorDinReal - valorDin;
-            var valorDebDif = (valorDebReal + valorDeb24h) - valorDeb ;
-            var valorCredDif = (valorCredReal + valorCred24h) - valorCred ;
-            var valorPixDif = valorPixReal - valorPix ;
+            var valorDinDif = valorDinReal - valorDin;
+            var valorDebDif = (valorDebReal ) - (valorDeb); // Inclui valor do banco
+            var valorCredDif = (valorCredReal) - (valorCred); // Inclui valor do banco
+            var valorPixDif = valorPixReal - valorPix;
 
             // Atualiza os campos de diferença
             atualizarCampo('valor_din_dif', valorDinDif);
@@ -860,20 +847,20 @@
         // Função para atualizar o campo e mudar a cor conforme o valor
         function atualizarCampo(campoId, valor) {
             var campo = document.getElementById(campoId);
-            campo.value = valor.toFixed(2);  // Formata o número para 2 casas decimais
+            campo.value = valor.toFixed(2); // Formata o número para 2 casas decimais
 
             if (valor < 0) {
-                campo.style.color = 'red';  // Se negativo, cor vermelha
-                campo.value = '-' + Math.abs(valor).toFixed(2);  // Adiciona o sinal negativo
+                campo.style.color = 'red'; // Se negativo, cor vermelha
+                campo.value = '-' + Math.abs(valor).toFixed(2); // Adiciona o sinal negativo
             } else {
-                campo.style.color = 'green';  // Se positivo, cor verde
+                campo.style.color = 'green'; // Se positivo, cor verde
             }
         }
 
         // Adiciona evento para recalcular as diferenças quando os campos forem alterados
         var campos = [
-            'valor_din', 'valor_din_real', 'valor_deb', 'valor_deb_real', 'valor_deb_24h',
-            'valor_cred', 'valor_cred_real', 'valor_cred_24h', 'valor_pix', 'valor_pix_real'
+            'valor_din', 'valor_din_real', 'valor_deb', 'valor_deb_real',
+            'valor_cred', 'valor_cred_real', 'valor_pix', 'valor_pix_real'
         ];
 
         campos.forEach(function (campoId) {
@@ -883,6 +870,7 @@
         // Calcula as diferenças inicialmente
         calcularDiferenças();
     });
+
 
 
 

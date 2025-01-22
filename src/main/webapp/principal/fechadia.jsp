@@ -259,7 +259,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               readonly id="total_ft_din"
+                                                               id="total_ft_din"
                                                                tabindex="-1" name="total_ft_din"
                                                                value="${fechamento.total_ft_din}">
                                                     </div>
@@ -271,7 +271,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               readonly  id="_total_ft_deb"
+                                                                id="_total_ft_deb"
                                                                tabindex="-1"  name="total_ft_deb"
                                                                value="${fechamento.total_ft_deb}">
                                                     </div>
@@ -283,7 +283,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               readonly  id="_total_ft_cred"
+                                                                 id="_total_ft_cred"
                                                                tabindex="-1"  name="total_ft_cred"
                                                                value="${fechamento.total_ft_cred}">
                                                     </div>
@@ -295,7 +295,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               readonly  id="_total_ft_pix"
+                                                                 id="_total_ft_pix"
                                                                tabindex="-1" name="total_ft_pix"
                                                                value="${fechamento.total_ft_pix}">
                                                     </div>
@@ -334,7 +334,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
-                                                               readonly  id="_total_enc_din"
+                                                                 id="_total_enc_din"
                                                                tabindex="-1" name="total_enc_din"
                                                                value="${fechamento.total_enc_din}">
                                                     </div>
@@ -346,7 +346,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
-                                                               readonly  id="_total_enc_deb"
+                                                                 id="_total_enc_deb"
                                                                tabindex="-1" name="total_enc_deb"
                                                                value="${fechamento.total_enc_deb}">
                                                     </div>
@@ -358,7 +358,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
-                                                               readonly  id="_total_enc_cred"
+                                                                 id="_total_enc_cred"
                                                                tabindex="-1" name="total_enc_cred"
                                                                value="${fechamento.total_enc_cred}">
                                                     </div>
@@ -370,7 +370,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: #73b307; color: black; font-weight: bold"
-                                                               readonly  id="_total_enc_pix"
+                                                                 id="_total_enc_pix"
                                                                tabindex="-1" name="total_enc_pix"
                                                                value="${fechamento.total_enc_pix}">
                                                     </div>
@@ -387,7 +387,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
-                                                               readonly  id="total_dig_din"
+                                                                 id="total_dig_din"
                                                                tabindex="-1"  name="total_dig_din"
                                                                value="${fechamento.total_dig_din}">
                                                     </div>
@@ -399,7 +399,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
-                                                               readonly  id="total_dig_deb"
+                                                                 id="total_dig_deb"
                                                                tabindex="-1"  name="total_dig_deb"
                                                                value="${fechamento.total_dig_deb}">
                                                     </div>
@@ -411,7 +411,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
-                                                               readonly  id="total_dig_cred"
+                                                                 id="total_dig_cred"
                                                                tabindex="-1"  name="total_dig_cred"
                                                                value="${fechamento.total_dig_cred}">
                                                     </div>
@@ -423,7 +423,7 @@
                                                                class="form-control"
                                                                placeholder=""
                                                                style="text-align: center; background-color: fuchsia; color: black; font-weight: bold"
-                                                               readonly  id="total_dig_pix"
+                                                                 id="total_dig_pix"
                                                                tabindex="-1" name="total_dig_pix"
                                                                value="${fechamento.total_dig_pix}">
                                                     </div>
@@ -446,14 +446,14 @@
                                                         <label style="color: #f2a654">Ribbon 1 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_1_conf" name="old_ribbon_1" value="${fechamento.old_ribbon_1}">
+                                                               tabindex="-1"  id="ribbon_1_conf" name="old_ribbon_1" value="${fechamento.old_ribbon_1}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 2 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_2_conf" name="old_ribbon_2" value="${fechamento.old_ribbon_2}">
+                                                               tabindex="-1"  id="ribbon_2_conf" name="old_ribbon_2" value="${fechamento.old_ribbon_2}">
                                                     </div>
 
                                                     <div class="col-6">
@@ -464,8 +464,8 @@
 
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
-                                                               readonly style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon_1" name="rev_ribbon_1" >
+                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                               tabindex="-1"  id="rev_ribbon_1" name="rev_ribbon_1" >
 
 
 
@@ -481,7 +481,7 @@
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon_2" name="rev_ribbon_2" readonly>
+                                                               tabindex="-1"  id="rev_ribbon_2" name="rev_ribbon_2" >
                                                     </div>
                                                 </div>
                                             </div>
@@ -492,14 +492,14 @@
                                                         <label style="color: #f2a654">Ribbon 3 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_3_conf" name="old_ribbon_3" value="${fechamento.old_ribbon_3}">
+                                                               tabindex="-1"  id="ribbon_3_conf" name="old_ribbon_3" value="${fechamento.old_ribbon_3}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 4 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_4_conf" name="old_ribbon_4" value="${fechamento.old_ribbon_4}">
+                                                               tabindex="-1"  id="ribbon_4_conf" name="old_ribbon_4" value="${fechamento.old_ribbon_4}">
                                                     </div>
 
                                                     <div class="col-6">
@@ -511,7 +511,7 @@
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon_3" name="rev_ribbon_3" readonly>
+                                                               tabindex="-1"  id="rev_ribbon_3" name="rev_ribbon_3" >
                                                     </div>
 
                                                     <div class="col-6">
@@ -523,7 +523,7 @@
                                                         <label style="color: white">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon_4" name="rev_ribbon_4" readonly>
+                                                               tabindex="-1"  id="rev_ribbon_4" name="rev_ribbon_4" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -534,14 +534,14 @@
                                                         <label style="color: #f2a654">Ribbon 5 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_5_conf" name="old_ribbon_5" value="${fechamento.old_ribbon_5}">
+                                                               tabindex="-1"  id="ribbon_5_conf" name="old_ribbon_5" value="${fechamento.old_ribbon_5}">
                                                     </div>
 
                                                     <div class="col-6">
                                                         <label style="color: #f2a654">Ribbon 6 Conf</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="ribbon_6_conf" name="old_ribbon_6" value="${fechamento.old_ribbon_6}">
+                                                               tabindex="-1"  id="ribbon_6_conf" name="old_ribbon_6" value="${fechamento.old_ribbon_6}">
                                                     </div>
 
                                                     <div class="col-6">
@@ -553,7 +553,7 @@
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon_5" name="rev_ribbon_5" readonly>
+                                                               tabindex="-1"  id="rev_ribbon_5" name="rev_ribbon_5" >
                                                     </div>
 
                                                     <div class="col-6">
@@ -565,7 +565,7 @@
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1" readonly id="rev_ribbon_6" name="rev_ribbon_6" readonly>
+                                                               tabindex="-1"  id="rev_ribbon_6" name="rev_ribbon_6" >
                                                     </div>
                                                 </div>
                                             </div>
@@ -576,13 +576,13 @@
                                                 <h5 style="color: white">TOTAL REVELADO</h5>
                                                 <input type="number" class="form-control"
                                                        style="text-align: center; background-color: #f2a654; color: black; font-weight: bold; width: 150px;"
-                                                       id="total_rev" name="total_rev" readonly>
+                                                       id="total_rev" name="total_rev" >
                                             </div>
                                             <div class="col-auto">
                                                 <h5 style="color: white">TOTAL INFORMADO</h5>
                                                 <input type="number" class="form-control"
                                                        style="text-align: center; background-color: #f2a654; color: black; font-weight: bold; width: 150px;" value="<%= totalInformado %>"
-                                                       id="total_inf" name="total_inf" readonly>
+                                                       id="total_inf" name="total_inf" >
                                             </div>
                                         </div>
 

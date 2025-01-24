@@ -3,41 +3,49 @@ package model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class ModelFechaMes implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private long id;
+    private LocalDate data_fechamento;
 
-    private LocalDate data_final;
-
-
+    private String formattedDate;
     private int final_ft_din;
     private int final_ft_deb;
     private int final_ft_cred;
     private int final_ft_pix;
-
     private int final_enc_din;
     private int final_enc_deb;
     private int final_enc_cred;
     private int final_enc_pix;
-
     private int final_dig_din;
     private int final_dig_deb;
     private int final_dig_cred;
     private int final_dig_pix;
-
-    private int final_sobras;
+    private int total_ft;
+    private int total_enc;
+    private int total_dig;
 
     private BigDecimal final_descontos;
-
-
     private int final_ribbon_1;
     private int final_ribbon_2;
     private int final_ribbon_3;
     private int final_ribbon_4;
     private int final_ribbon_5;
     private int final_ribbon_6;
+    private int total_sobras;
+
+    public void setData_fechamento(LocalDate data_fechamento) {
+        this.data_fechamento = data_fechamento;
+        this.formattedDate = data_fechamento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
+    public String getFormattedDate() {
+        return formattedDate;
+    }
+
 
 
     public long getId() {
@@ -48,13 +56,11 @@ public class ModelFechaMes implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getData_final() {
-        return data_final;
+    public LocalDate getData_fechamento() {
+        return data_fechamento;
     }
 
-    public void setData_final(LocalDate data_final) {
-        this.data_final = data_final;
-    }
+
 
     public int getFinal_ft_din() {
         return final_ft_din;
@@ -152,12 +158,28 @@ public class ModelFechaMes implements Serializable {
         this.final_dig_pix = final_dig_pix;
     }
 
-    public int getFinal_sobras() {
-        return final_sobras;
+    public int getTotal_ft() {
+        return total_ft;
     }
 
-    public void setFinal_sobras(int final_sobras) {
-        this.final_sobras = final_sobras;
+    public void setTotal_ft(int total_ft) {
+        this.total_ft = total_ft;
+    }
+
+    public int getTotal_enc() {
+        return total_enc;
+    }
+
+    public void setTotal_enc(int total_enc) {
+        this.total_enc = total_enc;
+    }
+
+    public int getTotal_dig() {
+        return total_dig;
+    }
+
+    public void setTotal_dig(int total_dig) {
+        this.total_dig = total_dig;
     }
 
     public BigDecimal getFinal_descontos() {
@@ -214,5 +236,13 @@ public class ModelFechaMes implements Serializable {
 
     public void setFinal_ribbon_6(int final_ribbon_6) {
         this.final_ribbon_6 = final_ribbon_6;
+    }
+
+    public int getTotal_sobras() {
+        return total_sobras;
+    }
+
+    public void setTotal_sobras(int total_sobras) {
+        this.total_sobras = total_sobras;
     }
 }

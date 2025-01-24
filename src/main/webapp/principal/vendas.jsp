@@ -1366,24 +1366,19 @@
                     if (xhr.status === 200) {
                         // Preenche o array de produtos com os valores retornados
                         produtos = JSON.parse(xhr.responseText);
-                        // console.log('Produtos carregados:', produtos); // Log dos produtos carregados
                         calcularValor(quantidade, produtoId); // Calcular valor após receber os produtos
                     } else {
-                        // console.error('Erro ao buscar valores:', xhr.statusText);
                     }
                 };
                 xhr.send();
             } else {
-                // console.log('Produtos já carregados:', produtos); // Log para verificar os produtos carregados
                 calcularValor(quantidade, produtoId); // Se os produtos já foram carregados, calcular o valor imediatamente
             }
         }
 
         function calcularValor(quantidade, produtoId) {
-            // console.log('Recalculando valor para a quantidade:', quantidade, 'do produto:', produtoId); // Log da recalculação
 
             const prod = produtos[0]; // Considerando que você só tem um produto na lista
-            // console.log('Produto carregado:', prod); // Log para verificar o produto carregado
 
             if (prod) {
                 let valorProduto;
@@ -1394,21 +1389,18 @@
                     case 'outer_prod1_cred':
                     case 'outer_prod1_pix':
                         valorProduto = parseFloat(prod.conf1_valor);
-                        // console.log('Valor do produto 1:', valorProduto); // Log para verificar o valor
                         break;
                     case 'outer_prod2_din':
                     case 'outer_prod2_deb':
                     case 'outer_prod2_cred':
                     case 'outer_prod2_pix':
                         valorProduto = parseFloat(prod.conf2_valor);
-                        // console.log('Valor do produto 2:', valorProduto); // Log para verificar o valor
                         break;
                     case 'outer_prod3_din':
                     case 'outer_prod3_deb':
                     case 'outer_prod3_cred':
                     case 'outer_prod3_pix':
                         valorProduto = parseFloat(prod.conf3_valor);
-                        // console.log('Valor do produto 3:', valorProduto); // Log para verificar o valor
                         break;
                     default:
                         console.log('Produto não encontrado');
@@ -1416,12 +1408,10 @@
                 }
 
                 const valorTotal = quantidade * valorProduto; // Calcula o valor total
-                // console.log('Valor total calculado:', valorTotal); // Log do valor total
                 document.getElementById(produtoId + '_valor').value = valorTotal.toFixed(2); // Mostrando duas casas decimais
 
                 atualizarTotal(); // Atualiza o total geral
             } else {
-                // console.log('Produto não encontrado');
             }
         }
 
@@ -1431,10 +1421,8 @@
             ['outer_prod1_din', 'outer_prod1_deb', 'outer_prod1_cred', 'outer_prod1_pix'].forEach(id => {
                 const quantidade = parseFloat(document.getElementById(id).value) || 0; // Pega o valor ou 0 se estiver vazio
                 total += quantidade;
-                // console.log('Valor da quantidade do produto', id, ':', quantidade); // Log do valor da quantidade de cada produto
             });
             document.getElementById('outer_total').value = total; // Atualiza o valor total no campo
-            // console.log('Total atualizado:', total); // Log do total
         }
 
         // Funções para o modal
@@ -1448,25 +1436,20 @@
                 xhr.onload = function () {
                     if (xhr.status === 200) {
                         produtos = JSON.parse(xhr.responseText);
-                        // console.log('Produtos carregados no modal:', produtos); // Log dos produtos carregados
                         calcularValorModal(quantidade, produtoId);
                     } else {
-                        // console.error('Erro ao buscar valores no modal:', xhr.statusText);
                     }
                 };
                 xhr.send();
             } else {
-                console.log('Produtos já carregados no modal:', produtos); // Log para verificar os produtos carregados
                 calcularValorModal(quantidade, produtoId);
             }
         }
 
         function calcularValorModal(quantidade, produtoId) {
-            // console.log('Recalculando valor no modal para a quantidade:', quantidade, 'do produto:', produtoId); // Log da recalculação
 
             // Acessando o array 'configs' dentro de produtos
             const prod = produtos.configs[0]; // Acessando o primeiro produto da lista
-            // console.log('Produto carregado no modal:', prod); // Log para verificar o produto carregado
 
             if (prod) {
                 let valorProduto;
@@ -1477,34 +1460,30 @@
                     case 'prod1_cred':
                     case 'prod1_pix':
                         valorProduto = parseFloat(prod.conf1_valor);
-                        // console.log('Valor do produto 1 no modal:', valorProduto); // Log para verificar o valor
                         break;
                     case 'prod2_din':
                     case 'prod2_deb':
                     case 'prod2_cred':
                     case 'prod2_pix':
                         valorProduto = parseFloat(prod.conf2_valor);
-                        // console.log('Valor do produto 2 no modal:', valorProduto); // Log para verificar o valor
                         break;
                     case 'prod3_din':
                     case 'prod3_deb':
                     case 'prod3_cred':
                     case 'prod3_pix':
                         valorProduto = parseFloat(prod.conf3_valor);
-                        // console.log('Valor do produto 3 no modal:', valorProduto); // Log para verificar o valor
                         break;
                     default:
-                        // console.log('Produto não encontrado no modal');
+                        console.log('Produto não encontrado no modal');
                         return;
                 }
 
                 const valorTotal = quantidade * valorProduto;
-                // console.log('Valor total calculado no modal:', valorTotal); // Log do valor total
                 document.getElementById(produtoId + '_valor').value = valorTotal.toFixed(2);
 
                 atualizarTotalModal(); // Atualiza o total geral do modal
             } else {
-                // console.log('Produto não encontrado no modal');
+                console.log('Produto não encontrado no modal');
             }
         }
 
@@ -1515,10 +1494,8 @@
             ['prod1_din', 'prod1_deb', 'prod1_cred', 'prod1_pix'].forEach(id => {
                 const quantidade = parseFloat(document.getElementById(id).value) || 0;
                 total += quantidade;
-                // console.log('Valor da quantidade no modal do produto', id, ':', quantidade); // Log do valor da quantidade no modal
             });
             document.getElementById('total').value = total;
-            // console.log('Total atualizado no modal:', total); // Log do total no modal
         }
 
 
@@ -1547,7 +1524,7 @@
                 if (xhr.status === 200) {
                     const data = JSON.parse(xhr.responseText);
                     console.log('Resposta do servidor:', data); // Log da resposta do servidor
-                    controles = data.controles; // Preenche a variável controles com os dados recebidos
+                    controles = data.controles || []; // Preenche a variável controles com os dados recebidos
                     console.log('Valores dos controles recebidos:', controles); // Log dos valores recebidos
 
                     // Adiciona o event listener para o select após carregar os valores
@@ -1557,11 +1534,18 @@
 
                         console.log('Ribbon selecionado:', ribbonSelecionado, 'Index:', ribbonIndex); // Log da seleção
 
-                        if (controles.length > 0 && ribbonIndex >= 0 && ribbonIndex < controles.length) {
+                        if (controles.length > 0 && ribbonIndex >= 0 && ribbonIndex < 6) {
                             const valorRibbon = controles[ribbonIndex];
-                            document.getElementById('ribbon_atual').value = valorRibbon; // Atualiza o campo "ribbon_atual" com o valor retornado
-                            console.log('Valor atualizado no campo ribbon_atual:', valorRibbon); // Log do valor atualizado
+                            const valorTroca = controles[ribbonIndex + 6] || 0; // Garantir que valorTroca tenha um default
+                            const valorFim = controles[ribbonIndex + 12] || 0; // Garantir que valorFim tenha um default
+                            const valorTotal = valorRibbon + valorTroca - valorFim;
+
+                            document.getElementById('ribbon_atual').value = valorTotal; // Atualiza o campo "ribbon_atual" com o valor retornado
+                            console.log('Valor atualizado no campo ribbon_atual:', valorTotal); // Log do valor atualizado
+
                             calcularDiferenca(); // Calcula a diferença imediatamente após atualizar o valor atual
+                        } else {
+                            console.error('Dados invalidos ou faltando para o controle.');
                         }
                     });
                 } else {
@@ -1575,11 +1559,15 @@
         function calcularDiferenca() {
             const ribbonAtual = parseFloat(document.getElementById("ribbon_atual").value) || 0;
             const ribbonInf = parseFloat(document.getElementById("ribbon_inf").value) || 0;
+            const ribbonSobras = parseFloat(document.getElementById("sobras").value) || 0;
+            const ribbonTotal = parseFloat(document.getElementById("total").value) || 0;
             const ribbonDif = document.getElementById("ribbon_dif");
 
-            ribbonDif.value = ribbonAtual - ribbonInf;
-            console.log('Cálculo da diferença - Atual:', ribbonAtual, 'Informado:', ribbonInf, 'Diferença:', ribbonDif.value); // Log do cálculo da diferença
+            ribbonDif.value = (ribbonInf + ribbonSobras + ribbonTotal) - ribbonAtual;
+            console.log('Cálculo da diferença - Atual:', ribbonAtual, 'Informado:', ribbonInf, 'Diferença:', ribbonDif.value, 'Valores:', ribbonSobras, ribbonTotal);
         }
+
+
 
 
 

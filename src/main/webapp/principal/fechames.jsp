@@ -39,8 +39,8 @@
                                                     <div class="modal-content">
                                                           <div class="modal-body">
 
-                                                            <form action="<%= request.getContextPath() %>/ServletFuncionario" method="get" id="formVendaTotal" name="formVendaTotal">
-                                                                <input type="hidden" name="acao" value="imprimirVendasFuncionario">
+                                                            <form action="<%= request.getContextPath() %>/ServletFechaMes" method="get" id="formBuscaMes" name="formBuscaMes">
+                                                                <input type="hidden" name="acao" value="relatorioMes">
                                                                 <div class="form-row align-items-center">
                                                                     <div class="col-auto">
                                                                         <label for="dataInicial">Data Inicial</label>
@@ -50,31 +50,7 @@
                                                                         <label for="dataFinal">Data Final</label>
                                                                         <input type="date" class="form-control" id="dataFinal" name="dataFinal" value="${dataFinal}">
                                                                     </div>
-                                                                    <div class="col-auto">
-                                                                        <label>Funcionário</label>
-                                                                        <select class="form-control" id="funcionarioId" name="funcionarioId" required>
-                                                                            <option value="">Selecione um Funcionário</option>
-                                                                            <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
-                                                                                <c:if test="${funcionario.status == 'ATIVO'}">
-                                                                                    <option value="${funcionario.id}"
-                                                                                            class="text-success"
-                                                                                            <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
-                                                                                            ${funcionario.nome}
-                                                                                    </option>
-                                                                                </c:if>
-                                                                            </c:forEach>
-                                                                            <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
-                                                                                <c:if test="${funcionario.status != 'ATIVO'}">
-                                                                                    <option value="${funcionario.id}"
-                                                                                            class="text-danger"
-                                                                                            <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
-                                                                                            ${funcionario.nome}
-                                                                                    </option>
-                                                                                </c:if>
-                                                                            </c:forEach>
-                                                                        </select>
 
-                                                                    </div>
                                                                     <div class="col-auto">
                                                                         <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
                                                                     </div>
@@ -99,9 +75,10 @@
 
                 </div>
                 <div class="row">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
+                    <div class="col-lg-3 grid-margin">
+                        <div class="card" >
+                            <div class="card-body" style="text-align: center">
+                                <!-- Card 1 -->
                                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalData">
                                     <h4>Gerar Relatório</h4>
                                 </button>
@@ -110,65 +87,43 @@
                                         <span style="color:#1ad76b; text-align: center">${msg}</span>
                                     </div>
                                 </c:if>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
 
+                                <h4 class="card-title" style="text-align: center">RELATÓRIO DE VENDAS</h4>
 
-                                <div class="row align-items-center mb-3">
-                                    <div class="col-2">
-                                        <label class="float-label">ID:</label>
-                                        <span class="form-bar"></span>
-                                        <input type="text" class="form-control" id="FechaId"
-                                               name="id" placeholder=""
-                                               style="text-align: center; background-color: black" readonly
-                                               value="${funcionarioId}">
-                                    </div>
-
-                                </div>
-
-                                <h4 class="card-title" style="text-align: center">VENDAS TOTAIS DO FUNCIONÁRIO</h4>
-
-                                <div style="overflow-x: hidden; overflow-y: hidden;">
-                                    <table class="table table-bordered" id="tabelafuncvendas">
+                                <div style="overflow-x: hidden">
+                                    <table class="table table-bordered" id="tabelavendasmes">
                                         <thead class="thead-light">
                                         <tr>
-                                            <th scope="col">NOME</th>
+                                            <th scope="col">DATA</th>
                                             <th scope="col">TOTAL DE FOTOS</th>
                                             <th scope="col">TOTAL DE ENCARTES</th>
                                             <th scope="col">TOTAL DE DIGITAIS</th>
                                             <th scope="col">TOTAL DE SOBRAS</th>
-                                            <th scope="col">APROVEITAMENTO</th>
+
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${vendasFuncionarioList}" var="mv">
+                                        <c:forEach items="${vendasMesList}" var="vl">
                                             <tr>
-                                                <td><c:out value="${mv.nome}"></c:out></td>
-                                                <td><c:out value="${mv.ft_total}"></c:out></td>
-                                                <td><c:out value="${mv.enc_total}"></c:out></td>
-                                                <td><c:out value="${mv.dig_total}"></c:out></td>
-                                                <td><c:out value="${mv.sobras}"></c:out></td>
-                                                <td>
-                                                    <c:choose>
-                                                        <c:when test="${mv.sobras + mv.ft_total > 0}">
-                                                            <fmt:formatNumber value="${(mv.ft_total * 100) / (mv.sobras + mv.ft_total)}" maxFractionDigits="2" />%
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            0%
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </td>
+                                                <td><c:out value="${vl.data_fechamento}"></c:out></td>
+                                                <td><c:out value="${vl.total_ft}"></c:out></td>
+                                                <td><c:out value="${vl.total_enc}"></c:out></td>
+                                                <td><c:out value="${vl.total_dig}"></c:out></td>
+                                                <td><c:out value="${vl.total_sobras}"></c:out></td>
+
 
                                             </tr>
                                         </c:forEach>
                                         </tbody>
                                     </table>
 
-                                    <!-- Controles de paginação -->
-                                    <div class="pagination">
-                                        <c:forEach var="i" begin="1" end="${totalPaginas}">
-                                            <a href="ServletFuncionario?acao=imprimirRelatorioVendas&pagina=${i}"
-                                               class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
-                                        </c:forEach>
-                                    </div>
+
                                 </div>
 
                                 <div class="table-responsive">
@@ -183,187 +138,28 @@
 
             <%--parte 2--%>
 
-                <div class="row ">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-
-
-                                <h4 class="card-title" STYLE="text-align: center">HISTÓRICO DE CONDUTA</h4>
-
-                                <div  style="overflow-x: hidden; overflow-y: hidden;">
-                                    <table class="table table-bordered" id="tabelafuncconduta">
-                                        <thead class="thead-light">
-                                        <tr>
-
-                                            <th scope="col">TODAL DE ATRASOS</th>
-                                            <th scope="col">TOTAL DE FALTAS</th>
-                                            <th scope="col">TOTAL DE ADVERTÊNCIAS</th>
-                                            <th scope="col">TOTAL DE SUSPENSÕES</th>
-
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:forEach items="${}" var="hc">
-                                            <tr>
-
-                                                <td>
-                                                    <c:out value="${hc.atrasos_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.faltas_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.advertencias_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.suspensoes_total}"></c:out>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                        </tbody>
-
-                                    </table>
-                                    <!-- Controles de paginação -->
-                                    <div class="pagination">
-
-                                        <c:forEach var="i" begin="1" end="${totalPaginas}">
-                                            <a href="ServletFuncionario?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
-                                        </c:forEach>
-
-                                    </div>
-
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-<%-- 3 PARTE--%>
-                <div class="row ">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-
-
-                                <h4 class="card-title" STYLE="text-align: center">FINANCEIRO</h4>
-
-                                <div  style="overflow-x: hidden; overflow-y: hidden;">
-                                    <table class="table table-bordered" id="tabelafuncfinanceiro">
-                                        <thead class="thead-light">
-                                        <tr>
-
-
-                                            <th scope="col">NOME</th>
-
-                                            <th scope="col">TODAL DE ATRASOS</th>
-                                            <th scope="col">TOTAL DE FALTAS</th>
-                                            <th scope="col">TOTAL DE ADVERTÊNCIAS</th>
-                                            <th scope="col">TOTAL DE SUSPENSÕES</th>
-
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:forEach items="${}" var="hc">
-                                            <tr>
-                                                <td>
-                                                    <c:out value="${hc.nome}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.atrasos_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.faltas_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.advertencias_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.suspensoes_total}"></c:out>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                        </tbody>
-
-                                    </table>
-                                    <!-- Controles de paginação -->
-                                    <div class="pagination">
-
-                                        <c:forEach var="i" begin="1" end="${totalPaginas}">
-                                            <a href="ServletFuncionario?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
-                                        </c:forEach>
-
-                                    </div>
-
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
-                    <div class="col-12 grid-margin">
+                    <div class="col-md-4 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <div class="row align-items-center">
-                                    <table class="table table-bordered" id="tabelafuncfinanceiro2">
-                                        <thead class="thead-light">
-                                        <tr>
-
-                                            <th scope="col">SALÁRIO BRUTO</th>
-                                            <th scope="col">VALES</th>
-                                            <th scope="col">INSS</th>
-                                            <th scope="col">FGTS</th>
-
-                                            <th scope="col">DESCONTOS TOTAIS</th>
-                                            <th scope="col">SALÁRIO LIQUÍDO</th>
-
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:forEach items="${}" var="hc">
-                                            <tr>
-
-                                                <td>
-                                                    <c:out value="${hc.salario_bruto}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.vales_mes}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.inss}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.fgts}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.descontos_mes}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.salario_liquido}"></c:out>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                        </tbody>
-
-                                    </table>
-
-
-                                </div>
-
-                                <div class="table-responsive mt-3">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                    </table>
-                                </div>
+                                <h4 class="card-title" style="text-align: center">HISTÓRICO DE CONDUTA</h4>
+ <!-- Table Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">FINANCEIRO</h4>
+ <!-- Table Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">SALÁRIO BRUTO</h4>
+<!-- Table Content -->
                             </div>
                         </div>
                     </div>

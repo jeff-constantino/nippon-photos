@@ -43,7 +43,7 @@ public class DAOControleRibbon {
     public List<BigDecimal> buscarRibbonAtual() throws SQLException {
         List<BigDecimal> ribbonValues = new ArrayList<>();
 
-        String sql = "SELECT ribbon_1_atual, ribbon_2_atual, ribbon_3_atual, ribbon_4_atual, ribbon_5_atual, ribbon_6_atual FROM controle_ribbon ORDER BY data_ribbon DESC LIMIT 1";
+        String sql = "SELECT ribbon_1_atual, ribbon_2_atual, ribbon_3_atual, ribbon_4_atual, ribbon_5_atual, ribbon_6_atual,troca_ribbon_1,troca_ribbon_2,troca_ribbon_3,troca_ribbon_4,troca_ribbon_5,troca_ribbon_6,fim_ribbon_1,fim_ribbon_2,fim_ribbon_3,fim_ribbon_4,fim_ribbon_5,fim_ribbon_6 FROM controle_ribbon ORDER BY data_ribbon DESC LIMIT 1";
 
         try (PreparedStatement pst = connection.prepareStatement(sql);
              ResultSet rs = pst.executeQuery()) {
@@ -56,6 +56,19 @@ public class DAOControleRibbon {
                 ribbonValues.add(BigDecimal.valueOf(rs.getDouble("ribbon_4_atual")));
                 ribbonValues.add(BigDecimal.valueOf(rs.getDouble("ribbon_5_atual")));
                 ribbonValues.add(BigDecimal.valueOf(rs.getDouble("ribbon_6_atual")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("troca_ribbon_1")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("troca_ribbon_2")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("troca_ribbon_3")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("troca_ribbon_4")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("troca_ribbon_5")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("troca_ribbon_6")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("fim_ribbon_1")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("fim_ribbon_2")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("fim_ribbon_3")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("fim_ribbon_4")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("fim_ribbon_5")));
+                ribbonValues.add(BigDecimal.valueOf(rs.getDouble("fim_ribbon_6")));
+
             }
 
         } catch (SQLException e) {

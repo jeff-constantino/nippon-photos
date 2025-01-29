@@ -510,12 +510,17 @@ public class DAOVendasRepository {
         String sql = "DELETE FROM vendas WHERE venda_id = ?";
         try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
             preparedSql.setLong(1, id);
-            int rowsAffected = preparedSql.executeUpdate(); // Captura o número de linhas afetadas
+            int rowsAffected = preparedSql.executeUpdate();
             connection.commit();
 
-            // Log ou verifique se a exclusão foi bem-sucedida
+            // Log para verificar o ID e o número de linhas afetadas
+            System.out.println("Tentando excluir venda com ID: " + id);
+            System.out.println("Linhas afetadas: " + rowsAffected);
+
             if (rowsAffected == 0) {
+                System.out.println("Nenhuma venda encontrada com o ID: " + id);
             } else {
+                System.out.println("Venda excluída com sucesso!");
             }
         }
     }
@@ -537,7 +542,7 @@ public class DAOVendasRepository {
 
 
     public List<ModelVendas> listaVendas(Long idVendedorPai) throws Exception {
-        String sql = "select * from Vendas where id_vendedor_pai = ?";
+        String sql = "select * from Vendas where vendedor_id = ?";
         List<ModelVendas> retorno = new ArrayList<>();
 
         PreparedStatement preparedStatement = connection.prepareStatement(sql);

@@ -35,12 +35,19 @@ public class ServletRelMes extends ServletGenericUtil{
         DAOFechaMes daoFechaMes = new DAOFechaMes();
 
         try {
+            // Recupera a lista de vendas do banco de dados
             List<ModelFechaMes> vendasMesList = daoFechaMes.buscarFechamentoMensal(dataInicial, dataFinal);
+            System.out.println(vendasMesList);
+
+           // Passa a lista para o JSP
             request.setAttribute("vendasMesList", vendasMesList);
-            RequestDispatcher rd = request.getRequestDispatcher("principal/relmes.jsp"); // Altere o nome do JSP que exibe a tabela
+            RequestDispatcher rd = request.getRequestDispatcher("principal/relmes.jsp");
             rd.forward(request, response);
+
         } catch (SQLException e) {
             throw new ServletException("Erro ao gerar relatório mensal", e);
         }
     }
+
+
 }

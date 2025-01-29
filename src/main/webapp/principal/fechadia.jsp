@@ -460,7 +460,7 @@
                                                         <label style="color: #f2a654">Ribbon 1 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_1_atual" name="ribbon_1_atual" value="${fechamento.ribbon_1_atual}">
+                                                               id="ribbon_1_atual" name="ribbon_1_atual" value="${fechamento.ribbon_1_atual}" required>
 
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -476,7 +476,7 @@
                                                         <label style="color: #f2a654">Ribbon 2 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_2_atual" name="ribbon_2_atual" value="${fechamento.ribbon_2_atual}">
+                                                               id="ribbon_2_atual" name="ribbon_2_atual" value="${fechamento.ribbon_2_atual}" required>
 
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -506,7 +506,7 @@
                                                         <label style="color: #f2a654">Ribbon 3 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_3_atual" name="ribbon_3_atual" value="${fechamento.ribbon_3_atual}">
+                                                               id="ribbon_3_atual" name="ribbon_3_atual" value="${fechamento.ribbon_3_atual}" required>
 
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -518,7 +518,7 @@
                                                         <label style="color: #f2a654">Ribbon 4 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_4_atual" name="ribbon_4_atual" value="${fechamento.ribbon_4_atual}">
+                                                               id="ribbon_4_atual" name="ribbon_4_atual" value="${fechamento.ribbon_4_atual}" required>
 
                                                         <label style="color: white">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -548,7 +548,7 @@
                                                         <label style="color: #f2a654">Ribbon 5 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_5_atual" name="ribbon_5_atual" value="${fechamento.ribbon_5_atual}">
+                                                               id="ribbon_5_atual" name="ribbon_5_atual" value="${fechamento.ribbon_5_atual}" required>
 
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -560,7 +560,7 @@
                                                         <label style="color: #f2a654">Ribbon 6 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_6_atual" name="ribbon_6_atual" value="${fechamento.ribbon_6_atual}">
+                                                               id="ribbon_6_atual" name="ribbon_6_atual" value="${fechamento.ribbon_6_atual}" required>
 
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -693,12 +693,58 @@
         </div>
     </div>
     <script>
+
+
+
         $(document).ready(function() {
             var msg = "${msg}";
             if (msg) {
                 $('#msgModal').modal('show'); // Exibe o modal com a mensagem
             }
         });
+
+        // Função para navegar entre elementos focáveis com as setas
+        function navigateFocusableElements(event) {
+            // Lista de elementos que podem receber foco, excluindo elementos com tabindex -1
+            const focusableElements = Array.from(
+                document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
+            ).filter(element => !element.disabled && element.tabIndex !== -1); // Filtra elementos desabilitados e tabindex -1
+
+            if (focusableElements.length === 0) return; // Se não houver elementos focáveis, sai da função
+
+            const currentElement = document.activeElement; // Elemento atual com foco
+            let currentIndex = focusableElements.indexOf(currentElement); // Índice do elemento atual
+
+            switch (event.key) {
+                case 'ArrowRight': // Seta para a direita
+                case 'ArrowDown': // Seta para baixo
+                    currentIndex = (currentIndex + 1) % focusableElements.length; // Próximo elemento
+                    break;
+                case 'ArrowLeft': // Seta para a esquerda
+                case 'ArrowUp': // Seta para cima
+                    currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length; // Elemento anterior
+                    break;
+                default:
+                    return; // Ignora outras teclas
+            }
+
+            focusableElements[currentIndex].focus(); // Define o foco no elemento correspondente
+        }
+
+        // Adiciona o evento keydown ao documento
+        document.addEventListener('keydown', navigateFocusableElements);
+
+        // Bloqueia a alteração de valor com as setas nos inputs do tipo number
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('keydown', function(event) {
+                if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                    event.preventDefault(); // Impede a alteração do valor
+                }
+            });
+        });
+
+        // Fim de navegação por setas
+
 
 
 

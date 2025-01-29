@@ -45,6 +45,15 @@
 
 
     <style>
+        /* Esconde as setas dos inputs do tipo number */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield; /* Firefox */
+        }
         .pagination a.page-link {
             margin: 0 5px; /* Adiciona espaço horizontal de 5px entre os links */
             padding: 8px 12px; /* Define o padding dentro dos links para aumentar o clique */

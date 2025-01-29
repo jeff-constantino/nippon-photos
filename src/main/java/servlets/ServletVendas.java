@@ -58,16 +58,7 @@ import java.util.Map;
                 List<ModelConfig> configs = daoConfig.consultarTodasConfigs();
                 List<BigDecimal> controles = daoControleRibbon.buscarRibbonAtual();
 
-                // Imprime os valores dos ribbons no console para verificação
-                System.out.println("quantidade dos Ribbons:");
-                for (BigDecimal controle : controles) {
-                    System.out.println(controle);  // Imprime cada valor de controle
-                }
-                // Imprime os valores das fotos no console para verificação
-                System.out.println("Valores das fotos:");
-                for (ModelConfig config : configs) {
-                    System.out.println(config);  // Imprime cada valor de controle
-                }
+
 
 
 
@@ -131,15 +122,6 @@ import java.util.Map;
                     return; // Sai do método
                 }
 
-                // Ação de deletar
-                if (acao.equals("deletar")) {
-                    String venda_id = request.getParameter("venda_id");
-                    if (venda_id != null && !venda_id.isEmpty()) {
-                        daoVendas.deleteVenda(Long.parseLong(venda_id));
-                        request.setAttribute("msg", "Venda Excluída!");
-                        request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
-                    }
-                }
                 // Ação de buscar usuários via AJAX
                 else if (acao.equalsIgnoreCase("buscaruserajax")) {
                     String nome = request.getParameter("nome");
@@ -178,14 +160,14 @@ import java.util.Map;
                     request.getRequestDispatcher("/principal/vendas.jsp").forward(request, response);
                 }
                 // Ação de deletar via Ajax
-                else if (acao.equals("deletarajax")) {
-                    String venda_id = request.getParameter("venda_id");
-                    if (venda_id != null && !venda_id.isEmpty()) {
-                        daoVendas.deleteVenda(Long.parseLong(venda_id));
-                        response.getWriter().write("Venda Excluída!");
-                    }
-                    // AÇÃO PARA RELATÓRIO DE VENDAS
-                }
+//                else if (acao.equals("deletarajax")) {
+//                    String venda_id = request.getParameter("venda_id");
+//                    if (venda_id != null && !venda_id.isEmpty()) {
+//                        daoVendas.deleteVenda(Long.parseLong(venda_id));
+//                        response.getWriter().write("Venda Excluída!");
+//                    }
+//
+//                }
                 // Ação de buscar para editar venda
                 else if (acao.equalsIgnoreCase("CadVenda")) {
                     String vendaIdStr = request.getParameter("venda_id");
@@ -239,128 +221,119 @@ import java.util.Map;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            String acao = request.getParameter("acao"); // Obtém a ação atual da requisição
             String msg = "Venda Gravada com Sucesso!";
 
-            // Obtém os parâmetros do request
-            String venda_id = request.getParameter("venda_id");
-            String nome = request.getParameter("nome");
+            if (acao != null && acao.equals("deletar")) {
 
-            // Produtos
-            String prod1_din_str = request.getParameter("prod1_din");
-            String prod1_deb_str = request.getParameter("prod1_deb");
-            String prod1_cred_str = request.getParameter("prod1_cred");
-            String prod1_pix_str = request.getParameter("prod1_pix");
+                String venda_id = request.getParameter("venda_id");
 
-            String prod2_din_str = request.getParameter("prod2_din");
-            String prod2_deb_str = request.getParameter("prod2_deb");
-            String prod2_cred_str = request.getParameter("prod2_cred");
-            String prod2_pix_str = request.getParameter("prod2_pix");
+                if (venda_id != null && !venda_id.isEmpty()) {
+                    daoVendas.deleteVenda(Long.parseLong(venda_id));
+                    request.getSession().setAttribute("msg", "Venda Excluída!");
+                    response.sendRedirect(request.getContextPath() + "/ServletVendas");
 
-            String prod3_din_str = request.getParameter("prod3_din");
-            String prod3_deb_str = request.getParameter("prod3_deb");
-            String prod3_cred_str = request.getParameter("prod3_cred");
-            String prod3_pix_str = request.getParameter("prod3_pix");
 
-            // Data da Venda
-            String dataVenda = request.getParameter("dataVenda"); // Certifique-se que o nome do parâmetro é correto
-
-            // Sobras
-            String sobras_str = request.getParameter("sobras");
-
-            // Ribbon
-            String ribbon = request.getParameter("ribbon"); // Obtém o parâmetro 'ribbon'
-
-            // Criação do objeto ModelVendas
-            ModelVendas modelVendas = new ModelVendas();
-
-            // Settar os dados da venda
-            if (venda_id != null && !venda_id.isEmpty()) {
-                modelVendas.setVenda_id(Long.parseLong(venda_id)); // Atualiza se existe
-            }
-
-            // Usando o novo método para setar vendedor_id
-            String vendedor_id_str = request.getParameter("vendedor_id");
-            modelVendas.setVendedor_id(vendedor_id_str); // Define o ID do vendedor no modelo
-            modelVendas.setNome(nome);
-
-            // Settar os campos novos de produtos
-            modelVendas.setProd1_din(prod1_din_str != null && !prod1_din_str.isEmpty() ? Integer.parseInt(prod1_din_str) : 0);
-            modelVendas.setProd1_deb(prod1_deb_str != null && !prod1_deb_str.isEmpty() ? Integer.parseInt(prod1_deb_str) : 0);
-            modelVendas.setProd1_cred(prod1_cred_str != null && !prod1_cred_str.isEmpty() ? Integer.parseInt(prod1_cred_str) : 0);
-            modelVendas.setProd1_pix(prod1_pix_str != null && !prod1_pix_str.isEmpty() ? Integer.parseInt(prod1_pix_str) : 0);
-
-            modelVendas.setProd2_din(prod2_din_str != null && !prod2_din_str.isEmpty() ? Integer.parseInt(prod2_din_str) : 0);
-            modelVendas.setProd2_deb(prod2_deb_str != null && !prod2_deb_str.isEmpty() ? Integer.parseInt(prod2_deb_str) : 0);
-            modelVendas.setProd2_cred(prod2_cred_str != null && !prod2_cred_str.isEmpty() ? Integer.parseInt(prod2_cred_str) : 0);
-            modelVendas.setProd2_pix(prod2_pix_str != null && !prod2_pix_str.isEmpty() ? Integer.parseInt(prod2_pix_str) : 0);
-
-            modelVendas.setProd3_din(prod3_din_str != null && !prod3_din_str.isEmpty() ? Integer.parseInt(prod3_din_str) : 0);
-            modelVendas.setProd3_deb(prod3_deb_str != null && !prod3_deb_str.isEmpty() ? Integer.parseInt(prod3_deb_str) : 0);
-            modelVendas.setProd3_cred(prod3_cred_str != null && !prod3_cred_str.isEmpty() ? Integer.parseInt(prod3_cred_str) : 0);
-            modelVendas.setProd3_pix(prod3_pix_str != null && !prod3_pix_str.isEmpty() ? Integer.parseInt(prod3_pix_str) : 0);
-
-            // Definindo a data da venda
-            if (dataVenda != null && !dataVenda.isEmpty()) {
-                Date sqlDate = Date.valueOf(dataVenda); // Converte diretamente para java.sql.Date
-                modelVendas.setData_venda(sqlDate);
+                } else {
+                    System.out.println("ID da venda não foi recebido ou está vazio.");
+                }
             } else {
-                throw new Exception("O parâmetro 'dataVenda' não pode ser nulo ou vazio."); // A mensagem de erro
+                // Todo o código existente para gravação e atualização das vendas...
+                String venda_id = request.getParameter("venda_id");
+                String nome = request.getParameter("nome");
+
+                String prod1_din_str = request.getParameter("prod1_din");
+                String prod1_deb_str = request.getParameter("prod1_deb");
+                String prod1_cred_str = request.getParameter("prod1_cred");
+                String prod1_pix_str = request.getParameter("prod1_pix");
+
+                String prod2_din_str = request.getParameter("prod2_din");
+                String prod2_deb_str = request.getParameter("prod2_deb");
+                String prod2_cred_str = request.getParameter("prod2_cred");
+                String prod2_pix_str = request.getParameter("prod2_pix");
+
+                String prod3_din_str = request.getParameter("prod3_din");
+                String prod3_deb_str = request.getParameter("prod3_deb");
+                String prod3_cred_str = request.getParameter("prod3_cred");
+                String prod3_pix_str = request.getParameter("prod3_pix");
+
+                String dataVenda = request.getParameter("dataVenda");
+
+                String sobras_str = request.getParameter("sobras");
+
+                String ribbon = request.getParameter("ribbon");
+
+                ModelVendas modelVendas = new ModelVendas();
+                if (venda_id != null && !venda_id.isEmpty()) {
+                    modelVendas.setVenda_id(Long.parseLong(venda_id));
+                }
+
+                String vendedor_id_str = request.getParameter("vendedor_id");
+                modelVendas.setVendedor_id(vendedor_id_str);
+                modelVendas.setNome(nome);
+
+                modelVendas.setProd1_din(prod1_din_str != null && !prod1_din_str.isEmpty() ? Integer.parseInt(prod1_din_str) : 0);
+                modelVendas.setProd1_deb(prod1_deb_str != null && !prod1_deb_str.isEmpty() ? Integer.parseInt(prod1_deb_str) : 0);
+                modelVendas.setProd1_cred(prod1_cred_str != null && !prod1_cred_str.isEmpty() ? Integer.parseInt(prod1_cred_str) : 0);
+                modelVendas.setProd1_pix(prod1_pix_str != null && !prod1_pix_str.isEmpty() ? Integer.parseInt(prod1_pix_str) : 0);
+
+                modelVendas.setProd2_din(prod2_din_str != null && !prod2_din_str.isEmpty() ? Integer.parseInt(prod2_din_str) : 0);
+                modelVendas.setProd2_deb(prod2_deb_str != null && !prod2_deb_str.isEmpty() ? Integer.parseInt(prod2_deb_str) : 0);
+                modelVendas.setProd2_cred(prod2_cred_str != null && !prod2_cred_str.isEmpty() ? Integer.parseInt(prod2_cred_str) : 0);
+                modelVendas.setProd2_pix(prod2_pix_str != null && !prod2_pix_str.isEmpty() ? Integer.parseInt(prod2_pix_str) : 0);
+
+                modelVendas.setProd3_din(prod3_din_str != null && !prod3_din_str.isEmpty() ? Integer.parseInt(prod3_din_str) : 0);
+                modelVendas.setProd3_deb(prod3_deb_str != null && !prod3_deb_str.isEmpty() ? Integer.parseInt(prod3_deb_str) : 0);
+                modelVendas.setProd3_cred(prod3_cred_str != null && !prod3_cred_str.isEmpty() ? Integer.parseInt(prod3_cred_str) : 0);
+                modelVendas.setProd3_pix(prod3_pix_str != null && !prod3_pix_str.isEmpty() ? Integer.parseInt(prod3_pix_str) : 0);
+
+                if (dataVenda != null && !dataVenda.isEmpty()) {
+                    Date sqlDate = Date.valueOf(dataVenda);
+                    modelVendas.setData_venda(sqlDate);
+                } else {
+                    throw new Exception("O parâmetro 'dataVenda' não pode ser nulo ou vazio.");
+                }
+
+                if (modelVendas.getData_venda() != null) {
+                    String formattedDataVenda = DateUtil.formatDate(modelVendas.getData_venda());
+                    request.setAttribute("formattedDataVenda", formattedDataVenda);
+                }
+
+                modelVendas.setSobras(sobras_str != null && !sobras_str.isEmpty() ? Integer.parseInt(sobras_str) : 0);
+
+                if (ribbon != null && !ribbon.isEmpty()) {
+                    modelVendas.setRibbon(ribbon);
+                }
+
+                if (modelVendas.getVenda_id() != null) {
+                    modelVendas = daoVendas.atualizarVenda(modelVendas.getVenda_id(), modelVendas, super.getUserLogado(request));
+                } else {
+                    modelVendas = daoVendas.gravarVenda(modelVendas, super.getUserLogado(request));
+                }
+
+                ModelVendas modelVendasConsulta = daoVendas.consultaVenda(modelVendas.getVenda_id(), super.getUserLogado(request));
+                request.setAttribute("modelVendasConsulta", modelVendasConsulta);
+
+                request.setAttribute("msg", msg);
+                request.setAttribute("modelVenda", modelVendas);
+                request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
+
+                ModelVendas modelVendasConsulta1 = daoVendas.consultaVenda(modelVendas.getVenda_id(), super.getUserLogado(request));
+
+                if (modelVendasConsulta1.getData_venda() != null) {
+                    String formattedDataVenda = DateUtil.formatDate(modelVendasConsulta1.getData_venda());
+                    request.setAttribute("formattedDataVenda", formattedDataVenda);
+                } else {
+                    System.out.println("Data da venda está nula.");
+                }
+
+                request.setAttribute("msg", msg);
+                request.setAttribute("modelVenda", modelVendas);
+                request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
+
+                request.setAttribute("acao", "vendaDoDia");
+                doGet(request, response);
             }
-
-            // Após recuperar a data da venda
-            if (modelVendas.getData_venda() != null) {
-                String formattedDataVenda = DateUtil.formatDate(modelVendas.getData_venda());
-                request.setAttribute("formattedDataVenda", formattedDataVenda);
-            }
-
-            modelVendas.setSobras(sobras_str != null && !sobras_str.isEmpty() ? Integer.parseInt(sobras_str) : 0);
-
-            // Definindo o ribbon
-            if (ribbon != null && !ribbon.isEmpty()) {
-                modelVendas.setRibbon(ribbon); // Supondo que você tenha um método setRibbon no seu ModelVendas
-            }
-
-            // Grava ou atualiza a venda
-            if (modelVendas.getVenda_id() != null) {
-                modelVendas = daoVendas.atualizarVenda(modelVendas.getVenda_id(), modelVendas, super.getUserLogado(request)); // Atualiza
-            } else {
-                modelVendas = daoVendas.gravarVenda(modelVendas, super.getUserLogado(request)); // Grava nova venda
-            }
-
-            // Consulta a venda
-            ModelVendas modelVendasConsulta = daoVendas.consultaVenda(modelVendas.getVenda_id(), super.getUserLogado(request));
-            request.setAttribute("modelVendasConsulta", modelVendasConsulta);
-
-            // Mantém os dados na tela e envia a mensagem de sucesso
-            request.setAttribute("msg", msg);
-            request.setAttribute("modelVenda", modelVendas);
-            request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
-
-            // Após recuperar a venda
-            ModelVendas modelVendasConsulta1 = daoVendas.consultaVenda(modelVendas.getVenda_id(), super.getUserLogado(request));
-
-            // Formata a data para o formato necessário
-            if (modelVendasConsulta1.getData_venda() != null) {
-                String formattedDataVenda = DateUtil.formatDate(modelVendasConsulta1.getData_venda());
-
-                request.setAttribute("formattedDataVenda", formattedDataVenda);
-            } else {
-                System.out.println("Data da venda está nula."); // Mensagem caso a data esteja nula
-            }
-
-            // Mantém os dados na tela e envia a mensagem de sucesso
-            request.setAttribute("msg", msg);
-            request.setAttribute("modelVenda", modelVendas);
-            request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
-
-//            // Redireciona para vendas.jsp
-//            RequestDispatcher redireciona = request.getRequestDispatcher("/principal/vendas.jsp");
-//            redireciona.forward(request, response);
-
-            // Chama o doGet para buscar vendas do dia após a gravação
-            request.setAttribute("acao", "vendaDoDia"); // Define a ação para o doGet
-            doGet(request, response); // Chama o doGet
-
         } catch (Exception e) {
             e.printStackTrace();
             RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");
@@ -368,6 +341,7 @@ import java.util.Map;
             redirecionar.forward(request, response);
         }
     }
+
 
 
 

@@ -44,11 +44,11 @@
                                                                 <div class="form-row align-items-center">
                                                                     <div class="col-auto">
                                                                         <label for="dataInicial">Data Inicial</label>
-                                                                        <input type="date" class="form-control" id="dataInicial" name="dataInicial" value="${dataInicial}">
+                                                                        <input type="date" class="form-control" id="dataInicial" name="dataInicial" required value="${dataInicial}">
                                                                     </div>
                                                                     <div class="col-auto">
                                                                         <label for="dataFinal">Data Final</label>
-                                                                        <input type="date" class="form-control" id="dataFinal" name="dataFinal" value="${dataFinal}">
+                                                                        <input type="date" class="form-control" id="dataFinal" name="dataFinal" requiredvalue="${dataFinal}">
                                                                     </div>
 
                                                                     <div class="col-auto">
@@ -94,30 +94,42 @@
                         <div class="card">
                             <div class="card-body">
 
-                                <h4 class="card-title" style="text-align: center">RELATÓRIO DE VENDAS</h4>
+                                <h4 class="card-title" style="text-align: center">RESUMO DO MÊS</h4>
 
-                                <div style="overflow-x: hidden">
+                                <div style="overflow-x: hidden; overflow-y: hidden">
                                     <table class="table table-bordered" id="tabelavendasmes">
                                         <thead class="thead-light">
                                         <tr>
-                                            <th scope="col">DATA</th>
+
                                             <th scope="col">TOTAL DE FOTOS</th>
                                             <th scope="col">TOTAL DE ENCARTES</th>
                                             <th scope="col">TOTAL DE DIGITAIS</th>
                                             <th scope="col">TOTAL DE SOBRAS</th>
+                                            <th scope="col">TOTAL DE RIBBONS</th>
+
+
 
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <c:forEach items="${vendasMesList}" var="vl">
                                             <tr>
-                                                <td><c:out value="${vl.data_fechamento}"></c:out></td>
                                                 <td><c:out value="${vl.total_ft}"></c:out></td>
                                                 <td><c:out value="${vl.total_enc}"></c:out></td>
                                                 <td><c:out value="${vl.total_dig}"></c:out></td>
                                                 <td><c:out value="${vl.total_sobras}"></c:out></td>
 
 
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${vl.conf1_qtd != 0}">
+                                                            <fmt:formatNumber value="${(vl.total_ft + vl.total_sobras) / vl.conf1_qtd}" pattern="0.00" />
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <c:out value="Não aplicável" />
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -139,11 +151,92 @@
             <%--parte 2--%>
 
                 <div class="row">
+                    <div class="col-md-6 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">VALORES ANOTADOS</h4>
+                                <!-- Table Content -->
+                                <div style="overflow-x: hidden; overflow-y: hidden">
+                                    <table class="table table-bordered" id="tabelavaloresmes">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">TIPO</th>
+                                            <th scope="col">VALOR</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach items="${vendasMesList}" var="vl">
+                                            <tr>
+                                                <td>Total Dinheiro</td>
+                                                <td><fmt:formatNumber value="${vl.valor_din_mes}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Débito</td>
+                                                <td><fmt:formatNumber value="${vl.valor_deb_mes}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Crédito</td>
+                                                <td><fmt:formatNumber value="${vl.valor_cred_mes}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Pix</td>
+                                                <td><fmt:formatNumber value="${vl.valor_pix_mes}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">VALORES REAIS</h4>
+                                <!-- Table Content -->
+                                <div style="overflow-x: hidden; overflow-y: hidden">
+                                    <table class="table table-bordered" id="tabelavaloresrealmes">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">TIPO</th>
+                                            <th scope="col">VALOR</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach items="${vendasMesList}" var="vl">
+                                            <tr>
+                                                <td>Total Dinheiro</td>
+                                                <td><fmt:formatNumber value="${vl.valor_din_mes_real}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Débito</td>
+                                                <td><fmt:formatNumber value="${vl.valor_deb_mes_real}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Crédito</td>
+                                                <td><fmt:formatNumber value="${vl.valor_cred_mes_real}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Pix</td>
+                                                <td><fmt:formatNumber value="${vl.valor_pix_mes_real}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <%--parte 3--%>
+                <div class="row">
                     <div class="col-md-4 grid-margin">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">HISTÓRICO DE CONDUTA</h4>
- <!-- Table Content -->
+                                <!-- Table Content -->
                             </div>
                         </div>
                     </div>
@@ -151,7 +244,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">FINANCEIRO</h4>
- <!-- Table Content -->
+                                <!-- Table Content -->
                             </div>
                         </div>
                     </div>
@@ -159,12 +252,11 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">SALÁRIO BRUTO</h4>
-<!-- Table Content -->
+                                <!-- Table Content -->
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
             <!-- content-wrapper ends -->
             <!-- partial:partials/_footer.html -->
@@ -210,6 +302,47 @@
         }
     });
 
+    // Função para navegar entre elementos focáveis com as setas
+    function navigateFocusableElements(event) {
+        // Lista de elementos que podem receber foco, excluindo elementos com tabindex -1
+        const focusableElements = Array.from(
+            document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
+        ).filter(element => !element.disabled && element.tabIndex !== -1); // Filtra elementos desabilitados e tabindex -1
+
+        if (focusableElements.length === 0) return; // Se não houver elementos focáveis, sai da função
+
+        const currentElement = document.activeElement; // Elemento atual com foco
+        let currentIndex = focusableElements.indexOf(currentElement); // Índice do elemento atual
+
+        switch (event.key) {
+            case 'ArrowRight': // Seta para a direita
+            case 'ArrowDown': // Seta para baixo
+                currentIndex = (currentIndex + 1) % focusableElements.length; // Próximo elemento
+                break;
+            case 'ArrowLeft': // Seta para a esquerda
+            case 'ArrowUp': // Seta para cima
+                currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length; // Elemento anterior
+                break;
+            default:
+                return; // Ignora outras teclas
+        }
+
+        focusableElements[currentIndex].focus(); // Define o foco no elemento correspondente
+    }
+
+    // Adiciona o evento keydown ao documento
+    document.addEventListener('keydown', navigateFocusableElements);
+
+    // Bloqueia a alteração de valor com as setas nos inputs do tipo number
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                event.preventDefault(); // Impede a alteração do valor
+            }
+        });
+    });
+
+    // Fim de navegação por setas
 
     window.onload = function() {
         fetch('ServletRelVenda')
@@ -225,6 +358,10 @@
             delay: { "show": 100, "hide": 100 } // O tooltip vai aparecer em 100ms
         });
     });
+
+
+
+
 </script>
 </body>
 </html>

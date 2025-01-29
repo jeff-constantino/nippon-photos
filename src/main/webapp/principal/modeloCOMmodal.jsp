@@ -455,7 +455,47 @@
     });
 
 
+    // Função para navegar entre elementos focáveis com as setas
+    function navigateFocusableElements(event) {
+        // Lista de elementos que podem receber foco, excluindo elementos com tabindex -1
+        const focusableElements = Array.from(
+            document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
+        ).filter(element => !element.disabled && element.tabIndex !== -1); // Filtra elementos desabilitados e tabindex -1
 
+        if (focusableElements.length === 0) return; // Se não houver elementos focáveis, sai da função
+
+        const currentElement = document.activeElement; // Elemento atual com foco
+        let currentIndex = focusableElements.indexOf(currentElement); // Índice do elemento atual
+
+        switch (event.key) {
+            case 'ArrowRight': // Seta para a direita
+            case 'ArrowDown': // Seta para baixo
+                currentIndex = (currentIndex + 1) % focusableElements.length; // Próximo elemento
+                break;
+            case 'ArrowLeft': // Seta para a esquerda
+            case 'ArrowUp': // Seta para cima
+                currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length; // Elemento anterior
+                break;
+            default:
+                return; // Ignora outras teclas
+        }
+
+        focusableElements[currentIndex].focus(); // Define o foco no elemento correspondente
+    }
+
+    // Adiciona o evento keydown ao documento
+    document.addEventListener('keydown', navigateFocusableElements);
+
+    // Bloqueia a alteração de valor com as setas nos inputs do tipo number
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                event.preventDefault(); // Impede a alteração do valor
+            }
+        });
+    });
+
+    // Fim de navegação por setas
 
 </SCRIPT>
 

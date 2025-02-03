@@ -1,19 +1,178 @@
- PARA CRIAR AS LISTAS
+// Função para navegar entre elementos focáveis com as setas
+function navigateFocusableElements(event) {
+    const focusableElements = Array.from(
+        document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
+    ).filter(element => !element.disabled && element.tabIndex !== -1);
 
-         <c:forEach items="${modelLogins}" var ="mL">
-            <tr>
-              <td>
-                     <c:out value="${mL.id}"></c:out>
-              </td>
-              <td>
-                <c:out value="${mL.nome}"></c:out>
-              </td>
-              <td><a class="btn btn-outline-success waves-effect waves-light" href="<%= request.getContextPath() %>/ServletUsuarioController?acao=buscarEditar&id=${mL.id}" >Gerenciar</a></td>
+    if (focusableElements.length === 0) return;
 
-            </tr>
-          </c:forEach>
+    const currentElement = document.activeElement;
+    if (!focusableElements.includes(currentElement)) return;
+
+    let currentIndex = focusableElements.indexOf(currentElement);
+
+    switch (event.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+            currentIndex = (currentIndex + 1) % focusableElements.length;
+            break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+            currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
+            break;
+        default:
+            return;
+    }
+
+    focusableElements[currentIndex].focus();
+}
+
+// Bloqueia a alteração de valor com as setas nos inputs do tipo number
+document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener('keydown', function(event) {
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            event.preventDefault(); // Impede a alteração do valor
+        }
+    });
+});
+
+// Adiciona o evento keydown ao documento
+document.addEventListener('keydown', navigateFocusableElements);
+// Fim de navegação por setas
+
+
+// Obtém a data atual no fuso horário local
+const today = new Date();
+const localDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+// Define o valor do campo de data como a data local
+document.getElementById('outer_dataVenda').value = localDate;
 
 
 
+retornar para servlet ao inves da página :
+ao invés disso :
+            request.getRequestDispatcher("principal/PAGINA.jsp").forward(request, response);
 
-          alter table model_login add constraint usuario_fk foreign key (usuario_id) reference model_login(id) (referenciar um para o outro)
+USA ASSIM:
+response.sendRedirect(request.getContextPath() + "/Servlet.....");
+***********************************************************************
+
+
+
+FORMATAÇÃO VALORES:
+para tables <c if =
+<td><fmt:formatNumber value="${conta.valor}"
+                      type="currency"
+                      currencySymbol="R$"/></td>
+
+
+//Pega o id do input para aplicar a mask: 
+$("#input").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+
+function removerMascara(valor) {
+    return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '');
+}
+// PEGA O ID DO FORM PARA REMOVER A MASK AO ENVIAR:
+$("#id Form").on("submit", function(e) {
+    var valor1 = removerMascara($("#conf1_valor").val());
+
+    $("#input").val(valor1);
+
+});
+FIM FORMATAÇÃO VALORES
+
+*************************************************************
+MODAL PARA MSG:
+
+$(document).ready(function() {
+    var msg = "${msg}";
+    if (msg) {
+        $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+    }
+});
+
+
+<SCRIPT type="text/javascript">
+
+    $(document).ready(function() {
+        var msg = "${msg}";
+        if (msg) {
+            $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+        }
+    });
+<SCRIPT> FIM DO MODAL PARA MSG
+
+********************************************************************
+DEFINIR A DATA INICIAL COMO A DE HOJE....
+<script>
+    // Obtém a data atual
+    const today = new Date().toISOString().split('T')[0];
+    // Define o valor do campo de data como a data atual
+    document.getElementById('outer_dataVenda').value = today;
+</script>
+FIM DA DATA INICIAL
+*************************************************************
+paginar 
+
+jsp :
+<!-- Controles de paginação -->
+<div class="pagination">
+    <c:if test="${paginaAtual > 1}">
+        <a href="ServletVendas?acao=imprimirRelatorioVendas&pagina=${paginaAtual - 1}" class="page-link">&laquo; Anterior</a>
+    </c:if>
+
+    <c:forEach var="i" begin="1" end="${totalPaginas}">
+        <a href="ServletVendas?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
+    </c:forEach>
+
+header :
+<style>
+    .pagination a.page-link {
+        margin: 0 5px; /* Adiciona espaço horizontal de 5px entre os links */
+        padding: 8px 12px; /* Define o padding dentro dos links para aumentar o clique */
+        text-decoration: none;
+        border: 1px solid #ddd; /* Adiciona uma borda ao redor dos links */
+        color: #007bff;
+    }
+
+    .pagination a.page-link.active {
+        background-color: #007bff;
+        color: white; /* Deixa o link da página ativa com cores diferentes */
+    }
+
+    .pagination a.page-link:hover {
+        background-color: #ddd; /* Adiciona um efeito de hover */
+        color: #007bff;
+    }
+</style>
+
+Servlet :
+if ("imprimirRelatorioVendas".equals(acao)) {
+    int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
+    int registrosPorPagina = 10;
+    int offset = (paginaAtual - 1) * registrosPorPagina;
+
+    // Busca de vendas com paginação
+    vendasList = relatorio.consultarVendas(funcionarioId, dataInicial, dataFinal, offset, registrosPorPagina);
+
+    // Adiciona vendasList no request para o JSP
+    request.setAttribute("vendasList", vendasList);
+
+    // Lógica para cálculo de total de páginas
+    int totalVendas = relatorio.contarVendas(funcionarioId, dataInicial, dataFinal); // Método para contar registros
+    int totalPaginas = (int) Math.ceil(totalVendas / (double) registrosPorPagina);
+
+    // Adiciona totalPaginas e paginaAtual no request
+    request.setAttribute("totalPaginas", totalPaginas);
+    request.setAttribute("paginaAtual", paginaAtual);
+
+    // Redireciona para a página JSP correta
+    dispatcher = request.getRequestDispatcher("principal/relvendas.jsp");
+}
+
+dao:
+// Ordenação e paginação
+sql.append(" ORDER BY v.venda_id DESC LIMIT ? OFFSET ?");
+
+fim paginação
+*********************************************************************

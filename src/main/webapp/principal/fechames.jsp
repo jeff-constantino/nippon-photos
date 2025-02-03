@@ -48,7 +48,7 @@
                                                                     </div>
                                                                     <div class="col-auto">
                                                                         <label for="dataFinal">Data Final</label>
-                                                                        <input type="date" class="form-control" id="dataFinal" name="dataFinal" requiredvalue="${dataFinal}">
+                                                                        <input type="date" class="form-control" id="dataFinal" name="dataFinal" required value="${dataFinal}">
                                                                     </div>
 
                                                                     <div class="col-auto">
@@ -147,6 +147,137 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-3 grid-margin">
+                        <div class="card" >
+                            <div class="card-body" style="text-align: center">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <h4 class="card-title" style="text-align: center">RANKING FUNCIONÁRIOS</h4>
+
+                                <div style="overflow-x: hidden; overflow-y: hidden">
+                                    <table class="table table-bordered" id="tabelaRankingmes">
+                                        <!-- Área para o gráfico -->
+                                        <div style="width: 100%; height: auto;">
+                                            <canvas id="vendasChart"></canvas>
+                                        </div>
+
+                                        <!-- Script para gerar o gráfico -->
+                                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                        <script>
+                                            // Variáveis para o gráfico de vendas
+                                            const ctxVendas = document.getElementById('vendasChart').getContext('2d');
+
+                                            // Arrays para armazenar os dados
+                                            var nomesVendas = [];
+                                            var totalVendas = [];
+
+                                            // Preenchendo os dados do gráfico
+                                            <c:forEach var="venda" items="${vendasList}">
+                                            nomesVendas.push("${venda.nome}");          // Nome do funcionário
+                                            totalVendas.push(${venda.totalFotosVendidas}); // Total de vendas
+                                            </c:forEach>
+
+                                            // Gerando o gráfico
+                                            const vendasChart = new Chart(ctxVendas, {
+                                                type: 'bar', // Tipo de gráfico: 'bar' para barra
+                                                data: {
+                                                    labels: nomesVendas, // Nomes dos funcionários no eixo X
+                                                    datasets: [{
+                                                        label: 'Fotos Vendidas',
+                                                        data: totalVendas, // Total de vendas no eixo Y
+                                                        backgroundColor: [
+                                                            'rgba(50,205,50)', // Cor vibrante 1
+                                                            'rgba(54, 162, 235)',   // Cor vibrante 2 (azul)
+                                                            'rgba(255, 206, 86)',   // Cor vibrante 3 (amarelo)
+                                                            'rgba(75, 192, 192)',   // Cor vibrante 4 (verde claro)
+                                                            'rgba(153, 102, 255)',  // Cor vibrante 5 (roxo)
+                                                            'rgba(255, 99, 132)'    // Cor vibrante 6 (laranja)
+                                                        ], // Cores vibrantes para as barras
+                                                        borderColor: [
+                                                            'rgba(107,142,35, 1)',     // Cor da borda vibrante 1
+                                                            'rgba(54, 162, 235, 1)',     // Cor da borda vibrante 2
+                                                            'rgba(255, 206, 86, 1)',     // Cor da borda vibrante 3
+                                                            'rgba(75, 192, 192, 1)',     // Cor da borda vibrante 4
+                                                            'rgba(153, 102, 255, 1)',    // Cor da borda vibrante 5
+                                                            'rgba(255, 99, 132, 1)'      // Cor da borda vibrante 6
+                                                        ], // Cores da borda das barras
+                                                        borderWidth: 1
+                                                    }]
+                                                },
+                                                options: {
+                                                    responsive: true, // Gráfico responsivo
+                                                    maintainAspectRatio: false, // Permite que o gráfico se ajuste ao tamanho do contêiner
+                                                    animation: {
+                                                        duration: 1500, // Duração da animação
+                                                        easing: 'easeInOutCubic' // Efeito de animação
+                                                    },
+                                                    scales: {
+                                                        y: {
+                                                            beginAtZero: false, // O gráfico começa no 0
+                                                            title: {
+                                                                display: false,
+                                                                text: 'Fotos Vendidas', // Título do eixo Y
+                                                                font: {
+                                                                    size: 16
+                                                                }
+                                                            },
+                                                            ticks: {
+                                                                font: {
+                                                                    size: 14, // Tamanho da fonte do eixo Y
+                                                                    weight: 'bold'
+                                                                }
+                                                            }
+                                                        },
+                                                        x: {
+                                                            title: {
+                                                                display: false, // Título do eixo X oculto
+                                                            },
+                                                            ticks: {
+                                                                font: {
+                                                                    size: 14, // Tamanho da fonte do eixo X
+                                                                    weight: 'bold'
+                                                                },
+                                                                // Modificando os labels para mostrar nome + quantidade de fotos
+                                                                callback: function(value, index, values) {
+                                                                    return nomesVendas[index] + '\n(' + totalVendas[index] + ')'; // Nome + Quantidade de fotos
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    plugins: {
+                                                        legend: {
+                                                            labels: {
+                                                                font: {
+                                                                    size: 14, // Tamanho da fonte da legenda
+                                                                    weight: 'bold'
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        </script>
+                                    </table>
+
+
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             <%--parte 2--%>
 
@@ -165,6 +296,11 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        <c:set var="totalDinheiro" value="0" />
+                                        <c:set var="totalDebito" value="0" />
+                                        <c:set var="totalCredito" value="0" />
+                                        <c:set var="totalPix" value="0" />
+
                                         <c:forEach items="${vendasMesList}" var="vl">
                                             <tr>
                                                 <td>Total Dinheiro</td>
@@ -182,8 +318,17 @@
                                                 <td>Total Pix</td>
                                                 <td><fmt:formatNumber value="${vl.valor_pix_mes}" type="currency" currencySymbol="R$" /></td>
                                             </tr>
+                                            <c:set var="totalDinheiro" value="${totalDinheiro + vl.valor_din_mes}" />
+                                            <c:set var="totalDebito" value="${totalDebito + vl.valor_deb_mes}" />
+                                            <c:set var="totalCredito" value="${totalCredito + vl.valor_cred_mes}" />
+                                            <c:set var="totalPix" value="${totalPix + vl.valor_pix_mes}" />
                                         </c:forEach>
                                         </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td style="color: #DAA520;font-weight: bold">Total Geral:</td>
+                                            <td style="color: #DAA520;font-weight: bold"><fmt:formatNumber value="${totalDinheiro + totalDebito + totalCredito + totalPix}" type="currency" currencySymbol="R$" /></td>
+
                                     </table>
                                 </div>
                             </div>
@@ -204,6 +349,11 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        <c:set var="totalDinheiroReal" value="0" />
+                                        <c:set var="totalDebitoReal" value="0" />
+                                        <c:set var="totalCreditoReal" value="0" />
+                                        <c:set var="totalPixReal" value="0" />
+
                                         <c:forEach items="${vendasMesList}" var="vl">
                                             <tr>
                                                 <td>Total Dinheiro</td>
@@ -221,8 +371,19 @@
                                                 <td>Total Pix</td>
                                                 <td><fmt:formatNumber value="${vl.valor_pix_mes_real}" type="currency" currencySymbol="R$" /></td>
                                             </tr>
+                                            <c:set var="totalDinheiroReal" value="${totalDinheiroReal + vl.valor_din_mes_real}" />
+                                            <c:set var="totalDebitoReal" value="${totalDebitoReal + vl.valor_deb_mes_real}" />
+                                            <c:set var="totalCreditoReal" value="${totalCreditoReal + vl.valor_cred_mes_real}" />
+                                            <c:set var="totalPixReal" value="${totalPixReal + vl.valor_pix_mes_real}" />
                                         </c:forEach>
                                         </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td style="color: #DAA520;font-weight: bold">Total Geral:</td>
+                                            <td style="color: #DAA520;font-weight: bold"><fmt:formatNumber value="${totalDinheiroReal + totalDebitoReal + totalCreditoReal + totalPixReal}" type="currency" currencySymbol="R$" /></td>
+                                        </tr>
+                                        </tfoot>
+
                                     </table>
                                 </div>
                             </div>
@@ -304,34 +465,32 @@
 
     // Função para navegar entre elementos focáveis com as setas
     function navigateFocusableElements(event) {
-        // Lista de elementos que podem receber foco, excluindo elementos com tabindex -1
         const focusableElements = Array.from(
             document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
-        ).filter(element => !element.disabled && element.tabIndex !== -1); // Filtra elementos desabilitados e tabindex -1
+        ).filter(element => !element.disabled && element.tabIndex !== -1);
 
-        if (focusableElements.length === 0) return; // Se não houver elementos focáveis, sai da função
+        if (focusableElements.length === 0) return;
 
-        const currentElement = document.activeElement; // Elemento atual com foco
-        let currentIndex = focusableElements.indexOf(currentElement); // Índice do elemento atual
+        const currentElement = document.activeElement;
+        if (!focusableElements.includes(currentElement)) return;
+
+        let currentIndex = focusableElements.indexOf(currentElement);
 
         switch (event.key) {
-            case 'ArrowRight': // Seta para a direita
-            case 'ArrowDown': // Seta para baixo
-                currentIndex = (currentIndex + 1) % focusableElements.length; // Próximo elemento
+            case 'ArrowRight':
+            case 'ArrowDown':
+                currentIndex = (currentIndex + 1) % focusableElements.length;
                 break;
-            case 'ArrowLeft': // Seta para a esquerda
-            case 'ArrowUp': // Seta para cima
-                currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length; // Elemento anterior
+            case 'ArrowLeft':
+            case 'ArrowUp':
+                currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
                 break;
             default:
-                return; // Ignora outras teclas
+                return;
         }
 
-        focusableElements[currentIndex].focus(); // Define o foco no elemento correspondente
+        focusableElements[currentIndex].focus();
     }
-
-    // Adiciona o evento keydown ao documento
-    document.addEventListener('keydown', navigateFocusableElements);
 
     // Bloqueia a alteração de valor com as setas nos inputs do tipo number
     document.querySelectorAll('input[type="number"]').forEach(input => {
@@ -342,7 +501,10 @@
         });
     });
 
+    // Adiciona o evento keydown ao documento
+    document.addEventListener('keydown', navigateFocusableElements);
     // Fim de navegação por setas
+
 
     window.onload = function() {
         fetch('ServletRelVenda')

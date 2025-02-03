@@ -851,30 +851,28 @@
     // Fim de navegação por setas
 
     document.addEventListener('DOMContentLoaded', function () {
-        // Valores que vêm do banco de dados
-
+        // Função para substituir vírgulas por pontos
+        function substituirVirgulaPorPonto(event) {
+            var input = event.target;
+            input.value = input.value.replace(/,/g, '.'); // Substitui todas as vírgulas por pontos
+        }
 
         // Função para calcular a diferença e atualizar os campos
         function calcularDiferenças() {
             // Obtém os valores dos campos
             var valorDin = parseFloat(document.getElementById('valor_din').value.replace(',', '.')) || 0;
             var valorDinReal = parseFloat(document.getElementById('valor_din_real').value.replace(',', '.')) || 0;
-
             var valorDeb = parseFloat(document.getElementById('valor_deb').value.replace(',', '.')) || 0;
             var valorDebReal = parseFloat(document.getElementById('valor_deb_real').value.replace(',', '.')) || 0;
-
-
             var valorCred = parseFloat(document.getElementById('valor_cred').value.replace(',', '.')) || 0;
             var valorCredReal = parseFloat(document.getElementById('valor_cred_real').value.replace(',', '.')) || 0;
-
-
             var valorPix = parseFloat(document.getElementById('valor_pix').value.replace(',', '.')) || 0;
             var valorPixReal = parseFloat(document.getElementById('valor_pix_real').value.replace(',', '.')) || 0;
 
             // Calcula as diferenças
             var valorDinDif = valorDinReal - valorDin;
-            var valorDebDif = (valorDebReal ) - (valorDeb); // Inclui valor do banco
-            var valorCredDif = (valorCredReal) - (valorCred); // Inclui valor do banco
+            var valorDebDif = valorDebReal - valorDeb;
+            var valorCredDif = valorCredReal - valorCred;
             var valorPixDif = valorPixReal - valorPix;
 
             // Atualiza os campos de diferença
@@ -897,22 +895,21 @@
             }
         }
 
-        // Adiciona evento para recalcular as diferenças quando os campos forem alterados
+        // Adiciona evento para substituir vírgula por ponto e recalcular as diferenças quando os campos forem alterados
         var campos = [
             'valor_din', 'valor_din_real', 'valor_deb', 'valor_deb_real',
             'valor_cred', 'valor_cred_real', 'valor_pix', 'valor_pix_real'
         ];
 
         campos.forEach(function (campoId) {
-            document.getElementById(campoId).addEventListener('input', calcularDiferenças);
+            var campo = document.getElementById(campoId);
+            campo.addEventListener('input', substituirVirgulaPorPonto);
+            campo.addEventListener('input', calcularDiferenças);
         });
 
         // Calcula as diferenças inicialmente
         calcularDiferenças();
     });
-
-
-
 
     window.onload = function() {
         // Função para calcular e alterar a cor da diferença
@@ -929,14 +926,14 @@
 
             // Mudando a cor dependendo da diferença
             if (diferenca < 0) {
-                difRibbon.style.backgroundColor = '#f8d7da'; // Vermelho para negativo
+                difRibbon.style.backgroundColor = '#f8d7da';
                 difRibbon.style.color = 'red';
             } else {
-                difRibbon.style.backgroundColor = '#d4edda'; // Verde para positivo
+                difRibbon.style.backgroundColor = '#d4edda';
                 difRibbon.style.color = 'green';
             }
 
-            return diferenca; // Retorna a diferença calculada
+            return diferenca;
         }
 
         // Variável para somar as diferenças
@@ -970,8 +967,6 @@
         document.getElementById("ribbon_6_atual").addEventListener("input", atualizarTotalDiferenca);
     };
 
-
-
     document.addEventListener("DOMContentLoaded", function () {
         // Seleciona os inputs
         const valorDin = document.getElementById("valor_din");
@@ -1000,6 +995,7 @@
             input.addEventListener("input", calcularTotal);
         });
     });
+
 
 
 </SCRIPT>

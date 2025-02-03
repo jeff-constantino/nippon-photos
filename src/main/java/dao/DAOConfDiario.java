@@ -40,7 +40,7 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
                 "valor_pix = ?, valor_pix_real = ?, valor_pix_dif = ?, " +
                 "valor_despesa_total = ?, valor_vale_total = ?, desconto = ?, " +
                 "venda_total_dia = ?, observacao = UPPER(?), total_revelado = ?, total_informado = ?, " +
-                "valor_deb_24h = ?, valor_cred_24h = ?, ribbon_1_atual = ?, ribbon_2_atual = ?, ribbon_3_atual = ?, " +
+                "ribbon_1_atual = ?, ribbon_2_atual = ?, ribbon_3_atual = ?, " +
                 "ribbon_4_atual = ?, ribbon_5_atual = ?, ribbon_6_atual = ?, sobras = ?, dif_ribbon_1 = ?, dif_ribbon_2 = ?, " +
                 "dif_ribbon_3 = ?, dif_ribbon_4 = ?, dif_ribbon_5 = ?, dif_ribbon_6 = ?, " +
                 "old_ribbon_1 = ?, old_ribbon_2 = ?, old_ribbon_3 = ?, old_ribbon_4 = ?, old_ribbon_5 = ?, old_ribbon_6 = ?, " +
@@ -80,36 +80,36 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
             psConfDia.setString(17, confDiario.getObservacao());
             psConfDia.setInt(18, confDiario.getTotal_revelado());
             psConfDia.setInt(19, confDiario.getTotal_informado());
-            psConfDia.setBigDecimal(20, confDiario.getValor_deb_24h());
-            psConfDia.setBigDecimal(21, confDiario.getValor_cred_24h());
-            psConfDia.setInt(22, confDiario.getRibbon_1_atual());
-            psConfDia.setInt(23, confDiario.getRibbon_2_atual());
-            psConfDia.setInt(24, confDiario.getRibbon_3_atual());
-            psConfDia.setInt(25, confDiario.getRibbon_4_atual());
-            psConfDia.setInt(26, confDiario.getRibbon_5_atual());
-            psConfDia.setInt(27, confDiario.getRibbon_6_atual());
-            psConfDia.setInt(28, confDiario.getSobras());
-            psConfDia.setInt(29, confDiario.getDif_ribbon_1());
-            psConfDia.setInt(30, confDiario.getDif_ribbon_2());
-            psConfDia.setInt(31, confDiario.getDif_ribbon_3());
-            psConfDia.setInt(32, confDiario.getDif_ribbon_4());
-            psConfDia.setInt(33, confDiario.getDif_ribbon_5());
-            psConfDia.setInt(34, confDiario.getDif_ribbon_6());
-            psConfDia.setInt(35, confDiario.getOld_ribbon_1());
-            psConfDia.setInt(36, confDiario.getOld_ribbon_2());
-            psConfDia.setInt(37, confDiario.getOld_ribbon_3());
-            psConfDia.setInt(38, confDiario.getOld_ribbon_4());
-            psConfDia.setInt(39, confDiario.getOld_ribbon_5());
-            psConfDia.setInt(40, confDiario.getOld_ribbon_6());
-            psConfDia.setInt(41, confDiario.getRev_ribbon_1());
-            psConfDia.setInt(42, confDiario.getRev_ribbon_2());
-            psConfDia.setInt(43, confDiario.getRev_ribbon_3());
-            psConfDia.setInt(44, confDiario.getRev_ribbon_4());
-            psConfDia.setInt(45, confDiario.getRev_ribbon_5());
-            psConfDia.setInt(46, confDiario.getRev_ribbon_6());
-            psConfDia.setInt(47, confDiario.getTotal_dif());
-            psConfDia.setString(48, confDiario.getObservacao_ribbon());
-            psConfDia.setDate(49, java.sql.Date.valueOf(confDiario.getData_fechamento()));
+
+
+            psConfDia.setInt(20, confDiario.getRibbon_1_atual());
+            psConfDia.setInt(21, confDiario.getRibbon_2_atual());
+            psConfDia.setInt(22, confDiario.getRibbon_3_atual());
+            psConfDia.setInt(23, confDiario.getRibbon_4_atual());
+            psConfDia.setInt(24, confDiario.getRibbon_5_atual());
+            psConfDia.setInt(25, confDiario.getRibbon_6_atual());
+            psConfDia.setInt(26, confDiario.getSobras());
+            psConfDia.setInt(27, confDiario.getDif_ribbon_1());
+            psConfDia.setInt(28, confDiario.getDif_ribbon_2());
+            psConfDia.setInt(29, confDiario.getDif_ribbon_3());
+            psConfDia.setInt(30, confDiario.getDif_ribbon_4());
+            psConfDia.setInt(31, confDiario.getDif_ribbon_5());
+            psConfDia.setInt(32, confDiario.getDif_ribbon_6());
+            psConfDia.setInt(33, confDiario.getOld_ribbon_1());
+            psConfDia.setInt(34, confDiario.getOld_ribbon_2());
+            psConfDia.setInt(35, confDiario.getOld_ribbon_3());
+            psConfDia.setInt(36, confDiario.getOld_ribbon_4());
+            psConfDia.setInt(37, confDiario.getOld_ribbon_5());
+            psConfDia.setInt(38, confDiario.getOld_ribbon_6());
+            psConfDia.setInt(39, confDiario.getRev_ribbon_1());
+            psConfDia.setInt(40, confDiario.getRev_ribbon_2());
+            psConfDia.setInt(41, confDiario.getRev_ribbon_3());
+            psConfDia.setInt(42, confDiario.getRev_ribbon_4());
+            psConfDia.setInt(43, confDiario.getRev_ribbon_5());
+            psConfDia.setInt(44, confDiario.getRev_ribbon_6());
+            psConfDia.setInt(45, confDiario.getTotal_dif());
+            psConfDia.setString(46, confDiario.getObservacao_ribbon());
+            psConfDia.setDate(47, java.sql.Date.valueOf(confDiario.getData_fechamento()));
 
             psConfDia.executeUpdate();
 
@@ -190,32 +190,7 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
                 conf.setTotal_revelado(rs.getInt("total_revelado"));
                 conf.setTotal_informado(rs.getInt("total_informado"));
 
-                // Buscar o último valor não nulo para os campos valor_deb_24h e valor_cred_24h
-                if (rs.getBigDecimal("valor_deb_24h") == null) {
-                    String sqlUltimoValorDeb24h = "SELECT valor_deb_24h FROM conf_dia WHERE valor_deb_24h IS NOT NULL AND data_fechamento <= ? ORDER BY data_fechamento DESC LIMIT 1";
-                    try (PreparedStatement stmtUltimoValorDeb24h = connection.prepareStatement(sqlUltimoValorDeb24h)) {
-                        stmtUltimoValorDeb24h.setDate(1, new java.sql.Date(dataFechamento.getTime()));
-                        ResultSet rsUltimoValorDeb24h = stmtUltimoValorDeb24h.executeQuery();
-                        if (rsUltimoValorDeb24h.next()) {
-                            conf.setValor_deb_24h(rsUltimoValorDeb24h.getBigDecimal("valor_deb_24h"));
-                        }
-                    }
-                } else {
-                    conf.setValor_deb_24h(rs.getBigDecimal("valor_deb_24h"));
-                }
 
-                if (rs.getBigDecimal("valor_cred_24h") == null) {
-                    String sqlUltimoValorCred24h = "SELECT valor_cred_24h FROM conf_dia WHERE valor_cred_24h IS NOT NULL AND data_fechamento <= ? ORDER BY data_fechamento DESC LIMIT 1";
-                    try (PreparedStatement stmtUltimoValorCred24h = connection.prepareStatement(sqlUltimoValorCred24h)) {
-                        stmtUltimoValorCred24h.setDate(1, new java.sql.Date(dataFechamento.getTime()));
-                        ResultSet rsUltimoValorCred24h = stmtUltimoValorCred24h.executeQuery();
-                        if (rsUltimoValorCred24h.next()) {
-                            conf.setValor_cred_24h(rsUltimoValorCred24h.getBigDecimal("valor_cred_24h"));
-                        }
-                    }
-                } else {
-                    conf.setValor_cred_24h(rs.getBigDecimal("valor_cred_24h"));
-                }
             }
         }
 
@@ -318,8 +293,7 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
                     conf.setData_fechamento(rs.getDate("data_fechamento").toLocalDate());
                     conf.setTotal_revelado(rs.getInt("total_revelado"));
                     conf.setTotal_informado(rs.getInt("total_informado"));
-                    conf.setValor_deb_24h(rs.getBigDecimal("valor_deb_24h"));
-                    conf.setValor_cred_24h(rs.getBigDecimal("valor_cred_24h"));
+
                     conf.setRibbon_1_atual(rs.getInt("ribbon_1_atual"));
                     conf.setRibbon_2_atual(rs.getInt("ribbon_2_atual"));
                     conf.setRibbon_3_atual(rs.getInt("ribbon_3_atual"));

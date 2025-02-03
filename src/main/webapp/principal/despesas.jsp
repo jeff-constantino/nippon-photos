@@ -320,34 +320,32 @@
 
     // Função para navegar entre elementos focáveis com as setas
     function navigateFocusableElements(event) {
-        // Lista de elementos que podem receber foco, excluindo elementos com tabindex -1
         const focusableElements = Array.from(
             document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
-        ).filter(element => !element.disabled && element.tabIndex !== -1); // Filtra elementos desabilitados e tabindex -1
+        ).filter(element => !element.disabled && element.tabIndex !== -1);
 
-        if (focusableElements.length === 0) return; // Se não houver elementos focáveis, sai da função
+        if (focusableElements.length === 0) return;
 
-        const currentElement = document.activeElement; // Elemento atual com foco
-        let currentIndex = focusableElements.indexOf(currentElement); // Índice do elemento atual
+        const currentElement = document.activeElement;
+        if (!focusableElements.includes(currentElement)) return;
+
+        let currentIndex = focusableElements.indexOf(currentElement);
 
         switch (event.key) {
-            case 'ArrowRight': // Seta para a direita
-            case 'ArrowDown': // Seta para baixo
-                currentIndex = (currentIndex + 1) % focusableElements.length; // Próximo elemento
+            case 'ArrowRight':
+            case 'ArrowDown':
+                currentIndex = (currentIndex + 1) % focusableElements.length;
                 break;
-            case 'ArrowLeft': // Seta para a esquerda
-            case 'ArrowUp': // Seta para cima
-                currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length; // Elemento anterior
+            case 'ArrowLeft':
+            case 'ArrowUp':
+                currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
                 break;
             default:
-                return; // Ignora outras teclas
+                return;
         }
 
-        focusableElements[currentIndex].focus(); // Define o foco no elemento correspondente
+        focusableElements[currentIndex].focus();
     }
-
-    // Adiciona o evento keydown ao documento
-    document.addEventListener('keydown', navigateFocusableElements);
 
     // Bloqueia a alteração de valor com as setas nos inputs do tipo number
     document.querySelectorAll('input[type="number"]').forEach(input => {
@@ -358,7 +356,10 @@
         });
     });
 
+    // Adiciona o evento keydown ao documento
+    document.addEventListener('keydown', navigateFocusableElements);
     // Fim de navegação por setas
+
     function formatarValor(input) {
         // Remove caracteres não numéricos exceto vírgulas e pontos
         let valor = input.value.replace(/\D/g, '');

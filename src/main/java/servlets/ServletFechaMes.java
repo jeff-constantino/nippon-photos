@@ -14,9 +14,11 @@ import model.ModelVendas;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,6 +37,8 @@ public class ServletFechaMes  extends ServletGenericUtil{
             gerarRelatorioMensal(request, response);
         }
     }
+
+
 
     private void gerarRelatorioMensal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String dataInicial = request.getParameter("dataInicial");
@@ -79,6 +83,17 @@ public class ServletFechaMes  extends ServletGenericUtil{
             request.setAttribute("dataFinal", dataFinal);
             request.setAttribute("funcionarioId", funcionarioId);
 
+            // --- Adicionando o nome do mês e ano ---
+            if (dataInicial != null && !dataInicial.isEmpty()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = sdf.parse(dataInicial);
+
+                SimpleDateFormat sdfMesAno = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR"));
+                String mesAnoFormatado = sdfMesAno.format(date);
+
+                request.setAttribute("mesAno", mesAnoFormatado);
+            }
+
             // Encaminha para fechames.jsp SEM redirecionamento para ranking.jsp
             RequestDispatcher rd = request.getRequestDispatcher("principal/fechames.jsp");
             rd.forward(request, response);
@@ -92,6 +107,7 @@ public class ServletFechaMes  extends ServletGenericUtil{
             dispatcher.forward(request, response);
         }
     }
+
 
 
 

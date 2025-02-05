@@ -94,7 +94,7 @@
                         <div class="card" >
                             <div class="card-body" style="text-align: center">
                                 <!-- Card 1 -->
-                                <h2 style="text-transform: uppercase;">${nomeMesAno}</h2>
+                                <h2 style="text-transform: uppercase;">${mesAno}</h2>
                             </div>
 
                         </div>
@@ -247,12 +247,12 @@
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">VALORES ANOTADOS</h4>
                                 <!-- Table Content -->
-                                <div style="overflow-x: hidden; overflow-y: hidden">
-                                    <table class="table table-bordered" id="tabelavaloresmes">
+                                <div style="overflow-x: hidden; overflow-y: hidden"  class="table-responsive">
+                                    <table class="table table-bordered" id="tabelavaloresmes" >
                                         <thead class="thead-light">
                                         <tr>
-                                            <th scope="col">TIPO</th>
-                                            <th scope="col">VALOR</th>
+                                            <th scope="col" style="font-size: 1.2rem">TIPO</th>
+                                            <th scope="col" style="font-size: 1.2rem">VALOR</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -263,20 +263,20 @@
 
                                         <c:forEach items="${vendasMesList}" var="vl">
                                             <tr>
-                                                <td>Total Dinheiro</td>
-                                                <td><fmt:formatNumber value="${vl.valor_din_mes}" type="currency" currencySymbol="R$" /></td>
+                                                <td style="font-size: 1.2rem">Total Dinheiro</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_din_mes}" type="currency" currencySymbol="R$" /></td>
                                             </tr>
                                             <tr>
-                                                <td>Total Débito</td>
-                                                <td><fmt:formatNumber value="${vl.valor_deb_mes}" type="currency" currencySymbol="R$" /></td>
+                                                <td style="font-size: 1.2rem">Total Débito</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_deb_mes}" type="currency" currencySymbol="R$" /></td>
                                             </tr>
                                             <tr>
-                                                <td>Total Crédito</td>
-                                                <td><fmt:formatNumber value="${vl.valor_cred_mes}" type="currency" currencySymbol="R$" /></td>
+                                                <td style="font-size: 1.2rem">Total Crédito</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_cred_mes}" type="currency" currencySymbol="R$" /></td>
                                             </tr>
                                             <tr>
-                                                <td>Total Pix</td>
-                                                <td><fmt:formatNumber value="${vl.valor_pix_mes}" type="currency" currencySymbol="R$" /></td>
+                                                <td style="font-size: 1.2rem">Total Pix</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_pix_mes}" type="currency" currencySymbol="R$" /></td>
                                             </tr>
                                             <c:set var="totalDinheiro" value="${totalDinheiro + vl.valor_din_mes}" />
                                             <c:set var="totalDebito" value="${totalDebito + vl.valor_deb_mes}" />
@@ -286,8 +286,13 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td style="color: #DAA520;font-weight: bold">Total Geral:</td>
-                                            <td style="color: #DAA520;font-weight: bold"><fmt:formatNumber value="${totalDinheiro + totalDebito + totalCredito + totalPix}" type="currency" currencySymbol="R$" /></td>
+                                            <td style="color: #DAA520; font-size: 1.2rem">Total Geral:</td>
+                                            <td style="color: #DAA520; font-size: 1.2rem">
+                                                <fmt:formatNumber value="${totalDinheiro + totalDebito + totalCredito + totalPix}" type="currency" currencySymbol="R$" />
+                                            </td>
+                                        </tr>
+                                        </tfoot>
+
 
                                     </table>
                                 </div>
@@ -300,12 +305,12 @@
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">VALORES REAIS</h4>
                                 <!-- Table Content -->
-                                <div style="overflow-x: hidden; overflow-y: hidden">
+                                <div style="overflow-x: hidden; overflow-y: hidden"  class="table-responsive">
                                     <table class="table table-bordered" id="tabelavaloresrealmes">
                                         <thead class="thead-light">
                                         <tr>
-                                            <th scope="col">TIPO</th>
-                                            <th scope="col">VALOR</th>
+                                            <th scope="col" style="font-size: 1.2rem">TIPO</th>
+                                            <th scope="col" style="font-size: 1.2rem">VALOR</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -316,20 +321,20 @@
 
                                         <c:forEach items="${vendasMesList}" var="vl">
                                             <tr>
-                                                <td>Total Dinheiro</td>
-                                                <td><fmt:formatNumber value="${vl.valor_din_mes_real}" type="currency" currencySymbol="R$" /></td>
+                                                <td style="font-size: 1.2rem">Total Dinheiro</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_din_mes_real}" type="currency" currencySymbol="R$" /></td>
                                             </tr>
                                             <tr>
-                                                <td>Total Débito</td>
-                                                <td><fmt:formatNumber value="${vl.valor_deb_mes_real}" type="currency" currencySymbol="R$" /></td>
+                                                <td style="font-size: 1.2rem">Total Débito</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_deb_mes_real}" type="currency" currencySymbol="R$" /></td>
                                             </tr>
                                             <tr>
-                                                <td>Total Crédito</td>
-                                                <td><fmt:formatNumber value="${vl.valor_cred_mes_real}" type="currency" currencySymbol="R$" /></td>
+                                                <td style="font-size: 1.2rem">Total Crédito</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_cred_mes_real}" type="currency" currencySymbol="R$" /></td>
                                             </tr>
                                             <tr>
-                                                <td>Total Pix</td>
-                                                <td><fmt:formatNumber value="${vl.valor_pix_mes_real}" type="currency" currencySymbol="R$" /></td>
+                                                <td style="font-size: 1.2rem">Total Pix</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_pix_mes_real}" type="currency" currencySymbol="R$" /></td>
                                             </tr>
                                             <c:set var="totalDinheiroReal" value="${totalDinheiroReal + vl.valor_din_mes_real}" />
                                             <c:set var="totalDebitoReal" value="${totalDebitoReal + vl.valor_deb_mes_real}" />
@@ -339,8 +344,8 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <td style="color: #DAA520;font-weight: bold">Total Geral:</td>
-                                            <td style="color: #DAA520;font-weight: bold"><fmt:formatNumber value="${totalDinheiroReal + totalDebitoReal + totalCreditoReal + totalPixReal}" type="currency" currencySymbol="R$" /></td>
+                                            <td style="color: #DAA520; font-size: 1.2rem">Total Geral:</td>
+                                            <td style="color: #DAA520; font-size: 1.2rem"><fmt:formatNumber value="${totalDinheiroReal + totalDebitoReal + totalCreditoReal + totalPixReal}" type="currency" currencySymbol="R$" /></td>
                                         </tr>
                                         </tfoot>
 
@@ -353,54 +358,54 @@
                     <div class="col-md-4 grid-margin">
                         <div class="card">
                             <div class="card-body">
+                                <form id="formConta">
                                 <h4 class="card-title" style="text-align: center">VALORES CONTA</h4>
                                 <!-- Table Content -->
                                 <div style="overflow-x: hidden; overflow-y: hidden">
                                     <table class="table table-bordered" id="tabelavalorescontames">
-                                        <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col">TIPO</th>
-                                            <th scope="col">VALOR</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:set var="totalDinheiroReal" value="0" />
-                                        <c:set var="totalDebitoReal" value="0" />
-                                        <c:set var="totalCreditoReal" value="0" />
-                                        <c:set var="totalPixReal" value="0" />
+                                        <div class="row">
+                                            <div class="col-6 mb-3">
+                                                <label for="debitoVm" style="font-size: 0.8rem;">DÉBITO V/M</label>
+                                                <input type="text" class="form-control money" id="debitoVm" name="debitoVm"  style="font-size: 0.8rem;">
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label for="jurosDebitoVm" style="font-size: 0.8rem;">JUROS</label>
+                                                <input type="text" class="form-control money" id="jurosDebitoVm" name="jurosDebitoVm" style="font-size: 0.8rem;">
+                                            </div>
 
-                                        <c:forEach items="${vendasMesList}" var="vl">
-                                            <tr>
-                                                <td>Total Dinheiro</td>
-                                                <td><fmt:formatNumber value="${vl.valor_din_mes_real}" type="currency" currencySymbol="R$" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total Débito</td>
-                                                <td><fmt:formatNumber value="${vl.valor_deb_mes_real}" type="currency" currencySymbol="R$" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total Crédito</td>
-                                                <td><fmt:formatNumber value="${vl.valor_cred_mes_real}" type="currency" currencySymbol="R$" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total Pix</td>
-                                                <td><fmt:formatNumber value="${vl.valor_pix_mes_real}" type="currency" currencySymbol="R$" /></td>
-                                            </tr>
-                                            <c:set var="totalDinheiroReal" value="${totalDinheiroReal + vl.valor_din_mes_real}" />
-                                            <c:set var="totalDebitoReal" value="${totalDebitoReal + vl.valor_deb_mes_real}" />
-                                            <c:set var="totalCreditoReal" value="${totalCreditoReal + vl.valor_cred_mes_real}" />
-                                            <c:set var="totalPixReal" value="${totalPixReal + vl.valor_pix_mes_real}" />
-                                        </c:forEach>
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <td style="color: #DAA520;font-weight: bold">Total Geral:</td>
-                                            <td style="color: #DAA520;font-weight: bold"><fmt:formatNumber value="${totalDinheiroReal + totalDebitoReal + totalCreditoReal + totalPixReal}" type="currency" currencySymbol="R$" /></td>
-                                        </tr>
-                                        </tfoot>
+                                            <div class="col-6 mb-3">
+                                                <label for="creditoVm" style="font-size: 0.8rem;">CRÉDITO V/M</label>
+                                                <input type="text" class="form-control money" id="creditoVm" name="creditoVm" style="font-size: 0.8rem;">
+
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label for="jurosCreditoVm" style="font-size: 0.8rem;">JUROS</label>
+                                                <input type="text" class="form-control money" id="jurosCreditoVm" name="jurosCreditoVm" style="font-size: 0.8rem;">
+                                            </div>
+
+                                            <div class="col-6 mb-3">
+                                                <label for="debitoOutros" style="font-size: 0.8rem;">DÉBITO OUTROS</label>
+                                                <input type="text" class="form-control money" id="debitoOutros" name="debitoOutros" style="font-size: 0.8rem;">
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label for="jurosDebitoOutros" style="font-size: 0.8rem;">JUROS</label>
+                                                <input type="text" class="form-control money" id="jurosDebitoOutros" name="jurosDebitoOutros" style="font-size: 0.8rem;">
+                                            </div>
+
+                                            <div class="col-6 mb-3">
+                                                <label for="creditoOutros" style="font-size: 0.8rem;">CRÉDITO OUTROS</label>
+                                                <input type="text" class="form-control money" id="creditoOutros" name="creditoOutros" style="font-size: 0.8rem;">
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <label for="jurosCreditoOutros" style="font-size: 0.8rem;">JUROS</label>
+                                                <input type="text" class="form-control money" id="jurosCreditoOutros" name="jurosCreditoOutros" style="font-size: 0.8rem;">
+                                            </div>
+                                        </div>
+
 
                                     </table>
                                 </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -610,6 +615,28 @@
         // Adiciona o evento onchange ao campo dataInicial
         document.getElementById("dataInicial").addEventListener('change', setData);
     });
+
+
+    // Aplica a máscara em todos os inputs com a classe .money
+    $(".money").maskMoney({
+        showSymbol: true,
+        symbol: "R$ ",
+        decimal: ",",
+        thousands: "."
+    });
+
+    function removerMascara(valor) {
+        return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '');
+    }
+
+    // Remove a máscara de todos os inputs com a classe .money ao enviar o formulário
+    $("#formConta").on("submit", function(e) {
+        $(".money").each(function() {
+            var valorSemMascara = removerMascara($(this).val());
+            $(this).val(valorSemMascara);
+        });
+    });
+
 
 </script>
 </body>

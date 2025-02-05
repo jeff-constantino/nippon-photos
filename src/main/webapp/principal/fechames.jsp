@@ -39,23 +39,22 @@
                                                     <div class="modal-content">
                                                           <div class="modal-body">
 
-                                                            <form action="<%= request.getContextPath() %>/ServletFechaMes" method="get" id="formBuscaMes" name="formBuscaMes">
-                                                                <input type="hidden" name="acao" value="relatorioMes">
-                                                                <div class="form-row align-items-center">
-                                                                    <div class="col-auto">
-                                                                        <label for="dataInicial">Data Inicial</label>
-                                                                        <input type="date" class="form-control" id="dataInicial" name="dataInicial" required value="${dataInicial}">
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <label for="dataFinal">Data Final</label>
-                                                                        <input type="date" class="form-control" id="dataFinal" name="dataFinal" required value="${dataFinal}">
-                                                                    </div>
-
-                                                                    <div class="col-auto">
-                                                                        <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
+                                                              <form action="<%= request.getContextPath() %>/ServletFechaMes" method="get" id="formBuscaMes" name="formBuscaMes">
+                                                                  <input type="hidden" name="acao" value="relatorioMes">
+                                                                  <div class="form-row align-items-center">
+                                                                      <div class="col-auto">
+                                                                          <label for="dataInicial">Data Inicial</label>
+                                                                          <input type="date" class="form-control" id="dataInicial" name="dataInicial" required onchange="setData()">
+                                                                      </div>
+                                                                      <div class="col-auto">
+                                                                          <label for="dataFinal">Data Final</label>
+                                                                          <input type="date" class="form-control" id="dataFinal" name="dataFinal" required>
+                                                                      </div>
+                                                                      <div class="col-auto">
+                                                                          <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
+                                                                      </div>
+                                                                  </div>
+                                                              </form>
 
                                                         </div>
                                                         <div class="modal-footer">
@@ -88,6 +87,16 @@
                                     </div>
                                 </c:if>
                             </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-3 grid-margin">
+                        <div class="card" >
+                            <div class="card-body" style="text-align: center">
+                                <!-- Card 1 -->
+                                <h2 style="text-transform: uppercase;">${nomeMesAno}</h2>
+                            </div>
+
                         </div>
                     </div>
                     <div class="col-12 grid-margin">
@@ -233,7 +242,7 @@
             <%--parte 2--%>
 
                 <div class="row">
-                    <div class="col-md-6 grid-margin">
+                    <div class="col-md-4 grid-margin">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">VALORES ANOTADOS</h4>
@@ -286,13 +295,68 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6 grid-margin">
+                    <div class="col-md-4 grid-margin">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">VALORES REAIS</h4>
                                 <!-- Table Content -->
                                 <div style="overflow-x: hidden; overflow-y: hidden">
                                     <table class="table table-bordered" id="tabelavaloresrealmes">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">TIPO</th>
+                                            <th scope="col">VALOR</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:set var="totalDinheiroReal" value="0" />
+                                        <c:set var="totalDebitoReal" value="0" />
+                                        <c:set var="totalCreditoReal" value="0" />
+                                        <c:set var="totalPixReal" value="0" />
+
+                                        <c:forEach items="${vendasMesList}" var="vl">
+                                            <tr>
+                                                <td>Total Dinheiro</td>
+                                                <td><fmt:formatNumber value="${vl.valor_din_mes_real}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Débito</td>
+                                                <td><fmt:formatNumber value="${vl.valor_deb_mes_real}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Crédito</td>
+                                                <td><fmt:formatNumber value="${vl.valor_cred_mes_real}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Pix</td>
+                                                <td><fmt:formatNumber value="${vl.valor_pix_mes_real}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <c:set var="totalDinheiroReal" value="${totalDinheiroReal + vl.valor_din_mes_real}" />
+                                            <c:set var="totalDebitoReal" value="${totalDebitoReal + vl.valor_deb_mes_real}" />
+                                            <c:set var="totalCreditoReal" value="${totalCreditoReal + vl.valor_cred_mes_real}" />
+                                            <c:set var="totalPixReal" value="${totalPixReal + vl.valor_pix_mes_real}" />
+                                        </c:forEach>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <td style="color: #DAA520;font-weight: bold">Total Geral:</td>
+                                            <td style="color: #DAA520;font-weight: bold"><fmt:formatNumber value="${totalDinheiroReal + totalDebitoReal + totalCreditoReal + totalPixReal}" type="currency" currencySymbol="R$" /></td>
+                                        </tr>
+                                        </tfoot>
+
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">VALORES CONTA</h4>
+                                <!-- Table Content -->
+                                <div style="overflow-x: hidden; overflow-y: hidden">
+                                    <table class="table table-bordered" id="tabelavalorescontames">
                                         <thead class="thead-light">
                                         <tr>
                                             <th scope="col">TIPO</th>
@@ -465,6 +529,7 @@
             })
             .catch(error => console.error('Erro:', error));
     }
+
     // Inicializa o tooltip com um delay reduzido para aparecer mais rápido
     $(document).ready(function(){
         $('#tooltipButton').tooltip({
@@ -474,6 +539,84 @@
 
 
 
+
+
+    function setData() {
+        // Obtém o valor do campo dataInicial
+        var dataInicial = document.getElementById("dataInicial").value;
+
+        if (dataInicial) {
+            // Divide a data inicial em dia, mês e ano
+            var partesData = dataInicial.split('-'); // Assume que o formato é yyyy-mm-dd
+            var ano = parseInt(partesData[0], 10);
+            var mes = parseInt(partesData[1], 10) - 1; // Mês é 0-based no JavaScript
+            var dia = parseInt(partesData[2], 10);
+
+            // Cria um objeto Date com os valores extraídos
+            var data = new Date(ano, mes, dia);
+
+            // Verifica se a data é válida
+            if (!isNaN(data.getTime())) {
+                // Calcula o último dia do mês da data inicial
+                var ultimoDia = new Date(ano, mes + 1, 0);
+
+                // Formata a data final no padrão yyyy-mm-dd
+                var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+                var mesFinal = String(mes + 1).padStart(2, '0'); // Ajusta o mês para exibição (1-12)
+                var dataFinal = ano + '-' + mesFinal + '-' + diaFinal;
+
+                // Define o valor do campo dataFinal
+                document.getElementById("dataFinal").value = dataFinal;
+            } else {
+                console.error("Data inicial inválida.");
+                document.getElementById("dataFinal").value = ""; // Limpa o campo se a data for inválida
+            }
+        } else {
+            console.error("Data inicial não selecionada.");
+            document.getElementById("dataFinal").value = ""; // Limpa o campo se a data inicial estiver vazia
+        }
+    }
+
+    // Função para inicializar os campos de data ao abrir o modal
+    function initializeDates() {
+        // Obtém a data atual
+        var today = new Date();
+
+        // Formata a data inicial no padrão yyyy-mm-dd
+        var diaInicial = String(today.getDate()).padStart(2, '0');
+        var mesInicial = String(today.getMonth() + 1).padStart(2, '0');
+        var anoInicial = today.getFullYear();
+        var dataInicial = anoInicial + '-' + mesInicial + '-' + diaInicial;
+
+        // Calcula o último dia do mês atual
+        var ultimoDia = new Date(anoInicial, today.getMonth() + 1, 0);
+
+        // Formata a data final no padrão yyyy-mm-dd
+        var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+        var mesFinal = String(today.getMonth() + 1).padStart(2, '0'); // Usa o mês da data inicial
+        var anoFinal = today.getFullYear();
+        var dataFinal = anoFinal + '-' + mesFinal + '-' + diaFinal;
+
+        // Define os valores dos campos
+        document.getElementById("dataInicial").value = dataInicial;
+        document.getElementById("dataFinal").value = dataFinal;
+    }
+
+    // Inicializa os campos de data quando o modal é aberto
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('modalData'); // Substitua 'meuModal' pelo ID do seu modal
+        if (modal) {
+            modal.addEventListener('shown.bs.modal', function () {
+                // Verifica se os campos já foram inicializados
+                if (!document.getElementById("dataInicial").value) {
+                    initializeDates();
+                }
+            });
+        }
+
+        // Adiciona o evento onchange ao campo dataInicial
+        document.getElementById("dataInicial").addEventListener('change', setData);
+    });
 
 </script>
 </body>

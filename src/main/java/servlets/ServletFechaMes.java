@@ -14,8 +14,11 @@ import model.ModelVendas;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @WebServlet("/ServletFechaMes")
 public class ServletFechaMes  extends ServletGenericUtil{
@@ -36,8 +39,17 @@ public class ServletFechaMes  extends ServletGenericUtil{
     private void gerarRelatorioMensal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String dataInicial = request.getParameter("dataInicial");
         String dataFinal = request.getParameter("dataFinal");
-        String funcionarioId = request.getParameter("funcionarioId"); // Se necessário
-        String acao = request.getParameter("acao");
+
+        // Processar o nome do mês e o ano
+        String nomeMesAno = "";
+        if (dataInicial != null && !dataInicial.isEmpty()) {
+            LocalDate data = LocalDate.parse(dataInicial);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy", new Locale("pt", "BR"));
+            nomeMesAno = data.format(formatter);
+        }
+
+
+        request.setAttribute("nomeMesAno", nomeMesAno); // Enviar para o JSP
 
         DAOFechaMes daoFechaMes = new DAOFechaMes();
         DAOFuncionario daoFuncionario = new DAOFuncionario();
@@ -51,32 +63,7 @@ public class ServletFechaMes  extends ServletGenericUtil{
             List<ModelLogin> funcionarios = daoFuncionario.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);
 
-            // Buscar ranking de funcionários SEMPRE
-            int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
-            int registrosPorPagina = 10;
-            int offset = (paginaAtual - 1) * registrosPorPagina;
-
-            List<ModelVendas> vendasList = daoFuncionario.consultarRanking(dataInicial, dataFinal, offset, registrosPorPagina);
-            request.setAttribute("vendasList", vendasList);
-
-            // Converter vendasList para JSON (caso seja necessário para AJAX)
-            Gson gson = new Gson();
-            String vendasJson = gson.toJson(vendasList);
-            request.setAttribute("vendasJson", vendasJson);
-
-            // Calcular total de páginas
-            int totalVendas = daoFuncionario.contarVendas(funcionarioId, dataInicial, dataFinal);
-            int totalPaginas = (int) Math.ceil(totalVendas / (double) registrosPorPagina);
-
-            request.setAttribute("totalPaginas", totalPaginas);
-            request.setAttribute("paginaAtual", paginaAtual);
-
-            // Preservar os filtros no request
-            request.setAttribute("dataInicial", dataInicial);
-            request.setAttribute("dataFinal", dataFinal);
-            request.setAttribute("funcionarioId", funcionarioId);
-
-            // Encaminha para fechames.jsp SEM redirecionamento para ranking.jsp
+            // Encaminha para fechames.jsp
             RequestDispatcher rd = request.getRequestDispatcher("principal/fechames.jsp");
             rd.forward(request, response);
 

@@ -55,7 +55,7 @@ public class ServletRanking extends ServletGenericUtil {
                 int registrosPorPagina = 10;
                 int offset = (paginaAtual - 1) * registrosPorPagina;
 
-                // Busca de vendas com paginação
+
                 vendasList = relatorio.consultarRanking(dataInicial, dataFinal, offset, registrosPorPagina);
 
                 // Converte vendasList em JSON

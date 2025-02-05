@@ -24,11 +24,9 @@ public class DAOFechaMes {
     public List<ModelFechaMes> buscarFechamentoMensal(String dataInicial, String dataFinal) throws SQLException {
         List<ModelFechaMes> resumoMensal = new ArrayList<>();
 
-        // Converte as strings para LocalDate
         LocalDate dataInicio = LocalDate.parse(dataInicial);
         LocalDate dataFim = LocalDate.parse(dataFinal);
 
-        // SQL para fecha_dia
         String sqlFechamento = "SELECT " +
                 "SUM(total_ft_din + total_ft_deb + total_ft_cred + total_ft_pix) AS total_ft, " +
                 "SUM(total_enc_din + total_enc_deb + total_enc_cred + total_enc_pix) AS total_enc, " +
@@ -37,7 +35,6 @@ public class DAOFechaMes {
                 "FROM fecha_dia " +
                 "WHERE data_fechamento >= ? AND data_fechamento <= ?";
 
-        // SQL para conf_dia
         String sqlConfiguracoes = "SELECT " +
                 "SUM(valor_din) AS valor_din, " +
                 "SUM(valor_din_real) AS valor_din_real, " +

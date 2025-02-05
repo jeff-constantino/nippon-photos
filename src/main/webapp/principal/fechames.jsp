@@ -44,11 +44,11 @@
                                                                   <div class="form-row align-items-center">
                                                                       <div class="col-auto">
                                                                           <label for="dataInicial">Data Inicial</label>
-                                                                          <input type="date" class="form-control" id="dataInicial" name="dataInicial" required onchange="setData()">
+                                                                          <input type="date" class="form-control" id="dataInicial" name="dataInicial" required onchange="setData()" value="${dataInicial}">
                                                                       </div>
                                                                       <div class="col-auto">
                                                                           <label for="dataFinal">Data Final</label>
-                                                                          <input type="date" class="form-control" id="dataFinal" name="dataFinal" required>
+                                                                          <input type="date" class="form-control" id="dataFinal" name="dataFinal" required value="${dataFinal}">
                                                                       </div>
                                                                       <div class="col-auto">
                                                                           <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
@@ -521,14 +521,7 @@
     // Fim de navegação por setas
 
 
-    window.onload = function() {
-        fetch('ServletRelVenda')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('resultado').innerHTML = data;
-            })
-            .catch(error => console.error('Erro:', error));
-    }
+
 
     // Inicializa o tooltip com um delay reduzido para aparecer mais rápido
     $(document).ready(function(){

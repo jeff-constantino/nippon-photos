@@ -45,6 +45,7 @@ public class ModelVendas implements Serializable {
     private int totalFotosVendidas ;
     private int totalProducao;
 
+    public int ribbon_dif;
 
 
 
@@ -220,6 +221,8 @@ public Boolean novaVenda(){
         return vendedor_id;
     }
 
+
+
     // Método para setar vendedor_id
     public void setVendedor_id(String vendedorIdStr) throws Exception {
         if (vendedorIdStr != null && !vendedorIdStr.isEmpty()) {
@@ -265,6 +268,13 @@ public Boolean novaVenda(){
         this.dig_total = dig_total;
     }
 
+    public int getRibbon_dif() {
+        return ribbon_dif;
+    }
+
+    public void setRibbon_dif(int ribbon_dif) {
+        this.ribbon_dif = ribbon_dif;
+    }
 
     @Override
     public String toString() {
@@ -294,4 +304,6 @@ public Boolean novaVenda(){
                 ", totalFotosVendidas=" + totalFotosVendidas +
                 '}';
     }
+
+
 }

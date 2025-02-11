@@ -1,6 +1,49 @@
 
+********************************************************************************
+// Função para navegar entre elementos focáveis com as setas
+function navigateFocusableElements(event) {
+    const focusableElements = Array.from(
+        document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
+    ).filter(element => !element.disabled && element.tabIndex !== -1);
 
+    if (focusableElements.length === 0) return;
+
+    const currentElement = document.activeElement;
+    if (!focusableElements.includes(currentElement)) return;
+
+    let currentIndex = focusableElements.indexOf(currentElement);
+
+    switch (event.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+            currentIndex = (currentIndex + 1) % focusableElements.length;
+            break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+            currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
+            break;
+        default:
+            return;
+    }
+
+    focusableElements[currentIndex].focus();
+}
+
+// Bloqueia a alteração de valor com as setas nos inputs do tipo number
+document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener('keydown', function(event) {
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            event.preventDefault(); // Impede a alteração do valor
+        }
+    });
+});
+
+// Adiciona o evento keydown ao documento
+document.addEventListener('keydown', navigateFocusableElements);
+// Fim de navegação por setas
 ***********************************************************************
+
+************************************************************************
 retornar para servlet ao inves da página :
 ao invés disso :
             request.getRequestDispatcher("principal/PAGINA.jsp").forward(request, response);
@@ -15,25 +58,39 @@ response.sendRedirect(request.getContextPath() + "/Servlet.....");
 
 ***********************************************************************
 FORMATAÇÃO VALORES:
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 para tables <c if =
 <td><fmt:formatNumber value="${conta.valor}"
                       type="currency"
                       currencySymbol="R$"/></td>
 
 
-//Pega o id do input para aplicar a mask:
-$("#input").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+//aplica a mask em todos com class money type text.. ex:<input type="text" class="form-control money"
 
-function removerMascara(valor) {
-    return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '');
-}
-// PEGA O ID DO FORM PARA REMOVER A MASK AO ENVIAR:
-$("#id Form").on("submit", function(e) {
-    var valor1 = removerMascara($("#conf1_valor").val());
+$(document).ready(function() {
+    // Aplica a máscara nos inputs com a classe "money"
+    $(".money").maskMoney({
+        prefix: "R$ ",
+        allowNegative: false,
+        thousands: ".",
+        decimal: ",",
+        affixesStay: false
+    });
 
-    $("#input").val(valor1);
+    function removerMascara(valor) {
+        return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '').trim();
+    }
 
+    // Remove a máscara antes de enviar o formulário
+    $("#idForm").on("submit", function(e) {
+        $(".money").each(function() {
+            var valorSemMascara = removerMascara($(this).val());
+            $(this).val(valorSemMascara);
+        });
+    });
 });
+
 FIM FORMATAÇÃO VALORES
 
 ***********************************************************************
@@ -75,6 +132,88 @@ DEFINIR A DATA INICIAL COMO A DE HOJE....
 FIM DA DATA INICIAL
 *************************************************************
 
+*****************************************************************
+
+//codigo para data inicial e data final: utilize onclick para chamar a funcao setData()
+
+ function setData() {
+        // Obtém o valor do campo dataInicial
+        var dataInicial = document.getElementById("dataInicial").value;
+
+        if (dataInicial) {
+            // Divide a data inicial em dia, mês e ano
+            var partesData = dataInicial.split('-'); // Assume que o formato é yyyy-mm-dd
+            var ano = parseInt(partesData[0], 10);
+            var mes = parseInt(partesData[1], 10) - 1; // Mês é 0-based no JavaScript
+            var dia = parseInt(partesData[2], 10);
+
+            // Cria um objeto Date com os valores extraídos
+            var data = new Date(ano, mes, dia);
+
+            // Verifica se a data é válida
+            if (!isNaN(data.getTime())) {
+                // Calcula o último dia do mês da data inicial
+                var ultimoDia = new Date(ano, mes + 1, 0);
+
+                // Formata a data final no padrão yyyy-mm-dd
+                var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+                var mesFinal = String(mes + 1).padStart(2, '0'); // Ajusta o mês para exibição (1-12)
+                var dataFinal = ano + '-' + mesFinal + '-' + diaFinal;
+
+                // Define o valor do campo dataFinal
+                document.getElementById("dataFinal").value = dataFinal;
+            } else {
+                console.error("Data inicial inválida.");
+                document.getElementById("dataFinal").value = ""; // Limpa o campo se a data for inválida
+            }
+        } else {
+            console.error("Data inicial não selecionada.");
+            document.getElementById("dataFinal").value = ""; // Limpa o campo se a data inicial estiver vazia
+        }
+    }
+
+    // Função para inicializar os campos de data ao abrir o modal
+    function initializeDates() {
+        // Obtém a data atual
+        var today = new Date();
+
+        // Formata a data inicial no padrão yyyy-mm-dd
+        var diaInicial = String(today.getDate()).padStart(2, '0');
+        var mesInicial = String(today.getMonth() + 1).padStart(2, '0');
+        var anoInicial = today.getFullYear();
+        var dataInicial = anoInicial + '-' + mesInicial + '-' + diaInicial;
+
+        // Calcula o último dia do mês atual
+        var ultimoDia = new Date(anoInicial, today.getMonth() + 1, 0);
+
+        // Formata a data final no padrão yyyy-mm-dd
+        var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+        var mesFinal = String(today.getMonth() + 1).padStart(2, '0'); // Usa o mês da data inicial
+        var anoFinal = today.getFullYear();
+        var dataFinal = anoFinal + '-' + mesFinal + '-' + diaFinal;
+
+        // Define os valores dos campos
+        document.getElementById("dataInicial").value = dataInicial;
+        document.getElementById("dataFinal").value = dataFinal;
+    }
+
+    // Inicializa os campos de data quando o modal é aberto
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('modalData'); // Substitua 'modalData' pelo ID do seu modal
+        if (modal) {
+            modal.addEventListener('shown.bs.modal', function () {
+                // Verifica se os campos já foram inicializados
+                if (!document.getElementById("dataInicial").value) {
+                    initializeDates();
+                }
+            });
+        }
+
+        // Adiciona o evento onchange ao campo dataInicial
+        document.getElementById("dataInicial").addEventListener('change', setData);
+    });
+
+***********************************************************************
 
 ***********************************************************************
 paginar

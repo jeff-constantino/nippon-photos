@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
@@ -152,7 +153,7 @@
                                         <c:forEach items="${vendasList}" var="mv">
                                             <tr>
                                                 <td><c:out value="${mv.nome}" /></td>
-                                                <td><c:out value="${mv.data_venda}" /></td>
+                                                <td><fmt:formatDate value="${mv.data_venda}" pattern="dd/MM/yyyy"/></td>
                                                 <td><c:out value="${mv.prod1_din}" /></td>
                                                 <td><c:out value="${mv.prod1_deb}" /></td>
                                                 <td><c:out value="${mv.prod1_cred}" /></td>

@@ -38,8 +38,8 @@ public class DAOVendasRepository {
     public ModelVendas gravarVenda(ModelVendas modelVendas, Long userLogado) throws Exception {
         String sql = "INSERT INTO vendas(vendedor_id, nome, prod1_din, prod1_deb, prod1_cred, prod1_pix, "
                 + "prod2_din, prod2_deb, prod2_cred, prod2_pix, prod3_din, prod3_deb, prod3_cred, prod3_pix, "
-                + "ft_total, enc_total, dig_total, sobras, data_venda, ribbon) "
-                + "VALUES (?, UPPER(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "ft_total, enc_total, dig_total, sobras, data_venda, ribbon, ribbon_dif) "
+                + "VALUES (?, UPPER(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             connection.setAutoCommit(false); // Desabilita o auto-commit
@@ -61,6 +61,7 @@ public class DAOVendasRepository {
             preparedSql.setInt(13, modelVendas.getProd3_cred());
             preparedSql.setInt(14, modelVendas.getProd3_pix());
 
+
             // Calcula os totais
             int ft_total = modelVendas.getProd1_din() + modelVendas.getProd1_deb() + modelVendas.getProd1_cred() + modelVendas.getProd1_pix();
             int enc_total = modelVendas.getProd2_din() + modelVendas.getProd2_deb() + modelVendas.getProd2_cred() + modelVendas.getProd2_pix();
@@ -73,6 +74,7 @@ public class DAOVendasRepository {
 
             preparedSql.setInt(18, modelVendas.getSobras());
 
+
             // Verifica se a data_venda não é nula
             if (modelVendas.getData_venda() == null) {
                 throw new IllegalArgumentException("O parâmetro 'data_venda' não pode ser nulo.");
@@ -83,6 +85,7 @@ public class DAOVendasRepository {
 
             // Adicionando o parâmetro do ribbon
             preparedSql.setString(20, modelVendas.getRibbon());
+            preparedSql.setInt(21, modelVendas.getRibbon_dif());
 
             // Executa a inserção
             preparedSql.executeUpdate();
@@ -325,41 +328,51 @@ public class DAOVendasRepository {
     public List<ModelVendas> vendaDia() throws Exception {
         List<ModelVendas> modelVendasList = new ArrayList<>();
 
+        // Consulta para obter a última data de venda registrada
+        String sqlData = "SELECT MAX(data_venda) AS ultima_data FROM vendas";
+        PreparedStatement preparedSqlData = connection.prepareStatement(sqlData);
+        ResultSet resultadoData = preparedSqlData.executeQuery();
 
-        // Consulta SQL para filtrar as vendas realizadas no dia atual
-        String sql = "SELECT * FROM vendas WHERE data_venda = CURRENT_DATE ORDER BY venda_id DESC";
+        if (resultadoData.next()) {
+            Date ultimaData = resultadoData.getDate("ultima_data");
 
-        PreparedStatement preparedSql = connection.prepareStatement(sql);
-        ResultSet resultado = preparedSql.executeQuery();
+            if (ultimaData != null) {
+                // Consulta para buscar as vendas da última data registrada
+                String sql = "SELECT * FROM vendas WHERE data_venda = ? ORDER BY venda_id DESC";
+                PreparedStatement preparedSql = connection.prepareStatement(sql);
+                preparedSql.setDate(1, ultimaData);
+                ResultSet resultado = preparedSql.executeQuery();
 
-        while (resultado.next()) {
-            ModelVendas modelVenda = new ModelVendas();
-            modelVenda.setVenda_id(resultado.getLong("venda_id"));
-            modelVenda.setVendedor_id(resultado.getString("vendedor_id"));
-            modelVenda.setNome(resultado.getString("nome"));
+                while (resultado.next()) {
+                    ModelVendas modelVenda = new ModelVendas();
+                    modelVenda.setVenda_id(resultado.getLong("venda_id"));
+                    modelVenda.setVendedor_id(resultado.getString("vendedor_id"));
+                    modelVenda.setNome(resultado.getString("nome"));
 
-            // Campos adicionais
-            modelVenda.setProd1_din(resultado.getInt("prod1_din"));
-            modelVenda.setProd1_deb(resultado.getInt("prod1_deb"));
-            modelVenda.setProd1_cred(resultado.getInt("prod1_cred"));
-            modelVenda.setProd1_pix(resultado.getInt("prod1_pix"));
-            modelVenda.setProd2_din(resultado.getInt("prod2_din"));
-            modelVenda.setProd2_deb(resultado.getInt("prod2_deb"));
-            modelVenda.setProd2_cred(resultado.getInt("prod2_cred"));
-            modelVenda.setProd2_pix(resultado.getInt("prod2_pix"));
-            modelVenda.setProd3_din(resultado.getInt("prod3_din"));
-            modelVenda.setProd3_deb(resultado.getInt("prod3_deb"));
-            modelVenda.setProd3_cred(resultado.getInt("prod3_cred"));
-            modelVenda.setProd3_pix(resultado.getInt("prod3_pix"));
-            modelVenda.setSobras(resultado.getInt("sobras"));
-            modelVenda.setRibbon(resultado.getString("ribbon"));
-            modelVenda.setData_venda(resultado.getDate("data_venda"));
+                    // Campos adicionais
+                    modelVenda.setProd1_din(resultado.getInt("prod1_din"));
+                    modelVenda.setProd1_deb(resultado.getInt("prod1_deb"));
+                    modelVenda.setProd1_cred(resultado.getInt("prod1_cred"));
+                    modelVenda.setProd1_pix(resultado.getInt("prod1_pix"));
+                    modelVenda.setProd2_din(resultado.getInt("prod2_din"));
+                    modelVenda.setProd2_deb(resultado.getInt("prod2_deb"));
+                    modelVenda.setProd2_cred(resultado.getInt("prod2_cred"));
+                    modelVenda.setProd2_pix(resultado.getInt("prod2_pix"));
+                    modelVenda.setProd3_din(resultado.getInt("prod3_din"));
+                    modelVenda.setProd3_deb(resultado.getInt("prod3_deb"));
+                    modelVenda.setProd3_cred(resultado.getInt("prod3_cred"));
+                    modelVenda.setProd3_pix(resultado.getInt("prod3_pix"));
+                    modelVenda.setSobras(resultado.getInt("sobras"));
+                    modelVenda.setRibbon(resultado.getString("ribbon"));
+                    modelVenda.setData_venda(resultado.getDate("data_venda"));
 
-
-            modelVendasList.add(modelVenda);
+                    modelVendasList.add(modelVenda);
+                }
+            }
         }
         return modelVendasList;
     }
+
 
     public ModelVendas buscarVendaPorId(Long idVenda) throws SQLException {
         ModelVendas venda = null;
@@ -465,7 +478,7 @@ public class DAOVendasRepository {
     }
     public List<ModelLogin> consultaFuncionarioList(String nome) throws Exception {
         List<ModelLogin> retorno = new ArrayList<ModelLogin>();
-        String sql = "SELECT * FROM model_login WHERE UPPER(nome) LIKE UPPER(?) AND useradmin IS FALSE ORDER BY status";
+        String sql = "SELECT * FROM model_login WHERE UPPER(nome) LIKE UPPER(?) AND useradmin IS FALSE AND status = UPPER('ATIVO')";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
             preparedSql.setString(1, "%" + nome + "%");

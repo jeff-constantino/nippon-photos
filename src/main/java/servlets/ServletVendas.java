@@ -232,11 +232,11 @@ import java.util.Map;
                     daoVendas.deleteVenda(Long.parseLong(venda_id));
                     request.getSession().setAttribute("msg", "Venda Excluída!");
                     response.sendRedirect(request.getContextPath() + "/ServletVendas");
-
-
                 } else {
                     System.out.println("ID da venda não foi recebido ou está vazio.");
                 }
+            } else if (acao != null && acao.equals("limparMsg")) {
+                request.getSession().removeAttribute("msg");
             } else {
                 // Todo o código existente para gravação e atualização das vendas...
                 String venda_id = request.getParameter("venda_id");
@@ -263,6 +263,8 @@ import java.util.Map;
 
                 String ribbon = request.getParameter("ribbon");
 
+                String ribbon_dif_str = request.getParameter("ribbon_dif");
+
                 ModelVendas modelVendas = new ModelVendas();
                 if (venda_id != null && !venda_id.isEmpty()) {
                     modelVendas.setVenda_id(Long.parseLong(venda_id));
@@ -286,6 +288,8 @@ import java.util.Map;
                 modelVendas.setProd3_deb(prod3_deb_str != null && !prod3_deb_str.isEmpty() ? Integer.parseInt(prod3_deb_str) : 0);
                 modelVendas.setProd3_cred(prod3_cred_str != null && !prod3_cred_str.isEmpty() ? Integer.parseInt(prod3_cred_str) : 0);
                 modelVendas.setProd3_pix(prod3_pix_str != null && !prod3_pix_str.isEmpty() ? Integer.parseInt(prod3_pix_str) : 0);
+
+                modelVendas.setRibbon_dif(ribbon_dif_str != null && !ribbon_dif_str.isEmpty() ? Integer.parseInt(ribbon_dif_str) : 0);
 
                 if (dataVenda != null && !dataVenda.isEmpty()) {
                     Date sqlDate = Date.valueOf(dataVenda);
@@ -341,6 +345,7 @@ import java.util.Map;
             redirecionar.forward(request, response);
         }
     }
+
 
 
 

@@ -26,10 +26,12 @@ import java.util.Locale;
 public class ServletFechaMes  extends ServletGenericUtil{
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao");
+
         // Verifica se a ação é vazia ou nula
         if (acao == null || acao.isEmpty()) {
-            // Redireciona para a página principal se a ação não for fornecida
-            response.sendRedirect("principal/fechames.jsp");
+            // Encaminha para a página principal sem mudar o endereço no navegador
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/fechames.jsp");
+            dispatcher.forward(request, response);
             return; // Importante retornar para evitar que o código continue
         }
 

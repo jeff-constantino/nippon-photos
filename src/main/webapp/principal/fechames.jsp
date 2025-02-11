@@ -106,36 +106,30 @@
                                 <h4 class="card-title" style="text-align: center">RESUMO DO MÊS</h4>
 
                                 <div style="overflow-x: hidden; overflow-y: hidden">
-                                    <table class="table table-bordered" id="tabelavendasmes">
+                                    <table class="table table-bordered text-center" id="tabelavendasmes"> <!-- Adicionando text-center -->
                                         <thead class="thead-light">
                                         <tr>
-
                                             <th scope="col">TOTAL DE FOTOS</th>
                                             <th scope="col">TOTAL DE ENCARTES</th>
                                             <th scope="col">TOTAL DE DIGITAIS</th>
                                             <th scope="col">TOTAL DE SOBRAS</th>
                                             <th scope="col">TOTAL DE RIBBONS</th>
-
-
-
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <c:forEach items="${vendasMesList}" var="vl">
                                             <tr>
-                                                <td><c:out value="${vl.total_ft}"></c:out></td>
-                                                <td><c:out value="${vl.total_enc}"></c:out></td>
-                                                <td><c:out value="${vl.total_dig}"></c:out></td>
-                                                <td><c:out value="${vl.total_sobras}"></c:out></td>
-
-
-                                                <td>
+                                                <td style="font-size: 1.2rem; vertical-align: middle;"><c:out value="${vl.total_ft}"/></td>
+                                                <td style="font-size: 1.2rem; vertical-align: middle;"><c:out value="${vl.total_enc}"/></td>
+                                                <td style="font-size: 1.2rem; vertical-align: middle;"><c:out value="${vl.total_dig}"/></td>
+                                                <td style="font-size: 1.2rem; vertical-align: middle;"><c:out value="${vl.total_sobras}"/></td>
+                                                <td style="font-size: 1.2rem; vertical-align: middle;">
                                                     <c:choose>
                                                         <c:when test="${vl.conf1_qtd != 0}">
-                                                            <fmt:formatNumber value="${(vl.total_ft + vl.total_sobras) / vl.conf1_qtd}" pattern="0.00" />
+                                                            <fmt:formatNumber value="${(vl.total_ft + vl.total_sobras) / vl.conf1_qtd}" pattern="0.00"/>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <c:out value="Não aplicável" />
+                                                            <c:out value="Não aplicável"/>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
@@ -143,9 +137,8 @@
                                         </c:forEach>
                                         </tbody>
                                     </table>
-
-
                                 </div>
+
 
                                 <div class="table-responsive">
                                     <table class="table">
@@ -416,7 +409,7 @@
                     <div class="col-md-4 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">HISTÓRICO DE CONDUTA</h4>
+                                <h4 class="card-title" style="text-align: center">DESPESAS</h4>
                                 <!-- Table Content -->
                             </div>
                         </div>
@@ -424,7 +417,7 @@
                     <div class="col-md-4 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">FINANCEIRO</h4>
+                                <h4 class="card-title" style="text-align: center">CONTAS</h4>
                                 <!-- Table Content -->
                             </div>
                         </div>
@@ -432,7 +425,34 @@
                     <div class="col-md-4 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">SALÁRIO BRUTO</h4>
+                                <h4 class="card-title" style="text-align: center">SALÁRIOS</h4>
+                                <!-- Table Content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<%--PARTE 4--%>
+                <div class="row">
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">ETC 1</h4>
+                                <!-- Table Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">ETC 2</h4>
+                                <!-- Table Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">ETC 3</h4>
                                 <!-- Table Content -->
                             </div>
                         </div>

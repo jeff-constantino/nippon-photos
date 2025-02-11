@@ -154,7 +154,7 @@
                                                                     <label style="color: #f2a654">Ribbon Final</label>
                                                                     <input type="number" class="form-control" placeholder=""
                                                                            style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                                           tabindex="-1" id="fim_ribbon" name="fim_ribbon" value="${controle.fim_ribbon}">
+                                                                            id="fim_ribbon" name="fim_ribbon" value="${controle.fim_ribbon}">
                                                                 </div>
 
                                                                 <!-- Input Ribbon Troca -->
@@ -162,7 +162,7 @@
                                                                     <label style="color: #f2a654">Ribbon Troca</label>
                                                                     <input type="number" class="form-control" placeholder=""
                                                                            style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                                           tabindex="-1" id="troca_ribbon" name="troca_ribbon" value="${controle.troca_ribbon}">
+                                                                            id="troca_ribbon" name="troca_ribbon" value="${controle.troca_ribbon}">
                                                                 </div>
                                                             </div>
 

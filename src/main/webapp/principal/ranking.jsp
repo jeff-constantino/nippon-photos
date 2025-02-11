@@ -80,60 +80,84 @@
 
 
                 </div>
-                <!-- Div que contém o gráfico -->
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <!-- Botão à esquerda -->
+                                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalData">
+                                    <h4>Gerar Relatório</h4>
+                                </button>
+
+                                <!-- Datas à direita -->
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <div class="me-1">
+                                        <input type="date" class="form-control" id="dataInicial2" name="dataInicial"
+                                               style="background-color: transparent; border: transparent; color: #DAA520; font-weight: bold; font-size: larger"
+                                               value="${dataInicial}" readonly>
+                                    </div>                                    
+                                    <div class="ms-1">
+                                        <input type="date" class="form-control" id="dataFinal2" name="dataFinal"
+                                               style="background-color: transparent; border: transparent; color: #DAA520; font-weight: bold; font-size: larger"
+                                               value="${dataFinal}" readonly>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ranking vendas -->
+
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalData">
-                                    <h4>Gerar Relatório</h4>
-                                </button>
                                 <h4 class="card-title" style="text-align: center">RANKING DE VENDAS</h4>
 
-                                <!-- Área para o gráfico -->
+                                <!-- Área para o gráfico reduzido -->
                                 <div style="width: 100%; height: auto;">
-                                    <canvas id="vendasChart"></canvas>
+                                    <canvas id="vendasChartMini"></canvas>
                                 </div>
 
                                 <!-- Script para gerar o gráfico -->
                                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                                 <script>
-                                    // Variáveis para o gráfico de vendas
-                                    const ctxVendas = document.getElementById('vendasChart').getContext('2d');
+                                    const ctxVendasMini = document.getElementById('vendasChartMini').getContext('2d');
 
-                                    // Arrays para armazenar os dados
-                                    var nomesVendas = [];
-                                    var totalVendas = [];
+                                    var nomesVendasMini = [];
+                                    var totalVendasMini = [];
 
-                                    // Preenchendo os dados do gráfico
                                     <c:forEach var="venda" items="${vendasList}">
-                                    nomesVendas.push("${venda.nome}");          // Nome do funcionário
-                                    totalVendas.push(${venda.totalFotosVendidas}); // Total de vendas
+                                    nomesVendasMini.push("${venda.nome}");          // Nome do funcionário
+                                    totalVendasMini.push(${venda.totalFotosVendidas}); // Total de vendas
                                     </c:forEach>
 
-                                    // Gerando o gráfico
-                                    const vendasChart = new Chart(ctxVendas, {
+                                    const vendasChartMini = new Chart(ctxVendasMini, {
                                         type: 'bar', // Tipo de gráfico: 'bar' para barra
                                         data: {
-                                            labels: nomesVendas, // Nomes dos funcionários no eixo X
+                                            labels: nomesVendasMini, // Nomes dos funcionários no eixo X
                                             datasets: [{
                                                 label: 'Fotos Vendidas',
-                                                data: totalVendas, // Total de vendas no eixo Y
+                                                data: totalVendasMini, // Total de vendas no eixo Y
                                                 backgroundColor: [
                                                     'rgba(50,205,50)', // Cor vibrante 1
-                                                    'rgba(54, 162, 235)',   // Cor vibrante 2 (azul)
-                                                    'rgba(255, 206, 86)',   // Cor vibrante 3 (amarelo)
-                                                    'rgba(75, 192, 192)',   // Cor vibrante 4 (verde claro)
-                                                    'rgba(153, 102, 255)',  // Cor vibrante 5 (roxo)
-                                                    'rgba(255, 99, 132)'    // Cor vibrante 6 (laranja)
+                                                    'rgba(54, 162, 235)', // Cor vibrante 2 (azul)
+                                                    'rgba(255, 206, 86)', // Cor vibrante 3 (amarelo)
+                                                    'rgba(75, 192, 192)', // Cor vibrante 4 (verde claro)
+                                                    'rgba(153, 102, 255)', // Cor vibrante 5 (roxo)
+                                                    'rgba(255, 99, 132)' // Cor vibrante 6 (laranja)
                                                 ], // Cores vibrantes para as barras
                                                 borderColor: [
-                                                    'rgba(107,142,35, 1)',     // Cor da borda vibrante 1
-                                                    'rgba(54, 162, 235, 1)',     // Cor da borda vibrante 2
-                                                    'rgba(255, 206, 86, 1)',     // Cor da borda vibrante 3
-                                                    'rgba(75, 192, 192, 1)',     // Cor da borda vibrante 4
-                                                    'rgba(153, 102, 255, 1)',    // Cor da borda vibrante 5
-                                                    'rgba(255, 99, 132, 1)'      // Cor da borda vibrante 6
+                                                    'rgba(107,142,35, 1)', // Cor da borda vibrante 1
+                                                    'rgba(54, 162, 235, 1)', // Cor da borda vibrante 2
+                                                    'rgba(255, 206, 86, 1)', // Cor da borda vibrante 3
+                                                    'rgba(75, 192, 192, 1)', // Cor da borda vibrante 4
+                                                    'rgba(153, 102, 255, 1)', // Cor da borda vibrante 5
+                                                    'rgba(255, 99, 132, 1)' // Cor da borda vibrante 6
                                                 ], // Cores da borda das barras
                                                 borderWidth: 1
                                             }]
@@ -173,7 +197,7 @@
                                                         },
                                                         // Modificando os labels para mostrar nome + quantidade de fotos
                                                         callback: function(value, index, values) {
-                                                            return nomesVendas[index] + '\n(' + totalVendas[index] + ')'; // Nome + Quantidade de fotos
+                                                            return nomesVendasMini[index] + '\n- ' + totalVendasMini[index]  ; // Nome + Quantidade de fotos
                                                         }
                                                     }
                                                 }
@@ -195,7 +219,6 @@
                         </div>
                     </div>
                 </div>
-
 
 
                 <!-- RANKING DE PRODUÇÃO -->

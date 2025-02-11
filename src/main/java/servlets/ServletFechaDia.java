@@ -55,8 +55,9 @@ public class ServletFechaDia extends ServletGenericUtil {
 
         // Verifica se a ação é vazia ou nula
         if (acao == null || acao.isEmpty()) {
-            // Redireciona para a página principal se a ação não for fornecida
-            response.sendRedirect("principal/fechadia.jsp");
+            // Encaminha para a página principal sem mudar o endereço no navegador
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/fechadia.jsp");
+            dispatcher.forward(request, response);
             return; // Importante retornar para evitar que o código continue
         }
 

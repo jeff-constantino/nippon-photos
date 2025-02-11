@@ -762,7 +762,64 @@
                     </div>
                 </div>
 
+
+<%--PARTE 1--%>
+                <div class="row">
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">HISTÓRICO DE CONDUTA</h4>
+                                <!-- Table Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">FINANCEIRO</h4>
+                                <!-- Table Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">SALÁRIO BRUTO</h4>
+                                <!-- Table Content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<%--PARTE 2--%>
+                <div class="row">
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">HISTÓRICO DE CONDUTA</h4>
+                                <!-- Table Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">FINANCEIRO</h4>
+                                <!-- Table Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">SALÁRIO BRUTO</h4>
+                                <!-- Table Content -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
             <!-- content-wrapper ends -->
             <!-- partial:partials/_footer.html -->
             <jsp:include page="footer.jsp"></jsp:include>

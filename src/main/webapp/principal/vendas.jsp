@@ -9,6 +9,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
@@ -616,22 +617,22 @@
                                                                                                 Papel
                                                                                             </option>
                                                                                             <option style="color: #00d25b"
-                                                                                                    value="10x15"
+                                                                                                    value="AUTORIZADO"
                                                                                                     <%
                                                                                                         ModelVendas modelVendas = (ModelVendas) request.getAttribute("modelVendas");
-                                                                                                        if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("10x15")) {
+                                                                                                        if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("AUTORIZADO")) {
                                                                                                             out.print("selected=\"selected\"");
                                                                                                         }
-                                                                                                    %>>10x15
+                                                                                                    %>>AUTORIZADO
                                                                                             </option>
                                                                                             <option style="color: #bf3322"
-                                                                                                    value="15x20"
+                                                                                                    value="DESCONTAR"
                                                                                                     <%
                                                                                                         modelVendas = (ModelVendas) request.getAttribute("modelVendas");
-                                                                                                        if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("15x20")) {
+                                                                                                        if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("DESCONTAR")) {
                                                                                                             out.print("selected=\"selected\"");
                                                                                                         }
-                                                                                                    %>>15x20
+                                                                                                    %>>DESCONTAR
                                                                                             </option>
 
 
@@ -1062,22 +1063,22 @@
                                                                                     <option disabled>Tamanho do Papel
                                                                                     </option>
                                                                                     <option style="color: #00d25b"
-                                                                                            value="10x15"
+                                                                                            value="AUTORIZADO"
                                                                                             <%
                                                                                                 modelVendas = (ModelVendas) request.getAttribute("modelVendas");
-                                                                                                if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("10x15")) {
+                                                                                                if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("AUTORIZADO")) {
                                                                                                     out.print("selected=\"selected\"");
                                                                                                 }
-                                                                                            %>>10x15
+                                                                                            %>>AUTORIZADO
                                                                                     </option>
                                                                                     <option style="color: #bf3322"
-                                                                                            value="15x20"
+                                                                                            value="DESCONTAR"
                                                                                             <%
                                                                                                 modelVendas = (ModelVendas) request.getAttribute("modelVendas");
-                                                                                                if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("15x20")) {
+                                                                                                if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("DESCONTAR")) {
                                                                                                     out.print("selected=\"selected\"");
                                                                                                 }
-                                                                                            %>>15x20
+                                                                                            %>>DESCONTAR
                                                                                     </option>
 
                                                                                 </select>
@@ -1113,7 +1114,7 @@
 
 
                                                         </table>
-                                                        <h5>Lançamentos do Dia:</h5>
+                                                        <h5>Último Lançamento:</h5>
 
 
                                                         <div style="overflow-x: hidden">
@@ -1187,8 +1188,7 @@
                                                                                             value="${vd.ribbon}"/></td>
                                                                                     <td><c:out
                                                                                             value="${vd.vendedor_id}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.data_venda}"/></td>
+                                                                                    <td><fmt:formatDate value="${vd.data_venda}" pattern="dd/MM/yyyy"/></td>
 
 
                                                                                     <td><c:out
@@ -1263,6 +1263,9 @@
             var msg = "${msg}";
             if (msg) {
                 $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+
+                // Remove a mensagem da sessão após exibi-la
+                $.post("${pageContext.request.contextPath}/ServletVendas", { acao: "limparMsg" });
             }
         });
 

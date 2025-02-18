@@ -1,6 +1,7 @@
 package servlets;
 
 import dao.DAOConfDiario;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,7 +13,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 @WebServlet("/ServletConfDiario")
 public class ServletConfDiario extends HttpServlet {
@@ -23,10 +26,24 @@ public class ServletConfDiario extends HttpServlet {
         super();
         daoConfDiario = new DAOConfDiario();
     }
+    private void carregarConfNaoFechadas(HttpServletRequest request) {
+        try {
+            System.out.println("Método carregarConfNaoFechadas foi chamado!");
+            List<Date> confNaoFechadas = daoConfDiario.buscarConfNaoFechadas();
+            System.out.println("Dados de confNaoFechadas: " + confNaoFechadas);
+            request.setAttribute("confNaoFechadas", confNaoFechadas);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            request.setAttribute("msgErro", "Erro ao buscar datas pendentes: " + e.getMessage());
+        }
+    }
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao");
+        carregarConfNaoFechadas(request);
+
 
         try {
             if ("buscaFechamentoDiario".equals(acao)) {
@@ -110,7 +127,9 @@ public class ServletConfDiario extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        carregarConfNaoFechadas(request);
         try {
+
             // Chamando o método para atualizar a conferência
             atualizarConferencia(request, response);
 

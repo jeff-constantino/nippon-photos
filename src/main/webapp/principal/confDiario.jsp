@@ -10,6 +10,9 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 
 <body>
 <div class="container-scroller">
@@ -81,16 +84,7 @@
                                                             aria-label="Close"></button>
                                                 </div>
 
-                                                <div class="container-fluid">
-                                                    <div class="page-body">
 
-                                                        <div class="row">
-                                                            <div class="col-auto">
-                                                                <span style="color:#1ad76b; text-align: center">${msg}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
                                                 <div class="modal-body">
                                                     <div class="container-fluid">
@@ -101,33 +95,39 @@
 
                                                                     <div class="card">
                                                                         <div class="card-block">
-                                                                            <form action="<%= request.getContextPath() %>/ServletConfDiario"
-                                                                                  method="get" id="formConfModal"
-                                                                                  name="formConfModal">
-                                                                                <input type="hidden" name="acao"
-                                                                                       value="buscaFechamentoDiario"/>
-                                                                                <div class="form-row align-items-center">
-                                                                                    <div class="col-auto d-flex align-items-end">
-                                                                                        <div class="mr-2">
-                                                                                            <label for="data_fechamento">Data
-                                                                                                Fechamento</label>
-                                                                                            <input type="date"
-                                                                                                   class="form-control"
-                                                                                                   id="data_fechamento"
-                                                                                                   name="data_fechamento"
-                                                                                                   value="">
-                                                                                        </div>
-                                                                                        <div>
-                                                                                            <button type="submit"
-                                                                                                    class="btn btn-outline-success">
-                                                                                                Buscar Fechamento
-                                                                                            </button>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
+                                                                            ${confNaoFechadas}
+                                                                                <c:if test="${not empty confNaoFechadas}">
+                                                                                    <table class="table table-striped">
+                                                                                        <thead>
+                                                                                        <tr>
+                                                                                            <th>Data do Fechamento</th>
+                                                                                            <th>Ação</th>
+                                                                                        </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                        <c:forEach var="data" items="${confNaoFechadas}">
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                    <fmt:formatDate value="${data}" pattern="dd/MM/yyyy" />
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <form action="<%= request.getContextPath() %>/ServletConfDiario" method="get">
+                                                                                                        <input type="hidden" name="acao" value="buscaFechamentoDiario">
+                                                                                                        <input type="hidden" name="data_fechamento" value="${data}" required />
+                                                                                                        <button type="submit" class="btn btn-outline-primary">
+                                                                                                            Realizar Fechamento
+                                                                                                        </button>
+                                                                                                    </form>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </c:forEach>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </c:if>
+                                                                                <c:if test="${empty confNaoFechadas}">
+                                                                                    <p>Nenhum dado encontrado.</p>
+                                                                                </c:if>
 
-
-                                                                            </form>
 
 
                                                                         </div>

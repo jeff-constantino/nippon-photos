@@ -47,23 +47,32 @@ public class ServletFechaDia extends ServletGenericUtil {
             return defaultValue; // Retorna o valor padrão em caso de erro
         }
     }
+    private void carregarDatasNaoFechadas(HttpServletRequest request) {
+        try {
+            List<Date> datasNaoFechadas = daoFechaDia.buscarDatasNaoFechadas();
+            request.setAttribute("datasNaoFechadas", datasNaoFechadas);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            request.setAttribute("msgErro", "Erro ao buscar datas pendentes: " + e.getMessage());
+        }
+    }
 
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao");
-
-        // Verifica se a ação é vazia ou nula
-        if (acao == null || acao.isEmpty()) {
-            // Encaminha para a página principal sem mudar o endereço no navegador
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/fechadia.jsp");
-            dispatcher.forward(request, response);
-            return; // Importante retornar para evitar que o código continue
-        }
+        // Carrega as datas não fechadas em todas as ações
+        carregarDatasNaoFechadas(request);
 
         // Inicializa o DAO
         DAOFechaDia daoFechaDia = new DAOFechaDia();
 
+        if (acao == null || acao.isEmpty()) {
+            carregarDatasNaoFechadas(request);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/fechadia.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
 
 
         // Lógica para "buscarfechamento"
@@ -124,11 +133,13 @@ public class ServletFechaDia extends ServletGenericUtil {
         // Se a ação for buscaData
         if ("buscaData".equals(acao)) {
             String dataFechamento = request.getParameter("data_fechamento");
+            System.out.println("Parâmetro 'data_fechamento': " + dataFechamento);
 
             if (dataFechamento != null && !dataFechamento.isEmpty()) {
                 try {
-                    // Converte a string da data para o tipo Date
-                    Date data = Date.valueOf(dataFechamento);
+                    // Converte a string da data para o tipo java.sql.Date
+                    java.sql.Date data = java.sql.Date.valueOf(dataFechamento);
+                    System.out.println("Data convertida: " + data);
 
                     // Verifica se há vendas registradas para a data informada
                     if (!daoFechaDia.existeVendaParaData(data)) {
@@ -146,23 +157,22 @@ public class ServletFechaDia extends ServletGenericUtil {
                                 request.setAttribute("fechamento", fechamento);
                                 System.out.println(fechamento);
                             } else {
-                                request.setAttribute("msg", "Nenhum fechamento encontrado para a data informada."); // Mensagem caso não encontre
+                                request.setAttribute("msg", "Nenhum fechamento encontrado para a data informada.");
                             }
 
                             // Agora, também executa a busca dos valores dos produtos
                             try {
-
                                 List<ModelConfig> configs = daoFechaDia.consultarValor();
                                 ModelConfig config = configs.isEmpty() ? null : configs.get(0);  // Pega a primeira configuração
 
-// Passa os valores de configuração para o JSP
-                                request.setAttribute("conf1_valor", config.getConf1_valor());
-                                request.setAttribute("conf2_valor", config.getConf2_valor());
-                                request.setAttribute("conf3_valor", config.getConf3_valor());
+                                // Passa os valores de configuração para o JSP
+                                if (config != null) {
+                                    request.setAttribute("conf1_valor", config.getConf1_valor());
+                                    request.setAttribute("conf2_valor", config.getConf2_valor());
+                                    request.setAttribute("conf3_valor", config.getConf3_valor());
+                                }
                             } catch (Exception e) {
-                                // Loga a exceção para análise posterior
                                 e.printStackTrace();
-                                // Envia uma resposta de erro ao cliente
                                 request.setAttribute("produtosErro", "Erro ao buscar valores dos produtos.");
                             }
                         }
@@ -173,23 +183,23 @@ public class ServletFechaDia extends ServletGenericUtil {
                     request.setAttribute("msg", "Erro ao buscar fechamento: " + e.getMessage());
                 }
             } else {
-                request.setAttribute("msg", "Data de fechamento não pode ser vazia."); // Mensagem de erro para o usuário
+                request.setAttribute("msg", "Data de fechamento não pode ser vazia.");
             }
         } else {
-            request.setAttribute("msg", "Ação não reconhecida."); // Mensagem para ações não reconhecidas
+            request.setAttribute("msg", "Ação não reconhecida.");
         }
 
-// Encaminha a requisição para a página JSP
+        // Encaminha a requisição para a página JSP
         RequestDispatcher dispatcher = request.getRequestDispatcher("principal/fechadia.jsp");
         dispatcher.forward(request, response);
-
     }
 
 
-    @Override
+        @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ModelFechaDia fechamento = new ModelFechaDia();
-
+// Carrega as datas não fechadas em todas as ações
+            carregarDatasNaoFechadas(request);
         try {
             // Recuperar valores dos inputs com checagem
             fechamento.setData_fechamento(Date.valueOf(request.getParameter("data_fechamento")));

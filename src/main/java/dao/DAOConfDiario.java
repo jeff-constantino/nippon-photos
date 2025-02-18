@@ -5,6 +5,8 @@ import model.ModelConfDiario;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DAOConfDiario {
 
@@ -15,7 +17,29 @@ public class DAOConfDiario {
     }
 
 
-//
+    public List<Date> buscarConfNaoFechadas() throws SQLException {
+        List<Date> confNaoFechadas = new ArrayList<>();
+
+        // Nova consulta para verificar se valor_din_real é NULL
+        String sql = "SELECT DISTINCT f.data_fechamento " +
+                "FROM conf_dia f " +
+                "WHERE f.valor_din_real IS NULL " +
+                "ORDER BY f.data_fechamento DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                confNaoFechadas.add(rs.getDate("data_fechamento"));
+            }
+        }
+
+        return confNaoFechadas;
+    }
+
+
+
+
+    //
 public boolean existeConferenciaParaData(Date dataFechamento) {
     String query = "SELECT COUNT(*) FROM conf_dia WHERE data_fechamento = ? AND valor_din_real IS NOT NULL";
     try {

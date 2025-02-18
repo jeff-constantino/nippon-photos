@@ -14,6 +14,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
 
 <body>
 <div class="container-scroller">
@@ -30,84 +34,65 @@
                     <div class="col-xl-12">
 
                         <div class="modal fade" id="modalLancaFechamento" data-bs-backdrop="static"
-                             data-bs-keyboard="false"
-                             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                             data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div class="modal-dialog modal-xl mt-5">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">FECHAMENTO DIÁRIO </h5>
-
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                    </div>
-
-                                    <div class="container-fluid">
-                                        <div class="page-body">
-
-                                            <div class="row">
-                                                <div class="col-auto">
-                                                    <span style="color:#1ad76b; text-align: center">${msg}</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <h5 class="modal-title">FECHAMENTO DIÁRIO</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
 
                                     <div class="modal-body">
                                         <div class="container-fluid">
                                             <div class="page-body">
-
                                                 <div class="row">
                                                     <div class="col-sm-12">
-
                                                         <div class="card">
                                                             <div class="card-block">
-                                                                <form action="<%= request.getContextPath() %>/ServletFechaDia"
-                                                                      method="get" id="formFechaTotal"
-                                                                      name="formFechaTotal">
-                                                                    <input type="hidden" name="acao"
-                                                                           value="buscaData"/>
-                                                                    <div class="form-row align-items-center">
-                                                                        <div class="col-auto d-flex align-items-end">
-                                                                            <div class="mr-2">
-                                                                                <label for="data_fechamento">Data
-                                                                                    Fechamento</label>
-                                                                                <input type="date"
-                                                                                       class="form-control"
-                                                                                       id="data_fechamento"
-                                                                                       name="data_fechamento"
-                                                                                       value="${data_fechamento}">
-                                                                            </div>
-                                                                            <div>
-                                                                                <button type="submit"
-                                                                                        class="btn btn-outline-success">
-                                                                                    Gerar Fechamento
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
+
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Data da Venda</th>
+                                                                        <th>Ação</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <c:forEach var="data" items="${datasNaoFechadas}">
+                                                                        <tr>
+                                                                            <td>
+                                                                                <fmt:formatDate value="${data}" pattern="dd/MM/yyyy" />
+                                                                            </td>
+                                                                            <td>
+                                                                                <form action="<%= request.getContextPath() %>/ServletFechaDia" method="get">
+                                                                                    <input type="hidden" name="acao" value="buscaData">
+                                                                                    <input type="hidden" name="data_fechamento" value="${data}" required />
+                                                                                    <button type="submit" class="btn btn-outline-primary">
+                                                                                        Realizar Fechamento
+                                                                                    </button>
+                                                                                </form>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </c:forEach>
 
 
-                                                                </form>
-
-
+                                                                    </tbody>
+                                                                </table>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
-
                                     </div>
+
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-light"
-                                                data-bs-dismiss="modal">SAIR
-                                        </button>
-                                        <%--FIM MODAL BUSCA--%>
+                                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">SAIR</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
 
                         <div class="modal fade" id="modalBuscaFechamento" data-bs-backdrop="static"
                              data-bs-keyboard="false"  aria-labelledby="staticBackdropLabel"
@@ -941,6 +926,7 @@
 
         // Adiciona um listener ao campo de desconto
         document.getElementById("desconto").addEventListener("input", calcularValores);
+
 
 
 

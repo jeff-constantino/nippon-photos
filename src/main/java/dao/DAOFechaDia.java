@@ -17,6 +17,26 @@ public class DAOFechaDia {
         connection = SingleConnectionBanco.getConnection();
     }
 
+    public List<Date> buscarDatasNaoFechadas() throws SQLException {
+        List<Date> datasNaoFechadas = new ArrayList<>();
+
+        String sql = "SELECT DISTINCT v.data_venda " +
+                "FROM vendas v " +
+                "LEFT JOIN fecha_dia f ON v.data_venda = f.data_fechamento " +
+                "WHERE f.data_fechamento IS NULL " +
+                "ORDER BY v.data_venda DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                datasNaoFechadas.add(rs.getDate("data_venda"));
+            }
+        }
+
+        return datasNaoFechadas;
+    }
+
+
     public boolean existeVendaParaData(Date data) {
         String query = "SELECT COUNT(*) FROM vendas WHERE data_venda = ?";
         try {

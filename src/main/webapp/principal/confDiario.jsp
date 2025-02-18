@@ -95,7 +95,7 @@
 
                                                                     <div class="card">
                                                                         <div class="card-block">
-                                                                            ${confNaoFechadas}
+
                                                                                 <c:if test="${not empty confNaoFechadas}">
                                                                                     <table class="table table-striped">
                                                                                         <thead>

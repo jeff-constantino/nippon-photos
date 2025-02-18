@@ -95,7 +95,7 @@
                                         <input type="date" class="form-control" id="dataInicial2" name="dataInicial"
                                                style="background-color: transparent; border: transparent; color: #DAA520; font-weight: bold; font-size: larger"
                                                value="${dataInicial}" readonly>
-                                    </div>                                    
+                                    </div>
                                     <div class="ms-1">
                                         <input type="date" class="form-control" id="dataFinal2" name="dataFinal"
                                                style="background-color: transparent; border: transparent; color: #DAA520; font-weight: bold; font-size: larger"

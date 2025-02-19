@@ -63,4 +63,38 @@ public class DAOConfiguracao {
         return model;
     }
 
+    public ModelConfiguracao gravarConfigCartao(ModelConfiguracao model) throws SQLException {
+        String sql;
+
+        // Verifica se o idConf é nulo para decidir entre inserir ou atualizar
+        if (model.getIdConf() == null) {
+            sql = "INSERT INTO conf_juros_cartao (deb_visa_master, cred_visa_master, deb_outros, cred_outros) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                stmt.setBigDecimal(1, model.getDeb_visa_master());
+                stmt.setBigDecimal(2, model.getCred_visa_master());
+                stmt.setBigDecimal(3, model.getDeb_outros());
+                stmt.setBigDecimal(4, model.getCred_outros());
+                stmt.executeUpdate();
+
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        model.setIdConf(rs.getLong(1)); // Definindo o idConf gerado
+                    }
+                }
+            }
+        } else {
+            sql = "UPDATE conf_juros_cartao SET deb_visa_master=?, cred_visa_master=?, deb_outros=?, cred_outros=? WHERE id_conf=?";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setBigDecimal(1, model.getDeb_visa_master());
+                stmt.setBigDecimal(2, model.getCred_visa_master());
+                stmt.setBigDecimal(3, model.getDeb_outros());
+                stmt.setBigDecimal(4, model.getCred_outros());
+                stmt.setLong(5, model.getIdConf());
+                stmt.executeUpdate();
+            }
+        }
+        return model;
+    }
+
+
 }

@@ -534,6 +534,7 @@
                                                     <div class="container-fluid">
                                                         <div class="row">
                                                             <form id="configPagamento" method="post" action="<%= request.getContextPath() %>/ServletConfiguracao">
+                                                                <input type="hidden" name="acao" value="cartao">
 
 
 
@@ -868,7 +869,7 @@
                                         </thead>
                                     </table>
                                 </div>
-                              
+
                             </div>
                         </div>
                     </div>

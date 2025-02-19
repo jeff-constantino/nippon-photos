@@ -28,9 +28,10 @@ public class ModelConfiguracao implements java.io.Serializable {
 
     //MODEL PARA A TABELA DE JUROS DAS FORMAS DE PAGAMENTO
 
-    private BigDecimal debito;
-    private BigDecimal credito;
-    private BigDecimal pix;
+    private BigDecimal deb_visa_master;
+    private BigDecimal cred_visa_master;
+    private BigDecimal deb_outros;
+    private BigDecimal cred_outros;
 
     public Long getIdConf() {
         return idConf;
@@ -112,27 +113,35 @@ public class ModelConfiguracao implements java.io.Serializable {
         this.fgts = fgts;
     }
 
-    public BigDecimal getDebito() {
-        return debito;
+    public BigDecimal getDeb_visa_master() {
+        return deb_visa_master;
     }
 
-    public void setDebito(BigDecimal debito) {
-        this.debito = debito;
+    public void setDeb_visa_master(BigDecimal deb_visa_master) {
+        this.deb_visa_master = deb_visa_master;
     }
 
-    public BigDecimal getCredito() {
-        return credito;
+    public BigDecimal getCred_visa_master() {
+        return cred_visa_master;
     }
 
-    public void setCredito(BigDecimal credito) {
-        this.credito = credito;
+    public void setCred_visa_master(BigDecimal cred_visa_master) {
+        this.cred_visa_master = cred_visa_master;
     }
 
-    public BigDecimal getPix() {
-        return pix;
+    public BigDecimal getDeb_outros() {
+        return deb_outros;
     }
 
-    public void setPix(BigDecimal pix) {
-        this.pix = pix;
+    public void setDeb_outros(BigDecimal deb_outros) {
+        this.deb_outros = deb_outros;
+    }
+
+    public BigDecimal getCred_outros() {
+        return cred_outros;
+    }
+
+    public void setCred_outros(BigDecimal cred_outros) {
+        this.cred_outros = cred_outros;
     }
 }

@@ -27,40 +27,85 @@
                 <div class="row">
 
                 </div>
-                <div class="row">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
+ <%--PARTE 1--%>
+                <div class="row justify-content-center">
+                    <div class="col-md-4 grid-margin">
+                        <div class="card text-center">
                             <div class="card-body">
+                                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalProd">
+                                    <h4>Configurações de Produtos</h4>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 grid-margin">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalMat">
+                                    <h4>Configurações de Materiais</h4>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 grid-margin">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalSalarios">
+                                    <h4>Salários e Comissões</h4>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                <div class="table-responsive">
-                                    <table class="table">
-
-
-                                            <div class="d-flex justify-content-between">
-                                                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalProd">
-                                                    <h4>Configurações de Produtos</h4>
-                                                </button>
-
-                                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalMat">
-                                                    <h4>Configurações de Materiais</h4>
-                                                </button>
-
-                                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalGeral">
-                                                    <h4>Configurações Gerais</h4>
-                                                </button>
-                                            </div>
-
-
-                                    </table>
-                                </div>
+                <%--PARTE 2--%>
+                <div class="row justify-content-center">
+                    <div class="col-md-4 grid-margin">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalCartao">
+                                    <h4>Juros Cartões</h4>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 grid-margin">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h4 class="card-title">FINANCEIRO</h4>
+                                <!-- Table Content -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 grid-margin">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalGeral">
+                                    <h4>Configurações Gerais</h4>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
 
+
+
+
             <%--TODOS MODAIS  --%>
                 <div class="row">
+
+
+
+
+
+
+
+
+
+
+
+
                     <div class="col-sm-4 grid-margin">
 
 
@@ -463,8 +508,191 @@
 
                         </div>
                     </div>
-                </div>
 
+
+
+                    <div class="col-sm-4 grid-margin">
+
+
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                    <!--INSERIR BOTÃO 3 AQUI-->
+                                    <!-- Button trigger modal -->
+
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalCartao" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl mt-5">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="pagamento">Cartões</h5>
+
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="container-fluid">
+                                                        <div class="row">
+                                                            <form id="configPagamento" method="post" action="<%= request.getContextPath() %>/ServletConfiguracao">
+
+
+
+                                                                <div class="row mb-3">
+                                                                    <div class="col-sm-1">
+                                                                        <label class="float-label">ID:</label>
+                                                                        <span class="form-bar"></span>
+                                                                        <input type="text" class="form-control" style="background-color: black" id="idConf_pagamento"
+                                                                               name="idConf" placeholder=""
+                                                                               value="" readonly>
+                                                                    </div>
+
+
+                                                                </div>
+
+                                                                <div class="row mb-4 d-flex">
+                                                                    <div class="col-3">
+                                                                        <label for="conf1_nome">Débito Visa/Master</label>
+                                                                        <input type="text" class="form-control" id="deb_visa_master" name="deb_visa_master" required value="">
+                                                                    </div>
+                                                                    <div class="col-3">
+                                                                        <label for="conf1_valor">Crédito Visa/Master</label>
+                                                                        <input type="text" class="form-control" id="cred_visa_master" name="cred_visa_master" required value="">
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row mb-4 d-flex">
+                                                                    <div class="col-3">
+                                                                        <label for="conf2_nome">Débito Outros</label>
+                                                                        <input type="text" class="form-control" id="deb_outros" name="deb_outros" required value="">
+                                                                    </div>
+                                                                    <div class="col-3">
+                                                                        <label for="conf2_valor">Crédito Outros</label>
+                                                                        <input type="text" class="form-control" id="cred_outros" name="cred_outros" required value="">
+                                                                    </div>
+
+                                                                </div>
+
+
+
+                                                                <button type="submit" class="btn btn-outline-success">Salvar</button>
+
+                                                            </form>
+
+
+
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 grid-margin">
+
+
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                    <!--INSERIR BOTÃO 3 AQUI-->
+                                    <!-- Button trigger modal -->
+
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalSalarios" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl mt-5">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="modal_salario">Salários e Comissões</h5>
+
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="container-fluid">
+                                                        <div class="row">
+                                                            <form id="configFormSalarios" method="post" action="<%= request.getContextPath() %>/ServletConfiguracao">
+                                                                <input type="hidden" name="acao" value="salario">
+
+                                                              <div class="row mb-3">
+                                                                    <div class="col-sm-1">
+                                                                        <label class="float-label">ID:</label>
+                                                                        <span class="form-bar"></span>
+                                                                        <input type="text" class="form-control" style="background-color: black" id="idConf_salario"
+                                                                               name="idConf" placeholder=""
+                                                                               value="" readonly>
+                                                                    </div>
+
+
+                                                                </div>
+
+                                                                <div class="row mb-4 d-flex">
+                                                                    <div class="col-3">
+                                                                        <label for="conf1_nome">Salário</label>
+                                                                        <input type="text" class="form-control" id="salario" name="salario" required value="">
+                                                                    </div>
+                                                                    <div class="col-3">
+                                                                        <label for="conf2_nome">Comissão</label>
+                                                                        <input type="text" class="form-control" id="comissao" name="comissao" required value="">
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row mb-4 d-flex">
+                                                                    <div class="col-3">
+                                                                        <label for="conf2_nome">FGTS</label>
+                                                                        <input type="text" class="form-control" id="fgts" name="fgts" required value="">
+                                                                    </div>
+                                                                    <div class="col-3">
+                                                                        <label for="conf2_valor">INSS</label>
+                                                                        <input type="text" class="form-control" id="inss" name="inss" required value="">
+                                                                    </div>
+
+                                                                </div>
+
+
+
+                                                                <button type="submit" class="btn btn-outline-success">Salvar</button>
+
+                                                            </form>
+
+
+
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+<%--FIM DOS MODAIS--%>
                 <style>
                     .minha-tabela {
                         border-collapse: collapse; /* Remove espaço entre as bordas */
@@ -552,30 +780,6 @@
                                          </thead>
                                     </table>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <style>
-                    .minha-tabela {
-                        border-collapse: collapse; /* Remove espaço entre as bordas */
-                        width: 100%; /* Opcional: para garantir que a tabela ocupe toda a largura */
-                    }
-
-                    .minha-tabela td, .minha-tabela th {
-                        padding: 2px; /* Diminui o padding das células */
-                        vertical-align: middle; /* Alinha verticalmente ao meio */
-                        font-size: 14px; /* Ajusta o tamanho da fonte (opcional) */
-                    }
-                </style>
-
-                <div class="row ">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">MATERIAIS</h4>
                                 <div class="table-responsive">
                                     <table class="table table-bordered minha-tabela">
@@ -631,7 +835,7 @@
                                                                        '${modelConf.conf3_valor}',
                                                                        '${modelConf.conf3_qtd}',
                                                                        '${modelConf.conf3_custo}')">
-                                                            Editar
+                                                                Editar
                                                             </a>
                                                         </td>
                                                         <td><c:out value="${modelConf.idConf}"/></td>
@@ -664,6 +868,7 @@
                                         </thead>
                                     </table>
                                 </div>
+                              
                             </div>
                         </div>
                     </div>
@@ -688,137 +893,40 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">GERAL</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered minha-tabela">
-                                        <thead class="thead-light">
+                                <h4 class="card-title" style="text-align: center">tabela</h4>
 
-                                        <c:if test="${not empty configs}">
-                                        <table class="table table-bordered">
-
-                                            <tr>
-                                                <th>Ações</th>
-                                                <th>ID</th>
-                                                <th>Produto 1</th>
-                                                <th>Valor 1</th>
-
-                                                <th>Produto 2</th>
-                                                <th>Valor</th>
-                                                <th>Produto 3</th>
-                                                <th>Valor</th>
-
-
-                                            </tr>
-
-                                            <!-- Bloco 3 -->
-                                            <tbody>
-                                            <c:forEach items="${configs}" var="modelConf">
-                                                <c:if test="${modelConf.idConf == 3}">
-                                                    <tr>
-                                                        <td>
-                                                            <a class="btn btn-outline-success waves-effect waves-light"
-                                                               href="javascript:void(0);"
-                                                               data-bs-toggle="modal"
-                                                               data-bs-target="#modalGeral"
-                                                               onclick="gerenciarGeral(
-                                                                   ${modelConf.idConf},
-                                                                       '${modelConf.conf_name}',
-                                                                       '${modelConf.conf1_nome}',
-                                                                       '${modelConf.conf1_valor}',
-
-
-                                                                       '${modelConf.conf2_nome}',
-                                                                       '${modelConf.conf2_valor}',
-
-                                                                       '${modelConf.conf3_nome}',
-                                                                       '${modelConf.conf3_valor}'
-                                                                       )">
-                                                                Editar
-                                                            </a>
-                                                        </td>
-                                                        <td><c:out value="${modelConf.idConf}"/></td>
-                                                        <td><c:out value="${modelConf.conf1_nome}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf1_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
-                                                        <td><c:out value="${modelConf.conf2_nome}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf2_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
-                                                        <td><c:out value="${modelConf.conf3_nome}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf3_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
-
-                                                    </tr>
-                                                </c:if>
-                                            </c:forEach>
-                                            </tbody>
-
-
-                                            </c:if>
-                                            <c:if test="${empty configs}">
-                                            <p>Nenhuma configuração encontrada.</p>
-                                            </c:if>
-                                        </thead>
-                                    </table>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
 
-<%--PARTE 1--%>
-                <div class="row">
-                    <div class="col-md-4 grid-margin">
+
+                <style>
+                    .minha-tabela {
+                        border-collapse: collapse; /* Remove espaço entre as bordas */
+                        width: 100%; /* Opcional: para garantir que a tabela ocupe toda a largura */
+                    }
+
+                    .minha-tabela td, .minha-tabela th {
+                        padding: 2px; /* Diminui o padding das células */
+                        vertical-align: middle; /* Alinha verticalmente ao meio */
+                        font-size: 14px; /* Ajusta o tamanho da fonte (opcional) */
+                    }
+                </style>
+
+                <div class="row ">
+                    <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">HISTÓRICO DE CONDUTA</h4>
-                                <!-- Table Content -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">FINANCEIRO</h4>
-                                <!-- Table Content -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">SALÁRIO BRUTO</h4>
-                                <!-- Table Content -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-<%--PARTE 2--%>
-                <div class="row">
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">HISTÓRICO DE CONDUTA</h4>
-                                <!-- Table Content -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">FINANCEIRO</h4>
-                                <!-- Table Content -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">SALÁRIO BRUTO</h4>
-                                <!-- Table Content -->
+                                <h4 class="card-title" style="text-align: center">tabela 3</h4>
                             </div>
                         </div>
                     </div>
                 </div>
 
-            </div>
+
+
 
             <!-- content-wrapper ends -->
             <!-- partial:partials/_footer.html -->

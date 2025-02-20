@@ -33,6 +33,11 @@ public class ModelConfiguracao implements java.io.Serializable {
     private BigDecimal deb_outros;
     private BigDecimal cred_outros;
 
+
+
+
+
+
     public Long getIdConf() {
         return idConf;
     }

@@ -12,18 +12,22 @@ import model.ModelConfiguracao;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/ServletConfiguracao")
 public class ServletConfiguracao extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
-    private DAOConfiguracao daoConfiguracao = new DAOConfiguracao();
+    private DAOConfiguracao daoConfiguracao;
     private DAOConfig daoConfig;
 
 
-    public void init() {
+    @Override
+    public void init() throws ServletException {
         daoConfig = new DAOConfig();
+        daoConfiguracao = new DAOConfiguracao();
     }
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -94,20 +98,29 @@ public class ServletConfiguracao extends ServletGenericUtil {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao");
-        // Carrega as datas não fechadas em todas as ações
+
         if (acao == null || acao.isEmpty()) {
-            List<ModelConfig> configs = null; // Recupera todas as configurações
+            List<ModelConfig> configs = new ArrayList<>();
+            List<ModelConfiguracao> configsSalarios = new ArrayList<>();
+            List<ModelConfiguracao> configsCartoes = new ArrayList<>();
+
             try {
                 configs = daoConfig.consultarTodasConfigs();
+                configsCartoes = daoConfiguracao.consultarJuros();
+                configsSalarios = daoConfiguracao.consultarSalarios();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
+            request.setAttribute("configsCartoes", configsCartoes);
+            request.setAttribute("configsSalarios", configsSalarios);
             request.setAttribute("configs", configs); // Adiciona a lista ao request
+
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/config.jsp");
             dispatcher.forward(request, response);
         }
     }
+
 
     private BigDecimal parseBigDecimal(String value) {
         try {

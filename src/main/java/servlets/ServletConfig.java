@@ -1,11 +1,13 @@
 package servlets;
 
 import dao.DAOConfig;
+import dao.DAOConfiguracao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelConfig;
+import model.ModelConfiguracao;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -15,10 +17,12 @@ import java.util.List;
 public class ServletConfig extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
     private DAOConfig daoConfig;
+    private DAOConfiguracao daoConfiguracao;
 
     @Override
-    public void init() {
+    public void init() throws ServletException {
         daoConfig = new DAOConfig();
+        daoConfiguracao = new DAOConfiguracao();
     }
 
     @Override
@@ -27,8 +31,12 @@ public class ServletConfig extends ServletGenericUtil {
 
 
         try {
-            List<ModelConfig> configs = daoConfig.consultarTodasConfigs(); // Recupera todas as configurações
+            List<ModelConfig> configs = daoConfig.consultarTodasConfigs();
+            List<ModelConfiguracao> configsSalarios = daoConfiguracao.consultarSalarios();
+            List<ModelConfiguracao> configsJuros = daoConfiguracao.consultarJuros();
 
+            request.setAttribute("configsJuros", configsJuros);
+            request.setAttribute("configsSalarios", configsSalarios);
             request.setAttribute("configs", configs); // Adiciona a lista ao request
             request.getRequestDispatcher("/principal/config.jsp").forward(request, response); // Redireciona para a JSP
         } catch (Exception e) {

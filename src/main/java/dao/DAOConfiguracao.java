@@ -1,11 +1,16 @@
 package dao;
 
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import connection.SingleConnectionBanco;
+import model.ModelConfig;
 import model.ModelConfiguracao;
 
 public class DAOConfiguracao {
@@ -37,7 +42,7 @@ public class DAOConfiguracao {
                     }
                 }
             } else {
-                String sql = "UPDATE conf_salarios SET salario=?, comissao=?, fgts=?, inss=? WHERE id_conf=?";
+                String sql = "UPDATE conf_salarios SET salario=?, comissao=?, fgts=?, inss=? WHERE \"idConf\" =?";
                 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
                     stmt.setBigDecimal(1, model.getSalario());
@@ -83,7 +88,7 @@ public class DAOConfiguracao {
                 }
             }
         } else {
-            sql = "UPDATE conf_juros_cartao SET deb_visa_master=?, cred_visa_master=?, deb_outros=?, cred_outros=? WHERE id_conf=?";
+            sql = "UPDATE conf_juros_cartao SET deb_visa_master=?, cred_visa_master=?, deb_outros=?, cred_outros=? WHERE \"idConf\" =?";
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setBigDecimal(1, model.getDeb_visa_master());
                 stmt.setBigDecimal(2, model.getCred_visa_master());
@@ -95,6 +100,69 @@ public class DAOConfiguracao {
         }
         return model;
     }
+
+    public List<ModelConfiguracao> consultarSalarios() throws Exception {
+        List<ModelConfiguracao> listaSalarios = new ArrayList<>();
+        String sql = "SELECT * FROM public.conf_salarios"; // Certifique-se de que a tabela existe
+
+        try (PreparedStatement preparedSql = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedSql.executeQuery()) {
+
+            while (resultSet.next()) {
+                ModelConfiguracao modelConfiguracao = new ModelConfiguracao();
+                modelConfiguracao.setIdConf(resultSet.getLong("idConf"));
+                modelConfiguracao.setSalario(resultSet.getBigDecimal("salario"));
+                modelConfiguracao.setComissao(resultSet.getBigDecimal("comissao"));
+                modelConfiguracao.setFgts(resultSet.getBigDecimal("fgts"));
+                modelConfiguracao.setInss(resultSet.getBigDecimal("inss"));
+
+
+
+
+                listaSalarios.add(modelConfiguracao);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao consultar configurações: " + e.getMessage()); // Captura erros de SQL
+            throw e; // Repropaga a exceção para ser tratada na camada superior
+        }
+
+        return listaSalarios;
+    }
+
+    public List<ModelConfiguracao> consultarJuros() throws Exception {
+        List<ModelConfiguracao> listaJuros = new ArrayList<>();
+        String sql = "SELECT * FROM public.conf_juros_cartao"; // Certifique-se de que a tabela existe
+
+        try (PreparedStatement preparedSql = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedSql.executeQuery()) {
+
+            while (resultSet.next()) {
+                ModelConfiguracao modelConfiguracao = new ModelConfiguracao();
+                modelConfiguracao.setIdConf(resultSet.getLong("idConf"));
+
+                // Divide os valores por 100 diretamente no Java
+                BigDecimal debVisaMaster = resultSet.getBigDecimal("deb_visa_master").divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
+                BigDecimal credVisaMaster = resultSet.getBigDecimal("cred_visa_master").divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
+                BigDecimal debOutros = resultSet.getBigDecimal("deb_outros").divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
+                BigDecimal credOutros = resultSet.getBigDecimal("cred_outros").divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
+
+                modelConfiguracao.setDeb_visa_master(debVisaMaster);
+                modelConfiguracao.setCred_visa_master(credVisaMaster);
+                modelConfiguracao.setDeb_outros(debOutros);
+                modelConfiguracao.setCred_outros(credOutros);
+
+                listaJuros.add(modelConfiguracao);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao consultar configurações: " + e.getMessage()); // Captura erros de SQL
+            throw e; // Repropaga a exceção para ser tratada na camada superior
+        }
+
+        return listaJuros;
+    }
+
 
 
 }

@@ -542,7 +542,7 @@
                                                                     <div class="col-sm-1">
                                                                         <label class="float-label">ID:</label>
                                                                         <span class="form-bar"></span>
-                                                                        <input type="text" class="form-control" style="background-color: black" id="idConf_pagamento"
+                                                                        <input type="text" class="form-control" style="background-color: black" id="idConf_juros"
                                                                                name="idConf" placeholder=""
                                                                                value="" readonly>
                                                                     </div>
@@ -894,7 +894,67 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">tabela</h4>
+                                <h4 class="card-title" style="text-align: center">SALÁRIOS E COMISSÕES</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered minha-tabela">
+                                        <thead class="thead-light">
+
+                                        <c:if test="${not empty configs}">
+                                        <table class="table table-bordered">
+
+                                            <tr>
+                                                <th>Ações</th>
+                                                <th>ID</th>
+                                                <th>Salário</th>
+                                                <th>Comissão</th>
+                                                <th>FGTS</th>
+                                                <th>INSS</th>
+
+                                            </tr>
+
+                                            <!-- Bloco 1 -->
+                                            <tbody>
+                                            <c:forEach items="${configsSalarios}" var="modelConfiguracao">
+
+                                                    <tr>
+                                                        <td>
+                                                            <a class="btn btn-outline-success waves-effect waves-light"
+                                                               href="javascript:void(0);"
+                                                               data-bs-toggle="modal"
+                                                               data-bs-target="#modalSalarios"
+                                                               onclick="gerenciarSalario(
+                                                                   ${modelConfiguracao.idConf},
+                                                                       '${modelConfiguracao.salario}',
+                                                                       '${modelConfiguracao.comissao}',
+                                                                       '${modelConfiguracao.fgts}',
+                                                                       '${modelConfiguracao.inss}'
+                                                                       )">
+                                                                Editar
+                                                            </a>
+                                                        </td>
+                                                        <td><c:out value="${modelConfiguracao.idConf}"/></td>
+
+                                                        <!-- Formatação do valor com JSTL -->
+                                                        <td><fmt:formatNumber value="${modelConfiguracao.salario}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConfiguracao.comissao / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConfiguracao.fgts / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConfiguracao.inss / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
+
+
+
+                                                    </tr>
+
+                                            </c:forEach>
+                                            </tbody>
+
+
+                                            </c:if>
+                                            <c:if test="${empty configsSalarios}">
+                                            <p>Nenhuma configuração encontrada.</p>
+                                            </c:if>
+                                        </thead>
+                                    </table>
+                                </div>
 
                             </div>
                         </div>
@@ -920,7 +980,78 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">tabela 3</h4>
+                                <h4 class="card-title" style="text-align: center">JUROS DE CARTÕES</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered minha-tabela">
+                                        <thead class="thead-light">
+
+                                        <c:if test="${not empty configs}">
+                                        <table class="table table-bordered">
+
+                                            <tr>
+                                                <th>Ações</th>
+                                                <th>ID</th>
+                                                <th>Débito V/M</th>
+                                                <th>Crédito V/M</th>
+                                                <th>Débito Outos</th>
+                                                <th>Crédit Outros</th>
+
+                                            </tr>
+
+                                            <!-- Bloco 1 -->
+                                            <tbody>
+                                            <c:forEach items="${configsJuros}" var="modelConfiguracao">
+
+                                                <tr>
+                                                    <td>
+                                                        <a class="btn btn-outline-success waves-effect waves-light"
+                                                           href="javascript:void(0);"
+                                                           data-bs-toggle="modal"
+                                                           data-bs-target="#modalCartao"
+                                                           onclick="gerenciarCartao(
+                                                               ${modelConfiguracao.idConf},
+                                                                   '${modelConfiguracao.deb_visa_master}',
+                                                                   '${modelConfiguracao.cred_visa_master}',
+                                                                   '${modelConfiguracao.deb_outros}',
+                                                                   '${modelConfiguracao.cred_outros}'
+                                                                   )">
+                                                            Editar
+                                                        </a>
+                                                    </td>
+                                                    <td><c:out value="${modelConfiguracao.idConf}"/></td>
+
+                                                    <!-- Formatação do valor com JSTL -->
+                                                    <fmt:setLocale value="pt_BR" />
+                                                    <td>
+                                                        <fmt:formatNumber value="${modelConfiguracao.deb_visa_master}" pattern="0.00%" />
+                                                    </td>
+                                                    <td>
+                                                        <fmt:formatNumber value="${modelConfiguracao.cred_visa_master}" pattern="0.00%" />
+                                                    </td>
+                                                    <td>
+                                                        <fmt:formatNumber value="${modelConfiguracao.deb_outros}" pattern="0.00%" />
+                                                    </td>
+                                                    <td>
+                                                        <fmt:formatNumber value="${modelConfiguracao.cred_outros}" pattern="0.00%" />
+                                                    </td>
+
+
+
+
+                                                </tr>
+
+
+                                            </c:forEach>
+                                            </tbody>
+
+
+                                            </c:if>
+                                            <c:if test="${empty configsSalarios}">
+                                            <p>Nenhuma configuração encontrada.</p>
+                                            </c:if>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1017,11 +1148,6 @@
         document.getElementById('idConf').value = idConf; // Campo que irá receber o idConf
         document.getElementById('conf_name').value = conf_name; // Campo para conf_name
 
-        console.log("Valores recebidos na função gerenciarConfig:");
-        console.log("idConf:", idConf);
-        console.log("conf1_nome:", conf1_nome);
-        console.log("conf1_valor:", conf1_valor);
-        console.log("conf1_valor2:", conf1_valor2);
 
         // Preencher os campos para idConf === 1
         document.getElementById('conf1_nome').value = conf1_nome;
@@ -1033,6 +1159,26 @@
         document.getElementById('conf2_valor').value = conf2_valor;
         document.getElementById('conf3_nome').value = conf3_nome;
         document.getElementById('conf3_valor').value = conf3_valor;
+    }
+
+    function gerenciarSalario(idConf, salario, comissao, fgts, inss) {
+        // Preencher o campo idConf
+        document.getElementById('idConf_salario').value = idConf;
+        document.getElementById('salario').value = salario;
+        document.getElementById('comissao').value = comissao;
+        document.getElementById('fgts').value = fgts;
+        document.getElementById('inss').value = inss;
+
+    }
+
+    function gerenciarCartao(idConf, deb_visa_master, cred_visa_master, deb_outros, cred_outros) {
+        // Preencher o campo idConf
+        document.getElementById('idConf_juros').value = idConf;
+        document.getElementById('deb_visa_master').value = deb_visa_master;
+        document.getElementById('cred_visa_master').value = cred_visa_master;
+        document.getElementById('deb_outros').value = deb_outros;
+        document.getElementById('cred_outros').value = cred_outros;
+
     }
 
     function gerenciarMat(idConf,conf_name, conf1_nome, conf1_valor, conf1_qtd, conf1_custo, conf2_nome, conf2_valor, conf2_qtd, conf2_custo, conf3_nome, conf3_valor, conf3_qtd, conf3_custo) {

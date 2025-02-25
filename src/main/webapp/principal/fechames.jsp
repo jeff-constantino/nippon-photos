@@ -1,4 +1,5 @@
-<%--
+<%@ page import="model.ModelConfiguracao" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: Jeff Constantino
   Date: 15/09/2024
@@ -8,6 +9,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%
+    // Recupera a lista de juros do atributo "configsJuros" que foi passado pela Servlet
+    List<ModelConfiguracao> configsJuros = (List<ModelConfiguracao>) request.getAttribute("configsJuros");
+
+    // Verifica se a lista não é nula e se contém pelo menos um elemento
+    ModelConfiguracao juros = configsJuros != null && !configsJuros.isEmpty() ? configsJuros.get(0) : null;
+%>
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
@@ -657,6 +665,77 @@
         });
     });
 
+    // Passa os valores de juros para o JavaScript
+    var debitoVmJuros = <%= juros != null ? juros.getDeb_visa_master() : 0 %>;
+    var creditoVmJuros = <%= juros != null ? juros.getCred_visa_master() : 0 %>;
+    var debitoOutrosJuros = <%= juros != null ? juros.getDeb_outros() : 0 %>;
+    var creditoOutrosJuros = <%= juros != null ? juros.getCred_outros() : 0 %>;
+
+
+    // Função para formatar o valor monetário (substitui vírgula por ponto)
+    function formatarValorMonetario(valor) {
+        return parseFloat(valor.replace(/\./g, '').replace(',', '.')) || 0;
+    }
+
+    // Função para calcular os juros de débito Visa/Master
+    function calcularJurosDebitoVm() {
+        var debitoVm = formatarValorMonetario(document.getElementById('debitoVm').value);
+        var jurosCalculado = debitoVm * debitoVmJuros;
+        document.getElementById('jurosDebitoVm').value = jurosCalculado.toFixed(2).replace('.', ',');
+    }
+
+    // Função para calcular os juros de crédito Visa/Master
+    function calcularJurosCreditoVm() {
+        var creditoVm = formatarValorMonetario(document.getElementById('creditoVm').value);
+        var jurosCalculado = creditoVm * creditoVmJuros;
+        document.getElementById('jurosCreditoVm').value = jurosCalculado.toFixed(2).replace('.', ',');
+    }
+
+    // Função para calcular os juros de débito outros
+    function calcularJurosDebitoOutros() {
+        var debitoOutros = formatarValorMonetario(document.getElementById('debitoOutros').value);
+        var jurosCalculado = debitoOutros * debitoOutrosJuros;
+        document.getElementById('jurosDebitoOutros').value = jurosCalculado.toFixed(2).replace('.', ',');
+    }
+
+    // Função para calcular os juros de crédito outros
+    function calcularJurosCreditoOutros() {
+        var creditoOutros = formatarValorMonetario(document.getElementById('creditoOutros').value);
+        var jurosCalculado = creditoOutros * creditoOutrosJuros;
+        document.getElementById('jurosCreditoOutros').value = jurosCalculado.toFixed(2).replace('.', ',');
+    }
+
+    // Adiciona listeners para os campos
+    function adicionarListeners() {
+        // Débito Visa/Master
+        var debitoVm = document.getElementById('debitoVm');
+        debitoVm.addEventListener('input', calcularJurosDebitoVm);
+        debitoVm.addEventListener('blur', calcularJurosDebitoVm);
+
+        // Crédito Visa/Master
+        var creditoVm = document.getElementById('creditoVm');
+        creditoVm.addEventListener('input', calcularJurosCreditoVm);
+        creditoVm.addEventListener('blur', calcularJurosCreditoVm);
+
+        // Débito Outros
+        var debitoOutros = document.getElementById('debitoOutros');
+        debitoOutros.addEventListener('input', calcularJurosDebitoOutros);
+        debitoOutros.addEventListener('blur', calcularJurosDebitoOutros);
+
+        // Crédito Outros
+        var creditoOutros = document.getElementById('creditoOutros');
+        creditoOutros.addEventListener('input', calcularJurosCreditoOutros);
+        creditoOutros.addEventListener('blur', calcularJurosCreditoOutros);
+    }
+
+    // Executa os cálculos ao carregar a página
+    $(document).ready(function() {
+        adicionarListeners();
+        calcularJurosDebitoVm();
+        calcularJurosCreditoVm();
+        calcularJurosDebitoOutros();
+        calcularJurosCreditoOutros();
+    });
 
 </script>
 </body>

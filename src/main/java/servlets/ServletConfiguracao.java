@@ -36,6 +36,14 @@ public class ServletConfiguracao extends ServletGenericUtil {
             String idConfParam = request.getParameter("idConf");
             ModelConfiguracao modelConfiguracao = new ModelConfiguracao();
 
+            // Verifica se já existe uma configuração no banco de dados
+            List<ModelConfig> configsExistentes = daoConfig.consultarTodasConfigs();
+            ModelConfig configExistente = null;
+
+            if (configsExistentes != null && !configsExistentes.isEmpty()) {
+                configExistente = configsExistentes.get(0); // Pega a primeira configuração existente
+            }
+
             if ("salario".equals(acao)) {
                 // Processamento da ação "salario"
                 BigDecimal salario = parseBigDecimal(request.getParameter("salario"));
@@ -47,6 +55,11 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 modelConfiguracao.setComissao(comissao);
                 modelConfiguracao.setFgts(fgts);
                 modelConfiguracao.setInss(inss);
+
+                // Se já existe uma configuração, define o ID para atualização
+                if (configExistente != null) {
+                    modelConfiguracao.setIdConf(configExistente.getIdConf());
+                }
 
                 // Grava ou atualiza as configurações de salário
                 modelConfiguracao = daoConfiguracao.gravarConfig(modelConfiguracao);
@@ -62,11 +75,16 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 modelConfiguracao.setDeb_outros(debOutros);
                 modelConfiguracao.setCred_outros(credOutros);
 
+                // Se já existe uma configuração, define o ID para atualização
+                if (configExistente != null) {
+                    modelConfiguracao.setIdConf(configExistente.getIdConf());
+                }
+
                 // Grava ou atualiza as configurações de cartão
                 modelConfiguracao = daoConfiguracao.gravarConfigCartao(modelConfiguracao);
             } else {
-                request.setAttribute("msg", "Ação inválida!");List<ModelConfig> configs = daoConfig.consultarTodasConfigs(); // Recupera todas as configurações
-
+                request.setAttribute("msg", "Ação inválida!");
+                List<ModelConfig> configs = daoConfig.consultarTodasConfigs(); // Recupera todas as configurações
                 request.setAttribute("configs", configs); // Adiciona a lista ao request
                 request.getRequestDispatcher("/principal/config.jsp").forward(request, response); // Redireciona para a JSP
                 return;
@@ -77,10 +95,8 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 modelConfiguracao.setIdConf(Long.parseLong(idConfParam));
             }
 
-
             request.setAttribute("msg", msg); // Mensagem de sucesso
             List<ModelConfig> configs = daoConfig.consultarTodasConfigs(); // Recupera todas as configurações
-
             request.setAttribute("configs", configs); // Adiciona a lista ao request
             request.getRequestDispatcher("/principal/config.jsp").forward(request, response); // Redireciona para a JSP
         } catch (Exception e) {

@@ -1,6 +1,8 @@
 package servlets;
 
 import com.google.gson.Gson;
+import dao.DAOConfig;
+import dao.DAOConfiguracao;
 import dao.DAOFechaMes;
 import dao.DAOFuncionario;
 import jakarta.servlet.RequestDispatcher;
@@ -8,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.ModelConfiguracao;
 import model.ModelFechaMes;
 import model.ModelLogin;
 import model.ModelVendas;
@@ -15,9 +18,6 @@ import model.ModelVendas;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -50,11 +50,15 @@ public class ServletFechaMes  extends ServletGenericUtil{
 
         DAOFechaMes daoFechaMes = new DAOFechaMes();
         DAOFuncionario daoFuncionario = new DAOFuncionario();
+        DAOConfiguracao daoConfiguracao = new DAOConfiguracao();
 
         try {
-            // Buscar fechamento do mês
+
             List<ModelFechaMes> vendasMesList = daoFechaMes.buscarFechamentoMensal(dataInicial, dataFinal);
             request.setAttribute("vendasMesList", vendasMesList);
+
+            List<ModelConfiguracao> configsJuros = daoConfiguracao.consultarJuros();
+            request.setAttribute("configsJuros", configsJuros);
 
             // Buscar lista de funcionários
             List<ModelLogin> funcionarios = daoFuncionario.buscaFuncionarios();

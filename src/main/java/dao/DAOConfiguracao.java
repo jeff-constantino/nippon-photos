@@ -21,30 +21,32 @@ public class DAOConfiguracao {
     }
 
     public ModelConfiguracao gravarConfig(ModelConfiguracao model) throws SQLException {
-        // Desabilita o autocommit
+        // Desabilita o autocommit para gerenciar a transação manualmente
         connection.setAutoCommit(false);
 
         try {
-            if (model.getIdConf() == null) {
-                String sql = "INSERT INTO conf_salarios (salario, comissao, fgts, inss) VALUES (?, ?, ?, ?)";
-                try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            String sql;
 
+            // Verifica se o idConf é nulo para decidir entre inserir ou atualizar
+            if (model.getIdConf() == null) {
+                sql = "INSERT INTO conf_salarios (salario, comissao, fgts, inss) VALUES (?, ?, ?, ?)";
+                try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
                     stmt.setBigDecimal(1, model.getSalario());
                     stmt.setBigDecimal(2, model.getComissao());
                     stmt.setBigDecimal(3, model.getFgts());
                     stmt.setBigDecimal(4, model.getInss());
                     stmt.executeUpdate();
 
+                    // Recupera o ID gerado
                     try (ResultSet rs = stmt.getGeneratedKeys()) {
                         if (rs.next()) {
-                            model.setIdConf(rs.getLong(1));
+                            model.setIdConf(rs.getLong(1)); // Define o idConf gerado
                         }
                     }
                 }
             } else {
-                String sql = "UPDATE conf_salarios SET salario=?, comissao=?, fgts=?, inss=? WHERE \"idConf\" =?";
+                sql = "UPDATE conf_salarios SET salario=?, comissao=?, fgts=?, inss=? WHERE \"idConf\" =?";
                 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-
                     stmt.setBigDecimal(1, model.getSalario());
                     stmt.setBigDecimal(2, model.getComissao());
                     stmt.setBigDecimal(3, model.getFgts());
@@ -54,12 +56,12 @@ public class DAOConfiguracao {
                 }
             }
 
-            // Realiza o commit
+            // Realiza o commit da transação
             connection.commit();
         } catch (SQLException e) {
             // Em caso de erro, faz rollback
             connection.rollback();
-            throw e;
+            throw e; // Repropaga a exceção
         } finally {
             // Restaura o autocommit
             connection.setAutoCommit(true);
@@ -69,35 +71,52 @@ public class DAOConfiguracao {
     }
 
     public ModelConfiguracao gravarConfigCartao(ModelConfiguracao model) throws SQLException {
-        String sql;
+        // Desabilita o autocommit para gerenciar a transação manualmente
+        connection.setAutoCommit(false);
 
-        // Verifica se o idConf é nulo para decidir entre inserir ou atualizar
-        if (model.getIdConf() == null) {
-            sql = "INSERT INTO conf_juros_cartao (deb_visa_master, cred_visa_master, deb_outros, cred_outros) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                stmt.setBigDecimal(1, model.getDeb_visa_master());
-                stmt.setBigDecimal(2, model.getCred_visa_master());
-                stmt.setBigDecimal(3, model.getDeb_outros());
-                stmt.setBigDecimal(4, model.getCred_outros());
-                stmt.executeUpdate();
+        try {
+            String sql;
 
-                try (ResultSet rs = stmt.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        model.setIdConf(rs.getLong(1)); // Definindo o idConf gerado
+            // Verifica se o idConf é nulo para decidir entre inserir ou atualizar
+            if (model.getIdConf() == null) {
+                sql = "INSERT INTO conf_juros_cartao (deb_visa_master, cred_visa_master, deb_outros, cred_outros) VALUES (?, ?, ?, ?)";
+                try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                    stmt.setBigDecimal(1, model.getDeb_visa_master());
+                    stmt.setBigDecimal(2, model.getCred_visa_master());
+                    stmt.setBigDecimal(3, model.getDeb_outros());
+                    stmt.setBigDecimal(4, model.getCred_outros());
+                    stmt.executeUpdate();
+
+                    // Recupera o ID gerado
+                    try (ResultSet rs = stmt.getGeneratedKeys()) {
+                        if (rs.next()) {
+                            model.setIdConf(rs.getLong(1)); // Define o idConf gerado
+                        }
                     }
                 }
+            } else {
+                sql = "UPDATE conf_juros_cartao SET deb_visa_master=?, cred_visa_master=?, deb_outros=?, cred_outros=? WHERE \"idConf\" =?";
+                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                    stmt.setBigDecimal(1, model.getDeb_visa_master());
+                    stmt.setBigDecimal(2, model.getCred_visa_master());
+                    stmt.setBigDecimal(3, model.getDeb_outros());
+                    stmt.setBigDecimal(4, model.getCred_outros());
+                    stmt.setLong(5, model.getIdConf());
+                    stmt.executeUpdate();
+                }
             }
-        } else {
-            sql = "UPDATE conf_juros_cartao SET deb_visa_master=?, cred_visa_master=?, deb_outros=?, cred_outros=? WHERE \"idConf\" =?";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.setBigDecimal(1, model.getDeb_visa_master());
-                stmt.setBigDecimal(2, model.getCred_visa_master());
-                stmt.setBigDecimal(3, model.getDeb_outros());
-                stmt.setBigDecimal(4, model.getCred_outros());
-                stmt.setLong(5, model.getIdConf());
-                stmt.executeUpdate();
-            }
+
+            // Realiza o commit da transação
+            connection.commit();
+        } catch (SQLException e) {
+            // Em caso de erro, faz rollback
+            connection.rollback();
+            throw e; // Repropaga a exceção
+        } finally {
+            // Restaura o autocommit
+            connection.setAutoCommit(true);
         }
+
         return model;
     }
 

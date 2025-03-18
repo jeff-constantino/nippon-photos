@@ -503,10 +503,13 @@
 
 <SCRIPT type="text/javascript">
 
-    $(document).ready(function() {
+   $(document).ready(function () {
         var msg = "${msg}";
         if (msg) {
             $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+
+            // Remove a mensagem da sessão após exibi-la
+            $.post("${pageContext.request.contextPath}/ServletVendas", { acao: "limparMsg" });
         }
     });
     // Função para navegar entre elementos focáveis com as setas

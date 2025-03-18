@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class ModelFechaMes implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -76,6 +77,7 @@ public class ModelFechaMes implements Serializable {
     private int conf2_qtd;
     private int conf3_qtd;
     private int conf4_qtd;
+
 
     public BigDecimal getResultadoDivisao() {
         return resultadoDivisao;
@@ -540,4 +542,6 @@ public class ModelFechaMes implements Serializable {
 
     public void setConfiguracao(ModelFechaMes configuracao) {
     }
+
+
 }

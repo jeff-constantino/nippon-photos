@@ -414,30 +414,57 @@
 
             <%--parte 3--%>
                 <div class="row">
-                    <div class="col-md-4 grid-margin">
+                    <div class="col-md-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">DESPESAS</h4>
-                                <!-- Table Content -->
+                                <h4 class="card-title" style="text-align: center">DESPESAS DO MÊS</h4>
+                                <div style="height: 300px; overflow-y: auto;">
+
+                                    <table class="table" id="tabelareldespesas">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Id Despesa</th>
+                                            <th scope="col">Nome Despesa</th>
+                                            <th scope="col">Descrição</th>
+                                            <th scope="col">Valor</th>
+                                            <th scope="col">Data</th>
+                                            <th scope="col">Forma de Pagamento</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach items="${despesasMes}" var="despesa">
+                                            <tr>
+                                                <td><c:out value="${despesa.id_despesa}"/></td>
+                                                <td><c:out value="${despesa.nome_despesa}"/></td>
+                                                <td><c:out value="${despesa.descricao_despesa}"/></td>
+                                                <td>
+                                                    <fmt:formatNumber value="${despesa.valor_despesa}" type="currency" currencySymbol="R$" />
+                                                </td>
+                                                <td>
+                                                    <fmt:formatDate value="${despesa.data_despesa}" pattern="dd/MM/yyyy"/>
+                                                </td>
+                                                <td><c:out value="${despesa.pagamento_despesa}"/></td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+
+                                        <!-- Exibir o valor total das despesas -->
+                                        <tr>
+                                            <td colspan="6" style="font-weight: bold; color: #DAA520; font-size: 1.2rem; text-align: center;">
+                                                Valor Total das Despesas:
+                                                <fmt:formatNumber value="${valorTotalDespesas}" type="currency" currencySymbol="R$" />
+                                            </td>
+                                        </tr>
+
+                                    </table>
+
+
+
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">CONTAS</h4>
-                                <!-- Table Content -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">SALÁRIOS</h4>
-                                <!-- Table Content -->
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
 <%--PARTE 4--%>
                 <div class="row">
@@ -504,10 +531,13 @@
 
 <script>
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         var msg = "${msg}";
         if (msg) {
             $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+
+            // Remove a mensagem da sessão após exibi-la
+            $.post("${pageContext.request.contextPath}/ServletVendas", { acao: "limparMsg" });
         }
     });
 

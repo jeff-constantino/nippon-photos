@@ -291,7 +291,7 @@
 
 
 <!-- Modal HTML -->
-<div class="modal" id="msgModal" tabindex="-1" role="dialog">
+<div class="modal" id="msgModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;"> <!-- Borda preta -->
             <div class="modal-header" style="border-bottom: none;">
@@ -310,10 +310,13 @@
 
 <script>
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         var msg = "${msg}";
         if (msg) {
             $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+
+            // Remove a mensagem da sessão após exibi-la
+            $.post("${pageContext.request.contextPath}/ServletVendas", { acao: "limparMsg" });
         }
     });
 

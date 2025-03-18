@@ -7,8 +7,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.sql.*;
 
 public class DAODespesas {
     private Connection connection;
@@ -149,6 +154,52 @@ public class DAODespesas {
 
         return despesasList;
     }
+
+
+
+    public List<ModelDespesas> listarDespesasPorPeriodo(String dataInicio, String dataFim) throws SQLException {
+        List<ModelDespesas> despesasMes = new ArrayList<>();
+
+        // Definindo o formato da data (ajuste conforme o formato que você está usando)
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  // Ajuste conforme o formato da data
+
+        try {
+            // Convertendo as strings para objetos Date
+            Date inicio = sdf.parse(dataInicio);
+            Date fim = sdf.parse(dataFim);
+
+            // Consulta SQL com parâmetros para o intervalo de datas
+            String sql = "SELECT * FROM despesas WHERE data_despesa >= ? AND data_despesa <= ? ORDER BY data_despesa DESC";
+
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                // Definindo os parâmetros da consulta
+                stmt.setDate(1, new java.sql.Date(inicio.getTime())); // Convertendo Date para java.sql.Date
+                stmt.setDate(2, new java.sql.Date(fim.getTime()));    // Convertendo Date para java.sql.Date
+
+                // Executando a consulta
+                ResultSet rs = stmt.executeQuery();
+
+                // Processando o resultado
+                while (rs.next()) {
+                    ModelDespesas despesa = new ModelDespesas();
+                    despesa.setId_despesa(rs.getLong("id_despesa"));
+                    despesa.setNome_despesa(rs.getString("nome_despesa"));
+                    despesa.setDescricao_despesa(rs.getString("descricao_despesa"));
+                    despesa.setValor_despesa(rs.getDouble("valor_despesa"));
+                    despesa.setPagamento_despesa(rs.getString("pagamento_despesa"));
+                    despesa.setData_despesa(rs.getDate("data_despesa"));
+                    despesasMes.add(despesa);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SQLException("Erro ao listar despesas por período", e);
+        }
+
+        return despesasMes;
+    }
+
+
     public List<ModelDespesas> listarTodasDespesas(int pagina, int tamanho) throws SQLException {
         List<ModelDespesas> todasDespesasList = new ArrayList<>();
 

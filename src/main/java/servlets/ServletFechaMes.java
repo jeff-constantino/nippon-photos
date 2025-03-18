@@ -5,15 +5,13 @@ import dao.DAOConfig;
 import dao.DAOConfiguracao;
 import dao.DAOFechaMes;
 import dao.DAOFuncionario;
+import dao.DAODespesas;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.ModelConfiguracao;
-import model.ModelFechaMes;
-import model.ModelLogin;
-import model.ModelVendas;
+import model.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -51,8 +49,18 @@ public class ServletFechaMes  extends ServletGenericUtil{
         DAOFechaMes daoFechaMes = new DAOFechaMes();
         DAOFuncionario daoFuncionario = new DAOFuncionario();
         DAOConfiguracao daoConfiguracao = new DAOConfiguracao();
+        DAODespesas daoDespesas = new DAODespesas();
 
         try {
+            List<ModelDespesas> despesasMes = daoDespesas.listarDespesasPorPeriodo(dataInicial,dataFinal);
+            request.setAttribute("despesasMes", despesasMes);
+            // Calcular o total das despesas
+            double valorTotal = 0;
+            for (ModelDespesas despesa : despesasMes) {
+                valorTotal += despesa.getValor_despesa();  // Adiciona o valor da despesa ao total
+            }
+            request.setAttribute("valorTotalDespesas", valorTotal);  // Passa o valor total para a JSP
+
 
             List<ModelFechaMes> vendasMesList = daoFechaMes.buscarFechamentoMensal(dataInicial, dataFinal);
             request.setAttribute("vendasMesList", vendasMesList);

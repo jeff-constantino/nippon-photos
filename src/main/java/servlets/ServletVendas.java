@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @WebServlet("/ServletVendas")
-    public class ServletVendas extends ServletGenericUtil {
+    public class    ServletVendas extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
     private DAOVendasRepository daoVendas = new DAOVendasRepository();
     private DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();

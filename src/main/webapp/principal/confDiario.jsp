@@ -6,11 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 
@@ -801,10 +800,13 @@
     </div>
 </div>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         var msg = "${msg}";
         if (msg) {
             $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+
+            // Remove a mensagem da sessão após exibi-la
+            $.post("${pageContext.request.contextPath}/ServletVendas", { acao: "limparMsg" });
         }
     });
 

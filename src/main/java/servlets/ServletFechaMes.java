@@ -6,6 +6,7 @@ import dao.DAOConfiguracao;
 import dao.DAOFechaMes;
 import dao.DAOFuncionario;
 import dao.DAODespesas;
+import dao.DAOContas;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -50,8 +51,18 @@ public class ServletFechaMes  extends ServletGenericUtil{
         DAOFuncionario daoFuncionario = new DAOFuncionario();
         DAOConfiguracao daoConfiguracao = new DAOConfiguracao();
         DAODespesas daoDespesas = new DAODespesas();
+        DAOContas daoContas = new DAOContas();
 
         try {
+            List<ModelContas> contasMes = daoContas.buscarContasMes(dataInicial, dataFinal);
+            request.setAttribute("contasMes", contasMes);
+            // Calcular o total das despesas
+            double valorContas = 0;
+            for (ModelContas contas : contasMes) {
+                valorContas += contas.getValor();  // Adiciona o valor da despesa ao total
+            }
+            request.setAttribute("valorTotalContas", valorContas);  // Passa o valor total para a JSP
+
             List<ModelDespesas> despesasMes = daoDespesas.listarDespesasPorPeriodo(dataInicial,dataFinal);
             request.setAttribute("despesasMes", despesasMes);
             // Calcular o total das despesas

@@ -180,6 +180,41 @@ public class DAOContas {
         return contasRecentes;
     }
 
+    public List<ModelContas> buscarContasMes(String dataInicio, String dataFim) throws SQLException {
+        List<ModelContas> contasMes = new ArrayList<>();
+        String sql = "SELECT * FROM contas WHERE data_de_pedido >= ? AND data_de_pedido <= ? ORDER BY data_de_pedido DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            // Conversão das datas de String para Date
+            java.sql.Date sqlDataInicio = java.sql.Date.valueOf(dataInicio); // Converte a string para java.sql.Date
+            java.sql.Date sqlDataFim = java.sql.Date.valueOf(dataFim); // Converte a string para java.sql.Date
+
+            stmt.setDate(1, sqlDataInicio); // Define o parâmetro 1 como a data de início
+            stmt.setDate(2, sqlDataFim);    // Define o parâmetro 2 como a data de fim
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ModelContas conta = new ModelContas();
+                conta.setConta_id(rs.getLong("conta_id"));
+                conta.setNumero_pedido(rs.getLong("numero_pedido"));
+                conta.setEmpresa(rs.getString("empresa"));
+                conta.setItens(rs.getString("itens"));
+                conta.setValor(rs.getDouble("valor"));
+                conta.setData_de_pedido(rs.getDate("data_de_pedido"));
+                conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
+                conta.setStatus(rs.getString("status"));
+                conta.setPagamento(rs.getString("pagamento"));
+                contasMes.add(conta);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar contas: " + e.getMessage());
+            throw e; // Repropaga a exceção
+        }
+        return contasMes;
+    }
+
+
+
 
     public List<ModelContas> buscarContasVencendoEm7Dias() throws SQLException {
         List<ModelContas> contas = new ArrayList<>();

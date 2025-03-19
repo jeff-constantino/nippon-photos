@@ -468,30 +468,64 @@
                 </div>
 <%--PARTE 4--%>
                 <div class="row">
-                    <div class="col-md-4 grid-margin">
+                    <div class="col-md-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">ETC 1</h4>
-                                <!-- Table Content -->
+                                <h4 class="card-title" style="text-align: center">CONTAS DO MÊS</h4>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Nº Pedido</th>
+                                        <th>Empresa</th>
+                                        <th>Itens</th>
+                                        <th>Valor</th>
+                                        <th>Pedido</th>
+                                        <th>Pagamento</th>
+                                        <th>Status</th>
+                                        <th>Pagamento</th>
+                                        <th>ID</th>
+
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="contas" items="${contasMes}">
+                                        <tr>
+
+                                            <td><c:out
+                                                    value="${contas.numero_pedido}"/></td>
+                                            <td><c:out value="${contas.empresa}"/></td>
+                                            <td><c:out value="${contas.itens}"/></td>
+                                            <td><fmt:formatNumber value="${contas.valor}"
+                                                                  type="currency"
+                                                                  currencySymbol="R$"/></td>
+                                            <td><fmt:formatDate
+                                                    value="${contas.data_de_pedido}"
+                                                    pattern="dd/MM/yyyy"/></td>
+                                            <td><fmt:formatDate
+                                                    value="${contas.data_de_pagamento}"
+                                                    pattern="dd/MM/yyyy"/></td>
+                                            <td><c:out value="${contas.status}"/></td>
+                                            <td><c:out value="${contas.pagamento}"/></td>
+                                            <td><c:out value="${contas.conta_id}"/></td>
+                                        </tr>
+                                    </c:forEach>
+                                    <tr>
+                                        <td colspan="9" style="font-weight: bold; color: #DAA520; font-size: 1.2rem; text-align: center;">
+                                            Valor Total das Contas:
+                                            <fmt:formatNumber value="${valorTotalContas}" type="currency" currencySymbol="R$" />
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+
+
+
+                                </table>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">ETC 2</h4>
-                                <!-- Table Content -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">ETC 3</h4>
-                                <!-- Table Content -->
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
             <!-- content-wrapper ends -->

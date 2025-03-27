@@ -55,33 +55,30 @@ public class DAOUsuarioRepository {
 
 
     public List<ModelLogin> consultaUsuarioListPaginada(Long userLogado, Integer offset) throws Exception {
-        List<ModelLogin> retorno = new ArrayList<ModelLogin>();
-//        String sql = "SELECT * FROM model_login where useradmin is false and usuario_id= " + userLogado + "order by status offset "+offset+"limit 6";
-        String sql = "SELECT * FROM model_login WHERE useradmin is false and usuario_id=? ORDER BY status offset ? limit 6";
+        List<ModelLogin> retorno = new ArrayList<>();
+        String sql = "SELECT * FROM model_login WHERE useradmin IS FALSE AND usuario_id = ? AND status = 'ATIVO' ORDER BY id OFFSET ? LIMIT 6";
         PreparedStatement preparedSql = connection.prepareStatement(sql);
-        preparedSql.setLong(1,userLogado);
-        preparedSql.setLong(2,offset);
+        preparedSql.setLong(1, userLogado);
+        preparedSql.setInt(2, offset);
         ResultSet resultSet = preparedSql.executeQuery();
+
         while (resultSet.next()) {
             ModelLogin modelLogin = new ModelLogin();
             modelLogin.setId(resultSet.getLong("id"));
             modelLogin.setNome(resultSet.getString("nome"));
             modelLogin.setStatus(resultSet.getString("status"));
             retorno.add(modelLogin);
-
         }
-
-
-
 
         return retorno;
     }
 
 
+
     public List<ModelLogin> consultaUsuarioList(Long userLogado) throws Exception {
 
         List <ModelLogin> retorno = new ArrayList<ModelLogin>();
-        String sql = "SELECT * FROM model_login WHERE useradmin is false and usuario_id=? ORDER BY status limit 6";
+        String sql = "SELECT * FROM model_login WHERE useradmin IS FALSE AND usuario_id = ? AND status = 'ATIVO' ORDER BY id";
         PreparedStatement preparedSql = connection.prepareStatement(sql);
         preparedSql.setLong(1,userLogado);
         ResultSet resultSet = preparedSql.executeQuery();

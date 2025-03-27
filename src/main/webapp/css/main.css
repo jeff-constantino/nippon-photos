@@ -35,13 +35,13 @@
 }
 
 body, html {
-/*  background-image: url("/images/BG.jpg");*/
-/*  background-size: cover;*/
-/*  background-position: center;*/
-/*  background-repeat:no-repeat; // Added*/
-/*min-height:100vh; // Added for ensure capture window size*/
-	height: 100%;
-	font-family: Poppins-Regular, sans-serif;
+  /*background: red !important; !* Apenas para teste *!*/
+  /*background-size: cover;*/
+  /*background-position: center;*/
+  /*background-repeat: no-repeat; !* Added *!*/
+  /*min-height: 100vh; !* Added to ensure full window size *!*/
+
+  /*font-family: Poppins-Regular, sans-serif;*/
 }
 
 /*---------------------------------------------*/
@@ -162,57 +162,40 @@ iframe {
 }
 
 .container-login100 {
-  width: 100%;  
+  width: 100%;
   min-height: 100vh;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   padding: 15px;
-  /*background: #9053c7;*/
-  /*background: -webkit-linear-gradient(-135deg, #c850c0, #4158d0);*/
-  /*background: -o-linear-gradient(-135deg, #c850c0, #4158d0);*/
-  /*background: -moz-linear-gradient(-135deg, #c850c0, #4158d0);*/
-  /*background: linear-gradient(-135deg, #c850c0, #4158d0);*/
-
 }
 
 .wrap-login100 {
-  width: 960px;
-
-  /*background: #fff;*/
+  width: 90%;
+  max-width: 1100px; /* Aumentado para telas grandes */
+  padding: 100px 50px 50px 50px; /* Ajustando padding */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-radius: 10px;
   overflow: hidden;
-
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: 177px 250px 33px 95px;
 }
 
 /*------------------------------------------------------------------
 [  ]*/
 .login100-pic {
-  width: 316px;
+  width: 545px;
 }
 
 .login100-pic img {
   max-width: 100%;
 }
 
-
 /*------------------------------------------------------------------
 [  ]*/
 .login100-form {
-  width: 290px;
+  width: 100%;
+  max-width: 450px; /* Ajustado para telas maiores */
 }
 
 .login100-form-title {
@@ -221,12 +204,10 @@ iframe {
   color: #333333;
   line-height: 1.2;
   text-align: center;
-
   width: 100%;
   display: block;
   padding-bottom: 54px;
 }
-
 
 /*---------------------------------------------*/
 .wrap-input100 {
@@ -241,7 +222,6 @@ iframe {
   font-size: 15px;
   line-height: 1.5;
   color: #666666;
-
   display: block;
   width: 100%;
   background: #e6e6e6;
@@ -249,7 +229,6 @@ iframe {
   border-radius: 25px;
   padding: 0 30px 0 68px;
 }
-
 
 /*------------------------------------------------------------------
 [ Focus ]*/
@@ -267,15 +246,7 @@ iframe {
 }
 
 .input100:focus + .focus-input100 {
-  -webkit-animation: anim-shadow 0.5s ease-in-out forwards;
   animation: anim-shadow 0.5s ease-in-out forwards;
-}
-
-@-webkit-keyframes anim-shadow {
-  to {
-    box-shadow: 0px 0px 70px 25px;
-    opacity: 0;
-  }
 }
 
 @keyframes anim-shadow {
@@ -287,11 +258,6 @@ iframe {
 
 .symbol-input100 {
   font-size: 15px;
-
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
   display: flex;
   align-items: center;
   position: absolute;
@@ -303,10 +269,6 @@ iframe {
   padding-left: 35px;
   pointer-events: none;
   color: #666666;
-
-  -webkit-transition: all 0.4s;
-  -o-transition: all 0.4s;
-  -moz-transition: all 0.4s;
   transition: all 0.4s;
 }
 
@@ -319,12 +281,7 @@ iframe {
 [ Button ]*/
 .container-login100-form-btn {
   width: 100%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   padding-top: 20px;
 }
@@ -335,23 +292,15 @@ iframe {
   line-height: 1.5;
   color: #fff;
   text-transform: uppercase;
-
   width: 100%;
+  max-width: 400px; /* Aumenta o botão em telas grandes */
   height: 50px;
   border-radius: 25px;
   background: #fac900;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 25px;
-
-  -webkit-transition: all 0.4s;
-  -o-transition: all 0.4s;
-  -moz-transition: all 0.4s;
   transition: all 0.4s;
 }
 
@@ -359,10 +308,20 @@ iframe {
   background: #c49f04;
 }
 
-
-
 /*------------------------------------------------------------------
 [ Responsive ]*/
+@media (min-width: 1200px) {
+  .login100-form {
+    max-width: 600px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .login100-form {
+    max-width: 700px;
+  }
+}
+
 
 
 
@@ -372,7 +331,7 @@ iframe {
   }
 
   .login100-pic {
-    width: 35%;
+    width: 80%;
   }
 
   .login100-form {

@@ -603,7 +603,7 @@
                                                                                                name="ribbon_dif"
                                                                                                required
                                                                                                value=""
-                                                                                               readonly>
+                                                                                               readonly tabindex="-1">
                                                                                     </div>
 
 

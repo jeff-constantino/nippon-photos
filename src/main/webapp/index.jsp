@@ -24,44 +24,47 @@
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <!--===============================================================================================-->
 </head>
-<body background="images/BG.jpg" style="background-size: auto" >
+<body style="background-image: url('images/BG.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+
 
 <div class="limiter">
-  <div class="container-login100">
-    <div class="wrap-login100">
-      <div class="login100-pic js-tilt" data-tilt>
+  <div class="container-login100" style=" align-content: center; align-items: center">
+    <div class="wrap-login100" style="width: 45%; align-content: center; align-items: center">
+      <div class="login100-pic js-tilt" data-tilt style="width: 55%">
         <img src="images/img-01.webp" alt="IMG">
       </div>
 
-      <form class="login100-form validate-form" action="<%= request.getContextPath() %>/ServletLogin" method="post" >
-					<span class="login100-form-title">
-						Bem Vindo
-					</span>
+      <form class="login100-form validate-form" action="<%= request.getContextPath() %>/ServletLogin" method="post">
+    <span class="login100-form-title" style="font-size: 2vw;"> <!-- Aumentando o tamanho da fonte -->
+        Bem Vindo
+    </span>
         <div><h4 class="msg">${msg}</h4></div>
 
-        <div class="wrap-input100 validate-input" data-validate = "INSIRA O LOGIN">
-          <input class="input100" type="text" name="login" placeholder="Login" autofocus>
+        <div class="wrap-input100 validate-input" data-validate="INSIRA O LOGIN">
+          <input class="input100" type="text" name="login" placeholder="Login" autofocus
+                 style="font-size: 1vw; height: 5vh;"> <!-- Aumentando o tamanho da fonte e altura conforme a tela -->
           <span class="focus-input100"></span>
           <span class="symbol-input100">
-							<i class="fa fa-user" aria-hidden="true"></i>
-						</span>
+            <i class="fa fa-user" aria-hidden="true"></i>
+        </span>
         </div>
 
-        <div class="wrap-input100 validate-input" data-validate = "INSIRA A SENHA">
-          <input class="input100" type="password" name="senha" placeholder="Senha">
+        <div class="wrap-input100 validate-input" data-validate="INSIRA A SENHA">
+          <input class="input100" type="password" name="senha" placeholder="Senha"
+                 style="font-size: 1vw; height: 5vh;"> <!-- Aumentando o tamanho da fonte e altura conforme a tela -->
           <span class="focus-input100"></span>
           <span class="symbol-input100">
-							<i class="fa fa-lock" aria-hidden="true"></i>
-						</span>
+            <i class="fa fa-lock" aria-hidden="true"></i>
+        </span>
         </div>
 
-        <div class="container-login100-form-btn">
-          <button class="login100-form-btn">
+        <div class="container-login100-form-btn" style="padding-top: 2vh;">
+          <button class="login100-form-btn" style="font-size: 2vw; height: 7vh; width: 60vw;"> <!-- Ajustando o tamanho do botão -->
             Login
           </button>
         </div>
-
       </form>
+
     </div>
   </div>
 </div>

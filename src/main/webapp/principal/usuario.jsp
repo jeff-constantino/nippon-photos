@@ -274,61 +274,7 @@
 
                         </div>
                     </div>
-                    <div class="col-sm-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-
-                                <div class="row">
-                                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                                        <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                            <!--INSERIR BOTÃO 3 AQUI-->
-                                            <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal3">
-                                                <h4>Excluir</h4>
-                                            </button>
-
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="modal3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-xl mt-5">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticFinalizar">FINALIZAR</h5>
-
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="container-fluid">
-                                                                <div class="row">
-                                                                    <div class="col-lg-6 grid-margin stretch-card">
-                                                                        <H5>CORPO DA FINALIZAÇÃO</H5>
-                                                                    </div>
-
-
-
-
-                                                                </div>
-
-                                                            </div>
-
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
-                                                            <button type="button" class="btn btn-outline-warning">ENVIAR</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                                        <i class="icon-lg mdi mdi-account-remove text-danger ml-auto" type="button"  data-bs-toggle="modal" data-bs-target="#modal3" ></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                   
                 <div class="row ">
                     <div class="col-12 grid-margin">
                         <div class="card">
@@ -391,15 +337,15 @@
                                         </form>
 
                                     </table>
-                                    <h5>Funcionários Cadastrados:</h5>
+                                    <h5>Funcionários Ativos:</h5>
 
 
 
 
 
 
-                                    <div style="overflow-x: hidden">
-                                        <div style="height: 300px; overflow-y: auto ">
+                                    <div style="overflow-x: hidden; overflow-y: hidden">
+                                        <div>
                                             <table class="table" id="tabelaresultadosview">
                                                 <thead>
                                                 <tr>
@@ -437,22 +383,7 @@
                                             </table>
 
                                         </div>
-                                        <nav aria-label="Page navigation example">
-                                            <ul class="pagination">
-                                                <%
-                                                    int totalPagina = (int) request.getAttribute("totalPagina");
-                                                    for (int p=0; p<totalPagina; p++) {
-                                                        String url = request.getContextPath()+"/ServletUsuarioController?acao=paginar&pagina=" + (p * 6);
 
-                                                        out.print("<li class=\"page-item\"><a class=\"page-link\" href=\""+url+"\">"+(p + 1)+"</a></li>");
-                                                    }
-                                                %>
-
-
-
-
-                                            </ul>
-                                        </nav>
                                     </div>
 
                                 </div>

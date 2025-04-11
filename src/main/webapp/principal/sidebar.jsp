@@ -42,6 +42,7 @@
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletFechaDia">Fechamento Diário</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletConfDiario">Conferência Diária</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletFechaMes">Fechamento do Mês</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="">DRE</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletContas">Contas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletDespesas">Despesas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="principal/salarios.jsp">Salários</a></li>
@@ -69,7 +70,7 @@
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletRelMes">Relatório do Mês</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletFuncionario">Funcionários</a></li>
                     <li class="nav-item"> <a class="nav-link" href="">Contas e Despesas</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="">DRE</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletComparativoYoY">Comparativo de Vendas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletRanking">Ranking de Funcionários</a></li>
 
                 </ul>

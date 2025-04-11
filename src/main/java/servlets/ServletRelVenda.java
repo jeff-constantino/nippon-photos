@@ -52,7 +52,7 @@ public class ServletRelVenda extends ServletGenericUtil {
 
             if ("imprimirRelatorioVendas".equals(acao)) {
                 int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
-                int registrosPorPagina = 10;
+                int registrosPorPagina = 30;
                 int offset = (paginaAtual - 1) * registrosPorPagina;
 
                 // Busca de vendas com paginação

@@ -82,7 +82,7 @@
 <!--===============================================================================================-->
 <script src="vendor/tilt/tilt.jquery.min.js"></script>
 <script >
-  $('.js-tilt').t++++++++++++++ilt({
+  $('.js-tilt').tilt({
     scale: 1.1
   })
 </script>

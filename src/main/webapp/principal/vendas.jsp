@@ -554,7 +554,8 @@
                                                                                                class="form-control"
                                                                                                id="sobras" name="sobras"
                                                                                                placeholder=""
-                                                                                               value="${modelVendas.sobras}" required>
+                                                                                               value="${modelVendas.sobras}" required
+                                                                                               oninput="calcularAproveitamento()">
                                                                                     </div>
                                                                                     <div class="col-2">
                                                                                         <label>IMPRESSORA</label>
@@ -639,10 +640,26 @@
                                                                                         </select>
 
                                                                                     </div>
+                                                                                    <div class="col-2">
+                                                                                        <label>APROVEITAMENTO</label>
+                                                                                        <input type="text"
+                                                                                               class="form-control"
+                                                                                               placeholder=""
+                                                                                               style="background-color: black; color:#DAA520; font-weight: bold"
+                                                                                               id="aproveitamento"
+                                                                                               name="aproveitamento"
+                                                                                               required
+                                                                                               value=""
+                                                                                               readonly tabindex="-1">
+
+                                                                                    </div>
+
 
                                                                                 </div>
 
+
                                                                                 <br>
+
 
                                                                                 <div>
                                                                                     <button class="btn btn-outline-success waves-effect waves-light">
@@ -660,6 +677,7 @@
                                                                             </form>
 
                                                                         </div>
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1606,7 +1624,14 @@
         }
 
 
+        function calcularAproveitamento() {
+            const vendas = parseFloat(document.getElementById('total').value) || 0;
+            const sobras = parseFloat(document.getElementById('sobras').value) || 0;
+            const producao = vendas + sobras;
 
+            const aproveitamento = producao > 0 ? (vendas / producao) * 100 : 0;
+            document.getElementById('aproveitamento').value = aproveitamento.toFixed(2) + " %"; // mostra com 2 casas decimais
+        }
 
 
 

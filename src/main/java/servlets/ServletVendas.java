@@ -328,7 +328,9 @@ import java.util.Map;
                     String formattedDataVenda = DateUtil.formatDate(modelVendasConsulta1.getData_venda());
                     request.setAttribute("formattedDataVenda", formattedDataVenda);
                 } else {
-                    System.out.println("Data da venda está nula.");
+
+                    request.setAttribute("msg", "Selecione a Data da venda.");
+//                    System.out.println("Data da venda está nula.");
                 }
 
                 request.setAttribute("msg", msg);

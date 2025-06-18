@@ -145,6 +145,44 @@ public class DAOFechaMes {
     }
 
 
+    public void gravarFechamentoMes(ModelFechaMes fechamento) throws SQLException {
+        String sql = "INSERT INTO fecha_mes (" +
+                "mes, ano, total_ft, total_enc, total_dig, total_sobras, total_ribbons, " +
+                "valor_din_mes_real, valor_deb_mes_real, valor_cred_mes_real, valor_pix_mes_real, " +
+                "total_geral, juros_cartoes, valor_total_despesas, valor_total_contas, " +
+                "valor_vale_total, desconto_mes" +
+                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setInt(1, fechamento.getMes());
+            pst.setInt(2, fechamento.getAno());
+            pst.setInt(3, fechamento.getTotal_ft());
+            pst.setInt(4, fechamento.getTotal_enc());
+            pst.setInt(5, fechamento.getTotal_dig());
+            pst.setInt(6, fechamento.getTotal_sobras());
+            pst.setBigDecimal(7, fechamento.getTotal_ribbons());
+
+            pst.setBigDecimal(8, fechamento.getValor_din_mes_real());
+            pst.setBigDecimal(9, fechamento.getValor_deb_mes_real());
+            pst.setBigDecimal(10, fechamento.getValor_cred_mes_real());
+            pst.setBigDecimal(11, fechamento.getValor_pix_mes_real());
+
+            pst.setBigDecimal(12, fechamento.getTotal_geral());
+            pst.setBigDecimal(13, fechamento.getJuros_cartoes());
+            pst.setBigDecimal(14, fechamento.getValor_total_despesas());
+            pst.setBigDecimal(15, fechamento.getValor_total_contas());
+            pst.setBigDecimal(16, fechamento.getValor_vale_total());
+            pst.setBigDecimal(17, fechamento.getDesconto_mes());
+
+            pst.executeUpdate();
+            connection.commit(); // <- COMMIT para efetivar a transação
+
+        } catch (SQLException e) {
+            connection.rollback(); // <- ROLLBACK em caso de erro para evitar dados incompletos
+            System.err.println("Erro ao gravar fechamento do mês: " + e.getMessage());
+            throw e;
+        }
+    }
 
 
 

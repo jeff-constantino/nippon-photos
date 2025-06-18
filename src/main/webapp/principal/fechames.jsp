@@ -134,12 +134,16 @@
                                                 <td style="font-size: 1.2rem; vertical-align: middle;">
                                                     <c:choose>
                                                         <c:when test="${vl.conf1_qtd != 0}">
+
                                                             <fmt:formatNumber value="${(vl.total_ft + vl.total_sobras) / vl.conf1_qtd}" pattern="0.00"/>
+
                                                         </c:when>
                                                         <c:otherwise>
                                                             <c:out value="Não aplicável"/>
+
                                                         </c:otherwise>
                                                     </c:choose>
+
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -569,8 +573,7 @@
                     <div class="col-md-12 grid-margin">
                         <div class="card" style="align-items: center">
                             <div class="card-body">
-                                <form action="<%= request.getContextPath() %>/ServletFechaMes" method="post">
-                                    <input type="hidden" name="acao" value="gravarFechamento">
+                                <form method="post" action="<%=request.getContextPath()%>/ServletFechaMes">
                                     <button type="submit" class="btn btn-outline-success" STYLE="font-size: large">
                                         Gravar Fechamento do Mês
                                     </button>

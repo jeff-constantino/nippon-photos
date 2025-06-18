@@ -80,6 +80,13 @@ public class ModelFechaMes implements Serializable {
 
     private BigDecimal juros_cartoes;
 
+    private int mes;
+    private int ano;
+    private BigDecimal total_ribbons;
+    private BigDecimal total_geral;
+    private BigDecimal valor_total_despesas;
+    private BigDecimal valor_total_contas;
+
     public BigDecimal getResultadoDivisao() {
         return resultadoDivisao;
     }
@@ -88,7 +95,61 @@ public class ModelFechaMes implements Serializable {
         this.resultadoDivisao = resultadoDivisao;
     }
 
+    public BigDecimal getJuros_cartoes() {
+        return juros_cartoes;
+    }
 
+    public void setJuros_cartoes(BigDecimal juros_cartoes) {
+        this.juros_cartoes = juros_cartoes;
+    }
+
+    public int getMes() {
+        return mes;
+    }
+
+    public void setMes(int mes) {
+        this.mes = mes;
+    }
+
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
+    public BigDecimal getTotal_ribbons() {
+        return total_ribbons;
+    }
+
+    public void setTotal_ribbons(BigDecimal total_ribbons) {
+        this.total_ribbons = total_ribbons;
+    }
+
+    public BigDecimal getTotal_geral() {
+        return total_geral;
+    }
+
+    public void setTotal_geral(BigDecimal total_geral) {
+        this.total_geral = total_geral;
+    }
+
+    public BigDecimal getValor_total_despesas() {
+        return valor_total_despesas;
+    }
+
+    public void setValor_total_despesas(BigDecimal valor_total_despesas) {
+        this.valor_total_despesas = valor_total_despesas;
+    }
+
+    public BigDecimal getValor_total_contas() {
+        return valor_total_contas;
+    }
+
+    public void setValor_total_contas(BigDecimal valor_total_contas) {
+        this.valor_total_contas = valor_total_contas;
+    }
 
     public void setData_fechamento(LocalDate data_fechamento) {
         this.data_fechamento = data_fechamento;

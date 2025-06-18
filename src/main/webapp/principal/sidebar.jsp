@@ -93,7 +93,7 @@
                                 <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletControleRibbon"> Controle de Ribbon </a></li>
                                 <li class="nav-item"> <a class="nav-link" href=""> 505 </a></li>
                                 <li class="nav-item"> <a class="nav-link" href=""> 606 </a></li>
-                                <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/principal/medidasDisciplinares.jsp">Medidas Disciplinares</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletMedidasDisciplinares">Medidas Disciplinares</a></li>
                             </ul>
                         </div>
                     </li>

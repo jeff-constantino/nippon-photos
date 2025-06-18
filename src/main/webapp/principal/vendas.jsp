@@ -57,7 +57,7 @@
                                                             <label for="venda_id" class="form-label">ID da
                                                                 Venda:</label>
                                                             <div class="input-group">
-                                                                <input type="text" class="form-control" id="venda_id"
+                                                                <input type="text" class="form-control" id="id_venda_id"
                                                                        name="venda_id" required
                                                                        placeholder="Digite o ID da venda"/>
                                                                 <button type="submit" class="btn btn-outline-success">
@@ -1620,7 +1620,6 @@
             const ribbonDif = document.getElementById("ribbon_dif");
 
             ribbonDif.value = (ribbonInf + ribbonSobras + ribbonTotal) - ribbonAtual;
-            console.log('Cálculo da diferença - Atual:', ribbonAtual, 'Informado:', ribbonInf, 'Diferença:', ribbonDif.value, 'Valores:', ribbonSobras, ribbonTotal);
         }
 
 

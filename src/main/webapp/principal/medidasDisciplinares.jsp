@@ -6,6 +6,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
@@ -71,61 +74,45 @@
 
                                                                                     <form class="form-material" id="formBuscaFuncionario1"
                                                                                           method="get"
-                                                                                          action="<%= request.getContextPath() %>/ServletMedidaDisciplinar">
+                                                                                          action="<%= request.getContextPath() %>/ServletMedidasDisciplinares">
 
                                                                                         <div class="row">
 
-                                                                                            <div class="col-4">
-
-
-                                                                                                <input type="text" class="form-control"
-                                                                                                       id="nomeBusca1" name="nome" placeholder=""
-                                                                                                       style="background-color: black" REQUIRED
-                                                                                                       autofocus>
+                                                                                            <div class="col-auto">
+                                                                                                <label>Funcionário</label>
+                                                                                                <select class="form-control" id="funcionarioIdADV" name="funcionarioIdADV" required>
+                                                                                                    <option value="">Selecione um Funcionário</option>
+                                                                                                    <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                                                        <c:if test="${funcionario.status == 'ATIVO'}">
+                                                                                                            <option value="${funcionario.id}"
+                                                                                                                    class="text-success"
+                                                                                                                    <c:if test="${funcionario.id == funcionarioIdADV}">selected</c:if>>
+                                                                                                                    ${funcionario.nome}
+                                                                                                            </option>
+                                                                                                        </c:if>
+                                                                                                    </c:forEach>
+                                                                                                    <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                                                        <c:if test="${funcionario.status != 'ATIVO'}">
+                                                                                                            <option value="${funcionario.id}"
+                                                                                                                    class="text-danger"
+                                                                                                                    <c:if test="${funcionario.id == funcionarioIdADV}">selected</c:if>>
+                                                                                                                    ${funcionario.nome}
+                                                                                                            </option>
+                                                                                                        </c:if>
+                                                                                                    </c:forEach>
+                                                                                                </select>
 
                                                                                             </div>
 
-                                                                                            <div>
 
 
-                                                                                                <button type="button"
-                                                                                                        class="btn btn-outline-primary waves-effect waves-light"
-                                                                                                        onclick="limparbuscaFuncionario();">Novo
-                                                                                                </button>
-                                                                                                <button type="button"
-                                                                                                        class="btn btn-outline-success waves-effect waves-light"
-                                                                                                        onclick="buscarFunc();">Pesquisar
-                                                                                                </button>
 
-
-                                                                                                <%--  BOTOES MODAL busca--%>
-                                                                                            </div>
-                                                                                            <div style="overflow-x: hidden">
-                                                                                                <div style="height: 300px; overflow-y: auto ">
-                                                                                                    <table class="table"
-                                                                                                           id="tabelabuscafuncionario1">
-                                                                                                        <thead>
-                                                                                                        <tr>
-                                                                                                            <th scope="col">ID</th>
-                                                                                                            <th scope="col">NOME</th>
-                                                                                                            <th scope="col">OPÇÕES</th>
-
-                                                                                                        </tr>
-                                                                                                        </thead>
-                                                                                                        <tbody>
-
-                                                                                                        </tbody>
-                                                                                                    </table>
-
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <span id="totalResultados1"></span>
 
                                                                                         </div>
 
                                                                                     </form>
 
-                                                                                    <form action="<%= request.getContextPath() %>/ServletMedidaDisciplinar"
+                                                                                    <form action="<%= request.getContextPath() %>/ServletMedidasDisciplinares"
                                                                                           method="post" id="formAdvertencia" name="formAdvertencia">
                                                                                         <input type="hidden" name="acao" value="">
 
@@ -136,7 +123,7 @@
                                                                                         </div>
                                                                                         <div class="row">
                                                                                             <div class="col-3">
-                                                                                                <label for="outer_dataVenda">Data da Advertência</label>
+                                                                                                <label>Data da Advertência</label>
                                                                                                 <input type="date" class="form-control"
                                                                                                        id="data_advertencia" name="data_advertencia"
                                                                                                        required
@@ -149,16 +136,9 @@
                                                                                                        id="id_advertencia" name="id"
                                                                                                        placeholder=""
                                                                                                        style="background-color: black" readonly
-                                                                                                       value="${modelVendas.id}">
+                                                                                                       value="${funcionarioIdAdv}">
                                                                                             </div>
-                                                                                            <div class="col-6">
-                                                                                                <label class="float-label">FUNCIONÁRIO:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control"
-                                                                                                       id="nome_advertencia" name="nome" placeholder=""
-                                                                                                       style="background-color: black" readonly
-                                                                                                       value="${modelVendas.nome}">
-                                                                                            </div>
+
 
                                                                                         </div>
 
@@ -282,56 +262,34 @@
 
                                                                                     <form class="form-material" id="formBuscaFuncionario2"
                                                                                           method="get"
-                                                                                          action="<%= request.getContextPath() %>/ServletVendas">
+                                                                                          action="<%= request.getContextPath() %>/ServletMedidasDisciplinares">
 
                                                                                         <div class="row">
-
-                                                                                            <div class="col-4">
-
-
-                                                                                                <input type="text" class="form-control"
-                                                                                                       id="nomeBusca2" name="nome" placeholder=""
-                                                                                                       style="background-color: black" REQUIRED
-                                                                                                       autofocus>
+                                                                                            <div class="col-auto">
+                                                                                                <label>Funcionário</label>
+                                                                                                <select class="form-control" id="funcionarioIdFalta" name="funcionarioIdFalta" required>
+                                                                                                    <option value="">Selecione um Funcionário</option>
+                                                                                                    <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                                                        <c:if test="${funcionario.status == 'ATIVO'}">
+                                                                                                            <option value="${funcionario.id}"
+                                                                                                                    class="text-success"
+                                                                                                                    <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
+                                                                                                                    ${funcionario.nome}
+                                                                                                            </option>
+                                                                                                        </c:if>
+                                                                                                    </c:forEach>
+                                                                                                    <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                                                        <c:if test="${funcionario.status != 'ATIVO'}">
+                                                                                                            <option value="${funcionario.id}"
+                                                                                                                    class="text-danger"
+                                                                                                                    <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
+                                                                                                                    ${funcionario.nome}
+                                                                                                            </option>
+                                                                                                        </c:if>
+                                                                                                    </c:forEach>
+                                                                                                </select>
 
                                                                                             </div>
-
-                                                                                            <div>
-
-
-                                                                                                <button type="button"
-                                                                                                        class="btn btn-outline-primary waves-effect waves-light"
-                                                                                                        onclick="limparbuscaFuncionario();">Novo
-                                                                                                </button>
-                                                                                                <button type="button"
-                                                                                                        class="btn btn-outline-success waves-effect waves-light"
-                                                                                                        onclick="buscarFunc();">Pesquisar
-                                                                                                </button>
-
-
-                                                                                                <%--  BOTOES MODAL busca--%>
-                                                                                            </div>
-                                                                                            <div style="overflow-x: hidden">
-                                                                                                <div style="height: 300px; overflow-y: auto ">
-                                                                                                    <table class="table"
-                                                                                                           id="tabelabuscafuncionario2">
-                                                                                                        <thead>
-                                                                                                        <tr>
-                                                                                                            <th scope="col">ID</th>
-                                                                                                            <th scope="col">NOME</th>
-                                                                                                            <th scope="col">OPÇÕES</th>
-
-                                                                                                        </tr>
-                                                                                                        </thead>
-                                                                                                        <tbody>
-
-                                                                                                        </tbody>
-                                                                                                    </table>
-
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <span id="totalResultados2"></span>
-
                                                                                         </div>
 
                                                                                     </form>
@@ -346,6 +304,7 @@
                                                                                             </div>
                                                                                         </div>
                                                                                         <div class="row">
+
                                                                                             <div class="col-3">
                                                                                                 <label for="outer_dataVenda">Data da Falta</label>
                                                                                                 <input type="date" class="form-control"
@@ -360,16 +319,9 @@
                                                                                                        id="id_falta" name="id"
                                                                                                        placeholder=""
                                                                                                        style="background-color: black" readonly
-                                                                                                       value="${modelVendas.id}">
+                                                                                                       value="${funcionario.id}">
                                                                                             </div>
-                                                                                            <div class="col-6">
-                                                                                                <label class="float-label">FUNCIONÁRIO:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control"
-                                                                                                       id="nome_falta" name="nome" placeholder=""
-                                                                                                       style="background-color: black" readonly
-                                                                                                       value="${modelVendas.nome}">
-                                                                                            </div>
+
 
                                                                                         </div>
 
@@ -499,51 +451,31 @@
 
                                                                                         <div class="row">
 
-                                                                                            <div class="col-4">
-
-
-                                                                                                <input type="text" class="form-control"
-                                                                                                       id="nomeBusca3" name="nome" placeholder=""
-                                                                                                       style="background-color: black" REQUIRED
-                                                                                                       autofocus>
+                                                                                            <div class="col-auto">
+                                                                                                <label>Funcionário</label>
+                                                                                                <select class="form-control" id="funcionarioIdSusp" name="funcionarioIdSusp" required>
+                                                                                                    <option value="">Selecione um Funcionário</option>
+                                                                                                    <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                                                        <c:if test="${funcionario.status == 'ATIVO'}">
+                                                                                                            <option value="${funcionario.id}"
+                                                                                                                    class="text-success"
+                                                                                                                    <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
+                                                                                                                    ${funcionario.nome}
+                                                                                                            </option>
+                                                                                                        </c:if>
+                                                                                                    </c:forEach>
+                                                                                                    <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                                                        <c:if test="${funcionario.status != 'ATIVO'}">
+                                                                                                            <option value="${funcionario.id}"
+                                                                                                                    class="text-danger"
+                                                                                                                    <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
+                                                                                                                    ${funcionario.nome}
+                                                                                                            </option>
+                                                                                                        </c:if>
+                                                                                                    </c:forEach>
+                                                                                                </select>
 
                                                                                             </div>
-
-                                                                                            <div>
-
-
-                                                                                                <button type="button"
-                                                                                                        class="btn btn-outline-primary waves-effect waves-light"
-                                                                                                        onclick="limparbuscaFuncionario();">Novo
-                                                                                                </button>
-                                                                                                <button type="button"
-                                                                                                        class="btn btn-outline-success waves-effect waves-light"
-                                                                                                        onclick="buscarFunc();">Pesquisar
-                                                                                                </button>
-
-
-                                                                                                <%--  BOTOES MODAL busca--%>
-                                                                                            </div>
-                                                                                            <div style="overflow-x: hidden">
-                                                                                                <div style="height: 300px; overflow-y: auto ">
-                                                                                                    <table class="table"
-                                                                                                           id="tabelabuscafuncionario3">
-                                                                                                        <thead>
-                                                                                                        <tr>
-                                                                                                            <th scope="col">ID</th>
-                                                                                                            <th scope="col">NOME</th>
-                                                                                                            <th scope="col">OPÇÕES</th>
-
-                                                                                                        </tr>
-                                                                                                        </thead>
-                                                                                                        <tbody>
-
-                                                                                                        </tbody>
-                                                                                                    </table>
-
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <span id="totalResultados3"></span>
 
                                                                                         </div>
 
@@ -573,16 +505,9 @@
                                                                                                        id="id_suspensao" name="id"
                                                                                                        placeholder=""
                                                                                                        style="background-color: black" readonly
-                                                                                                       value="${modelVendas.id}">
+                                                                                                       value="${funcionario.id}">
                                                                                             </div>
-                                                                                            <div class="col-6">
-                                                                                                <label class="float-label">FUNCIONÁRIO:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control"
-                                                                                                       id="nome_suspensao" name="nome" placeholder=""
-                                                                                                       style="background-color: black" readonly
-                                                                                                       value="${modelVendas.nome}">
-                                                                                            </div>
+
                                                                                             <div class="col-sm-1">
                                                                                                 <label class="float-label">DIAS:</label>
                                                                                                 <span class="form-bar"></span>
@@ -704,7 +629,7 @@
             $('#msgModal').modal('show'); // Exibe o modal com a mensagem
 
             // Remove a mensagem da sessão após exibi-la
-            $.post("${pageContext.request.contextPath}/ServletVendas", { acao: "limparMsg" });
+            $.post("${pageContext.request.contextPath}/ServletMedidasDisciplinares", { acao: "limparMsg" });
         }
     });
 
@@ -749,6 +674,42 @@
     // Adiciona o evento keydown ao documento
     document.addEventListener('keydown', navigateFocusableElements);
     // Fim de navegação por setas
+
+
+
+    function buscarFuncAdv() {
+        var nomeBusca = document.getElementById('nomeBusca').value;
+
+        if (nomeBusca != null && nomeBusca.trim() != '') {
+            var urlAction = document.getElementById('formBuscaFuncionario1').action;
+
+            $.ajax({
+                method: 'GET',
+                url: urlAction,
+                data: "nome=" + encodeURIComponent(nomeBusca) + '&acao=buscaruserajax',
+                dataType: 'json',
+                success: function (json) {
+                    $('#tabelabuscafuncionario > tbody > tr').remove();
+                    for (var p = 0; p < json.length; p++) {
+                        $('#tabelabuscafuncionario > tbody').append(
+                            '<tr> <td>' + json[p].id + '</td> <td>' + json[p].nome +
+                            '</td> <td> <button type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditarAdv(' + json[p].id + ', \'' + json[p].nome + '\')">Selecionar</button></td></tr>'
+                        );
+                    }
+                    document.getElementById('totalResultados').textContent = 'Resultados: ' + json.length;
+                },
+                error: function (xhr, status, errorThrown) {
+                    alert('Erro ao Pesquisar o Funcionário: ' + xhr.responseText);
+                }
+            });
+        }
+    }
+    function verEditarAdv(id, nome) {
+        document.getElementById('id_advertencia').value = id;
+        document.getElementById('nome_advertencia').value = nome;
+
+
+    }
 
 </SCRIPT>
 </body>

@@ -78,6 +78,7 @@ public class ModelFechaMes implements Serializable {
     private int conf3_qtd;
     private int conf4_qtd;
 
+    private BigDecimal juros_cartoes;
 
     public BigDecimal getResultadoDivisao() {
         return resultadoDivisao;

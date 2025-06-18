@@ -110,6 +110,7 @@ public class ServletFechaMes  extends ServletGenericUtil{
 
             // --- Adicionando o nome do mês e ano ---
             if (dataInicial != null && !dataInicial.isEmpty()) {
+
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = sdf.parse(dataInicial);
 

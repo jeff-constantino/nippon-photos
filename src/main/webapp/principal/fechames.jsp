@@ -418,7 +418,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">DESPESAS DO MÊS</h4>
-                                <div style="height: 300px; overflow-y: auto;">
+                                <div>
 
                                     <table class="table" id="tabelareldespesas">
                                         <thead>
@@ -522,6 +522,77 @@
 
 
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">VALES DO MÊS</h4>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Valor</th>
+                                        <th>Data</th>
+
+                                        <th>ID</th>
+
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach var="contas" items="${contasMes}">
+                                        <tr>
+
+                                            <td><c:out
+                                                    value="${contas.numero_pedido}"/></td>
+                                            <td><c:out value="${contas.empresa}"/></td>
+                                            <td><c:out value="${contas.itens}"/></td>
+                                            <td><fmt:formatNumber value="${contas.valor}"
+                                                                  type="currency"
+                                                                  currencySymbol="R$"/></td>
+                                            <td><fmt:formatDate
+                                                    value="${contas.data_de_pedido}"
+                                                    pattern="dd/MM/yyyy"/></td>
+                                            <td><fmt:formatDate
+                                                    value="${contas.data_de_pagamento}"
+                                                    pattern="dd/MM/yyyy"/></td>
+                                            <td><c:out value="${contas.status}"/></td>
+                                            <td><c:out value="${contas.pagamento}"/></td>
+                                            <td><c:out value="${contas.conta_id}"/></td>
+                                        </tr>
+                                    </c:forEach>
+                                    <tr>
+                                        <td colspan="9" style="font-weight: bold; color: #DAA520; font-size: 1.2rem; text-align: center;">
+                                            Valor Total das Contas:
+                                            <fmt:formatNumber value="${valorTotalContas}" type="currency" currencySymbol="R$" />
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12 grid-margin">
+                        <div class="card" style="align-items: center">
+                            <div class="card-body">
+                                <form action="<%= request.getContextPath() %>/ServletFechaMes" method="post">
+                                    <input type="hidden" name="acao" value="gravarFechamento">
+                                    <button type="submit" class="btn btn-outline-success" STYLE="font-size: large">
+                                        Gravar Fechamento do Mês
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

@@ -1,6 +1,42 @@
-colocar aproveitamento no lançamento de vendas diarias.
+ajustar vales, fmt e busca
+criar medidas disciplinares, etc.. ajustar form
 Gravar fechamento do mês
 criar DRE
-criar Salarios, ajustar selec funcionario etc..
+criar Salarios, ajustar selec funcionario (usar o selec de medidas e gerar conforme o select) etc..
 criar comparativo de vendas mes/ano
-criar medidas disciplinares, ajustar selec func etc..
+
+
+
+criar na servlet a busca de vales e de descontos
+fecha mes:
+${mesAno}
+
+QUANTIDADES
+${vl.total_ft}
+${vl.total_enc}
+${vl.total_dig}
+${vl.total_sobras}
+${(vl.total_ft + vl.total_sobras) / vl.conf1_qtd}" pattern="0.00"} (total de ribbons usados)
+
+VALORES
+ items="${vendasMesList}"
+
+ ${totalDinheiroReal + vl.valor_din_mes_real}
+ ${totalDebitoReal + vl.valor_deb_mes_real}
+ ${totalCreditoReal + vl.valor_cred_mes_real}
+ ${totalPixReal + vl.valor_pix_mes_real}
+
+ ${totalDinheiroReal + totalDebitoReal + totalCreditoReal + totalPixReal} (total geral)
+
+JUROS CARTÕES
+
+DESPESAS
+${valorTotalDespesas}
+
+CONTAS
+${valorTotalContas}
+
+VALES DO MES
+
+DESCONTOS DO MES
+

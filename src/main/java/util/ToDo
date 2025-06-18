@@ -8,6 +8,7 @@ criar comparativo de vendas mes/ano
 
 
 criar na servlet a busca de vales e de descontos
+WHERE \"idConf\" = 2";
 fecha mes:
 ${mesAno}
 

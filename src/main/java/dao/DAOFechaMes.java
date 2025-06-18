@@ -45,20 +45,19 @@ public class DAOFechaMes {
                 "SUM(valor_pix) AS valor_pix, " +
                 "SUM(valor_pix_real) AS valor_pix_real, " +
                 "SUM(valor_despesa_total) AS valor_despesa_total, " +
-                "SUM(valor_vale_total) AS valor_vale_total, " +
                 "SUM(desconto) AS desconto " +
                 "FROM conf_dia " +
                 "WHERE data_fechamento >= ? AND data_fechamento <= ?";
 
-        // SQL para configuracao
+        String sqlVales = "SELECT SUM(valor) AS total_vales FROM vales WHERE data >= ? AND data <= ?";
+
         String sqlConfiguracao = "SELECT * FROM configuracao WHERE \"idConf\" = 2";
 
         try {
-            // Prepara a conexão e executa a primeira consulta (fecha_dia)
+            // Consulta fecha_dia
             try (PreparedStatement pst = connection.prepareStatement(sqlFechamento)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
-
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         ModelFechaMes resumo = new ModelFechaMes();
@@ -66,87 +65,72 @@ public class DAOFechaMes {
                         resumo.setTotal_enc(rs.getInt("total_enc"));
                         resumo.setTotal_dig(rs.getInt("total_dig"));
                         resumo.setTotal_sobras(rs.getInt("total_sobras"));
-                        resumoMensal.add(resumo); // Adiciona os dados de fecha_dia
+                        resumoMensal.add(resumo);
                     }
                 }
             }
 
-            // Prepara e executa a segunda consulta (conf_dia)
+            // Consulta conf_dia
             try (PreparedStatement pst = connection.prepareStatement(sqlConfiguracoes)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
-
                 try (ResultSet rs = pst.executeQuery()) {
-                    if (rs.next()) {
-                        // Verifica se a lista já tem um objeto, se tiver, atualiza com os dados de conf_dia
-                        if (!resumoMensal.isEmpty()) {
-                            ModelFechaMes resumo = resumoMensal.get(0);  // Pega o primeiro item
-                            resumo.setValor_din_mes(rs.getBigDecimal("valor_din"));
-                            resumo.setValor_din_mes_real(rs.getBigDecimal("valor_din_real"));
-                            resumo.setValor_deb_mes(rs.getBigDecimal("valor_deb"));
-                            resumo.setValor_deb_mes_real(rs.getBigDecimal("valor_deb_real"));
-                            resumo.setValor_cred_mes(rs.getBigDecimal("valor_cred"));
-                            resumo.setValor_cred_mes_real(rs.getBigDecimal("valor_cred_real"));
-                            resumo.setValor_pix_mes(rs.getBigDecimal("valor_pix"));
-                            resumo.setValor_pix_mes_real(rs.getBigDecimal("valor_pix_real"));
-                            resumo.setValor_despesa_total(rs.getBigDecimal("valor_despesa_total"));
-                            resumo.setValor_vale_total(rs.getBigDecimal("valor_vale_total"));
-                            resumo.setDesconto_mes(rs.getBigDecimal("desconto"));
-                        }
+                    if (rs.next() && !resumoMensal.isEmpty()) {
+                        ModelFechaMes resumo = resumoMensal.get(0);
+                        resumo.setValor_din_mes(rs.getBigDecimal("valor_din"));
+                        resumo.setValor_din_mes_real(rs.getBigDecimal("valor_din_real"));
+                        resumo.setValor_deb_mes(rs.getBigDecimal("valor_deb"));
+                        resumo.setValor_deb_mes_real(rs.getBigDecimal("valor_deb_real"));
+                        resumo.setValor_cred_mes(rs.getBigDecimal("valor_cred"));
+                        resumo.setValor_cred_mes_real(rs.getBigDecimal("valor_cred_real"));
+                        resumo.setValor_pix_mes(rs.getBigDecimal("valor_pix"));
+                        resumo.setValor_pix_mes_real(rs.getBigDecimal("valor_pix_real"));
+                        resumo.setValor_despesa_total(rs.getBigDecimal("valor_despesa_total"));
+                        resumo.setDesconto_mes(rs.getBigDecimal("desconto"));
                     }
                 }
             }
 
-            // Prepara e executa a terceira consulta (configuracao)
+            // Consulta vales
+            try (PreparedStatement pst = connection.prepareStatement(sqlVales)) {
+                pst.setDate(1, java.sql.Date.valueOf(dataInicio));
+                pst.setDate(2, java.sql.Date.valueOf(dataFim));
+                try (ResultSet rs = pst.executeQuery()) {
+                    if (rs.next() && !resumoMensal.isEmpty()) {
+                        ModelFechaMes resumo = resumoMensal.get(0);
+                        resumo.setValor_vale_total(rs.getBigDecimal("total_vales")); // <- novo campo com total dos vales
+                    }
+                }
+            }
+
+            // Consulta configuracao
             try (PreparedStatement pst = connection.prepareStatement(sqlConfiguracao)) {
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
-                        // Verifica se a lista já tem um objeto, se tiver, atualiza com os dados de configuracao
-                        if (!resumoMensal.isEmpty()) {
-                            ModelFechaMes resumo = resumoMensal.get(0); // Pega o primeiro item
-                            resumo.setIdConf(rs.getLong("idConf"));
-                            resumo.setConf1_valor(rs.getBigDecimal("conf1_valor"));
-                            resumo.setConf1_valor2(rs.getBigDecimal("conf1_valor2"));
-                            resumo.setConf2_valor(rs.getBigDecimal("conf2_valor"));
-                            resumo.setConf3_valor(rs.getBigDecimal("conf3_valor"));
-                            resumo.setConf4_valor(rs.getBigDecimal("conf4_valor"));
-                            resumo.setConf1_custo(rs.getBigDecimal("conf1_custo"));
-                            resumo.setConf2_custo(rs.getBigDecimal("conf2_custo"));
-                            resumo.setConf3_custo(rs.getBigDecimal("conf3_custo"));
-                            resumo.setConf4_custo(rs.getBigDecimal("conf4_custo"));
-                            resumo.setConf1_nome(rs.getString("conf1_nome"));
-                            resumo.setConf2_nome(rs.getString("conf2_nome"));
-                            resumo.setConf3_nome(rs.getString("conf3_nome"));
-                            resumo.setConf4_nome(rs.getString("conf4_nome"));
-                            resumo.setConf_name(rs.getString("conf_name"));
-                            resumo.setConf1_qtd(rs.getInt("conf1_qtd"));
-                            resumo.setConf2_qtd(rs.getInt("conf2_qtd"));
-                            resumo.setConf3_qtd(rs.getInt("conf3_qtd"));
-                            resumo.setConf4_qtd(rs.getInt("conf4_qtd"));
-                        } else {
-                            // Se não houver objeto, cria um novo e adiciona à lista
-                            ModelFechaMes configuracao = new ModelFechaMes();
-                            configuracao.setIdConf(rs.getLong("idConf"));
-                            configuracao.setConf1_valor(rs.getBigDecimal("conf1_valor"));
-                            configuracao.setConf1_valor2(rs.getBigDecimal("conf1_valor2"));
-                            configuracao.setConf2_valor(rs.getBigDecimal("conf2_valor"));
-                            configuracao.setConf3_valor(rs.getBigDecimal("conf3_valor"));
-                            configuracao.setConf4_valor(rs.getBigDecimal("conf4_valor"));
-                            configuracao.setConf1_custo(rs.getBigDecimal("conf1_custo"));
-                            configuracao.setConf2_custo(rs.getBigDecimal("conf2_custo"));
-                            configuracao.setConf3_custo(rs.getBigDecimal("conf3_custo"));
-                            configuracao.setConf4_custo(rs.getBigDecimal("conf4_custo"));
-                            configuracao.setConf1_nome(rs.getString("conf1_nome"));
-                            configuracao.setConf2_nome(rs.getString("conf2_nome"));
-                            configuracao.setConf3_nome(rs.getString("conf3_nome"));
-                            configuracao.setConf4_nome(rs.getString("conf4_nome"));
-                            configuracao.setConf_name(rs.getString("conf_name"));
-                            configuracao.setConf1_qtd(rs.getInt("conf1_qtd"));
-                            configuracao.setConf2_qtd(rs.getInt("conf2_qtd"));
-                            configuracao.setConf3_qtd(rs.getInt("conf3_qtd"));
-                            configuracao.setConf4_qtd(rs.getInt("conf4_qtd"));
+                        ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);
 
-                            resumoMensal.add(configuracao); // Adiciona o novo objeto à lista
+                        resumo.setIdConf(rs.getLong("idConf"));
+                        resumo.setConf1_valor(rs.getBigDecimal("conf1_valor"));
+                        resumo.setConf1_valor2(rs.getBigDecimal("conf1_valor2"));
+                        resumo.setConf2_valor(rs.getBigDecimal("conf2_valor"));
+                        resumo.setConf3_valor(rs.getBigDecimal("conf3_valor"));
+                        resumo.setConf4_valor(rs.getBigDecimal("conf4_valor"));
+                        resumo.setConf1_custo(rs.getBigDecimal("conf1_custo"));
+                        resumo.setConf2_custo(rs.getBigDecimal("conf2_custo"));
+                        resumo.setConf3_custo(rs.getBigDecimal("conf3_custo"));
+                        resumo.setConf4_custo(rs.getBigDecimal("conf4_custo"));
+                        resumo.setConf1_nome(rs.getString("conf1_nome"));
+                        resumo.setConf2_nome(rs.getString("conf2_nome"));
+                        resumo.setConf3_nome(rs.getString("conf3_nome"));
+                        resumo.setConf4_nome(rs.getString("conf4_nome"));
+                        resumo.setConf_name(rs.getString("conf_name"));
+                        resumo.setConf1_qtd(rs.getInt("conf1_qtd"));
+                        resumo.setConf2_qtd(rs.getInt("conf2_qtd"));
+                        resumo.setConf3_qtd(rs.getInt("conf3_qtd"));
+                        resumo.setConf4_qtd(rs.getInt("conf4_qtd"));
+
+                        if (resumoMensal.isEmpty()) {
+                            resumoMensal.add(resumo);
                         }
                     }
                 }
@@ -157,8 +141,9 @@ public class DAOFechaMes {
             throw e;
         }
 
-        return resumoMensal;  // Retorna a lista com todos os dados combinados
+        return resumoMensal;
     }
+
 
 
 

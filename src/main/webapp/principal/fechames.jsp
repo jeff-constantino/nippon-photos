@@ -363,7 +363,8 @@
                     <div class="col-md-4 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <form id="formConta">
+
+                             <form method="post" action="<%=request.getContextPath()%>/ServletFechaMes">
                                 <h4 class="card-title" style="text-align: center">VALORES CONTA</h4>
                                 <!-- Table Content -->
                                 <div style="overflow-x: hidden; overflow-y: hidden">
@@ -409,6 +410,12 @@
 
 
                                     </table>
+                                    <div style="align-items: center">
+
+                                        <button type="submit" class="btn btn-outline-success" STYLE="font-size: large">
+                                            Gravar Fechamento do Mês
+                                        </button>
+                                    </div>
                                 </div>
                                 </form>
                             </div>
@@ -550,10 +557,10 @@
                                     <c:forEach var="vl" items="${vendasMesList}">
                                         <tr>
                                             <td>
-                                                <fmt:formatNumber value="${vl.valor_vale_total}" type="currency" currencySymbol="R$" />
+                                                <fmt:formatNumber value="${empty vl.valor_vale_total ? 0 : vl.valor_vale_total}" type="currency" currencySymbol="R$" />
                                             </td>
                                             <td>
-                                                <fmt:formatNumber value="${vl.desconto_mes}" type="currency" currencySymbol="R$" />
+                                                <fmt:formatNumber value="${empty vl.desconto_mes ? 0 : vl.desconto_mes}" type="currency" currencySymbol="R$" />
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -569,20 +576,7 @@
                     </div>
 
                 </div>
-                <div class="row">
-                    <div class="col-md-12 grid-margin">
-                        <div class="card" style="align-items: center">
-                            <div class="card-body">
-                                <form method="post" action="<%=request.getContextPath()%>/ServletFechaMes">
-                                    <button type="submit" class="btn btn-outline-success" STYLE="font-size: large">
-                                        Gravar Fechamento do Mês
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+                
             </div>
             <!-- content-wrapper ends -->
             <!-- partial:partials/_footer.html -->

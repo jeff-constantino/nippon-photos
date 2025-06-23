@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
@@ -166,8 +167,8 @@
                                         <c:forEach var="vale" items="${vales}">
                                             <tr>
                                                 <td>${vale.nome_funcionario}</td>
-                                                <td>${vale.data}</td>
-                                                <td>${vale.valor}</td>
+                                                <td><fmt:formatDate value="${vale.dataFormatadaParaFmt}" pattern="dd/MM/yyyy" /></td>
+                                                <td><fmt:formatNumber value="${vale.valor}" type="currency" currencySymbol="R$" /></td>
                                                 <td>${vale.forma_pagamento}</td>
                                                 <td>${vale.id_vale}</td>
                                                 <td>

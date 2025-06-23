@@ -1,4 +1,6 @@
-ajustar vales, fmt e busca
+ajustar fechamento do mes, gravar valores na conta e juros dos cartões
+
+ajustar vales busca
 criar medidas disciplinares, etc.. ajustar form
 Gravar fechamento do mês
 criar DRE
@@ -7,39 +9,4 @@ criar comparativo de vendas mes/ano
 
 
 
-criar na servlet a busca de vales e de descontos
-WHERE \"idConf\" = 2";
-fecha mes:
-${mesAno} (esse é algo que pretendo usar futuramente para comparação entre os meses, tipo Março-2024 e Março-2025, então acho que deveria ter 2 campos, o do mes e do ano correto?)
-
-QUANTIDADES
-${vl.total_ft}
-${vl.total_enc}
-${vl.total_dig}
-${vl.total_sobras}
-${(vl.total_ft + vl.total_sobras) / vl.conf1_qtd}" pattern="0.00"} (total de ribbons usados)
-
-VALORES
- items="${vendasMesList}"
-
- ${totalDinheiroReal + vl.valor_din_mes_real}
- ${totalDebitoReal + vl.valor_deb_mes_real}
- ${totalCreditoReal + vl.valor_cred_mes_real}
- ${totalPixReal + vl.valor_pix_mes_real}
-
- ${totalDinheiroReal + totalDebitoReal + totalCreditoReal + totalPixReal} (total geral)
-
-JUROS CARTÕES (ainda vou avaliar de onde pegar os dados)
-
-DESPESAS
-${valorTotalDespesas}
-
-CONTAS
-${valorTotalContas}
-
-VALES DO MES
-${vl.valor_vale_total}
-
-DESCONTOS DO MES
-${vl.desconto_mes}
 

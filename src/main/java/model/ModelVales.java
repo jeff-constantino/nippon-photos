@@ -1,10 +1,12 @@
 package model;
 
 import model.ModelLogin;
+import util.DateConverter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 public class ModelVales implements Serializable {
     private long id_vale;
@@ -15,6 +17,12 @@ public class ModelVales implements Serializable {
     private String observacao;
     private BigDecimal valor;
     private String forma_pagamento;
+
+
+    public Date getDataFormatadaParaFmt() {
+        return DateConverter.toUtilDate(this.data);
+    }
+
 
     public String getForma_pagamento() {
         return forma_pagamento;

@@ -155,15 +155,12 @@ public class ServletFechaMes extends ServletGenericUtil {
                 return;
             }
 
-            ModelFechaMes resumo = vendasMesList.get(0); // Assume que o primeiro item é o resumo
+            ModelFechaMes resumo = vendasMesList.get(0);
 
-
-            String totalRibbonsStr = request.getParameter("total_ribbons");
-            System.out.println("total_ribbons do request: '" + totalRibbonsStr + "'");
             BigDecimal totalRibbons = BigDecimal.ZERO;
 
-            if (resumo.getConf1_qtd() > 0) { // Apenas verifica se é maior que zero, pois int nunca será null
-                BigDecimal conf1Qtd = BigDecimal.valueOf(resumo.getConf1_qtd()); // Converte int para BigDecimal
+            if (resumo.getConf1_qtd() > 0) {
+                BigDecimal conf1Qtd = BigDecimal.valueOf(resumo.getConf1_qtd());
                 BigDecimal totalFt = BigDecimal.valueOf(resumo.getTotal_ft());
                 BigDecimal totalSobras = BigDecimal.valueOf(resumo.getTotal_sobras());
 

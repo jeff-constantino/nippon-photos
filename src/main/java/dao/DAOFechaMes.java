@@ -162,10 +162,7 @@ public class DAOFechaMes {
             pst.setInt(6, fechamento.getTotal_sobras());
             pst.setBigDecimal(7, fechamento.getTotal_ribbons());
 
-            pst.setBigDecimal(8, fechamento.getValor_din_mes_real());
-            pst.setBigDecimal(9, fechamento.getValor_deb_mes_real());
-            pst.setBigDecimal(10, fechamento.getValor_cred_mes_real());
-            pst.setBigDecimal(11, fechamento.getValor_pix_mes_real());
+
 
             pst.setBigDecimal(12, fechamento.getTotal_geral());
             pst.setBigDecimal(13, fechamento.getJuros_cartoes());

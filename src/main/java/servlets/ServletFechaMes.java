@@ -167,15 +167,23 @@ public class ServletFechaMes extends ServletGenericUtil {
                 totalRibbons = totalFt.add(totalSobras).divide(conf1Qtd, 2, RoundingMode.HALF_UP);
             }
 
-
-
-            // Calcula total_geral somando os valores do resumo, tratando possíveis nulls
             BigDecimal valorDin = resumo.getValor_din_mes_real() != null ? resumo.getValor_din_mes_real() : BigDecimal.ZERO;
             BigDecimal valorDeb = resumo.getValor_deb_mes_real() != null ? resumo.getValor_deb_mes_real() : BigDecimal.ZERO;
             BigDecimal valorCred = resumo.getValor_cred_mes_real() != null ? resumo.getValor_cred_mes_real() : BigDecimal.ZERO;
             BigDecimal valorPix = resumo.getValor_pix_mes_real() != null ? resumo.getValor_pix_mes_real() : BigDecimal.ZERO;
 
             BigDecimal totalGeral = valorDin.add(valorDeb).add(valorCred).add(valorPix);
+
+            BigDecimal jurosDebitoVm = parseBigDecimal(request.getParameter("jurosDebitoVm"));
+            BigDecimal jurosCreditoVm = parseBigDecimal(request.getParameter("jurosCreditoVm"));
+            BigDecimal jurosDebitoOutros = parseBigDecimal(request.getParameter("jurosDebitoOutros"));
+            BigDecimal jurosCreditoOutros = parseBigDecimal(request.getParameter("jurosCreditoOutros"));
+            BigDecimal totalJuros = jurosDebitoVm.add(jurosCreditoVm).add(jurosDebitoOutros).add(jurosCreditoOutros);
+
+            BigDecimal debitoVm = parseBigDecimal(request.getParameter("debitoVm"));
+            BigDecimal creditoVm = parseBigDecimal(request.getParameter("creditoVm"));
+            BigDecimal debitoOutros = parseBigDecimal(request.getParameter("debitoOutros"));
+            BigDecimal creditoOutros = parseBigDecimal(request.getParameter("creditoOutros"));
 
             ModelFechaMes fechamento = new ModelFechaMes();
             fechamento.setMes(mes);
@@ -190,14 +198,18 @@ public class ServletFechaMes extends ServletGenericUtil {
             fechamento.setValor_deb_mes_real(valorDeb);
             fechamento.setValor_cred_mes_real(valorCred);
             fechamento.setValor_pix_mes_real(valorPix);
-
             fechamento.setTotal_geral(totalGeral);
-            fechamento.setJuros_cartoes(resumo.getJuros_cartoes());
+            fechamento.setJuros_cartoes(totalJuros);
 
             fechamento.setValor_total_despesas(valorTotalDespesas);
             fechamento.setValor_total_contas(valorTotalContas);
             fechamento.setValor_vale_total(resumo.getValor_vale_total());
             fechamento.setDesconto_mes(resumo.getDesconto_mes());
+
+            fechamento.setDebitoVm(debitoVm);
+            fechamento.setCreditoVm(creditoVm);
+            fechamento.setDebitoOutros(debitoOutros);
+            fechamento.setCreditoOutros(creditoOutros);
 
             DAOFechaMes dao = new DAOFechaMes();
             dao.gravarFechamentoMes(fechamento);
@@ -212,6 +224,20 @@ public class ServletFechaMes extends ServletGenericUtil {
         request.getRequestDispatcher("principal/fechames.jsp").forward(request, response);
     }
 
+
+
+    private BigDecimal parseBigDecimal(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        try {
+            // Remove pontos (milhar) e troca vírgula por ponto (decimal)
+            String normalized = value.trim().replace(".", "").replace(",", ".");
+            return new BigDecimal(normalized);
+        } catch (NumberFormatException e) {
+            return BigDecimal.ZERO;
+        }
+    }
 
 }
 

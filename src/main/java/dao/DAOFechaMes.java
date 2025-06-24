@@ -150,8 +150,8 @@ public class DAOFechaMes {
                 "mes, ano, total_ft, total_enc, total_dig, total_sobras, total_ribbons, " +
                 "valor_din_mes_real, valor_deb_mes_real, valor_cred_mes_real, valor_pix_mes_real, " +
                 "total_geral, juros_cartoes, valor_total_despesas, valor_total_contas, " +
-                "valor_vale_total, desconto_mes" +
-                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "valor_vale_total, desconto_mes, debito_vm, credito_vm, debito_outros, credito_outros" +
+                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, fechamento.getMes());
@@ -162,7 +162,10 @@ public class DAOFechaMes {
             pst.setInt(6, fechamento.getTotal_sobras());
             pst.setBigDecimal(7, fechamento.getTotal_ribbons());
 
-
+            pst.setBigDecimal(8, fechamento.getValor_din_mes_real());
+            pst.setBigDecimal(9, fechamento.getValor_deb_mes_real());
+            pst.setBigDecimal(10, fechamento.getValor_cred_mes_real());
+            pst.setBigDecimal(11, fechamento.getValor_pix_mes_real());
 
             pst.setBigDecimal(12, fechamento.getTotal_geral());
             pst.setBigDecimal(13, fechamento.getJuros_cartoes());
@@ -171,11 +174,15 @@ public class DAOFechaMes {
             pst.setBigDecimal(16, fechamento.getValor_vale_total());
             pst.setBigDecimal(17, fechamento.getDesconto_mes());
 
-            pst.executeUpdate();
-            connection.commit(); // <- COMMIT para efetivar a transação
+            pst.setBigDecimal(18, fechamento.getDebitoVm());
+            pst.setBigDecimal(19, fechamento.getCreditoVm());
+            pst.setBigDecimal(20, fechamento.getDebitoOutros());
+            pst.setBigDecimal(21, fechamento.getCreditoOutros());
 
+            pst.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
-            connection.rollback(); // <- ROLLBACK em caso de erro para evitar dados incompletos
+            connection.rollback();
             System.err.println("Erro ao gravar fechamento do mês: " + e.getMessage());
             throw e;
         }

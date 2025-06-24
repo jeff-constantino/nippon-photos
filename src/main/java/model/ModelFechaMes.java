@@ -95,6 +95,44 @@ public class ModelFechaMes implements Serializable {
         this.resultadoDivisao = resultadoDivisao;
     }
 
+    private BigDecimal debitoVm;
+    private BigDecimal creditoVm;
+    private BigDecimal debitoOutros;
+    private BigDecimal creditoOutros;
+
+    // Getters e Setters (somente os novos abaixo)
+    public BigDecimal getDebitoVm() {
+        return debitoVm;
+    }
+
+    public void setDebitoVm(BigDecimal debitoVm) {
+        this.debitoVm = debitoVm;
+    }
+
+    public BigDecimal getCreditoVm() {
+        return creditoVm;
+    }
+
+    public void setCreditoVm(BigDecimal creditoVm) {
+        this.creditoVm = creditoVm;
+    }
+
+    public BigDecimal getDebitoOutros() {
+        return debitoOutros;
+    }
+
+    public void setDebitoOutros(BigDecimal debitoOutros) {
+        this.debitoOutros = debitoOutros;
+    }
+
+    public BigDecimal getCreditoOutros() {
+        return creditoOutros;
+    }
+
+    public void setCreditoOutros(BigDecimal creditoOutros) {
+        this.creditoOutros = creditoOutros;
+    }
+
     public BigDecimal getJuros_cartoes() {
         return juros_cartoes;
     }

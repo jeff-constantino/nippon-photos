@@ -317,7 +317,7 @@
                                                                                 <input type="text" class="form-control" id="conf1_qtd_mat" name="conf1_qtd" required value="${modelConfig.conf1_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf1_custo_mat">Custo Unitário</label>
+                                                                                <label for="conf1_custo_mat">Custo Und</label>
                                                                                 <input type="text" class="form-control" id="conf1_custo_mat" name="conf1_custo" required value="${modelConfig.conf1_custo}">
                                                                             </div>
                                                                         </div>
@@ -336,7 +336,7 @@
                                                                                 <input type="text" class="form-control" id="conf2_qtd_mat" name="conf2_qtd" required value="${modelConfig.conf2_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf2_custo_mat">Custo Unitário</label>
+                                                                                <label for="conf2_custo_mat">Custo Und</label>
                                                                                 <input type="text" class="form-control" id="conf2_custo_mat" name="conf2_custo" required value="${modelConfig.conf2_custo}">
                                                                             </div>
                                                                         </div>
@@ -355,7 +355,7 @@
                                                                                 <input type="text" class="form-control" id="conf3_qtd_mat" name="conf3_qtd" required value="${modelConfig.conf3_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf3_custo_mat">Custo Unitário</label>
+                                                                                <label for="conf3_custo_mat">Custo Und</label>
                                                                                 <input type="text" class="form-control" id="conf3_custo_mat" name="conf3_custo" required value="${modelConfig.conf3_custo}">
                                                                             </div>
                                                                         </div>
@@ -761,12 +761,12 @@
                                                          <td><c:out value="${modelConf.conf1_nome}"/></td>
 
                                                          <!-- Formatação do valor com JSTL -->
-                                                         <td><fmt:formatNumber value="${modelConf.conf1_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
-                                                         <td><fmt:formatNumber value="${modelConf.conf1_valor2}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                         <td><fmt:formatNumber value="${modelConf.conf1_valor}" type="currency" currencySymbol="R$" /></td>
+                                                         <td><fmt:formatNumber value="${modelConf.conf1_valor2}" type="currency" currencySymbol="R$" /></td>
                                                          <td><c:out value="${modelConf.conf2_nome}"/></td>
-                                                         <td><fmt:formatNumber value="${modelConf.conf2_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                         <td><fmt:formatNumber value="${modelConf.conf2_valor}" type="currency" currencySymbol="R$" /></td>
                                                          <td><c:out value="${modelConf.conf3_nome}"/></td>
-                                                         <td><fmt:formatNumber value="${modelConf.conf3_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                         <td><fmt:formatNumber value="${modelConf.conf3_valor}" type="currency" currencySymbol="R$" /></td>
 
                                                      </tr>
                                                  </c:if>
@@ -795,18 +795,18 @@
                                                 <th hidden="hidden">Nome</th>
                                                 <th>Produto 1</th>
                                                 <th>Valor</th>
-                                                <th>Quantidade</th>
-                                                <th>Custo Unitário</th>
+                                                <th>Qtd</th>
+                                                <th>Custo Und</th>
 
                                                 <th>Produto 2</th>
                                                 <th>Valor</th>
-                                                <th>Quantidade</th>
-                                                <th>Custo Unitário</th>
+                                                <th>Qtd</th>
+                                                <th>Custo Und</th>
 
                                                 <th>Produto 3</th>
                                                 <th>Valor</th>
-                                                <th>Quantidade</th>
-                                                <th>Custo Unitário</th>
+                                                <th>Qtd</th>
+                                                <th>Custo Und</th>
 
 
                                             </tr>
@@ -841,19 +841,19 @@
                                                         </td>
                                                         <td><c:out value="${modelConf.idConf}"/></td>
                                                         <td><c:out value="${modelConf.conf1_nome}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf1_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf1_valor}" type="currency" currencySymbol="R$" /></td>
                                                         <td><c:out value="${modelConf.conf1_qtd}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf1_custo}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf1_custo}" type="currency" currencySymbol="R$" /></td>
 
                                                         <td><c:out value="${modelConf.conf2_nome}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf2_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf2_valor}" type="currency" currencySymbol="R$" /></td>
                                                         <td><c:out value="${modelConf.conf2_qtd}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf2_custo}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf2_custo}" type="currency" currencySymbol="R$" /></td>
 
                                                         <td><c:out value="${modelConf.conf3_nome}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf3_valor}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf3_valor}" type="currency" currencySymbol="R$" /></td>
                                                         <td><c:out value="${modelConf.conf3_qtd}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf3_custo}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConf.conf3_custo}" type="currency" currencySymbol="R$" /></td>
 
 
                                                     </tr>
@@ -935,7 +935,7 @@
                                                         <td><c:out value="${modelConfiguracao.idConf}"/></td>
 
                                                         <!-- Formatação do valor com JSTL -->
-                                                        <td><fmt:formatNumber value="${modelConfiguracao.salario}" type="number" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConfiguracao.salario}" type="currency" currencySymbol="R$" /></td>
                                                         <td><fmt:formatNumber value="${modelConfiguracao.comissao / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                         <td><fmt:formatNumber value="${modelConfiguracao.fgts / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                         <td><fmt:formatNumber value="${modelConfiguracao.inss / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>

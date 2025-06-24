@@ -44,7 +44,7 @@
                                                                 <div class="form-row align-items-center">
                                                                     <div class="col-auto">
                                                                         <label for="dataInicial">Data Inicial</label>
-                                                                        <input type="date" class="form-control" id="dataInicial" name="dataInicial" required value="${dataInicial}">
+                                                                        <input type="date" class="form-control" id="dataInicial" name="dataInicial" required onchange="setData()" value="${dataInicial}">
                                                                     </div>
                                                                     <div class="col-auto">
                                                                         <label for="dataFinal">Data Final</label>
@@ -417,6 +417,83 @@
             delay: { "show": 100, "hide": 100 } // O tooltip vai aparecer em 100ms
         });
     });
+
+   function setData() {
+       // Obtém o valor do campo dataInicial
+       var dataInicial = document.getElementById("dataInicial").value;
+
+       if (dataInicial) {
+           // Divide a data inicial em dia, mês e ano
+           var partesData = dataInicial.split('-'); // Assume que o formato é yyyy-mm-dd
+           var ano = parseInt(partesData[0], 10);
+           var mes = parseInt(partesData[1], 10) - 1; // Mês é 0-based no JavaScript
+           var dia = parseInt(partesData[2], 10);
+
+           // Cria um objeto Date com os valores extraídos
+           var data = new Date(ano, mes, dia);
+
+           // Verifica se a data é válida
+           if (!isNaN(data.getTime())) {
+               // Calcula o último dia do mês da data inicial
+               var ultimoDia = new Date(ano, mes + 1, 0);
+
+               // Formata a data final no padrão yyyy-mm-dd
+               var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+               var mesFinal = String(mes + 1).padStart(2, '0'); // Ajusta o mês para exibição (1-12)
+               var dataFinal = ano + '-' + mesFinal + '-' + diaFinal;
+
+               // Define o valor do campo dataFinal
+               document.getElementById("dataFinal").value = dataFinal;
+           } else {
+               console.error("Data inicial inválida.");
+               document.getElementById("dataFinal").value = ""; // Limpa o campo se a data for inválida
+           }
+       } else {
+           console.error("Data inicial não selecionada.");
+           document.getElementById("dataFinal").value = ""; // Limpa o campo se a data inicial estiver vazia
+       }
+   }
+
+   // Função para inicializar os campos de data ao abrir o modal
+   function initializeDates() {
+       // Obtém a data atual
+       var today = new Date();
+
+       // Formata a data inicial no padrão yyyy-mm-dd
+       var diaInicial = String(today.getDate()).padStart(2, '0');
+       var mesInicial = String(today.getMonth() + 1).padStart(2, '0');
+       var anoInicial = today.getFullYear();
+       var dataInicial = anoInicial + '-' + mesInicial + '-' + diaInicial;
+
+       // Calcula o último dia do mês atual
+       var ultimoDia = new Date(anoInicial, today.getMonth() + 1, 0);
+
+       // Formata a data final no padrão yyyy-mm-dd
+       var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+       var mesFinal = String(today.getMonth() + 1).padStart(2, '0'); // Usa o mês da data inicial
+       var anoFinal = today.getFullYear();
+       var dataFinal = anoFinal + '-' + mesFinal + '-' + diaFinal;
+
+       // Define os valores dos campos
+       document.getElementById("dataInicial").value = dataInicial;
+       document.getElementById("dataFinal").value = dataFinal;
+   }
+
+   // Inicializa os campos de data quando o modal é aberto
+   document.addEventListener('DOMContentLoaded', function () {
+       const modal = document.getElementById('modalData'); // Substitua 'meuModal' pelo ID do seu modal
+       if (modal) {
+           modal.addEventListener('shown.bs.modal', function () {
+               // Verifica se os campos já foram inicializados
+               if (!document.getElementById("dataInicial").value) {
+                   initializeDates();
+               }
+           });
+       }
+
+       // Adiciona o evento onchange ao campo dataInicial
+       document.getElementById("dataInicial").addEventListener('change', setData);
+   });
 </script>
 </body>
 </html>

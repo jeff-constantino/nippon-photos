@@ -72,20 +72,15 @@
                                                                             <div class="card">
                                                                                 <div class="card-block">
 
-                                                                                    <form class="form-material" id="formBuscaFuncionario1"
-                                                                                          method="get"
-                                                                                          action="<%= request.getContextPath() %>/ServletMedidasDisciplinares">
-
+                                                                                    <form class="form-material" id="formBuscaFuncionario1" method="get" action="<%= request.getContextPath() %>/ServletMedidasDisciplinares">
                                                                                         <div class="row">
-
                                                                                             <div class="col-auto">
                                                                                                 <label>Funcionário</label>
-                                                                                                <select class="form-control" id="funcionarioIdADV" name="funcionarioIdADV" required>
+                                                                                                <select class="form-control" id="funcionarioIdADV" name="funcionarioIdADV" onchange="atualizarFuncionarioSelecionado('formAdvertencia', this.value)" required>
                                                                                                     <option value="">Selecione um Funcionário</option>
                                                                                                     <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
                                                                                                         <c:if test="${funcionario.status == 'ATIVO'}">
-                                                                                                            <option value="${funcionario.id}"
-                                                                                                                    class="text-success"
+                                                                                                            <option value="${funcionario.id}" class="text-success"
                                                                                                                     <c:if test="${funcionario.id == funcionarioIdADV}">selected</c:if>>
                                                                                                                     ${funcionario.nome}
                                                                                                             </option>
@@ -93,8 +88,7 @@
                                                                                                     </c:forEach>
                                                                                                     <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
                                                                                                         <c:if test="${funcionario.status != 'ATIVO'}">
-                                                                                                            <option value="${funcionario.id}"
-                                                                                                                    class="text-danger"
+                                                                                                            <option value="${funcionario.id}" class="text-danger"
                                                                                                                     <c:if test="${funcionario.id == funcionarioIdADV}">selected</c:if>>
                                                                                                                     ${funcionario.nome}
                                                                                                             </option>
@@ -103,88 +97,41 @@
                                                                                                 </select>
 
                                                                                             </div>
-
-
-
-
-
                                                                                         </div>
-
                                                                                     </form>
 
-                                                                                    <form action="<%= request.getContextPath() %>/ServletMedidasDisciplinares"
-                                                                                          method="post" id="formAdvertencia" name="formAdvertencia">
-                                                                                        <input type="hidden" name="acao" value="">
+                                                                                    <form action="<%= request.getContextPath() %>/ServletMedidasDisciplinares" method="post" id="formAdvertencia" name="formAdvertencia">
+                                                                                        <input type="hidden" name="acao" value="gravarAdvertencia">
+                                                                                        <input type="hidden" name="funcionarioId" id="funcionarioIdAdvertencia">
+                                                                                        <input type="hidden" name="nomeFuncionario" id="nomeFuncionario" />
+
 
                                                                                         <div class="col-6">
-                                                                                            <div class="col-auto">
-                                                                                                <span style="color:#1ad76b">${msg}</span>
-                                                                                            </div>
+                                                                                            <span style="color:#1ad76b">${msg}</span>
                                                                                         </div>
                                                                                         <div class="row">
                                                                                             <div class="col-3">
                                                                                                 <label>Data da Advertência</label>
-                                                                                                <input type="date" class="form-control"
-                                                                                                       id="data_advertencia" name="data_advertencia"
-                                                                                                       required
-                                                                                                       value="${formattedDataVenda != null ? formattedDataVenda : ''}">
+                                                                                                <input type="date" class="form-control" id="data_advertencia" name="data_advertencia" required
+                                                                                                       value="">
                                                                                             </div>
-                                                                                            <div class="col-sm-1">
-                                                                                                <label class="float-label">ID:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control"
-                                                                                                       id="id_advertencia" name="id"
-                                                                                                       placeholder=""
-                                                                                                       style="background-color: black" readonly
-                                                                                                       value="${funcionarioIdAdv}">
-                                                                                            </div>
-
 
                                                                                         </div>
-
-
-
-
                                                                                         <div class="row">
-
                                                                                             <div class="col">
-                                                                                                <div class="row">
-                                                                                                    <div class="mb-3">
-                                                                                                        <label style="color: #f2a654">MOTIVO</label>
-                                                                                                        <textarea type="text" class="form-control"
-                                                                                                               style="background-color: #f2a654; color: black; font-weight: bold"
-                                                                                                               id="adv_motivo" name="adv_motivo"
-                                                                                                               required
-                                                                                                               value=""/></textarea>
+                                                                                                <label style="color: #f2a654">Motivo</label>
+                                                                                                <textarea class="form-control"
+                                                                                                          style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase"
+                                                                                                          id="adv_motivo" name="adv_motivo" required
+                                                                                                          oninput="this.value = this.value.toUpperCase();"></textarea>
 
-                                                                                                    </div>
-
-                                                                                                </div>
                                                                                             </div>
-
-
-
-
-
-
-
-
-
                                                                                         </div>
-
                                                                                         <br>
-
                                                                                         <div>
-                                                                                            <button class="btn btn-outline-success waves-effect waves-light">
-                                                                                                Salvar
-                                                                                            </button>
-                                                                                            <button type="button"
-                                                                                                    class="btn btn-outline-warning waves-effect waves-light"
-                                                                                                    onclick="limparFormVendas();">Limpar
-                                                                                            </button>
-
+                                                                                            <button class="btn btn-outline-success waves-effect waves-light">Salvar</button>
+                                                                                            <button type="button" class="btn btn-outline-warning waves-effect waves-light" onclick="limparForm('formAdvertencia')">Limpar</button>
                                                                                         </div>
-
                                                                                     </form>
 
 
@@ -267,7 +214,7 @@
                                                                                         <div class="row">
                                                                                             <div class="col-auto">
                                                                                                 <label>Funcionário</label>
-                                                                                                <select class="form-control" id="funcionarioIdFalta" name="funcionarioIdFalta" required>
+                                                                                                <select class="form-control" id="funcionarioFalta" name="funcionarioIdFalta" onchange="atualizarFuncionarioFalta()" required>
                                                                                                     <option value="">Selecione um Funcionário</option>
                                                                                                     <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
                                                                                                         <c:if test="${funcionario.status == 'ATIVO'}">
@@ -296,7 +243,11 @@
 
                                                                                     <form action="<%= request.getContextPath() %>/ServletMedidasDisciplinares"
                                                                                           method="post" id="formFaltas" name="formFaltas">
-                                                                                        <input type="hidden" name="acao" value="">
+                                                                                        <input type="hidden" name="acao" value="gravarFaltas">
+                                                                                        <input type="hidden" name="acao" value="gravarAdvertencia">
+                                                                                        <input type="hidden" name="funcionarioId" id="funcionarioIdFalta" />
+                                                                                        <input type="hidden" name="nomeFuncionario" id="nomeFuncionarioFalta" />
+
 
                                                                                         <div class="col-6">
                                                                                             <div class="col-auto">
@@ -310,17 +261,9 @@
                                                                                                 <input type="date" class="form-control"
                                                                                                        id="data_falta" name="data_falta"
                                                                                                        required
-                                                                                                       value="${formattedDataVenda != null ? formattedDataVenda : ''}">
+                                                                                                       value="">
                                                                                             </div>
-                                                                                            <div class="col-sm-1">
-                                                                                                <label class="float-label">ID:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control"
-                                                                                                       id="id_falta" name="id"
-                                                                                                       placeholder=""
-                                                                                                       style="background-color: black" readonly
-                                                                                                       value="${funcionario.id}">
-                                                                                            </div>
+
 
 
                                                                                         </div>
@@ -334,11 +277,13 @@
                                                                                                 <div class="row">
                                                                                                     <div class="mb-3">
                                                                                                         <label style="color: #f2a654">OBSERVAÇÕES</label>
-                                                                                                        <textarea type="text" class="form-control"
-                                                                                                                  style="background-color: #f2a654; color: black; font-weight: bold"
+                                                                                                        <textarea class="form-control"
+                                                                                                                  style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase"
                                                                                                                   id="falta_obs" name="falta_obs"
                                                                                                                   required
-                                                                                                                  value=""/></textarea>
+                                                                                                                  oninput="this.value = this.value.toUpperCase();"></textarea>
+
+
 
                                                                                                     </div>
 
@@ -496,7 +441,7 @@
                                                                                                 <input type="date" class="form-control"
                                                                                                        id="data_suspensao" name="data_suspensao"
                                                                                                        required
-                                                                                                       value="${formattedDataVenda != null ? formattedDataVenda : ''}">
+                                                                                                       value="">
                                                                                             </div>
                                                                                             <div class="col-sm-1">
                                                                                                 <label class="float-label">ID:</label>
@@ -528,11 +473,12 @@
                                                                                                 <div class="row">
                                                                                                     <div class="mb-3">
                                                                                                         <label style="color: #f2a654">MOTIVO:</label>
-                                                                                                        <textarea type="text" class="form-control"
-                                                                                                                  style="background-color: #f2a654; color: black; font-weight: bold"
+                                                                                                        <textarea class="form-control"
+                                                                                                                  style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase"
                                                                                                                   id="susp_motivo" name="susp_motivo"
                                                                                                                   required
-                                                                                                                  value=""/></textarea>
+                                                                                                                  oninput="this.value = this.value.toUpperCase();"></textarea>
+
 
                                                                                                     </div>
 
@@ -617,6 +563,23 @@
         <!-- main-panel ends -->
     </div>
     <!-- page-body-wrapper ends -->
+</div>
+<!-- Modal HTML -->
+<div class="modal" id="msgModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;"> <!-- Borda preta -->
+            <div class="modal-header" style="border-bottom: none;">
+
+                <!-- Removido o botão "X" -->
+            </div>
+            <div class="modal-body" style="color: black;">
+                <p style="font-size: 1.5em; text-align: center">${msg}</p> <!-- Mensagem aqui -->
+            </div>
+            <div class="modal-footer" style="border-top: none;">
+                <h1 class="modal-title" style="color: black; font-size: 0.8em;">aperte ESC para fechar</h1>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- container-scroller -->
 <!-- plugins:js -->
@@ -710,6 +673,39 @@
 
 
     }
+
+    function atualizarFuncionarioSelecionado(formId) {
+        const select = document.getElementById("funcionarioIdADV");
+        const funcionarioId = select.value;
+        const nomeFuncionario = select.options[select.selectedIndex].text.trim();
+
+        const form = document.getElementById(formId);
+        form.querySelector('input[name="funcionarioId"]').value = funcionarioId;
+        // form.querySelector('input[name="id_advertencia"]').value = funcionarioId;
+        form.querySelector('input[name="nomeFuncionario"]').value = nomeFuncionario;
+    }
+
+    window.onload = function () {
+        atualizarFuncionarioSelecionado('formAdvertencia');
+    };
+    function atualizarFuncionarioFalta() {
+        const select = document.getElementById("funcionarioFalta");
+        const funcionarioId = select.value;
+        const nomeFuncionario = select.options[select.selectedIndex].text.trim();
+
+        const form = document.getElementById("formFaltas");
+        form.querySelector('input[name="funcionarioId"]').value = funcionarioId;
+        form.querySelector('input[name="nomeFuncionario"]').value = nomeFuncionario;
+    }
+    window.onload = atualizarFuncionarioFalta;
+
+    function limparForm(formId) {
+        document.getElementById(formId).reset();
+        document.getElementById(formId).querySelector('input[name="funcionarioId"]').value = '';
+        document.getElementById(formId).querySelector('input[name="id_advertencia"]').value = '';
+    }
+
+
 
 </SCRIPT>
 </body>

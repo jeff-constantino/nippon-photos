@@ -1,24 +1,22 @@
 package model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class ModelMedidasDisciplinares implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
-    private long id;
-    private String nome;
+    private Long id;
+    private Long funcionarioId;
+    private java.sql.Date dataAdvertencia;
+    private String motivo;
 
-    private LocalTime atrasos;
-
-    private LocalDate data_falta;
-    private LocalDate data_advertencia;
-    private String adv_motivo;
-
-    private LocalDate data_suspensao;
-    private int susp_dias;
-    private String susp_motivo;
-
+    // Getters e Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public Long getFuncionarioId() { return funcionarioId; }
+    public void setFuncionarioId(Long funcionarioId) { this.funcionarioId = funcionarioId; }
+    public java.sql.Date getDataAdvertencia() { return dataAdvertencia; }
+    public void setDataAdvertencia(java.sql.Date dataAdvertencia) { this.dataAdvertencia = dataAdvertencia; }
+    public String getMotivo() { return motivo; }
+    public void setMotivo(String motivo) { this.motivo = motivo; }
 }

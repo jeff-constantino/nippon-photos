@@ -1,7 +1,7 @@
 package servlets;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.DAOFuncionario;
+import dao.DAOMedidasDisciplinares;
 import dao.DAOVendasRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -9,13 +9,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.ModelAdvertencia;
+import model.ModelFaltas;
 import model.ModelLogin;
-import model.ModelVales;
-import model.ModelVendas;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -31,76 +29,98 @@ public class ServletMedidasDisciplinares extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Verifica se a ação é para excluir um vale
-            String acao = request.getParameter("acao");
-            String funcionarioId = request.getParameter("funcionarioId");
-
-
-            // Instancia o DAO para buscar os funcionários
-            DAOFuncionario relatorio = new DAOFuncionario();
-            List<ModelLogin> funcionarios = relatorio.buscaFuncionarios();
-            // Adiciona lista de funcionários ao request para que esteja sempre disponível no JSP
+            DAOFuncionario daoFuncionario = new DAOFuncionario();
+            List<ModelLogin> funcionarios = daoFuncionario.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);
 
-            List<ModelVendas> vendasFuncionarioList = new ArrayList<>();
+            System.out.println("doGet: Mensagem na sessão: " + request.getSession().getAttribute("msg"));
 
-
-//            RequestDispatcher dispatcher;
-
-
-            // Encaminha para o JSP
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/medidasDisciplinares.jsp");
             dispatcher.forward(request, response);
-
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("msg", "Erro ao processar a solicitação: " + e.getMessage());
-            request.setAttribute("vales", new ArrayList<>()); // Garante que a lista será exibida, mesmo vazia
+            request.setAttribute("funcionarios", new ArrayList<>());
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/medidasDisciplinares.jsp");
             dispatcher.forward(request, response);
         }
     }
 
-
-
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String acao = request.getParameter("acao");
-        String msg = "";
-
+        String msg = null;
         try {
-            if ("inserirVale".equals(acao)) {
-                // Captura os parâmetros do formulário
-                String idFuncionarioStr = request.getParameter("id_funcionario");
-                String nomeFuncionario = request.getParameter("nome_funcionario");
-                String data = request.getParameter("data");
-                String observacao = request.getParameter("observacao");
-                String valor = request.getParameter("valor");
-                String formaPagamento = request.getParameter("forma_pagamento");
+            String acao = request.getParameter("acao");
+            if ("limparMsg".equals(acao)) {
+                request.getSession().removeAttribute("msg");
+                response.setStatus(HttpServletResponse.SC_OK);
+                return;
+            }
 
-                // Cria um objeto ModelVales e configura os valores
-                ModelVales vale = new ModelVales();
+            DAOFuncionario daoFuncionario = new DAOFuncionario();
+            List<ModelLogin> funcionarios = daoFuncionario.buscaFuncionarios();
+            request.setAttribute("funcionarios", funcionarios);
 
-                // Verifica se o ID do funcionário foi enviado e atribui ao modelo
-                if (idFuncionarioStr != null && !idFuncionarioStr.isEmpty()) {
-                    vale.setId_funcionario(Long.parseLong(idFuncionarioStr));
+            if ("gravarAdvertencia".equals(acao)) {
+                String funcionarioId = request.getParameter("funcionarioId");
+                String dataAdvertencia = request.getParameter("data_advertencia");
+                String motivo = request.getParameter("adv_motivo");
+                String nomeFuncionario = request.getParameter("nomeFuncionario");
+
+
+
+                if (funcionarioId == null || funcionarioId.isEmpty()) {
+                    msg = "Funcionário não selecionado.";
+                } else if (dataAdvertencia == null || dataAdvertencia.isEmpty()) {
+                    msg = "Data da advertência é obrigatória.";
+                } else if (motivo == null || motivo.trim().isEmpty()) {
+                    msg = "Motivo da advertência é obrigatório.";
+                } else {
+                    DAOMedidasDisciplinares dao = new DAOMedidasDisciplinares();
+                    ModelAdvertencia advertencia = new ModelAdvertencia();
+                    advertencia.setFuncionarioId(Long.parseLong(funcionarioId));
+                    advertencia.setDataAdvertencia(java.sql.Date.valueOf(dataAdvertencia));
+                    advertencia.setMotivo(motivo);
+                    advertencia.setNomeFuncionario(nomeFuncionario);
+
+
+                    dao.gravarAdvertencia(advertencia);
+                    msg = "Advertência registrada com sucesso!";
+                    request.getSession().setAttribute("funcionarioIdADV", funcionarioId);
                 }
+            } else if ("gravarFaltas".equals(acao)) {
+                String funcionarioId = request.getParameter("funcionarioId");
+                String dataFalta = request.getParameter("data_falta");
+                String observacoes = request.getParameter("falta_obs");
+                String nomeFuncionario = request.getParameter("nomeFuncionario");
 
-                vale.setNome_funcionario(nomeFuncionario);
-                vale.setData(LocalDate.parse(data));
-                vale.setObservacao(observacao);
-                vale.setValor(new BigDecimal(valor));
-                vale.setForma_pagamento(formaPagamento);
+                if (funcionarioId == null || funcionarioId.isEmpty()) {
+                    msg = "Funcionário não selecionado.";
+                } else if (dataFalta == null || dataFalta.isEmpty()) {
+                    msg = "Data da falta é obrigatória.";
+                } else if (observacoes == null || observacoes.trim().isEmpty()) {
+                    msg = "Observações da falta são obrigatórias.";
+                } else {
+                    DAOMedidasDisciplinares dao = new DAOMedidasDisciplinares();
+                    ModelFaltas falta = new ModelFaltas();
+                    falta.setFuncionarioId(Long.parseLong(funcionarioId));
+                    falta.setDataFalta(java.sql.Date.valueOf(dataFalta));
+                    falta.setObservacoes(observacoes);
+                    falta.setNomeFuncionario(nomeFuncionario);
 
-
-
+                    dao.gravarFalta(falta);
+                    msg = "Falta registrada com sucesso!";
+                }
+            }
+            else {
+                msg = "Ação inválida.";
             }
         } catch (Exception e) {
-            msg = "Erro ao processar o vale: " + e.getMessage();
+            e.printStackTrace();
+            msg = "Erro ao gravar os dados: " + e.getMessage();
         }
 
-        // Configura a mensagem no request e redireciona de volta para a página de vales
+        System.out.println("doPost: Mensagem armazenada na sessão: " + msg);
         request.getSession().setAttribute("msg", msg);
         response.sendRedirect(request.getContextPath() + "/ServletMedidasDisciplinares");
     }

@@ -257,7 +257,7 @@
                                                                                         <div class="row">
 
                                                                                             <div class="col-3">
-                                                                                                <label for="outer_dataVenda">Data da Falta</label>
+                                                                                                <label>Data da Falta</label>
                                                                                                 <input type="date" class="form-control"
                                                                                                        id="data_falta" name="data_falta"
                                                                                                        required

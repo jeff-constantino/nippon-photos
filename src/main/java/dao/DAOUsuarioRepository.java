@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DAOUsuarioRepository {
 
-    private Connection connection;
+    private final Connection connection;
 
     public DAOUsuarioRepository() {
         connection = SingleConnectionBanco.getConnection();
@@ -34,7 +34,7 @@ public class DAOUsuarioRepository {
 
             connection.commit();
         } else {
-            String sql = "UPDATE model_login SET nome = UPPER(?), status =UPPER(?) WHERE id = " + objeto.getId() + "";
+            String sql = "UPDATE model_login SET nome = UPPER(?), status =UPPER(?) WHERE id = " + objeto.getId();
 
             PreparedStatement preparedSql = connection.prepareStatement(sql);
 
@@ -230,7 +230,6 @@ public class DAOUsuarioRepository {
             modelLogin.setId(resultado.getLong("id"));
             modelLogin.setNome(resultado.getString("nome"));
             modelLogin.setStatus(resultado.getString("status"));
-            ;
 
 
         }
@@ -254,7 +253,6 @@ public class DAOUsuarioRepository {
             modelLogin.setId(resultado.getLong("id"));
             modelLogin.setNome(resultado.getString("nome"));
             modelLogin.setStatus(resultado.getString("status"));
-            ;
 
 
         }

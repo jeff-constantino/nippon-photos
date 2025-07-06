@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DAOVendasRepository {
 
-    private Connection connection;
+    private final Connection connection;
 
 
 
@@ -404,11 +404,8 @@ public class DAOVendasRepository {
                 // Tratamento do vendedor_id
                 String vendedorId = rs.getString("vendedor_id");
                 try {
-                    if (vendedorId != null) {
-                        venda.setVendedor_id(vendedorId);
-                    } else {
-                        venda.setVendedor_id(null); // Ou trate como preferir
-                    }
+                    // Ou trate como preferir
+                    venda.setVendedor_id(vendedorId);
                 } catch (Exception e) {
                     // Captura a exceção aqui e trate-a conforme necessário
                     System.err.println("Erro ao definir vendedor_id: " + e.getMessage());
@@ -417,11 +414,8 @@ public class DAOVendasRepository {
 
                 // Tratamento da data
                 Date dataVenda = rs.getDate("data_venda");
-                if (dataVenda != null) {
-                    venda.setData_venda(dataVenda);
-                } else {
-                    venda.setData_venda(null); // Ou trate como preferir
-                }
+                // Ou trate como preferir
+                venda.setData_venda(dataVenda);
             }
         } catch (SQLException e) {
             e.printStackTrace();

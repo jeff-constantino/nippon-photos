@@ -16,7 +16,7 @@ public class ServletDre extends ServletGenericUtil{
         if (acao == null || acao.isEmpty()) {
             // Redireciona para a página principal se a ação não for fornecida
             response.sendRedirect("principal/dre.jsp");
-            return; // Importante retornar para evitar que o código continue
+            // Importante retornar para evitar que o código continue
         }
     }
 }

@@ -14,7 +14,7 @@ import model.ModelConfig;
 import model.ModelConfiguracao;
 
 public class DAOConfiguracao {
-    private Connection connection;
+    private final Connection connection;
 
     public DAOConfiguracao() {
         connection = SingleConnectionBanco.getConnection();

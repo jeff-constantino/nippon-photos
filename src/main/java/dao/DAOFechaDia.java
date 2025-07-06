@@ -11,7 +11,7 @@ import java.util.List;
 
 
 public class DAOFechaDia {
-    private Connection connection;
+    private final Connection connection;
 
     public DAOFechaDia() {
         connection = SingleConnectionBanco.getConnection();

@@ -17,7 +17,7 @@ import java.util.List;
 public class ServletDespesas extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
 
-    private DAODespesas daoDespesas;
+    private final DAODespesas daoDespesas;
 
     // Inicializa o DAODespesas no construtor
     public ServletDespesas() {

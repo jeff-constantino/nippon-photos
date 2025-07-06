@@ -19,7 +19,7 @@ import java.util.List;
 @WebServlet("/ServletControleRibbon")
 public class ServletControleRibbon extends ServletGenericUtil {
 
-    private DAOControleRibbon daoControleRibbon = new DAOControleRibbon();
+    private final DAOControleRibbon daoControleRibbon = new DAOControleRibbon();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao");

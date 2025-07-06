@@ -12,12 +12,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.ModelAdvertencia;
 import model.ModelFaltas;
 import model.ModelLogin;
+import model.ModelSuspensao;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+@SuppressWarnings("ALL")
 @WebServlet("/ServletMedidasDisciplinares")
 public class ServletMedidasDisciplinares extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -110,6 +112,31 @@ public class ServletMedidasDisciplinares extends HttpServlet {
 
                     dao.gravarFalta(falta);
                     msg = "Falta registrada com sucesso!";
+                }
+            } else if ("gravarSuspensao".equals(acao)) {
+                String funcionarioId = request.getParameter("funcionarioId");
+                String dataSuspensao = request.getParameter("data_suspensao");
+                String motivo = request.getParameter("motivo");
+                String nomeFuncionario = request.getParameter("nomeFuncionario");
+                String dias  = request.getParameter("dias");
+
+                if (funcionarioId == null || funcionarioId.isEmpty()) {
+                    msg = "Funcionário não selecionado.";
+                } else if (dataSuspensao == null || dataSuspensao.isEmpty()) {
+                    msg = "Data da Suspensão é obrigatória.";
+                } else if (motivo == null || motivo.trim().isEmpty()) {
+                    msg = "O motivo da Suspenão é obrigatório.";
+                } else {
+                    DAOMedidasDisciplinares dao = new DAOMedidasDisciplinares();
+                    ModelSuspensao suspensao = new ModelSuspensao();
+                    suspensao.setFuncionarioId(Long.parseLong(funcionarioId));
+                    suspensao.setDataSuspensao(java.sql.Date.valueOf(dataSuspensao));
+                    suspensao.setMotivo(motivo);
+                    suspensao.setNomeFuncionario(nomeFuncionario);
+                    suspensao.setDias(Integer.parseInt(dias));
+
+                    dao.gravarSuspensao(suspensao);
+                    msg = "Suspensão registrada com sucesso!";
                 }
             }
             else {

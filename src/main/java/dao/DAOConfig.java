@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DAOConfig {
-    private Connection connection;
+    private final Connection connection;
 
     public DAOConfig() {
         connection = SingleConnectionBanco.getConnection();

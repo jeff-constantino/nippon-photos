@@ -16,7 +16,7 @@ import java.util.List;
 @WebServlet(name = "ServletPrincipal", value = "/ServletPrincipal")
 public class ServletPrincipal extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private DAOContas daoContas = new DAOContas(); // Instância do DAOContas
+    private final DAOContas daoContas = new DAOContas(); // Instância do DAOContas
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Verifica se o usuário está logado

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DAOControleRibbon {
 
-    private Connection connection;
+    private final Connection connection;
 
     public DAOControleRibbon()  {
         connection = SingleConnectionBanco.getConnection();

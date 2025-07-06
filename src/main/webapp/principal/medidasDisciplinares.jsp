@@ -1,3 +1,4 @@
+<%--suppress ALL --%>
 <%--
   Created by IntelliJ IDEA.
   User: Jeff Constantino
@@ -5,7 +6,7 @@
   Time: 20:41
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -244,7 +245,6 @@
                                                                                     <form action="<%= request.getContextPath() %>/ServletMedidasDisciplinares"
                                                                                           method="post" id="formFaltas" name="formFaltas">
                                                                                         <input type="hidden" name="acao" value="gravarFaltas">
-                                                                                        <input type="hidden" name="acao" value="gravarAdvertencia">
                                                                                         <input type="hidden" name="funcionarioId" id="funcionarioIdFalta" />
                                                                                         <input type="hidden" name="nomeFuncionario" id="nomeFuncionarioFalta" />
 
@@ -398,7 +398,7 @@
 
                                                                                             <div class="col-auto">
                                                                                                 <label>Funcionário</label>
-                                                                                                <select class="form-control" id="funcionarioIdSusp" name="funcionarioIdSusp" required>
+                                                                                                <select class="form-control" id="funcionarioSuspensao" name="funcionarioSuspensao"  onchange="atualizarFuncionarioSuspensao()"  required>
                                                                                                     <option value="">Selecione um Funcionário</option>
                                                                                                     <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
                                                                                                         <c:if test="${funcionario.status == 'ATIVO'}">
@@ -428,7 +428,9 @@
 
                                                                                     <form action="<%= request.getContextPath() %>/ServletMedidasDisciplinares"
                                                                                           method="post" id="formSuspensao" name="formSuspensao">
-                                                                                        <input type="hidden" name="acao" value="">
+                                                                                        <input type="hidden" name="acao" value="gravarSuspensao">
+                                                                                        <input type="hidden" name="funcionarioId" id="funcionarioIdFalta" />
+                                                                                        <input type="hidden" name="nomeFuncionario" id="nomeFuncionarioFalta" />
 
                                                                                         <div class="col-6">
                                                                                             <div class="col-auto">
@@ -443,21 +445,13 @@
                                                                                                        required
                                                                                                        value="">
                                                                                             </div>
-                                                                                            <div class="col-sm-1">
-                                                                                                <label class="float-label">ID:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control"
-                                                                                                       id="id_suspensao" name="id"
-                                                                                                       placeholder=""
-                                                                                                       style="background-color: black" readonly
-                                                                                                       value="${funcionario.id}">
-                                                                                            </div>
+
 
                                                                                             <div class="col-sm-1">
                                                                                                 <label class="float-label">DIAS:</label>
                                                                                                 <span class="form-bar"></span>
                                                                                                 <input type="text" class="form-control"
-                                                                                                       id="dias_suspensao" name="susp_dias" placeholder=""
+                                                                                                       id="dias" name="dias" placeholder=""
                                                                                                        style="background-color: white; color: black; font-weight: bold"
                                                                                                        value="${modelVendas.nome}" >
                                                                                             </div>
@@ -475,7 +469,7 @@
                                                                                                         <label style="color: #f2a654">MOTIVO:</label>
                                                                                                         <textarea class="form-control"
                                                                                                                   style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase"
-                                                                                                                  id="susp_motivo" name="susp_motivo"
+                                                                                                                  id="motivo" name="motivo"
                                                                                                                   required
                                                                                                                   oninput="this.value = this.value.toUpperCase();"></textarea>
 
@@ -698,6 +692,17 @@
         form.querySelector('input[name="nomeFuncionario"]').value = nomeFuncionario;
     }
     window.onload = atualizarFuncionarioFalta;
+
+    function atualizarFuncionarioSuspensao() {
+        const select = document.getElementById("funcionarioSuspensao");
+        const funcionarioId = select.value;
+        const nomeFuncionario = select.options[select.selectedIndex].text.trim();
+
+        const form = document.getElementById("formSuspensao");
+        form.querySelector('input[name="funcionarioId"]').value = funcionarioId;
+        form.querySelector('input[name="nomeFuncionario"]').value = nomeFuncionario;
+    }
+    window.onload = atualizarFuncionarioSuspensao();
 
     function limparForm(formId) {
         document.getElementById(formId).reset();

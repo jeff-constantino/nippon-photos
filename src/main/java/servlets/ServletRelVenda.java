@@ -18,8 +18,8 @@ import java.util.List;
 @WebServlet("/ServletRelVenda")
 public class ServletRelVenda extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
-    private DAOFuncionario relatorio = new DAOFuncionario();
-    private DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
+    private final DAOFuncionario relatorio = new DAOFuncionario();
+    private final DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
 
     private DAOConfig daoConfig;
 

@@ -12,7 +12,7 @@ import model.ModelContas;
 import model.ModelLogin;
 
 public class DAOLoginRepository {
-    private Connection connection;
+    private final Connection connection;
 
 
     public DAOLoginRepository() {
@@ -33,12 +33,7 @@ public class DAOLoginRepository {
 
         ResultSet resultSet = statement.executeQuery();
 
-        if (resultSet.next()) {
-            return true;/*autenticado*/
-
-        }
-
-        return false;/*n�o autenticado*/
+        return resultSet.next();/*autenticado*//*n�o autenticado*/
 
     }
 

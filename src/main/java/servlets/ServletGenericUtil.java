@@ -11,7 +11,7 @@ public class ServletGenericUtil extends HttpServlet implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    private DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
+    private final DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
 
     public Long getUserLogado(HttpServletRequest request) throws Exception {
 

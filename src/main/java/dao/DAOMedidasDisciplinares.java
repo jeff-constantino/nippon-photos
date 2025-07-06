@@ -3,13 +3,15 @@ package dao;
 import connection.SingleConnectionBanco;
 import model.ModelAdvertencia;
 import model.ModelFaltas;
+import model.ModelSuspensao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+@SuppressWarnings("ALL")
 public class DAOMedidasDisciplinares {
-    private Connection connection;
+    private final Connection connection;
 
     // Construtor para inicializar a conexão com o banco
     public DAOMedidasDisciplinares() {
@@ -43,6 +45,25 @@ public class DAOMedidasDisciplinares {
             stmt.setDate(2, falta.getDataFalta());
             stmt.setString(3, falta.getObservacoes());
             stmt.setString(4, falta.getNomeFuncionario());
+
+            stmt.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        }
+    }
+
+    public void gravarSuspensao(ModelSuspensao suspensao) throws SQLException {
+        String sql = "INSERT INTO suspensao (funcionario_id, data_suspensao, motivo, nome_funcionario, dias) " +
+                "VALUES (?, ?, UPPER(?), UPPER(?), ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, suspensao.getFuncionarioId());
+            stmt.setDate(2, suspensao.getDataSuspensao());
+            stmt.setString(3, suspensao.getMotivo());
+            stmt.setString(4, suspensao.getNomeFuncionario());
+            stmt.setInt(5, suspensao.getDias());
 
             stmt.executeUpdate();
             connection.commit();

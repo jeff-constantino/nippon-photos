@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DAOContas {
-    private Connection connection;
+    private final Connection connection;
 
     public DAOContas() {
         connection = SingleConnectionBanco.getConnection();

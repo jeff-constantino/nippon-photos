@@ -28,8 +28,8 @@ import java.util.Map;
 @WebServlet("/ServletVendas")
     public class    ServletVendas extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
-    private DAOVendasRepository daoVendas = new DAOVendasRepository();
-    private DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
+    private final DAOVendasRepository daoVendas = new DAOVendasRepository();
+    private final DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
 
     private DAOConfig daoConfig;
     private DAOControleRibbon daoControleRibbon;
@@ -119,7 +119,7 @@ import java.util.Map;
                     List<ModelVendas> listaVendasDoDia = daoVendas.vendaDia(); // Chama o método que busca vendas do dia
                     request.setAttribute("listaVendasDoDia", listaVendasDoDia); // Define a lista como atributo
                     request.getRequestDispatcher("principal/vendas.jsp").forward(request, response); // Redireciona para o JSP
-                    return; // Sai do método
+                    // Sai do método
                 }
 
                 // Ação de buscar usuários via AJAX

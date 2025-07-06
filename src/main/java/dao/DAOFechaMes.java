@@ -15,7 +15,7 @@ import java.util.List;
 
 public class DAOFechaMes {
 
-    private Connection connection;
+    private final Connection connection;
 
     public DAOFechaMes() {
         this.connection = SingleConnectionBanco.getConnection();

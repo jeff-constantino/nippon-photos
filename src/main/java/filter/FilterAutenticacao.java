@@ -57,7 +57,7 @@ public class FilterAutenticacao implements Filter {
                 RequestDispatcher redireciona = request.getRequestDispatcher("/index.jsp?url=" +urlParaAutenticar);
                 request.setAttribute("msg", "Por favor realize o login!");
                 redireciona.forward(request, response);
-                return;/*para a execucao e redireciona ao login*/
+                /*para a execucao e redireciona ao login*/
             }else {
 
                 connection.setAutoCommit(false); // Setar autocommit para off

@@ -18,8 +18,8 @@ import java.util.List;
 @WebServlet(name = "ServletLogin", value = "/ServletLogin")
 public class ServletLogin extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private DAOLoginRepository daoLoginRepository = new DAOLoginRepository();
-    private DAOContas daoContas = new DAOContas(); // Instância do DAOContas
+    private final DAOLoginRepository daoLoginRepository = new DAOLoginRepository();
+    private final DAOContas daoContas = new DAOContas(); // Instância do DAOContas
 
     public ServletLogin() {
 

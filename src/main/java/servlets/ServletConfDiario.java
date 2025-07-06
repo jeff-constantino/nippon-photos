@@ -12,6 +12,7 @@ import model.ModelConfDiario;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -20,7 +21,7 @@ import java.util.List;
 @WebServlet("/ServletConfDiario")
 public class ServletConfDiario extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private DAOConfDiario daoConfDiario;
+    private final DAOConfDiario daoConfDiario;
 
     public ServletConfDiario() {
         super();
@@ -82,7 +83,7 @@ public class ServletConfDiario extends HttpServlet {
             if (conf != null) {
                 // Armazena o objeto conf no request para ser acessado no JSP
                 request.setAttribute("conf_diario", conf);
-                System.out.println(conf.toString());
+                System.out.println(conf);
 
 
                 // Use forward em vez de sendRedirect
@@ -141,7 +142,7 @@ public class ServletConfDiario extends HttpServlet {
             e.printStackTrace();
 
             // Mensagem de erro enviada no redirecionamento
-            request.setAttribute("msg", "Erro: " + URLEncoder.encode(e.getMessage(), "UTF-8"));
+            request.setAttribute("msg", "Erro: " + URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8));
             request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);
         }
     }

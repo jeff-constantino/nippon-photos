@@ -17,7 +17,7 @@ import java.util.List;
 public class ServletUsuarioController extends ServletGenericUtil{
 
     private static final long serialVersionUID = 1L;
-    private DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
+    private final DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
 
     public ServletUsuarioController() {
 

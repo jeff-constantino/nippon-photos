@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DAOVales {
 
-    private Connection connection;
+    private final Connection connection;
 
     // Construtor para inicializar a conexão com o banco
     public DAOVales() {

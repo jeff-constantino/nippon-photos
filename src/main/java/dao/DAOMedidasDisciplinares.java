@@ -55,8 +55,8 @@ public class DAOMedidasDisciplinares {
     }
 
     public void gravarSuspensao(ModelSuspensao suspensao) throws SQLException {
-        String sql = "INSERT INTO suspensao (funcionario_id, data_suspensao, motivo, nome_funcionario, dias) " +
-                "VALUES (?, ?, UPPER(?), UPPER(?), ?)";
+        String sql = "INSERT INTO suspensao (funcionario_id, data_suspensao, motivo, nome_funcionario, dias, dsr) " +
+                "VALUES (?, ?, UPPER(?), UPPER(?), ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, suspensao.getFuncionarioId());
@@ -64,6 +64,7 @@ public class DAOMedidasDisciplinares {
             stmt.setString(3, suspensao.getMotivo());
             stmt.setString(4, suspensao.getNomeFuncionario());
             stmt.setInt(5, suspensao.getDias());
+            stmt.setInt(6, suspensao.getDsr());
 
             stmt.executeUpdate();
             connection.commit();

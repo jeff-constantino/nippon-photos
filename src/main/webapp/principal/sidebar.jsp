@@ -45,7 +45,7 @@
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletDre">DRE</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletContas">Contas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletDespesas">Despesas</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="principal/salarios.jsp">Salários</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletSalarios">Salários</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletVales">Vales</a></li>
 
 

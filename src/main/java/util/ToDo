@@ -4,7 +4,13 @@ criar comparativo de vendas mes/ano
 
 APRENDER DOCKER
 
+<div class="row align-items-center mb-3">
 
+                                    <!-- Mês/Ano -->
+                                    <div class="col text-center">
+                                        <h2 style="text-transform: uppercase; color: #d39e00">${mesAno}</h2>
+                                    </div>
+                                </div>
 
 
 

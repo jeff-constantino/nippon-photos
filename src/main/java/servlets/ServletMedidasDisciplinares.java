@@ -119,6 +119,7 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                 String motivo = request.getParameter("motivo");
                 String nomeFuncionario = request.getParameter("nomeFuncionario");
                 String dias  = request.getParameter("dias");
+                String dsr = request.getParameter("dsr");
 
                 if (funcionarioId == null || funcionarioId.isEmpty()) {
                     msg = "Funcionário não selecionado.";
@@ -134,6 +135,7 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                     suspensao.setMotivo(motivo);
                     suspensao.setNomeFuncionario(nomeFuncionario);
                     suspensao.setDias(Integer.parseInt(dias));
+                    suspensao.setDsr(Integer.parseInt(dsr));
 
                     dao.gravarSuspensao(suspensao);
                     msg = "Suspensão registrada com sucesso!";

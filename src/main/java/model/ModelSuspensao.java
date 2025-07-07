@@ -12,6 +12,7 @@ public class ModelSuspensao implements Serializable {
     private Date dataSuspensao;
     private String motivo;
     private int dias;
+    private int dsr;
 
     public Long getId() {
         return id;
@@ -59,5 +60,13 @@ public class ModelSuspensao implements Serializable {
 
     public void setDias(int dias) {
         this.dias = dias;
+    }
+
+    public int getDsr() {
+        return dsr;
+    }
+
+    public void setDsr(int dsr) {
+        this.dsr = dsr;
     }
 }

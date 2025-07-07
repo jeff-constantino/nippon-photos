@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
@@ -38,7 +39,7 @@
                                                     <div class="modal-content">
                                                           <div class="modal-body">
 
-                                                            <form action="<%= request.getContextPath() %>/ServletFuncionario" method="get" id="formVendaTotal" name="formVendaTotal">
+                                                            <form action="<%= request.getContextPath() %>/ServletSalarios" method="get" id="formVendaTotal" name="formVendaTotal">
                                                                 <input type="hidden" name="acao" value="imprimirVendasFuncionario">
                                                                 <div class="form-row align-items-center">
                                                                     <div class="col-auto">
@@ -100,6 +101,7 @@
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
+
                             <div class="card-body">
                                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalData">
                                     <h4>Gerar Relatório</h4>
@@ -112,26 +114,20 @@
 
 
                                 <div class="row align-items-center mb-3">
-                                    <div class="col-2">
-                                        <label class="float-label">ID:</label>
-                                        <span class="form-bar"></span>
-                                        <input type="text" class="form-control" id="FechaId"
-                                               name="id" placeholder=""
-                                               style="text-align: center; background-color: black" readonly
-                                               value="${funcionarioId}">
-                                    </div>
-                                    <div class="col-auto">
-                                        <label for="data_fecha_mes">Data Fechamento:</label>
-                                        <input type="date" class="form-control"
-                                               id="data_fecha_mes"
-                                               name="data_fecha_mes"
-                                               value="${data_fecha_mes}">
+
+                                    <div class="row align-items-center mb-3">
+
+                                        <div class="col text-center">
+                                            <h2 style="text-transform: uppercase; color: #d39e00">${mesAno}</h2>
+                                        </div>
                                     </div>
                                 </div>
 
+
                                 <h4 class="card-title" style="text-align: center">VENDAS TOTAIS DO FUNCIONÁRIO</h4>
 
-                                <div style="overflow-x: hidden; overflow-y: hidden;"> 
+                                <div style="overflow-x: hidden; overflow-y: hidden;">
+
                                     <table class="table" id="tabelarelvendas">
                                         <thead>
                                         <tr>
@@ -140,6 +136,10 @@
                                             <th scope="col">TOTAL DE ENCARTES</th>
                                             <th scope="col">TOTAL DE DIGITAIS</th>
                                             <th scope="col">TOTAL DE SOBRAS</th>
+                                            <th scope="col">APROVEITAMENTO</th>
+                                            <th scope="col">ID</th>
+
+
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -150,6 +150,20 @@
                                                 <td><c:out value="${mv.enc_total}"></c:out></td>
                                                 <td><c:out value="${mv.dig_total}"></c:out></td>
                                                 <td><c:out value="${mv.sobras}"></c:out></td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${mv.sobras + mv.ft_total > 0}">
+                                                            <fmt:formatNumber value="${(mv.ft_total * 100) / (mv.sobras + mv.ft_total)}" maxFractionDigits="2" />%
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            0%
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                                <td><c:out value="${funcionarioId}"></c:out></td>
+
+
+
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -158,7 +172,7 @@
                                     <!-- Controles de paginação -->
                                     <div class="pagination">
                                         <c:forEach var="i" begin="1" end="${totalPaginas}">
-                                            <a href="ServletFuncionario?acao=imprimirRelatorioVendas&pagina=${i}"
+                                            <a href="ServletSalarios?acao=imprimirRelatorioVendas&pagina=${i}"
                                                class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
                                         </c:forEach>
                                     </div>
@@ -221,7 +235,7 @@
                                     <div class="pagination">
 
                                         <c:forEach var="i" begin="1" end="${totalPaginas}">
-                                            <a href="ServletFuncionario?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
+                                            <a href="ServletSalarios?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
                                         </c:forEach>
 
                                     </div>
@@ -243,38 +257,30 @@
                             <div class="card-body">
 
 
-                                <h4 class="card-title" STYLE="text-align: center">FINANCEIRO</h4>
+                                <h4 class="card-title" STYLE="text-align: center">VALOR DE DESCONTOS DISCIPLINARES</h4>
 
                                 <div  style="overflow-x: hidden; overflow-y: hidden;">
                                     <table class="table" id="tabelafuncfinanceiro">
                                         <thead>
                                         <tr>
 
-
-                                            <th scope="col">NOME</th>
-
-                                            <th scope="col">TODAL DE ATRASOS</th>
-                                            <th scope="col">TOTAL DE FALTAS</th>
-                                            <th scope="col">TOTAL DE ADVERTÊNCIAS</th>
-                                            <th scope="col">TOTAL DE SUSPENSÕES</th>
+                                            <th scope="col">VALOR DE ATRASOS</th>
+                                            <th scope="col">VALOR DE FALTAS</th>
+                                            <th scope="col">VALOR DE SUSPENSÕES + DSR</th>
 
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <c:forEach items="${}" var="hc">
                                             <tr>
-                                                <td>
-                                                    <c:out value="${hc.nome}"></c:out>
-                                                </td>
+
                                                 <td>
                                                     <c:out value="${hc.atrasos_total}"></c:out>
                                                 </td>
                                                 <td>
                                                     <c:out value="${hc.faltas_total}"></c:out>
                                                 </td>
-                                                <td>
-                                                    <c:out value="${hc.advertencias_total}"></c:out>
-                                                </td>
+
                                                 <td>
                                                     <c:out value="${hc.suspensoes_total}"></c:out>
                                                 </td>
@@ -287,7 +293,7 @@
                                     <div class="pagination">
 
                                         <c:forEach var="i" begin="1" end="${totalPaginas}">
-                                            <a href="ServletFuncionario?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
+                                            <a href="ServletSalarios?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
                                         </c:forEach>
 
                                     </div>
@@ -342,14 +348,16 @@
                                                value="${fecha_mes.fgts}">
                                     </div>
 
+
                                     <!-- Descontos Total -->
                                     <div class="col-auto">
-                                        <label style="color: #f2a654">DESCONTOS TOTAL</label>
+                                        <label style="color: #f2a654">DESCONTOS DISCIPLINARES</label>
                                         <input type="number" class="form-control"
                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                id="descontos_mes" name="descontos_mes"
                                                value="${fecha_mes.descontos_mes}">
                                     </div>
+
 
 
                                 </div>
@@ -478,6 +486,99 @@
             delay: { "show": 100, "hide": 100 } // O tooltip vai aparecer em 100ms
         });
     });
+
+
+   function setData() {
+       // Obtém o valor do campo dataInicial
+       var dataInicial = document.getElementById("dataInicial").value;
+
+       if (dataInicial) {
+           // Divide a data inicial em dia, mês e ano
+           var partesData = dataInicial.split('-'); // Assume que o formato é yyyy-mm-dd
+           var ano = parseInt(partesData[0], 10);
+           var mes = parseInt(partesData[1], 10) - 1; // Mês é 0-based no JavaScript
+           var dia = parseInt(partesData[2], 10);
+
+           // Cria um objeto Date com os valores extraídos
+           var data = new Date(ano, mes, dia);
+
+           // Verifica se a data é válida
+           if (!isNaN(data.getTime())) {
+               // Calcula o último dia do mês da data inicial
+               var ultimoDia = new Date(ano, mes + 1, 0);
+
+               // Formata a data final no padrão yyyy-mm-dd
+               var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+               var mesFinal = String(mes + 1).padStart(2, '0'); // Ajusta o mês para exibição (1-12)
+               var dataFinal = ano + '-' + mesFinal + '-' + diaFinal;
+
+               // Define o valor do campo dataFinal
+               document.getElementById("dataFinal").value = dataFinal;
+           } else {
+               console.error("Data inicial inválida.");
+               document.getElementById("dataFinal").value = ""; // Limpa o campo se a data for inválida
+           }
+       } else {
+           console.error("Data inicial não selecionada.");
+           document.getElementById("dataFinal").value = ""; // Limpa o campo se a data inicial estiver vazia
+       }
+   }
+
+   // Função para inicializar os campos de data ao abrir o modal
+   function initializeDates() {
+       // Obtém a data atual
+       var today = new Date();
+
+       // Formata a data inicial no padrão yyyy-mm-dd
+       var diaInicial = String(today.getDate()).padStart(2, '0');
+       var mesInicial = String(today.getMonth() + 1).padStart(2, '0');
+       var anoInicial = today.getFullYear();
+       var dataInicial = anoInicial + '-' + mesInicial + '-' + diaInicial;
+
+       // Calcula o último dia do mês atual
+       var ultimoDia = new Date(anoInicial, today.getMonth() + 1, 0);
+
+       // Formata a data final no padrão yyyy-mm-dd
+       var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+       var mesFinal = String(today.getMonth() + 1).padStart(2, '0'); // Usa o mês da data inicial
+       var anoFinal = today.getFullYear();
+       var dataFinal = anoFinal + '-' + mesFinal + '-' + diaFinal;
+
+       // Define os valores dos campos
+       document.getElementById("dataInicial").value = dataInicial;
+       document.getElementById("dataFinal").value = dataFinal;
+   }
+
+   // Inicializa os campos de data quando o modal é aberto
+   document.addEventListener('DOMContentLoaded', function () {
+       const modal = document.getElementById('modalData'); // Substitua 'meuModal' pelo ID do seu modal
+       if (modal) {
+           modal.addEventListener('shown.bs.modal', function () {
+               // Verifica se os campos já foram inicializados
+               if (!document.getElementById("dataInicial").value) {
+                   initializeDates();
+               }
+           });
+       }
+
+       // Adiciona o evento onchange ao campo dataInicial
+       document.getElementById("dataInicial").addEventListener('change', setData);
+   });
+
+   function atualizarFuncionarioSelecionado(formId) {
+       const select = document.getElementById("funcionarioId");
+       const funcionarioId = select.value;
+       const nomeFuncionario = select.options[select.selectedIndex].text.trim();
+
+       const form = document.getElementById(formId);
+       form.querySelector('input[name="funcionarioId"]').value = funcionarioId;
+       // form.querySelector('input[name="id_advertencia"]').value = funcionarioId;
+       form.querySelector('input[name="nomeFuncionario"]').value = nomeFuncionario;
+   }
+
+   window.onload = function () {
+       atualizarFuncionarioSelecionado('formAdvertencia');
+   };
 </script>
 </body>
 </html>

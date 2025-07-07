@@ -453,7 +453,15 @@
                                                                                                 <input type="text" class="form-control"
                                                                                                        id="dias" name="dias" placeholder=""
                                                                                                        style="background-color: white; color: black; font-weight: bold"
-                                                                                                       value="${modelVendas.nome}" >
+                                                                                                       >
+                                                                                            </div>
+                                                                                            <div class="col-sm-1">
+                                                                                                <label class="float-label">DSR:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control"
+                                                                                                       id="dsr" name="dsr" placeholder=""
+                                                                                                       style="background-color: white; color: black; font-weight: bold"
+                                                                                                        >
                                                                                             </div>
 
                                                                                         </div>
@@ -675,7 +683,7 @@
 
         const form = document.getElementById(formId);
         form.querySelector('input[name="funcionarioId"]').value = funcionarioId;
-        // form.querySelector('input[name="id_advertencia"]').value = funcionarioId;
+
         form.querySelector('input[name="nomeFuncionario"]').value = nomeFuncionario;
     }
 

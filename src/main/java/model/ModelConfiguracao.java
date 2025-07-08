@@ -33,10 +33,154 @@ public class ModelConfiguracao implements java.io.Serializable {
     private BigDecimal deb_outros;
     private BigDecimal cred_outros;
 
+    private  Long id_inss_1;
+    private  BigDecimal inss_1;
+    private BigDecimal min_inss_1;
+    private BigDecimal max_inss_1;
+
+    private Long id_inss_2;
+    private BigDecimal inss_2;
+    private BigDecimal min_inss_2;
+    private BigDecimal max_inss_2;
+
+    private Long id_inss_3;
+    private BigDecimal inss_3;
+    private BigDecimal min_inss_3;
+    private BigDecimal max_inss_3;
+
+    private Long id_inss_4;
+    private BigDecimal inss_4;
+    private BigDecimal min_inss_4;
+    private BigDecimal max_inss_4;
 
 
+    public Long getId_inss_1() {
+        return id_inss_1;
+    }
 
+    public void setId_inss_1(Long id_inss_1) {
+        this.id_inss_1 = id_inss_1;
+    }
 
+    public BigDecimal getInss_1() {
+        return inss_1;
+    }
+
+    public void setInss_1(BigDecimal inss_1) {
+        this.inss_1 = inss_1;
+    }
+
+    public BigDecimal getMin_inss_1() {
+        return min_inss_1;
+    }
+
+    public void setMin_inss_1(BigDecimal min_inss_1) {
+        this.min_inss_1 = min_inss_1;
+    }
+
+    public BigDecimal getMax_inss_1() {
+        return max_inss_1;
+    }
+
+    public void setMax_inss_1(BigDecimal max_inss_1) {
+        this.max_inss_1 = max_inss_1;
+    }
+
+    public Long getId_inss_2() {
+        return id_inss_2;
+    }
+
+    public void setId_inss_2(Long id_inss_2) {
+        this.id_inss_2 = id_inss_2;
+    }
+
+    public BigDecimal getInss_2() {
+        return inss_2;
+    }
+
+    public void setInss_2(BigDecimal inss_2) {
+        this.inss_2 = inss_2;
+    }
+
+    public BigDecimal getMin_inss_2() {
+        return min_inss_2;
+    }
+
+    public void setMin_inss_2(BigDecimal min_inss_2) {
+        this.min_inss_2 = min_inss_2;
+    }
+
+    public BigDecimal getMax_inss_2() {
+        return max_inss_2;
+    }
+
+    public void setMax_inss_2(BigDecimal max_inss_2) {
+        this.max_inss_2 = max_inss_2;
+    }
+
+    public Long getId_inss_3() {
+        return id_inss_3;
+    }
+
+    public void setId_inss_3(Long id_inss_3) {
+        this.id_inss_3 = id_inss_3;
+    }
+
+    public BigDecimal getInss_3() {
+        return inss_3;
+    }
+
+    public void setInss_3(BigDecimal inss_3) {
+        this.inss_3 = inss_3;
+    }
+
+    public BigDecimal getMin_inss_3() {
+        return min_inss_3;
+    }
+
+    public void setMin_inss_3(BigDecimal min_inss_3) {
+        this.min_inss_3 = min_inss_3;
+    }
+
+    public BigDecimal getMax_inss_3() {
+        return max_inss_3;
+    }
+
+    public void setMax_inss_3(BigDecimal max_inss_3) {
+        this.max_inss_3 = max_inss_3;
+    }
+
+    public Long getId_inss_4() {
+        return id_inss_4;
+    }
+
+    public void setId_inss_4(Long id_inss_4) {
+        this.id_inss_4 = id_inss_4;
+    }
+
+    public BigDecimal getInss_4() {
+        return inss_4;
+    }
+
+    public void setInss_4(BigDecimal inss_4) {
+        this.inss_4 = inss_4;
+    }
+
+    public BigDecimal getMin_inss_4() {
+        return min_inss_4;
+    }
+
+    public void setMin_inss_4(BigDecimal min_inss_4) {
+        this.min_inss_4 = min_inss_4;
+    }
+
+    public BigDecimal getMax_inss_4() {
+        return max_inss_4;
+    }
+
+    public void setMax_inss_4(BigDecimal max_inss_4) {
+        this.max_inss_4 = max_inss_4;
+    }
 
     public Long getIdConf() {
         return idConf;

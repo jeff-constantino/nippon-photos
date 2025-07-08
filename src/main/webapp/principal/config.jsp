@@ -8,6 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -80,8 +82,8 @@
                     <div class="col-md-4 grid-margin">
                         <div class="card text-center">
                             <div class="card-body">
-                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalGeral">
-                                    <h4>Configurações Gerais</h4>
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalINSS">
+                                    <h4>Configurações INSS</h4>
                                 </button>
                             </div>
                         </div>
@@ -400,92 +402,82 @@
 
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="modalGeral" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal fade" id="modalINSS" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl mt-5">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticFinalizar">Configurações Gerais</h5>
+                                                            <h5 class="modal-title" id="staticFinalizar">Configurações INSS</h5>
 
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="container-fluid">
                                                                 <div class="row">
-                                                                    <form id="configFormGeral" method="post" action="<%= request.getContextPath() %>/ServletConfig">
+                                                                    <form action="${pageContext.request.contextPath}/ServletConfiguracao" method="post" id="formINSS">
+                                                                        <input type="hidden" name="acao" value="inss" />
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="staticFinalizar">Configurações INSS</h5>
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                        </div>
+                                                                        <div class="modal-body container-fluid">
+                                                                            <div class="row">
+                                                                                <!-- Faixa 1 -->
+                                                                                <div class="col-12 mb-3 border rounded p-3">
+                                                                                    <h6>Faixa 1</h6>
+                                                                                    <input type="hidden" name="id_inss_1" value="${configInss.id_inss_1}" />
 
-                                                                        <div class="row">
-                                                                            <div class="col-auto">
-                                                                                <span style="color:#1ad76b; text-align: center">${msg}</span>
+                                                                                    <label>INSS (%)</label>
+                                                                                    <input type="number" name="inss_1" step="0.01" min="0" max="100" class="form-control" value="${configInss.inss_1}" required />
+
+                                                                                    <label>Salário Mínimo</label>
+                                                                                    <input type="number" name="min_inss_1" step="0.01" min="0" class="form-control" value="${configInss.min_inss_1}" required />
+
+                                                                                    <label>Salário Máximo</label>
+                                                                                    <input type="number" name="max_inss_1" step="0.01" min="0" class="form-control" value="${configInss.max_inss_1}" required />
+                                                                                </div>
+
+                                                                                <!-- Faixa 2 -->
+                                                                                <div class="col-12 mb-3 border rounded p-3">
+                                                                                    <h6>Faixa 2</h6>
+                                                                                    <input type="hidden" name="id_inss_2" value="${configInss.id_inss_2}" />
+                                                                                    <label>INSS (%)</label>
+                                                                                    <input type="number" name="inss_2" step="0.01" min="0" max="100" class="form-control" value="${configInss.inss_2}" required />
+                                                                                    <label>Salário Mínimo</label>
+                                                                                    <input type="number" name="min_inss_2" step="0.01" min="0" class="form-control" value="${configInss.min_inss_2}" required />
+                                                                                    <label>Salário Máximo</label>
+                                                                                    <input type="number" name="max_inss_2" step="0.01" min="0" class="form-control" value="${configInss.max_inss_2}" required />
+                                                                                </div>
+
+                                                                                <!-- Faixa 3 -->
+                                                                                <div class="col-12 mb-3 border rounded p-3">
+                                                                                    <h6>Faixa 3</h6>
+                                                                                    <input type="hidden" name="id_inss_3" value="${configInss.id_inss_3}" />
+                                                                                    <label>INSS (%)</label>
+                                                                                    <input type="number" name="inss_3" step="0.01" min="0" max="100" class="form-control" value="${configInss.inss_3}" required />
+                                                                                    <label>Salário Mínimo</label>
+                                                                                    <input type="number" name="min_inss_3" step="0.01" min="0" class="form-control" value="${configInss.min_inss_3}" required />
+                                                                                    <label>Salário Máximo</label>
+                                                                                    <input type="number" name="max_inss_3" step="0.01" min="0" class="form-control" value="${configInss.max_inss_3}" required />
+                                                                                </div>
+
+                                                                                <!-- Faixa 4 -->
+                                                                                <div class="col-12 mb-3 border rounded p-3">
+                                                                                    <h6>Faixa 4</h6>
+                                                                                    <input type="hidden" name="id_inss_4" value="${configInss.id_inss_4}" />
+                                                                                    <label>INSS (%)</label>
+                                                                                    <input type="number" name="inss_4" step="0.01" min="0" max="100" class="form-control" value="${configInss.inss_4}" required />
+                                                                                    <label>Salário Mínimo</label>
+                                                                                    <input type="number" name="min_inss_4" step="0.01" min="0" class="form-control" value="${configInss.min_inss_4}" required />
+                                                                                    <label>Salário Máximo</label>
+                                                                                    <input type="number" name="max_inss_4" step="0.01" min="0" class="form-control" value="${configInss.max_inss_4}" required />
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-
-                                                                        <div class="row mb-3">
-                                                                            <div class="col-sm-1">
-                                                                                <label class="float-label">ID:</label>
-                                                                                <span class="form-bar"></span>
-                                                                                <input type="text" class="form-control" style="background-color: black" id="idConf_geral"
-                                                                                       name="idConf" placeholder=""
-                                                                                       value="${modelConfig.idConf}" readonly>
-                                                                            </div>
-
-                                                                            <div class="col-4">
-                                                                                <label for="conf_name_geral">Configuração</label>
-                                                                                <input type="text" class="form-control" id="conf_name_geral"
-                                                                                       name="conf_name" required
-                                                                                       value="${modelConfig.conf_name}" style="color: black" readonly>
-                                                                            </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="submit" class="btn btn-primary">Salvar</button>
                                                                         </div>
-
-                                                                        <div class="row mb-4 d-flex">
-                                                                            <div class="col-3">
-                                                                                <label for="conf1_nome">Produto 1</label>
-                                                                                <input type="text" class="form-control" id="conf1_nome_geral" name="conf1_nome" required value="${modelConfig.conf1_nome}">
-                                                                            </div>
-                                                                            <div class="col-3">
-                                                                                <label for="conf1_valor">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf1_valor_geral" name="conf1_valor" required value="${modelConfig.conf1_valor}">
-                                                                            </div>
-
-                                                                        </div>
-
-                                                                        <div class="row mb-4 d-flex">
-                                                                            <div class="col-3">
-                                                                                <label for="conf2_nome">Produto 2</label>
-                                                                                <input type="text" class="form-control" id="conf2_nome_geral" name="conf2_nome" required value="${modelConfig.conf2_nome}">
-                                                                            </div>
-                                                                            <div class="col-3">
-                                                                                <label for="conf2_valor">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf2_valor_geral" name="conf2_valor" required value="${modelConfig.conf2_valor}">
-                                                                            </div>
-
-                                                                        </div>
-
-                                                                        <div class="row mb-4 d-flex">
-                                                                            <div class="col-3">
-                                                                                <label for="conf3_nome">Produto 3</label>
-                                                                                <input type="text" class="form-control" id="conf3_nome_geral" name="conf3_nome" required value="${modelConfig.conf3_nome}">
-                                                                            </div>
-                                                                            <div class="col-3">
-                                                                                <label for="conf3_valor">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf3_valor_geral" name="conf3_valor" required value="${modelConfig.conf3_valor}">
-                                                                            </div>
-
-                                                                        </div>
-                                                                        <div class="row mb-4 d-flex">
-                                                                            <div class="col-3">
-                                                                                <label for="conf4_nome_geral">Produto 4</label>
-                                                                                <input type="text" class="form-control" id="conf4_nome_geral" name="conf3_nome" required value="${modelConfig.conf4_nome}">
-                                                                            </div>
-                                                                            <div class="col-3">
-                                                                                <label for="conf4_valor_geral">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf4_valor_geral" name="conf3_valor" required value="${modelConfig.conf4_valor}">
-                                                                            </div>
-
-                                                                        </div>
-
-                                                                        <button type="submit" class="btn btn-outline-success">Salvar</button>
-
                                                                     </form>
+
 
 
 
@@ -1057,10 +1049,64 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">TABELA DE INSS</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th>Faixa</th>
+                                            <th>ID</th>
+                                            <th>INSS (%)</th>
+                                            <th>Salário Mínimo</th>
+                                            <th>Salário Máximo</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>${configInss.id_inss_1}</td>
+                                            <td><fmt:formatNumber value="${configInss.inss_1}" pattern="0.00"/></td>
+                                            <td><fmt:formatNumber value="${configInss.min_inss_1}" type="currency"/></td>
+                                            <td><fmt:formatNumber value="${configInss.max_inss_1}" type="currency"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>${configInss.id_inss_2}</td>
+                                            <td><fmt:formatNumber value="${configInss.inss_2}" pattern="0.00"/></td>
+                                            <td><fmt:formatNumber value="${configInss.min_inss_2}" type="currency"/></td>
+                                            <td><fmt:formatNumber value="${configInss.max_inss_2}" type="currency"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>${configInss.id_inss_3}</td>
+                                            <td><fmt:formatNumber value="${configInss.inss_3}" pattern="0.00"/></td>
+                                            <td><fmt:formatNumber value="${configInss.min_inss_3}" type="currency"/></td>
+                                            <td><fmt:formatNumber value="${configInss.max_inss_3}" type="currency"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>${configInss.id_inss_4}</td>
+                                            <td><fmt:formatNumber value="${configInss.inss_4}" pattern="0.00"/></td>
+                                            <td><fmt:formatNumber value="${configInss.min_inss_4}" type="currency"/></td>
+                                            <td><fmt:formatNumber value="${configInss.max_inss_4}" type="currency"/></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
 
-            <!-- content-wrapper ends -->
+
+
+                <!-- content-wrapper ends -->
             <!-- partial:partials/_footer.html -->
             <jsp:include page="footer.jsp"></jsp:include>
             <!-- partial -->
@@ -1098,7 +1144,7 @@
             $('#msgModal').modal('show'); // Exibe o modal com a mensagem
 
             // Remove a mensagem da sessão após exibi-la
-            $.post("${pageContext.request.contextPath}/ServletVendas", { acao: "limparMsg" });
+            $.post("${pageContext.request.contextPath}/ServletConfig", { acao: "limparMsg" });
         }
     });
 

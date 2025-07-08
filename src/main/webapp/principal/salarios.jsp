@@ -318,8 +318,8 @@
                                         <label style="color: #f2a654">SALÁRIO BRUTO</label>
                                         <input type="number" class="form-control"
                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               tabindex="-1" id="salario_bruto" name="salario_bruto"
-                                               value="${fecha_mes.salario_bruto}">
+                                               id="salario_bruto" name="salario_bruto"
+                                               value="">
                                     </div>
 
                                     <!-- Vales -->
@@ -328,7 +328,7 @@
                                         <input type="number" class="form-control"
                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                tabindex="-1" id="vales_mes" name="vales_mes"
-                                               value="${fecha_mes.vales_mes}">
+                                               value="">
                                     </div>
 
                                     <!-- INSS -->
@@ -336,7 +336,8 @@
                                         <label style="color: #f2a654">INSS</label>
                                         <input type="number" class="form-control"
                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               id="inss" name="inss" value="${fecha_mes.inss}">
+                                               id="inss" name="inss"
+                                                readonly step="0.01">
                                     </div>
 
                                     <!-- FGTS -->
@@ -345,9 +346,8 @@
                                         <input type="number" class="form-control"
                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                tabindex="-1" id="fgts" name="fgts"
-                                               value="${fecha_mes.fgts}">
+                                               >
                                     </div>
-
 
                                     <!-- Descontos Total -->
                                     <div class="col-auto">
@@ -355,27 +355,19 @@
                                         <input type="number" class="form-control"
                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
                                                id="descontos_mes" name="descontos_mes"
-                                               value="${fecha_mes.descontos_mes}">
+                                               value="">
                                     </div>
-
-
-
                                 </div>
-                                <div class="row align-items-center">
-                                <!-- Salário Líquido -->
-                                <div class="col-3" STYLE="align-content: center">
-                                    <label style="color: #f2a654">SALÁRIO LIQUÍDO</label>
-                                    <input type="number" class="form-control" readonly
-                                           style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                           tabindex="-1" id="salario_liquido" name="salario_liquido"
-                                           value="${fecha_mes.salario_liquido}">
 
-                                </div>
-                                </div>
-                                <div class="table-responsive mt-3">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                    </table>
+                                <div class="row align-items-center mt-3">
+                                    <!-- Salário Líquido -->
+                                    <div class="col-3" style="align-content: center">
+                                        <label style="color: #f2a654">SALÁRIO LÍQUIDO</label>
+                                        <input type="number" class="form-control" readonly
+                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                               tabindex="-1" id="salario_liquido" name="salario_liquido"
+                                               value="">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -579,6 +571,69 @@
    window.onload = function () {
        atualizarFuncionarioSelecionado('formAdvertencia');
    };
+
+// *******************************************************************
+   const faixasInss = [
+       {
+           min: parseFloat('${configInss.min_inss_1}'),
+           max: parseFloat('${configInss.max_inss_1}'),
+           aliquota: parseFloat('${configInss.inss_1}')
+       },
+       {
+           min: parseFloat('${configInss.min_inss_2}'),
+           max: parseFloat('${configInss.max_inss_2}'),
+           aliquota: parseFloat('${configInss.inss_2}')
+       },
+       {
+           min: parseFloat('${configInss.min_inss_3}'),
+           max: parseFloat('${configInss.max_inss_3}'),
+           aliquota: parseFloat('${configInss.inss_3}')
+       },
+       {
+           min: parseFloat('${configInss.min_inss_4}'),
+           max: parseFloat('${configInss.max_inss_4}'),
+           aliquota: parseFloat('${configInss.inss_4}')
+       }
+   ];
+
+   // Alíquota fixa do FGTS vinda do backend (ex: 8%)
+   const fgtsAliquota = parseFloat('${configSalario.fgts}'); // já vem como número
+
+   const salarioInput = document.getElementById('salario_bruto');
+   const inssInput = document.getElementById('inss');
+   const fgtsInput = document.getElementById('fgts');
+
+   salarioInput.addEventListener('input', function () {
+       let salario = parseFloat(this.value);
+
+       // Se salário inválido, zera os campos
+       if (isNaN(salario) || salario <= 0) {
+           inssInput.value = 0;
+           fgtsInput.value = 0;
+           return;
+       }
+
+       // === Cálculo do INSS ===
+       let aliquotaInss = 0;
+
+       for (let faixa of faixasInss) {
+           if (salario >= faixa.min && salario <= faixa.max) {
+               aliquotaInss = faixa.aliquota / 100;
+               break;
+           }
+       }
+
+       if (aliquotaInss === 0 && salario > faixasInss[faixasInss.length - 1].max) {
+           aliquotaInss = faixasInss[faixasInss.length - 1].aliquota / 100;
+       }
+
+       let valorInss = salario * aliquotaInss;
+       inssInput.value = valorInss.toFixed(2);
+
+       // === Cálculo do FGTS ===
+       let valorFgts = salario * (fgtsAliquota / 100);
+       fgtsInput.value = valorFgts.toFixed(2);
+   });
 </script>
 </body>
 </html>

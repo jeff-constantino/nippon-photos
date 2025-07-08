@@ -1,16 +1,28 @@
-criar DRE
-criar Salarios,ajustar data, ajustar selec funcionario (usar o selec de medidas e gerar conforme o select) etc..
-criar comparativo de vendas mes/ano
 
+criar Salarios, BUSCAR HISTORICO DE CONDUTA, FAZER CALCULOS (TALVEZ ADCIONAR ALGO NAS CONFIG INSS ALIQUOTA/FGTS 8%)
+
+de R$1,00 até R$ 1.518,00: 7,5%
+De R$ 1.518,01 até R$ 2.793,88: 9%
+De R$ 2.793,89 até R$ 4.190,83: 12%
+De R$ 4.190,84 até R$ 8.157,41: 14%
+
+criar comparativo de vendas mes/ano
+criar DRE
 APRENDER DOCKER
 
-<div class="row align-items-center mb-3">
 
-                                    <!-- Mês/Ano -->
-                                    <div class="col text-center">
-                                        <h2 style="text-transform: uppercase; color: #d39e00">${mesAno}</h2>
-                                    </div>
-                                </div>
+servlet buscou esses, buscar tbm valores dos produtos
+// Carrega INSS e adiciona ao request
+            ModelConfiguracao configInss = daoConfiguracao.buscarFaixasInss();
+            request.setAttribute("configInss", configInss);
+            // Carrega as configurações de salário que contém o FGTS
+            List<ModelConfiguracao> configsSalarios = daoConfiguracao.consultarSalarios();
+            ModelConfiguracao configSalario = null;
+            if (configsSalarios != null && !configsSalarios.isEmpty()) {
+                configSalario = configsSalarios.get(0); // pegar primeira config, por exemplo
+            }
+            request.setAttribute("configSalario", configSalario);
 
-
-
+fazer o calculo de salario bruto
+buscar os vales de acordo com o funcionario, somar todos e lançar no input
+calcular o valor de atrasos, faltas e suspensões, colocar no input proprio, somar tudo e colocar no input geral de descontos

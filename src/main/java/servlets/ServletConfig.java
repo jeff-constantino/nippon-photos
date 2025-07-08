@@ -27,24 +27,24 @@ public class ServletConfig extends ServletGenericUtil {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-
         try {
             List<ModelConfig> configs = daoConfig.consultarTodasConfigs();
             List<ModelConfiguracao> configsSalarios = daoConfiguracao.consultarSalarios();
             List<ModelConfiguracao> configsJuros = daoConfiguracao.consultarJuros();
+            ModelConfiguracao configInss = daoConfiguracao.buscarFaixasInss();  // adiciona aqui
 
             request.setAttribute("configsJuros", configsJuros);
             request.setAttribute("configsSalarios", configsSalarios);
-            request.setAttribute("configs", configs); // Adiciona a lista ao request
-            request.getRequestDispatcher("/principal/config.jsp").forward(request, response); // Redireciona para a JSP
+            request.setAttribute("configs", configs);
+            request.setAttribute("configInss", configInss);  // envia o objeto para o JSP
+            request.getRequestDispatcher("/principal/config.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("msg", e.getMessage());
             request.getRequestDispatcher("erro.jsp").forward(request, response);
         }
     }
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

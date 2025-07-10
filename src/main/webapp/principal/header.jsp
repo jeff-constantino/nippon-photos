@@ -20,8 +20,6 @@
     <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/vendors/font-awesome/css/font-awesome.min.css">
 
-
-
     <!-- endinject -->
     <!-- Plugin css for this page -->
     <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/vendors/jvectormap/jquery-jvectormap.css">
@@ -38,11 +36,8 @@
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-
-
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 
     <style>
         /* Esconde as setas dos inputs do tipo number */
@@ -73,6 +68,8 @@
         }
     </style>
 
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <!-- jquery.maskMoney plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
 </head>

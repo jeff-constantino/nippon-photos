@@ -22,6 +22,7 @@ public class ModelConfiguracao implements java.io.Serializable {
 
     private BigDecimal salario;
     private BigDecimal comissao;
+    private BigDecimal comissao2;
     private BigDecimal inss;
     private BigDecimal fgts;
 
@@ -53,6 +54,13 @@ public class ModelConfiguracao implements java.io.Serializable {
     private BigDecimal min_inss_4;
     private BigDecimal max_inss_4;
 
+    public BigDecimal getComissao2() {
+        return comissao2;
+    }
+
+    public void setComissao2(BigDecimal comissao2) {
+        this.comissao2 = comissao2;
+    }
 
     public Long getId_inss_1() {
         return id_inss_1;

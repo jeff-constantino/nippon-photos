@@ -28,7 +28,6 @@ public class ServletVales extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Verifica se a ação é para excluir um vale
             String acao = request.getParameter("acao");
 
             if ("excluirVale".equals(acao)) {
@@ -51,15 +50,39 @@ public class ServletVales extends HttpServlet {
                 }
             }
 
-            // Busca os funcionários e os vales novamente após a exclusão
+            if ("buscarValesPorData".equals(acao)) {
+                String dataInicialStr = request.getParameter("dataInicial");
+                String dataFinalStr = request.getParameter("dataFinal");
+                String funcionarioIdStr = request.getParameter("funcionarioId");
+
+                if (dataInicialStr != null && dataFinalStr != null && funcionarioIdStr != null
+                        && !dataInicialStr.isEmpty() && !dataFinalStr.isEmpty() && !funcionarioIdStr.isEmpty()) {
+                    try {
+                        LocalDate dataInicial = LocalDate.parse(dataInicialStr);
+                        LocalDate dataFinal = LocalDate.parse(dataFinalStr);
+                        Long funcionarioId = Long.parseLong(funcionarioIdStr);
+
+                        DAOVales daoVales = new DAOVales();
+                        List<ModelVales> valesFiltrados = daoVales.buscarValesPorDataEFuncionario(dataInicial, dataFinal, funcionarioId);
+                        request.setAttribute("valesFiltrados", valesFiltrados);
+                        request.setAttribute("modalDataAbrir", true);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        request.setAttribute("msg", "Erro ao buscar os vales filtrados: " + e.getMessage());
+                    }
+                }
+            }
+
+            // Sempre carrega os funcionários
             DAOFuncionario relatorio = new DAOFuncionario();
             List<ModelLogin> funcionarios = relatorio.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);
 
-            // Busca os vales dos últimos 30 dias
+            // Sempre carrega os vales dos últimos 30 dias
             DAOVales daoVales = new DAOVales();
             List<ModelVales> valesList = daoVales.buscarValesUltimos30Dias();
-            request.setAttribute("vales", valesList); // Nome do atributo ajustado
+            request.setAttribute("vales", valesList);
 
             // Encaminha para o JSP
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/vales.jsp");
@@ -68,11 +91,12 @@ public class ServletVales extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("msg", "Erro ao processar a solicitação: " + e.getMessage());
-            request.setAttribute("vales", new ArrayList<>()); // Garante que a lista será exibida, mesmo vazia
+            request.setAttribute("vales", new ArrayList<>());
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/vales.jsp");
             dispatcher.forward(request, response);
         }
     }
+
 
 
 
@@ -85,7 +109,8 @@ public class ServletVales extends HttpServlet {
         try {
             if ("inserirVale".equals(acao)) {
                 // Captura os parâmetros do formulário
-                String idFuncionarioStr = request.getParameter("id_funcionario");
+                String idFuncionarioStr = request.getParameter("funcionarioId");
+
                 String nomeFuncionario = request.getParameter("nome_funcionario");
                 String data = request.getParameter("data");
                 String observacao = request.getParameter("observacao");

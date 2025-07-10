@@ -29,12 +29,12 @@ public class DAOConfiguracao {
 
             // Verifica se o idConf é nulo para decidir entre inserir ou atualizar
             if (model.getIdConf() == null) {
-                sql = "INSERT INTO conf_salarios (salario, comissao, fgts, inss) VALUES (?, ?, ?, ?)";
+                sql = "INSERT INTO conf_salarios (salario, comissao, fgts, comissao2) VALUES (?, ?, ?, ?)";
                 try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
                     stmt.setBigDecimal(1, model.getSalario());
                     stmt.setBigDecimal(2, model.getComissao());
                     stmt.setBigDecimal(3, model.getFgts());
-                    stmt.setBigDecimal(4, model.getInss());
+                    stmt.setBigDecimal(4, model.getComissao2());
                     stmt.executeUpdate();
 
                     // Recupera o ID gerado
@@ -45,12 +45,12 @@ public class DAOConfiguracao {
                     }
                 }
             } else {
-                sql = "UPDATE conf_salarios SET salario=?, comissao=?, fgts=?, inss=? WHERE \"idConf\" =?";
+                sql = "UPDATE conf_salarios SET salario=?, comissao=?, fgts=?, comissao2=? WHERE \"idConf\" =?";
                 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                     stmt.setBigDecimal(1, model.getSalario());
                     stmt.setBigDecimal(2, model.getComissao());
                     stmt.setBigDecimal(3, model.getFgts());
-                    stmt.setBigDecimal(4, model.getInss());
+                    stmt.setBigDecimal(4, model.getComissao2());
                     stmt.setLong(5, model.getIdConf());
                     stmt.executeUpdate();
                 }
@@ -133,7 +133,7 @@ public class DAOConfiguracao {
                 modelConfiguracao.setSalario(resultSet.getBigDecimal("salario"));
                 modelConfiguracao.setComissao(resultSet.getBigDecimal("comissao"));
                 modelConfiguracao.setFgts(resultSet.getBigDecimal("fgts"));
-                modelConfiguracao.setInss(resultSet.getBigDecimal("inss"));
+                modelConfiguracao.setComissao2(resultSet.getBigDecimal("comissao2"));
 
 
 

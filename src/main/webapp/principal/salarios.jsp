@@ -146,9 +146,9 @@
                                         <c:forEach items="${vendasFuncionarioList}" var="mv">
                                             <tr>
                                                 <td><c:out value="${mv.nome}"></c:out></td>
-                                                <td><c:out value="${mv.ft_total}"></c:out></td>
-                                                <td><c:out value="${mv.enc_total}"></c:out></td>
-                                                <td><c:out value="${mv.dig_total}"></c:out></td>
+                                                <td id="ft_total"><c:out value="${mv.ft_total}"/></td>
+                                                <td id="enc_total"><c:out value="${mv.enc_total}"/></td>
+                                                <td id="dig_total"><c:out value="${mv.dig_total}"/></td>
                                                 <td><c:out value="${mv.sobras}"></c:out></td>
                                                 <td>
                                                     <c:choose>
@@ -312,67 +312,84 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <div class="row align-items-center">
-                                    <!-- Salário Bruto -->
+                                <!-- Primeira linha: Vendas, vales, inss, fgts, descontos -->
+                                <div class="row align-items-center mb-3">
                                     <div class="col-auto">
-                                        <label style="color: #f2a654">SALÁRIO BRUTO</label>
-                                        <input type="number" class="form-control"
-                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               id="salario_bruto" name="salario_bruto"
-                                               value="">
+                                        <label style="color: #f2a654">VENDA TOTAL</label>
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: white; color: black"
+                                               id="salario_bruto" name="salario_bruto" value="${salario_bruto}" tabindex="-1">
                                     </div>
 
-                                    <!-- Vales -->
                                     <div class="col-auto">
                                         <label style="color: #f2a654">VALES</label>
-                                        <input type="number" class="form-control"
-                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               tabindex="-1" id="vales_mes" name="vales_mes"
-                                               value="">
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: white; color: black"
+                                               id="vales_mes" name="vales_mes" value="${vales_mes}" readonly tabindex="-1">
                                     </div>
 
-                                    <!-- INSS -->
                                     <div class="col-auto">
                                         <label style="color: #f2a654">INSS</label>
-                                        <input type="number" class="form-control"
-                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               id="inss" name="inss"
-                                                readonly step="0.01">
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: white; color: black"
+                                               id="inss" name="inss" value="${inss}" readonly tabindex="-1">
                                     </div>
 
-                                    <!-- FGTS -->
                                     <div class="col-auto">
                                         <label style="color: #f2a654">FGTS</label>
-                                        <input type="number" class="form-control"
-                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               tabindex="-1" id="fgts" name="fgts"
-                                               >
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: white; color: black"
+                                               id="fgts" name="fgts" value="${fgts}" readonly tabindex="-1">
                                     </div>
 
-                                    <!-- Descontos Total -->
                                     <div class="col-auto">
                                         <label style="color: #f2a654">DESCONTOS DISCIPLINARES</label>
-                                        <input type="number" class="form-control"
-                                               style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                               id="descontos_mes" name="descontos_mes"
-                                               value="">
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: white; color: black"
+                                               id="descontos_mes" name="descontos_mes" value="${descontos_mes}" readonly tabindex="-1">
                                     </div>
                                 </div>
 
-                                <div class="row align-items-center mt-3">
-                                    <!-- Salário Líquido -->
-                                    <div class="col-3" style="align-content: center">
+                                <!-- Segunda linha: Comissão 1 e Salário Líquido 1 -->
+                                <div class="row align-items-center mb-3">
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">COMISSÃO %</label>
+                                        <input type="text" class="form-control text-center fw-bold"
+                                               style="background-color: #f2a654; color: black"
+                                               readonly tabindex="-1" id="comissao" name="comissao" value="${comissao}%" >
+                                    </div>
+
+                                    <div class="col-auto ms-3">
                                         <label style="color: #f2a654">SALÁRIO LÍQUIDO</label>
-                                        <input type="number" class="form-control" readonly
-                                               style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                               tabindex="-1" id="salario_liquido" name="salario_liquido"
-                                               value="">
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: #f2a654; color: black"
+                                               readonly tabindex="-1" id="salario_liquido" name="salario_liquido" value="${salario_liquido}">
+                                    </div>
+                                </div>
+
+                                <!-- Terceira linha: Comissão 2 e Salário Líquido 2 -->
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">COMISSÃO %</label>
+                                        <input type="text" class="form-control text-center fw-bold"
+                                               style="background-color: #f2a654; color: black"
+                                               readonly tabindex="-1" id="comissao2" name="comissao2" value="${comissao2}%" >
+
+                                    </div>
+
+                                    <div class="col-auto ms-3">
+                                        <label style="color: #f2a654">SALÁRIO LÍQUIDO 2</label>
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: #f2a654; color: black"
+                                               readonly tabindex="-1" id="salario_liquido2" name="salario_liquido2" value="${salario_liquido2}">
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
+
 
             </div>
             <!-- content-wrapper ends -->
@@ -573,6 +590,15 @@
    };
 
 // *******************************************************************
+   // === CONFIGURAÇÕES DO BACKEND ===
+   const conf1_valor = parseFloat('${listaConfigs[0].conf1_valor}');
+   const conf2_valor = parseFloat('${listaConfigs[0].conf2_valor}');
+   const conf3_valor = parseFloat('${listaConfigs[0].conf3_valor}');
+
+   const comissao = parseFloat('${configSalario.comissao}');
+   const comissao2 = parseFloat('${configSalario.comissao2}');
+   const fgtsAliquota = parseFloat('${configSalario.fgts}');
+
    const faixasInss = [
        {
            min: parseFloat('${configInss.min_inss_1}'),
@@ -596,44 +622,127 @@
        }
    ];
 
-   // Alíquota fixa do FGTS vinda do backend (ex: 8%)
-   const fgtsAliquota = parseFloat('${configSalario.fgts}'); // já vem como número
-
+   // === ELEMENTOS DO FORMULÁRIO ===
    const salarioInput = document.getElementById('salario_bruto');
    const inssInput = document.getElementById('inss');
    const fgtsInput = document.getElementById('fgts');
 
-   salarioInput.addEventListener('input', function () {
-       let salario = parseFloat(this.value);
+   const comissaoInput = document.getElementById('comissao');
+   const comissao2Input = document.getElementById('comissao2');
 
-       // Se salário inválido, zera os campos
-       if (isNaN(salario) || salario <= 0) {
+   const salarioLiquido1Input = document.getElementById('salario_liquido');
+   const salarioLiquido2Input = document.getElementById('salario_liquido2');
+
+   const valesInput = document.getElementById('vales_mes');
+   const descontosInput = document.getElementById('descontos_mes');
+
+   // === CÁLCULO AUTOMÁTICO AO CARREGAR ===
+   window.addEventListener('DOMContentLoaded', () => {
+       calcularSalarioBruto();
+       comissaoInput.value = comissao;
+       comissao2Input.value = comissao2;
+   });
+
+   // === CÁLCULO DO SALÁRIO BRUTO ===
+   function calcularSalarioBruto() {
+       const ftTotal = parseFloat(document.getElementById('ft_total')?.innerText || 0);
+       const encTotal = parseFloat(document.getElementById('enc_total')?.innerText || 0);
+       const digTotal = parseFloat(document.getElementById('dig_total')?.innerText || 0);
+
+       const salarioBruto = (ftTotal * conf1_valor) + (encTotal * conf2_valor) + (digTotal * conf3_valor);
+       salarioInput.value = salarioBruto.toFixed(2);
+
+       // Dispara manualmente o evento para calcular INSS/FGTS/Salário líquido
+       salarioInput.dispatchEvent(new Event('input'));
+   }
+
+   // === EVENTO: CALCULAR INSS, FGTS E SALÁRIOS LÍQUIDOS ===
+   salarioInput.addEventListener('input', function () {
+       const salarioBruto = parseFloat(this.value);
+
+       if (isNaN(salarioBruto) || salarioBruto <= 0) {
            inssInput.value = 0;
            fgtsInput.value = 0;
            return;
        }
 
+       // Base para INSS/FGTS = salário_bruto * comissao
+       const baseCalculo = salarioBruto * (comissao / 100);
+
        // === Cálculo do INSS ===
        let aliquotaInss = 0;
-
        for (let faixa of faixasInss) {
-           if (salario >= faixa.min && salario <= faixa.max) {
+           if (baseCalculo >= faixa.min && baseCalculo <= faixa.max) {
                aliquotaInss = faixa.aliquota / 100;
                break;
            }
        }
-
-       if (aliquotaInss === 0 && salario > faixasInss[faixasInss.length - 1].max) {
+       if (aliquotaInss === 0 && baseCalculo > faixasInss[faixasInss.length - 1].max) {
            aliquotaInss = faixasInss[faixasInss.length - 1].aliquota / 100;
        }
 
-       let valorInss = salario * aliquotaInss;
+       const valorInss = baseCalculo * aliquotaInss;
        inssInput.value = valorInss.toFixed(2);
 
        // === Cálculo do FGTS ===
-       let valorFgts = salario * (fgtsAliquota / 100);
+       const valorFgts = baseCalculo * (fgtsAliquota / 100);
        fgtsInput.value = valorFgts.toFixed(2);
+
+       // Atualiza os salários líquidos
+       calcularSalariosLiquidos();
    });
+
+   // === CÁLCULO DOS SALÁRIOS LÍQUIDOS ===
+   function calcularSalariosLiquidos() {
+       const salarioBruto = parseFloat(salarioInput.value || 0);
+       const inss = parseFloat(inssInput.value || 0);
+       const fgts = parseFloat(fgtsInput.value || 0);
+       const vales = parseFloat(valesInput?.value || 0);
+       const descontos = parseFloat(descontosInput?.value || 0);
+
+       const salarioLiquido1 = (salarioBruto * (comissao / 100)) - inss - fgts - vales - descontos;
+       const salarioLiquido2 = (salarioBruto * (comissao2 / 100)) - inss - fgts - vales - descontos;
+
+       salarioLiquido1Input.value = salarioLiquido1.toFixed(2);
+       salarioLiquido2Input.value = salarioLiquido2.toFixed(2);
+   }
+
+   // === REAGIR A ALTERAÇÕES NOS DESCONTOS E VALES ===
+   valesInput?.addEventListener('input', calcularSalariosLiquidos);
+   descontosInput?.addEventListener('input', calcularSalariosLiquidos);
+
+   console.log("conf1_valor:", '${listaConfigs[0].conf1_valor}');
+   console.log("conf2_valor:", '${listaConfigs[0].conf2_valor}');
+   console.log("conf3_valor:", '${listaConfigs[0].conf3_valor}');
+
+
+
+   $(document).ready(function() {
+       $(".money").maskMoney({
+           prefix: "R$ ",
+           allowNegative: false,
+           thousands: ".",
+           decimal: ",",
+           affixesStay: true
+       });
+
+       // Aplica máscara no valor inicial
+       $(".money").each(function() {
+           $(this).maskMoney('mask');
+       });
+
+       function removerMascara(valor) {
+           return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '').trim();
+       }
+
+       $("#idForm").on("submit", function(e) {
+           $(".money").each(function() {
+               var valorSemMascara = removerMascara($(this).val());
+               $(this).val(valorSemMascara);
+           });
+       });
+   });
+
 </script>
 </body>
 </html>

@@ -3,6 +3,7 @@ package dao;
 import connection.SingleConnectionBanco;
 import model.ModelVales;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -76,6 +77,25 @@ public class DAOVales {
         }
     }
 
+    public BigDecimal somarValesPorFuncionarioEPeriodo(Long funcionarioId, LocalDate dataInicial, LocalDate dataFinal) throws Exception {
+        BigDecimal totalVales = BigDecimal.ZERO;
+        String sql = "SELECT SUM(valor) FROM vales WHERE id_funcionario = ? AND data BETWEEN ? AND ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, funcionarioId);
+            stmt.setDate(2, java.sql.Date.valueOf(dataInicial));
+            stmt.setDate(3, java.sql.Date.valueOf(dataFinal));
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalVales = rs.getBigDecimal(1);
+                if (totalVales == null) {
+                    totalVales = BigDecimal.ZERO;
+                }
+            }
+        }
+
+        return totalVales;
+    }
 
 
 
@@ -105,5 +125,32 @@ public class DAOVales {
             return false;
         }
     }
+
+    public List<ModelVales> buscarValesPorDataEFuncionario(LocalDate dataInicial, LocalDate dataFinal, Long funcionarioId) throws Exception {
+        List<ModelVales> vales = new ArrayList<>();
+
+        String sql = "SELECT * FROM vales WHERE data BETWEEN ? AND ? AND id_funcionario = ? ORDER BY data DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setDate(1, Date.valueOf(dataInicial));
+            stmt.setDate(2, Date.valueOf(dataFinal));
+            stmt.setLong(3, funcionarioId);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ModelVales vale = new ModelVales();
+                vale.setId_vale(rs.getLong("id_vale"));
+                vale.setId_funcionario(rs.getLong("id_funcionario")); // corrigido conforme o nome da coluna
+                vale.setValor(rs.getBigDecimal("valor"));
+                vale.setData(rs.getDate("data").toLocalDate()); // corrigido conforme o nome da coluna
+                vale.setObservacao(rs.getString("observacao")); // corrigido conforme o nome da coluna
+                vales.add(vale);
+            }
+        }
+
+        return vales;
+    }
+
+
 
 }

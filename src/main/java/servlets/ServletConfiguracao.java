@@ -46,12 +46,12 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 BigDecimal salario = parseBigDecimal(request.getParameter("salario"));
                 BigDecimal comissao = parseBigDecimal(request.getParameter("comissao"));
                 BigDecimal fgts = parseBigDecimal(request.getParameter("fgts"));
-                BigDecimal inss = parseBigDecimal(request.getParameter("inss"));
+                BigDecimal comissao2 = parseBigDecimal(request.getParameter("comissao2"));
 
                 modelConfiguracao.setSalario(salario);
                 modelConfiguracao.setComissao(comissao);
                 modelConfiguracao.setFgts(fgts);
-                modelConfiguracao.setInss(inss);
+                modelConfiguracao.setComissao2(comissao2);
 
                 if (configExistente != null) {
                     modelConfiguracao.setIdConf(configExistente.getIdConf());

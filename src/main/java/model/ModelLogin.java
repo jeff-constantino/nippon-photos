@@ -15,6 +15,9 @@ public class ModelLogin implements Serializable{
     private String status;
     private String vendas;
     private String vales;
+    private long id_funcionario;
+
+
 
 
     public Boolean isNovo(){
@@ -25,6 +28,15 @@ public class ModelLogin implements Serializable{
         }
 
         return id == null;
+    }
+
+
+    public long getId_funcionario() {
+        return id_funcionario;
+    }
+
+    public void setId_funcionario(long id_funcionario) {
+        this.id_funcionario = id_funcionario;
     }
 
     public Long getId() {

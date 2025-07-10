@@ -1,4 +1,5 @@
 
+
 ********************************************************************************
 // Função para navegar entre elementos focáveis com as setas
 function navigateFocusableElements(event) {
@@ -66,7 +67,7 @@ para tables <c if =
                       currencySymbol="R$"/></td>
 
 
-//aplica a mask em todos com class money type text.. ex:<input type="text" class="form-control money"
+//aplica a mask em todos com class money type text.. ex:<input type="text"(tem que ser tex e não number) class="form-control money"
 
 $(document).ready(function() {
     // Aplica a máscara nos inputs com a classe "money"

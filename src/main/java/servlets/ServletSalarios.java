@@ -1,13 +1,16 @@
 package servlets;
 
+import dao.DAOConfig;
 import dao.DAOConfiguracao;
 import dao.DAOSalarios;
+import dao.DAOVales;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.ModelConfig;
 import model.ModelConfiguracao;
 import model.ModelLogin;
 import model.ModelVendas;
@@ -15,6 +18,7 @@ import model.ModelVendas;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @WebServlet("/ServletSalarios")
@@ -30,10 +34,15 @@ public class ServletSalarios extends ServletGenericUtil{
         try {
             DAOSalarios relatorio = new DAOSalarios();
             DAOConfiguracao daoConfiguracao = new DAOConfiguracao(); // instância do DAO de config
+            DAOConfig daoConfig = new DAOConfig();
 
             // Carrega INSS e adiciona ao request
             ModelConfiguracao configInss = daoConfiguracao.buscarFaixasInss();
             request.setAttribute("configInss", configInss);
+            // Carrega todas as configurações para cálculo de produtos
+            List<ModelConfig> listaConfigs = daoConfig.consultarTodasConfigs();
+            request.setAttribute("listaConfigs", listaConfigs);
+
             // Carrega as configurações de salário que contém o FGTS
             List<ModelConfiguracao> configsSalarios = daoConfiguracao.consultarSalarios();
             ModelConfiguracao configSalario = null;
@@ -50,6 +59,16 @@ public class ServletSalarios extends ServletGenericUtil{
             RequestDispatcher dispatcher;
 
             if ("imprimirVendasFuncionario".equals(acao)) {
+                // Conversões
+                LocalDate dataIni = LocalDate.parse(dataInicial);
+                LocalDate dataFin = LocalDate.parse(dataFinal);
+                Long funcId = Long.parseLong(funcionarioId);
+
+// Busca e soma dos vales
+                DAOVales daoVales = new DAOVales();
+                BigDecimal totalVales = daoVales.somarValesPorFuncionarioEPeriodo(funcId, dataIni, dataFin);
+                request.setAttribute("vales_mes", totalVales);
+
                 int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
                 int resultadosPorPagina = 10;
                 int offset = (paginaAtual - 1) * resultadosPorPagina;

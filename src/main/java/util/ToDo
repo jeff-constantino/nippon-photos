@@ -1,5 +1,4 @@
-
-criar Salarios, BUSCAR HISTORICO DE CONDUTA, FAZER CALCULOS (TALVEZ ADCIONAR ALGO NAS CONFIG INSS ALIQUOTA/FGTS 8%)
+ajustar salarios, fmt para os valores, buscar total de conduta e criar os valores das condutas
 
 de R$1,00 até R$ 1.518,00: 7,5%
 De R$ 1.518,01 até R$ 2.793,88: 9%
@@ -11,18 +10,5 @@ criar DRE
 APRENDER DOCKER
 
 
-servlet buscou esses, buscar tbm valores dos produtos
-// Carrega INSS e adiciona ao request
-            ModelConfiguracao configInss = daoConfiguracao.buscarFaixasInss();
-            request.setAttribute("configInss", configInss);
-            // Carrega as configurações de salário que contém o FGTS
-            List<ModelConfiguracao> configsSalarios = daoConfiguracao.consultarSalarios();
-            ModelConfiguracao configSalario = null;
-            if (configsSalarios != null && !configsSalarios.isEmpty()) {
-                configSalario = configsSalarios.get(0); // pegar primeira config, por exemplo
-            }
-            request.setAttribute("configSalario", configSalario);
 
-fazer o calculo de salario bruto
-buscar os vales de acordo com o funcionario, somar todos e lançar no input
 calcular o valor de atrasos, faltas e suspensões, colocar no input proprio, somar tudo e colocar no input geral de descontos

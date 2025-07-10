@@ -153,7 +153,7 @@
                                                                                 <label for="conf1_nome">Configuração</label>
                                                                                 <input type="text" class="form-control" id="conf_name"
                                                                                        name="conf_name" required
-                                                                                       value="${modelConfig.conf_name}" style="color: black" readonly>
+                                                                                       value="${modelConfig.conf_name}" style="color: black">
                                                                             </div>
 
 
@@ -637,7 +637,7 @@
                                                                         <input type="text" class="form-control" id="salario" name="salario" required value="">
                                                                     </div>
                                                                     <div class="col-3">
-                                                                        <label for="conf2_nome">Comissão</label>
+                                                                        <label for="conf2_nome">Comissão 1</label>
                                                                         <input type="text" class="form-control" id="comissao" name="comissao" required value="">
                                                                     </div>
 
@@ -645,13 +645,14 @@
 
                                                                 <div class="row mb-4 d-flex">
                                                                     <div class="col-3">
+                                                                        <label for="conf2_valor">COMISSÃO 2</label>
+                                                                        <input type="text" class="form-control" id="comissao2" name="comissao2" required value="">
+                                                                    </div>
+                                                                    <div class="col-3">
                                                                         <label for="conf2_nome">FGTS</label>
                                                                         <input type="text" class="form-control" id="fgts" name="fgts" required value="">
                                                                     </div>
-                                                                    <div class="col-3">
-                                                                        <label for="conf2_valor">INSS</label>
-                                                                        <input type="text" class="form-control" id="inss" name="inss" required value="">
-                                                                    </div>
+
 
                                                                 </div>
 
@@ -806,6 +807,7 @@
                                             <!-- Bloco 2 -->
                                             <tbody>
                                             <c:forEach items="${configs}" var="modelConf">
+<%-- ALTERAR ORIGEM PARA BUSCA DE MATERIAIS                                             --%>
                                                 <c:if test="${modelConf.idConf == 2}">
                                                     <tr>
                                                         <td>
@@ -898,9 +900,9 @@
                                                 <th>Ações</th>
                                                 <th>ID</th>
                                                 <th>Salário</th>
-                                                <th>Comissão</th>
+                                                <th>Comissão 1</th>
+                                                <th>Comissão 2</th>
                                                 <th>FGTS</th>
-                                                <th>INSS</th>
 
                                             </tr>
 
@@ -918,8 +920,8 @@
                                                                    ${modelConfiguracao.idConf},
                                                                        '${modelConfiguracao.salario}',
                                                                        '${modelConfiguracao.comissao}',
-                                                                       '${modelConfiguracao.fgts}',
-                                                                       '${modelConfiguracao.inss}'
+                                                                       '${modelConfiguracao.comissao2}',
+                                                                       '${modelConfiguracao.fgts}'
                                                                        )">
                                                                 Editar
                                                             </a>
@@ -929,8 +931,8 @@
                                                         <!-- Formatação do valor com JSTL -->
                                                         <td><fmt:formatNumber value="${modelConfiguracao.salario}" type="currency" currencySymbol="R$" /></td>
                                                         <td><fmt:formatNumber value="${modelConfiguracao.comissao / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConfiguracao.comissao2 / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                         <td><fmt:formatNumber value="${modelConfiguracao.fgts / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
-                                                        <td><fmt:formatNumber value="${modelConfiguracao.inss / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
 
 
 
@@ -1210,13 +1212,13 @@
         document.getElementById('conf3_valor').value = conf3_valor;
     }
 
-    function gerenciarSalario(idConf, salario, comissao, fgts, inss) {
+    function gerenciarSalario(idConf, salario, comissao, comissao2, fgts) {
         // Preencher o campo idConf
         document.getElementById('idConf_salario').value = idConf;
         document.getElementById('salario').value = salario;
         document.getElementById('comissao').value = comissao;
+        document.getElementById('comissao2').value = comissao2;
         document.getElementById('fgts').value = fgts;
-        document.getElementById('inss').value = inss;
 
     }
 

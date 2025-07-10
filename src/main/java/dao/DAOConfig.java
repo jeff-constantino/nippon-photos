@@ -57,6 +57,7 @@ public class DAOConfig {
             preparedSql.setInt(18, modelConfig.getConf4_qtd()); // Este é o 18º parâmetro
 
             preparedSql.executeUpdate();
+            connection.commit();
 
             // Caso precise obter a chave gerada
             try (ResultSet generatedKeys = preparedSql.getGeneratedKeys()) {
@@ -163,6 +164,7 @@ public class DAOConfig {
 
             while (resultSet.next()) {
                 ModelConfig modelConfig = new ModelConfig();
+
                 modelConfig.setIdConf(resultSet.getLong("idConf"));
                 modelConfig.setConf_name(resultSet.getString("conf_name"));
 
@@ -172,28 +174,29 @@ public class DAOConfig {
                 modelConfig.setConf1_qtd(resultSet.getInt("conf1_qtd"));
                 modelConfig.setConf1_custo(resultSet.getBigDecimal("conf1_custo"));
 
-
-                modelConfig.setConf1_valor2(resultSet.getBigDecimal("conf1_valor2"));
                 modelConfig.setConf2_nome(resultSet.getString("conf2_nome"));
                 modelConfig.setConf2_valor(resultSet.getBigDecimal("conf2_valor"));
                 modelConfig.setConf2_qtd(resultSet.getInt("conf2_qtd"));
                 modelConfig.setConf2_custo(resultSet.getBigDecimal("conf2_custo"));
-
 
                 modelConfig.setConf3_nome(resultSet.getString("conf3_nome"));
                 modelConfig.setConf3_valor(resultSet.getBigDecimal("conf3_valor"));
                 modelConfig.setConf3_qtd(resultSet.getInt("conf3_qtd"));
                 modelConfig.setConf3_custo(resultSet.getBigDecimal("conf3_custo"));
 
-
+                // Adiciona à lista
                 listaConfigs.add(modelConfig);
+
+
             }
 
         } catch (SQLException e) {
-            System.err.println("Erro ao consultar configurações: " + e.getMessage()); // Captura erros de SQL
-            throw e; // Repropaga a exceção para ser tratada na camada superior
+            System.err.println("Erro ao consultar configurações: " + e.getMessage());
+            throw e;
         }
 
+        System.out.println("TOTAL DE CONFIGS CARREGADAS: " + listaConfigs.size());
         return listaConfigs;
     }
+
 }

@@ -1,19 +1,13 @@
 package servlets;
 
-import dao.DAOConfig;
-import dao.DAOConfiguracao;
-import dao.DAOSalarios;
-import dao.DAOVales;
+import dao.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.ModelConfig;
-import model.ModelConfiguracao;
-import model.ModelLogin;
-import model.ModelVendas;
+import model.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -64,10 +58,22 @@ public class ServletSalarios extends ServletGenericUtil{
                 LocalDate dataFin = LocalDate.parse(dataFinal);
                 Long funcId = Long.parseLong(funcionarioId);
 
-// Busca e soma dos vales
+                // Busca e soma dos vales
                 DAOVales daoVales = new DAOVales();
                 BigDecimal totalVales = daoVales.somarValesPorFuncionarioEPeriodo(funcId, dataIni, dataFin);
                 request.setAttribute("vales_mes", totalVales);
+
+                // Busca resumo de conduta
+                DAOMedidasDisciplinares daoCondutas = new DAOMedidasDisciplinares();
+                ModelCondutaResumo resumoConduta = daoCondutas.buscarResumoConduta(funcId, dataIni, dataFin);
+
+                request.setAttribute("resumoConduta", resumoConduta);
+                System.out.println("Resumo Conduta:");
+                System.out.println("Advertências: " + resumoConduta.getTotalAdvertencias());
+                System.out.println("Faltas: " + resumoConduta.getTotalFaltas());
+                System.out.println("Dias de Suspensão: " + resumoConduta.getTotalDiasSuspensao());
+                System.out.println("DSRs: " + resumoConduta.getTotalDsrSuspensao());
+
 
                 int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
                 int resultadosPorPagina = 10;
@@ -81,6 +87,7 @@ public class ServletSalarios extends ServletGenericUtil{
                 request.setAttribute("paginaAtual", paginaAtual);
                 request.setAttribute("totalPaginas", totalPaginas);
             }
+
 
             request.setAttribute("dataInicial", dataInicial);
             request.setAttribute("dataFinal", dataFinal);

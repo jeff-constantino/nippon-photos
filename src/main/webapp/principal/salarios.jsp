@@ -202,33 +202,25 @@
                                     <table class="table" id="tabelafuncconduta">
                                         <thead>
                                         <tr>
-
-                                            <th scope="col">TODAL DE ATRASOS</th>
-                                            <th scope="col">TOTAL DE FALTAS</th>
-                                            <th scope="col">TOTAL DE ADVERTÊNCIAS</th>
-                                            <th scope="col">TOTAL DE SUSPENSÕES</th>
-
+                                            <th>ADVERTÊNCIAS</th>
+                                            <th>FALTAS</th>
+                                            <th>DIAS DE SUSPENSÃO</th>
+                                            <th>DSR</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        <c:forEach items="${}" var="hc">
-                                            <tr>
 
-                                                <td>
-                                                    <c:out value="${hc.atrasos_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.faltas_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.advertencias_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.suspensoes_total}"></c:out>
-                                                </td>
+                                        <tbody>
+                                        <c:if test="${not empty resumoConduta}">
+                                            <tr>
+                                                <td>${resumoConduta.totalAdvertencias}</td>
+                                                <td>${resumoConduta.totalFaltas}</td>
+                                                <td>${resumoConduta.totalDiasSuspensao}</td>
+                                                <td>${resumoConduta.totalDsrSuspensao}</td>
                                             </tr>
-                                        </c:forEach>
+                                        </c:if>
                                         </tbody>
+
+
 
                                     </table>
                                     <!-- Controles de paginação -->
@@ -251,63 +243,54 @@
                     </div>
                 </div>
 <%-- 3 PARTE--%>
-                <div class="row ">
+                <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
 
-
+                                <div class="row align-items-center mb-3">
                                 <h4 class="card-title" STYLE="text-align: center">VALOR DE DESCONTOS DISCIPLINARES</h4>
+                                <div class="col-auto">
+                                    <label style="color: #f2a654">VALOR DAS FALTAS</label>
+                                    <input type="text" class="form-control text-center fw-bold"
+                                           style="background-color: white; color: black"
+                                           id="inputFaltas" name="inputFaltas"
+                                           value="R$ 0,00"
+                                           data-faltas="${resumoConduta.totalFaltas}" readonly tabindex="-1">
+                                </div>
 
-                                <div  style="overflow-x: hidden; overflow-y: hidden;">
-                                    <table class="table" id="tabelafuncfinanceiro">
-                                        <thead>
-                                        <tr>
+                                <div class="col-auto">
+                                    <label style="color: #f2a654">VALOR DAS SUSPENSÕES + DSR</label>
+                                    <input type="text" class="form-control text-center fw-bold"
+                                           style="background-color: white; color: black"
+                                           id="inputSuspensoes" name="inputSuspensoes"
+                                           value="R$ 0,00"
+                                           data-suspensoes="${resumoConduta.totalDiasSuspensao}"
+                                           data-dsr="${resumoConduta.totalDsrSuspensao}" readonly tabindex="-1">
+                                </div>
 
-                                            <th scope="col">VALOR DE ATRASOS</th>
-                                            <th scope="col">VALOR DE FALTAS</th>
-                                            <th scope="col">VALOR DE SUSPENSÕES + DSR</th>
-
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:forEach items="${}" var="hc">
-                                            <tr>
-
-                                                <td>
-                                                    <c:out value="${hc.atrasos_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.faltas_total}"></c:out>
-                                                </td>
-
-                                                <td>
-                                                    <c:out value="${hc.suspensoes_total}"></c:out>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                        </tbody>
-
-                                    </table>
-                                    <!-- Controles de paginação -->
-                                    <div class="pagination">
-
-                                        <c:forEach var="i" begin="1" end="${totalPaginas}">
-                                            <a href="ServletSalarios?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
-                                        </c:forEach>
-
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">ATRASOS (HH:MM)</label>
+                                        <input type="text" class="form-control text-center fw-bold"
+                                               style="background-color: white; color: black"
+                                               id="atrasos_horas" name="atrasos_horas" placeholder="00:00">
                                     </div>
+                                    <div class="col-auto ms-3">
+                                        <label style="color: #f2a654">VALOR DESCONTO ATRASOS</label>
+                                        <input type="text" class="form-control text-center fw-bold"
+                                               style="background-color: white; color: black"
+                                               id="valor_desconto_atrasos" name="valor_desconto_atrasos" value="R$ 0,00" readonly tabindex="-1">
+                                    </div>
+                            </div>
 
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                    </table>
-                                </div>
+
+
                             </div>
                         </div>
                     </div>
                 </div>
+
+
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
@@ -348,6 +331,7 @@
                                                style="background-color: white; color: black"
                                                id="descontos_mes" name="descontos_mes" value="${descontos_mes}" readonly tabindex="-1">
                                     </div>
+
                                 </div>
 
                                 <!-- Segunda linha: Comissão 1 e Salário Líquido 1 -->
@@ -357,6 +341,12 @@
                                         <input type="text" class="form-control text-center fw-bold"
                                                style="background-color: #f2a654; color: black"
                                                readonly tabindex="-1" id="comissao" name="comissao" value="${comissao}%" >
+                                    </div>
+                                    <div class="col-auto ms-3">
+                                        <label style="color: #f2a654">SALÁRIO TOTAL</label>
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: #f2a654; color: black"
+                                               readonly tabindex="-1" id="salario_total" name="salario_total" value="${salario_total}">
                                     </div>
 
                                     <div class="col-auto ms-3">
@@ -375,6 +365,12 @@
                                                style="background-color: #f2a654; color: black"
                                                readonly tabindex="-1" id="comissao2" name="comissao2" value="${comissao2}%" >
 
+                                    </div>
+                                    <div class="col-auto ms-3">
+                                        <label style="color: #f2a654">SALÁRIO TOTAL</label>
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: #f2a654; color: black"
+                                               readonly tabindex="-1" id="salario_total2" name="salario_total2" value="${salario_total2}">
                                     </div>
 
                                     <div class="col-auto ms-3">
@@ -626,24 +622,74 @@
    const salarioInput = document.getElementById('salario_bruto');
    const inssInput = document.getElementById('inss');
    const fgtsInput = document.getElementById('fgts');
-
    const comissaoInput = document.getElementById('comissao');
    const comissao2Input = document.getElementById('comissao2');
-
+   const salarioTotal1Input = document.getElementById('salario_total');
+   const salarioTotal2Input = document.getElementById('salario_total2');
    const salarioLiquido1Input = document.getElementById('salario_liquido');
    const salarioLiquido2Input = document.getElementById('salario_liquido2');
-
    const valesInput = document.getElementById('vales_mes');
    const descontosInput = document.getElementById('descontos_mes');
+   const atrasosInput = document.getElementById('atrasos_horas');
 
-   // === CÁLCULO AUTOMÁTICO AO CARREGAR ===
-   window.addEventListener('DOMContentLoaded', () => {
-       calcularSalarioBruto();
-       comissaoInput.value = comissao;
-       comissao2Input.value = comissao2;
-   });
+   // === Função para converter HH:MM em horas decimais ===
+   function converterHorasParaDecimal(horasMinutos) {
+       if (!horasMinutos) return 0;
+       const partes = horasMinutos.split(':');
+       const horas = parseInt(partes[0], 10) || 0;
+       const minutos = parseInt(partes[1], 10) || 0;
+       return horas + (minutos / 60);
+   }
 
-   // === CÁLCULO DO SALÁRIO BRUTO ===
+   // === Função para remover máscara e tratar valores numéricos ===
+   function removerMascara(valor) {
+       if (!valor || typeof valor !== 'string') return '0';
+       return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '').trim();
+   }
+
+   // === Calcular descontos disciplinares ===
+   function calcularDescontosDisciplinares() {
+       const inputFaltas = document.getElementById('inputFaltas');
+       const inputSuspensoes = document.getElementById('inputSuspensoes');
+       const descontosMesInput = document.getElementById('descontos_mes');
+
+       // Salário bruto e comissão
+       let salarioBruto = parseFloat(salarioInput.value || 0);
+       if (isNaN(salarioBruto)) salarioBruto = parseFloat(removerMascara(salarioInput.value)) || 0;
+
+       const baseCalculo = salarioBruto * (comissao / 100);
+       const valorDia = baseCalculo / 30;
+
+       // Dados do backend
+       const totalFaltas = parseInt(inputFaltas?.getAttribute('data-faltas')) || 0;
+       const totalSuspensoes = parseInt(inputSuspensoes?.getAttribute('data-suspensoes')) || 0;
+       const totalDsr = parseInt(inputSuspensoes?.getAttribute('data-dsr')) || 0;
+
+       const valorFaltas = totalFaltas * valorDia;
+       const valorSuspensoes = (totalSuspensoes + totalDsr) * valorDia;
+       const valorTotal = valorFaltas + valorSuspensoes;
+
+       if (inputFaltas) inputFaltas.value = valorFaltas.toFixed(2);
+       if (inputSuspensoes) inputSuspensoes.value = valorSuspensoes.toFixed(2);
+
+       if (descontosMesInput) {
+           descontosMesInput.value = valorTotal.toFixed(2);
+       }
+
+       console.log('Descontos disciplinares calculados:', {
+           salarioBruto,
+           baseCalculo,
+           valorDia,
+           totalFaltas,
+           totalSuspensoes,
+           totalDsr,
+           valorFaltas,
+           valorSuspensoes,
+           valorTotal
+       });
+   }
+
+   // === Calcular salário bruto com base nos totais e valores configurados ===
    function calcularSalarioBruto() {
        const ftTotal = parseFloat(document.getElementById('ft_total')?.innerText || 0);
        const encTotal = parseFloat(document.getElementById('enc_total')?.innerText || 0);
@@ -652,24 +698,29 @@
        const salarioBruto = (ftTotal * conf1_valor) + (encTotal * conf2_valor) + (digTotal * conf3_valor);
        salarioInput.value = salarioBruto.toFixed(2);
 
-       // Dispara manualmente o evento para calcular INSS/FGTS/Salário líquido
+       // Dispara evento input para recalcular INSS, FGTS e salários líquidos
        salarioInput.dispatchEvent(new Event('input'));
    }
 
-   // === EVENTO: CALCULAR INSS, FGTS E SALÁRIOS LÍQUIDOS ===
+   // === Cálculo do INSS, FGTS e atualização dos salários líquidos ===
    salarioInput.addEventListener('input', function () {
-       const salarioBruto = parseFloat(this.value);
+       let salarioBruto = parseFloat(this.value);
+
+       if (isNaN(salarioBruto)) {
+           salarioBruto = parseFloat(removerMascara(this.value)) || 0;
+       }
 
        if (isNaN(salarioBruto) || salarioBruto <= 0) {
-           inssInput.value = 0;
-           fgtsInput.value = 0;
+           inssInput.value = '0.00';
+           fgtsInput.value = '0.00';
+           calcularSalariosLiquidos();
            return;
        }
 
-       // Base para INSS/FGTS = salário_bruto * comissao
+       // Base para cálculo INSS e FGTS = salário_bruto * comissão
        const baseCalculo = salarioBruto * (comissao / 100);
 
-       // === Cálculo do INSS ===
+       // Cálculo do INSS baseado nas faixas
        let aliquotaInss = 0;
        for (let faixa of faixasInss) {
            if (baseCalculo >= faixa.min && baseCalculo <= faixa.max) {
@@ -684,64 +735,113 @@
        const valorInss = baseCalculo * aliquotaInss;
        inssInput.value = valorInss.toFixed(2);
 
-       // === Cálculo do FGTS ===
+       // Cálculo do FGTS
        const valorFgts = baseCalculo * (fgtsAliquota / 100);
        fgtsInput.value = valorFgts.toFixed(2);
+
+       // Recalcula os descontos disciplinares quando o salário muda
+       calcularDescontosDisciplinares();
 
        // Atualiza os salários líquidos
        calcularSalariosLiquidos();
    });
 
-   // === CÁLCULO DOS SALÁRIOS LÍQUIDOS ===
+   // === Calcular salários líquidos considerando atrasos, vales, descontos e encargos ===
    function calcularSalariosLiquidos() {
-       const salarioBruto = parseFloat(salarioInput.value || 0);
-       const inss = parseFloat(inssInput.value || 0);
-       const fgts = parseFloat(fgtsInput.value || 0);
-       const vales = parseFloat(valesInput?.value || 0);
-       const descontos = parseFloat(descontosInput?.value || 0);
+       let salarioBruto = parseFloat(salarioInput.value || 0);
+       let inss = parseFloat(inssInput.value || 0);
+       let fgts = parseFloat(fgtsInput.value || 0);
+       let vales = parseFloat(valesInput?.value || 0);
 
-       const salarioLiquido1 = (salarioBruto * (comissao / 100)) - inss - fgts - vales - descontos;
-       const salarioLiquido2 = (salarioBruto * (comissao2 / 100)) - inss - fgts - vales - descontos;
-
-       salarioLiquido1Input.value = salarioLiquido1.toFixed(2);
-       salarioLiquido2Input.value = salarioLiquido2.toFixed(2);
-   }
-
-   // === REAGIR A ALTERAÇÕES NOS DESCONTOS E VALES ===
-   valesInput?.addEventListener('input', calcularSalariosLiquidos);
-   descontosInput?.addEventListener('input', calcularSalariosLiquidos);
-
-   console.log("conf1_valor:", '${listaConfigs[0].conf1_valor}');
-   console.log("conf2_valor:", '${listaConfigs[0].conf2_valor}');
-   console.log("conf3_valor:", '${listaConfigs[0].conf3_valor}');
-
-
-
-   $(document).ready(function() {
-       $(".money").maskMoney({
-           prefix: "R$ ",
-           allowNegative: false,
-           thousands: ".",
-           decimal: ",",
-           affixesStay: true
-       });
-
-       // Aplica máscara no valor inicial
-       $(".money").each(function() {
-           $(this).maskMoney('mask');
-       });
-
-       function removerMascara(valor) {
-           return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '').trim();
+       // Tratamento dos descontos - agora mais simples já que vem do backend sem formatação
+       let descontos = 0;
+       if (descontosInput && descontosInput.value) {
+           descontos = parseFloat(descontosInput.value) || 0;
        }
 
-       $("#idForm").on("submit", function(e) {
-           $(".money").each(function() {
-               var valorSemMascara = removerMascara($(this).val());
-               $(this).val(valorSemMascara);
+       // Cálculo do desconto por atraso (em horas)
+       const horasAtraso = converterHorasParaDecimal(atrasosInput?.value || '0:00');
+       const salarioBaseComissao = salarioBruto * (comissao / 100);
+       const salarioHora = salarioBaseComissao / 220;
+       const descontoAtraso = horasAtraso * salarioHora;
+
+       // Atualiza campo visual com valor do desconto por atrasos
+       const valorDescontoAtrasosInput = document.getElementById('valor_desconto_atrasos');
+       if (valorDescontoAtrasosInput) {
+           valorDescontoAtrasosInput.value = descontoAtraso.toLocaleString('pt-BR', {
+               style: 'currency',
+               currency: 'BRL'
            });
+       }
+
+       // Cálculo dos salários totais (bruto * comissão)
+       const salarioTotal1 = salarioBruto * (comissao / 100);
+       const salarioTotal2 = salarioBruto * (comissao2 / 100);
+
+       // Atualiza os campos de salário total
+       salarioTotal1Input.value = (salarioTotal1 || 0).toLocaleString('pt-BR', {
+           style: 'currency',
+           currency: 'BRL'
        });
+       salarioTotal2Input.value = (salarioTotal2 || 0).toLocaleString('pt-BR', {
+           style: 'currency',
+           currency: 'BRL'
+       });
+
+       // Debug dos valores antes do cálculo
+       console.log('Valores para cálculo:', {
+           salarioBruto,
+           comissao,
+           comissao2,
+           salarioTotal1,
+           salarioTotal2,
+           inss,
+           fgts,
+           vales,
+           descontos,
+           descontoAtraso
+       });
+
+       // Cálculo dos salários líquidos
+       const salarioLiquido1 = salarioTotal1 - inss - vales - descontos - descontoAtraso;
+       const salarioLiquido2 = salarioTotal2 - inss - fgts - vales - descontos - descontoAtraso;
+
+       console.log('Salários líquidos calculados:', {
+           salarioLiquido1,
+           salarioLiquido2
+       });
+
+       salarioLiquido1Input.value = (salarioLiquido1 || 0).toLocaleString('pt-BR', {
+           style: 'currency',
+           currency: 'BRL'
+       });
+       salarioLiquido2Input.value = (salarioLiquido2 || 0).toLocaleString('pt-BR', {
+           style: 'currency',
+           currency: 'BRL'
+       });
+   }
+
+   // === Eventos para recalcular salários líquidos ao alterar vales, descontos ou atrasos ===
+   valesInput?.addEventListener('input', function() {
+       calcularSalariosLiquidos();
    });
+
+   descontosInput?.addEventListener('input', function() {
+       calcularSalariosLiquidos();
+   });
+
+   atrasosInput?.addEventListener('input', function() {
+       calcularSalariosLiquidos();
+   });
+
+   // === Inicialização ===
+   window.addEventListener('DOMContentLoaded', () => {
+       calcularSalarioBruto();
+       comissaoInput.value = comissao.toFixed(2);
+       comissao2Input.value = comissao2.toFixed(2);
+       calcularDescontosDisciplinares();
+   });
+
 
 </script>
 </body>

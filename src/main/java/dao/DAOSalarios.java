@@ -2,6 +2,7 @@ package dao;
 
 import connection.SingleConnectionBanco;
 import model.ModelLogin;
+import model.ModelSalarios;
 import model.ModelVendas;
 
 import java.sql.Connection;
@@ -260,6 +261,48 @@ public class DAOSalarios {
 
 
 
+    public void gravarSalarios(ModelSalarios model) throws Exception {
+        String sql = "INSERT INTO salarios (" +
+                "mes, ano, funcionario_id, nome_funcionario, qtd_fotos, qtd_arquivos, qtd_sobras, " +
+                "atrasos, faltas, advertencias, suspensoes, dsr, valor_atrasos, valor_faltas, " +
+                "valor_suspensoes, vales, inss, fgts, venda_total, comissao, salario_total, salario_liquido1, " +
+                "comissao2, salario_total2, salario_liquido2) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, model.getMes());
+            stmt.setInt(2, model.getAno());
+            stmt.setLong(3, model.getFuncionarioId());
+            stmt.setString(4, model.getNomeFuncionario());
+            stmt.setInt(5, model.getQtdFotos());
+            stmt.setInt(6, model.getQtdArquivos());
+            stmt.setInt(7, model.getQtdSobras());
+            stmt.setDouble(8, model.getAtrasos());
+            stmt.setInt(9, model.getFaltas());
+            stmt.setInt(10, model.getAdvertencias());
+            stmt.setInt(11, model.getSuspensoes());
+            stmt.setInt(12, model.getDsr());
+            stmt.setBigDecimal(13, model.getValorAtrasos());
+            stmt.setBigDecimal(14, model.getValorFaltas());
+            stmt.setBigDecimal(15, model.getValorSuspensoes());
+            stmt.setBigDecimal(16, model.getVales());
+            stmt.setBigDecimal(17, model.getInss());
+            stmt.setBigDecimal(18, model.getFgts());
+            stmt.setBigDecimal(19, model.getVenda_total());
+            stmt.setBigDecimal(20, model.getComissao());
+            stmt.setBigDecimal(21, model.getSalario_total());
+            stmt.setBigDecimal(22, model.getSalario_liquido1());
+            stmt.setBigDecimal(23, model.getComissao2());
+            stmt.setBigDecimal(24, model.getSalario_total2());
+            stmt.setBigDecimal(25, model.getSalario_liquido2());
+
+            stmt.execute();
+            connection.commit();
+        } catch (Exception e) {
+            connection.rollback();
+            throw new Exception("Erro ao gravar salários: " + e.getMessage(), e);
+        }
+    }
 
 
 

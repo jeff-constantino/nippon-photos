@@ -12,3 +12,108 @@ APRENDER DOCKER
 
 
 calcular o valor de atrasos, faltas e suspensões, colocar no input proprio, somar tudo e colocar no input geral de descontos
+
+
+=== DEBUG SERVLET ===
+Mês: 3
+Ano: 2025
+Funcionario ID:64
+Nome: SARAH CRISTINY
+Qtd Fotos: 0
+Qtd Arquivos: 0
+Qtd Sobras: 0
+Advertencias: 1
+Faltas: 2
+Suspensoes: 3
+Dsr: 1
+Atrasos: 4.0
+Valor dos Atrasos: 34.47
+Valor dos Faltas: 12640
+Valor das Suspensões: 25280
+Valor dos Vales: 0
+Venda Total: 1264000
+INSS: 0
+FGTS: 0
+Comissão: 0
+Salario Total: 0
+Salario Liquido1: 791.69
+Comissão2: 0
+Salario Total2: 0
+Salario Liquido2: 0
+=====================
+
+
+  function atualizarCamposHidden() {
+       // Atualizar mês e ano apenas se estiverem vazios
+       const agora = new Date();
+       const mesInput = document.querySelector('input[name="mes"]');
+       const anoInput = document.querySelector('input[name="ano"]');
+
+       if (!mesInput.value || mesInput.value === '0') {
+           mesInput.value = agora.getMonth() + 1;
+       }
+       if (!anoInput.value || anoInput.value === '0') {
+           anoInput.value = agora.getFullYear();
+       }
+
+
+       // Atualizar quantidades das tabelas
+       const ftTotal = document.getElementById('ft_total')?.innerText || '0';
+       const encTotal = document.getElementById('enc_total')?.innerText || '0';
+       const digTotal = document.getElementById('dig_total')?.innerText || '0';
+
+       document.querySelector('input[name="qtdFotos"]').value = ftTotal;
+       document.querySelector('input[name="qtdArquivos"]').value = encTotal;
+       document.querySelector('input[name="qtdSobras"]').value = digTotal;
+
+       // Atualizar dados de conduta (se existirem)
+       const resumoConduta = document.querySelector('#tabelafuncconduta tbody tr');
+       if (resumoConduta) {
+           const cells = resumoConduta.querySelectorAll('td');
+           if (cells.length >= 4) {
+               document.querySelector('input[name="advertencias"]').value = cells[0].innerText || '0';
+               document.querySelector('input[name="faltas"]').value = cells[1].innerText || '0';
+               document.querySelector('input[name="suspensoes"]').value = cells[2].innerText || '0';
+               document.querySelector('input[name="dsr"]').value = cells[3].innerText || '0';
+           }
+       }
+
+       // Atualizar atrasos
+       const atrasosInput = document.getElementById('atrasos_horas');
+       if (atrasosInput) {
+           document.querySelector('input[name="atrasos"]').value = atrasosInput.value;
+       }
+
+       // Atualizar valores financeiros
+       const campos = [
+           'salario_bruto', 'vales_mes', 'inss', 'fgts', 'descontos_mes',
+           'comissao', 'salario_total', 'salario_liquido',
+           'comissao2', 'salario_total2', 'salario_liquido2'
+       ];
+
+       campos.forEach(campo => {
+           const input = document.getElementById(campo);
+           if (input) {
+               const hiddenInput = document.querySelector(`input[name="${campo}"]`);
+               if (hiddenInput) {
+                   hiddenInput.value = removerFormatacao(input.value);
+
+               }
+           }
+       });
+
+       // Atualizar valores de descontos disciplinares
+       const valorFaltas = document.getElementById('inputFaltas')?.value || '0';
+       const valorSuspensoes = document.getElementById('inputSuspensoes')?.value || '0';
+       const valorAtrasos = document.getElementById('valor_desconto_atrasos')?.value || '0';
+
+       document.querySelector('input[name="valorFaltas"]').value = valorFaltas;
+       document.querySelector('input[name="valorSuspensoes"]').value = valorSuspensoes;
+       document.querySelector('input[name="valorAtrasos"]').value = valorAtrasos;
+
+       // Atualizar venda_total com o valor de salario_bruto
+       const salarioBruto = document.getElementById('salario_bruto')?.value || '0';
+       document.querySelector('input[name="venda_total"]').value = salarioBruto;
+
+       console.log('Campos hidden atualizados antes do envio');
+   }

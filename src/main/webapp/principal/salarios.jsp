@@ -343,6 +343,7 @@
                                                id="descontos_mes" name="descontos_mes" value="${descontos_mes}" readonly tabindex="-1">
                                     </div>
 
+
                                 </div>
 
                                 <!-- Segunda linha: Comissão 1 e Salário Líquido 1 -->
@@ -360,12 +361,20 @@
                                                readonly tabindex="-1" id="salario_total" name="salario_total" value="${salario_total}">
                                     </div>
 
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: white; color: black"
+                                               id="descontos_1" name="descontos_1" value="${descontos_1}" readonly tabindex="-1">
+                                    </div>
+
                                     <div class="col-auto ms-3">
                                         <label style="color: #f2a654">SALÁRIO LÍQUIDO</label>
                                         <input type="text" class="form-control money text-center fw-bold"
                                                style="background-color: #f2a654; color: black"
                                                readonly tabindex="-1" id="salario_liquido" name="salario_liquido" value="${salario_liquido}">
                                     </div>
+
                                 </div>
 
                                 <!-- Terceira linha: Comissão 2 e Salário Líquido 2 -->
@@ -382,6 +391,13 @@
                                         <input type="text" class="form-control money text-center fw-bold"
                                                style="background-color: #f2a654; color: black"
                                                readonly tabindex="-1" id="salario_total2" name="salario_total2" value="${salario_total2}">
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: white; color: black"
+                                               id="descontos_2" name="descontos_2" value="${descontos_2}" readonly tabindex="-1">
                                     </div>
 
                                     <div class="col-auto ms-3">
@@ -756,61 +772,48 @@
         calcularSalariosLiquidos();
     });
 
-    // === Calcular salários líquidos considerando atrasos, vales, descontos e encargos ===
     function calcularSalariosLiquidos() {
         let salarioBruto = parseFloat(salarioInput.value || 0);
         let inss = parseFloat(inssInput.value || 0);
         let fgts = parseFloat(fgtsInput.value || 0);
         let vales = parseFloat(valesInput?.value || 0);
 
-        // Tratamento dos descontos - agora mais simples já que vem do backend sem formatação
         let descontos = 0;
         if (descontosInput && descontosInput.value) {
             descontos = parseFloat(descontosInput.value) || 0;
         }
 
-        // Cálculo do desconto por atraso (em horas)
         const horasAtraso = converterHorasParaDecimal(atrasosInput?.value || '0:00');
         const salarioBaseComissao = salarioBruto * (comissao / 100);
         const salarioHora = salarioBaseComissao / 220;
         const descontoAtraso = horasAtraso * salarioHora;
 
-        // Atualiza campo visual com valor do desconto por atrasos (sem formatação)
         const valorDescontoAtrasosInput = document.getElementById('valor_desconto_atrasos');
         if (valorDescontoAtrasosInput) {
             valorDescontoAtrasosInput.value = descontoAtraso.toFixed(2);
         }
 
-        // Cálculo dos salários totais (bruto * comissão)
         const salarioTotal1 = salarioBruto * (comissao / 100);
         const salarioTotal2 = salarioBruto * (comissao2 / 100);
 
-        // Atualiza os campos de salário total (sem formatação)
         salarioTotal1Input.value = salarioTotal1.toFixed(2);
         salarioTotal2Input.value = salarioTotal2.toFixed(2);
 
-        // Debug dos valores antes do cálculo
-        console.log('Valores para cálculo:', {
-            salarioBruto,
-            comissao,
-            comissao2,
-            salarioTotal1,
-            salarioTotal2,
-            inss,
-            fgts,
-            vales,
-            descontos,
-            descontoAtraso
-        });
+        const descontos_1 = inss + vales + descontos + descontoAtraso;
+        const descontos_2 = inss + fgts + vales + descontos + descontoAtraso;
 
-        // Cálculo dos salários líquidos
-        const salarioLiquido1 = salarioTotal1 - inss - vales - descontos - descontoAtraso;
-        const salarioLiquido2 = salarioTotal2 - inss - fgts - vales - descontos - descontoAtraso;
+        // Atualiza os campos descontos_1 e descontos_2 sem formatação
+        const descontos1Input = document.getElementById('descontos_1');
+        if (descontos1Input) {
+            descontos1Input.value = descontos_1.toFixed(2);
+        }
+        const descontos2Input = document.getElementById('descontos_2');
+        if (descontos2Input) {
+            descontos2Input.value = descontos_2.toFixed(2);
+        }
 
-        console.log('Salários líquidos calculados:', {
-            salarioLiquido1,
-            salarioLiquido2
-        });
+        const salarioLiquido1 = salarioTotal1 - descontos_1;
+        const salarioLiquido2 = salarioTotal2 - descontos_2;
 
         salarioLiquido1Input.value = salarioLiquido1.toLocaleString('pt-BR', {
             style: 'currency',
@@ -821,6 +824,7 @@
             currency: 'BRL'
         });
     }
+
 
     // === Eventos para recalcular salários líquidos ao alterar vales, descontos ou atrasos ===
     valesInput?.addEventListener('input', function() {

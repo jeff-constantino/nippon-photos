@@ -135,7 +135,7 @@ public class ServletSalarios extends ServletGenericUtil{
 
             // Dados básicos
             model.setFuncionarioId(Long.parseLong(funcionarioIdStr));
-            model.setNomeFuncionario(req.getParameter("nomeFuncionario"));
+            model.setNomeFuncionario(req.getParameter("nome"));
 
             // Mês e ano - usar valor de mesAno se presente
             String mesAnoStr = req.getParameter("mesAno"); // Ex: "março 2025"
@@ -157,10 +157,13 @@ public class ServletSalarios extends ServletGenericUtil{
             model.setAno(ano);
 
 
-            // Quantidades - buscar pelos nomes corretos dos campos JSP
-            model.setQtdFotos(parseIntFromElement(req.getParameter("qtdFotos")));
-            model.setQtdArquivos(parseIntFromElement(req.getParameter("qtdArquivos")));
-            model.setQtdSobras(parseIntFromElement(req.getParameter("qtdSobras")));
+            // Quantidades - buscados no tbody
+            model.setQtdFotos(parseIntFromElement(req.getParameter("ft_total")));
+            model.setQtdEnc(parseIntFromElement(req.getParameter("enc_total")));
+            model.setQtdArquivos(parseIntFromElement(req.getParameter("dig_total")));
+            model.setQtdSobras(parseIntFromElement(req.getParameter("sobras")));
+            model.setAproveitamento(parseBigDecimal(req.getParameter("aproveitamento")));
+
 
             // Conduta - buscar dados do resumoConduta
             model.setAdvertencias(parseIntOrZero(req.getParameter("advertencias")));
@@ -176,7 +179,7 @@ public class ServletSalarios extends ServletGenericUtil{
             model.setValorFaltas(parseBigDecimal(req.getParameter("inputFaltas")));
             model.setValorSuspensoes(parseBigDecimal(req.getParameter("inputSuspensoes")));
             model.setValorAtrasos(parseBigDecimal(req.getParameter("valor_desconto_atrasos")));
-            model.setVales(parseBigDecimal(req.getParameter("vales")));
+            model.setVales(parseBigDecimal(req.getParameter("vales_mes")));
             model.setInss(parseBigDecimal(req.getParameter("inss")));
             model.setFgts(parseBigDecimal(req.getParameter("fgts")));
 
@@ -186,7 +189,7 @@ public class ServletSalarios extends ServletGenericUtil{
             // Salários
             model.setComissao(parseBigDecimal(req.getParameter("comissao")));
             model.setSalario_total(parseBigDecimal(req.getParameter("salario_total")));
-            model.setSalario_liquido1(parseBigDecimal(req.getParameter("salario_liquido1")));
+            model.setSalario_liquido1(parseBigDecimal(req.getParameter("salario_liquido")));
 
             model.setComissao2(parseBigDecimal(req.getParameter("comissao2")));
             model.setSalario_total2(parseBigDecimal(req.getParameter("salario_total2")));
@@ -265,13 +268,12 @@ public class ServletSalarios extends ServletGenericUtil{
     private BigDecimal parseBigDecimal(String valor) {
         if (valor == null || valor.trim().isEmpty()) return BigDecimal.ZERO;
 
-        valor = valor.replace("R$", "")
-                .replace("\u00A0", "") // <- remove espaço especial (non-breaking space)
-                .replace(" ", "")
-                .replace(".", "")
-                .replace(",", ".");
+        valor = valor.trim().replace("R$", "").replace("\u00A0", "").replace(" ", "");
 
-        valor = valor.trim();
+        // Se contém vírgula, trata como formato BR; senão, assume padrão americano
+        if (valor.contains(",")) {
+            valor = valor.replace(".", "").replace(",", ".");
+        }
 
         try {
             return new BigDecimal(valor);
@@ -280,6 +282,7 @@ public class ServletSalarios extends ServletGenericUtil{
             return BigDecimal.ZERO;
         }
     }
+
 
 
     private double convertHorasParaDecimal(String horasMinutos) {

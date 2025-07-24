@@ -99,7 +99,11 @@
 
 
                 </div>
-                <div class="row">
+                <form action="<%= request.getContextPath() %>/ServletSalarios" method="post" id="formGravarVenda" name="formGravarVenda">
+                    <input type="hidden" name="acao" value="gravarVenda">
+                    <input type="hidden" name="mesAno" value="${mesAno}">
+
+                    <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
@@ -312,7 +316,7 @@
                                         <label style="color: #f2a654">VENDA TOTAL</label>
                                         <input type="text" class="form-control money text-center fw-bold"
                                                style="background-color: white; color: black"
-                                               id="salario_bruto" name="salario_bruto" value="${salario_bruto}" tabindex="-1">
+                                               id="venda_total" name="venda_total" value="${venda_total}" tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
@@ -408,10 +412,15 @@
                                     </div>
                                 </div>
                             </div>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> Gravar
+                            </button>
+
 
                         </div>
                     </div>
                 </div>
+                </form>
 
 
             </div>
@@ -646,7 +655,7 @@
     ];
 
     // === ELEMENTOS DO FORMULÁRIO ===
-    const salarioInput = document.getElementById('salario_bruto');
+    const vendaTotalInput = document.getElementById('venda_total');
     const inssInput = document.getElementById('inss');
     const fgtsInput = document.getElementById('fgts');
     const comissaoInput = document.getElementById('comissao');
@@ -680,10 +689,10 @@
         const inputSuspensoes = document.getElementById('inputSuspensoes');
         const descontosMesInput = document.getElementById('descontos_mes');
 
-        let salarioBruto = parseFloat(salarioInput.value || 0);
-        if (isNaN(salarioBruto)) salarioBruto = parseFloat(removerMascara(salarioInput.value)) || 0;
+        let vendaTotal = parseFloat(vendaTotalInput.value || 0);
+        if (isNaN(vendaTotal)) vendaTotal = parseFloat(removerMascara(vendaTotalInput.value)) || 0;
 
-        const baseCalculo = salarioBruto * (comissao / 100);
+        const baseCalculo = vendaTotal * (comissao / 100);
         const valorDia = baseCalculo / 30;
 
         const totalFaltas = parseInt(inputFaltas?.getAttribute('data-faltas')) || 0;
@@ -703,7 +712,7 @@
         }
 
         console.log('Descontos disciplinares calculados:', {
-            salarioBruto,
+            vendaTotal,
             baseCalculo,
             valorDia,
             totalFaltas,
@@ -716,27 +725,27 @@
     }
 
     // === Calcular salário bruto com base nos totais e valores configurados ===
-    function calcularSalarioBruto() {
+    function calcularVendaTotal() {
         const ftTotal = parseFloat(document.getElementById('ft_total')?.value || 0);
         const encTotal = parseFloat(document.getElementById('enc_total')?.value || 0);
         const digTotal = parseFloat(document.getElementById('dig_total')?.value || 0);
 
-        const salarioBruto = (ftTotal * conf1_valor) + (encTotal * conf2_valor) + (digTotal * conf3_valor);
-        salarioInput.value = salarioBruto.toFixed(2);
+        const vendaTotal = (ftTotal * conf1_valor) + (encTotal * conf2_valor) + (digTotal * conf3_valor);
+        vendaTotalInput.value = vendaTotal.toFixed(2);
 
         // Dispara evento input para recalcular INSS, FGTS e salários líquidos
-        salarioInput.dispatchEvent(new Event('input'));
+        vendaTotalInput.dispatchEvent(new Event('input'));
     }
 
     // === Cálculo do INSS, FGTS e atualização dos salários líquidos ===
-    salarioInput.addEventListener('input', function () {
-        let salarioBruto = parseFloat(this.value);
+    vendaTotalInput.addEventListener('input', function () {
+        let vendaTotal = parseFloat(this.value);
 
-        if (isNaN(salarioBruto)) {
-            salarioBruto = parseFloat(removerMascara(this.value)) || 0;
+        if (isNaN(vendaTotal)) {
+            vendaTotal = parseFloat(removerMascara(this.value)) || 0;
         }
 
-        if (isNaN(salarioBruto) || salarioBruto <= 0) {
+        if (isNaN(vendaTotal) || vendaTotal <= 0) {
             inssInput.value = '0.00';
             fgtsInput.value = '0.00';
             calcularSalariosLiquidos();
@@ -744,7 +753,7 @@
         }
 
         // Base para cálculo INSS e FGTS = salário_bruto * comissão
-        const baseCalculo = salarioBruto * (comissao / 100);
+        const baseCalculo = vendaTotal * (comissao / 100);
 
         // Cálculo do INSS baseado nas faixas
         let aliquotaInss = 0;
@@ -773,7 +782,7 @@
     });
 
     function calcularSalariosLiquidos() {
-        let salarioBruto = parseFloat(salarioInput.value || 0);
+        let vendaTotal = parseFloat(vendaTotalInput.value || 0);
         let inss = parseFloat(inssInput.value || 0);
         let fgts = parseFloat(fgtsInput.value || 0);
         let vales = parseFloat(valesInput?.value || 0);
@@ -784,7 +793,7 @@
         }
 
         const horasAtraso = converterHorasParaDecimal(atrasosInput?.value || '0:00');
-        const salarioBaseComissao = salarioBruto * (comissao / 100);
+        const salarioBaseComissao = vendaTotal * (comissao / 100);
         const salarioHora = salarioBaseComissao / 220;
         const descontoAtraso = horasAtraso * salarioHora;
 
@@ -793,8 +802,8 @@
             valorDescontoAtrasosInput.value = descontoAtraso.toFixed(2);
         }
 
-        const salarioTotal1 = salarioBruto * (comissao / 100);
-        const salarioTotal2 = salarioBruto * (comissao2 / 100);
+        const salarioTotal1 = vendaTotal * (comissao / 100);
+        const salarioTotal2 = vendaTotal * (comissao2 / 100);
 
         salarioTotal1Input.value = salarioTotal1.toFixed(2);
         salarioTotal2Input.value = salarioTotal2.toFixed(2);
@@ -841,7 +850,7 @@
 
     // === Inicialização ===
     window.addEventListener('DOMContentLoaded', () => {
-        calcularSalarioBruto();
+        calcularVendaTotal();
         comissaoInput.value = comissao.toFixed(2);
         comissao2Input.value = comissao2.toFixed(2);
         calcularDescontosDisciplinares();

@@ -18,6 +18,7 @@ public class ModelSalarios implements Serializable {
     private int qtdArquivos;
     private int qtdSobras;
     private int qtdEnc;
+    private BigDecimal aproveitamento;
 
     private double atrasos;
     private  int faltas;
@@ -43,6 +44,15 @@ public class ModelSalarios implements Serializable {
     private BigDecimal comissao2;
     private BigDecimal salario_total2;
     private BigDecimal salario_liquido2;
+
+
+    public BigDecimal getAproveitamento() {
+        return aproveitamento;
+    }
+
+    public void setAproveitamento(BigDecimal aproveitamento) {
+        this.aproveitamento = aproveitamento;
+    }
 
     public int getQtdEnc() {
         return qtdEnc;

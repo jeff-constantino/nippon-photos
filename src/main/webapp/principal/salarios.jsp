@@ -9,6 +9,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%
+    // Gera o ano atual e define como atributo
+    java.util.Calendar cal = java.util.Calendar.getInstance();
+    int anoAtual = cal.get(java.util.Calendar.YEAR);
+    request.setAttribute("anoAtual", anoAtual);
+%>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <jsp:include page="header.jsp"></jsp:include>
@@ -27,7 +34,353 @@
                 <div class="row">
 
                 </div>
+
                 <div class="row">
+                    <div class="col-sm-4 grid-margin">
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                    <!-- Modal Buscar Salarios -->
+                                    <div class="modal fade" id="modalBusca" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl mt-5" style="max-width: 80%; width: 80%">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+
+                                                    <form id="formBusca" name="formBusca">
+                                                        <input type="hidden" name="acao" value="buscaSalario">
+                                                        <div class="form-row align-items-center">
+
+                                                            <!-- Select de Mês -->
+                                                            <div class="col-auto">
+                                                                <label for="mes">Mês</label>
+                                                                <select class="form-control" id="mes" name="mes" required>
+                                                                    <option value="">Selecione o mês</option>
+                                                                    <c:forEach var="i" begin="1" end="12">
+                                                                        <c:set var="mesNome">
+                                                                            <c:choose>
+                                                                                <c:when test="${i == 1}">Janeiro</c:when>
+                                                                                <c:when test="${i == 2}">Fevereiro</c:when>
+                                                                                <c:when test="${i == 3}">Março</c:when>
+                                                                                <c:when test="${i == 4}">Abril</c:when>
+                                                                                <c:when test="${i == 5}">Maio</c:when>
+                                                                                <c:when test="${i == 6}">Junho</c:when>
+                                                                                <c:when test="${i == 7}">Julho</c:when>
+                                                                                <c:when test="${i == 8}">Agosto</c:when>
+                                                                                <c:when test="${i == 9}">Setembro</c:when>
+                                                                                <c:when test="${i == 10}">Outubro</c:when>
+                                                                                <c:when test="${i == 11}">Novembro</c:when>
+                                                                                <c:when test="${i == 12}">Dezembro</c:when>
+                                                                            </c:choose>
+                                                                        </c:set>
+                                                                        <option value="${i}" <c:if test="${i == mes}">selected</c:if>>${mesNome}</option>
+                                                                    </c:forEach>
+                                                                </select>
+                                                            </div>
+
+                                                            <!-- Select de Ano -->
+                                                            <div class="col-auto">
+                                                                <label for="ano">Ano</label>
+                                                                <select class="form-control" id="ano" name="ano" required>
+                                                                    <option value="">Selecione o ano</option>
+                                                                    <c:forEach var="a" begin="${anoAtual - 10}" end="${anoAtual + 10}">
+                                                                        <option value="${a}" <c:if test="${a == ano}">selected</c:if>>${a}</option>
+                                                                    </c:forEach>
+                                                                </select>
+                                                            </div>
+
+                                                            <!-- Select de Funcionário -->
+                                                            <div class="col-auto">
+                                                                <label>Funcionário</label>
+                                                                <select class="form-control" id="funcionarioIdBusca" name="funcionarioId" required>
+                                                                    <option value="">Selecione um Funcionário</option>
+
+                                                                    <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                        <c:if test="${funcionario.status == 'ATIVO'}">
+                                                                            <option value="${funcionario.id}" class="text-success"
+                                                                                    <c:if test="${param.funcionarioId != null && param.funcionarioId == funcionario.id}">
+                                                                                        selected
+                                                                                    </c:if>>
+                                                                                    ${funcionario.nome}
+                                                                            </option>
+                                                                        </c:if>
+                                                                    </c:forEach>
+
+                                                                    <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                        <c:if test="${funcionario.status != 'ATIVO'}">
+                                                                            <option value="${funcionario.id}" class="text-danger"
+                                                                                    <c:if test="${param.funcionarioId != null && param.funcionarioId == funcionario.id}">
+                                                                                        selected
+                                                                                    </c:if>>
+                                                                                    ${funcionario.nome}
+                                                                            </option>
+                                                                        </c:if>
+                                                                    </c:forEach>
+                                                                </select>
+                                                            </div>
+
+                                                            <!-- Botão de Submissão -->
+                                                            <div class="col-auto">
+                                                                <button id="btnBuscar" type="button" class="btn btn-primary">Exibir Resultados</button>
+                                                            </div>
+
+                                                        </div>
+                                                    </form>
+
+                                                    <!-- ÁREA DE RESULTADOS DA BUSCA -->
+                                                    <div id="resultadoBusca" style="display: none;">
+                                                        <hr class="my-4">
+
+                                                        <!-- Título com mês/ano -->
+                                                        <div class="row align-items-center mb-3">
+                                                            <div class="col text-center">
+                                                                <h2 style="text-transform: uppercase; color: #d39e00" id="mesAnoResultado">${mesAno}</h2>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- VENDAS TOTAIS DO FUNCIONÁRIO -->
+                                                        <div class="card mb-3">
+                                                            <div class="card-body">
+                                                                <h4 class="card-title" style="text-align: center">VENDAS TOTAIS DO FUNCIONÁRIO</h4>
+
+                                                                <div class="row align-items-center mb-3">
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">NOME</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="nomeResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">TOTAL DE FOTOS</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="ft_totalResultado" readonly tabindex="-1">
+                                                                    </div>
+
+
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">TOTAL DE DIGITAIS</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="dig_totalResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">TOTAL DE SOBRAS</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="sobrasResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">APROVEITAMENTO</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="aproveitamentoResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">FUNCIONÁRIO ID</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="funcionarioIdResultado" readonly tabindex="-1">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- HISTÓRICO DE CONDUTA -->
+                                                        <div class="card mb-3">
+                                                            <div class="card-body">
+                                                                <h4 class="card-title" style="text-align: center">HISTÓRICO DE CONDUTA</h4>
+
+                                                                <div class="row align-items-center mb-3">
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">ADVERTÊNCIAS</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="advertenciasResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">FALTAS</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="faltasResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">DIAS DE SUSPENSÃO</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="suspensoesResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">DSR</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="dsrResultado" readonly tabindex="-1">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- DESCONTOS DISCIPLINARES -->
+                                                        <div class="card mb-3">
+                                                            <div class="card-body">
+                                                                <h4 class="card-title" style="text-align: center">VALOR DE DESCONTOS DISCIPLINARES</h4>
+
+                                                                <div class="row align-items-center mb-3">
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">VALOR DAS FALTAS</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="inputFaltasResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">VALOR DAS SUSPENSÕES + DSR</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="inputSuspensoesResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">ATRASOS (HH:MM)</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="atrasos_horasResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto ms-3">
+                                                                        <label style="color: #f2a654">VALOR DESCONTO ATRASOS</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="valor_desconto_atrasosResultado" readonly tabindex="-1">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- SALÁRIOS E COMISSÕES -->
+                                                        <div class="card mb-3">
+                                                            <div class="card-body">
+                                                                <!-- Primeira linha -->
+                                                                <div class="row align-items-center mb-3">
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">VENDA TOTAL</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="venda_totalResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">VALES</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="vales_mesResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">INSS</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="inssResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">FGTS</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="fgtsResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">DESCONTOS DISCIPLINARES</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="descontos_mesResultado" readonly tabindex="-1">
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Segunda linha -->
+                                                                <div class="row align-items-center mb-3">
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">COMISSÃO %</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: #f2a654; color: black"
+                                                                               id="comissaoResultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto ms-3">
+                                                                        <label style="color: #f2a654">SALÁRIO TOTAL</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: #f2a654; color: black"
+                                                                               id="salario_totalResultadoField" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="descontos_1Resultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto ms-3">
+                                                                        <label style="color: #f2a654">SALÁRIO LÍQUIDO</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: #f2a654; color: black"
+                                                                               id="salario_liquidoResultado" readonly tabindex="-1">
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Terceira linha -->
+                                                                <div class="row align-items-center">
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">COMISSÃO %</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: #f2a654; color: black"
+                                                                               id="comissao2Resultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto ms-3">
+                                                                        <label style="color: #f2a654">SALÁRIO TOTAL</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: #f2a654; color: black"
+                                                                               id="salario_total2Resultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="descontos_2Resultado" readonly tabindex="-1">
+                                                                    </div>
+
+                                                                    <div class="col-auto ms-3">
+                                                                        <label style="color: #f2a654">SALÁRIO LÍQUIDO 2</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: #f2a654; color: black"
+                                                                               id="salario_liquido2Resultado" readonly tabindex="-1">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-sm-4 grid-margin">
 
 
@@ -110,7 +463,10 @@
 
                                 <!-- Botão Gerar Relatório -->
                                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalData">
-                                    <h4>Gerar Relatório</h4>
+                                    <h4>GERAR RELATÓRIO</h4>
+                                </button>
+                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalBusca">
+                                    <h4>BUSCAR SALÁRIO</h4>
                                 </button>
 
                                 <!-- Mensagem de retorno -->
@@ -172,6 +528,7 @@
                                                    name="sobras" value="${mv.sobras}" readonly tabindex="-1">
                                         </div>
 
+                                            <%-- Lógica JSP para calcular aproveitamento --%>
                                         <c:set var="aproveitamento" value="0" />
                                         <c:if test="${mv.sobras + mv.ft_total > 0}">
                                             <c:set var="aproveitamento" value="${(mv.ft_total * 100) / (mv.sobras + mv.ft_total)}" />
@@ -181,10 +538,13 @@
                                             <label style="color: #f2a654">APROVEITAMENTO</label>
                                             <input type="text" class="form-control text-center fw-bold"
                                                    style="background-color: white; color: black"
-                                                   name="aproveitamento"
                                                    value="<fmt:formatNumber value='${aproveitamento}' maxFractionDigits='2'/>%"
                                                    readonly tabindex="-1">
+
+                                            <!-- input real para enviar no POST -->
+                                            <input type="hidden" name="aproveitamento" value="${aproveitamento}" />
                                         </div>
+
 
 
                                         <div class="col-auto">
@@ -411,15 +771,31 @@
                                                readonly tabindex="-1" id="salario_liquido2" name="salario_liquido2" value="${salario_liquido2}">
                                     </div>
                                 </div>
+                                <input type="hidden" name="id_salario" id="id_salario" value="">
+
+
                             </div>
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save"></i> Gravar
-                            </button>
+
 
 
                         </div>
                     </div>
                 </div>
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <button type="submit" class="btn btn-outline-success">
+                                        <H4>Gravar</H4>
+                                    </button>
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
                 </form>
 
 
@@ -855,6 +1231,185 @@
         comissao2Input.value = comissao2.toFixed(2);
         calcularDescontosDisciplinares();
     });
+    // Formatação de dinheiro simples (R$ 0,00)
+    function formatMoney(valor) {
+        if (valor == null) return 'R$ 0,00';
+        let num = Number(valor);
+        if (isNaN(num)) return 'R$ 0,00';
+        return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnBuscar = document.getElementById('btnBuscar');
+        const resultadoBusca = document.getElementById('resultadoBusca');
+
+        if (btnBuscar) {
+            btnBuscar.addEventListener('click', function() {
+                realizarBusca();
+            });
+        }
+
+        function realizarBusca() {
+            const mes = document.getElementById('mes').value;
+            const ano = document.getElementById('ano').value;
+            const funcionarioId = document.getElementById('funcionarioIdBusca').value;
+
+            // Validação dos campos
+            if (!mes || !ano || !funcionarioId) {
+                alert('Por favor, preencha todos os campos (Mês, Ano e Funcionário).');
+                return;
+            }
+
+            // Mostrar loading
+            btnBuscar.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
+            btnBuscar.disabled = true;
+
+            // Ocultar resultados anteriores
+            resultadoBusca.style.display = 'none';
+
+            // Fazer requisição AJAX
+            const params = new URLSearchParams({
+                acao: 'buscaSalario',
+                mes: mes,
+                ano: ano,
+                funcionarioId: funcionarioId
+            });
+
+            fetch('<%= request.getContextPath() %>/ServletSalarios?' + params.toString(), {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => Promise.reject(err));
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        preencherResultados(data[0]); // Pega o primeiro (e provavelmente único) resultado
+                        resultadoBusca.style.display = 'block';
+                    } else {
+                        alert('Nenhum salário encontrado para os critérios informados.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro na busca:', error);
+                    if (error.erro) {
+                        alert('Erro: ' + error.erro);
+                    } else {
+                        alert('Erro ao buscar salário. Verifique os dados e tente novamente.');
+                    }
+                })
+                .finally(() => {
+                    // Restaurar botão
+                    btnBuscar.innerHTML = 'Exibir Resultados';
+                    btnBuscar.disabled = false;
+                });
+        }
+
+        function preencherResultados(salario) {
+            // Atualizar título com mês/ano
+            const meses = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const mesAnoTexto = meses[salario.mes] + ' ' + salario.ano;
+            document.getElementById('mesAnoResultado').textContent = mesAnoTexto.toUpperCase();
+
+            // Vendas Totais do Funcionário
+            document.getElementById('nomeResultado').value = salario.nomeFuncionario || '';
+            document.getElementById('ft_totalResultado').value = salario.qtdFotos || '0';
+
+            document.getElementById('dig_totalResultado').value = salario.qtdArquivos || '0';
+            document.getElementById('sobrasResultado').value = salario.qtdSobras || '0';
+            document.getElementById('aproveitamentoResultado').value = formatarAproveitamento(salario.aproveitamento);
+            document.getElementById('funcionarioIdResultado').value = salario.funcionarioId || '';
+
+            // Histórico de Conduta
+            document.getElementById('advertenciasResultado').value = salario.advertencias || '0';
+            document.getElementById('faltasResultado').value = salario.faltas || '0';
+            document.getElementById('suspensoesResultado').value = salario.suspensoes || '0';
+            document.getElementById('dsrResultado').value = salario.dsr || '0';
+
+            // Descontos Disciplinares
+            document.getElementById('inputFaltasResultado').value = formatarMoeda(salario.valorFaltas);
+            document.getElementById('inputSuspensoesResultado').value = formatarMoeda(salario.valorSuspensoes);
+            document.getElementById('atrasos_horasResultado').value = formatarHoras(salario.atrasos);
+            document.getElementById('valor_desconto_atrasosResultado').value = formatarMoeda(salario.valorAtrasos);
+
+            // Salários e Comissões - Primeira linha
+            document.getElementById('venda_totalResultado').value = formatarMoeda(salario.venda_total);
+            document.getElementById('vales_mesResultado').value = formatarMoeda(salario.vales);
+            document.getElementById('inssResultado').value = formatarMoeda(salario.inss);
+            document.getElementById('fgtsResultado').value = formatarMoeda(salario.fgts);
+            document.getElementById('descontos_mesResultado').value = formatarMoeda(salario.descontos_mes);
+
+            // Salários e Comissões - Segunda linha
+            document.getElementById('comissaoResultado').value = formatarPercentual(salario.comissao);
+            document.getElementById('salario_totalResultadoField').value = formatarMoeda(salario.salario_total);
+            document.getElementById('descontos_1Resultado').value = formatarMoeda(salario.descontos_1);
+            document.getElementById('salario_liquidoResultado').value = formatarMoeda(salario.salario_liquido1);
+
+            // Salários e Comissões - Terceira linha
+            document.getElementById('comissao2Resultado').value = formatarPercentual(salario.comissao2);
+            document.getElementById('salario_total2Resultado').value = formatarMoeda(salario.salario_total2);
+            document.getElementById('descontos_2Resultado').value = formatarMoeda(salario.descontos_2);
+            document.getElementById('salario_liquido2Resultado').value = formatarMoeda(salario.salario_liquido2);
+        }
+
+        function formatarMoeda(valor) {
+            if (!valor && valor !== 0) return 'R$ 0,00';
+
+            const numero = typeof valor === 'string' ? parseFloat(valor) : valor;
+            if (isNaN(numero)) return 'R$ 0,00';
+
+            return 'R$ ' + numero.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function formatarPercentual(valor) {
+            if (!valor && valor !== 0) return '0%';
+
+            const numero = typeof valor === 'string' ? parseFloat(valor) : valor;
+            if (isNaN(numero)) return '0%';
+
+            return numero.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + '%';
+        }
+
+        function formatarAproveitamento(valor) {
+            if (!valor && valor !== 0) return '0,00%';
+
+            const numero = typeof valor === 'string' ? parseFloat(valor) : valor;
+            if (isNaN(numero)) return '0,00%';
+
+            return numero.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }) + '%';
+        }
+
+        function formatarHoras(valor) {
+            if (!valor && valor !== 0) return '00:00';
+
+            // Assumindo que o valor está em horas decimais (ex: 1.5 = 1h30min)
+            const horas = Math.floor(valor);
+            const minutos = Math.round((valor - horas) * 60);
+
+            return String(horas).padStart(2, '0') + ':' + String(minutos).padStart(2, '0');
+        }
+    });
+
+
+
+
+
 
 
 

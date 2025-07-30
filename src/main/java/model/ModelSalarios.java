@@ -46,6 +46,37 @@ public class ModelSalarios implements Serializable {
     private BigDecimal salario_liquido2;
 
 
+
+
+    private BigDecimal descontos_mes;
+    private  BigDecimal descontos_1;
+    private BigDecimal descontos_2;
+
+
+    public BigDecimal getDescontos_mes() {
+        return descontos_mes;
+    }
+
+    public void setDescontos_mes(BigDecimal descontos_mes) {
+        this.descontos_mes = descontos_mes;
+    }
+
+    public BigDecimal getDescontos_1() {
+        return descontos_1;
+    }
+
+    public void setDescontos_1(BigDecimal descontos_1) {
+        this.descontos_1 = descontos_1;
+    }
+
+    public BigDecimal getDescontos_2() {
+        return descontos_2;
+    }
+
+    public void setDescontos_2(BigDecimal descontos_2) {
+        this.descontos_2 = descontos_2;
+    }
+
     public BigDecimal getAproveitamento() {
         return aproveitamento;
     }

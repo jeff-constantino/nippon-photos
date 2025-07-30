@@ -266,8 +266,8 @@ public class DAOSalarios {
                 "mes, ano, funcionario_id, nome_funcionario, qtd_fotos, qtd_arquivos, qtd_sobras, " +
                 "atrasos, faltas, advertencias, suspensoes, dsr, valor_atrasos, valor_faltas, " +
                 "valor_suspensoes, vales, inss, fgts, venda_total, comissao, salario_total, salario_liquido1, " +
-                "comissao2, salario_total2, salario_liquido2) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "comissao2, salario_total2, salario_liquido2, aproveitamento, descontos_mes, descontos_1, descontos_2) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, model.getMes());
@@ -295,6 +295,10 @@ public class DAOSalarios {
             stmt.setBigDecimal(23, model.getComissao2());
             stmt.setBigDecimal(24, model.getSalario_total2());
             stmt.setBigDecimal(25, model.getSalario_liquido2());
+            stmt.setBigDecimal(26, model.getAproveitamento());
+            stmt.setBigDecimal(27, model.getDescontos_mes());
+            stmt.setBigDecimal(28, model.getDescontos_1());
+            stmt.setBigDecimal(29, model.getDescontos_2());
 
             stmt.execute();
             connection.commit();
@@ -304,6 +308,67 @@ public class DAOSalarios {
         }
     }
 
+
+
+    public List<ModelSalarios> buscarSalariosPorMesAnoFuncionario(int mes, int ano, long funcionarioId) throws Exception {
+        List<ModelSalarios> lista = new ArrayList<>();
+        String sql = "SELECT * FROM salarios WHERE mes = ? AND ano = ? AND funcionario_id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, mes);
+            stmt.setInt(2, ano);
+            stmt.setLong(3, funcionarioId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ModelSalarios salario = new ModelSalarios();
+                salario.setIdSalario(rs.getInt("id_salario"));
+                salario.setMes(rs.getInt("mes"));
+                salario.setAno(rs.getInt("ano"));
+                salario.setFuncionarioId(rs.getLong("funcionario_id"));
+                salario.setNomeFuncionario(rs.getString("nome_funcionario"));
+
+                salario.setQtdFotos(rs.getInt("qtd_fotos"));
+                salario.setQtdArquivos(rs.getInt("qtd_arquivos"));
+                salario.setQtdSobras(rs.getInt("qtd_sobras"));
+
+
+                salario.setAtrasos(rs.getDouble("atrasos"));
+                salario.setFaltas(rs.getInt("faltas"));
+                salario.setAdvertencias(rs.getInt("advertencias"));
+                salario.setSuspensoes(rs.getInt("suspensoes"));
+                salario.setDsr(rs.getInt("dsr"));
+
+                salario.setValorAtrasos(rs.getBigDecimal("valor_atrasos"));
+                salario.setValorFaltas(rs.getBigDecimal("valor_faltas"));
+                salario.setValorSuspensoes(rs.getBigDecimal("valor_suspensoes"));
+
+                salario.setVales(rs.getBigDecimal("vales"));
+                salario.setInss(rs.getBigDecimal("inss"));
+                salario.setFgts(rs.getBigDecimal("fgts"));
+
+                salario.setVenda_total(rs.getBigDecimal("venda_total"));
+                salario.setComissao(rs.getBigDecimal("comissao"));
+                salario.setSalario_total(rs.getBigDecimal("salario_total"));
+                salario.setSalario_liquido1(rs.getBigDecimal("salario_liquido1"));
+
+                salario.setComissao2(rs.getBigDecimal("comissao2"));
+                salario.setSalario_total2(rs.getBigDecimal("salario_total2"));
+                salario.setSalario_liquido2(rs.getBigDecimal("salario_liquido2"));
+
+                salario.setAproveitamento(rs.getBigDecimal("aproveitamento"));
+                salario.setDescontos_mes(rs.getBigDecimal("descontos_mes"));
+                salario.setDescontos_1(rs.getBigDecimal("descontos_1"));
+                salario.setDescontos_2(rs.getBigDecimal("descontos_2"));
+
+
+                lista.add(salario);
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao consultar salários: " + e.getMessage(), e);
+        }
+        return lista;
+    }
 
 
 

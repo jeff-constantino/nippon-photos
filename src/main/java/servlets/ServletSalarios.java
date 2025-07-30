@@ -1,5 +1,6 @@
 package servlets;
 
+import com.google.gson.Gson;
 import dao.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -10,7 +11,9 @@ import jakarta.servlet.http.HttpSession;
 import model.*;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
@@ -68,11 +71,7 @@ public class ServletSalarios extends ServletGenericUtil{
                 ModelCondutaResumo resumoConduta = daoCondutas.buscarResumoConduta(funcId, dataIni, dataFin);
 
                 request.setAttribute("resumoConduta", resumoConduta);
-                System.out.println("Resumo Conduta:");
-                System.out.println("Advertências: " + resumoConduta.getTotalAdvertencias());
-                System.out.println("Faltas: " + resumoConduta.getTotalFaltas());
-                System.out.println("Dias de Suspensão: " + resumoConduta.getTotalDiasSuspensao());
-                System.out.println("DSRs: " + resumoConduta.getTotalDsrSuspensao());
+
 
 
                 int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
@@ -87,6 +86,70 @@ public class ServletSalarios extends ServletGenericUtil{
                 request.setAttribute("paginaAtual", paginaAtual);
                 request.setAttribute("totalPaginas", totalPaginas);
             }
+            if ("buscaSalario".equals(acao)) {
+                System.out.println("Entrou no bloco buscaSalario");
+
+                String funcionarioIdParam = request.getParameter("funcionarioId");
+                String mesParam = request.getParameter("mes");
+                String anoParam = request.getParameter("ano");
+
+                System.out.println("funcionarioId: " + funcionarioIdParam);
+                System.out.println("mes: " + mesParam);
+                System.out.println("ano: " + anoParam);
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                try (PrintWriter out = response.getWriter()) {
+                    if (funcionarioIdParam == null || funcionarioIdParam.isEmpty() ||
+                            mesParam == null || mesParam.isEmpty() ||
+                            anoParam == null || anoParam.isEmpty()) {
+
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        out.write("{\"erro\": \"Parâmetros obrigatórios ausentes ou inválidos.\"}");
+                        out.flush();
+                        return;
+                    }
+
+                    try {
+                        int mes = Integer.parseInt(mesParam);
+                        int ano = Integer.parseInt(anoParam);
+                        long funcId = Long.parseLong(funcionarioIdParam);
+
+                        DAOSalarios dao = new DAOSalarios();
+                        List<ModelSalarios> listaSalarios = dao.buscarSalariosPorMesAnoFuncionario(mes, ano, funcId);
+
+                        Gson gson = new Gson();
+
+                        if (listaSalarios != null && !listaSalarios.isEmpty()) {
+                            String json = gson.toJson(listaSalarios);
+                            out.print(json);
+                        } else {
+                            out.print("[]");
+                        }
+                        out.flush();
+
+                    } catch (NumberFormatException e) {
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        out.write("{\"erro\": \"Formato inválido nos parâmetros numéricos.\"}");
+                        out.flush();
+                    } catch (Exception e) {
+                        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                        String mensagemErro = e.getMessage().replace("\"", "\\\"");
+                        out.write("{\"erro\": \"Erro ao buscar salários: " + mensagemErro + "\"}");
+                        out.flush();
+                    }
+                } catch (IOException ioEx) {
+                    ioEx.printStackTrace();
+                }
+
+                return;
+            }
+
+
+
+
+
 
 
             request.setAttribute("dataInicial", dataInicial);
@@ -110,6 +173,11 @@ public class ServletSalarios extends ServletGenericUtil{
             HttpSession session = request.getSession();
             session.setAttribute("mes", mes);
             session.setAttribute("ano", ano);
+            
+            String msg = request.getParameter("msg");
+            if (msg != null && !msg.isEmpty()) {
+                request.setAttribute("msg", msg);
+            }
 
             dispatcher = request.getRequestDispatcher("principal/salarios.jsp");
             dispatcher.forward(request, response);
@@ -126,19 +194,16 @@ public class ServletSalarios extends ServletGenericUtil{
         try {
             String funcionarioIdStr = req.getParameter("funcionarioId");
             if (funcionarioIdStr == null || funcionarioIdStr.isEmpty()) {
-                req.setAttribute("msg", "Funcionário não informado.");
-                req.getRequestDispatcher("principal/salarios.jsp").forward(req, resp);
+                resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("Funcionário não informado.", "UTF-8"));
                 return;
             }
 
             ModelSalarios model = new ModelSalarios();
 
-            // Dados básicos
             model.setFuncionarioId(Long.parseLong(funcionarioIdStr));
             model.setNomeFuncionario(req.getParameter("nome"));
 
-            // Mês e ano - usar valor de mesAno se presente
-            String mesAnoStr = req.getParameter("mesAno"); // Ex: "março 2025"
+            String mesAnoStr = req.getParameter("mesAno");
             int mes = 0, ano = 0;
 
             if (mesAnoStr != null && !mesAnoStr.isEmpty()) {
@@ -156,26 +221,20 @@ public class ServletSalarios extends ServletGenericUtil{
             model.setMes(mes);
             model.setAno(ano);
 
-
-            // Quantidades - buscados no tbody
             model.setQtdFotos(parseIntFromElement(req.getParameter("ft_total")));
             model.setQtdEnc(parseIntFromElement(req.getParameter("enc_total")));
             model.setQtdArquivos(parseIntFromElement(req.getParameter("dig_total")));
             model.setQtdSobras(parseIntFromElement(req.getParameter("sobras")));
             model.setAproveitamento(parseBigDecimal(req.getParameter("aproveitamento")));
 
-
-            // Conduta - buscar dados do resumoConduta
             model.setAdvertencias(parseIntOrZero(req.getParameter("advertencias")));
             model.setFaltas(parseIntOrZero(req.getParameter("faltas")));
             model.setSuspensoes(parseIntOrZero(req.getParameter("suspensoes")));
             model.setDsr(parseIntOrZero(req.getParameter("dsr")));
 
-            // Atrasos - buscar pelo nome correto do campo
-            String atrasos = req.getParameter("atrasos_horas"); // Nome correto do campo
+            String atrasos = req.getParameter("atrasos_horas");
             model.setAtrasos(convertHorasParaDecimal(atrasos));
 
-            // Valores - buscar pelos nomes corretos dos campos
             model.setValorFaltas(parseBigDecimal(req.getParameter("inputFaltas")));
             model.setValorSuspensoes(parseBigDecimal(req.getParameter("inputSuspensoes")));
             model.setValorAtrasos(parseBigDecimal(req.getParameter("valor_desconto_atrasos")));
@@ -183,10 +242,8 @@ public class ServletSalarios extends ServletGenericUtil{
             model.setInss(parseBigDecimal(req.getParameter("inss")));
             model.setFgts(parseBigDecimal(req.getParameter("fgts")));
 
-            // CORREÇÃO: buscar venda_total ao invés de venda_total
             model.setVenda_total(parseBigDecimal(req.getParameter("venda_total")));
 
-            // Salários
             model.setComissao(parseBigDecimal(req.getParameter("comissao")));
             model.setSalario_total(parseBigDecimal(req.getParameter("salario_total")));
             model.setSalario_liquido1(parseBigDecimal(req.getParameter("salario_liquido")));
@@ -194,54 +251,22 @@ public class ServletSalarios extends ServletGenericUtil{
             model.setComissao2(parseBigDecimal(req.getParameter("comissao2")));
             model.setSalario_total2(parseBigDecimal(req.getParameter("salario_total2")));
             model.setSalario_liquido2(parseBigDecimal(req.getParameter("salario_liquido2")));
-
-            // Debug - imprimir valores recebidos
-            System.out.println("=== DEBUG SERVLET ===");
-            System.out.println("Mês: " + model.getMes()); //deveria ser 3 pela busca que eu fiz, gravou 7
-            System.out.println("Ano: " + model.getAno());
-            System.out.println("Funcionario ID:" + model.getFuncionarioId());
-            System.out.println("Nome: " + model.getNomeFuncionario());
-            System.out.println("Qtd Fotos: " + model.getQtdFotos());
-            System.out.println("Qtd Arquivos: " + model.getQtdArquivos());
-            System.out.println("Qtd Sobras: " + model.getQtdSobras());
-            System.out.println("Advertencias: " + model.getAdvertencias());
-            System.out.println("Faltas: " + model.getFaltas());
-            System.out.println("Suspensoes: " + model.getSuspensoes());
-            System.out.println("Dsr: " + model.getDsr());
-            System.out.println("Atrasos: " + model.getAtrasos());
-            System.out.println("Valor dos Atrasos: " + model.getValorAtrasos());
-            System.out.println("Valor dos Faltas: " + model.getValorFaltas());
-            System.out.println("Valor das Suspensões: " + model.getValorSuspensoes());
-            System.out.println("Valor dos Vales: " +model.getVales());
-            System.out.println("Venda Total: " + model.getVenda_total());
-
-            System.out.println("INSS: " + model.getInss());
-            System.out.println("FGTS: " + model.getFgts());
-
-            System.out.println("Comissão: " + model.getComissao());
-            System.out.println("Salario Total: " + model.getSalario_total());
-            System.out.println("Salario Liquido1: " + model.getSalario_liquido1());
-
-            System.out.println("Comissão2: " + model.getComissao2());
-            System.out.println("Salario Total2: " + model.getSalario_total2());
-            System.out.println("Salario Liquido2: " + model.getSalario_liquido2());
-
-
-            System.out.println("=====================");
+            model.setDescontos_mes(parseBigDecimal(req.getParameter("descontos_mes")));
+            model.setDescontos_1(parseBigDecimal(req.getParameter("descontos_1")));
+            model.setDescontos_2(parseBigDecimal(req.getParameter("descontos_2")));
 
             // Grava no banco
             DAOSalarios dao = new DAOSalarios();
             dao.gravarSalarios(model);
 
-            req.setAttribute("msg", "Salário registrado com sucesso!");
-            req.getRequestDispatcher("principal/salarios.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("Salário registrado com sucesso!", "UTF-8"));
 
         } catch (Exception e) {
             e.printStackTrace();
-            req.setAttribute("msg", "Erro ao gravar salário: " + e.getMessage());
-            req.getRequestDispatcher("principal/salarios.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("Erro ao gravar salário: " + e.getMessage(), "UTF-8"));
         }
     }
+
 
     // Helpers
     private int parseIntOrZero(String str) {

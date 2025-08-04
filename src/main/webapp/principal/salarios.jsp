@@ -469,12 +469,7 @@
                                     <h4>BUSCAR SALÁRIO</h4>
                                 </button>
 
-                                <!-- Mensagem de retorno -->
-                                <c:if test="${not empty msg}">
-                                    <div>
-                                        <span style="color:#1ad76b; text-align: center">${msg}</span>
-                                    </div>
-                                </c:if>
+                                
 
                                 <!-- Título com mês/ano -->
                                 <div class="row align-items-center mb-3">

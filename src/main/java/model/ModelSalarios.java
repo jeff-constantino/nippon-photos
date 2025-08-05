@@ -32,6 +32,7 @@ public class ModelSalarios implements Serializable {
     private BigDecimal valorSuspensoes;
     private BigDecimal vales;
     private BigDecimal inss;
+    private BigDecimal parcela;
     private BigDecimal fgts;
 
 
@@ -52,6 +53,13 @@ public class ModelSalarios implements Serializable {
     private  BigDecimal descontos_1;
     private BigDecimal descontos_2;
 
+    public BigDecimal getParcela() {
+        return parcela;
+    }
+
+    public void setParcela(BigDecimal parcela) {
+        this.parcela = parcela;
+    }
 
     public BigDecimal getDescontos_mes() {
         return descontos_mes;

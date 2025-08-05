@@ -195,7 +195,7 @@ public class DAOConfig {
             throw e;
         }
 
-        System.out.println("TOTAL DE CONFIGS CARREGADAS: " + listaConfigs.size());
+
         return listaConfigs;
     }
 

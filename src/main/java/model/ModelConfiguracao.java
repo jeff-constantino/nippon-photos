@@ -38,21 +38,58 @@ public class ModelConfiguracao implements java.io.Serializable {
     private  BigDecimal inss_1;
     private BigDecimal min_inss_1;
     private BigDecimal max_inss_1;
+    private BigDecimal parcela_1;
 
     private Long id_inss_2;
     private BigDecimal inss_2;
     private BigDecimal min_inss_2;
     private BigDecimal max_inss_2;
+    private BigDecimal parcela_2;
 
     private Long id_inss_3;
     private BigDecimal inss_3;
     private BigDecimal min_inss_3;
     private BigDecimal max_inss_3;
+    private BigDecimal parcela_3;
 
     private Long id_inss_4;
     private BigDecimal inss_4;
     private BigDecimal min_inss_4;
     private BigDecimal max_inss_4;
+    private BigDecimal parcela_4;
+
+
+    public BigDecimal getParcela_1() {
+        return parcela_1;
+    }
+
+    public void setParcela_1(BigDecimal parcela_1) {
+        this.parcela_1 = parcela_1;
+    }
+
+    public BigDecimal getParcela_2() {
+        return parcela_2;
+    }
+
+    public void setParcela_2(BigDecimal parcela_2) {
+        this.parcela_2 = parcela_2;
+    }
+
+    public BigDecimal getParcela_3() {
+        return parcela_3;
+    }
+
+    public void setParcela_3(BigDecimal parcela_3) {
+        this.parcela_3 = parcela_3;
+    }
+
+    public BigDecimal getParcela_4() {
+        return parcela_4;
+    }
+
+    public void setParcela_4(BigDecimal parcela_4) {
+        this.parcela_4 = parcela_4;
+    }
 
     public BigDecimal getComissao2() {
         return comissao2;

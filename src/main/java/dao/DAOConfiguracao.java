@@ -152,7 +152,7 @@ public class DAOConfiguracao {
     public ModelConfiguracao buscarFaixasInss() throws Exception {
         ModelConfiguracao configInss = new ModelConfiguracao();
 
-        String sql = "SELECT id_inss, inss, min_inss, max_inss FROM inss ORDER BY id_inss";
+        String sql = "SELECT id_inss, inss, min_inss, max_inss, parcela FROM inss ORDER BY id_inss";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql);
              ResultSet rs = preparedSql.executeQuery()) {
@@ -163,6 +163,7 @@ public class DAOConfiguracao {
                 BigDecimal inss = rs.getBigDecimal("inss");
                 BigDecimal min = rs.getBigDecimal("min_inss");
                 BigDecimal max = rs.getBigDecimal("max_inss");
+                BigDecimal parcela = rs.getBigDecimal("parcela");
 
                 switch (faixa) {
                     case 1:
@@ -170,24 +171,28 @@ public class DAOConfiguracao {
                         configInss.setInss_1(inss);
                         configInss.setMin_inss_1(min);
                         configInss.setMax_inss_1(max);
+                        configInss.setParcela_1(parcela);
                         break;
                     case 2:
                         configInss.setId_inss_2(id);
                         configInss.setInss_2(inss);
                         configInss.setMin_inss_2(min);
                         configInss.setMax_inss_2(max);
+                        configInss.setParcela_2(parcela);
                         break;
                     case 3:
                         configInss.setId_inss_3(id);
                         configInss.setInss_3(inss);
                         configInss.setMin_inss_3(min);
                         configInss.setMax_inss_3(max);
+                        configInss.setParcela_3(parcela);
                         break;
                     case 4:
                         configInss.setId_inss_4(id);
                         configInss.setInss_4(inss);
                         configInss.setMin_inss_4(min);
                         configInss.setMax_inss_4(max);
+                        configInss.setParcela_4(parcela);
                         break;
                 }
 
@@ -199,23 +204,24 @@ public class DAOConfiguracao {
 
         return configInss;
     }
-    public void salvarOuAtualizarFaixaInss(Long id, BigDecimal inss, BigDecimal min, BigDecimal max) throws SQLException {
+    public void salvarOuAtualizarFaixaInss(Long id, BigDecimal inss, BigDecimal min, BigDecimal max, BigDecimal parcela) throws SQLException {
         String sql;
         boolean isUpdate = (id != null && id > 0);
 
         if (isUpdate) {
-            sql = "UPDATE inss SET inss = ?, min_inss = ?, max_inss = ? WHERE id_inss = ?";
+            sql = "UPDATE inss SET inss = ?, min_inss = ?, max_inss = ?, parcela = ? WHERE id_inss = ?";
         } else {
-            sql = "INSERT INTO inss (inss, min_inss, max_inss) VALUES (?, ?, ?)";
+            sql = "INSERT INTO inss (inss, min_inss, max_inss, parcela) VALUES (?, ?, ?, ?)";
         }
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setBigDecimal(1, inss);
             ps.setBigDecimal(2, min);
             ps.setBigDecimal(3, max);
+            ps.setBigDecimal(4, parcela);
 
             if (isUpdate) {
-                ps.setLong(4, id);
+                ps.setLong(5, id);
             }
 
             ps.executeUpdate();

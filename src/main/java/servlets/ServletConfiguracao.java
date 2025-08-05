@@ -83,8 +83,9 @@ public class ServletConfiguracao extends ServletGenericUtil {
                     BigDecimal inss = new BigDecimal(request.getParameter("inss_" + i));
                     BigDecimal min = new BigDecimal(request.getParameter("min_inss_" + i));
                     BigDecimal max = new BigDecimal(request.getParameter("max_inss_" + i));
+                    BigDecimal parcela = new BigDecimal(request.getParameter("parcela_" + i));
 
-                    daoConfiguracao.salvarOuAtualizarFaixaInss(id, inss, min, max);
+                    daoConfiguracao.salvarOuAtualizarFaixaInss(id, inss, min, max,parcela);
                 }
 
                 msg = "Faixas INSS atualizadas com sucesso!";

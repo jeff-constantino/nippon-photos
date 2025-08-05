@@ -658,7 +658,7 @@
 
 
         function preencherFormularioRibbon(idControle, data_ribbon, ribbon_1_atual, ribbon_2_atual, ribbon_3_atual, ribbon_4_atual, ribbon_5_atual, ribbon_6_atual, rev_ribbon_1, rev_ribbon_2, rev_ribbon_3, rev_ribbon_4, rev_ribbon_5, rev_ribbon_6, dif_ribbon_1, dif_ribbon_2, dif_ribbon_3, dif_ribbon_4, dif_ribbon_5, dif_ribbon_6, troca_ribbon_1, troca_ribbon_2, troca_ribbon_3, troca_ribbon_4, troca_ribbon_5, troca_ribbon_6, fim_ribbon_1, fim_ribbon_2, fim_ribbon_3, fim_ribbon_4, fim_ribbon_5, fim_ribbon_6, old_ribbon_1, old_ribbon_2, old_ribbon_3, old_ribbon_4, old_ribbon_5, old_ribbon_6, observacao_ribbon) {
-            console.log("Valor de data_ribbon recebido:", data_ribbon); // Exibe no console do navegador
+
 
             // Certifique-se de que a data está no formato esperado (yyyy-MM-dd)
             if (data_ribbon && /^(\d{4})-(\d{2})-(\d{2})$/.test(data_ribbon)) {

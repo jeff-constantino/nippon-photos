@@ -1463,7 +1463,7 @@
                         valorProduto = parseFloat(prod.conf3_valor);
                         break;
                     default:
-                        console.log('Produto não encontrado');
+
                         return;
                 }
 
@@ -1534,7 +1534,7 @@
                         valorProduto = parseFloat(prod.conf3_valor);
                         break;
                     default:
-                        console.log('Produto não encontrado no modal');
+
                         return;
                 }
 
@@ -1543,7 +1543,7 @@
 
                 atualizarTotalModal(); // Atualiza o total geral do modal
             } else {
-                console.log('Produto não encontrado no modal');
+
             }
         }
 
@@ -1579,16 +1579,16 @@
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     const data = JSON.parse(xhr.responseText);
-                    console.log('Resposta do servidor:', data); // Log da resposta do servidor
+
                     controles = data.controles || []; // Preenche a variável controles com os dados recebidos
-                    console.log('Valores dos controles recebidos:', controles); // Log dos valores recebidos
+
 
                     // Adiciona o event listener para o select após carregar os valores
                     document.getElementById('ribbon_selecionado').addEventListener('change', function() {
                         const ribbonSelecionado = this.value;
                         const ribbonIndex = parseInt(ribbonSelecionado.replace("ribbon", "")) - 1;
 
-                        console.log('Ribbon selecionado:', ribbonSelecionado, 'Index:', ribbonIndex); // Log da seleção
+
 
                         if (controles.length > 0 && ribbonIndex >= 0 && ribbonIndex < 6) {
                             const valorRibbon = controles[ribbonIndex];
@@ -1597,7 +1597,7 @@
                             const valorTotal = valorRibbon + valorTroca - valorFim;
 
                             document.getElementById('ribbon_atual').value = valorTotal; // Atualiza o campo "ribbon_atual" com o valor retornado
-                            console.log('Valor atualizado no campo ribbon_atual:', valorTotal); // Log do valor atualizado
+
 
                             calcularDiferenca(); // Calcula a diferença imediatamente após atualizar o valor atual
                         } else {

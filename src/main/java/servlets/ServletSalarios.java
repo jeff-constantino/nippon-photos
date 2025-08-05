@@ -87,15 +87,13 @@ public class ServletSalarios extends ServletGenericUtil{
                 request.setAttribute("totalPaginas", totalPaginas);
             }
             if ("buscaSalario".equals(acao)) {
-                System.out.println("Entrou no bloco buscaSalario");
+
 
                 String funcionarioIdParam = request.getParameter("funcionarioId");
                 String mesParam = request.getParameter("mes");
                 String anoParam = request.getParameter("ano");
 
-                System.out.println("funcionarioId: " + funcionarioIdParam);
-                System.out.println("mes: " + mesParam);
-                System.out.println("ano: " + anoParam);
+
 
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
@@ -240,6 +238,7 @@ public class ServletSalarios extends ServletGenericUtil{
             model.setValorAtrasos(parseBigDecimal(req.getParameter("valor_desconto_atrasos")));
             model.setVales(parseBigDecimal(req.getParameter("vales_mes")));
             model.setInss(parseBigDecimal(req.getParameter("inss")));
+            model.setParcela(parseBigDecimal(req.getParameter("parcela")));
             model.setFgts(parseBigDecimal(req.getParameter("fgts")));
 
             model.setVenda_total(parseBigDecimal(req.getParameter("venda_total")));

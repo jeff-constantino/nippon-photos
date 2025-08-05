@@ -266,8 +266,8 @@ public class DAOSalarios {
                 "mes, ano, funcionario_id, nome_funcionario, qtd_fotos, qtd_arquivos, qtd_sobras, " +
                 "atrasos, faltas, advertencias, suspensoes, dsr, valor_atrasos, valor_faltas, " +
                 "valor_suspensoes, vales, inss, fgts, venda_total, comissao, salario_total, salario_liquido1, " +
-                "comissao2, salario_total2, salario_liquido2, aproveitamento, descontos_mes, descontos_1, descontos_2) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "comissao2, salario_total2, salario_liquido2, aproveitamento, descontos_mes, descontos_1, descontos_2, parcela) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, model.getMes());
@@ -299,6 +299,7 @@ public class DAOSalarios {
             stmt.setBigDecimal(27, model.getDescontos_mes());
             stmt.setBigDecimal(28, model.getDescontos_1());
             stmt.setBigDecimal(29, model.getDescontos_2());
+            stmt.setBigDecimal(30, model.getParcela());
 
             stmt.execute();
             connection.commit();

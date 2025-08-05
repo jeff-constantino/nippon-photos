@@ -38,7 +38,7 @@ public class DAODespesas {
             } else {
                 stmt.setNull(5, java.sql.Types.DATE); // Seta como null no banco na posição 4
             }
-            System.out.println(despesas);
+
             stmt.executeUpdate();
 
             // Recupera a chave gerada automaticamente (ID)

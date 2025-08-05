@@ -687,6 +687,12 @@
                                                style="background-color: white; color: black"
                                                id="inss" name="inss" value="${inss}" readonly tabindex="-1">
                                     </div>
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">PARCELA A DEDUZIR</label>
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: white; color: black"
+                                               id="parcela" name="parcela" value="${parcela}" readonly tabindex="-1">
+                                    </div>
 
                                     <div class="col-auto">
                                         <label style="color: #f2a654">FGTS</label>
@@ -1006,28 +1012,33 @@
         {
             min: parseFloat('${configInss.min_inss_1}'),
             max: parseFloat('${configInss.max_inss_1}'),
-            aliquota: parseFloat('${configInss.inss_1}')
+            aliquota: parseFloat('${configInss.inss_1}'),
+            parcela: parseFloat('${configInss.parcela_1}')
         },
         {
             min: parseFloat('${configInss.min_inss_2}'),
             max: parseFloat('${configInss.max_inss_2}'),
-            aliquota: parseFloat('${configInss.inss_2}')
+            aliquota: parseFloat('${configInss.inss_2}'),
+            parcela: parseFloat('${configInss.parcela_2}')
         },
         {
             min: parseFloat('${configInss.min_inss_3}'),
             max: parseFloat('${configInss.max_inss_3}'),
-            aliquota: parseFloat('${configInss.inss_3}')
+            aliquota: parseFloat('${configInss.inss_3}'),
+            parcela: parseFloat('${configInss.parcela_3}')
         },
         {
             min: parseFloat('${configInss.min_inss_4}'),
             max: parseFloat('${configInss.max_inss_4}'),
-            aliquota: parseFloat('${configInss.inss_4}')
+            aliquota: parseFloat('${configInss.inss_4}'),
+            parcela: parseFloat('${configInss.parcela_4}')
         }
     ];
 
     // === ELEMENTOS DO FORMULÁRIO ===
     const vendaTotalInput = document.getElementById('venda_total');
     const inssInput = document.getElementById('inss');
+    const parcelaInput = document.getElementById('parcela')
     const fgtsInput = document.getElementById('fgts');
     const comissaoInput = document.getElementById('comissao');
     const comissao2Input = document.getElementById('comissao2');
@@ -1082,17 +1093,7 @@
             descontosMesInput.value = valorTotal.toFixed(2);
         }
 
-        console.log('Descontos disciplinares calculados:', {
-            vendaTotal,
-            baseCalculo,
-            valorDia,
-            totalFaltas,
-            totalSuspensoes,
-            totalDsr,
-            valorFaltas,
-            valorSuspensoes,
-            valorTotal
-        });
+
     }
 
     // === Calcular salário bruto com base nos totais e valores configurados ===
@@ -1118,6 +1119,7 @@
 
         if (isNaN(vendaTotal) || vendaTotal <= 0) {
             inssInput.value = '0.00';
+            parcelaInput.value = '0.00'
             fgtsInput.value = '0.00';
             calcularSalariosLiquidos();
             return;
@@ -1128,20 +1130,29 @@
 
         // Cálculo do INSS baseado nas faixas
         let aliquotaInss = 0;
+        let parcelaDeduzir = 0;
+
         for (let faixa of faixasInss) {
             if (baseCalculo >= faixa.min && baseCalculo <= faixa.max) {
                 aliquotaInss = faixa.aliquota / 100;
+                parcelaDeduzir = faixa.parcela || 0;
                 break;
             }
         }
+
+// Caso ultrapasse todas as faixas, usa última faixa como padrão
         if (aliquotaInss === 0 && baseCalculo > faixasInss[faixasInss.length - 1].max) {
-            aliquotaInss = faixasInss[faixasInss.length - 1].aliquota / 100;
+            const ultimaFaixa = faixasInss[faixasInss.length - 1];
+            aliquotaInss = ultimaFaixa.aliquota / 100;
+            parcelaDeduzir = ultimaFaixa.parcela || 0;
         }
 
-        const valorInss = baseCalculo * aliquotaInss;
+        const valorInss = (baseCalculo * aliquotaInss) - parcelaDeduzir;
         inssInput.value = valorInss.toFixed(2);
+        parcelaInput.value = parcelaDeduzir.toFixed(2);
 
-        // Cálculo do FGTS
+
+         // Cálculo do FGTS
         const valorFgts = baseCalculo * (fgtsAliquota / 100);
         fgtsInput.value = valorFgts.toFixed(2);
 
@@ -1155,6 +1166,7 @@
     function calcularSalariosLiquidos() {
         let vendaTotal = parseFloat(vendaTotalInput.value || 0);
         let inss = parseFloat(inssInput.value || 0);
+        let parcela = parseFloat(parcelaInput.value || 0);
         let fgts = parseFloat(fgtsInput.value || 0);
         let vales = parseFloat(valesInput?.value || 0);
 
@@ -1338,6 +1350,7 @@
             document.getElementById('venda_totalResultado').value = formatarMoeda(salario.venda_total);
             document.getElementById('vales_mesResultado').value = formatarMoeda(salario.vales);
             document.getElementById('inssResultado').value = formatarMoeda(salario.inss);
+            document.getElementById('parcelaResultado').value =formatarMoeda(salario.parcela)
             document.getElementById('fgtsResultado').value = formatarMoeda(salario.fgts);
             document.getElementById('descontos_mesResultado').value = formatarMoeda(salario.descontos_mes);
 

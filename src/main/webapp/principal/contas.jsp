@@ -762,7 +762,7 @@
             var valor2 = removerMascara($("#conf1_valor2").val());
 
 
-            console.log("Valor 2 sem máscara:", valor2);
+
 
 
             $("#conf1_valor2").val(valor2);
@@ -771,7 +771,7 @@
             var valor1 = removerMascara($("#conf1_valor").val());
 
 
-            console.log("Valor 1 sem máscara:", valor1);
+
 
 
             $("#conf1_valor").val(valor1);

@@ -415,10 +415,7 @@
                                                                 <div class="row">
                                                                     <form action="${pageContext.request.contextPath}/ServletConfiguracao" method="post" id="formINSS">
                                                                         <input type="hidden" name="acao" value="inss" />
-                                                                        <div class="modal-header">
-                                                                            <h5 class="modal-title" id="staticFinalizar">Configurações INSS</h5>
-                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                        </div>
+
                                                                         <div class="modal-body container-fluid">
                                                                             <div class="row">
                                                                                 <!-- Faixa 1 -->
@@ -428,6 +425,9 @@
 
                                                                                     <label>INSS (%)</label>
                                                                                     <input type="number" name="inss_1" step="0.01" min="0" max="100" class="form-control" value="${configInss.inss_1}" required />
+
+                                                                                    <label>PARCELA A DEDUZIR</label>
+                                                                                    <input type="number" name="parcela_1" step="0.01" min="0"  class="form-control" value="${configInss.parcela_1}" required />
 
                                                                                     <label>Salário Mínimo</label>
                                                                                     <input type="number" name="min_inss_1" step="0.01" min="0" class="form-control" value="${configInss.min_inss_1}" required />
@@ -442,6 +442,8 @@
                                                                                     <input type="hidden" name="id_inss_2" value="${configInss.id_inss_2}" />
                                                                                     <label>INSS (%)</label>
                                                                                     <input type="number" name="inss_2" step="0.01" min="0" max="100" class="form-control" value="${configInss.inss_2}" required />
+                                                                                    <label>PARCELA A DEDUZIR</label>
+                                                                                    <input type="number" name="parcela_2" step="0.01" min="0"  class="form-control" value="${configInss.parcela_2}" required />
                                                                                     <label>Salário Mínimo</label>
                                                                                     <input type="number" name="min_inss_2" step="0.01" min="0" class="form-control" value="${configInss.min_inss_2}" required />
                                                                                     <label>Salário Máximo</label>
@@ -454,6 +456,8 @@
                                                                                     <input type="hidden" name="id_inss_3" value="${configInss.id_inss_3}" />
                                                                                     <label>INSS (%)</label>
                                                                                     <input type="number" name="inss_3" step="0.01" min="0" max="100" class="form-control" value="${configInss.inss_3}" required />
+                                                                                    <label>PARCELA A DEDUZIR</label>
+                                                                                    <input type="number" name="parcela_3" step="0.01" min="0"  class="form-control" value="${configInss.parcela_3}" required />
                                                                                     <label>Salário Mínimo</label>
                                                                                     <input type="number" name="min_inss_3" step="0.01" min="0" class="form-control" value="${configInss.min_inss_3}" required />
                                                                                     <label>Salário Máximo</label>
@@ -466,6 +470,8 @@
                                                                                     <input type="hidden" name="id_inss_4" value="${configInss.id_inss_4}" />
                                                                                     <label>INSS (%)</label>
                                                                                     <input type="number" name="inss_4" step="0.01" min="0" max="100" class="form-control" value="${configInss.inss_4}" required />
+                                                                                    <label>PARCELA A DEDUZIR</label>
+                                                                                    <input type="number" name="parcela_4" step="0.01" min="0"  class="form-control" value="${configInss.parcela_4}" required />
                                                                                     <label>Salário Mínimo</label>
                                                                                     <input type="number" name="min_inss_4" step="0.01" min="0" class="form-control" value="${configInss.min_inss_4}" required />
                                                                                     <label>Salário Máximo</label>
@@ -1061,19 +1067,19 @@
                                         <thead class="thead-light">
                                         <tr>
                                             <th>Faixa</th>
-                                            <th>ID</th>
                                             <th>INSS (%)</th>
                                             <th>Salário Mínimo</th>
                                             <th>Salário Máximo</th>
+                                            <th>ID</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>${configInss.id_inss_1}</td>
                                             <td><fmt:formatNumber value="${configInss.inss_1}" pattern="0.00"/></td>
                                             <td><fmt:formatNumber value="${configInss.min_inss_1}" type="currency"/></td>
                                             <td><fmt:formatNumber value="${configInss.max_inss_1}" type="currency"/></td>
+                                            <td>${configInss.id_inss_1}</td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
@@ -1258,12 +1264,7 @@
         document.getElementById('idConf_geral').value = idConf; // Campo que irá receber o idConf
         document.getElementById('conf_name_geral').value = conf_name; // Campo para conf_name
 
-        console.log("Valores recebidos na função gerenciarGeral:");
-        console.log("idConf:", idConf);
-        console.log("conf1_nome:", conf1_nome);
-        console.log("conf1_valor:", conf1_valor);
-        console.log("conf1_qtd:", conf1_qtd); // Este deve ser o correto
-        console.log("conf1_custo:", conf1_custo); // Este deve ser o custo
+
 
         // Preencher os campos para idConf === 3
         document.getElementById('conf1_nome_geral').value = conf1_nome;
@@ -1321,7 +1322,7 @@
 
 
     $("#configFormMat").on("submit", function(e) {
-        console.log($("#conf1_valor_mat").val());
+
         $("#conf1_valor_mat").val(removerMascara($("#conf1_valor_mat").val()));
         $("#conf2_valor_mat").val(removerMascara($("#conf2_valor_mat").val()));
         $("#conf3_valor_mat").val(removerMascara($("#conf3_valor_mat").val()));

@@ -289,6 +289,12 @@
                                                                                style="background-color: white; color: black"
                                                                                id="inssResultado" readonly tabindex="-1">
                                                                     </div>
+                                                                    <div class="col-auto">
+                                                                        <label style="color: #f2a654">PARCELA A DEDUZIR</label>
+                                                                        <input type="text" class="form-control text-center fw-bold"
+                                                                               style="background-color: white; color: black"
+                                                                               id="parcelaResultado" readonly tabindex="-1">
+                                                                    </div>
 
                                                                     <div class="col-auto">
                                                                         <label style="color: #f2a654">FGTS</label>
@@ -1319,53 +1325,68 @@
         }
 
         function preencherResultados(salario) {
-            // Atualizar título com mês/ano
             const meses = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
                 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
             const mesAnoTexto = meses[salario.mes] + ' ' + salario.ano;
-            document.getElementById('mesAnoResultado').textContent = mesAnoTexto.toUpperCase();
 
-            // Vendas Totais do Funcionário
-            document.getElementById('nomeResultado').value = salario.nomeFuncionario || '';
-            document.getElementById('ft_totalResultado').value = salario.qtdFotos || '0';
+            setText('mesAnoResultado', mesAnoTexto.toUpperCase());
 
-            document.getElementById('dig_totalResultado').value = salario.qtdArquivos || '0';
-            document.getElementById('sobrasResultado').value = salario.qtdSobras || '0';
-            document.getElementById('aproveitamentoResultado').value = formatarAproveitamento(salario.aproveitamento);
-            document.getElementById('funcionarioIdResultado').value = salario.funcionarioId || '';
+            // Informações Gerais
+            setValue('nomeResultado', salario.nomeFuncionario);
+            setValue('ft_totalResultado', salario.qtdFotos, true);
+            setValue('dig_totalResultado', salario.qtdArquivos, true);
+            setValue('sobrasResultado', salario.qtdSobras, true);
+            setValue('aproveitamentoResultado', formatarAproveitamento(salario.aproveitamento));
+            setValue('funcionarioIdResultado', salario.funcionarioId);
 
-            // Histórico de Conduta
-            document.getElementById('advertenciasResultado').value = salario.advertencias || '0';
-            document.getElementById('faltasResultado').value = salario.faltas || '0';
-            document.getElementById('suspensoesResultado').value = salario.suspensoes || '0';
-            document.getElementById('dsrResultado').value = salario.dsr || '0';
+            // Conduta
+            setValue('advertenciasResultado', salario.advertencias, true);
+            setValue('faltasResultado', salario.faltas, true);
+            setValue('suspensoesResultado', salario.suspensoes, true);
+            setValue('dsrResultado', salario.dsr, true);
 
-            // Descontos Disciplinares
-            document.getElementById('inputFaltasResultado').value = formatarMoeda(salario.valorFaltas);
-            document.getElementById('inputSuspensoesResultado').value = formatarMoeda(salario.valorSuspensoes);
-            document.getElementById('atrasos_horasResultado').value = formatarHoras(salario.atrasos);
-            document.getElementById('valor_desconto_atrasosResultado').value = formatarMoeda(salario.valorAtrasos);
+            // Descontos
+            setValue('inputFaltasResultado', formatarMoeda(salario.valorFaltas));
+            setValue('inputSuspensoesResultado', formatarMoeda(salario.valorSuspensoes));
+            setValue('atrasos_horasResultado', formatarHoras(salario.atrasos));
+            setValue('valor_desconto_atrasosResultado', formatarMoeda(salario.valorAtrasos));
 
-            // Salários e Comissões - Primeira linha
-            document.getElementById('venda_totalResultado').value = formatarMoeda(salario.venda_total);
-            document.getElementById('vales_mesResultado').value = formatarMoeda(salario.vales);
-            document.getElementById('inssResultado').value = formatarMoeda(salario.inss);
-            document.getElementById('parcelaResultado').value =formatarMoeda(salario.parcela)
-            document.getElementById('fgtsResultado').value = formatarMoeda(salario.fgts);
-            document.getElementById('descontos_mesResultado').value = formatarMoeda(salario.descontos_mes);
+            // Salários e Benefícios
+            setValue('venda_totalResultado', formatarMoeda(salario.venda_total));
+            setValue('vales_mesResultado', formatarMoeda(salario.vales));
+            setValue('inssResultado', formatarMoeda(salario.inss));
+            setValue('parcelaResultado', formatarMoeda(salario.parcela));
+            setValue('fgtsResultado', formatarMoeda(salario.fgts));
+            setValue('descontos_mesResultado', formatarMoeda(salario.descontos_mes));
 
-            // Salários e Comissões - Segunda linha
-            document.getElementById('comissaoResultado').value = formatarPercentual(salario.comissao);
-            document.getElementById('salario_totalResultadoField').value = formatarMoeda(salario.salario_total);
-            document.getElementById('descontos_1Resultado').value = formatarMoeda(salario.descontos_1);
-            document.getElementById('salario_liquidoResultado').value = formatarMoeda(salario.salario_liquido1);
+            // Salário 1ª linha
+            setValue('comissaoResultado', formatarPercentual(salario.comissao));
+            setValue('salario_totalResultadoField', formatarMoeda(salario.salario_total));
+            setValue('descontos_1Resultado', formatarMoeda(salario.descontos_1));
+            setValue('salario_liquidoResultado', formatarMoeda(salario.salario_liquido1));
 
-            // Salários e Comissões - Terceira linha
-            document.getElementById('comissao2Resultado').value = formatarPercentual(salario.comissao2);
-            document.getElementById('salario_total2Resultado').value = formatarMoeda(salario.salario_total2);
-            document.getElementById('descontos_2Resultado').value = formatarMoeda(salario.descontos_2);
-            document.getElementById('salario_liquido2Resultado').value = formatarMoeda(salario.salario_liquido2);
+            // Salário 2ª linha
+            setValue('comissao2Resultado', formatarPercentual(salario.comissao2));
+            setValue('salario_total2Resultado', formatarMoeda(salario.salario_total2));
+            setValue('descontos_2Resultado', formatarMoeda(salario.descontos_2));
+            setValue('salario_liquido2Resultado', formatarMoeda(salario.salario_liquido2));
         }
+
+// Auxiliares seguros
+        function setValue(id, valor, zeroPorPadrao = false) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.value = valor !== undefined && valor !== null ? valor : (zeroPorPadrao ? '0' : '');
+            }
+        }
+
+        function setText(id, texto) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.textContent = texto || '';
+            }
+        }
+
 
         function formatarMoeda(valor) {
             if (!valor && valor !== 0) return 'R$ 0,00';

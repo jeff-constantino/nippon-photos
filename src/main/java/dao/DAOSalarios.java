@@ -346,6 +346,7 @@ public class DAOSalarios {
 
                 salario.setVales(rs.getBigDecimal("vales"));
                 salario.setInss(rs.getBigDecimal("inss"));
+                salario.setParcela(rs.getBigDecimal("parcela"));
                 salario.setFgts(rs.getBigDecimal("fgts"));
 
                 salario.setVenda_total(rs.getBigDecimal("venda_total"));

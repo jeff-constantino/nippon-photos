@@ -373,10 +373,147 @@ public class DAOSalarios {
     }
 
 
+    public void atualizarSalario(ModelSalarios model) throws Exception {
+        // LOG: Verificar dados recebidos
+        System.out.println("=== DEBUG ATUALIZAR SALARIO ===");
+        System.out.println("ID Salário: " + model.getIdSalario());
+        System.out.println("Qtd Fotos: " + model.getQtdFotos());
+        System.out.println("Funcionário ID: " + model.getFuncionarioId());
 
+        String sql = "UPDATE salarios SET " +
+                "qtd_fotos = ?, " +
+                "qtd_arquivos = ?, " +
+                "qtd_sobras = ?, " +
+                "aproveitamento = ?, " +
+                "advertencias = ?, " +
+                "faltas = ?, " +
+                "suspensoes = ?, " +
+                "dsr = ?, " +
+                "atrasos = ?, " +
+                "valor_faltas = ?, " +
+                "valor_suspensoes = ?, " +
+                "valor_atrasos = ?, " +
+                "venda_total = ?, " +
+                "vales = ?, " +
+                "inss = ?, " +
+                "parcela = ?, " +
+                "fgts = ?, " +
+                "descontos_mes = ?, " +
+                "comissao = ?, " +
+                "salario_total = ?, " +
+                "descontos_1 = ?, " +
+                "salario_liquido1 = ?, " +
+                "comissao2 = ?, " +
+                "salario_total2 = ?, " +
+                "descontos_2 = ?, " +
+                "salario_liquido2 = ? " +
+                "WHERE id_salario = ?";
 
+        System.out.println("SQL: " + sql);
 
+        try {
+            // Verificar se connection não é null
+            if (connection == null) {
+                throw new Exception("Connection é null!");
+            }
 
+            // Verificar se connection está fechada
+            if (connection.isClosed()) {
+                throw new Exception("Connection está fechada!");
+            }
+
+            System.out.println("Connection OK - AutoCommit: " + connection.getAutoCommit());
+
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                int i = 1;
+
+                // Vendas
+                stmt.setInt(i++, model.getQtdFotos());
+                stmt.setInt(i++, model.getQtdArquivos());
+                stmt.setInt(i++, model.getQtdSobras());
+                stmt.setBigDecimal(i++, model.getAproveitamento());
+
+                // Conduta
+                stmt.setInt(i++, model.getAdvertencias());
+                stmt.setInt(i++, model.getFaltas());
+                stmt.setInt(i++, model.getSuspensoes());
+                stmt.setInt(i++, model.getDsr());
+                stmt.setDouble(i++, model.getAtrasos());
+
+                // Valores de descontos
+                stmt.setBigDecimal(i++, model.getValorFaltas());
+                stmt.setBigDecimal(i++, model.getValorSuspensoes());
+                stmt.setBigDecimal(i++, model.getValorAtrasos());
+
+                // Salários e benefícios
+                stmt.setBigDecimal(i++, model.getVenda_total());
+                stmt.setBigDecimal(i++, model.getVales());
+                stmt.setBigDecimal(i++, model.getInss());
+                stmt.setBigDecimal(i++, model.getParcela());
+                stmt.setBigDecimal(i++, model.getFgts());
+                stmt.setBigDecimal(i++, model.getDescontos_mes());
+
+                // Primeira linha de salário
+                stmt.setBigDecimal(i++, model.getComissao());
+                stmt.setBigDecimal(i++, model.getSalario_total());
+                stmt.setBigDecimal(i++, model.getDescontos_1());
+                stmt.setBigDecimal(i++, model.getSalario_liquido1());
+
+                // Segunda linha de salário
+                stmt.setBigDecimal(i++, model.getComissao2());
+                stmt.setBigDecimal(i++, model.getSalario_total2());
+                stmt.setBigDecimal(i++, model.getDescontos_2());
+                stmt.setBigDecimal(i++, model.getSalario_liquido2());
+
+                // WHERE
+                stmt.setInt(i++, model.getIdSalario());
+
+                System.out.println("Executando update...");
+                int rowsAffected = stmt.executeUpdate();
+                System.out.println("Linhas afetadas: " + rowsAffected);
+
+                if (rowsAffected == 0) {
+                    // Verificar se o registro existe
+                    String selectSql = "SELECT COUNT(*) FROM salarios WHERE id_salario = ?";
+                    try (PreparedStatement selectStmt = connection.prepareStatement(selectSql)) {
+                        selectStmt.setInt(1, model.getIdSalario());
+                        try (ResultSet rs = selectStmt.executeQuery()) {
+                            rs.next();
+                            int count = rs.getInt(1);
+                            System.out.println("Registros encontrados com ID " + model.getIdSalario() + ": " + count);
+                        }
+                    }
+                    throw new Exception("Nenhum registro foi atualizado. ID não encontrado: " + model.getIdSalario());
+                }
+
+                // COMMIT - confirmar a transação
+                if (!connection.getAutoCommit()) {
+                    connection.commit();
+                    System.out.println("Commit realizado!");
+                } else {
+                    System.out.println("AutoCommit está ativo - commit automático");
+                }
+
+                System.out.println("=== UPDATE FINALIZADO COM SUCESSO ===");
+
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro SQL: " + e.getMessage());
+            e.printStackTrace();
+
+            // ROLLBACK em caso de erro
+            try {
+                if (!connection.getAutoCommit()) {
+                    connection.rollback();
+                    System.out.println("Rollback realizado!");
+                }
+            } catch (SQLException rollbackException) {
+                System.out.println("Erro no rollback: " + rollbackException.getMessage());
+                rollbackException.printStackTrace();
+            }
+            throw new Exception("Erro ao atualizar salário no banco de dados: " + e.getMessage(), e);
+        }
+    }
 
 
 

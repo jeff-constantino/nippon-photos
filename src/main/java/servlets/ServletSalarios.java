@@ -189,6 +189,14 @@ public class ServletSalarios extends ServletGenericUtil{
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String acao = req.getParameter("acao");
+
+        if ("editarSalario".equals(acao)) {
+            editarSalario(req, resp);
+            return;
+        }
+
+        // Código original para gravar novo salário
         try {
             String funcionarioIdStr = req.getParameter("funcionarioId");
             if (funcionarioIdStr == null || funcionarioIdStr.isEmpty()) {
@@ -265,6 +273,160 @@ public class ServletSalarios extends ServletGenericUtil{
             resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("Erro ao gravar salário: " + e.getMessage(), "UTF-8"));
         }
     }
+
+    // Método para buscar salário
+    private void buscarSalario(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            String mesStr = req.getParameter("mes");
+            String anoStr = req.getParameter("ano");
+            String funcionarioIdStr = req.getParameter("funcionarioId");
+
+            if (mesStr == null || anoStr == null || funcionarioIdStr == null) {
+                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                resp.getWriter().write("{\"erro\": \"Parâmetros obrigatórios não informados\"}");
+                return;
+            }
+
+            int mes = Integer.parseInt(mesStr);
+            int ano = Integer.parseInt(anoStr);
+            long funcionarioId = Long.parseLong(funcionarioIdStr);
+
+            DAOSalarios dao = new DAOSalarios();
+            List<ModelSalarios> salarios = dao.buscarSalariosPorMesAnoFuncionario(mes, ano, funcionarioId);
+
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+
+            Gson gson = new Gson();
+            String json = gson.toJson(salarios);
+            resp.getWriter().write(json);
+
+        } catch (NumberFormatException e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"erro\": \"Parâmetros inválidos\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("{\"erro\": \"Erro interno do servidor: " + e.getMessage() + "\"}");
+        }
+    }
+
+    // Método para editar salário
+    private void editarSalario(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            // ===== LOGS DE DEBUG - INÍCIO =====
+            System.out.println("=== DEBUG SERVLET EDITAR SALARIO ===");
+            System.out.println("=== PARÂMETROS RECEBIDOS ===");
+
+            // Verificar todos os parâmetros importantes
+            System.out.println("idSalario: " + req.getParameter("idSalario"));
+            System.out.println("funcionarioId: " + req.getParameter("funcionarioId"));
+            System.out.println("nome: " + req.getParameter("nome"));
+            System.out.println("mes: " + req.getParameter("mes"));
+            System.out.println("ano: " + req.getParameter("ano"));
+            System.out.println("ft_total: " + req.getParameter("ft_total"));
+            System.out.println("dig_total: " + req.getParameter("dig_total"));
+            System.out.println("sobras: " + req.getParameter("sobras"));
+            System.out.println("aproveitamento: " + req.getParameter("aproveitamento"));
+            System.out.println("advertencias: " + req.getParameter("advertencias"));
+            System.out.println("faltas: " + req.getParameter("faltas"));
+            System.out.println("suspensoes: " + req.getParameter("suspensoes"));
+            System.out.println("dsr: " + req.getParameter("dsr"));
+            System.out.println("atrasos_horas: " + req.getParameter("atrasos_horas"));
+            System.out.println("venda_total: " + req.getParameter("venda_total"));
+            System.out.println("comissao: " + req.getParameter("comissao"));
+            System.out.println("salario_total: " + req.getParameter("salario_total"));
+
+            // Mostrar TODOS os parâmetros (útil para debug)
+            System.out.println("=== TODOS OS PARÂMETROS ===");
+            req.getParameterMap().forEach((key, values) ->
+                    System.out.println(key + " = " + String.join(", ", values))
+            );
+            // ===== LOGS DE DEBUG - FIM =====
+
+            String idSalarioStr = req.getParameter("idSalario");
+            if (idSalarioStr == null || idSalarioStr.isEmpty()) {
+                System.out.println("ERRO: ID do salário não informado!");
+                resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("ID do salário não informado.", "UTF-8"));
+                return;
+            }
+
+            ModelSalarios model = new ModelSalarios();
+
+            // ID do registro a ser atualizado
+            model.setIdSalario(Integer.parseInt(idSalarioStr));
+            System.out.println("ID Salário parseado: " + model.getIdSalario());
+
+            // Dados básicos
+            model.setFuncionarioId(Long.parseLong(req.getParameter("funcionarioId")));
+            model.setNomeFuncionario(req.getParameter("nome"));
+            model.setMes(Integer.parseInt(req.getParameter("mes")));
+            model.setAno(Integer.parseInt(req.getParameter("ano")));
+
+            // Dados de vendas
+            model.setQtdFotos(parseIntFromElement(req.getParameter("ft_total")));
+            model.setQtdArquivos(parseIntFromElement(req.getParameter("dig_total")));
+            model.setQtdSobras(parseIntFromElement(req.getParameter("sobras")));
+            model.setAproveitamento(parseBigDecimal(req.getParameter("aproveitamento")));
+
+            System.out.println("=== DADOS APÓS PARSING ===");
+            System.out.println("Qtd Fotos (model): " + model.getQtdFotos());
+            System.out.println("Funcionário ID (model): " + model.getFuncionarioId());
+            System.out.println("Nome (model): " + model.getNomeFuncionario());
+
+            // Histórico de conduta
+            model.setAdvertencias(parseIntOrZero(req.getParameter("advertencias")));
+            model.setFaltas(parseIntOrZero(req.getParameter("faltas")));
+            model.setSuspensoes(parseIntOrZero(req.getParameter("suspensoes")));
+            model.setDsr(parseIntOrZero(req.getParameter("dsr")));
+
+            // Atrasos
+            String atrasos = req.getParameter("atrasos_horas");
+            model.setAtrasos(convertHorasParaDecimal(atrasos));
+
+            // Valores de descontos
+            model.setValorFaltas(parseBigDecimal(req.getParameter("inputFaltas")));
+            model.setValorSuspensoes(parseBigDecimal(req.getParameter("inputSuspensoes")));
+            model.setValorAtrasos(parseBigDecimal(req.getParameter("valor_desconto_atrasos")));
+
+            // Salários e benefícios
+            model.setVenda_total(parseBigDecimal(req.getParameter("venda_total")));
+            model.setVales(parseBigDecimal(req.getParameter("vales_mes")));
+            model.setInss(parseBigDecimal(req.getParameter("inss")));
+            model.setParcela(parseBigDecimal(req.getParameter("parcela")));
+            model.setFgts(parseBigDecimal(req.getParameter("fgts")));
+            model.setDescontos_mes(parseBigDecimal(req.getParameter("descontos_mes")));
+
+            // Primeira linha de salário
+            model.setComissao(parseBigDecimal(req.getParameter("comissao")));
+            model.setSalario_total(parseBigDecimal(req.getParameter("salario_total")));
+            model.setDescontos_1(parseBigDecimal(req.getParameter("descontos_1")));
+            model.setSalario_liquido1(parseBigDecimal(req.getParameter("salario_liquido")));
+
+            // Segunda linha de salário
+            model.setComissao2(parseBigDecimal(req.getParameter("comissao2")));
+            model.setSalario_total2(parseBigDecimal(req.getParameter("salario_total2")));
+            model.setDescontos_2(parseBigDecimal(req.getParameter("descontos_2")));
+            model.setSalario_liquido2(parseBigDecimal(req.getParameter("salario_liquido2")));
+
+            System.out.println("=== CHAMANDO DAO ===");
+
+            // Atualizar no banco
+            DAOSalarios dao = new DAOSalarios();
+            dao.atualizarSalario(model);
+
+            System.out.println("=== DAO EXECUTADO COM SUCESSO ===");
+            resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("Salário atualizado com sucesso!", "UTF-8"));
+
+        } catch (Exception e) {
+            System.out.println("=== ERRO NO SERVLET ===");
+            System.out.println("Tipo do erro: " + e.getClass().getSimpleName());
+            System.out.println("Mensagem: " + e.getMessage());
+            e.printStackTrace();
+            resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("Erro ao atualizar salário: " + e.getMessage(), "UTF-8"));
+        }
+    }
+
 
 
     // Helpers

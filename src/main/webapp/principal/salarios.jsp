@@ -126,258 +126,271 @@
                                                         </div>
                                                     </form>
 
+
                                                     <!-- ÁREA DE RESULTADOS DA BUSCA -->
                                                     <div id="resultadoBusca" style="display: none;">
                                                         <hr class="my-4">
 
-                                                        <!-- Título com mês/ano -->
-                                                        <div class="row align-items-center mb-3">
-                                                            <div class="col text-center">
-                                                                <h2 style="text-transform: uppercase; color: #d39e00" id="mesAnoResultado">${mesAno}</h2>
-                                                            </div>
-                                                        </div>
+                                                        <!-- Form para edição -->
+                                                        <form id="formEdicao" name="formEdicao" method="post" action="${pageContext.request.contextPath}/ServletSalarios">
+                                                            <input type="hidden" name="acao" value="editarSalario">
+                                                            <input type="hidden" id="idSalario" name="idSalario" value="">
+                                                            <input type="hidden" id="mesEdicao" name="mes" value="">
+                                                            <input type="hidden" id="anoEdicao" name="ano" value="">
+                                                            <input type="hidden" id="funcionarioIdEdicao" name="funcionarioId" value="">
+                                                            <input type="hidden" id="nomeEdicao" name="nome" value="">
+                                                            <input type="hidden" id="mesAnoHidden" name="mesAno" value="">
 
-                                                        <!-- VENDAS TOTAIS DO FUNCIONÁRIO -->
-                                                        <div class="card mb-3">
-                                                            <div class="card-body">
-                                                                <h4 class="card-title" style="text-align: center">VENDAS TOTAIS DO FUNCIONÁRIO</h4>
-
-                                                                <div class="row align-items-center mb-3">
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">NOME</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="nomeResultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">TOTAL DE FOTOS</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="ft_totalResultado" readonly tabindex="-1">
-                                                                    </div>
-
-
-
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">TOTAL DE DIGITAIS</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="dig_totalResultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">TOTAL DE SOBRAS</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="sobrasResultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">APROVEITAMENTO</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="aproveitamentoResultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">FUNCIONÁRIO ID</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="funcionarioIdResultado" readonly tabindex="-1">
-                                                                    </div>
+                                                            <!-- Título com mês/ano -->
+                                                            <div class="row align-items-center mb-3">
+                                                                <div class="col text-center">
+                                                                    <h2 style="text-transform: uppercase; color: #d39e00" id="mesAnoResultado">${mesAno}</h2>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
-                                                        <!-- HISTÓRICO DE CONDUTA -->
-                                                        <div class="card mb-3">
-                                                            <div class="card-body">
-                                                                <h4 class="card-title" style="text-align: center">HISTÓRICO DE CONDUTA</h4>
+                                                            <!-- VENDAS TOTAIS DO FUNCIONÁRIO -->
+                                                            <div class="card mb-3">
+                                                                <div class="card-body">
+                                                                    <h4 class="card-title" style="text-align: center">VENDAS TOTAIS DO FUNCIONÁRIO</h4>
 
-                                                                <div class="row align-items-center mb-3">
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">ADVERTÊNCIAS</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="advertenciasResultado" readonly tabindex="-1">
-                                                                    </div>
+                                                                    <div class="row align-items-center mb-3">
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">NOME</label>
+                                                                            <input type="text" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="nomeResultado" readonly tabindex="-1">
+                                                                        </div>
 
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">FALTAS</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="faltasResultado" readonly tabindex="-1">
-                                                                    </div>
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">TOTAL DE FOTOS</label>
+                                                                            <input type="number" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="ft_totalResultado" name="ft_total">
+                                                                        </div>
 
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">DIAS DE SUSPENSÃO</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="suspensoesResultado" readonly tabindex="-1">
-                                                                    </div>
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">TOTAL DE DIGITAIS</label>
+                                                                            <input type="number" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="dig_totalResultado" name="dig_total">
+                                                                        </div>
 
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">DSR</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="dsrResultado" readonly tabindex="-1">
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">TOTAL DE SOBRAS</label>
+                                                                            <input type="number" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="sobrasResultado" name="sobras">
+                                                                        </div>
+
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">APROVEITAMENTO</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="aproveitamentoResultado" name="aproveitamento">
+                                                                        </div>
+
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">FUNCIONÁRIO ID</label>
+                                                                            <input type="text" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="funcionarioIdResultado" readonly tabindex="-1">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
-                                                        <!-- DESCONTOS DISCIPLINARES -->
-                                                        <div class="card mb-3">
-                                                            <div class="card-body">
-                                                                <h4 class="card-title" style="text-align: center">VALOR DE DESCONTOS DISCIPLINARES</h4>
+                                                            <!-- HISTÓRICO DE CONDUTA -->
+                                                            <div class="card mb-3">
+                                                                <div class="card-body">
+                                                                    <h4 class="card-title" style="text-align: center">HISTÓRICO DE CONDUTA</h4>
 
-                                                                <div class="row align-items-center mb-3">
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">VALOR DAS FALTAS</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="inputFaltasResultado" readonly tabindex="-1">
-                                                                    </div>
+                                                                    <div class="row align-items-center mb-3">
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">ADVERTÊNCIAS</label>
+                                                                            <input type="number" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="advertenciasResultado" name="advertencias">
+                                                                        </div>
 
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">VALOR DAS SUSPENSÕES + DSR</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="inputSuspensoesResultado" readonly tabindex="-1">
-                                                                    </div>
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">FALTAS</label>
+                                                                            <input type="number" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="faltasResultado" name="faltas">
+                                                                        </div>
 
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">ATRASOS (HH:MM)</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="atrasos_horasResultado" readonly tabindex="-1">
-                                                                    </div>
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">DIAS DE SUSPENSÃO</label>
+                                                                            <input type="number" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="suspensoesResultado" name="suspensoes">
+                                                                        </div>
 
-                                                                    <div class="col-auto ms-3">
-                                                                        <label style="color: #f2a654">VALOR DESCONTO ATRASOS</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="valor_desconto_atrasosResultado" readonly tabindex="-1">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- SALÁRIOS E COMISSÕES -->
-                                                        <div class="card mb-3">
-                                                            <div class="card-body">
-                                                                <!-- Primeira linha -->
-                                                                <div class="row align-items-center mb-3">
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">VENDA TOTAL</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="venda_totalResultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">VALES</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="vales_mesResultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">INSS</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="inssResultado" readonly tabindex="-1">
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">PARCELA A DEDUZIR</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="parcelaResultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">FGTS</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="fgtsResultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">DESCONTOS DISCIPLINARES</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="descontos_mesResultado" readonly tabindex="-1">
-                                                                    </div>
-                                                                </div>
-
-                                                                <!-- Segunda linha -->
-                                                                <div class="row align-items-center mb-3">
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">COMISSÃO %</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: #f2a654; color: black"
-                                                                               id="comissaoResultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto ms-3">
-                                                                        <label style="color: #f2a654">SALÁRIO TOTAL</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: #f2a654; color: black"
-                                                                               id="salario_totalResultadoField" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="descontos_1Resultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto ms-3">
-                                                                        <label style="color: #f2a654">SALÁRIO LÍQUIDO</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: #f2a654; color: black"
-                                                                               id="salario_liquidoResultado" readonly tabindex="-1">
-                                                                    </div>
-                                                                </div>
-
-                                                                <!-- Terceira linha -->
-                                                                <div class="row align-items-center">
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">COMISSÃO %</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: #f2a654; color: black"
-                                                                               id="comissao2Resultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto ms-3">
-                                                                        <label style="color: #f2a654">SALÁRIO TOTAL</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: #f2a654; color: black"
-                                                                               id="salario_total2Resultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto">
-                                                                        <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: white; color: black"
-                                                                               id="descontos_2Resultado" readonly tabindex="-1">
-                                                                    </div>
-
-                                                                    <div class="col-auto ms-3">
-                                                                        <label style="color: #f2a654">SALÁRIO LÍQUIDO 2</label>
-                                                                        <input type="text" class="form-control text-center fw-bold"
-                                                                               style="background-color: #f2a654; color: black"
-                                                                               id="salario_liquido2Resultado" readonly tabindex="-1">
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">DSR</label>
+                                                                            <input type="number" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="dsrResultado" name="dsr">
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+
+                                                            <!-- DESCONTOS DISCIPLINARES -->
+                                                            <div class="card mb-3">
+                                                                <div class="card-body">
+                                                                    <h4 class="card-title" style="text-align: center">VALOR DE DESCONTOS DISCIPLINARES</h4>
+
+                                                                    <div class="row align-items-center mb-3">
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">VALOR DAS FALTAS</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="inputFaltasResultado" name="inputFaltas">
+                                                                        </div>
+
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">VALOR DAS SUSPENSÕES + DSR</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="inputSuspensoesResultado" name="inputSuspensoes">
+                                                                        </div>
+
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">ATRASOS (HH:MM)</label>
+                                                                            <input type="text" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="atrasos_horasResultado" name="atrasos_horas"
+                                                                                   pattern="^([0-9]{1,2}):([0-5][0-9])$"
+                                                                                   placeholder="00:00">
+                                                                        </div>
+
+                                                                        <div class="col-auto ms-3">
+                                                                            <label style="color: #f2a654">VALOR DESCONTO ATRASOS</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="valor_desconto_atrasosResultado" name="valor_desconto_atrasos">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- SALÁRIOS E COMISSÕES -->
+                                                            <div class="card mb-3">
+                                                                <div class="card-body">
+                                                                    <!-- Primeira linha -->
+                                                                    <div class="row align-items-center mb-3">
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">VENDA TOTAL</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="venda_totalResultado" name="venda_total">
+                                                                        </div>
+
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">VALES</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="vales_mesResultado" name="vales_mes">
+                                                                        </div>
+
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">INSS</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="inssResultado" name="inss">
+                                                                        </div>
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">PARCELA A DEDUZIR</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="parcelaResultado" name="parcela">
+                                                                        </div>
+
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">FGTS</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="fgtsResultado" name="fgts">
+                                                                        </div>
+
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">DESCONTOS DISCIPLINARES</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="descontos_mesResultado" name="descontos_mes">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Segunda linha -->
+                                                                    <div class="row align-items-center mb-3">
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">COMISSÃO %</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: #f2a654; color: black"
+                                                                                   id="comissaoResultado" name="comissao">
+                                                                        </div>
+
+                                                                        <div class="col-auto ms-3">
+                                                                            <label style="color: #f2a654">SALÁRIO TOTAL</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: #f2a654; color: black"
+                                                                                   id="salario_totalResultadoField" name="salario_total">
+                                                                        </div>
+
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="descontos_1Resultado" name="descontos_1">
+                                                                        </div>
+
+                                                                        <div class="col-auto ms-3">
+                                                                            <label style="color: #f2a654">SALÁRIO LÍQUIDO</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: #f2a654; color: black"
+                                                                                   id="salario_liquidoResultado" name="salario_liquido">
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Terceira linha -->
+                                                                    <div class="row align-items-center">
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">COMISSÃO %</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: #f2a654; color: black"
+                                                                                   id="comissao2Resultado" name="comissao2">
+                                                                        </div>
+
+                                                                        <div class="col-auto ms-3">
+                                                                            <label style="color: #f2a654">SALÁRIO TOTAL</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: #f2a654; color: black"
+                                                                                   id="salario_total2Resultado" name="salario_total2">
+                                                                        </div>
+
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: white; color: black"
+                                                                                   id="descontos_2Resultado" name="descontos_2">
+                                                                        </div>
+
+                                                                        <div class="col-auto ms-3">
+                                                                            <label style="color: #f2a654">SALÁRIO LÍQUIDO 2</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: #f2a654; color: black"
+                                                                                   id="salario_liquido2Resultado" name="salario_liquido2">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
                                                     </div>
 
                                                 </div>
                                                 <div class="modal-footer">
+                                                    <button type="button" class="btn btn-success" id="btnSalvar" style="display: none;">SALVAR ALTERAÇÕES</button>
                                                     <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
                                                 </div>
                                             </div>
@@ -1254,11 +1267,23 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         const btnBuscar = document.getElementById('btnBuscar');
+        const btnSalvar = document.getElementById('btnSalvar');
         const resultadoBusca = document.getElementById('resultadoBusca');
+        const formEdicao = document.getElementById('formEdicao');
 
+        // Evento para buscar
         if (btnBuscar) {
             btnBuscar.addEventListener('click', function() {
                 realizarBusca();
+            });
+        }
+
+        // Evento para salvar edição - USANDO SUBMIT TRADICIONAL
+        if (btnSalvar) {
+            btnSalvar.addEventListener('click', function() {
+                if (confirm('Deseja realmente salvar as alterações?')) {
+                    salvarEdicaoViaSubmit();
+                }
             });
         }
 
@@ -1280,6 +1305,11 @@
             // Ocultar resultados anteriores
             resultadoBusca.style.display = 'none';
 
+            // Ocultar botão salvar
+            if (btnSalvar) {
+                btnSalvar.style.display = 'none';
+            }
+
             // Fazer requisição AJAX
             const params = new URLSearchParams({
                 acao: 'buscaSalario',
@@ -1288,7 +1318,10 @@
                 funcionarioId: funcionarioId
             });
 
-            fetch('<%= request.getContextPath() %>/ServletSalarios?' + params.toString(), {
+            // CORRIGIDO: Removido o JSP scriptlet que não funciona no JavaScript
+            const contextPath = window.location.pathname.substring(0, window.location.pathname.indexOf('/', 2));
+
+            fetch(contextPath + '/ServletSalarios?' + params.toString(), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1303,8 +1336,13 @@
                 })
                 .then(data => {
                     if (Array.isArray(data) && data.length > 0) {
-                        preencherResultados(data[0]); // Pega o primeiro (e provavelmente único) resultado
+                        preencherResultadosParaEdicao(data[0]);
                         resultadoBusca.style.display = 'block';
+
+                        // Mostrar botão salvar
+                        if (btnSalvar) {
+                            btnSalvar.style.display = 'inline-block';
+                        }
                     } else {
                         alert('Nenhum salário encontrado para os critérios informados.');
                     }
@@ -1324,19 +1362,28 @@
                 });
         }
 
-        function preencherResultados(salario) {
+        // Função modificada para preencher os campos para edição
+        function preencherResultadosParaEdicao(salario) {
             const meses = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
                 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
             const mesAnoTexto = meses[salario.mes] + ' ' + salario.ano;
 
             setText('mesAnoResultado', mesAnoTexto.toUpperCase());
 
+            // Preencher campos ocultos para edição
+            setValue('idSalario', salario.idSalario);
+            setValue('mesEdicao', salario.mes);
+            setValue('anoEdicao', salario.ano);
+            setValue('funcionarioIdEdicao', salario.funcionarioId);
+            setValue('nomeEdicao', salario.nomeFuncionario);
+            setValue('mesAnoHidden', mesAnoTexto);
+
             // Informações Gerais
             setValue('nomeResultado', salario.nomeFuncionario);
             setValue('ft_totalResultado', salario.qtdFotos, true);
             setValue('dig_totalResultado', salario.qtdArquivos, true);
             setValue('sobrasResultado', salario.qtdSobras, true);
-            setValue('aproveitamentoResultado', formatarAproveitamento(salario.aproveitamento));
+            setValue('aproveitamentoResultado', formatarNumeroParaInput(salario.aproveitamento));
             setValue('funcionarioIdResultado', salario.funcionarioId);
 
             // Conduta
@@ -1345,34 +1392,159 @@
             setValue('suspensoesResultado', salario.suspensoes, true);
             setValue('dsrResultado', salario.dsr, true);
 
-            // Descontos
-            setValue('inputFaltasResultado', formatarMoeda(salario.valorFaltas));
-            setValue('inputSuspensoesResultado', formatarMoeda(salario.valorSuspensoes));
+            // Descontos - valores para input (sem formatação)
+            setValue('inputFaltasResultado', formatarNumeroParaInput(salario.valorFaltas));
+            setValue('inputSuspensoesResultado', formatarNumeroParaInput(salario.valorSuspensoes));
             setValue('atrasos_horasResultado', formatarHoras(salario.atrasos));
-            setValue('valor_desconto_atrasosResultado', formatarMoeda(salario.valorAtrasos));
+            setValue('valor_desconto_atrasosResultado', formatarNumeroParaInput(salario.valorAtrasos));
 
-            // Salários e Benefícios
-            setValue('venda_totalResultado', formatarMoeda(salario.venda_total));
-            setValue('vales_mesResultado', formatarMoeda(salario.vales));
-            setValue('inssResultado', formatarMoeda(salario.inss));
-            setValue('parcelaResultado', formatarMoeda(salario.parcela));
-            setValue('fgtsResultado', formatarMoeda(salario.fgts));
-            setValue('descontos_mesResultado', formatarMoeda(salario.descontos_mes));
+            // Salários e Benefícios - valores para input (sem formatação)
+            setValue('venda_totalResultado', formatarNumeroParaInput(salario.venda_total));
+            setValue('vales_mesResultado', formatarNumeroParaInput(salario.vales));
+            setValue('inssResultado', formatarNumeroParaInput(salario.inss));
+            setValue('parcelaResultado', formatarNumeroParaInput(salario.parcela));
+            setValue('fgtsResultado', formatarNumeroParaInput(salario.fgts));
+            setValue('descontos_mesResultado', formatarNumeroParaInput(salario.descontos_mes));
 
-            // Salário 1ª linha
-            setValue('comissaoResultado', formatarPercentual(salario.comissao));
-            setValue('salario_totalResultadoField', formatarMoeda(salario.salario_total));
-            setValue('descontos_1Resultado', formatarMoeda(salario.descontos_1));
-            setValue('salario_liquidoResultado', formatarMoeda(salario.salario_liquido1));
+            // Salário 1ª linha - valores para input (sem formatação)
+            setValue('comissaoResultado', formatarNumeroParaInput(salario.comissao));
+            setValue('salario_totalResultadoField', formatarNumeroParaInput(salario.salario_total));
+            setValue('descontos_1Resultado', formatarNumeroParaInput(salario.descontos_1));
+            setValue('salario_liquidoResultado', formatarNumeroParaInput(salario.salario_liquido1));
 
-            // Salário 2ª linha
-            setValue('comissao2Resultado', formatarPercentual(salario.comissao2));
-            setValue('salario_total2Resultado', formatarMoeda(salario.salario_total2));
-            setValue('descontos_2Resultado', formatarMoeda(salario.descontos_2));
-            setValue('salario_liquido2Resultado', formatarMoeda(salario.salario_liquido2));
+            // Salário 2ª linha - valores para input (sem formatação)
+            setValue('comissao2Resultado', formatarNumeroParaInput(salario.comissao2));
+            setValue('salario_total2Resultado', formatarNumeroParaInput(salario.salario_total2));
+            setValue('descontos_2Resultado', formatarNumeroParaInput(salario.descontos_2));
+            setValue('salario_liquido2Resultado', formatarNumeroParaInput(salario.salario_liquido2));
         }
 
-// Auxiliares seguros
+        // NOVA FUNÇÃO: Salvar usando fetch (com correções baseadas no submit que funciona)
+        function salvarEdicaoViaForm() {
+            console.log('=== SALVANDO VIA FORM ===');
+
+            // Verificar se o form existe
+            if (!formEdicao) {
+                console.error('Formulário de edição não encontrado!');
+                alert('Erro: Formulário não encontrado.');
+                return;
+            }
+
+            // Verificar se os campos obrigatórios existem
+            const idSalario = document.getElementById('idSalario');
+            if (!idSalario || !idSalario.value || idSalario.value === '0') {
+                console.error('ID do salário não encontrado ou é 0');
+                alert('Erro: ID do salário não encontrado. Realize uma nova busca.');
+                return;
+            }
+
+            console.log('ID do salário:', idSalario.value);
+
+            // Mostrar loading no botão
+            const textoOriginal = btnSalvar.innerHTML;
+            btnSalvar.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Salvando...';
+            btnSalvar.disabled = true;
+
+            // Criar FormData a partir do formulário
+            const formData = new FormData(formEdicao);
+
+            // DEBUG: Verificar os dados que serão enviados
+            console.log('=== DADOS DO FORMULÁRIO ===');
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
+            // CORREÇÃO: Usar a mesma URL do action do form
+            const url = formEdicao.action || (window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/ServletSalarios');
+            console.log('URL do servlet:', url);
+
+            // Enviar dados via fetch - SEM HEADERS DESNECESSÁRIOS
+            fetch(url, {
+                method: 'POST',
+                body: formData
+                // Removido headers - deixar o browser definir automaticamente
+            })
+                .then(response => {
+                    console.log('=== RESPOSTA RECEBIDA ===');
+                    console.log('Status:', response.status);
+                    console.log('OK:', response.ok);
+
+                    if (response.ok) {
+                        console.log('Resposta OK - operação bem-sucedida');
+                        alert('Salário atualizado com sucesso!');
+
+                        // Opcional: fechar o modal
+                        const modalElement = document.getElementById('modalBusca');
+                        if (modalElement && typeof bootstrap !== 'undefined') {
+                            const modal = bootstrap.Modal.getInstance(modalElement);
+                            if (modal) {
+                                modal.hide();
+                                console.log('Modal fechado');
+                            }
+                        }
+                    } else {
+                        console.error('Resposta não OK:', response.status, response.statusText);
+                        // Tentar ler a resposta como texto para obter mais detalhes do erro
+                        return response.text().then(text => {
+                            console.error('Resposta do servidor:', text);
+                            throw new Error(`Erro ${response.status}: ${response.statusText}`);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('=== ERRO NO FETCH ===');
+                    console.error('Tipo do erro:', error.name);
+                    console.error('Mensagem:', error.message);
+                    console.error('Stack:', error.stack);
+                    alert('Erro ao salvar as alterações: ' + error.message);
+                })
+                .finally(() => {
+                    console.log('=== FINALIZANDO ===');
+                    // Restaurar botão
+                    btnSalvar.innerHTML = textoOriginal;
+                    btnSalvar.disabled = false;
+                    console.log('Botão restaurado');
+                });
+        }
+
+        // FUNÇÃO PRINCIPAL: Salvar usando submit tradicional do form
+        function salvarEdicaoViaSubmit() {
+            console.log('=== SALVANDO VIA SUBMIT ===');
+
+            if (!formEdicao) {
+                console.error('Formulário de edição não encontrado!');
+                alert('Erro: Formulário não encontrado.');
+                return;
+            }
+
+            const idSalario = document.getElementById('idSalario');
+            if (!idSalario || !idSalario.value || idSalario.value === '0') {
+                console.error('ID do salário não encontrado ou é 0');
+                alert('Erro: ID do salário não encontrado. Realize uma nova busca.');
+                return;
+            }
+
+            // Mostrar loading no botão
+            const textoOriginal = btnSalvar.innerHTML;
+            btnSalvar.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Salvando...';
+            btnSalvar.disabled = true;
+
+            // Usar submit tradicional
+            console.log('Submetendo formulário...');
+            formEdicao.submit();
+
+            // Nota: O loading será restaurado quando a página recarregar/redirecionar
+        }
+
+        // Função para formatar número para input (sem formatação visual)
+        function formatarNumeroParaInput(valor) {
+            if (!valor && valor !== 0) return '';
+            const numero = typeof valor === 'string' ? parseFloat(valor) : valor;
+            if (isNaN(numero)) return '';
+            return numero.toFixed(2);
+        }
+
+        // Auxiliares seguros
         function setValue(id, valor, zeroPorPadrao = false) {
             const el = document.getElementById(id);
             if (el) {
@@ -1386,7 +1558,6 @@
                 el.textContent = texto || '';
             }
         }
-
 
         function formatarMoeda(valor) {
             if (!valor && valor !== 0) return 'R$ 0,00';
@@ -1433,6 +1604,13 @@
 
             return String(horas).padStart(2, '0') + ':' + String(minutos).padStart(2, '0');
         }
+
+        // EXPOSIÇÃO GLOBAL para debug (opcional)
+        window.debugSalarios = {
+            salvarViaForm: salvarEdicaoViaForm,
+            salvarViaSubmit: salvarEdicaoViaSubmit,
+            formEdicao: formEdicao
+        };
     });
 
 

@@ -272,43 +272,55 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">RELATÓRIO POR DIA</h4>
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title text-center">RELATÓRIO POR DIA</h4>
+                                    <div class="d-flex flex-wrap justify-content-center mt-3">
 
-                                <div style="overflow-x: hidden">
-                                    <table class="table table-bordered" id="tabelavendasdia">
-                                        <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col">DATA</th>
-                                            <th scope="col">TOTAL DE FOTOS</th>
-                                            <th scope="col">TOTAL DE ENCARTES</th>
-                                            <th scope="col">TOTAL DE DIGITAIS</th>
-                                            <th scope="col">TOTAL DE SOBRAS</th>
+                                        <c:forEach var="dia" items="${vendasMesList[0].relatorioDiario}" varStatus="status">
 
-                                        </tr>
-                                        </thead>
-                                        <tbody>
+                                            <!-- Começa nova tabela a cada 10 linhas -->
+                                            <c:if test="${status.index % 10 == 0}">
+                                                <c:if test="${status.index != 0}">
+                                                    </tbody>
+                                                    </table>
+                                                </c:if>
+                                                <table class="table table-bordered table-striped table-hover me-3 mb-3 relatorio-tabela" style="table-layout: auto; width: auto;">
+                                                <thead>
+                                                <thead>
+                                                <tr>
+                                                    <th style="white-space: nowrap;">Dia</th>
+                                                    <th style="white-space: nowrap;">Dia da Semana</th>
+                                                    <th style="white-space: nowrap;">Total Vendido</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                            </c:if>
 
-                                        </tbody>
-                                    </table>
+                                            <tr>
+                                                <td style="white-space: nowrap;"><c:out value="${dia.dia}" /></td>
+                                                <td style="white-space: nowrap;"><c:out value="${dia.diaSemana}" /></td>
+                                                <td style="white-space: nowrap;">R$ <fmt:formatNumber value="${dia.venda_total_dia}" type="currency" currencySymbol=""/></td>
+                                            </tr>
 
-
-                                </div>
-
-                                <div class="table-responsive mt-3">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                    </table>
+                                            <!-- Fecha tabela no último elemento -->
+                                            <c:if test="${status.last}">
+                                                </tbody>
+                                                </table>
+                                            </c:if>
+                                        </c:forEach>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-            </div>
+
+
+
+                </div>
             <!-- content-wrapper ends -->
             <!-- partial:partials/_footer.html -->
             <jsp:include page="footer.jsp"></jsp:include>
@@ -489,6 +501,34 @@
 
        // Adiciona o evento onchange ao campo dataInicial
        document.getElementById("dataInicial").addEventListener('change', setData);
+   });
+
+   window.addEventListener('load', function() {
+       // Seleciona todas as tabelas do relatório
+       const tabelas = document.querySelectorAll('.relatorio-tabela');
+
+       tabelas.forEach(tabela => {
+           const totalCells = tabela.querySelectorAll('td:nth-child(3)');
+
+           totalCells.forEach(td => {
+               let valor = td.textContent.replace('R$', '').replace('.', '').replace(',', '.').trim();
+               let numero = parseFloat(valor);
+
+               if (!isNaN(numero)) {
+                   if (numero <= 999.99) {
+                       td.style.color = 'red';
+                   } else if (numero <= 1999.99) {
+                       td.style.color = 'white';
+                   } else if (numero <= 2999.99) {
+                       td.style.color = 'yellow';
+                   } else if (numero <= 3999.99) {
+                       td.style.color = '#00ccff'; // verde limão
+                   } else {
+                       td.style.color = 'fuchsia';
+                   }
+               }
+           });
+       });
    });
 </script>
 </body>

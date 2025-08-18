@@ -42,14 +42,12 @@ public class DAORelMes {
                 "SUM(valor_cred_real) AS valor_cred_real, " +
                 "SUM(valor_pix) AS valor_pix, " +
                 "SUM(valor_pix_real) AS valor_pix_real, " +
-
                 "SUM(desconto) AS desconto " +
                 "FROM conf_dia " +
                 "WHERE data_fechamento >= ? AND data_fechamento <= ?";
 
         String sqlDespesas = "SELECT SUM(valor_despesa) AS despesa_total FROM despesas WHERE data_despesa >= ? AND data_despesa <= ?";
-        String sqlContas = "SELECT SUM(valor) AS total_contas FROM contas WHERE data_de_pagamento >= ? AND data_de_pagamento<= ?";
-
+        String sqlContas = "SELECT SUM(valor) AS total_contas FROM contas WHERE data_de_pagamento >= ? AND data_de_pagamento <= ?";
         String sqlVales = "SELECT SUM(valor) AS total_vales FROM vales WHERE data >= ? AND data <= ?";
         String sqlConfiguracao = "SELECT * FROM configuracao WHERE \"idConf\" = 2";
 
@@ -64,9 +62,7 @@ public class DAORelMes {
             stmt.setDate(1, java.sql.Date.valueOf(dataInicio));
             stmt.setDate(2, java.sql.Date.valueOf(dataFim));
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    totalAdvert = rs.getInt("total_advert");
-                }
+                if (rs.next()) totalAdvert = rs.getInt("total_advert");
             }
         }
 
@@ -76,9 +72,7 @@ public class DAORelMes {
             stmt.setDate(1, java.sql.Date.valueOf(dataInicio));
             stmt.setDate(2, java.sql.Date.valueOf(dataFim));
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    totalFaltas = rs.getInt("total_faltas");
-                }
+                if (rs.next()) totalFaltas = rs.getInt("total_faltas");
             }
         }
 
@@ -88,9 +82,7 @@ public class DAORelMes {
             stmt.setDate(1, java.sql.Date.valueOf(dataInicio));
             stmt.setDate(2, java.sql.Date.valueOf(dataFim));
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    totalSusp = rs.getInt("total_susp");
-                }
+                if (rs.next()) totalSusp = rs.getInt("total_susp");
             }
         }
 
@@ -126,7 +118,6 @@ public class DAORelMes {
                         resumo.setValor_cred_mes_real(rs.getBigDecimal("valor_cred_real"));
                         resumo.setValor_pix_mes(rs.getBigDecimal("valor_pix"));
                         resumo.setValor_pix_mes_real(rs.getBigDecimal("valor_pix_real"));
-
                         resumo.setDesconto_mes(rs.getBigDecimal("desconto"));
                         if (resumoMensal.isEmpty()) resumoMensal.add(resumo);
                     }
@@ -153,11 +144,12 @@ public class DAORelMes {
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);
-                        resumo.setValor_despesa_total(rs.getBigDecimal("despesa_total")); // <- seu setter de despesas
+                        resumo.setValor_despesa_total(rs.getBigDecimal("despesa_total"));
                         if (resumoMensal.isEmpty()) resumoMensal.add(resumo);
                     }
                 }
             }
+
             // Consulta contas
             try (PreparedStatement pst = connection.prepareStatement(sqlContas)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
@@ -165,7 +157,7 @@ public class DAORelMes {
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);
-                        resumo.setValor_total_contas(rs.getBigDecimal("total_contas")); // <- seu setter de despesas
+                        resumo.setValor_total_contas(rs.getBigDecimal("total_contas"));
                         if (resumoMensal.isEmpty()) resumoMensal.add(resumo);
                     }
                 }
@@ -176,7 +168,6 @@ public class DAORelMes {
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);
-
                         resumo.setIdConf(rs.getLong("idConf"));
                         resumo.setConf1_valor(rs.getBigDecimal("conf1_valor"));
                         resumo.setConf1_valor2(rs.getBigDecimal("conf1_valor2"));
@@ -196,13 +187,12 @@ public class DAORelMes {
                         resumo.setConf2_qtd(rs.getInt("conf2_qtd"));
                         resumo.setConf3_qtd(rs.getInt("conf3_qtd"));
                         resumo.setConf4_qtd(rs.getInt("conf4_qtd"));
-
                         if (resumoMensal.isEmpty()) resumoMensal.add(resumo);
                     }
                 }
             }
 
-            // 🔽 AGORA sim joga os totais de condutas dentro do resumo
+            // 🔽 Totais de condutas
             ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);
             resumo.setTotal_advert(totalAdvert);
             resumo.setTotal_faltas(totalFaltas);
@@ -210,12 +200,51 @@ public class DAORelMes {
             resumo.setTotal_condutas(totalAdvert + totalFaltas + totalSusp);
             if (resumoMensal.isEmpty()) resumoMensal.add(resumo);
 
+            // ================= RELATÓRIO POR DIA =================
+            String sqlRelatorioDia = "SELECT " +
+                    "EXTRACT(DAY FROM data_fechamento) AS dia, " +
+                    "EXTRACT(DOW FROM data_fechamento) AS dow, " +
+                    "venda_total_dia " +
+                    "FROM conf_dia " +
+                    "WHERE data_fechamento >= ? AND data_fechamento <= ? " +
+                    "ORDER BY data_fechamento";
+
+            List<ModelFechaMes> relatorioDiario = new ArrayList<>();
+// 0 = domingo, 1 = segunda ... 6 = sábado
+            String[] diasPt = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"};
+
+            try (PreparedStatement pst = connection.prepareStatement(sqlRelatorioDia)) {
+                pst.setDate(1, java.sql.Date.valueOf(dataInicio));
+                pst.setDate(2, java.sql.Date.valueOf(dataFim));
+
+                try (ResultSet rs = pst.executeQuery()) {
+                    while (rs.next()) {
+                        ModelFechaMes dia = new ModelFechaMes();
+                        dia.setDia(rs.getInt("dia"));
+
+                        int dow = rs.getInt("dow"); // número do dia da semana
+                        if (dow >=0 && dow <=6) {
+                            dia.setDiaSemana(diasPt[dow]);
+                        } else {
+                            dia.setDiaSemana("?");
+                        }
+
+                        dia.setVenda_total_dia(rs.getBigDecimal("venda_total_dia"));
+                        relatorioDiario.add(dia);
+                    }
+                }
+            }
+            resumo.setRelatorioDiario(relatorioDiario);
+
+
         } catch (SQLException e) {
             System.err.println("Erro ao executar as consultas: " + e.getMessage());
             throw e;
         }
 
+        // ✅ Retorna apenas no final do método
         return resumoMensal;
     }
+
 
 }

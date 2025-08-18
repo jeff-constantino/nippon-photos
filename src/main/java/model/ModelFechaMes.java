@@ -104,7 +104,31 @@ public class ModelFechaMes implements Serializable {
     private int total_advert;
     private int total_faltas;
     private int total_susp;
-    private int total_condutas; // <-- total geral
+    private int total_condutas;
+
+    private int dia;
+    private String diaSemana;
+    private BigDecimal venda_total_dia;
+    private List<ModelFechaMes> relatorioDiario;
+
+    public int getDia() { return dia; }
+    public void setDia(int dia) { this.dia = dia; }
+
+    public String getDiaSemana() { return diaSemana; }
+    public void setDiaSemana(String diaSemana) { this.diaSemana = diaSemana; }
+
+    public BigDecimal getVenda_total_dia() { return venda_total_dia; }
+    public void setVenda_total_dia(BigDecimal venda_total_dia) { this.venda_total_dia = venda_total_dia; }
+
+    public List<ModelFechaMes> getRelatorioDiario() { return relatorioDiario; }
+    public void setRelatorioDiario(List<ModelFechaMes> relatorioDiario) { this.relatorioDiario = relatorioDiario; }
+
+
+
+
+
+
+
 
 
     public void setFormattedDate(String formattedDate) {

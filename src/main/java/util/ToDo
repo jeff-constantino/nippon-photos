@@ -1,17 +1,9 @@
-adcionar edição de salario
-
-
-criar comparativo de vendas mes/ano
 criar DRE
+CRIAR RELMES
+AJUSTAR RELATORIO DE VENDAS
+criar comparativo de vendas mes/ano
+
 APRENDER DOCKER
-
-
-  resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("Salário registrado com sucesso!", "UTF-8"));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("Erro ao gravar salário: " + e.getMessage(), "UTF-8"));
-        }
 
 
 

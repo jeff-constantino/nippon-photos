@@ -1,6 +1,7 @@
 package servlets;
 
 import dao.DAOFechaMes;
+import dao.DAORelMes;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -32,15 +33,16 @@ public class ServletRelMes extends ServletGenericUtil{
         String dataInicial = request.getParameter("dataInicial");
         String dataFinal = request.getParameter("dataFinal");
 
-        DAOFechaMes daoFechaMes = new DAOFechaMes();
+        DAORelMes daoRelMes = new DAORelMes();
 
         try {
             // Recupera a lista de vendas do banco de dados
-            List<ModelFechaMes> vendasMesList = daoFechaMes.buscarFechamentoMensal(dataInicial, dataFinal);
-            System.out.println(vendasMesList);
+            List<ModelFechaMes> vendasMesList = daoRelMes.buscarFechamentoMensal(dataInicial, dataFinal);
+
 
            // Passa a lista para o JSP
             request.setAttribute("vendasMesList", vendasMesList);
+            System.out.println(vendasMesList);
             RequestDispatcher rd = request.getRequestDispatcher("principal/relmes.jsp");
             rd.forward(request, response);
 

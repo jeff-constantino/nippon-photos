@@ -49,7 +49,7 @@ public class ServletFechaMes extends ServletGenericUtil {
         DAOContas daoContas = new DAOContas();
 
         try {
-            List<ModelContas> contasMes = daoContas.buscarContasMes(dataInicial, dataFinal);
+            List<ModelContas> contasMes = daoContas.buscarContasRelMes(dataInicial, dataFinal);
             request.setAttribute("contasMes", contasMes);
 
             double valorContas = 0;

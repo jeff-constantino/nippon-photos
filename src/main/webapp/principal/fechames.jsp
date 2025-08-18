@@ -482,7 +482,7 @@
                     <div class="col-md-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">CONTAS DO MÊS</h4>
+                                <h4 class="card-title" style="text-align: center">CONTAS PAGAS NO MÊS</h4>
                                 <table class="table">
                                     <thead>
                                     <tr>

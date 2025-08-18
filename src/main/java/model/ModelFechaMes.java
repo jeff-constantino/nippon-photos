@@ -43,6 +43,7 @@ public class ModelFechaMes implements Serializable {
     private BigDecimal desconto_mes;
     private BigDecimal venda_total_mes;
 
+
     private BigDecimal final_descontos;
     private int final_ribbon_1;
     private int final_ribbon_2;
@@ -100,7 +101,48 @@ public class ModelFechaMes implements Serializable {
     private BigDecimal debitoOutros;
     private BigDecimal creditoOutros;
 
-    // Getters e Setters (somente os novos abaixo)
+    private int total_advert;
+    private int total_faltas;
+    private int total_susp;
+    private int total_condutas; // <-- total geral
+
+
+    public void setFormattedDate(String formattedDate) {
+        this.formattedDate = formattedDate;
+    }
+
+    public int getTotal_advert() {
+        return total_advert;
+    }
+
+    public void setTotal_advert(int total_advert) {
+        this.total_advert = total_advert;
+    }
+
+    public int getTotal_faltas() {
+        return total_faltas;
+    }
+
+    public void setTotal_faltas(int total_faltas) {
+        this.total_faltas = total_faltas;
+    }
+
+    public int getTotal_susp() {
+        return total_susp;
+    }
+
+    public void setTotal_susp(int total_susp) {
+        this.total_susp = total_susp;
+    }
+
+    public int getTotal_condutas() {
+        return total_condutas;
+    }
+
+    public void setTotal_condutas(int total_condutas) {
+        this.total_condutas = total_condutas;
+    }
+
     public BigDecimal getDebitoVm() {
         return debitoVm;
     }
@@ -643,5 +685,77 @@ public class ModelFechaMes implements Serializable {
     public void setConfiguracao(ModelFechaMes configuracao) {
     }
 
-
+    @Override
+    public String toString() {
+        return "ModelFechaMes{" +
+                "id=" + id +
+                ", data_fechamento=" + data_fechamento +
+                ", formattedDate='" + formattedDate + '\'' +
+                ", final_ft_din=" + final_ft_din +
+                ", final_ft_deb=" + final_ft_deb +
+                ", final_ft_cred=" + final_ft_cred +
+                ", final_ft_pix=" + final_ft_pix +
+                ", final_enc_din=" + final_enc_din +
+                ", final_enc_deb=" + final_enc_deb +
+                ", final_enc_cred=" + final_enc_cred +
+                ", final_enc_pix=" + final_enc_pix +
+                ", final_dig_din=" + final_dig_din +
+                ", final_dig_deb=" + final_dig_deb +
+                ", final_dig_cred=" + final_dig_cred +
+                ", final_dig_pix=" + final_dig_pix +
+                ", total_ft=" + total_ft +
+                ", total_enc=" + total_enc +
+                ", total_dig=" + total_dig +
+                ", valor_din_mes=" + valor_din_mes +
+                ", valor_din_mes_real=" + valor_din_mes_real +
+                ", valor_deb_mes=" + valor_deb_mes +
+                ", valor_deb_mes_real=" + valor_deb_mes_real +
+                ", valor_cred_mes=" + valor_cred_mes +
+                ", valor_cred_mes_real=" + valor_cred_mes_real +
+                ", valor_pix_mes=" + valor_pix_mes +
+                ", valor_pix_mes_real=" + valor_pix_mes_real +
+                ", valor_despesa_total=" + valor_despesa_total +
+                ", valor_vale_total=" + valor_vale_total +
+                ", desconto_mes=" + desconto_mes +
+                ", venda_total_mes=" + venda_total_mes +
+                ", final_descontos=" + final_descontos +
+                ", final_ribbon_1=" + final_ribbon_1 +
+                ", final_ribbon_2=" + final_ribbon_2 +
+                ", final_ribbon_3=" + final_ribbon_3 +
+                ", final_ribbon_4=" + final_ribbon_4 +
+                ", final_ribbon_5=" + final_ribbon_5 +
+                ", final_ribbon_6=" + final_ribbon_6 +
+                ", total_sobras=" + total_sobras +
+                ", resultadoDivisao=" + resultadoDivisao +
+                ", conf1_valor=" + conf1_valor +
+                ", conf1_valor2=" + conf1_valor2 +
+                ", conf2_valor=" + conf2_valor +
+                ", conf3_valor=" + conf3_valor +
+                ", conf4_valor=" + conf4_valor +
+                ", conf1_custo=" + conf1_custo +
+                ", conf2_custo=" + conf2_custo +
+                ", conf3_custo=" + conf3_custo +
+                ", conf4_custo=" + conf4_custo +
+                ", conf1_nome='" + conf1_nome + '\'' +
+                ", conf2_nome='" + conf2_nome + '\'' +
+                ", conf3_nome='" + conf3_nome + '\'' +
+                ", conf4_nome='" + conf4_nome + '\'' +
+                ", conf_name='" + conf_name + '\'' +
+                ", conf1_qtd=" + conf1_qtd +
+                ", conf2_qtd=" + conf2_qtd +
+                ", conf3_qtd=" + conf3_qtd +
+                ", conf4_qtd=" + conf4_qtd +
+                ", juros_cartoes=" + juros_cartoes +
+                ", mes=" + mes +
+                ", ano=" + ano +
+                ", total_ribbons=" + total_ribbons +
+                ", total_geral=" + total_geral +
+                ", valor_total_despesas=" + valor_total_despesas +
+                ", valor_total_contas=" + valor_total_contas +
+                ", debitoVm=" + debitoVm +
+                ", creditoVm=" + creditoVm +
+                ", debitoOutros=" + debitoOutros +
+                ", creditoOutros=" + creditoOutros +
+                '}';
+    }
 }

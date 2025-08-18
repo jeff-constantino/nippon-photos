@@ -40,13 +40,7 @@
                                                 <h4>Gerar Relatório</h4>
                                             </button>
 
-                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal2">
-                                                <h4>Configurações de Materiais</h4>
-                                            </button>
 
-                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal3">
-                                                <h4>Configurações Gerais</h4>
-                                            </button>
                                         </div>
 
 
@@ -252,7 +246,7 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <h4 class="card-title" style="text-align: center">DESPESAS DO MÊS</h4>
-                                                    <div style="height: 300px; overflow-y: auto;">
+                                                    <div>
 
                                                         <table class="table" id="tabelareldespesas">
                                                             <thead>
@@ -370,38 +364,7 @@
                 </div>
 
 
-                <%--BLOCO 2--%>
-                <div class="row ">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">MATERIAL</h4>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <%--BLOCO 3--%>
-
-                <div class="row ">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">GERAIS</h4>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
             </div>
             <!-- content-wrapper ends -->

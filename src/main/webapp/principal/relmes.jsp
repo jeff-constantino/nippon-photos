@@ -83,11 +83,7 @@
                             <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalData">
                                 <h4>Gerar Relatório</h4>
                             </button>
-                            <c:if test="${not empty msg}">
-                                <div>
-                                    <span style="color:#1ad76b; text-align: center">${msg}</span>
-                                </div>
-                            </c:if>
+
                                 </div>
                             </div>
                         </div>
@@ -99,7 +95,7 @@
                                 <h4 class="card-title" style="text-align: center">RELATÓRIO DE VENDAS</h4>
 
                                 <div style="overflow-x: hidden">
-                                    <table class="table table-bordered" id="tabelames">
+                                    <table class="table table-bordered" id="tabelavendasmes">
                                         <thead class="thead-light">
                                         <tr>
                                             <th scope="col">DATA</th>
@@ -111,9 +107,9 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${vendasMes}" var="vm">
+                                        <c:forEach items="${vendasMesList}" var="vl">
                                             <tr>
-                                                <td><c:out value="${vl.data_fechamento}"></c:out></td>
+                                                <td><c:out value="${vl.formattedDate}"></c:out></td>
                                                 <td><c:out value="${vl.total_ft}"></c:out></td>
                                                 <td><c:out value="${vl.total_enc}"></c:out></td>
                                                 <td><c:out value="${vl.total_dig}"></c:out></td>
@@ -153,7 +149,7 @@
                                         <thead class="thead-light">
                                         <tr>
 
-                                            <th scope="col">TODAL DE ATRASOS</th>
+
                                             <th scope="col">TOTAL DE FALTAS</th>
                                             <th scope="col">TOTAL DE ADVERTÊNCIAS</th>
                                             <th scope="col">TOTAL DE SUSPENSÕES</th>
@@ -161,20 +157,18 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${}" var="hc">
+                                        <c:forEach items="${vendasMesList}" var="hc">
                                             <tr>
 
+
                                                 <td>
-                                                    <c:out value="${hc.atrasos_total}"></c:out>
+                                                    <c:out value="${hc.total_faltas}"></c:out>
                                                 </td>
                                                 <td>
-                                                    <c:out value="${hc.faltas_total}"></c:out>
+                                                    <c:out value="${hc.total_advert}"></c:out>
                                                 </td>
                                                 <td>
-                                                    <c:out value="${hc.advertencias_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${hc.suspensoes_total}"></c:out>
+                                                    <c:out value="${hc.total_susp}"></c:out>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -215,32 +209,44 @@
                                         <tr>
 
 
-                                            <th scope="col">NOME</th>
+                                            <th scope="col">DINHEIRO</th>
 
-                                            <th scope="col">TODAL DE ATRASOS</th>
-                                            <th scope="col">TOTAL DE FALTAS</th>
-                                            <th scope="col">TOTAL DE ADVERTÊNCIAS</th>
-                                            <th scope="col">TOTAL DE SUSPENSÕES</th>
+                                            <th scope="col">DÉBITO</th>
+                                            <th scope="col">CRÉDITO</th>
+                                            <th scope="col">PIX</th>
+                                            <th scope="col">DESCONTOS</th>
+                                            <th scope="col">DESPESAS</th>
+                                            <th scope="col">CONTAS</th>
+                                            <th scope="col">VALES</th>
 
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${}" var="hc">
+                                        <c:forEach items="${vendasMesList}" var="fn">
                                             <tr>
                                                 <td>
-                                                    <c:out value="${hc.nome}"></c:out>
+                                                    <c:out value="${fn.valor_din_mes}"></c:out>
                                                 </td>
                                                 <td>
-                                                    <c:out value="${hc.atrasos_total}"></c:out>
+                                                    <c:out value="${fn.valor_deb_mes}"></c:out>
                                                 </td>
                                                 <td>
-                                                    <c:out value="${hc.faltas_total}"></c:out>
+                                                    <c:out value="${fn.valor_cred_mes}"></c:out>
                                                 </td>
                                                 <td>
-                                                    <c:out value="${hc.advertencias_total}"></c:out>
+                                                    <c:out value="${fn.valor_pix_mes}"></c:out>
                                                 </td>
                                                 <td>
-                                                    <c:out value="${hc.suspensoes_total}"></c:out>
+                                                    <c:out value="${fn.desconto_mes}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${fn.valor_despesa_total}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${fn.valor_total_contas}"></c:out>
+                                                </td>
+                                                <td>
+                                                    <c:out value="${fn.valor_vale_total}"></c:out>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -273,7 +279,7 @@
                                 <h4 class="card-title" style="text-align: center">RELATÓRIO POR DIA</h4>
 
                                 <div style="overflow-x: hidden">
-                                    <table class="table table-bordered" id="tabelavendasmes">
+                                    <table class="table table-bordered" id="tabelavendasdia">
                                         <thead class="thead-light">
                                         <tr>
                                             <th scope="col">DATA</th>
@@ -285,17 +291,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach items="${vendasMesList}" var="vl">
-                                            <tr>
-                                                <td><c:out value="${vl.formattedDate}"></c:out></td>
-                                                <td><c:out value="${vl.total_ft}"></c:out></td>
-                                                <td><c:out value="${vl.total_enc}"></c:out></td>
-                                                <td><c:out value="${vl.total_dig}"></c:out></td>
-                                                <td><c:out value="${vl.total_sobras}"></c:out></td>
 
-
-                                            </tr>
-                                        </c:forEach>
                                         </tbody>
                                     </table>
 

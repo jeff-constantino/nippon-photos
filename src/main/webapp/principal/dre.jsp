@@ -36,8 +36,8 @@
 
 
                                         <div class="d-flex justify-content-between">
-                                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalProd">
-                                                <h4>Configurações de Produtos</h4>
+                                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalDRE">
+                                                <h4>Gerar DRE</h4>
                                             </button>
 
                                             <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal2">
@@ -70,7 +70,7 @@
 
 
                                     <!-- Modal -->
-                                    <div class="modal fade" id="modalProd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal fade" id="modalDRE" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-xl mt-5">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -79,109 +79,23 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div class="container-fluid">
-                                                        <div class="row">
-
-                                                            <%--body modal 1--%>
-                                                            <form id="configForm" method="post"
-                                                                  action="<%= request.getContextPath() %>/ServletConfig">
-
-                                                                <div class="row">
-                                                                    <div class="col-auto">
-                                                                        <span style="color:#1ad76b; text-align: center">${msg}</span>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="row mb-3">
-                                                                    <div class="col-sm-1">
-                                                                        <label class="float-label">ID:</label>
-                                                                        <span class="form-bar"></span>
-                                                                        <input type="text" class="form-control" style="background-color: black" id="idConf"
-                                                                               name="idConf" placeholder=""
-                                                                               value="${modelConfig.idConf}" readonly>
-                                                                    </div>
-
-
-                                                                    <div class="col-4">
-                                                                        <label for="prod1_nome">Produto 1 Nome</label>
-                                                                        <input type="text" class="form-control" id="prod1_nome"
-                                                                               name="prod1_nome" required
-                                                                               value="${modelConfig.prod1_nome}">
-                                                                    </div>
-
-                                                                    <div class="col-4">
-                                                                        <div class="row">
-                                                                            <div class="col-6">
-                                                                                <label for="prod1_valor">Produto 1 Valor</label>
-                                                                                <input type="text" class="form-control"
-                                                                                       id="prod1_valor" name="prod1_valor"
-                                                                                       required
-                                                                                       value="${modelConfig.prod1_valor}">
-                                                                            </div>
-
-                                                                            <div class="col-6">
-                                                                                <label for="prod1_valor2">Produto 1 Valor
-                                                                                    2</label>
-                                                                                <input type="text" class="form-control"
-                                                                                       id="prod1_valor2" name="prod1_valor2"
-                                                                                       required
-                                                                                       value="${modelConfig.prod1_valor2}">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="row mb-3">
-                                                                    <div class="col-4">
-                                                                        <label for="prod2_nome">Produto 2 Nome</label>
-                                                                        <input type="text" class="form-control" id="prod2_nome"
-                                                                               name="prod2_nome" required
-                                                                               value="${modelConfig.prod2_nome}">
-                                                                    </div>
-                                                                    <div class="col-4">
-                                                                        <label for="prod2_valor">Produto 2 Valor</label>
-                                                                        <input type="text" class="form-control" id="prod2_valor"
-                                                                               name="prod2_valor" required
-                                                                               value="${modelConfig.prod2_valor}">
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="row mb-3">
-                                                                    <div class="col-4">
-                                                                        <label for="prod3_nome">Produto 3 Nome</label>
-                                                                        <input type="text" class="form-control" id="prod3_nome"
-                                                                               name="prod3_nome" required
-                                                                               value="${modelConfig.prod3_nome}">
-                                                                    </div>
-                                                                    <div class="col-4">
-                                                                        <label for="prod3_valor">Produto 3 Valor</label>
-                                                                        <input type="text" class="form-control" id="prod3_valor"
-                                                                               name="prod3_valor" required
-                                                                               value="${modelConfig.prod3_valor}">
-                                                                    </div>
-                                                                </div>
-                                                                <button type="submit" class="btn btn-outline-success">Salvar
-                                                                </button>
-
-                                                            </form>
-
-
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <DIV></DIV>
-
+                                                    <form action="<%= request.getContextPath() %>/ServletDre" method="get" id="formDre" name="formDre">
+                                                        <input type="hidden" name="acao" value="relatorioMes">
+                                                        <div class="form-row align-items-center">
+                                                            <div class="col-auto">
+                                                                <label for="dataInicial">Data Inicial</label>
+                                                                <input type="date" class="form-control" id="dataInicial" name="dataInicial" required onchange="setData()" value="${dataInicial}">
                                                             </div>
-                                                            <div class="col">
-
+                                                            <div class="col-auto">
+                                                                <label for="dataFinal">Data Final</label>
+                                                                <input type="date" class="form-control" id="dataFinal" name="dataFinal" required value="${dataFinal}">
                                                             </div>
 
+                                                            <div class="col-auto">
+                                                                <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="row">
-
-                                                        </div>
-                                                    </div>
+                                                    </form>
 
                                                 </div>
                                                 <div class="modal-footer">
@@ -294,122 +208,198 @@
                         </div>
                     </div>
                 </div>
-
-                <%--BLOCO 1                --%>
-                <style>
-                    .minha-tabela {
-                        border-collapse: collapse; /* Remove espaço entre as bordas */
-                        width: 100%; /* Opcional: para garantir que a tabela ocupe toda a largura */
-                    }
-
-                    .minha-tabela td, .minha-tabela th {
-                        padding: 2px; /* Diminui o padding das células */
-                        vertical-align: middle; /* Alinha verticalmente ao meio */
-                        font-size: 14px; /* Ajusta o tamanho da fonte (opcional) */
-                    }
-                </style>
-
-                <div class="row ">
-                    <div class="col-12 grid-margin">
+<%--CONTEUDO PAGINA--%>
+                <div class="row">
+                    <div class="col-md-4 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">PRODUTOS</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered minha-tabela">
+                                <h4 class="card-title" style="text-align: center">RECEITAS OPERACIONAIS</h4>
+                                <!-- Table Content -->
+                                <div style="overflow-x: hidden; overflow-y: hidden"  class="table-responsive">
+                                    <table class="table table-bordered" id="tabelaReceita" >
                                         <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="font-size: 1.2rem">TIPO</th>
+                                            <th scope="col" style="font-size: 1.2rem">VALOR</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:set var="receitaDinheiro" value="0" />
+                                        <c:set var="receitaDebito" value="0" />
+                                        <c:set var="receitaCredito" value="0" />
+                                        <c:set var="receitaPix" value="0" />
+                                        <c:set var="impostos" value="0" />
+                                        <c:set var="receitaBruta" value="0" />
 
-                                        <c:if test="${not empty configs}">
-                                        <table class="table table-bordered">
+                                        <c:forEach items="${vendasMesList}" var="vl">
+                                            <tr>
+                                                <td style="font-size: 1.2rem">Dinheiro</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_din_mes}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: 1.2rem">Débito</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_deb_mes}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: 1.2rem">Crédito</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_cred_mes}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: 1.2rem">Pix</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_pix_mes}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <c:set var="receitaDinheiro" value="${receitaDinheiro+ vl.valor_din_mes}" />
+                                            <c:set var="receitaDebito" value="${receitaDebito + vl.valor_deb_mes}" />
+                                            <c:set var="receitaCredito" value="${receitaCredito + vl.valor_cred_mes}" />
+                                            <c:set var="receitaPix" value="${receitaPix + vl.valor_pix_mes}" />
+                                            <tr>
+                                                <td style="font-size: 1.2rem">Receita Bruta</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${receitaDinheiro + receitaDebito + receitaCredito + receitaPix}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">DESPESAS OPERACIONAIS</h4>
+                                <!-- Table Content -->
+                                <div style="overflow-x: hidden; overflow-y: hidden"  class="table-responsive">
+                                    <table class="table table-bordered" id="tabelaDespesas">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col" style="font-size: 1.2rem">TIPO</th>
+                                            <th scope="col" style="font-size: 1.2rem">VALOR</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:set var="ribbons" value="0" />
+                                        <c:set var="encartes" value="0" />
+                                        <c:set var="jurosCartoes" value="0" />
+                                        <c:set var="despesasOperacionais" value="0" />
+                                        <c:set var="lucroBruto" value="0" />
+
+                                        <c:forEach items="${vendasMesList}" var="vl">
 
                                             <tr>
-                                                <th>Ações</th>
-                                                <th>ID</th>
-                                                <th>Produto 1</th>
-                                                <th>Valor 1</th>
-                                                <th>Valor 2</th>
-                                                <th>Produto 2</th>
-                                                <th>Valor</th>
-                                                <th>Produto 3</th>
-                                                <th>Valor</th>
-
-
+                                                <td style="font-size: 1.2rem">Ribbons</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.ribbons}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: 1.2rem">Encartes</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.encartes}" type="currency" currencySymbol="R$" /></td>
                                             </tr>
 
-                                            <tbody>
-                                            <c:forEach items="${configs}" var="modelConf">
-                                                <tr>
-                                                    <td>
-                                                        <a class="btn btn-outline-success waves-effect waves-light"
-                                                           href="javascript:void(0);"
-                                                           data-bs-toggle="modal"
-                                                           data-bs-target="#modalProd"
-                                                           onclick="gerenciar(
-                                                               ${modelConf.idConf},
-                                                                   '${modelConf.prod1_nome}',
-                                                                   '${modelConf.prod1_valor}',
-                                                                   '${modelConf.prod1_valor2}',
-                                                                   '${modelConf.prod2_nome}',
-                                                                   '${modelConf.prod2_valor}',
-                                                                   '${modelConf.prod3_nome}',
-                                                                   '${modelConf.prod3_valor}')">
-                                                            Editar
-                                                        </a>
-                                                    </td>
-                                                    <td><c:out value="${modelConf.idConf}"/></td>
-                                                    <td><c:out value="${modelConf.prod1_nome}"/></td>
-                                                    <td><c:out value="${modelConf.prod1_valor}"/></td>
-                                                    <td><c:out value="${modelConf.prod1_valor2}"/></td>
-                                                    <td><c:out value="${modelConf.prod2_nome}"/></td>
-                                                    <td><c:out value="${modelConf.prod2_valor}"/></td>
-                                                    <td><c:out value="${modelConf.prod3_nome}"/></td>
-                                                    <td><c:out value="${modelConf.prod3_valor}"/></td>
 
-                                                </tr>
-                                            </c:forEach>
-                                            </tbody>
+                                            <tr>
+                                                <td style="font-size: 1.2rem">Juros dos Cartões</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.jurosCartoes}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="font-size: 1.2rem">Despesas Operacionais</td>
+                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.ribbons + vl.encartes + vl.jurosCartoes}" type="currency" currencySymbol="R$" /></td>
+                                            </tr>
 
 
-                                            </c:if>
-                                            <c:if test="${empty configs}">
-                                            <p>Nenhuma configuração encontrada.</p>
-                                            </c:if>
-                                        </thead>
+
+                                        </c:forEach>
+                                        </tbody>
+                                        <tfoot>
+
+                                        </tfoot>
+
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-
-                <%--BLOCO 2--%>
-                <div class="row ">
-                    <div class="col-12 grid-margin">
+                    <div class="col-md-4 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">MATERIAL</h4>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <%--BLOCO 3--%>
+                                <form method="post" action="<%=request.getContextPath()%>/ServletFechaMes">
+                                    <h4 class="card-title" style="text-align: center">DESPESAS ADMINISTRATIVAS</h4>
+                                    <!-- Table Content -->
+                                    <div style="overflow-x: hidden; overflow-y: hidden">
+                                        <table class="table table-bordered" id="tabelavalorescontames">
+                                            <div class="row">
 
-                <div class="row ">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">GERAIS</h4>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                    </table>
-                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label for="icms" style="font-size: 0.8rem;">ICMS</label>
+                                                    <input type="text" class="form-control money" id="icms" name="icms" style="font-size: 0.8rem;">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label for="pis" style="font-size: 0.8rem;">PIS</label>
+                                                    <input type="text" class="form-control money" id="pis" name="pis" style="font-size: 0.8rem;">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label for="cofins" style="font-size: 0.8rem;">COFINS</label>
+                                                    <input type="text" class="form-control money" id="cofins" name="cofins" style="font-size: 0.8rem;">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label for="inss" style="font-size: 0.8rem;">INSS</label>
+                                                    <input type="text" class="form-control money" id="inss" name="inss" style="font-size: 0.8rem;">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label for="irpj" style="font-size: 0.8rem;">IRPJ</label>
+                                                    <input type="text" class="form-control money" id="irpj" name="irpj" style="font-size: 0.8rem;">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label for="csll" style="font-size: 0.8rem;">CSLL</label>
+                                                    <input type="text" class="form-control money" id="csll" name="csll" style="font-size: 0.8rem;">
+                                                </div>
+
+                                                <div class="col-6 mb-3">
+                                                    <label for="aluguel" style="font-size: 0.8rem;">Aluguel</label>
+                                                    <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 0.8rem;">
+
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label for="salarios" style="font-size: 0.8rem;">Salários</label>
+                                                    <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 0.8rem;">
+                                                </div>
+
+                                                <div class="col-6 mb-3">
+                                                    <label for="contas" style="font-size: 0.8rem;">Contas</label>
+                                                    <input type="text" class="form-control money" id="contas" name="contas" style="font-size: 0.8rem;">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label for="despesasGerais" style="font-size: 0.8rem;">Depesas Gerais</label>
+                                                    <input type="text" class="form-control money" id="despesasGerais" name="despesasGerais" style="font-size: 0.8rem;">
+                                                </div>
+
+                                                <div class="col-6 mb-3">
+                                                    <label for="bonificacoes" style="font-size: 0.8rem;">Bonificações</label>
+                                                    <input type="text" class="form-control money" id="bonificacoes" name="bonificacoes" style="font-size: 0.8rem;">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label for="prestacoes" style="font-size: 0.8rem;">Prestações de Equipamentos</label>
+                                                    <input type="text" class="form-control money" id="prestacoes" name="prestacoes" style="font-size: 0.8rem;">
+                                                </div>
+
+                                                <div class="col-6 mb-3">
+                                                    <label for="debitoVm" style="font-size: 0.8rem;">Outras Despesas</label>
+                                                    <input type="text" class="form-control money" id="debitoVm" name="debitoVm"  style="font-size: 0.8rem;">
+                                                </div>
+
+                                            </div>
+
+
+                                        </table>
+                                        <div style="align-items: center">
+
+                                            <button type="submit" class="btn btn-outline-success" STYLE="font-size: large">
+                                                Gravar Fechamento do Mês
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -501,6 +491,85 @@
     document.addEventListener('keydown', navigateFocusableElements);
     // Fim de navegação por setas
 
+
+
+
+   function setData() {
+       // Obtém o valor do campo dataInicial
+       var dataInicial = document.getElementById("dataInicial").value;
+
+       if (dataInicial) {
+           // Divide a data inicial em dia, mês e ano
+           var partesData = dataInicial.split('-'); // Assume que o formato é yyyy-mm-dd
+           var ano = parseInt(partesData[0], 10);
+           var mes = parseInt(partesData[1], 10) - 1; // Mês é 0-based no JavaScript
+           var dia = parseInt(partesData[2], 10);
+
+           // Cria um objeto Date com os valores extraídos
+           var data = new Date(ano, mes, dia);
+
+           // Verifica se a data é válida
+           if (!isNaN(data.getTime())) {
+               // Calcula o último dia do mês da data inicial
+               var ultimoDia = new Date(ano, mes + 1, 0);
+
+               // Formata a data final no padrão yyyy-mm-dd
+               var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+               var mesFinal = String(mes + 1).padStart(2, '0'); // Ajusta o mês para exibição (1-12)
+               var dataFinal = ano + '-' + mesFinal + '-' + diaFinal;
+
+               // Define o valor do campo dataFinal
+               document.getElementById("dataFinal").value = dataFinal;
+           } else {
+               console.error("Data inicial inválida.");
+               document.getElementById("dataFinal").value = ""; // Limpa o campo se a data for inválida
+           }
+       } else {
+           console.error("Data inicial não selecionada.");
+           document.getElementById("dataFinal").value = ""; // Limpa o campo se a data inicial estiver vazia
+       }
+   }
+
+   // Função para inicializar os campos de data ao abrir o modal
+   function initializeDates() {
+       // Obtém a data atual
+       var today = new Date();
+
+       // Formata a data inicial no padrão yyyy-mm-dd
+       var diaInicial = String(today.getDate()).padStart(2, '0');
+       var mesInicial = String(today.getMonth() + 1).padStart(2, '0');
+       var anoInicial = today.getFullYear();
+       var dataInicial = anoInicial + '-' + mesInicial + '-' + diaInicial;
+
+       // Calcula o último dia do mês atual
+       var ultimoDia = new Date(anoInicial, today.getMonth() + 1, 0);
+
+       // Formata a data final no padrão yyyy-mm-dd
+       var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+       var mesFinal = String(today.getMonth() + 1).padStart(2, '0'); // Usa o mês da data inicial
+       var anoFinal = today.getFullYear();
+       var dataFinal = anoFinal + '-' + mesFinal + '-' + diaFinal;
+
+       // Define os valores dos campos
+       document.getElementById("dataInicial").value = dataInicial;
+       document.getElementById("dataFinal").value = dataFinal;
+   }
+
+   // Inicializa os campos de data quando o modal é aberto
+   document.addEventListener('DOMContentLoaded', function () {
+       const modal = document.getElementById('modalDRE'); // Substitua 'meuModal' pelo ID do seu modal
+       if (modal) {
+           modal.addEventListener('shown.bs.modal', function () {
+               // Verifica se os campos já foram inicializados
+               if (!document.getElementById("dataInicial").value) {
+                   initializeDates();
+               }
+           });
+       }
+
+       // Adiciona o evento onchange ao campo dataInicial
+       document.getElementById("dataInicial").addEventListener('change', setData);
+   });
 
 </SCRIPT>
 

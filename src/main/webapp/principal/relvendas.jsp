@@ -109,9 +109,9 @@
                                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalData">
                                     <h4>Gerar Relatório</h4>
                                 </button>
-                                <h4 class="card-title" STYLE="text-align: center">RELATÓRIO DE VENDAS</h4>
+                                <h4 class="card-title" STYLE="text-align: center">RELATÓRIO DE VENDAS POR FUNCIONÁRIO</h4>
 
-                                <div  style="overflow-x: auto; overflow-y: hidden;">
+                                <div style="overflow-x: auto; overflow-y: hidden;">
                                     <%-- Inicializando as variáveis de soma para cada coluna --%>
                                     <c:set var="totalProd1Din" value="0" />
                                     <c:set var="totalProd1Deb" value="0" />
@@ -130,7 +130,6 @@
                                     <table class="table" id="tabelarelvendas">
                                         <thead>
                                         <tr>
-
                                             <th scope="col">NOME</th>
                                             <th scope="col">DATA</th>
                                             <th scope="col">Ft Din</th>
@@ -186,7 +185,32 @@
                                             <c:set var="totalSobras" value="${totalSobras + mv.sobras}" />
                                         </c:forEach>
 
-                                        <%-- Exibindo os totais em uma linha ao final da tabela --%>
+                                        <%-- Agora sim, calcular os totais agrupados --%>
+                                        <c:set var="totalFT" value="${totalProd1Din + totalProd1Deb + totalProd1Cred + totalProd1Pix}" />
+                                        <c:set var="totalENC" value="${totalProd2Din + totalProd2Deb + totalProd2Cred + totalProd2Pix}" />
+                                        <c:set var="totalDIGI" value="${totalProd3Din + totalProd3Deb + totalProd3Cred + totalProd3Pix}" />
+
+                                        <%-- Repetição do cabeçalho antes dos totais --%>
+                                        <tr class="table-secondary">
+                                            <th scope="col">NOME</th>
+                                            <th scope="col">DATA</th>
+                                            <th scope="col">Ft Din</th>
+                                            <th scope="col">Ft Deb</th>
+                                            <th scope="col">Ft Cred</th>
+                                            <th scope="col">Ft Pix</th>
+                                            <th scope="col">Enc Din</th>
+                                            <th scope="col">Enc Deb</th>
+                                            <th scope="col">Enc Cred</th>
+                                            <th scope="col">Enc Pix</th>
+                                            <th scope="col">Dig Din</th>
+                                            <th scope="col">Dig Deb</th>
+                                            <th scope="col">Dig Cred</th>
+                                            <th scope="col">Dig Pix</th>
+                                            <th scope="col">Sobras</th>
+                                            <th scope="col">Id Venda</th>
+                                        </tr>
+
+                                        <%-- Totais detalhados --%>
                                         <tr>
                                             <td colspan="2" style="color: #f2a654"><strong>Total:</strong></td>
                                             <td style="color: #f2a654"><c:out value="${totalProd1Din}" /></td>
@@ -204,18 +228,27 @@
                                             <td style="color: #f2a654"><c:out value="${totalSobras}" /></td>
                                             <td></td>
                                         </tr>
+
+                                        <%-- Totais agrupados (alinhados à esquerda) --%>
+                                        <tr class="bg-warning fw-bold">
+                                            <td class="text-start">TOTAL FOTOS:</td>
+                                            <td class="text-start">${totalFT}</td>
+
+                                            <td class="text-start">TOTAL ENCARTES:</td>
+                                            <td class="text-start">${totalENC}</td>
+
+                                            <td class="text-start">TOTAL DIGITAIS:</td>
+                                            <td class="text-start">${totalDIGI}</td>
+
+                                            <!-- completa as 16 colunas da tabela -->
+                                            <td colspan="10"></td>
+                                        </tr>
+
                                         </tbody>
                                     </table>
-
-                                    <!-- Controles de paginação -->
-                                    <div class="pagination">
-
-                                        <c:forEach var="i" begin="1" end="${totalPaginas}">
-                                            <a href="ServletRelVenda?acao=imprimirRelatorioVendas&pagina=${i}" class="page-link ${i == paginaAtual ? 'active' : ''}">${i}</a>
-                                        </c:forEach>
-
-                                    </div>
                                 </div>
+
+                            </div>
                                 <div class="table-responsive">
                                     <table class="table">
                                         <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->

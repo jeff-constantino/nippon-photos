@@ -42,7 +42,7 @@ public class ServletRelMes extends ServletGenericUtil{
 
            // Passa a lista para o JSP
             request.setAttribute("vendasMesList", vendasMesList);
-            System.out.println(vendasMesList);
+
             RequestDispatcher rd = request.getRequestDispatcher("principal/relmes.jsp");
             rd.forward(request, response);
 

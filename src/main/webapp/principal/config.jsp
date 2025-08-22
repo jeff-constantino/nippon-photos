@@ -74,7 +74,9 @@
                     <div class="col-md-4 grid-margin">
                         <div class="card text-center">
                             <div class="card-body">
-                                <h4 class="card-title">FINANCEIRO</h4>
+                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalFinanceiro">
+                                    <h4>Configurações Financeiras</h4>
+                                </button>
                                 <!-- Table Content -->
                             </div>
                         </div>
@@ -502,6 +504,96 @@
                                         </div>
 
                                     </div>
+
+
+                        </div>
+                    </div>
+                    <div class="col-sm-4 grid-margin">
+
+
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                    <!--INSERIR BOTÃO 3 AQUI-->
+                                    <!-- Button trigger modal -->
+
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalFinanceiro" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl mt-5">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="financeiro">Configurações Dinanceiro</h5>
+
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="container-fluid">
+                                                        <div class="row">
+                                                            <form id="configFinanceiro" method="post" action="<%= request.getContextPath() %>/ServletConfiguracao">
+                                                                <input type="hidden" name="acao" value="financeiro">
+
+
+
+                                                                <div class="row mb-3">
+                                                                    <div class="col-sm-1">
+                                                                        <label class="float-label">ID:</label>
+                                                                        <span class="form-bar"></span>
+                                                                        <input type="text" class="form-control" style="background-color: black" id="idConf_financeiro"
+                                                                               name="idConf" placeholder=""
+                                                                               value="" readonly>
+                                                                    </div>
+
+
+                                                                </div>
+
+                                                                <div class="row mb-4 d-flex">
+                                                                    <div class="col-3">
+                                                                        <label for="conf1_nome">Impostos sobre Vendas</label>
+                                                                        <input type="text" class="form-control" id="juros_sobre_vendas" name="deb_visa_master" required value="">
+                                                                    </div>
+                                                                    <div class="col-3">
+                                                                        <label for="conf1_valor">ICMS</label>
+                                                                        <input type="text" class="form-control" id="etc" name="cred_visa_master" required value="">
+                                                                    </div>
+
+                                                                </div>
+
+                                                                <div class="row mb-4 d-flex">
+                                                                    <div class="col-3">
+                                                                        <label for="conf2_nome">PIS</label>
+                                                                        <input type="text" class="form-control" id="etc2" name="deb_outros" required value="">
+                                                                    </div>
+                                                                    <div class="col-3">
+                                                                        <label for="conf2_valor">COFINS</label>
+                                                                        <input type="text" class="form-control" id="etc3" name="cred_outros" required value="">
+                                                                    </div>
+
+                                                                </div>
+
+
+
+                                                                <button type="submit" class="btn btn-outline-success">Salvar</button>
+
+                                                            </form>
+
+
+
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
 
 
                         </div>

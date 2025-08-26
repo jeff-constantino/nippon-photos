@@ -3,6 +3,7 @@ package dao;
 import connection.SingleConnectionBanco;
 import model.ModelFechaMes;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -183,6 +184,61 @@ public class DAODre {
                     }
                 }
             }
+            // =================== CONSULTA RIBBONS, ENCARTES E JUROS ===================
+            String sqlMateriais = "SELECT " +
+                    "(total_ft + total_sobras) AS qtd_ribbons, " +
+                    "total_enc AS qtd_encartes, " +
+                    "juros_cartoes " +
+                    "FROM fecha_mes " +
+                    "WHERE (ano > ? OR (ano = ? AND mes >= ?)) " +
+                    "AND (ano < ? OR (ano = ? AND mes <= ?))";
+
+            try (PreparedStatement pst = connection.prepareStatement(sqlMateriais)) {
+                pst.setInt(1, dataInicio.getYear());
+                pst.setInt(2, dataInicio.getYear());
+                pst.setInt(3, dataInicio.getMonthValue());
+                pst.setInt(4, dataFim.getYear());
+                pst.setInt(5, dataFim.getYear());
+                pst.setInt(6, dataFim.getMonthValue());
+
+                try (ResultSet rs = pst.executeQuery()) {
+                    if (rs.next()) {
+                        int qtdRibbons = rs.getInt("qtd_ribbons");
+                        int qtdEncartes = rs.getInt("qtd_encartes");
+                        BigDecimal jurosCartoes = rs.getBigDecimal("juros_cartoes");
+
+                        // Buscar os custos dos materiais
+                        BigDecimal custoRibbon = BigDecimal.ZERO;
+                        BigDecimal custoEncarte = BigDecimal.ZERO;
+
+                        String sqlCustos = "SELECT id_conf, custo FROM conf_materiais WHERE id_conf IN (1,2)";
+                        try (PreparedStatement pstCusto = connection.prepareStatement(sqlCustos);
+                             ResultSet rsCusto = pstCusto.executeQuery()) {
+                            while (rsCusto.next()) {
+                                int idConf = rsCusto.getInt("id_conf");
+                                BigDecimal custo = rsCusto.getBigDecimal("custo");
+                                if (idConf == 1) custoRibbon = custo;
+                                if (idConf == 2) custoEncarte = custo;
+                            }
+                        }
+
+                        // Calcular valores totais
+                        BigDecimal totalRibbons = custoRibbon.multiply(BigDecimal.valueOf(qtdRibbons));
+                        BigDecimal totalEncartes = custoEncarte.multiply(BigDecimal.valueOf(qtdEncartes));
+
+                        // Adicionar ao resumo mensal
+                        ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);
+                        resumo.setQtd_ribbons(qtdRibbons);
+                        resumo.setTotal_enc(qtdEncartes);
+                        resumo.setTotal_ribbons(totalRibbons);
+                        resumo.setValor_enc(totalEncartes);
+                        resumo.setJuros_cartoes(jurosCartoes != null ? jurosCartoes : BigDecimal.ZERO);
+
+                        if (resumoMensal.isEmpty()) resumoMensal.add(resumo);
+                    }
+                }
+            }
+
 
             // 🔽 Totais de condutas
             ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);

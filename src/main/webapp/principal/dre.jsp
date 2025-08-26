@@ -288,26 +288,34 @@
 
                                             <tr>
                                                 <td style="font-size: 1.2rem">Ribbons</td>
-                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.ribbons}" type="currency" currencySymbol="R$" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size: 1.2rem">Encartes</td>
-                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.encartes}" type="currency" currencySymbol="R$" /></td>
+                                                <td style="font-size: 1.2rem">
+                                                    <fmt:formatNumber value="${vl.total_ribbons}" type="currency" currencySymbol="R$" />
+                                                </td>
                                             </tr>
 
+                                            <tr>
+                                                <td style="font-size: 1.2rem">Encartes</td>
+                                                <td style="font-size: 1.2rem">
+                                                    <fmt:formatNumber value="${vl.valor_enc}" type="currency" currencySymbol="R$" />
+                                                </td>
+                                            </tr>
 
                                             <tr>
                                                 <td style="font-size: 1.2rem">Juros dos Cartões</td>
-                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.jurosCartoes}" type="currency" currencySymbol="R$" /></td>
+                                                <td style="font-size: 1.2rem">
+                                                    <fmt:formatNumber value="${vl.juros_cartoes}" type="currency" currencySymbol="R$" />
+                                                </td>
                                             </tr>
+
                                             <tr>
                                                 <td style="font-size: 1.2rem">Despesas Operacionais</td>
-                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.ribbons + vl.encartes + vl.jurosCartoes}" type="currency" currencySymbol="R$" /></td>
+                                                <td style="font-size: 1.2rem">
+                                                    <fmt:formatNumber value="${vl.total_ribbons + vl.valor_enc + vl.juros_cartoes}" type="currency" currencySymbol="R$" />
+                                                </td>
                                             </tr>
 
-
-
                                         </c:forEach>
+
                                         </tbody>
                                         <tfoot>
 

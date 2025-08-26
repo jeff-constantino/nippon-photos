@@ -117,6 +117,34 @@ public class ModelFechaMes implements Serializable {
     private int qtd;
     private BigDecimal custo;
 
+    private BigDecimal valor_ribbons;
+    private BigDecimal valor_enc;
+    private BigDecimal valor_juros;
+
+    public BigDecimal getValor_ribbons() {
+        return valor_ribbons;
+    }
+
+    public void setValor_ribbons(BigDecimal valor_ribbons) {
+        this.valor_ribbons = valor_ribbons;
+    }
+
+    public BigDecimal getValor_enc() {
+        return valor_enc;
+    }
+
+    public void setValor_enc(BigDecimal valor_enc) {
+        this.valor_enc = valor_enc;
+    }
+
+    public BigDecimal getValor_juros() {
+        return valor_juros;
+    }
+
+    public void setValor_juros(BigDecimal valor_juros) {
+        this.valor_juros = valor_juros;
+    }
+
     public long getId_conf() {
         return id_conf;
     }
@@ -819,5 +847,8 @@ public class ModelFechaMes implements Serializable {
                 ", debitoOutros=" + debitoOutros +
                 ", creditoOutros=" + creditoOutros +
                 '}';
+    }
+
+    public void setQtd_ribbons(int qtdRibbons) {
     }
 }

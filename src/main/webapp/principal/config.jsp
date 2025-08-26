@@ -1453,11 +1453,12 @@
 
 
        // Função para formatar como moeda brasileira
-   function formatarMoeda(valor) {
-       return 'R$ ' + valor.toFixed(2).replace('.', ',');
-   }
+       function formatarMoeda(valor) {
+           return 'R$ ' + Number(valor).toFixed(8).replace('.', ',');
+       }
 
-   // Função para calcular custo unitário
+
+       // Função para calcular custo unitário
    function calcularCusto(valorSelector, qtdSelector, custoSelector) {
        const $valor = $(valorSelector);
        const $qtd = $(qtdSelector);

@@ -10,6 +10,7 @@ public class ModelFechaMes implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private long id;
+    private long id_conf;
     private LocalDate data_fechamento;
 
     private String formattedDate;
@@ -110,6 +111,43 @@ public class ModelFechaMes implements Serializable {
     private String diaSemana;
     private BigDecimal venda_total_dia;
     private List<ModelFechaMes> relatorioDiario;
+
+
+    private BigDecimal valor;
+    private int qtd;
+    private BigDecimal custo;
+
+    public long getId_conf() {
+        return id_conf;
+    }
+
+    public void setId_conf(long id_conf) {
+        this.id_conf = id_conf;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public int getQtd() {
+        return qtd;
+    }
+
+    public void setQtd(int qtd) {
+        this.qtd = qtd;
+    }
+
+    public BigDecimal getCusto() {
+        return custo;
+    }
+
+    public void setCusto(BigDecimal custo) {
+        this.custo = custo;
+    }
 
     public int getDia() { return dia; }
     public void setDia(int dia) { this.dia = dia; }

@@ -25,6 +25,10 @@ public class ModelConfig {
     private int conf2_qtd;
     private int conf3_qtd;
     private int conf4_qtd;
+    private String confName;
+    private int qtd;
+    private BigDecimal valor;
+    private BigDecimal custo;
 
     @Override
     public String toString() {
@@ -49,6 +53,38 @@ public class ModelConfig {
                 ", conf1_valor=" + conf1_valor +
                 ", idConf=" + idConf +
                 '}';
+    }
+
+    public String getConfName() {
+        return confName;
+    }
+
+    public void setConfName(String confName) {
+        this.confName = confName;
+    }
+
+    public int getQtd() {
+        return qtd;
+    }
+
+    public void setQtd(int qtd) {
+        this.qtd = qtd;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public BigDecimal getCusto() {
+        return custo;
+    }
+
+    public void setCusto(BigDecimal custo) {
+        this.custo = custo;
     }
 
     public Long getIdConf() {

@@ -11,6 +11,7 @@ import model.ModelConfiguracao;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/ServletConfig")
@@ -31,13 +32,38 @@ public class ServletConfig extends ServletGenericUtil {
             List<ModelConfig> configs = daoConfig.consultarTodasConfigs();
             List<ModelConfiguracao> configsSalarios = daoConfiguracao.consultarSalarios();
             List<ModelConfiguracao> configsJuros = daoConfiguracao.consultarJuros();
-            ModelConfiguracao configInss = daoConfiguracao.buscarFaixasInss();  // adiciona aqui
+            ModelConfiguracao configInss = daoConfiguracao.buscarFaixasInss();
 
+            // Carrega os 3 materiais fixos para preencher o formulário
+            List<ModelConfig> materiaisFixos = daoConfig.carregarMateriaisFixos();
+
+            // Cria arrays para facilitar o acesso na JSP
+            ModelConfig[] materiais = new ModelConfig[3];
+
+            // Inicializa com objetos vazios
+            for (int i = 0; i < 3; i++) {
+                materiais[i] = new ModelConfig();
+            }
+
+            // Preenche com os dados existentes do banco
+            for (ModelConfig material : materiaisFixos) {
+                int index = (int) (material.getIdConf() - 1); // ID 1 = index 0, ID 2 = index 1, etc.
+                if (index >= 0 && index < 3) {
+                    materiais[index] = material;
+                }
+            }
+
+            // Disponibiliza todos os atributos para a JSP
             request.setAttribute("configsJuros", configsJuros);
             request.setAttribute("configsSalarios", configsSalarios);
             request.setAttribute("configs", configs);
-            request.setAttribute("configInss", configInss);  // envia o objeto para o JSP
+            request.setAttribute("configInss", configInss);
+            request.setAttribute("material1", materiais[0]);
+            request.setAttribute("material2", materiais[1]);
+            request.setAttribute("material3", materiais[2]);
+
             request.getRequestDispatcher("/principal/config.jsp").forward(request, response);
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("msg", e.getMessage());
@@ -47,16 +73,38 @@ public class ServletConfig extends ServletGenericUtil {
 
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+      protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String msg = "Operação realizada com sucesso!";
+            String tipoConfig = request.getParameter("tipo_config");
+            String acao = request.getParameter("acao");
+            if ("limparMsg".equals(acao)) {
+                // limpe sua mensagem da sessão, se for o caso
+                request.getSession().removeAttribute("msg");
+                response.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204
+                return; // NÃO segue para gravação
+            }
+
+
+
+            // --- NOVO FLUXO: MATERIAIS (tabela conf_materiais) ---
+            if ("materiais".equals(tipoConfig)) {
+                processarMateriais(request);
+                request.setAttribute("msg", "Materiais gravados com sucesso!");
+                doGet(request, response);
+                return; // encerra aqui para não seguir para o fluxo de 'configuracao'
+            }
+
+            // --- FLUXO EXISTENTE: CONFIGURAÇÕES GERAIS (tabela configuracao) ---
             String idConfParam = request.getParameter("idConf");
             ModelConfig modelConfig = new ModelConfig();
 
-            // Verifica se o idConf foi passado e o configura
             if (idConfParam != null && !idConfParam.isEmpty()) {
-                modelConfig.setIdConf(Long.parseLong(idConfParam)); // Converter para Long
+                long id = Long.parseLong(idConfParam);
+                if (id > 0) {
+                    modelConfig.setIdConf(id);
+                }
             }
+
 
             // Configura os nomes
             modelConfig.setConf1_nome(request.getParameter("conf1_nome"));
@@ -72,6 +120,7 @@ public class ServletConfig extends ServletGenericUtil {
             modelConfig.setConf3_valor(parseBigDecimal(request.getParameter("conf3_valor")));
             modelConfig.setConf4_valor(parseBigDecimal(request.getParameter("conf4_valor"))); // Novo campo
 
+            // Definindo custos
             modelConfig.setConf1_custo(parseBigDecimal(request.getParameter("conf1_custo")));
             modelConfig.setConf2_custo(parseBigDecimal(request.getParameter("conf2_custo")));
             modelConfig.setConf3_custo(parseBigDecimal(request.getParameter("conf3_custo")));
@@ -84,32 +133,23 @@ public class ServletConfig extends ServletGenericUtil {
             modelConfig.setConf4_qtd(parseIntOrDefault(request.getParameter("conf4_qtd"))); // Novo campo
 
             // Grava ou atualiza a configuração no banco de dados
-            modelConfig = daoConfig.gravarConfig(modelConfig); // Ajuste este método para que ele possa gravar ou atualizar
+            modelConfig = daoConfig.gravarConfig(modelConfig);
 
-            // Obtendo valores de configuração para cada item
-            BigDecimal valorConf1 = modelConfig.getConf1_valor();
-            BigDecimal valorConf1_2 = modelConfig.getConf1_valor2();
-            BigDecimal valorConf2 = modelConfig.getConf2_valor();
-            BigDecimal valorConf3 = modelConfig.getConf3_valor();
-            BigDecimal valorConf4 = modelConfig.getConf4_valor(); // Novo campo
-            BigDecimal valorConf1_custo = modelConfig.getConf1_custo();
-            BigDecimal valorConf2_custo = modelConfig.getConf2_custo();
-            BigDecimal valorConf3_custo = modelConfig.getConf3_custo();
-            BigDecimal valorConf4_custo = modelConfig.getConf4_custo(); // Novo campo
+            // (Opcional) Anexa valores no request para reuso na JSP
+            request.setAttribute("valorConf1", modelConfig.getConf1_valor());
+            request.setAttribute("valorConf1_2", modelConfig.getConf1_valor2());
+            request.setAttribute("valorConf2", modelConfig.getConf2_valor());
+            request.setAttribute("valorConf3", modelConfig.getConf3_valor());
+            request.setAttribute("valorConf4", modelConfig.getConf4_valor());
+            request.setAttribute("valorConf1_custo", modelConfig.getConf1_custo());
+            request.setAttribute("valorConf2_custo", modelConfig.getConf2_custo());
+            request.setAttribute("valorConf3_custo", modelConfig.getConf3_custo());
+            request.setAttribute("valorConf4_custo", modelConfig.getConf4_custo());
 
-            // Adicionando os valores ao request
-            request.setAttribute("valorConf1", valorConf1);
-            request.setAttribute("valorConf1_2", valorConf1_2);
-            request.setAttribute("valorConf2", valorConf2);
-            request.setAttribute("valorConf3", valorConf3);
-            request.setAttribute("valorConf4", valorConf4); // Novo campo
-            request.setAttribute("valorConf1_custo", valorConf1_custo);
-            request.setAttribute("valorConf2_custo", valorConf2_custo);
-            request.setAttribute("valorConf3_custo", valorConf3_custo);
-            request.setAttribute("valorConf4_custo", valorConf4_custo); // Novo campo
-
+            request.setAttribute("msg", "Configuração gravada com sucesso!");
             // Redireciona para o método doGet para carregar os dados atualizados
-            doGet(request, response); // Chama o método doGet para recuperar os dados da configuração
+            doGet(request, response);
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("msg", e.getMessage());
@@ -117,13 +157,14 @@ public class ServletConfig extends ServletGenericUtil {
         }
     }
 
+
     // Método auxiliar para tratar os valores nulos ou inválidos
     private int parseIntOrDefault(String value) {
         if (value != null && !value.isEmpty()) {
             try {
                 return Integer.parseInt(value);
             } catch (NumberFormatException e) {
-                e.printStackTrace(); // Adicione log para depuração
+                e.printStackTrace(); // log para depuração
                 return 0; // Retorna 0 em caso de erro
             }
         }
@@ -137,10 +178,69 @@ public class ServletConfig extends ServletGenericUtil {
                 value = value.replace(",", ".");
                 return new BigDecimal(value);
             } catch (NumberFormatException e) {
-                e.printStackTrace(); // Adicione log para depuração
+                e.printStackTrace(); // log para depuração
                 return BigDecimal.ZERO; // Retorna 0 em caso de erro de conversão
             }
         }
         return BigDecimal.ZERO; // Retorna 0 se o valor estiver vazio
     }
+
+
+    /**
+     * Processa o formulário de materiais
+     * Cada produto será gravado separadamente
+     */
+    /**
+     * Processa os 3 materiais do formulário
+     */
+    private void processarMateriais(HttpServletRequest request) throws Exception {
+        // Material 1
+        String nome1 = request.getParameter("conf1_nome");
+        String valor1 = request.getParameter("conf1_valor");
+        String qtd1 = request.getParameter("conf1_qtd");
+        String custo1 = request.getParameter("conf1_custo");
+
+        // Material 2
+        String nome2 = request.getParameter("conf2_nome");
+        String valor2 = request.getParameter("conf2_valor");
+        String qtd2 = request.getParameter("conf2_qtd");
+        String custo2 = request.getParameter("conf2_custo");
+
+        // Material 3
+        String nome3 = request.getParameter("conf3_nome");
+        String valor3 = request.getParameter("conf3_valor");
+        String qtd3 = request.getParameter("conf3_qtd");
+        String custo3 = request.getParameter("conf3_custo");
+
+        // Chama o DAO para salvar/atualizar os 3 materiais fixos
+        daoConfig.salvarMateriaisFixos(
+                nome1, valor1, qtd1, custo1,
+                nome2, valor2, qtd2, custo2,
+                nome3, valor3, qtd3, custo3
+        );
+    }
+
+    /**
+     * Carrega materiais para exibição (opcional - para usar no doGet se necessário)
+     */
+    private void carregarMateriais(HttpServletRequest request) {
+        try {
+            // Se você quiser carregar materiais específicos por conf_name:
+            String confName = request.getParameter("conf_name_materiais");
+            if (confName != null && !confName.trim().isEmpty()) {
+                List<ModelConfig> materiais = daoConfig.buscarMateriaisPorConfName(confName);
+                request.setAttribute("materiaisCarregados", materiais);
+            }
+
+            // Ou carregar todos os materiais:
+            List<ModelConfig> todosMateriais = daoConfig.listarTodosMateriais();
+            request.setAttribute("todosMateriais", todosMateriais);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("erroMateriais", "Erro ao carregar materiais: " + e.getMessage());
+        }
+    }
+
+
 }

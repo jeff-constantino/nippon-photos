@@ -276,15 +276,13 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="staticRanking">Configurações de Materiais</h5>
-
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="container-fluid">
                                                                 <div class="row">
-
-
                                                                     <form id="configFormMat" method="post" action="<%= request.getContextPath() %>/ServletConfig">
+                                                                        <input type="hidden" name="tipo_config" value="materiais">
 
                                                                         <div class="row">
                                                                             <div class="col-auto">
@@ -292,92 +290,97 @@
                                                                             </div>
                                                                         </div>
 
-                                                                        <div class="row mb-3">
-                                                                            <div class="col-sm-1">
-                                                                                <label class="float-label">ID:</label>
-                                                                                <span class="form-bar"></span>
-                                                                                <input type="text" class="form-control" style="background-color: black" id="idConf_mat"
-                                                                                       name="idConf" placeholder="" value="${modelConfig.idConf}" readonly>
+                                                                        <!-- Material 1 -->
+                                                                        <div class="row mb-4 d-flex">
+                                                                            <div class="col-12">
+                                                                                <h6 class="text-primary">Material 1</h6>
                                                                             </div>
-
-                                                                            <div class="col-4">
-                                                                                <label for="conf_name_mat">Configuração</label>
-                                                                                <input type="text" class="form-control" id="conf_name_mat"
-                                                                                       name="conf_name" required value="${modelConfig.conf_name}" style="color: black" readonly>
+                                                                            <div class="col-3">
+                                                                                <label for="conf1_nome_mat">Nome do Material *</label>
+                                                                                <input type="text" class="form-control" id="conf1_nome_mat"
+                                                                                       name="conf1_nome" value="${material1.conf_name}" required>
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf1_valor_mat">Valor (R$) *</label>
+                                                                                <input type="text" class="form-control" id="conf1_valor_mat"
+                                                                                       name="conf1_valor" value="${material1.conf1_valor}" required>
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf1_qtd_mat">Quantidade *</label>
+                                                                                <input type="number" class="form-control" id="conf1_qtd_mat"
+                                                                                       name="conf1_qtd" value="${material1.conf1_qtd}" required>
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf1_custo_mat">Custo Unitário (R$) *</label>
+                                                                                <input type="text" class="form-control" id="conf1_custo_mat"
+                                                                                       name="conf1_custo" value="${material1.conf1_custo}">
                                                                             </div>
                                                                         </div>
 
+                                                                        <!-- Material 2 -->
                                                                         <div class="row mb-4 d-flex">
-                                                                            <div class="col-3">
-                                                                                <label for="conf1_nome_mat">Produto 1</label>
-                                                                                <input type="text" class="form-control" id="conf1_nome_mat" name="conf1_nome" required value="${modelConfig.conf1_nome}">
+                                                                            <div class="col-12">
+                                                                                <h6 class="text-primary">Material 2</h6>
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf1_valor_mat">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf1_valor_mat" name="conf1_valor" required value="${modelConfig.conf1_valor}">
+                                                                                <label for="conf2_nome_mat">Nome do Material</label>
+                                                                                <input type="text" class="form-control" id="conf2_nome_mat"
+                                                                                       name="conf2_nome" value="${material2.conf_name}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf1_qtd_mat">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf1_qtd_mat" name="conf1_qtd" required value="${modelConfig.conf1_qtd}">
-                                                                            </div>
-                                                                            <div class="col-3">
-                                                                                <label for="conf1_custo_mat">Custo Und</label>
-                                                                                <input type="text" class="form-control" id="conf1_custo_mat" name="conf1_custo" required value="${modelConfig.conf1_custo}">
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="row mb-4 d-flex">
-                                                                            <div class="col-3">
-                                                                                <label for="conf2_nome_mat">Produto 2</label>
-                                                                                <input type="text" class="form-control" id="conf2_nome_mat" name="conf2_nome" required value="${modelConfig.conf2_nome}">
-                                                                            </div>
-                                                                            <div class="col-3">
-                                                                                <label for="conf2_valor_mat">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf2_valor_mat" name="conf2_valor" required value="${modelConfig.conf2_valor}">
+                                                                                <label for="conf2_valor_mat">Valor (R$)</label>
+                                                                                <input type="text" class="form-control" id="conf2_valor_mat"
+                                                                                       name="conf2_valor" value="${material2.conf1_valor}">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf2_qtd_mat">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf2_qtd_mat" name="conf2_qtd" required value="${modelConfig.conf2_qtd}">
+                                                                                <input type="number" class="form-control" id="conf2_qtd_mat"
+                                                                                       name="conf2_qtd" value="${material2.conf1_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf2_custo_mat">Custo Und</label>
-                                                                                <input type="text" class="form-control" id="conf2_custo_mat" name="conf2_custo" required value="${modelConfig.conf2_custo}">
+                                                                                <label for="conf2_custo_mat">Custo Unitário (R$)</label>
+                                                                                <input type="text" class="form-control" id="conf2_custo_mat"
+                                                                                       name="conf2_custo" value="${material2.conf1_custo}">
                                                                             </div>
                                                                         </div>
 
+                                                                        <!-- Material 3 -->
                                                                         <div class="row mb-4 d-flex">
-                                                                            <div class="col-3">
-                                                                                <label for="conf3_nome_mat">Produto 3</label>
-                                                                                <input type="text" class="form-control" id="conf3_nome_mat" name="conf3_nome" required value="${modelConfig.conf3_nome}">
+                                                                            <div class="col-12">
+                                                                                <h6 class="text-primary">Material 3</h6>
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf3_valor_mat">Valor</label>
-                                                                                <input type="text" class="form-control" id="conf3_valor_mat" name="conf3_valor" required value="${modelConfig.conf3_valor}">
+                                                                                <label for="conf3_nome_mat">Nome do Material</label>
+                                                                                <input type="text" class="form-control" id="conf3_nome_mat"
+                                                                                       name="conf3_nome" value="${material3.conf_name}">
+                                                                            </div>
+                                                                            <div class="col-3">
+                                                                                <label for="conf3_valor_mat">Valor (R$)</label>
+                                                                                <input type="text" class="form-control" id="conf3_valor_mat"
+                                                                                       name="conf3_valor" value="${material3.conf1_valor}">
                                                                             </div>
                                                                             <div class="col-3">
                                                                                 <label for="conf3_qtd_mat">Quantidade</label>
-                                                                                <input type="text" class="form-control" id="conf3_qtd_mat" name="conf3_qtd" required value="${modelConfig.conf3_qtd}">
+                                                                                <input type="number" class="form-control" id="conf3_qtd_mat"
+                                                                                       name="conf3_qtd" value="${material3.conf1_qtd}">
                                                                             </div>
                                                                             <div class="col-3">
-                                                                                <label for="conf3_custo_mat">Custo Und</label>
-                                                                                <input type="text" class="form-control" id="conf3_custo_mat" name="conf3_custo" required value="${modelConfig.conf3_custo}">
+                                                                                <label for="conf3_custo_mat">Custo Unitário (R$)</label>
+                                                                                <input type="text" class="form-control" id="conf3_custo_mat"
+                                                                                       name="conf3_custo" value="${material3.conf1_custo}">
                                                                             </div>
                                                                         </div>
 
-                                                                        <button type="submit" class="btn btn-outline-success">Salvar</button>
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-12">
 
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <button type="submit" class="btn btn-outline-success">Salvar Materiais</button>
                                                                     </form>
-
-
-
-
-
-
-
                                                                 </div>
-
                                                             </div>
-
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
@@ -904,53 +907,44 @@
 
                                             <!-- Bloco 2 -->
                                             <tbody>
-                                            <c:forEach items="${configs}" var="modelConf">
-<%-- ALTERAR ORIGEM PARA BUSCA DE MATERIAIS                                             --%>
-                                                <c:if test="${modelConf.idConf == 2}">
-                                                    <tr>
-                                                        <td>
-                                                            <a class="btn btn-outline-success waves-effect waves-light"
-                                                               href="javascript:void(0);"
-                                                               data-bs-toggle="modal"
-                                                               data-bs-target="#modalMat"
-                                                               onclick="gerenciarMat(
-                                                                   ${modelConf.idConf},
-                                                                       '${modelConf.conf_name}',
-                                                                       '${modelConf.conf1_nome}',
-                                                                       '${modelConf.conf1_valor}',
-                                                                       '${modelConf.conf1_qtd}',
-                                                                       '${modelConf.conf1_custo}',
-                                                                       '${modelConf.conf2_nome}',
-                                                                       '${modelConf.conf2_valor}',
-                                                                       '${modelConf.conf2_qtd}',
-                                                                       '${modelConf.conf2_custo}',
-                                                                       '${modelConf.conf3_nome}',
-                                                                       '${modelConf.conf3_valor}',
-                                                                       '${modelConf.conf3_qtd}',
-                                                                       '${modelConf.conf3_custo}')">
-                                                                Editar
-                                                            </a>
-                                                        </td>
-                                                        <td><c:out value="${modelConf.idConf}"/></td>
-                                                        <td><c:out value="${modelConf.conf1_nome}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf1_valor}" type="currency" currencySymbol="R$" /></td>
-                                                        <td><c:out value="${modelConf.conf1_qtd}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf1_custo}" type="currency" currencySymbol="R$" /></td>
+                                            <!-- Tabela para exibir os 3 materiais fixos -->
+                                            <c:if test="${not empty material1.conf_name or not empty material2.conf_name or not empty material3.conf_name}">
+                                                <tr>
+                                                    <td>
+                                                        <a class="btn btn-outline-success waves-effect waves-light"
+                                                           href="javascript:void(0);"
+                                                           data-bs-toggle="modal"
+                                                           data-bs-target="#modalMat"
+                                                           onclick="gerenciarMat(
+                                                                   '${material1.conf_name}', '${material1.conf1_valor}', '${material1.conf1_qtd}', '${material1.conf1_custo}',
+                                                                   '${material2.conf_name}', '${material2.conf1_valor}', '${material2.conf1_qtd}', '${material2.conf1_custo}',
+                                                                   '${material3.conf_name}', '${material3.conf1_valor}', '${material3.conf1_qtd}', '${material3.conf1_custo}'
+                                                                   )">
+                                                            Editar
+                                                        </a>
+                                                    </td>
+                                                    <td>Materiais</td>
 
-                                                        <td><c:out value="${modelConf.conf2_nome}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf2_valor}" type="currency" currencySymbol="R$" /></td>
-                                                        <td><c:out value="${modelConf.conf2_qtd}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf2_custo}" type="currency" currencySymbol="R$" /></td>
+                                                    <!-- Material 1 -->
+                                                    <td><c:out value="${material1.conf_name}"/></td>
+                                                    <td><fmt:formatNumber value="${material1.conf1_valor}" type="currency" currencySymbol="R$" /></td>
+                                                    <td><c:out value="${material1.conf1_qtd}"/></td>
+                                                    <td><fmt:formatNumber value="${material1.conf1_custo}" type="currency" currencySymbol="R$" /></td>
 
-                                                        <td><c:out value="${modelConf.conf3_nome}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf3_valor}" type="currency" currencySymbol="R$" /></td>
-                                                        <td><c:out value="${modelConf.conf3_qtd}"/></td>
-                                                        <td><fmt:formatNumber value="${modelConf.conf3_custo}" type="currency" currencySymbol="R$" /></td>
+                                                    <!-- Material 2 -->
+                                                    <td><c:out value="${material2.conf_name}"/></td>
+                                                    <td><fmt:formatNumber value="${material2.conf1_valor}" type="currency" currencySymbol="R$" /></td>
+                                                    <td><c:out value="${material2.conf1_qtd}"/></td>
+                                                    <td><fmt:formatNumber value="${material2.conf1_custo}" type="currency" currencySymbol="R$" /></td>
 
+                                                    <!-- Material 3 -->
+                                                    <td><c:out value="${material3.conf_name}"/></td>
+                                                    <td><fmt:formatNumber value="${material3.conf1_valor}" type="currency" currencySymbol="R$" /></td>
+                                                    <td><c:out value="${material3.conf1_qtd}"/></td>
+                                                    <td><fmt:formatNumber value="${material3.conf1_custo}" type="currency" currencySymbol="R$" /></td>
+                                                </tr>
+                                            </c:if>
 
-                                                    </tr>
-                                                </c:if>
-                                            </c:forEach>
                                             </tbody>
 
 
@@ -1238,168 +1232,165 @@
     </div>
 </div>
 <script>
-   $(document).ready(function () {
-        var msg = "${msg}";
-        if (msg) {
-            $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+       $(document).ready(function () {
+       var msg = "${msg}";
+       if (msg) {
+       $('#msgModal').modal('show'); // Exibe o modal com a mensagem
 
-            // Remove a mensagem da sessão após exibi-la
-            $.post("${pageContext.request.contextPath}/ServletConfig", { acao: "limparMsg" });
-        }
-    });
+       // Remove a mensagem da sessão após exibi-la
+       $.post("${pageContext.request.contextPath}/ServletConfig", { acao: "limparMsg" });
+   }
+   });
 
-    // Função para navegar entre elementos focáveis com as setas
-    function navigateFocusableElements(event) {
-        const focusableElements = Array.from(
-            document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
-        ).filter(element => !element.disabled && element.tabIndex !== -1);
+       // Função para navegar entre elementos focáveis com as setas
+       function navigateFocusableElements(event) {
+       const focusableElements = Array.from(
+       document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
+       ).filter(element => !element.disabled && element.tabIndex !== -1);
 
-        if (focusableElements.length === 0) return;
+       if (focusableElements.length === 0) return;
 
-        const currentElement = document.activeElement;
-        if (!focusableElements.includes(currentElement)) return;
+       const currentElement = document.activeElement;
+       if (!focusableElements.includes(currentElement)) return;
 
-        let currentIndex = focusableElements.indexOf(currentElement);
+       let currentIndex = focusableElements.indexOf(currentElement);
 
-        switch (event.key) {
-            case 'ArrowRight':
-            case 'ArrowDown':
-                currentIndex = (currentIndex + 1) % focusableElements.length;
-                break;
-            case 'ArrowLeft':
-            case 'ArrowUp':
-                currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
-                break;
-            default:
-                return;
-        }
+       switch (event.key) {
+       case 'ArrowRight':
+       case 'ArrowDown':
+       currentIndex = (currentIndex + 1) % focusableElements.length;
+       break;
+       case 'ArrowLeft':
+       case 'ArrowUp':
+       currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
+       break;
+       default:
+       return;
+   }
 
-        focusableElements[currentIndex].focus();
-    }
+       focusableElements[currentIndex].focus();
+   }
 
-    // Bloqueia a alteração de valor com as setas nos inputs do tipo number
-    document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.addEventListener('keydown', function(event) {
-            if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-                event.preventDefault(); // Impede a alteração do valor
-            }
-        });
-    });
+       // Bloqueia a alteração de valor com as setas nos inputs do tipo number
+       document.querySelectorAll('input[type="number"]').forEach(input => {
+       input.addEventListener('keydown', function(event) {
+           if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+               event.preventDefault(); // Impede a alteração do valor
+           }
+       });
+   });
 
-    // Adiciona o evento keydown ao documento
-    document.addEventListener('keydown', navigateFocusableElements);
-    // Fim de navegação por setas
-
-
-
-    function gerenciarConfig(idConf, conf_name, conf1_nome, conf1_valor, conf1_valor2, conf2_nome, conf2_valor, conf3_nome, conf3_valor) {
-        // Preencher o campo idConf
-        document.getElementById('idConf').value = idConf; // Campo que irá receber o idConf
-        document.getElementById('conf_name').value = conf_name; // Campo para conf_name
-
-
-        // Preencher os campos para idConf === 1
-        document.getElementById('conf1_nome').value = conf1_nome;
-        document.getElementById('conf1_valor').value = conf1_valor;
-        document.getElementById('conf1_valor2').value = conf1_valor2;
-
-        // Preencher os campos para conf2 e conf3
-        document.getElementById('conf2_nome').value = conf2_nome;
-        document.getElementById('conf2_valor').value = conf2_valor;
-        document.getElementById('conf3_nome').value = conf3_nome;
-        document.getElementById('conf3_valor').value = conf3_valor;
-    }
-
-    function gerenciarSalario(idConf, salario, comissao, comissao2, fgts) {
-        // Preencher o campo idConf
-        document.getElementById('idConf_salario').value = idConf;
-        document.getElementById('salario').value = salario;
-        document.getElementById('comissao').value = comissao;
-        document.getElementById('comissao2').value = comissao2;
-        document.getElementById('fgts').value = fgts;
-
-    }
-
-    function gerenciarCartao(idConf, deb_visa_master, cred_visa_master, deb_outros, cred_outros) {
-        // Preencher o campo idConf
-        document.getElementById('idConf_juros').value = idConf;
-        document.getElementById('deb_visa_master').value = deb_visa_master;
-        document.getElementById('cred_visa_master').value = cred_visa_master;
-        document.getElementById('deb_outros').value = deb_outros;
-        document.getElementById('cred_outros').value = cred_outros;
-
-    }
-
-    function gerenciarMat(idConf,conf_name, conf1_nome, conf1_valor, conf1_qtd, conf1_custo, conf2_nome, conf2_valor, conf2_qtd, conf2_custo, conf3_nome, conf3_valor, conf3_qtd, conf3_custo) {
-
-        document.getElementById('idConf_mat').value = idConf; // Campo que irá receber o idConf
-        document.getElementById('conf_name_mat').value =conf_name;
-
-        document.getElementById('conf1_nome_mat').value = conf1_nome;
-        document.getElementById('conf1_valor_mat').value = conf1_valor;
-        document.getElementById('conf1_qtd_mat').value = conf1_qtd; // Verifique se o ID está correto
-        document.getElementById('conf1_custo_mat').value = conf1_custo; // Campo para custo do conf1
-
-        document.getElementById('conf2_nome_mat').value = conf2_nome;
-        document.getElementById('conf2_valor_mat').value = conf2_valor;
-        document.getElementById('conf2_qtd_mat').value = conf2_qtd; // Verifique se o ID está correto
-        document.getElementById('conf2_custo_mat').value = conf2_custo; // Campo para custo do conf2
-
-        document.getElementById('conf3_nome_mat').value = conf3_nome;
-        document.getElementById('conf3_valor_mat').value = conf3_valor;
-        document.getElementById('conf3_qtd_mat').value = conf3_qtd; // Verifique se o ID está correto
-        document.getElementById('conf3_custo_mat').value = conf3_custo; // Campo para custo do conf3
-    }
-
-    function gerenciarGeral(idConf, conf_name, conf1_nome, conf1_valor, conf1_qtd, conf1_custo, conf2_nome, conf2_valor, conf2_qtd, conf2_custo, conf3_nome, conf3_valor, conf3_qtd, conf3_custo) {
-        // Preencher o campo idConf
-        document.getElementById('idConf_geral').value = idConf; // Campo que irá receber o idConf
-        document.getElementById('conf_name_geral').value = conf_name; // Campo para conf_name
+       // Adiciona o evento keydown ao documento
+       document.addEventListener('keydown', navigateFocusableElements);
+       // Fim de navegação por setas
 
 
 
-        // Preencher os campos para idConf === 3
-        document.getElementById('conf1_nome_geral').value = conf1_nome;
-        document.getElementById('conf1_valor_geral').value = conf1_valor;
-        document.getElementById('conf1_qtd_geral').value = conf1_qtd; // Verifique se o ID está correto
-        document.getElementById('conf1_custo_geral').value = conf1_custo; // Campo para custo do conf1
-
-        document.getElementById('conf2_nome_geral').value = conf2_nome;
-        document.getElementById('conf2_valor_geral').value = conf2_valor;
-        document.getElementById('conf2_qtd_geral').value = conf2_qtd; // Verifique se o ID está correto
-        document.getElementById('conf2_custo_geral').value = conf2_custo; // Campo para custo do conf2
-
-        document.getElementById('conf3_nome_geral').value = conf3_nome;
-        document.getElementById('conf3_valor_geral').value = conf3_valor;
-        document.getElementById('conf3_qtd_geral').value = conf3_qtd; // Verifique se o ID está correto
-        document.getElementById('conf3_custo_geral').value = conf3_custo; // Campo para custo do conf3
-    }
-
-    function calcularCustoUnitario(conf) {
-        const valor = parseFloat(document.getElementById(`${conf}_valor`).value) || 0; // Obtém o valor ou 0 se vazio
-        const quantidade = parseFloat(document.getElementById(`${conf}_qtd`).value) || 1; // Evita divisão por zero
-
-        const custoUnitario = (quantidade > 0) ? (valor / quantidade) : 0; // Divide o valor pela quantidade
-
-        document.getElementById(`${conf}_custo`).value = custoUnitario.toFixed(2); // Atualiza o campo de custo unitário
-    }
-
-    $("#conf1_valor").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
-    $("#conf1_valor2").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
-    $("#conf2_valor").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
-    $("#conf3_valor").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+       function gerenciarConfig(idConf, conf_name, conf1_nome, conf1_valor, conf1_valor2, conf2_nome, conf2_valor, conf3_nome, conf3_valor) {
+       // Preencher o campo idConf
+       document.getElementById('idConf').value = idConf; // Campo que irá receber o idConf
+       document.getElementById('conf_name').value = conf_name; // Campo para conf_name
 
 
-    $("#conf1_valor_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
-    $("#conf2_valor_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
-    $("#conf3_valor_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
-    $("#conf1_custo_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
-    $("#conf2_custo_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
-    $("#conf3_custo_mat").maskMoney({showSymbol:true, symbol:"R$ ", decimal :",", thousands:"."});
+       // Preencher os campos para idConf === 1
+       document.getElementById('conf1_nome').value = conf1_nome;
+       document.getElementById('conf1_valor').value = conf1_valor;
+       document.getElementById('conf1_valor2').value = conf1_valor2;
 
-    function removerMascara(valor) {
-        return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '');
-    }
+       // Preencher os campos para conf2 e conf3
+       document.getElementById('conf2_nome').value = conf2_nome;
+       document.getElementById('conf2_valor').value = conf2_valor;
+       document.getElementById('conf3_nome').value = conf3_nome;
+       document.getElementById('conf3_valor').value = conf3_valor;
+   }
+
+       function gerenciarSalario(idConf, salario, comissao, comissao2, fgts) {
+       // Preencher o campo idConf
+       document.getElementById('idConf_salario').value = idConf;
+       document.getElementById('salario').value = salario;
+       document.getElementById('comissao').value = comissao;
+       document.getElementById('comissao2').value = comissao2;
+       document.getElementById('fgts').value = fgts;
+
+   }
+
+       function gerenciarCartao(idConf, deb_visa_master, cred_visa_master, deb_outros, cred_outros) {
+       // Preencher o campo idConf
+       document.getElementById('idConf_juros').value = idConf;
+       document.getElementById('deb_visa_master').value = deb_visa_master;
+       document.getElementById('cred_visa_master').value = cred_visa_master;
+       document.getElementById('deb_outros').value = deb_outros;
+       document.getElementById('cred_outros').value = cred_outros;
+
+   }
+
+       function gerenciarMat(nome1, valor1, qtd1, custo1, nome2, valor2, qtd2, custo2, nome3, valor3, qtd3, custo3) {
+       // Limpa os campos primeiro
+       document.getElementById('conf1_nome_mat').value = '';
+       document.getElementById('conf1_valor_mat').value = '';
+       document.getElementById('conf1_qtd_mat').value = '';
+       document.getElementById('conf1_custo_mat').value = '';
+
+       document.getElementById('conf2_nome_mat').value = '';
+       document.getElementById('conf2_valor_mat').value = '';
+       document.getElementById('conf2_qtd_mat').value = '';
+       document.getElementById('conf2_custo_mat').value = '';
+
+       document.getElementById('conf3_nome_mat').value = '';
+       document.getElementById('conf3_valor_mat').value = '';
+       document.getElementById('conf3_qtd_mat').value = '';
+       document.getElementById('conf3_custo_mat').value = '';
+
+       // Preenche Material 1 se existir
+       if (nome1 && nome1 !== 'null' && nome1.trim() !== '') {
+       document.getElementById('conf1_nome_mat').value = nome1;
+       document.getElementById('conf1_valor_mat').value = valor1 || '';
+       document.getElementById('conf1_qtd_mat').value = qtd1 || '';
+       document.getElementById('conf1_custo_mat').value = custo1 || '';
+   }
+
+       // Preenche Material 2 se existir
+       if (nome2 && nome2 !== 'null' && nome2.trim() !== '') {
+       document.getElementById('conf2_nome_mat').value = nome2;
+       document.getElementById('conf2_valor_mat').value = valor2 || '';
+       document.getElementById('conf2_qtd_mat').value = qtd2 || '';
+       document.getElementById('conf2_custo_mat').value = custo2 || '';
+   }
+
+       // Preenche Material 3 se existir
+       if (nome3 && nome3 !== 'null' && nome3.trim() !== '') {
+       document.getElementById('conf3_nome_mat').value = nome3;
+       document.getElementById('conf3_valor_mat').value = valor3 || '';
+       document.getElementById('conf3_qtd_mat').value = qtd3 || '';
+       document.getElementById('conf3_custo_mat').value = custo3 || '';
+   }
+   }
+
+       function gerenciarGeral(idConf, conf_name, conf1_nome, conf1_valor, conf1_qtd, conf1_custo, conf2_nome, conf2_valor, conf2_qtd, conf2_custo, conf3_nome, conf3_valor, conf3_qtd, conf3_custo) {
+       // Preencher o campo idConf
+       document.getElementById('idConf_geral').value = idConf; // Campo que irá receber o idConf
+       document.getElementById('conf_name_geral').value = conf_name; // Campo para conf_name
+
+
+
+       // Preencher os campos para idConf === 3
+       document.getElementById('conf1_nome_geral').value = conf1_nome;
+       document.getElementById('conf1_valor_geral').value = conf1_valor;
+       document.getElementById('conf1_qtd_geral').value = conf1_qtd; // Verifique se o ID está correto
+       document.getElementById('conf1_custo_geral').value = conf1_custo; // Campo para custo do conf1
+
+       document.getElementById('conf2_nome_geral').value = conf2_nome;
+       document.getElementById('conf2_valor_geral').value = conf2_valor;
+       document.getElementById('conf2_qtd_geral').value = conf2_qtd; // Verifique se o ID está correto
+       document.getElementById('conf2_custo_geral').value = conf2_custo; // Campo para custo do conf2
+
+       document.getElementById('conf3_nome_geral').value = conf3_nome;
+       document.getElementById('conf3_valor_geral').value = conf3_valor;
+       document.getElementById('conf3_qtd_geral').value = conf3_qtd; // Verifique se o ID está correto
+       document.getElementById('conf3_custo_geral').value = conf3_custo; // Campo para custo do conf3
+   }
+
+
 
     $("#configForm").on("submit", function(e) {
 
@@ -1413,22 +1404,97 @@
     });
 
 
-    $("#configFormMat").on("submit", function(e) {
 
-        $("#conf1_valor_mat").val(removerMascara($("#conf1_valor_mat").val()));
-        $("#conf2_valor_mat").val(removerMascara($("#conf2_valor_mat").val()));
-        $("#conf3_valor_mat").val(removerMascara($("#conf3_valor_mat").val()));
-        $("#conf1_custo_mat").val(removerMascara($("#conf1_custo_mat").val()));
-        $("#conf2_custo_mat").val(removerMascara($("#conf2_custo_mat").val()));
-        $("#conf3_custo_mat").val(removerMascara($("#conf3_custo_mat").val()));
+   // Aplica máscara apenas nos campos de entrada digitável
+   $('#conf1_valor_mat, #conf2_valor_mat, #conf3_valor_mat').maskMoney({
+       prefix: 'R$ ',
+       allowNegative: false,
+       thousands: '.',
+       decimal: ',',
+       affixesStay: true
+   });
+       $("#configProd").on("submit", function(e) {
+
+           $("#conf1_valor").val(removerMascara($("#conf1_valor").val()));
+           $("#conf1_valor2").val(removerMascara($("#conf1_valor2").val()));
+           $("#conf2_valor").val(removerMascara($("#conf2_valor").val()));
+           $("#conf3_valor").val(removerMascara($("#conf3_valor").val()));
 
 
-    });
+
+       });
 
 
 
+       // Aplica máscara apenas nos campos de entrada digitável
+       $('#conf1_valor,#conf1_valor2, #conf2_valor, #conf3_valor').maskMoney({
+           prefix: 'R$ ',
+           allowNegative: false,
+           thousands: '.',
+           decimal: ',',
+           affixesStay: true
+       });
+
+   // Função única para remover a máscara e converter para número
+       function removerMascara(valor) {
+           if (!valor) return 0;
+
+           valor = valor.replace('R$ ', '').trim();
+
+           // Só remove os pontos de milhar se houver vírgula (formato BR)
+           if (valor.includes(',')) {
+               valor = valor.replace(/\./g, '');
+               valor = valor.replace(',', '.');
+           }
+
+           return parseFloat(valor);
+       }
 
 
+
+       // Função para formatar como moeda brasileira
+   function formatarMoeda(valor) {
+       return 'R$ ' + valor.toFixed(2).replace('.', ',');
+   }
+
+   // Função para calcular custo unitário
+   function calcularCusto(valorSelector, qtdSelector, custoSelector) {
+       const $valor = $(valorSelector);
+       const $qtd = $(qtdSelector);
+       const $custo = $(custoSelector);
+
+       function atualizar() {
+           const valorNum = removerMascara($valor.val());
+           const qtdNum = parseFloat($qtd.val());
+
+           if (!isNaN(valorNum) && !isNaN(qtdNum) && qtdNum > 0) {
+               const custo = valorNum / qtdNum;
+               $custo.val(formatarMoeda(custo));
+           } else {
+               $custo.val('');
+           }
+       }
+
+       $valor.on('input', atualizar);
+       $qtd.on('input', atualizar);
+   }
+
+   // Aplica para cada material
+   $(document).ready(function () {
+       calcularCusto('#conf1_valor_mat', '#conf1_qtd_mat', '#conf1_custo_mat');
+       calcularCusto('#conf2_valor_mat', '#conf2_qtd_mat', '#conf2_custo_mat');
+       calcularCusto('#conf3_valor_mat', '#conf3_qtd_mat', '#conf3_custo_mat');
+   });
+
+   // Remove máscara antes de enviar o formulário
+   $('#configFormMat').on('submit', function () {
+       // $('#conf1_valor_mat').val(removerMascara($('#conf1_valor_mat').val()));
+        $('#conf2_valor_mat').val(removerMascara($('#conf2_valor_mat').val()));
+       // $('#conf3_valor_mat').val(removerMascara($('#conf3_valor_mat').val()));
+       $('#conf1_custo_mat').val(removerMascara($('#conf1_custo_mat').val()));
+       $('#conf2_custo_mat').val(removerMascara($('#conf2_custo_mat').val()));
+       $('#conf3_custo_mat').val(removerMascara($('#conf3_custo_mat').val()));
+   });
 
 </SCRIPT>
 

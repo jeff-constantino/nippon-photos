@@ -1,6 +1,11 @@
-ajustar config, IMPOSTOS sobre vendas "financeiro"
+relmes, ajustar "data" para mesAno
+
 
 criar DRE
+
+calcular custo do ribbon, encartes
+pegar o juros cartoes
+
 
 Identificar as Receitas Brutas de Vendas: ...
 Deduzir Impostos e Devoluções: ...
@@ -17,6 +22,6 @@ criar comparativo de vendas mes/ano (relmes já tem a função para buscar por d
 
 APRENDER DOCKER
 
-
+removido conf1_valor2
 
 

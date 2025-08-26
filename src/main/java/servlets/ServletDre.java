@@ -1,5 +1,6 @@
 package servlets;
 
+import dao.DAODre;
 import dao.DAORelMes;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -31,11 +32,11 @@ public class ServletDre extends ServletGenericUtil{
         String dataInicial = request.getParameter("dataInicial");
         String dataFinal = request.getParameter("dataFinal");
 
-        DAORelMes daoRelMes = new DAORelMes();
+        DAODre daoDre = new DAODre();
 
         try {
             // Recupera a lista de vendas do banco de dados
-            List<ModelFechaMes> vendasMesList = daoRelMes.buscarFechamentoMensal(dataInicial, dataFinal);
+            List<ModelFechaMes> vendasMesList = daoDre.buscarFechamentoMensal(dataInicial, dataFinal);
 
 
             // Passa a lista para o JSP

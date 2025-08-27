@@ -210,207 +210,256 @@
                 </div>
                 <%--CONTEUDO PAGINA--%>
                 <div class="row">
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">RECEITAS OPERACIONAIS</h4>
-                                <!-- Table Content -->
-                                <div style="overflow-x: hidden; overflow-y: hidden"  class="table-responsive">
-                                    <table class="table table-bordered" id="tabelaReceita" >
-                                        <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col" style="font-size: 1.2rem">TIPO</th>
-                                            <th scope="col" style="font-size: 1.2rem">VALOR</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:set var="receitaDinheiro" value="0" />
-                                        <c:set var="receitaDebito" value="0" />
-                                        <c:set var="receitaCredito" value="0" />
-                                        <c:set var="receitaPix" value="0" />
-                                        <c:set var="impostos" value="0" />
-                                        <c:set var="receitaBruta" value="0" />
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-6 grid-margin">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title" style="text-align: center">RECEITAS OPERACIONAIS</h4>
+                                        <div style="overflow-x: hidden; overflow-y: hidden" class="table-responsive">
+                                            <table class="table table-bordered" id="tabelaReceita">
+                                                <thead class="thead-light">
+                                                <tr>
+                                                    <th scope="col" style="font-size: 1.2rem">TIPO</th>
+                                                    <th scope="col" style="font-size: 1.2rem">VALOR</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <c:set var="receitaDinheiro" value="0" />
+                                                <c:set var="receitaDebito" value="0" />
+                                                <c:set var="receitaCredito" value="0" />
+                                                <c:set var="receitaPix" value="0" />
+                                                <c:set var="impostos" value="0" />
+                                                <c:set var="receitaBruta" value="0" />
 
-                                        <c:forEach items="${vendasMesList}" var="vl">
-                                            <tr>
-                                                <td style="font-size: 1.2rem">Dinheiro</td>
-                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_din_mes}" type="currency" currencySymbol="R$" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size: 1.2rem">Débito</td>
-                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_deb_mes}" type="currency" currencySymbol="R$" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size: 1.2rem">Crédito</td>
-                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_cred_mes}" type="currency" currencySymbol="R$" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td style="font-size: 1.2rem">Pix</td>
-                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_pix_mes}" type="currency" currencySymbol="R$" /></td>
-                                            </tr>
-                                            <c:set var="receitaDinheiro" value="${receitaDinheiro+ vl.valor_din_mes}" />
-                                            <c:set var="receitaDebito" value="${receitaDebito + vl.valor_deb_mes}" />
-                                            <c:set var="receitaCredito" value="${receitaCredito + vl.valor_cred_mes}" />
-                                            <c:set var="receitaPix" value="${receitaPix + vl.valor_pix_mes}" />
-                                            <tr>
-                                                <td style="font-size: 1.2rem">Receita Bruta</td>
-                                                <td style="font-size: 1.2rem"><fmt:formatNumber value="${receitaDinheiro + receitaDebito + receitaCredito + receitaPix}" type="currency" currencySymbol="R$" /></td>
-                                            </tr>
-                                        </c:forEach>
-                                        </tbody>
-                                    </table>
+                                                <c:forEach items="${vendasMesList}" var="vl">
+                                                    <tr>
+                                                        <td style="font-size: 1.2rem">Dinheiro</td>
+                                                        <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_din_mes}" type="currency" currencySymbol="R$" /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="font-size: 1.2rem">Débito</td>
+                                                        <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_deb_mes}" type="currency" currencySymbol="R$" /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="font-size: 1.2rem">Crédito</td>
+                                                        <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_cred_mes}" type="currency" currencySymbol="R$" /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="font-size: 1.2rem">Pix</td>
+                                                        <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_pix_mes}" type="currency" currencySymbol="R$" /></td>
+                                                    </tr>
+                                                    <c:set var="receitaDinheiro" value="${receitaDinheiro+ vl.valor_din_mes}" />
+                                                    <c:set var="receitaDebito" value="${receitaDebito + vl.valor_deb_mes}" />
+                                                    <c:set var="receitaCredito" value="${receitaCredito + vl.valor_cred_mes}" />
+                                                    <c:set var="receitaPix" value="${receitaPix + vl.valor_pix_mes}" />
+                                                    <c:set var="receitaBruta" value="${receitaDinheiro + receitaDebito + receitaCredito + receitaPix}" />
+                                                    <tr>
+                                                        <td style="font-size: 1.2rem">Receita Bruta</td>
+                                                        <td style="font-size: 1.2rem"><fmt:formatNumber value="${receitaBruta}" type="currency" currencySymbol="R$" /></td>
+                                                    </tr>
+                                                </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">DESPESAS OPERACIONAIS</h4>
-                                <!-- Table Content -->
-                                <div style="overflow-x: hidden; overflow-y: hidden"  class="table-responsive">
-                                    <table class="table table-bordered" id="tabelaDespesas">
-                                        <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col" style="font-size: 1.2rem">TIPO</th>
-                                            <th scope="col" style="font-size: 1.2rem">VALOR</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:set var="ribbons" value="0" />
-                                        <c:set var="encartes" value="0" />
-                                        <c:set var="jurosCartoes" value="0" />
-                                        <c:set var="despesasOperacionais" value="0" />
-                                        <c:set var="lucroBruto" value="0" />
-
-                                        <c:forEach items="${vendasMesList}" var="vl">
-
-                                            <tr>
-                                                <td style="font-size: 1.2rem">Ribbons</td>
-                                                <td style="font-size: 1.2rem">
-                                                    <fmt:formatNumber value="${vl.total_ribbons}" type="currency" currencySymbol="R$" />
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td style="font-size: 1.2rem">Encartes</td>
-                                                <td style="font-size: 1.2rem">
-                                                    <fmt:formatNumber value="${vl.valor_enc}" type="currency" currencySymbol="R$" />
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td style="font-size: 1.2rem">Juros dos Cartões</td>
-                                                <td style="font-size: 1.2rem">
-                                                    <fmt:formatNumber value="${vl.juros_cartoes}" type="currency" currencySymbol="R$" />
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td style="font-size: 1.2rem">Despesas Operacionais</td>
-                                                <td style="font-size: 1.2rem">
-                                                    <fmt:formatNumber value="${vl.total_ribbons + vl.valor_enc + vl.juros_cartoes}" type="currency" currencySymbol="R$" />
-                                                </td>
-                                            </tr>
-
-                                        </c:forEach>
-
-                                        </tbody>
-                                        <tfoot>
-
-                                        </tfoot>
-
-                                    </table>
+                            <div class="col-md-6 grid-margin">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title" style="text-align: center">DESPESAS OPERACIONAIS</h4>
+                                        <div style="overflow-x: hidden; overflow-y: hidden" class="table-responsive">
+                                            <table class="table table-bordered" id="tabelaDespesas">
+                                                <thead class="thead-light">
+                                                <tr>
+                                                    <th scope="col" style="font-size: 1.2rem">TIPO</th>
+                                                    <th scope="col" style="font-size: 1.2rem">VALOR</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <c:set var="ribbons" value="0" />
+                                                <c:set var="encartes" value="0" />
+                                                <c:set var="jurosCartoes" value="0" />
+                                                <c:set var="despesasOperacionais" value="0" />
+                                                <c:set var="lucroBruto" value="0" />
+                                                <c:set var="totalCustosOperacionais" value="0" />
+                                                <c:forEach items="${vendasMesList}" var="vl">
+                                                    <tr>
+                                                        <td style="font-size: 1.2rem">Ribbons</td>
+                                                        <td style="font-size: 1.2rem">
+                                                            <fmt:formatNumber value="${vl.total_ribbons}" type="currency" currencySymbol="R$" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="font-size: 1.2rem">Encartes</td>
+                                                        <td style="font-size: 1.2rem">
+                                                            <fmt:formatNumber value="${vl.valor_enc}" type="currency" currencySymbol="R$" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="font-size: 1.2rem">Juros dos Cartões</td>
+                                                        <td style="font-size: 1.2rem">
+                                                            <fmt:formatNumber value="${vl.juros_cartoes}" type="currency" currencySymbol="R$" />
+                                                        </td>
+                                                    </tr>
+                                                    <c:set var="despesaAtual" value="${vl.total_ribbons + vl.valor_enc + vl.juros_cartoes}" />
+                                                    <tr>
+                                                        <td style="font-size: 1.2rem">Despesas Operacionais</td>
+                                                        <td style="font-size: 1.2rem">
+                                                            <fmt:formatNumber value="${despesaAtual}" type="currency" currencySymbol="R$" />
+                                                        </td>
+                                                    </tr>
+                                                    <c:set var="totalCustosOperacionais" value="${totalCustosOperacionais + despesaAtual}" />
+                                                </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-
-                                <form method="post" action="<%=request.getContextPath()%>/ServletFechaMes">
-                                    <h4 class="card-title" style="text-align: center">DESPESAS ADMINISTRATIVAS</h4>
-                                    <!-- Table Content -->
-                                    <div style="overflow-x: hidden; overflow-y: hidden">
-                                        <table class="table table-bordered" id="tabelavalorescontames">
-                                            <div class="row">
-
-                                                <div class="col-6 mb-3">
-                                                    <label for="icms" style="font-size: 0.8rem;">ICMS</label>
-                                                    <input type="text" class="form-control money" id="icms" name="icms" style="font-size: 0.8rem;">
-                                                </div>
-                                                <div class="col-6 mb-3">
-                                                    <label for="pis" style="font-size: 0.8rem;">PIS</label>
-                                                    <input type="text" class="form-control money" id="pis" name="pis" style="font-size: 0.8rem;">
-                                                </div>
-                                                <div class="col-6 mb-3">
-                                                    <label for="cofins" style="font-size: 0.8rem;">COFINS</label>
-                                                    <input type="text" class="form-control money" id="cofins" name="cofins" style="font-size: 0.8rem;">
-                                                </div>
-                                                <div class="col-6 mb-3">
-                                                    <label for="inss" style="font-size: 0.8rem;">INSS</label>
-                                                    <input type="text" class="form-control money" id="inss" name="inss" style="font-size: 0.8rem;">
-                                                </div>
-                                                <div class="col-6 mb-3">
-                                                    <label for="irpj" style="font-size: 0.8rem;">IRPJ</label>
-                                                    <input type="text" class="form-control money" id="irpj" name="irpj" style="font-size: 0.8rem;">
-                                                </div>
-                                                <div class="col-6 mb-3">
-                                                    <label for="csll" style="font-size: 0.8rem;">CSLL</label>
-                                                    <input type="text" class="form-control money" id="csll" name="csll" style="font-size: 0.8rem;">
-                                                </div>
-
-                                                <div class="col-6 mb-3">
-                                                    <label for="aluguel" style="font-size: 0.8rem;">Aluguel</label>
-                                                    <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 0.8rem;">
-
-                                                </div>
-                                                <div class="col-6 mb-3">
-                                                    <label for="salarios" style="font-size: 0.8rem;">Salários</label>
-                                                    <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 0.8rem;">
-                                                </div>
-
-                                                <div class="col-6 mb-3">
-                                                    <label for="contas" style="font-size: 0.8rem;">Contas</label>
-                                                    <input type="text" class="form-control money" id="contas" name="contas" style="font-size: 0.8rem;">
-                                                </div>
-                                                <div class="col-6 mb-3">
-                                                    <label for="despesasGerais" style="font-size: 0.8rem;">Depesas Gerais</label>
-                                                    <input type="text" class="form-control money" id="despesasGerais" name="despesasGerais" style="font-size: 0.8rem;">
-                                                </div>
-
-                                                <div class="col-6 mb-3">
-                                                    <label for="bonificacoes" style="font-size: 0.8rem;">Bonificações</label>
-                                                    <input type="text" class="form-control money" id="bonificacoes" name="bonificacoes" style="font-size: 0.8rem;">
-                                                </div>
-                                                <div class="col-6 mb-3">
-                                                    <label for="prestacoes" style="font-size: 0.8rem;">Prestações de Equipamentos</label>
-                                                    <input type="text" class="form-control money" id="prestacoes" name="prestacoes" style="font-size: 0.8rem;">
-                                                </div>
-
-                                                <div class="col-6 mb-3">
-                                                    <label for="debitoVm" style="font-size: 0.8rem;">Outras Despesas</label>
-                                                    <input type="text" class="form-control money" id="debitoVm" name="debitoVm"  style="font-size: 0.8rem;">
-                                                </div>
-
+                            <div class="col-md-12 grid-margin">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title" style="text-align: center">CALCULO FINANCEIRO</h4>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <label for="receitaBrt" style="font-size: 0.8rem;">RECEITA BRUTA</label>
+                                                <input type="text" class="form-control money" id="receitaBrt" name="receitaBrt" style="color: #d39e00; font: bold"
+                                                       value="<fmt:formatNumber value="${receitaBruta}" pattern="#,##0.00" />">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="custosOpr" style="font-size: 0.8rem;">CUSTOS OPERACIONAL</label>
+                                                <input type="text" class="form-control money" id="custosOpr" name="custosOpr" style="color: #ff0000; font: bold"
+                                                       value="<fmt:formatNumber value="${totalCustosOperacionais}" pattern="#,##0.00" />">
                                             </div>
 
 
-                                        </table>
-                                        <div style="align-items: center">
+                                            <div class="col-md-4 mb-3">
+                                                <label for="lucroBrt" style="font-size: 0.8rem;">LUCRO BRUTO</label>
+                                                <input type="text" class="form-control money" id="lucroBrt" name="lucroBrt" style="font: bold"
+                                                value="<fmt:formatNumber value="${receitaBruta-totalCustosOperacionais}" pattern="#,##0.00" />">
+                                            </div>
+                                        </div>
+                                        <div class="row">
 
-                                            <button type="submit" class="btn btn-outline-success" STYLE="font-size: large">
-                                                Gravar Fechamento do Mês
-                                            </button>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="impostoVenda" style="font-size: 0.8rem;">IMPOSTOS SOBRE VENDAS</label>
+                                                <input type="text" class="form-control" id="impostoVenda" name="impostoVenda" style="font-size: 0.8rem;">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="despAdm" style="font-size: 0.8rem;">DESPESAS ADMINISTRATIVAS</label>
+                                                <input type="text" class="form-control" id="despAdm" name="despAdm" style="font-size: 0.8rem;">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="lucroLqd" style="font-size: 0.8rem;">LUCRO LIQUIDO </label>
+                                                <input type="text" class="form-control" id="lucroLqd" name="lucroLqd" style="font-size: 0.8rem;">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="post" action="<%=request.getContextPath()%>/ServletDre">
+                                    <!-- Bloco 1: Impostos sobre Vendas -->
+                                    <h4 class="card-title" style="text-align: center">IMPOSTOS SOBRE VENDAS</h4>
+                                    <div class="row">
+                                        <div class="col-6 mb-3">
+                                            <label for="icms" style="font-size: 0.8rem;">ICMS</label>
+                                            <input type="text" class="form-control money" id="icms" name="icms" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="pis" style="font-size: 0.8rem;">PIS</label>
+                                            <input type="text" class="form-control money" id="pis" name="pis" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="cofins" style="font-size: 0.8rem;">COFINS</label>
+                                            <input type="text" class="form-control money" id="cofins" name="cofins" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="inss" style="font-size: 0.8rem;">INSS</label>
+                                            <input type="text" class="form-control money" id="inss" name="inss" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="irpj" style="font-size: 0.8rem;">IRPJ</label>
+                                            <input type="text" class="form-control money" id="irpj" name="irpj" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="csll" style="font-size: 0.8rem;">CSLL</label>
+                                            <input type="text" class="form-control money" id="csll" name="csll" style="font-size: 0.8rem;">
                                         </div>
                                     </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-12 mb-3">
+                                            <label for="totalImpostos" style="font-size: 0.8rem; font-weight: bold;">TOTAL IMPOSTOS</label>
+                                            <input type="text" class="form-control money" id="totalImpostos" name="totalImpostos" style="font-size: 0.8rem;" readonly>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bloco 2: Despesas Administrativas -->
+                                    <h4 class="card-title" style="text-align: center; margin-top: 2rem;">DESPESAS ADMINISTRATIVAS</h4>
+                                    <div class="row">
+                                        <div class="col-6 mb-3">
+                                            <label for="aluguel" style="font-size: 0.8rem;">Aluguel</label>
+                                            <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="salarios" style="font-size: 0.8rem;">Salários</label>
+                                            <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="contas" style="font-size: 0.8rem;">Contas</label>
+                                            <input type="text" class="form-control money" id="contas" name="contas" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="despesasGerais" style="font-size: 0.8rem;">Despesas Gerais</label>
+                                            <input type="text" class="form-control money" id="despesasGerais" name="despesasGerais" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="bonificacoes" style="font-size: 0.8rem;">Bonificações</label>
+                                            <input type="text" class="form-control money" id="bonificacoes" name="bonificacoes" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="prestacoes" style="font-size: 0.8rem;">Prestações de Equipamentos</label>
+                                            <input type="text" class="form-control money" id="prestacoes" name="prestacoes" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="internet" style="font-size: 0.8rem;">Internet</label>
+                                            <input type="text" class="form-control money" id="internet" name="internet" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="outrasDesp" style="font-size: 0.8rem;">Outras Despesas</label>
+                                            <input type="text" class="form-control money" id="outrasDesp" name="outrasDesp" style="font-size: 0.8rem;">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-12 mb-3">
+                                            <label for="totalDespesasAdm" style="font-size: 0.8rem; font-weight: bold;">TOTAL DESPESAS ADM</label>
+                                            <input type="text" class="form-control money" id="totalDespesasAdm" name="totalDespesasAdm" style="font-size: 0.8rem;" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div style="text-align: center; margin-top: 15px;">
+                                        <button type="submit" class="btn btn-outline-success" style="font-size: large">
+                                            Gravar Fechamento do Mês
+                                        </button>
+                                    </div>
+
                                 </form>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
             </div>

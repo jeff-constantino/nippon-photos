@@ -52,7 +52,9 @@ public class DAODre {
         String sqlVales = "SELECT SUM(valor) AS total_vales FROM vales WHERE data >= ? AND data <= ?";
         String sqlConfiguracao = "SELECT * FROM configuracao WHERE \"idConf\" = 1";
 
-
+        // 🔽 NOVA CONSULTA SALÁRIOS
+        String sqlSalarios = "SELECT SUM(salario_total2) AS total_salarios FROM salarios " +
+                "WHERE mes >= ? AND mes <= ? AND ano >= ? AND ano <= ?";
 
         // 🔽 BUSCA DE CONDUTAS
         int totalAdvert = 0;
@@ -166,6 +168,23 @@ public class DAODre {
                 }
             }
 
+            // 🔽 NOVA CONSULTA SALÁRIOS
+            try (PreparedStatement pst = connection.prepareStatement(sqlSalarios)) {
+                // Define os parâmetros baseados no período de datas
+                pst.setInt(1, dataInicio.getMonthValue()); // mês inicial
+                pst.setInt(2, dataFim.getMonthValue());     // mês final
+                pst.setInt(3, dataInicio.getYear());       // ano inicial
+                pst.setInt(4, dataFim.getYear());          // ano final
+
+                try (ResultSet rs = pst.executeQuery()) {
+                    if (rs.next()) {
+                        ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);
+                        resumo.setTotal_salarios(rs.getBigDecimal("total_salarios"));
+                        if (resumoMensal.isEmpty()) resumoMensal.add(resumo);
+                    }
+                }
+            }
+
             // Consulta configuracao
             try (PreparedStatement pst = connection.prepareStatement(sqlConfiguracao)) {
                 try (ResultSet rs = pst.executeQuery()) {
@@ -184,6 +203,7 @@ public class DAODre {
                     }
                 }
             }
+
             // =================== CONSULTA RIBBONS, ENCARTES E JUROS ===================
             String sqlMateriais = "SELECT " +
                     "(total_ft + total_sobras) AS qtd_ribbons, " +
@@ -239,7 +259,6 @@ public class DAODre {
                 }
             }
 
-
             // 🔽 Totais de condutas
             ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);
             resumo.setTotal_advert(totalAdvert);
@@ -258,7 +277,7 @@ public class DAODre {
                     "ORDER BY data_fechamento";
 
             List<ModelFechaMes> relatorioDiario = new ArrayList<>();
-// 0 = domingo, 1 = segunda ... 6 = sábado
+            // 0 = domingo, 1 = segunda ... 6 = sábado
             String[] diasPt = {"Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"};
 
             try (PreparedStatement pst = connection.prepareStatement(sqlRelatorioDia)) {
@@ -283,7 +302,6 @@ public class DAODre {
                 }
             }
             resumo.setRelatorioDiario(relatorioDiario);
-
 
         } catch (SQLException e) {
             System.err.println("Erro ao executar as consultas: " + e.getMessage());

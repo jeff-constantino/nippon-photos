@@ -111,6 +111,7 @@ public class ServletFechaMes extends ServletGenericUtil {
                 request.setAttribute("mesAno", mesAnoFormatado);
             }
 
+
             // Salva na sessão para reutilizar no doPost
             HttpSession session = request.getSession();
             session.setAttribute("vendasMesList", vendasMesList);

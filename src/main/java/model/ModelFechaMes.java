@@ -89,6 +89,16 @@ public class ModelFechaMes implements Serializable {
     private BigDecimal valor_total_despesas;
     private BigDecimal valor_total_contas;
 
+    private BigDecimal total_salarios;
+
+    public BigDecimal getTotal_salarios() {
+        return total_salarios;
+    }
+
+    public void setTotal_salarios(BigDecimal total_salarios) {
+        this.total_salarios = total_salarios;
+    }
+
     public BigDecimal getResultadoDivisao() {
         return resultadoDivisao;
     }

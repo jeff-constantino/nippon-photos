@@ -1,13 +1,11 @@
 package dao;
 
 import connection.SingleConnectionBanco;
+import model.ModelDre;
 import model.ModelFechaMes;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -310,6 +308,97 @@ public class DAODre {
 
         // ✅ Retorna apenas no final do método
         return resumoMensal;
+    }
+
+    public void gravarDRE(ModelDre dre) throws SQLException {
+        // SQL para inserir os dados do DRE
+        String sql = "INSERT INTO dre (mes, ano, receita_bruta, custos_operacionais, lucro_bruto, icms, pis, cofins, inss, irpj, csll, total_impostos, aluguel, salarios, contas, despesas_gerais, bonificacoes, prestacoes, internet, outras_despesas, total_despesas_adm, lucro_liquido, data_gravacao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        // Verifica se já existe um registro para o mesmo mês/ano
+        if (existeRegistro(dre.getMes(), dre.getAno())) {
+            // Se existe, atualiza
+            sql = "UPDATE dre SET receita_bruta=?, custos_operacionais=?, lucro_bruto=?, icms=?, pis=?, cofins=?, inss=?, irpj=?, csll=?, total_impostos=?, aluguel=?, salarios=?, contas=?, despesas_gerais=?, bonificacoes=?, prestacoes=?, internet=?, outras_despesas=?, total_despesas_adm=?, lucro_liquido=?, data_gravacao=? WHERE mes=? AND ano=?";
+        }
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            int index = 1;
+
+            // Setar os parâmetros
+            if (existeRegistro(dre.getMes(), dre.getAno())) {
+                statement.setBigDecimal(index++, dre.getReceita_bruta());
+                statement.setBigDecimal(index++, dre.getCustos_operacionais());
+                statement.setBigDecimal(index++, dre.getLucro_bruto());
+                statement.setBigDecimal(index++, dre.getIcms());
+                statement.setBigDecimal(index++, dre.getPis());
+                statement.setBigDecimal(index++, dre.getCofins());
+                statement.setBigDecimal(index++, dre.getInss());
+                statement.setBigDecimal(index++, dre.getIrpj());
+                statement.setBigDecimal(index++, dre.getCsll());
+                statement.setBigDecimal(index++, dre.getTotal_impostos());
+                statement.setBigDecimal(index++, dre.getAluguel());
+                statement.setBigDecimal(index++, dre.getSalarios());
+                statement.setBigDecimal(index++, dre.getContas());
+                statement.setBigDecimal(index++, dre.getDespesas_gerais());
+                statement.setBigDecimal(index++, dre.getBonificacoes());
+                statement.setBigDecimal(index++, dre.getPrestacoes());
+                statement.setBigDecimal(index++, dre.getInternet());
+                statement.setBigDecimal(index++, dre.getOutras_despesas());
+                statement.setBigDecimal(index++, dre.getTotal_despesas_adm());
+                statement.setBigDecimal(index++, dre.getLucro_liquido());
+                statement.setDate(index++, Date.valueOf(LocalDate.now()));
+
+                // Parâmetros de WHERE
+                statement.setInt(index++, dre.getMes());
+                statement.setInt(index++, dre.getAno());
+
+            } else {
+                statement.setInt(index++, dre.getMes());
+                statement.setInt(index++, dre.getAno());
+                statement.setBigDecimal(index++, dre.getReceita_bruta());
+                statement.setBigDecimal(index++, dre.getCustos_operacionais());
+                statement.setBigDecimal(index++, dre.getLucro_bruto());
+                statement.setBigDecimal(index++, dre.getIcms());
+                statement.setBigDecimal(index++, dre.getPis());
+                statement.setBigDecimal(index++, dre.getCofins());
+                statement.setBigDecimal(index++, dre.getInss());
+                statement.setBigDecimal(index++, dre.getIrpj());
+                statement.setBigDecimal(index++, dre.getCsll());
+                statement.setBigDecimal(index++, dre.getTotal_impostos());
+                statement.setBigDecimal(index++, dre.getAluguel());
+                statement.setBigDecimal(index++, dre.getSalarios());
+                statement.setBigDecimal(index++, dre.getContas());
+                statement.setBigDecimal(index++, dre.getDespesas_gerais());
+                statement.setBigDecimal(index++, dre.getBonificacoes());
+                statement.setBigDecimal(index++, dre.getPrestacoes());
+                statement.setBigDecimal(index++, dre.getInternet());
+                statement.setBigDecimal(index++, dre.getOutras_despesas());
+                statement.setBigDecimal(index++, dre.getTotal_despesas_adm());
+                statement.setBigDecimal(index++, dre.getLucro_liquido());
+                statement.setDate(index++, Date.valueOf(LocalDate.now()));
+            }
+
+            statement.executeUpdate();
+            connection.commit();
+
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        }
+    }
+
+    // Método auxiliar para verificar se o registro já existe
+    public boolean existeRegistro(int mes, int ano) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM dre WHERE mes = ? AND ano = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, mes);
+            statement.setInt(2, ano);
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
     }
 
 

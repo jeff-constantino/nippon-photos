@@ -220,12 +220,12 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="card-title" style="text-align: center">RECEITAS OPERACIONAIS</h4>
-                                        <div style="overflow-x: hidden; overflow-y: hidden" class="table-responsive">
+                                        <div class="table-responsive">
                                             <table class="table table-bordered" id="tabelaReceita">
                                                 <thead class="thead-light">
                                                 <tr>
-                                                    <th scope="col" style="font-size: 1.2rem">TIPO</th>
-                                                    <th scope="col" style="font-size: 1.2rem">VALOR</th>
+                                                    <th scope="col" style="font-size: 1.0rem">TIPO</th>
+                                                    <th scope="col" style="font-size: 1.0rem">VALOR</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -238,20 +238,20 @@
 
                                                 <c:forEach items="${vendasMesList}" var="vl">
                                                     <tr>
-                                                        <td style="font-size: 1.2rem">Dinheiro</td>
-                                                        <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_din_mes}" type="currency" currencySymbol="R$" /></td>
+                                                        <td style="font-size: 1.0rem">Dinheiro</td>
+                                                        <td style="font-size: 1.0rem"><fmt:formatNumber value="${vl.valor_din_mes}" type="currency" currencySymbol="R$" /></td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="font-size: 1.2rem">Débito</td>
-                                                        <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_deb_mes}" type="currency" currencySymbol="R$" /></td>
+                                                        <td style="font-size: 1.0rem">Débito</td>
+                                                        <td style="font-size: 1.0rem"><fmt:formatNumber value="${vl.valor_deb_mes}" type="currency" currencySymbol="R$" /></td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="font-size: 1.2rem">Crédito</td>
-                                                        <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_cred_mes}" type="currency" currencySymbol="R$" /></td>
+                                                        <td style="font-size: 1.0rem">Crédito</td>
+                                                        <td style="font-size: 1.0rem"><fmt:formatNumber value="${vl.valor_cred_mes}" type="currency" currencySymbol="R$" /></td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="font-size: 1.2rem">Pix</td>
-                                                        <td style="font-size: 1.2rem"><fmt:formatNumber value="${vl.valor_pix_mes}" type="currency" currencySymbol="R$" /></td>
+                                                        <td style="font-size: 1.0rem">Pix</td>
+                                                        <td style="font-size: 1.0rem"><fmt:formatNumber value="${vl.valor_pix_mes}" type="currency" currencySymbol="R$" /></td>
                                                     </tr>
                                                     <c:set var="receitaDinheiro" value="${receitaDinheiro+ vl.valor_din_mes}" />
                                                     <c:set var="receitaDebito" value="${receitaDebito + vl.valor_deb_mes}" />
@@ -259,8 +259,8 @@
                                                     <c:set var="receitaPix" value="${receitaPix + vl.valor_pix_mes}" />
                                                     <c:set var="receitaBruta" value="${receitaDinheiro + receitaDebito + receitaCredito + receitaPix}" />
                                                     <tr>
-                                                        <td style="font-size: 1.2rem">Receita Bruta</td>
-                                                        <td style="font-size: 1.2rem"><fmt:formatNumber value="${receitaBruta}" type="currency" currencySymbol="R$" /></td>
+                                                        <td style="font-size: 1.0rem">Receita Bruta</td>
+                                                        <td style="font-size: 1.0rem"><fmt:formatNumber value="${receitaBruta}" type="currency" currencySymbol="R$" /></td>
                                                     </tr>
                                                 </c:forEach>
                                                 </tbody>
@@ -274,12 +274,12 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="card-title" style="text-align: center">DESPESAS OPERACIONAIS</h4>
-                                        <div style="overflow-x: hidden; overflow-y: hidden" class="table-responsive">
+                                        <div class="table-responsive">
                                             <table class="table table-bordered" id="tabelaDespesas">
                                                 <thead class="thead-light">
                                                 <tr>
-                                                    <th scope="col" style="font-size: 1.2rem">TIPO</th>
-                                                    <th scope="col" style="font-size: 1.2rem">VALOR</th>
+                                                    <th scope="col" style="font-size: 1.0rem">TIPO</th>
+                                                    <th scope="col" style="font-size: 1.0rem">VALOR</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -291,27 +291,27 @@
                                                 <c:set var="totalCustosOperacionais" value="0" />
                                                 <c:forEach items="${vendasMesList}" var="vl">
                                                     <tr>
-                                                        <td style="font-size: 1.2rem">Ribbons</td>
-                                                        <td style="font-size: 1.2rem">
+                                                        <td style="font-size: 1.0rem">Ribbons</td>
+                                                        <td style="font-size: 1.0rem">
                                                             <fmt:formatNumber value="${vl.total_ribbons}" type="currency" currencySymbol="R$" />
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="font-size: 1.2rem">Encartes</td>
-                                                        <td style="font-size: 1.2rem">
+                                                        <td style="font-size: 1.0rem">Encartes</td>
+                                                        <td style="font-size: 1.0rem">
                                                             <fmt:formatNumber value="${vl.valor_enc}" type="currency" currencySymbol="R$" />
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="font-size: 1.2rem">Juros dos Cartões</td>
-                                                        <td style="font-size: 1.2rem">
+                                                        <td style="font-size: 1.0rem">Juros dos Cartões</td>
+                                                        <td style="font-size: 1.0rem">
                                                             <fmt:formatNumber value="${vl.juros_cartoes}" type="currency" currencySymbol="R$" />
                                                         </td>
                                                     </tr>
                                                     <c:set var="despesaAtual" value="${vl.total_ribbons + vl.valor_enc + vl.juros_cartoes}" />
                                                     <tr>
-                                                        <td style="font-size: 1.2rem">Despesas Operacionais</td>
-                                                        <td style="font-size: 1.2rem">
+                                                        <td style="font-size: 1.0rem">Despesas Operacionais</td>
+                                                        <td style="font-size: 1.0rem">
                                                             <fmt:formatNumber value="${despesaAtual}" type="currency" currencySymbol="R$" />
                                                         </td>
                                                     </tr>
@@ -331,38 +331,34 @@
                                         <div class="row">
                                             <div class="col-md-4 mb-3">
                                                 <label for="receitaBrt" style="font-size: 1.0rem;">RECEITA BRUTA</label>
-                                                <input type="text" class="form-control money" id="receitaBrt" name="receitaBrt" style="color: #d39e00; font: bold; font-size: 1.0rem"
-                                                       value="<fmt:formatNumber value="${receitaBruta}" pattern="#,##0.00" />">
+                                                <input type="text" class="form-control money" id="receitaBrt" name="receitaBrt" style=" color: black; font: bold; font-size: 1.0rem"
+                                                       value="<fmt:formatNumber value="${receitaBruta}" pattern="#,##0.00" />" readonly>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="custosOpr" style="font-size: 1.0rem;">CUSTOS OPERACIONAL</label>
                                                 <input type="text" class="form-control money" id="custosOpr" name="custosOpr" style="color: #ff0000; font: bold; font-size: 1.0rem"
-                                                       value="<fmt:formatNumber value="${totalCustosOperacionais}" pattern="#,##0.00" />">
+                                                       value="<fmt:formatNumber value="${totalCustosOperacionais}" pattern="#,##0.00" />" readonly>
                                             </div>
-
-
                                             <div class="col-md-4 mb-3">
                                                 <label for="lucroBrt" style="font-size: 1.0rem;">LUCRO BRUTO</label>
-                                                <input type="text" class="form-control money" id="lucroBrt" name="lucroBrt" style="font: bold; font-size: 1.0rem"
-                                                value="<fmt:formatNumber value="${receitaBruta-totalCustosOperacionais}" pattern="#,##0.00" />">
+                                                <input type="text" class="form-control money" id="lucroBrt" name="lucroBrt" style="font: bold; font-size: 1.0rem; color: black"
+                                                       value="<fmt:formatNumber value="${receitaBruta-totalCustosOperacionais}" pattern="#,##0.00" />" readonly>
                                             </div>
                                         </div>
                                         <div class="row">
-
                                             <div class="col-md-4 mb-3">
                                                 <label for="impostoVenda" style="font-size: 1.0rem;">IMPOSTOS SOBRE VENDAS</label>
-                                                <input type="text" class="form-control" id="impostoVenda" name="impostoVenda" style="font-size: 1.0rem;">
+                                                <input type="text" class="form-control" id="impostoVenda" name="impostoVenda" style="font-size: 1.0rem; color: #ff0000" readonly>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="despAdm" style="font-size: 1.0rem;">DESPESAS ADMINISTRATIVAS</label>
-                                                <input type="text" class="form-control" id="despAdm" name="despAdm" style="font-size: 1.0rem;">
+                                                <input type="text" class="form-control" id="despAdm" name="despAdm" style="font-size: 1.0rem; color: #ff0000" readonly>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="lucroLqd" style="font-size: 1.0rem;">LUCRO LIQUIDO </label>
-                                                <input type="text" class="form-control" id="lucroLqd" name="lucroLqd" style="font-size: 1.0rem;">
+                                                <input type="text" class="form-control" id="lucroLqd" name="lucroLqd" style="font-size: 1.0rem;" readonly>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -373,7 +369,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <form method="post" action="<%=request.getContextPath()%>/ServletDre">
-                                    <!-- Bloco 1: Impostos sobre Vendas -->
+                                    <input type="hidden" name="acao" value="gravarDRE">
                                     <h4 class="card-title" style="text-align: center">IMPOSTOS SOBRE VENDAS</h4>
                                     <div class="row">
                                         <div class="col-6 mb-3">
@@ -409,7 +405,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Bloco 2: Despesas Administrativas -->
                                     <h4 class="card-title" style="text-align: center; margin-top: 2rem;">DESPESAS ADMINISTRATIVAS</h4>
                                     <div class="row">
                                         <div class="col-6 mb-3">
@@ -455,15 +450,13 @@
 
                                     <div style="text-align: center; margin-top: 15px;">
                                         <button type="submit" class="btn btn-outline-success" style="font-size: large">
-                                            Gravar Fechamento do Mês
+                                            Gravar DRE
                                         </button>
                                     </div>
-
                                 </form>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
             </div>
@@ -740,7 +733,7 @@
            lucroField.style.color = '#dc3545'; // Vermelho para prejuízo
            lucroField.style.fontWeight = 'bold';
        } else {
-           lucroField.style.color = '#6c757d'; // Cinza para zero
+           lucroField.style.color = '#000000'; // Cinza para zero
            lucroField.style.fontWeight = 'bold';
        }
    }
@@ -972,6 +965,25 @@
    window.recalculateDRE = recalculateAll;
    window.populateFieldFromBackend = populateFieldFromBackend;
    window.setFieldValueSafely = setFieldValueSafely;
+
+   $('#formDre').submit(function() {
+       const receitaBruta = parseMoneyToNumber($('#receitaBrt').val());
+       const custosOpr = parseMoneyToNumber($('#custosOpr').val());
+
+       $('#hiddenReceitaBruta').val(receitaBruta);
+       $('#hiddenCustosOpr').val(custosOpr);
+       $('#hiddenLucroBrt').val(receitaBruta - custosOpr);
+
+       // Os outros campos já estão em modo readonly, mas é bom garantir
+       const salarios = parseMoneyToNumber($('#salarios').val());
+       const contas = parseMoneyToNumber($('#contas').val());
+       const despesasGerais = parseMoneyToNumber($('#despesasGerais').val());
+
+       $('#hiddenSalarios').val(salarios);
+       $('#hiddenContas').val(contas);
+       $('#hiddenDespesasGerais').val(despesasGerais);
+   });
+
 </SCRIPT>
 
 

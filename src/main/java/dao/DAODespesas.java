@@ -3,11 +3,13 @@ package dao;
 import connection.SingleConnectionBanco;
 import model.ModelDespesas;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -239,7 +241,26 @@ public class DAODespesas {
         return 0;
     }
 
+    public BigDecimal buscarTotalDespesasPorPeriodo(String dataInicial, String dataFinal) throws SQLException {
+        BigDecimal total = BigDecimal.ZERO;
+        String sql = "SELECT SUM(valor_despesa) AS total_despesas FROM despesas WHERE data_despesa >= ? AND data_despesa <= ?";
 
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setDate(1, java.sql.Date.valueOf(LocalDate.parse(dataInicial)));
+            statement.setDate(2, java.sql.Date.valueOf(LocalDate.parse(dataFinal)));
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    total = rs.getBigDecimal("total_despesas");
+                    // Se o resultado for nulo, retorne zero
+                    if (total == null) {
+                        total = BigDecimal.ZERO;
+                    }
+                }
+            }
+        }
+        return total;
+    }
 
 
 }

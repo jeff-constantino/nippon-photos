@@ -8445,11 +8445,11 @@
   --bs-emphasis-color-rgb: 0, 0, 0;
   --bs-secondary-color: rgba(33, 37, 41, 0.75);
   --bs-secondary-color-rgb: 33, 37, 41;
-  --bs-secondary-bg: #e9ecef;
+  --bs-secondary-bg: #2c2c2c;
   --bs-secondary-bg-rgb: 233, 236, 239;
   --bs-tertiary-color: rgba(33, 37, 41, 0.5);
   --bs-tertiary-color-rgb: 33, 37, 41;
-  --bs-tertiary-bg: #f8f9fa;
+  --bs-tertiary-bg: #2c2c2c;
   --bs-tertiary-bg-rgb: 248, 249, 250;
   --bs-heading-color: inherit;
   --bs-link-color: #0d6efd;
@@ -8494,7 +8494,7 @@
   --bs-emphasis-color-rgb: 255, 255, 255;
   --bs-secondary-color: rgba(222, 226, 230, 0.75);
   --bs-secondary-color-rgb: 222, 226, 230;
-  --bs-secondary-bg: #343a40;
+  --bs-secondary-bg: #2c2c2c;
   --bs-secondary-bg-rgb: 52, 58, 64;
   --bs-tertiary-color: rgba(222, 226, 230, 0.5);
   --bs-tertiary-color-rgb: 222, 226, 230;
@@ -10476,7 +10476,7 @@ progress {
   line-height: 1;
   color: var(--bs-body-color);
   appearance: none;
-  background-color: #2A3038;
+  background-color: #2c2c2c;
   background-clip: padding-box;
   border: var(--bs-border-width) solid #2c2e33;
   border-radius: 2px;
@@ -11009,7 +11009,7 @@ textarea.form-control-lg {
   z-index: -1;
   height: 1.5em;
   content: "";
-  background-color: #2A3038;
+  background-color: #2c2c2c;
   border-radius: 2px;
 }
 .form-floating > .form-control:-webkit-autofill ~ label, .form-floating > .typeahead:-webkit-autofill ~ label,
@@ -22448,7 +22448,7 @@ code {
   font-weight: normal;
   font-size: 0.875rem;
   padding: 0.625rem 0.6875rem;
-  background-color: #2A3038;
+  background-color: #2c2c2c;
   border-radius: 2px;
   color: #ffffff;
 }
@@ -22456,7 +22456,7 @@ code {
 .tt-query:focus,
 .tt-hint:focus, .select2-container--default .select2-selection--single .select2-search__field:focus, .select2-container--default .select2-selection--single:focus {
   border: 1px solid rgba(71, 164, 71, 0.5);
-  background-color: #2A3038;
+  background-color: #2c2c2c;
   color: #ffffff;
 }
 .form-control.form-control-lg, .form-control-lg.typeahead,
@@ -22495,7 +22495,7 @@ code {
 }
 
 select {
-  background-color: #2a3038 !important;
+  background-color: #2c2c2c !important;
 }
 select.form-control, select.typeahead,
 select.tt-query,
@@ -23520,7 +23520,7 @@ dl li {
 }
 
 .typeahead {
-  background-color: #2A3038;
+  background-color: #2c2c2c;
 }
 .typeahead:focus {
   border-color: #2c2e33;

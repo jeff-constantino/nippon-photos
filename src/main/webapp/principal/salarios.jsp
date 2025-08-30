@@ -157,42 +157,42 @@
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">NOME</label>
                                                                             <input type="text" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="nomeResultado" readonly tabindex="-1">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">TOTAL DE FOTOS</label>
                                                                             <input type="number" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="ft_totalResultado" name="ft_total">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">TOTAL DE DIGITAIS</label>
                                                                             <input type="number" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="dig_totalResultado" name="dig_total">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">TOTAL DE SOBRAS</label>
                                                                             <input type="number" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="sobrasResultado" name="sobras">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">APROVEITAMENTO</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="aproveitamentoResultado" name="aproveitamento">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">FUNCIONÁRIO ID</label>
                                                                             <input type="text" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="funcionarioIdResultado" readonly tabindex="-1">
                                                                         </div>
                                                                     </div>
@@ -208,28 +208,28 @@
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">ADVERTÊNCIAS</label>
                                                                             <input type="number" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="advertenciasResultado" name="advertencias">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">FALTAS</label>
                                                                             <input type="number" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="faltasResultado" name="faltas">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">DIAS DE SUSPENSÃO</label>
                                                                             <input type="number" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="suspensoesResultado" name="suspensoes">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">DSR</label>
                                                                             <input type="number" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="dsrResultado" name="dsr">
                                                                         </div>
                                                                     </div>
@@ -245,14 +245,14 @@
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">VALOR DAS FALTAS</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="inputFaltasResultado" name="inputFaltas">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">VALOR DAS SUSPENSÕES + DSR</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="inputSuspensoesResultado" name="inputSuspensoes">
                                                                         </div>
 
@@ -268,7 +268,7 @@
                                                                         <div class="col-auto ms-3">
                                                                             <label style="color: #f2a654">VALOR DESCONTO ATRASOS</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="valor_desconto_atrasosResultado" name="valor_desconto_atrasos">
                                                                         </div>
                                                                     </div>
@@ -283,41 +283,41 @@
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">VENDA TOTAL</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="venda_totalResultado" name="venda_total">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">VALES</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="vales_mesResultado" name="vales_mes">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">INSS</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="inssResultado" name="inss">
                                                                         </div>
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">PARCELA A DEDUZIR</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="parcelaResultado" name="parcela">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">FGTS</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="fgtsResultado" name="fgts">
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">DESCONTOS DISCIPLINARES</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="descontos_mesResultado" name="descontos_mes">
                                                                         </div>
                                                                     </div>
@@ -341,7 +341,7 @@
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="descontos_1Resultado" name="descontos_1">
                                                                         </div>
 
@@ -372,7 +372,7 @@
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: white; color: black"
+                                                                                   style="background-color: #2c2c2c; color: white"
                                                                                    id="descontos_2Resultado" name="descontos_2">
                                                                         </div>
 
@@ -507,14 +507,14 @@
                                         <div class="col-auto">
                                             <label style="color: #f2a654">NOME</label>
                                             <input type="text" class="form-control text-center fw-bold"
-                                                   style="background-color: white; color: black"
+                                                   style="background-color: #2c2c2c; color: white"
                                                    name="nome" value="${mv.nome}" readonly tabindex="-1">
                                         </div>
 
                                         <div class="col-auto">
                                             <label style="color: #f2a654">TOTAL DE FOTOS</label>
                                             <input type="text" class="form-control text-center fw-bold"
-                                                   style="background-color: white; color: black"
+                                                   style="background-color: #2c2c2c; color: white"
                                                    id="ft_total" name="ft_total"
                                                    value="${mv.ft_total}" readonly tabindex="-1">
                                         </div>
@@ -522,7 +522,7 @@
                                         <div class="col-auto">
                                             <label style="color: #f2a654">TOTAL DE ENCARTES</label>
                                             <input type="text" class="form-control text-center fw-bold"
-                                                   style="background-color: white; color: black"
+                                                   style="background-color: #2c2c2c; color: white"
                                                    id="enc_total" name="enc_total"
                                                    value="${mv.enc_total}" readonly tabindex="-1">
                                         </div>
@@ -530,7 +530,7 @@
                                         <div class="col-auto">
                                             <label style="color: #f2a654">TOTAL DE DIGITAIS</label>
                                             <input type="text" class="form-control text-center fw-bold"
-                                                   style="background-color: white; color: black"
+                                                   style="background-color: #2c2c2c; color: white"
                                                    id="dig_total" name="dig_total"
                                                    value="${mv.dig_total}" readonly tabindex="-1">
                                         </div>
@@ -538,7 +538,7 @@
                                         <div class="col-auto">
                                             <label style="color: #f2a654">TOTAL DE SOBRAS</label>
                                             <input type="text" class="form-control text-center fw-bold"
-                                                   style="background-color: white; color: black"
+                                                   style="background-color: #2c2c2c; color: white"
                                                    name="sobras" value="${mv.sobras}" readonly tabindex="-1">
                                         </div>
 
@@ -551,7 +551,7 @@
                                         <div class="col-auto">
                                             <label style="color: #f2a654">APROVEITAMENTO</label>
                                             <input type="text" class="form-control text-center fw-bold"
-                                                   style="background-color: white; color: black"
+                                                   style="background-color: #2c2c2c; color: white"
                                                    value="<fmt:formatNumber value='${aproveitamento}' maxFractionDigits='2'/>%"
                                                    readonly tabindex="-1">
 
@@ -564,7 +564,7 @@
                                         <div class="col-auto">
                                             <label style="color: #f2a654">FUNCIONÁRIO ID</label>
                                             <input type="text" class="form-control text-center fw-bold"
-                                                   style="background-color: white; color: black"
+                                                   style="background-color: #2c2c2c; color: white"
                                                    name="funcionarioId"
                                                    value="${funcionarioId}" readonly tabindex="-1">
                                         </div>
@@ -595,7 +595,7 @@
                                     <div class="col-auto">
                                         <label style="color: #f2a654">ADVERTÊNCIAS</label>
                                         <input type="text" class="form-control text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                name="advertencias"
                                                value="${resumoConduta.totalAdvertencias}" readonly tabindex="-1">
                                     </div>
@@ -603,7 +603,7 @@
                                     <div class="col-auto">
                                         <label style="color: #f2a654">FALTAS</label>
                                         <input type="text" class="form-control text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                name="faltas"
                                                value="${resumoConduta.totalFaltas}" readonly tabindex="-1">
                                     </div>
@@ -611,7 +611,7 @@
                                     <div class="col-auto">
                                         <label style="color: #f2a654">DIAS DE SUSPENSÃO</label>
                                         <input type="text" class="form-control text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                name="suspensoes"
                                                value="${resumoConduta.totalDiasSuspensao}" readonly tabindex="-1">
                                     </div>
@@ -619,7 +619,7 @@
                                     <div class="col-auto">
                                         <label style="color: #f2a654">DSR</label>
                                         <input type="text" class="form-control text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                name="dsr"
                                                value="${resumoConduta.totalDsrSuspensao}" readonly tabindex="-1">
                                     </div>
@@ -642,7 +642,7 @@
                                     <div class="col-auto">
                                         <label style="color: #f2a654">VALOR DAS FALTAS</label>
                                         <input type="text" class="form-control text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                id="inputFaltas" name="inputFaltas"
                                                value="R$ 0,00"
                                                data-faltas="${resumoConduta.totalFaltas}" readonly tabindex="-1">
@@ -651,7 +651,7 @@
                                     <div class="col-auto">
                                         <label style="color: #f2a654">VALOR DAS SUSPENSÕES + DSR</label>
                                         <input type="text" class="form-control text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                id="inputSuspensoes" name="inputSuspensoes"
                                                value="R$ 0,00"
                                                data-suspensoes="${resumoConduta.totalDiasSuspensao}"
@@ -667,7 +667,7 @@
                                     <div class="col-auto ms-3">
                                         <label style="color: #f2a654">VALOR DESCONTO ATRASOS</label>
                                         <input type="text" class="form-control text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                id="valor_desconto_atrasos" name="valor_desconto_atrasos" value="R$ 0,00" readonly tabindex="-1">
                                     </div>
                                 </div>
@@ -689,41 +689,41 @@
                                     <div class="col-auto">
                                         <label style="color: #f2a654">VENDA TOTAL</label>
                                         <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                id="venda_total" name="venda_total" value="${venda_total}" tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
                                         <label style="color: #f2a654">VALES</label>
                                         <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                id="vales_mes" name="vales_mes" value="${vales_mes}" readonly tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
                                         <label style="color: #f2a654">INSS</label>
                                         <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                id="inss" name="inss" value="${inss}" readonly tabindex="-1">
                                     </div>
                                     <div class="col-auto">
                                         <label style="color: #f2a654">PARCELA A DEDUZIR</label>
                                         <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                id="parcela" name="parcela" value="${parcela}" readonly tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
                                         <label style="color: #f2a654">FGTS</label>
                                         <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                id="fgts" name="fgts" value="${fgts}" readonly tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
                                         <label style="color: #f2a654">DESCONTOS DISCIPLINARES</label>
                                         <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                id="descontos_mes" name="descontos_mes" value="${descontos_mes}" readonly tabindex="-1">
                                     </div>
 
@@ -748,7 +748,7 @@
                                     <div class="col-auto">
                                         <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
                                         <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                id="descontos_1" name="descontos_1" value="${descontos_1}" readonly tabindex="-1">
                                     </div>
 
@@ -780,7 +780,7 @@
                                     <div class="col-auto">
                                         <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
                                         <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: white; color: black"
+                                               style="background-color: #2c2c2c; color: white"
                                                id="descontos_2" name="descontos_2" value="${descontos_2}" readonly tabindex="-1">
                                     </div>
 

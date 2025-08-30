@@ -3,10 +3,12 @@ package dao;
 import connection.SingleConnectionBanco;
 import model.ModelContas;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -345,6 +347,25 @@ public class DAOContas {
             throw new Exception("Erro ao atualizar o status da conta: " + e.getMessage());
         }
     }
+    public BigDecimal buscarTotalContasPorPeriodo(String dataInicial, String dataFinal) throws SQLException {
+        BigDecimal total = BigDecimal.ZERO;
+        String sql = "SELECT SUM(valor) AS total_contas FROM contas WHERE data_de_pagamento >= ? AND data_de_pagamento <= ?";
 
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setDate(1, java.sql.Date.valueOf(LocalDate.parse(dataInicial)));
+            statement.setDate(2, java.sql.Date.valueOf(LocalDate.parse(dataFinal)));
+
+            try (ResultSet rs = statement.executeQuery()) {
+                if (rs.next()) {
+                    total = rs.getBigDecimal("total_contas");
+                    // Se o resultado for nulo, retorne zero
+                    if (total == null) {
+                        total = BigDecimal.ZERO;
+                    }
+                }
+            }
+        }
+        return total;
+    }
 
 }

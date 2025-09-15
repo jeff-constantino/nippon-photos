@@ -53,7 +53,7 @@
                         <div class="card text-center">
                             <div class="card-body">
                                 <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalSalarios">
-                                    <h4>Salários e Comissões</h4>
+                                    <h4>Salários e IRRF</h4>
                                 </button>
                             </div>
                         </div>
@@ -181,14 +181,7 @@
                                                                                                value="${modelConfig.conf1_valor}">
                                                                                     </div>
 
-                                                                                    <div class="col-6">
-                                                                                        <label for="conf1_valor2">Valor
-                                                                                            2</label>
-                                                                                        <input type="text" class="form-control"
-                                                                                               id="conf1_valor2" name="conf1_valor2"
-                                                                                               required
-                                                                                               value="${modelConfig.conf1_valor2}">
-                                                                                    </div>
+
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -726,7 +719,7 @@
                                                                         <span class="form-bar"></span>
                                                                         <input type="text" class="form-control" style="background-color: black" id="idConf_salario"
                                                                                name="idConf" placeholder=""
-                                                                               value="" readonly>
+                                                                               value="${configsSalarios[0].idConf}" readonly>
                                                                     </div>
 
 
@@ -735,11 +728,11 @@
                                                                 <div class="row mb-4 d-flex">
                                                                     <div class="col-3">
                                                                         <label for="conf1_nome">Salário</label>
-                                                                        <input type="text" class="form-control" id="salario" name="salario" required value="">
+                                                                        <input type="text" class="form-control" id="salario" name="salario" value="${configsSalarios[0].salario}">
                                                                     </div>
                                                                     <div class="col-3">
                                                                         <label for="conf2_nome">Comissão 1</label>
-                                                                        <input type="text" class="form-control" id="comissao" name="comissao" required value="">
+                                                                        <input type="text" class="form-control" id="comissao" name="comissao" value="${configsSalarios[0].comissao}">
                                                                     </div>
 
                                                                 </div>
@@ -747,14 +740,68 @@
                                                                 <div class="row mb-4 d-flex">
                                                                     <div class="col-3">
                                                                         <label for="conf2_valor">COMISSÃO 2</label>
-                                                                        <input type="text" class="form-control" id="comissao2" name="comissao2" required value="">
+                                                                        <input type="text" class="form-control" id="comissao2" name="comissao2" value="${configsSalarios[0].comissao2}">
                                                                     </div>
                                                                     <div class="col-3">
                                                                         <label for="conf2_nome">FGTS</label>
-                                                                        <input type="text" class="form-control" id="fgts" name="fgts" required value="">
+                                                                        <input type="text" class="form-control" id="fgts" name="fgts" required value="${configsSalarios[0].fgts}">
                                                                     </div>
 
 
+                                                                </div>
+                                                                <h5>CONFIGURAÇÕES IRRF</h5>
+                                                                <div class="row">
+                                                                    <div class="col-12 mb-3 border rounded p-3">
+                                                                        <h6>Faixa 1</h6>
+                                                                        <input type="hidden" name="id_irrf_1" value="${configIrrf.id_irrf_1}" />
+                                                                        <label>IRRF (%)</label>
+                                                                        <input type="number" name="irrf_1" step="0.01" min="0" max="100" class="form-control" value="${configIrrf.irrf_1}" required />
+                                                                        <label>PARCELA A DEDUZIR</label>
+                                                                        <input type="number" name="parcela_irrf_1" step="0.01" min="0" class="form-control" value="${configIrrf.parcela_irrf_1}" required />
+                                                                        <label>Salário Mínimo</label>
+                                                                        <input type="number" name="min_irrf_1" step="0.01" min="0" class="form-control" value="${configIrrf.min_irrf_1}" required />
+                                                                        <label>Salário Máximo</label>
+                                                                        <input type="number" name="max_irrf_1" step="0.01" min="0" class="form-control" value="${configIrrf.max_irrf_1}" required />
+                                                                    </div>
+
+                                                                    <div class="col-12 mb-3 border rounded p-3">
+                                                                        <h6>Faixa 2</h6>
+                                                                        <input type="hidden" name="id_irrf_2" value="${configIrrf.id_irrf_2}" />
+                                                                        <label>IRRF (%)</label>
+                                                                        <input type="number" name="irrf_2" step="0.01" min="0" max="100" class="form-control" value="${configIrrf.irrf_2}" required />
+                                                                        <label>PARCELA A DEDUZIR</label>
+                                                                        <input type="number" name="parcela_irrf_2" step="0.01" min="0" class="form-control" value="${configIrrf.parcela_irrf_2}" required />
+                                                                        <label>Salário Mínimo</label>
+                                                                        <input type="number" name="min_irrf_2" step="0.01" min="0" class="form-control" value="${configIrrf.min_irrf_2}" required />
+                                                                        <label>Salário Máximo</label>
+                                                                        <input type="number" name="max_irrf_2" step="0.01" min="0" class="form-control" value="${configIrrf.max_irrf_2}" required />
+                                                                    </div>
+
+                                                                    <div class="col-12 mb-3 border rounded p-3">
+                                                                        <h6>Faixa 3</h6>
+                                                                        <input type="hidden" name="id_irrf_3" value="${configIrrf.id_irrf_3}" />
+                                                                        <label>IRRF (%)</label>
+                                                                        <input type="number" name="irrf_3" step="0.01" min="0" max="100" class="form-control" value="${configIrrf.irrf_3}" required />
+                                                                        <label>PARCELA A DEDUZIR</label>
+                                                                        <input type="number" name="parcela_irrf_3" step="0.01" min="0" class="form-control" value="${configIrrf.parcela_irrf_3}" required />
+                                                                        <label>Salário Mínimo</label>
+                                                                        <input type="number" name="min_irrf_3" step="0.01" min="0" class="form-control" value="${configIrrf.min_irrf_3}" required />
+                                                                        <label>Salário Máximo</label>
+                                                                        <input type="number" name="max_irrf_3" step="0.01" min="0" class="form-control" value="${configIrrf.max_irrf_3}" required />
+                                                                    </div>
+
+                                                                    <div class="col-12 mb-3 border rounded p-3">
+                                                                        <h6>Faixa 4</h6>
+                                                                        <input type="hidden" name="id_irrf_4" value="${configIrrf.id_irrf_4}" />
+                                                                        <label>IRRF (%)</label>
+                                                                        <input type="number" name="irrf_4" step="0.01" min="0" max="100" class="form-control" value="${configIrrf.irrf_4}" required />
+                                                                        <label>PARCELA A DEDUZIR</label>
+                                                                        <input type="number" name="parcela_irrf_4" step="0.01" min="0" class="form-control" value="${configIrrf.parcela_irrf_4}" required />
+                                                                        <label>Salário Mínimo</label>
+                                                                        <input type="number" name="min_irrf_4" step="0.01" min="0" class="form-control" value="${configIrrf.min_irrf_4}" required />
+                                                                        <label>Salário Máximo</label>
+                                                                        <input type="number" name="max_irrf_4" step="0.01" min="0" class="form-control" value="${configIrrf.max_irrf_4}" required />
+                                                                    </div>
                                                                 </div>
 
 
@@ -818,7 +865,7 @@
                                                  <th>ID</th>
                                                  <th>Produto 1</th>
                                                  <th>Valor 1</th>
-                                                 <th>Valor 2</th>
+
                                                  <th>Produto 2</th>
                                                  <th>Valor</th>
                                                  <th>Produto 3</th>
@@ -842,7 +889,7 @@
                                                                         '${modelConf.conf_name}',
                                                                         '${modelConf.conf1_nome}',
                                                                         '${modelConf.conf1_valor}',
-                                                                        '${modelConf.conf1_valor2}',
+
                                                                         '${modelConf.conf2_nome}',
                                                                         '${modelConf.conf2_valor}',
                                                                         '${modelConf.conf3_nome}',
@@ -856,7 +903,7 @@
 
                                                          <!-- Formatação do valor com JSTL -->
                                                          <td><fmt:formatNumber value="${modelConf.conf1_valor}" type="currency" currencySymbol="R$" /></td>
-                                                         <td><fmt:formatNumber value="${modelConf.conf1_valor2}" type="currency" currencySymbol="R$" /></td>
+
                                                          <td><c:out value="${modelConf.conf2_nome}"/></td>
                                                          <td><fmt:formatNumber value="${modelConf.conf2_valor}" type="currency" currencySymbol="R$" /></td>
                                                          <td><c:out value="${modelConf.conf3_nome}"/></td>
@@ -1196,6 +1243,64 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">TABELA DE IRRF</h4>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th>Faixa</th>
+                                            <th>ID</th>
+                                            <th>IRRF (%)</th>
+                                            <th>Salário Mínimo</th>
+                                            <th>Salário Máximo</th>
+                                            <th>Parcela a Deduzir</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>${configIrrf.id_irrf_1}</td>
+                                            <td><fmt:formatNumber value="${configIrrf.irrf_1}" pattern="0.00"/></td>
+                                            <td><fmt:formatNumber value="${configIrrf.min_irrf_1}" type="currency"/></td>
+                                            <td><fmt:formatNumber value="${configIrrf.max_irrf_1}" type="currency"/></td>
+                                            <td><fmt:formatNumber value="${configIrrf.parcela_irrf_1}" type="currency"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>${configIrrf.id_irrf_2}</td>
+                                            <td><fmt:formatNumber value="${configIrrf.irrf_2}" pattern="0.00"/></td>
+                                            <td><fmt:formatNumber value="${configIrrf.min_irrf_2}" type="currency"/></td>
+                                            <td><fmt:formatNumber value="${configIrrf.max_irrf_2}" type="currency"/></td>
+                                            <td><fmt:formatNumber value="${configIrrf.parcela_irrf_2}" type="currency"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>${configIrrf.id_irrf_3}</td>
+                                            <td><fmt:formatNumber value="${configIrrf.irrf_3}" pattern="0.00"/></td>
+                                            <td><fmt:formatNumber value="${configIrrf.min_irrf_3}" type="currency"/></td>
+                                            <td><fmt:formatNumber value="${configIrrf.max_irrf_3}" type="currency"/></td>
+                                            <td><fmt:formatNumber value="${configIrrf.parcela_irrf_3}" type="currency"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>${configIrrf.id_irrf_4}</td>
+                                            <td><fmt:formatNumber value="${configIrrf.irrf_4}" pattern="0.00"/></td>
+                                            <td><fmt:formatNumber value="${configIrrf.min_irrf_4}" type="currency"/></td>
+                                            <td><fmt:formatNumber value="${configIrrf.max_irrf_4}" type="currency"/></td>
+                                            <td><fmt:formatNumber value="${configIrrf.parcela_irrf_4}" type="currency"/></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
 
 
@@ -1286,7 +1391,7 @@
 
 
 
-       function gerenciarConfig(idConf, conf_name, conf1_nome, conf1_valor, conf1_valor2, conf2_nome, conf2_valor, conf3_nome, conf3_valor) {
+       function gerenciarConfig(idConf, conf_name, conf1_nome, conf1_valor, conf2_nome, conf2_valor, conf3_nome, conf3_valor) {
        // Preencher o campo idConf
        document.getElementById('idConf').value = idConf; // Campo que irá receber o idConf
        document.getElementById('conf_name').value = conf_name; // Campo para conf_name
@@ -1295,7 +1400,7 @@
        // Preencher os campos para idConf === 1
        document.getElementById('conf1_nome').value = conf1_nome;
        document.getElementById('conf1_valor').value = conf1_valor;
-       document.getElementById('conf1_valor2').value = conf1_valor2;
+
 
        // Preencher os campos para conf2 e conf3
        document.getElementById('conf2_nome').value = conf2_nome;
@@ -1395,7 +1500,7 @@
     $("#configForm").on("submit", function(e) {
 
         $("#conf1_valor").val(removerMascara($("#conf1_valor").val()));
-        $("#conf1_valor2").val(removerMascara($("#conf1_valor2").val()));
+
         $("#conf2_valor").val(removerMascara($("#conf2_valor").val()));
         $("#conf3_valor").val(removerMascara($("#conf3_valor").val()));
 
@@ -1416,7 +1521,7 @@
        $("#configProd").on("submit", function(e) {
 
            $("#conf1_valor").val(removerMascara($("#conf1_valor").val()));
-           $("#conf1_valor2").val(removerMascara($("#conf1_valor2").val()));
+
            $("#conf2_valor").val(removerMascara($("#conf2_valor").val()));
            $("#conf3_valor").val(removerMascara($("#conf3_valor").val()));
 
@@ -1427,7 +1532,7 @@
 
 
        // Aplica máscara apenas nos campos de entrada digitável
-       $('#conf1_valor,#conf1_valor2, #conf2_valor, #conf3_valor').maskMoney({
+       $('#conf1_valor, #conf2_valor, #conf3_valor').maskMoney({
            prefix: 'R$ ',
            allowNegative: false,
            thousands: '.',

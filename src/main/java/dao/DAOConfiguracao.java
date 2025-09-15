@@ -21,13 +21,9 @@ public class DAOConfiguracao {
     }
 
     public ModelConfiguracao gravarConfig(ModelConfiguracao model) throws SQLException {
-        // Desabilita o autocommit para gerenciar a transação manualmente
-        connection.setAutoCommit(false);
-
         try {
             String sql;
 
-            // Verifica se o idConf é nulo para decidir entre inserir ou atualizar
             if (model.getIdConf() == null) {
                 sql = "INSERT INTO conf_salarios (salario, comissao, fgts, comissao2) VALUES (?, ?, ?, ?)";
                 try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -37,10 +33,9 @@ public class DAOConfiguracao {
                     stmt.setBigDecimal(4, model.getComissao2());
                     stmt.executeUpdate();
 
-                    // Recupera o ID gerado
                     try (ResultSet rs = stmt.getGeneratedKeys()) {
                         if (rs.next()) {
-                            model.setIdConf(rs.getLong(1)); // Define o idConf gerado
+                            model.setIdConf(rs.getLong(1));
                         }
                     }
                 }
@@ -56,28 +51,104 @@ public class DAOConfiguracao {
                 }
             }
 
-            // Realiza o commit da transação
             connection.commit();
         } catch (SQLException e) {
-            // Em caso de erro, faz rollback
             connection.rollback();
-            throw e; // Repropaga a exceção
-        } finally {
-            // Restaura o autocommit
-            connection.setAutoCommit(true);
+            throw e;
         }
 
         return model;
     }
+    public void gravarIrrf(ModelConfiguracao model) throws SQLException {
+        try {
+            // Lógica para a Faixa 1
+            gravarFaixaIrrf(model.getId_irrf_1(), model.getIrrf_1(), model.getParcela_irrf_1(), model.getMin_irrf_1(), model.getMax_irrf_1());
+
+            // Lógica para a Faixa 2
+            gravarFaixaIrrf(model.getId_irrf_2(), model.getIrrf_2(), model.getParcela_irrf_2(), model.getMin_irrf_2(), model.getMax_irrf_2());
+
+            // Lógica para a Faixa 3
+            gravarFaixaIrrf(model.getId_irrf_3(), model.getIrrf_3(), model.getParcela_irrf_3(), model.getMin_irrf_3(), model.getMax_irrf_3());
+
+            // Lógica para a Faixa 4
+            gravarFaixaIrrf(model.getId_irrf_4(), model.getIrrf_4(), model.getParcela_irrf_4(), model.getMin_irrf_4(), model.getMax_irrf_4());
+
+            connection.commit();
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        }
+    }
+
+    // Crie este método auxiliar para evitar repetição de código
+    private void gravarFaixaIrrf(Long id, BigDecimal irrf, BigDecimal parcela, BigDecimal min, BigDecimal max) throws SQLException {
+        String sql;
+
+        if (id == null || id == 0) { // Verifica se é um novo registro
+            sql = "INSERT INTO conf_irrf (irrf, parcela_irrf, min_salario, max_salario) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                stmt.setBigDecimal(1, irrf);
+                stmt.setBigDecimal(2, parcela);
+                stmt.setBigDecimal(3, min);
+                stmt.setBigDecimal(4, max);
+                stmt.executeUpdate();
+            }
+        } else { // Atualiza um registro existente
+            sql = "UPDATE conf_irrf SET irrf=?, parcela_irrf=?, min_salario=?, max_salario=? WHERE id_irrf = ?";
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setBigDecimal(1, irrf);
+                stmt.setBigDecimal(2, parcela);
+                stmt.setBigDecimal(3, min);
+                stmt.setBigDecimal(4, max);
+                stmt.setLong(5, id);
+                stmt.executeUpdate();
+            }
+        }
+    }
+    public ModelConfiguracao buscarFaixasIrrf() throws SQLException {
+        ModelConfiguracao model = new ModelConfiguracao();
+        String sql = "SELECT id_irrf, irrf, parcela_irrf, min_salario, max_salario FROM conf_irrf ORDER BY min_salario";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            int i = 0;
+            while (rs.next() && i < 4) {
+                if (i == 0) {
+                    model.setId_irrf_1(rs.getLong("id_irrf"));
+                    model.setIrrf_1(rs.getBigDecimal("irrf"));
+                    model.setParcela_irrf_1(rs.getBigDecimal("parcela_irrf"));
+                    model.setMin_irrf_1(rs.getBigDecimal("min_salario"));
+                    model.setMax_irrf_1(rs.getBigDecimal("max_salario"));
+                } else if (i == 1) {
+                    model.setId_irrf_2(rs.getLong("id_irrf"));
+                    model.setIrrf_2(rs.getBigDecimal("irrf"));
+                    model.setParcela_irrf_2(rs.getBigDecimal("parcela_irrf"));
+                    model.setMin_irrf_2(rs.getBigDecimal("min_salario"));
+                    model.setMax_irrf_2(rs.getBigDecimal("max_salario"));
+                } else if (i == 2) {
+                    model.setId_irrf_3(rs.getLong("id_irrf"));
+                    model.setIrrf_3(rs.getBigDecimal("irrf"));
+                    model.setParcela_irrf_3(rs.getBigDecimal("parcela_irrf"));
+                    model.setMin_irrf_3(rs.getBigDecimal("min_salario"));
+                    model.setMax_irrf_3(rs.getBigDecimal("max_salario"));
+                } else if (i == 3) {
+                    model.setId_irrf_4(rs.getLong("id_irrf"));
+                    model.setIrrf_4(rs.getBigDecimal("irrf"));
+                    model.setParcela_irrf_4(rs.getBigDecimal("parcela_irrf"));
+                    model.setMin_irrf_4(rs.getBigDecimal("min_salario"));
+                    model.setMax_irrf_4(rs.getBigDecimal("max_salario"));
+                }
+                i++;
+            }
+        }
+        return model;
+    }
 
     public ModelConfiguracao gravarConfigCartao(ModelConfiguracao model) throws SQLException {
-        // Desabilita o autocommit para gerenciar a transação manualmente
-        connection.setAutoCommit(false);
-
         try {
             String sql;
 
-            // Verifica se o idConf é nulo para decidir entre inserir ou atualizar
             if (model.getIdConf() == null) {
                 sql = "INSERT INTO conf_juros_cartao (deb_visa_master, cred_visa_master, deb_outros, cred_outros) VALUES (?, ?, ?, ?)";
                 try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -87,10 +158,9 @@ public class DAOConfiguracao {
                     stmt.setBigDecimal(4, model.getCred_outros());
                     stmt.executeUpdate();
 
-                    // Recupera o ID gerado
                     try (ResultSet rs = stmt.getGeneratedKeys()) {
                         if (rs.next()) {
-                            model.setIdConf(rs.getLong(1)); // Define o idConf gerado
+                            model.setIdConf(rs.getLong(1));
                         }
                     }
                 }
@@ -106,19 +176,15 @@ public class DAOConfiguracao {
                 }
             }
 
-            // Realiza o commit da transação
             connection.commit();
         } catch (SQLException e) {
-            // Em caso de erro, faz rollback
             connection.rollback();
-            throw e; // Repropaga a exceção
-        } finally {
-            // Restaura o autocommit
-            connection.setAutoCommit(true);
+            throw e;
         }
 
         return model;
     }
+
 
     public List<ModelConfiguracao> consultarSalarios() throws Exception {
         List<ModelConfiguracao> listaSalarios = new ArrayList<>();

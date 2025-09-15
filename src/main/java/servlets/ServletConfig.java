@@ -34,6 +34,9 @@ public class ServletConfig extends ServletGenericUtil {
             List<ModelConfiguracao> configsJuros = daoConfiguracao.consultarJuros();
             ModelConfiguracao configInss = daoConfiguracao.buscarFaixasInss();
 
+            // --- BUSCA OS DADOS DE IRRF CORRETAMENTE ---
+            ModelConfiguracao configIrrf = daoConfiguracao.buscarFaixasIrrf();
+
             // Carrega os 3 materiais fixos para preencher o formulário
             List<ModelConfig> materiaisFixos = daoConfig.carregarMateriaisFixos();
 
@@ -58,6 +61,10 @@ public class ServletConfig extends ServletGenericUtil {
             request.setAttribute("configsSalarios", configsSalarios);
             request.setAttribute("configs", configs);
             request.setAttribute("configInss", configInss);
+
+            // --- ATRIBUTO DO IRRF CORRIGIDO ---
+            request.setAttribute("configIrrf", configIrrf);
+
             request.setAttribute("material1", materiais[0]);
             request.setAttribute("material2", materiais[1]);
             request.setAttribute("material3", materiais[2]);

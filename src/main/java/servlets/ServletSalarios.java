@@ -314,39 +314,12 @@ public class ServletSalarios extends ServletGenericUtil{
     // Método para editar salário
     private void editarSalario(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            // ===== LOGS DE DEBUG - INÍCIO =====
-            System.out.println("=== DEBUG SERVLET EDITAR SALARIO ===");
-            System.out.println("=== PARÂMETROS RECEBIDOS ===");
 
-            // Verificar todos os parâmetros importantes
-            System.out.println("idSalario: " + req.getParameter("idSalario"));
-            System.out.println("funcionarioId: " + req.getParameter("funcionarioId"));
-            System.out.println("nome: " + req.getParameter("nome"));
-            System.out.println("mes: " + req.getParameter("mes"));
-            System.out.println("ano: " + req.getParameter("ano"));
-            System.out.println("ft_total: " + req.getParameter("ft_total"));
-            System.out.println("dig_total: " + req.getParameter("dig_total"));
-            System.out.println("sobras: " + req.getParameter("sobras"));
-            System.out.println("aproveitamento: " + req.getParameter("aproveitamento"));
-            System.out.println("advertencias: " + req.getParameter("advertencias"));
-            System.out.println("faltas: " + req.getParameter("faltas"));
-            System.out.println("suspensoes: " + req.getParameter("suspensoes"));
-            System.out.println("dsr: " + req.getParameter("dsr"));
-            System.out.println("atrasos_horas: " + req.getParameter("atrasos_horas"));
-            System.out.println("venda_total: " + req.getParameter("venda_total"));
-            System.out.println("comissao: " + req.getParameter("comissao"));
-            System.out.println("salario_total: " + req.getParameter("salario_total"));
 
-            // Mostrar TODOS os parâmetros (útil para debug)
-            System.out.println("=== TODOS OS PARÂMETROS ===");
-            req.getParameterMap().forEach((key, values) ->
-                    System.out.println(key + " = " + String.join(", ", values))
-            );
-            // ===== LOGS DE DEBUG - FIM =====
+
 
             String idSalarioStr = req.getParameter("idSalario");
             if (idSalarioStr == null || idSalarioStr.isEmpty()) {
-                System.out.println("ERRO: ID do salário não informado!");
                 resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("ID do salário não informado.", "UTF-8"));
                 return;
             }
@@ -355,7 +328,6 @@ public class ServletSalarios extends ServletGenericUtil{
 
             // ID do registro a ser atualizado
             model.setIdSalario(Integer.parseInt(idSalarioStr));
-            System.out.println("ID Salário parseado: " + model.getIdSalario());
 
             // Dados básicos
             model.setFuncionarioId(Long.parseLong(req.getParameter("funcionarioId")));
@@ -369,10 +341,7 @@ public class ServletSalarios extends ServletGenericUtil{
             model.setQtdSobras(parseIntFromElement(req.getParameter("sobras")));
             model.setAproveitamento(parseBigDecimal(req.getParameter("aproveitamento")));
 
-            System.out.println("=== DADOS APÓS PARSING ===");
-            System.out.println("Qtd Fotos (model): " + model.getQtdFotos());
-            System.out.println("Funcionário ID (model): " + model.getFuncionarioId());
-            System.out.println("Nome (model): " + model.getNomeFuncionario());
+
 
             // Histórico de conduta
             model.setAdvertencias(parseIntOrZero(req.getParameter("advertencias")));
@@ -409,13 +378,11 @@ public class ServletSalarios extends ServletGenericUtil{
             model.setDescontos_2(parseBigDecimal(req.getParameter("descontos_2")));
             model.setSalario_liquido2(parseBigDecimal(req.getParameter("salario_liquido2")));
 
-            System.out.println("=== CHAMANDO DAO ===");
 
             // Atualizar no banco
             DAOSalarios dao = new DAOSalarios();
             dao.atualizarSalario(model);
 
-            System.out.println("=== DAO EXECUTADO COM SUCESSO ===");
             resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("Salário atualizado com sucesso!", "UTF-8"));
 
         } catch (Exception e) {

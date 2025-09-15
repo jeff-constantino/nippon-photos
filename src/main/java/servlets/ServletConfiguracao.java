@@ -31,22 +31,25 @@ public class ServletConfiguracao extends ServletGenericUtil {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String acao = request.getParameter("acao");
+        String msg = "Operação realizada com sucesso!";
+
+        ModelConfiguracao modelConfiguracao = new ModelConfiguracao();
+        List<ModelConfig> configsExistentes = null;
         try {
-            String acao = request.getParameter("acao");
-            String msg = "Operação realizada com sucesso!";
-            String idConfParam = request.getParameter("idConf");
-            ModelConfiguracao modelConfiguracao = new ModelConfiguracao();
+            configsExistentes = daoConfig.consultarTodasConfigs();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ModelConfig configExistente = (configsExistentes != null && !configsExistentes.isEmpty())
+                ? configsExistentes.get(0) : null;
 
-            // Verifica se já existe uma configuração
-            List<ModelConfig> configsExistentes = daoConfig.consultarTodasConfigs();
-            ModelConfig configExistente = (configsExistentes != null && !configsExistentes.isEmpty())
-                    ? configsExistentes.get(0) : null;
-
+        try {
             if ("salario".equals(acao)) {
-                BigDecimal salario = parseBigDecimal(request.getParameter("salario"));
-                BigDecimal comissao = parseBigDecimal(request.getParameter("comissao"));
-                BigDecimal fgts = parseBigDecimal(request.getParameter("fgts"));
-                BigDecimal comissao2 = parseBigDecimal(request.getParameter("comissao2"));
+                BigDecimal salario = parseToBigDecimal(request.getParameter("salario"));
+                BigDecimal comissao = parseToBigDecimal(request.getParameter("comissao"));
+                BigDecimal fgts = parseToBigDecimal(request.getParameter("fgts"));
+                BigDecimal comissao2 = parseToBigDecimal(request.getParameter("comissao2"));
 
                 modelConfiguracao.setSalario(salario);
                 modelConfiguracao.setComissao(comissao);
@@ -57,13 +60,40 @@ public class ServletConfiguracao extends ServletGenericUtil {
                     modelConfiguracao.setIdConf(configExistente.getIdConf());
                 }
 
+                modelConfiguracao.setId_irrf_1(parseToLong(request.getParameter("id_irrf_1")));
+                modelConfiguracao.setIrrf_1(parseToBigDecimal(request.getParameter("irrf_1")));
+                modelConfiguracao.setParcela_irrf_1(parseToBigDecimal(request.getParameter("parcela_irrf_1")));
+                modelConfiguracao.setMin_irrf_1(parseToBigDecimal(request.getParameter("min_irrf_1")));
+                modelConfiguracao.setMax_irrf_1(parseToBigDecimal(request.getParameter("max_irrf_1")));
+
+                modelConfiguracao.setId_irrf_2(parseToLong(request.getParameter("id_irrf_2")));
+                modelConfiguracao.setIrrf_2(parseToBigDecimal(request.getParameter("irrf_2")));
+                modelConfiguracao.setParcela_irrf_2(parseToBigDecimal(request.getParameter("parcela_irrf_2")));
+                modelConfiguracao.setMin_irrf_2(parseToBigDecimal(request.getParameter("min_irrf_2")));
+                modelConfiguracao.setMax_irrf_2(parseToBigDecimal(request.getParameter("max_irrf_2")));
+
+                modelConfiguracao.setId_irrf_3(parseToLong(request.getParameter("id_irrf_3")));
+                modelConfiguracao.setIrrf_3(parseToBigDecimal(request.getParameter("irrf_3")));
+                modelConfiguracao.setParcela_irrf_3(parseToBigDecimal(request.getParameter("parcela_irrf_3")));
+                modelConfiguracao.setMin_irrf_3(parseToBigDecimal(request.getParameter("min_irrf_3")));
+                modelConfiguracao.setMax_irrf_3(parseToBigDecimal(request.getParameter("max_irrf_3")));
+
+                modelConfiguracao.setId_irrf_4(parseToLong(request.getParameter("id_irrf_4")));
+                modelConfiguracao.setIrrf_4(parseToBigDecimal(request.getParameter("irrf_4")));
+                modelConfiguracao.setParcela_irrf_4(parseToBigDecimal(request.getParameter("parcela_irrf_4")));
+                modelConfiguracao.setMin_irrf_4(parseToBigDecimal(request.getParameter("min_irrf_4")));
+                modelConfiguracao.setMax_irrf_4(parseToBigDecimal(request.getParameter("max_irrf_4")));
+
                 daoConfiguracao.gravarConfig(modelConfiguracao);
+                daoConfiguracao.gravarIrrf(modelConfiguracao);
+
+                msg = "Configurações de Salários e IRRF salvas com sucesso!";
 
             } else if ("cartao".equals(acao)) {
-                BigDecimal debVisaMaster = parseBigDecimal(request.getParameter("deb_visa_master"));
-                BigDecimal credVisaMaster = parseBigDecimal(request.getParameter("cred_visa_master"));
-                BigDecimal debOutros = parseBigDecimal(request.getParameter("deb_outros"));
-                BigDecimal credOutros = parseBigDecimal(request.getParameter("cred_outros"));
+                BigDecimal debVisaMaster = parseToBigDecimal(request.getParameter("deb_visa_master"));
+                BigDecimal credVisaMaster = parseToBigDecimal(request.getParameter("cred_visa_master"));
+                BigDecimal debOutros = parseToBigDecimal(request.getParameter("deb_outros"));
+                BigDecimal credOutros = parseToBigDecimal(request.getParameter("cred_outros"));
 
                 modelConfiguracao.setDeb_visa_master(debVisaMaster);
                 modelConfiguracao.setCred_visa_master(credVisaMaster);
@@ -73,8 +103,8 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 if (configExistente != null) {
                     modelConfiguracao.setIdConf(configExistente.getIdConf());
                 }
-
                 daoConfiguracao.gravarConfigCartao(modelConfiguracao);
+                msg = "Configurações de Cartão salvas com sucesso!";
 
             } else if ("inss".equals(acao)) {
                 for (int i = 1; i <= 4; i++) {
@@ -85,29 +115,43 @@ public class ServletConfiguracao extends ServletGenericUtil {
                     BigDecimal max = new BigDecimal(request.getParameter("max_inss_" + i));
                     BigDecimal parcela = new BigDecimal(request.getParameter("parcela_" + i));
 
-                    daoConfiguracao.salvarOuAtualizarFaixaInss(id, inss, min, max,parcela);
+                    daoConfiguracao.salvarOuAtualizarFaixaInss(id, inss, min, max, parcela);
                 }
-
                 msg = "Faixas INSS atualizadas com sucesso!";
 
             } else {
-                request.setAttribute("msg", "Ação inválida!");
-                request.getRequestDispatcher("/ServletConfig").forward(request, response);
-                return;
+                msg = "Ação inválida!";
             }
-
-            if (idConfParam != null && !idConfParam.isEmpty()) {
-                modelConfiguracao.setIdConf(Long.parseLong(idConfParam));
-            }
-
-            // Redireciona para a ServletConfig para recarregar os dados
-            request.setAttribute("msg", msg);
-            request.getRequestDispatcher("/ServletConfig").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("msg", "Erro: " + e.getMessage());
-            request.getRequestDispatcher("/ServletConfig").forward(request, response);
+            msg = "Erro: " + e.getMessage();
+        }
+
+        request.setAttribute("msg", msg);
+        request.getRequestDispatcher("/ServletConfig").forward(request, response);
+    }
+
+    // Métodos auxiliares renomeados para evitar ambiguidade
+    private Long parseToLong(String s) {
+        try {
+            if (s != null && !s.isEmpty()) {
+                return Long.parseLong(s);
+            }
+            return null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private BigDecimal parseToBigDecimal(String s) {
+        try {
+            if (s != null && !s.isEmpty()) {
+                return new BigDecimal(s.replace(",", "."));
+            }
+            return BigDecimal.ZERO;
+        } catch (NumberFormatException e) {
+            return BigDecimal.ZERO;
         }
     }
 

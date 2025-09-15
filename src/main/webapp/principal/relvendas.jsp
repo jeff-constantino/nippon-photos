@@ -192,8 +192,8 @@
 
                                         <%-- Repetição do cabeçalho antes dos totais --%>
                                         <tr class="table-secondary">
-                                            <th scope="col">NOME</th>
-                                            <th scope="col">DATA</th>
+                                            <th scope="col"></th>
+                                            <th scope="col"></th>
                                             <th scope="col">Ft Din</th>
                                             <th scope="col">Ft Deb</th>
                                             <th scope="col">Ft Cred</th>
@@ -229,35 +229,27 @@
                                             <td></td>
                                         </tr>
 
-                                        <%-- Totais agrupados (alinhados à esquerda) --%>
-                                        <tr class="bg-warning fw-bold">
-                                            <td class="text-start">TOTAL FOTOS:</td>
-                                            <td class="text-start">${totalFT}</td>
-
-                                            <td class="text-start">TOTAL ENCARTES:</td>
-                                            <td class="text-start">${totalENC}</td>
-
-                                            <td class="text-start">TOTAL DIGITAIS:</td>
-                                            <td class="text-start">${totalDIGI}</td>
-
-                                            <!-- completa as 16 colunas da tabela -->
-                                            <td colspan="10"></td>
-                                        </tr>
 
                                         </tbody>
                                     </table>
                                 </div>
 
                             </div>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                    </table>
-                                </div>
+                            <div class="table-responsive">
+                                <table class="table table-condensed">
+                                    <tbody>
+                                    <tr class="fw-bold">
+                                        <td>TOTAL FOTOS: ${totalFT}</td>
+                                        <td>TOTAL ENCARTES: ${totalENC}</td>
+                                        <td>TOTAL DIGITAIS: ${totalDIGI}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
 
 
             </div>

@@ -520,15 +520,7 @@ public class DAOVendasRepository {
             int rowsAffected = preparedSql.executeUpdate();
             connection.commit();
 
-            // Log para verificar o ID e o número de linhas afetadas
-            System.out.println("Tentando excluir venda com ID: " + id);
-            System.out.println("Linhas afetadas: " + rowsAffected);
 
-            if (rowsAffected == 0) {
-                System.out.println("Nenhuma venda encontrada com o ID: " + id);
-            } else {
-                System.out.println("Venda excluída com sucesso!");
-            }
         }
     }
 

@@ -90,14 +90,11 @@ public class DAOContas {
             stmt.setString(7, conta.getPagamento());
             stmt.setLong(8, conta.getConta_id());
 
-            int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected > 0) {
+
                 // Adiciona o commit aqui
                 connection.commit(); // Commit para confirmar a transação
-                System.out.println("Atualização bem-sucedida, linhas afetadas: " + rowsAffected);
-            } else {
-                System.out.println("Nenhuma linha foi atualizada.");
-            }
+
+
         } catch (SQLException e) {
             e.printStackTrace();
             try {
@@ -184,7 +181,7 @@ public class DAOContas {
 
     public List<ModelContas> buscarContasMes(String dataInicio, String dataFim) throws SQLException {
         List<ModelContas> contasMes = new ArrayList<>();
-        String sql = "SELECT * FROM contas WHERE data_de_pedido >= ? AND data_de_pedido <= ? ORDER BY data_de_pedido DESC";
+        String sql = "SELECT * FROM contas WHERE data_de_pagamento >= ? AND data_de_pagamento <= ? ORDER BY data_de_pagamento DESC";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             // Conversão das datas de String para Date

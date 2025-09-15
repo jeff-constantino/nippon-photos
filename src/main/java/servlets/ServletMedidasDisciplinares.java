@@ -35,7 +35,6 @@ public class ServletMedidasDisciplinares extends HttpServlet {
             List<ModelLogin> funcionarios = daoFuncionario.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);
 
-            System.out.println("doGet: Mensagem na sessão: " + request.getSession().getAttribute("msg"));
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/medidasDisciplinares.jsp");
             dispatcher.forward(request, response);
@@ -149,7 +148,6 @@ public class ServletMedidasDisciplinares extends HttpServlet {
             msg = "Erro ao gravar os dados: " + e.getMessage();
         }
 
-        System.out.println("doPost: Mensagem armazenada na sessão: " + msg);
         request.getSession().setAttribute("msg", msg);
         response.sendRedirect(request.getContextPath() + "/ServletMedidasDisciplinares");
     }

@@ -727,6 +727,26 @@
                                                id="descontos_mes" name="descontos_mes" value="${descontos_mes}" readonly tabindex="-1">
                                     </div>
 
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">DIFERENÇA DE FOTOS</label>
+                                        <input type="text" class="form-control text-center fw-bold"
+                                               style="background-color: #2c2c2c; color: white"
+                                               id="dif_fotos" name="dif_fotos" value="${dif_fotos}" readonly tabindex="-1">
+                                    </div>
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">DESCONTOS DE FOTOS</label>
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: #2c2c2c; color: white"
+                                               id="descontos_fotos" name="descontos_fotos" value="${descontos_fotos}" readonly tabindex="-1">
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <label style="color: #f2a654">IMPOSTO DE RENDA</label>
+                                        <input type="text" class="form-control money text-center fw-bold"
+                                               style="background-color: #2c2c2c; color: white"
+                                               id="descontos_ir" name="descontos_ir" value="${descontos_ir}" readonly tabindex="-1">
+                                    </div>
+
 
                                 </div>
 

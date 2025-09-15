@@ -166,9 +166,8 @@ public class DAOControleRibbon {
 
     public void gravarTrocaRibbon(ModelControleRibbon controle) throws SQLException {
         StringBuilder sql = new StringBuilder("UPDATE controle_ribbon SET ");
-        int paramIndex = 1; // Variável para controlar o índice dos parâmetros
+        int paramIndex = 1;
 
-        // Atualiza apenas o ribbon selecionado
         if (controle.getTroca_ribbon_1() != 0) {
             sql.append("troca_ribbon_1 = ?, fim_ribbon_1 = ?, ");
         }
@@ -188,58 +187,50 @@ public class DAOControleRibbon {
             sql.append("troca_ribbon_6 = ?, fim_ribbon_6 = ?, ");
         }
 
-        // Remove a vírgula extra no final da string
-        sql.setLength(sql.length() - 2); // Remove a última vírgula
+        sql.setLength(sql.length() - 2);
+        sql.append(" WHERE id_controle = ?");
 
-        sql.append(" WHERE id_controle = ?"); // Restringe ao ID específico
+        try (PreparedStatement pst = connection.prepareStatement(sql.toString())) {
 
-        try {
-            connection.setAutoCommit(false);
+            if (controle.getTroca_ribbon_1() != 0) {
+                pst.setInt(paramIndex++, controle.getTroca_ribbon_1());
+                pst.setInt(paramIndex++, controle.getFim_ribbon_1());
+            }
+            if (controle.getTroca_ribbon_2() != 0) {
+                pst.setInt(paramIndex++, controle.getTroca_ribbon_2());
+                pst.setInt(paramIndex++, controle.getFim_ribbon_2());
+            }
+            if (controle.getTroca_ribbon_3() != 0) {
+                pst.setInt(paramIndex++, controle.getTroca_ribbon_3());
+                pst.setInt(paramIndex++, controle.getFim_ribbon_3());
+            }
+            if (controle.getTroca_ribbon_4() != 0) {
+                pst.setInt(paramIndex++, controle.getTroca_ribbon_4());
+                pst.setInt(paramIndex++, controle.getFim_ribbon_4());
+            }
+            if (controle.getTroca_ribbon_5() != 0) {
+                pst.setInt(paramIndex++, controle.getTroca_ribbon_5());
+                pst.setInt(paramIndex++, controle.getFim_ribbon_5());
+            }
+            if (controle.getTroca_ribbon_6() != 0) {
+                pst.setInt(paramIndex++, controle.getTroca_ribbon_6());
+                pst.setInt(paramIndex++, controle.getFim_ribbon_6());
+            }
 
-            try (PreparedStatement pst = connection.prepareStatement(sql.toString())) {
-                // Preenche os parâmetros dinamicamente
-                if (controle.getTroca_ribbon_1() != 0) {
-                    pst.setInt(paramIndex++, controle.getTroca_ribbon_1());
-                    pst.setInt(paramIndex++, controle.getFim_ribbon_1());
-                }
-                if (controle.getTroca_ribbon_2() != 0) {
-                    pst.setInt(paramIndex++, controle.getTroca_ribbon_2());
-                    pst.setInt(paramIndex++, controle.getFim_ribbon_2());
-                }
-                if (controle.getTroca_ribbon_3() != 0) {
-                    pst.setInt(paramIndex++, controle.getTroca_ribbon_3());
-                    pst.setInt(paramIndex++, controle.getFim_ribbon_3());
-                }
-                if (controle.getTroca_ribbon_4() != 0) {
-                    pst.setInt(paramIndex++, controle.getTroca_ribbon_4());
-                    pst.setInt(paramIndex++, controle.getFim_ribbon_4());
-                }
-                if (controle.getTroca_ribbon_5() != 0) {
-                    pst.setInt(paramIndex++, controle.getTroca_ribbon_5());
-                    pst.setInt(paramIndex++, controle.getFim_ribbon_5());
-                }
-                if (controle.getTroca_ribbon_6() != 0) {
-                    pst.setInt(paramIndex++, controle.getTroca_ribbon_6());
-                    pst.setInt(paramIndex++, controle.getFim_ribbon_6());
-                }
+            pst.setLong(paramIndex, controle.getIdControle());
 
-                // Define o ID do controle para a atualização
-                pst.setLong(paramIndex, controle.getIdControle());
-
-                int rowsUpdated = pst.executeUpdate();
-                if (rowsUpdated == 0) {
-                    throw new SQLException("Nenhum registro foi atualizado. Verifique o ID do controle.");
-                }
+            int rowsUpdated = pst.executeUpdate();
+            if (rowsUpdated == 0) {
+                throw new SQLException("Nenhum registro foi atualizado. Verifique o ID do controle.");
             }
 
             connection.commit();
         } catch (SQLException e) {
             connection.rollback();
             throw e;
-        } finally {
-            connection.setAutoCommit(true);
         }
     }
+
 
 
 

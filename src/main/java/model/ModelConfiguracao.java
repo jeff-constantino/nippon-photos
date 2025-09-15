@@ -58,6 +58,191 @@ public class ModelConfiguracao implements java.io.Serializable {
     private BigDecimal max_inss_4;
     private BigDecimal parcela_4;
 
+    // MODEL PARA A TABELA DE IRRF
+    private Long id_irrf_1;
+    private BigDecimal irrf_1;
+    private BigDecimal parcela_irrf_1;
+    private BigDecimal min_irrf_1;
+    private BigDecimal max_irrf_1;
+
+    private Long id_irrf_2;
+    private BigDecimal irrf_2;
+    private BigDecimal parcela_irrf_2;
+    private BigDecimal min_irrf_2;
+    private BigDecimal max_irrf_2;
+
+    private Long id_irrf_3;
+    private BigDecimal irrf_3;
+    private BigDecimal parcela_irrf_3;
+    private BigDecimal min_irrf_3;
+    private BigDecimal max_irrf_3;
+
+    private Long id_irrf_4;
+    private BigDecimal irrf_4;
+    private BigDecimal parcela_irrf_4;
+    private BigDecimal min_irrf_4;
+    private BigDecimal max_irrf_4;
+
+
+    public Long getId_irrf_1() {
+        return id_irrf_1;
+    }
+
+    public void setId_irrf_1(Long id_irrf_1) {
+        this.id_irrf_1 = id_irrf_1;
+    }
+
+    public BigDecimal getIrrf_1() {
+        return irrf_1;
+    }
+
+    public void setIrrf_1(BigDecimal irrf_1) {
+        this.irrf_1 = irrf_1;
+    }
+
+    public BigDecimal getParcela_irrf_1() {
+        return parcela_irrf_1;
+    }
+
+    public void setParcela_irrf_1(BigDecimal parcela_irrf_1) {
+        this.parcela_irrf_1 = parcela_irrf_1;
+    }
+
+    public BigDecimal getMin_irrf_1() {
+        return min_irrf_1;
+    }
+
+    public void setMin_irrf_1(BigDecimal min_irrf_1) {
+        this.min_irrf_1 = min_irrf_1;
+    }
+
+    public BigDecimal getMax_irrf_1() {
+        return max_irrf_1;
+    }
+
+    public void setMax_irrf_1(BigDecimal max_irrf_1) {
+        this.max_irrf_1 = max_irrf_1;
+    }
+
+    public Long getId_irrf_2() {
+        return id_irrf_2;
+    }
+
+    public void setId_irrf_2(Long id_irrf_2) {
+        this.id_irrf_2 = id_irrf_2;
+    }
+
+    public BigDecimal getIrrf_2() {
+        return irrf_2;
+    }
+
+    public void setIrrf_2(BigDecimal irrf_2) {
+        this.irrf_2 = irrf_2;
+    }
+
+    public BigDecimal getParcela_irrf_2() {
+        return parcela_irrf_2;
+    }
+
+    public void setParcela_irrf_2(BigDecimal parcela_irrf_2) {
+        this.parcela_irrf_2 = parcela_irrf_2;
+    }
+
+    public BigDecimal getMin_irrf_2() {
+        return min_irrf_2;
+    }
+
+    public void setMin_irrf_2(BigDecimal min_irrf_2) {
+        this.min_irrf_2 = min_irrf_2;
+    }
+
+    public BigDecimal getMax_irrf_2() {
+        return max_irrf_2;
+    }
+
+    public void setMax_irrf_2(BigDecimal max_irrf_2) {
+        this.max_irrf_2 = max_irrf_2;
+    }
+
+    public Long getId_irrf_3() {
+        return id_irrf_3;
+    }
+
+    public void setId_irrf_3(Long id_irrf_3) {
+        this.id_irrf_3 = id_irrf_3;
+    }
+
+    public BigDecimal getIrrf_3() {
+        return irrf_3;
+    }
+
+    public void setIrrf_3(BigDecimal irrf_3) {
+        this.irrf_3 = irrf_3;
+    }
+
+    public BigDecimal getParcela_irrf_3() {
+        return parcela_irrf_3;
+    }
+
+    public void setParcela_irrf_3(BigDecimal parcela_irrf_3) {
+        this.parcela_irrf_3 = parcela_irrf_3;
+    }
+
+    public BigDecimal getMin_irrf_3() {
+        return min_irrf_3;
+    }
+
+    public void setMin_irrf_3(BigDecimal min_irrf_3) {
+        this.min_irrf_3 = min_irrf_3;
+    }
+
+    public BigDecimal getMax_irrf_3() {
+        return max_irrf_3;
+    }
+
+    public void setMax_irrf_3(BigDecimal max_irrf_3) {
+        this.max_irrf_3 = max_irrf_3;
+    }
+
+    public Long getId_irrf_4() {
+        return id_irrf_4;
+    }
+
+    public void setId_irrf_4(Long id_irrf_4) {
+        this.id_irrf_4 = id_irrf_4;
+    }
+
+    public BigDecimal getIrrf_4() {
+        return irrf_4;
+    }
+
+    public void setIrrf_4(BigDecimal irrf_4) {
+        this.irrf_4 = irrf_4;
+    }
+
+    public BigDecimal getParcela_irrf_4() {
+        return parcela_irrf_4;
+    }
+
+    public void setParcela_irrf_4(BigDecimal parcela_irrf_4) {
+        this.parcela_irrf_4 = parcela_irrf_4;
+    }
+
+    public BigDecimal getMin_irrf_4() {
+        return min_irrf_4;
+    }
+
+    public void setMin_irrf_4(BigDecimal min_irrf_4) {
+        this.min_irrf_4 = min_irrf_4;
+    }
+
+    public BigDecimal getMax_irrf_4() {
+        return max_irrf_4;
+    }
+
+    public void setMax_irrf_4(BigDecimal max_irrf_4) {
+        this.max_irrf_4 = max_irrf_4;
+    }
 
     public BigDecimal getParcela_1() {
         return parcela_1;

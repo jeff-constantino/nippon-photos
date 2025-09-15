@@ -375,10 +375,7 @@ public class DAOSalarios {
 
     public void atualizarSalario(ModelSalarios model) throws Exception {
         // LOG: Verificar dados recebidos
-        System.out.println("=== DEBUG ATUALIZAR SALARIO ===");
-        System.out.println("ID Salário: " + model.getIdSalario());
-        System.out.println("Qtd Fotos: " + model.getQtdFotos());
-        System.out.println("Funcionário ID: " + model.getFuncionarioId());
+
 
         String sql = "UPDATE salarios SET " +
                 "qtd_fotos = ?, " +
@@ -409,7 +406,7 @@ public class DAOSalarios {
                 "salario_liquido2 = ? " +
                 "WHERE id_salario = ?";
 
-        System.out.println("SQL: " + sql);
+
 
         try {
             // Verificar se connection não é null
@@ -422,7 +419,7 @@ public class DAOSalarios {
                 throw new Exception("Connection está fechada!");
             }
 
-            System.out.println("Connection OK - AutoCommit: " + connection.getAutoCommit());
+
 
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 int i = 1;
@@ -468,9 +465,9 @@ public class DAOSalarios {
                 // WHERE
                 stmt.setInt(i++, model.getIdSalario());
 
-                System.out.println("Executando update...");
+
                 int rowsAffected = stmt.executeUpdate();
-                System.out.println("Linhas afetadas: " + rowsAffected);
+
 
                 if (rowsAffected == 0) {
                     // Verificar se o registro existe
@@ -480,21 +477,15 @@ public class DAOSalarios {
                         try (ResultSet rs = selectStmt.executeQuery()) {
                             rs.next();
                             int count = rs.getInt(1);
-                            System.out.println("Registros encontrados com ID " + model.getIdSalario() + ": " + count);
+
                         }
                     }
                     throw new Exception("Nenhum registro foi atualizado. ID não encontrado: " + model.getIdSalario());
                 }
 
-                // COMMIT - confirmar a transação
-                if (!connection.getAutoCommit()) {
-                    connection.commit();
-                    System.out.println("Commit realizado!");
-                } else {
-                    System.out.println("AutoCommit está ativo - commit automático");
-                }
 
-                System.out.println("=== UPDATE FINALIZADO COM SUCESSO ===");
+
+
 
             }
         } catch (SQLException e) {

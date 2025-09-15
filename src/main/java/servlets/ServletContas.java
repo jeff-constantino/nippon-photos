@@ -114,7 +114,6 @@ public class ServletContas extends ServletGenericUtil {
             // Verifica se o ID da conta é válido para decidir entre atualização ou criação
             if (modelContas.getConta_id() != null) {
                 if (daoContas.existeContaId(modelContas.getConta_id())) {
-                    System.out.println("Conta existe, atualizando...");
                     daoContas.atualizarConta(modelContas); // Atualiza conta existente
                 } else {
                     daoContas.gravarConta(modelContas); // Grava nova conta

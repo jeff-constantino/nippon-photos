@@ -29,9 +29,9 @@ public class ServletConfDiario extends HttpServlet {
     }
     private void carregarConfNaoFechadas(HttpServletRequest request) {
         try {
-            System.out.println("Método carregarConfNaoFechadas foi chamado!");
+
             List<Date> confNaoFechadas = daoConfDiario.buscarConfNaoFechadas();
-            System.out.println("Dados de confNaoFechadas: " + confNaoFechadas);
+
             request.setAttribute("confNaoFechadas", confNaoFechadas);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -83,7 +83,7 @@ public class ServletConfDiario extends HttpServlet {
             if (conf != null) {
                 // Armazena o objeto conf no request para ser acessado no JSP
                 request.setAttribute("conf_diario", conf);
-                System.out.println(conf);
+
 
 
                 // Use forward em vez de sendRedirect

@@ -1,10 +1,8 @@
+confirmar se na DRE está descontando os custos de despesas em dinheiro do dinheiro em caixa.
+
 relmes, ajustar "data" para mesAno
 
-DESCONTAR NO SALARIO "FOTOS NÃO AUTORIZADAS NA VENDA (FALTA DO RIBBON)
- somar na tabela vendas, buscando por nome e datainicio, datafinal  se existe na coluna ribbon "descontar" somar a quantidade da coluna ribbon_dif
- multiplicando pelo valor da foto (prod1_valor+prod2_valor)
-
-desconto IR no salario (calcular se o salario bruto for X descontar a %)
+desconto IR no salario (calcular se o salario bruto for X descontar a %) buscando pelas faixas igual ao inss
 
 calcular dif_fotos, descontos_fotos e descontos_ir
 
@@ -13,6 +11,6 @@ criar comparativo de vendas mes/ano (relmes já tem a função para buscar por d
 
 APRENDER DOCKER
 
-removido conf1_valor2
+
 
 

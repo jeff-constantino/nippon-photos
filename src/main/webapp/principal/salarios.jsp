@@ -727,17 +727,20 @@
                                                id="descontos_mes" name="descontos_mes" value="${descontos_mes}" readonly tabindex="-1">
                                     </div>
 
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">DIFERENÇA DE FOTOS</label>
-                                        <input type="text" class="form-control text-center fw-bold"
-                                               style="background-color: #2c2c2c; color: white"
-                                               id="dif_fotos" name="dif_fotos" value="${dif_fotos}" readonly tabindex="-1">
-                                    </div>
+                                    <c:forEach var="mv" items="${vendasFuncionarioList}">
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">DIFERENÇA DE FOTOS</label>
+                                            <input type="text" class="form-control text-center fw-bold"
+                                                   style="background-color: #2c2c2c; color: white"
+                                                   id="dif_fotos" name="dif_fotos"
+                                                   value="${mv.ribbon_descontar}" readonly tabindex="-1">
+                                        </div>
+                                    </c:forEach>
                                     <div class="col-auto">
                                         <label style="color: #f2a654">DESCONTOS DE FOTOS</label>
                                         <input type="text" class="form-control money text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
-                                               id="descontos_fotos" name="descontos_fotos" value="${descontos_fotos}" readonly tabindex="-1">
+                                               id="desconto_fotos" name="desconto_fotos" value="${desconto_fotos}" readonly tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
@@ -1088,6 +1091,8 @@
     const valesInput = document.getElementById('vales_mes');
     const descontosInput = document.getElementById('descontos_mes');
     const atrasosInput = document.getElementById('atrasos_horas');
+    const descontoFotos = document.getElementById('desconto_fotos')
+    const dif_fotos = document.getElementById('dif_fotos')
 
     // === Função para converter HH:MM em horas decimais ===
     function converterHorasParaDecimal(horasMinutos) {
@@ -1146,6 +1151,17 @@
 
         // Dispara evento input para recalcular INSS, FGTS e salários líquidos
         vendaTotalInput.dispatchEvent(new Event('input'));
+    }
+    function calcularCustoFoto() {
+        const faltaFoto = parseFloat(document.getElementById('dif_fotos')?.value || 0);
+        const faltaEnc = parseFloat(document.getElementById('dif_fotos')?.value || 0);
+
+
+        const custoFoto = (faltaFoto * conf1_valor) + (faltaEnc * conf2_valor)
+        descontoFotos.value = custoFoto.toFixed(2);
+        calcularSalariosLiquidos();
+
+
     }
 
     // === Cálculo do INSS, FGTS e atualização dos salários líquidos ===
@@ -1208,6 +1224,12 @@
         let parcela = parseFloat(parcelaInput.value || 0);
         let fgts = parseFloat(fgtsInput.value || 0);
         let vales = parseFloat(valesInput?.value || 0);
+        //let valorRibbon= parseFloat(descontoFotos?.value || 0 );
+
+        let valorRibbon = 0;
+        if (descontoFotos && descontoFotos.value) {
+            valorRibbon = parseFloat(descontoFotos.value) || 0;
+        }
 
         let descontos = 0;
         if (descontosInput && descontosInput.value) {
@@ -1230,8 +1252,8 @@
         salarioTotal1Input.value = salarioTotal1.toFixed(2);
         salarioTotal2Input.value = salarioTotal2.toFixed(2);
 
-        const descontos_1 = inss + vales + descontos + descontoAtraso;
-        const descontos_2 = inss + fgts + vales + descontos + descontoAtraso;
+        const descontos_1 = inss + vales + descontos + descontoAtraso + valorRibbon;
+        const descontos_2 = inss + fgts + vales + descontos + descontoAtraso + valorRibbon;
 
         // Atualiza os campos descontos_1 e descontos_2 sem formatação
         const descontos1Input = document.getElementById('descontos_1');
@@ -1270,12 +1292,18 @@
         calcularSalariosLiquidos();
     });
 
+    dif_fotos?.addEventListener('input', function() {
+        calcularCustoFoto();
+    });
+
+
     // === Inicialização ===
     window.addEventListener('DOMContentLoaded', () => {
         calcularVendaTotal();
         comissaoInput.value = comissao.toFixed(2);
         comissao2Input.value = comissao2.toFixed(2);
         calcularDescontosDisciplinares();
+        calcularCustoFoto();
     });
     // Formatação de dinheiro simples (R$ 0,00)
     function formatMoney(valor) {

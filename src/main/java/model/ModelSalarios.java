@@ -53,6 +53,16 @@ public class ModelSalarios implements Serializable {
     private  BigDecimal descontos_1;
     private BigDecimal descontos_2;
 
+    private int ribbon_descontar;
+
+    public int getRibbon_descontar() {
+        return ribbon_descontar;
+    }
+
+    public void setRibbon_descontar(int ribbon_descontar) {
+        this.ribbon_descontar = ribbon_descontar;
+    }
+
     public BigDecimal getParcela() {
         return parcela;
     }

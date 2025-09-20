@@ -148,15 +148,15 @@ public class DAOSalarios {
         List<ModelVendas> modelVendasFuncionarioList = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder("SELECT l.nome, ")
-
                 .append("SUM(COALESCE(v.ft_total::INTEGER, 0)) AS foto_total, ")
                 .append("SUM(COALESCE(v.enc_total::INTEGER, 0)) AS encarte_total, ")
                 .append("SUM(COALESCE(v.dig_total::INTEGER, 0)) AS digital_total, ")
                 .append("SUM(COALESCE(v.sobras::INTEGER, 0)) AS sobras_total, ")
-                .append("l.status ") // Adicionando l.status aqui
+                .append("l.status, ") // Mantém l.status
+                .append("SUM(CASE WHEN v.ribbon = 'DESCONTAR' THEN ABS(COALESCE(v.ribbon_dif::INTEGER, 0)) ELSE 0 END) AS ribbon_descontar ") // Adiciona a nova lógica para a coluna ribbon
                 .append("FROM vendas v ")
                 .append("INNER JOIN model_login l ON v.vendedor_id = l.id ")
-                .append("WHERE 1=1 "); // Usando 1=1 para facilitar a adição de condições
+                .append("WHERE 1=1 ");
 
         if (funcionarioId != null && !funcionarioId.isEmpty()) {
             sql.append(" AND l.id = ?");
@@ -166,9 +166,8 @@ public class DAOSalarios {
             sql.append(" AND v.data_venda BETWEEN TO_DATE(?, 'YYYY-MM-DD') AND TO_DATE(?, 'YYYY-MM-DD')");
         }
 
-        // Adicionando a cláusula de ordenação
-        sql.append(" GROUP BY l.nome, l.status ") // Mantenha l.status aqui
-                .append(" ORDER BY l.status = 'Ativo' DESC ") // Ordena primeiro os ativos
+        sql.append(" GROUP BY l.nome, l.status ")
+                .append(" ORDER BY l.status = 'Ativo' DESC ")
                 .append(" LIMIT ? OFFSET ?");
 
 
@@ -184,27 +183,36 @@ public class DAOSalarios {
                 preparedSql.setString(index++, dataFinal);
             }
 
-            // Defina os parâmetros de limite e deslocamento
             preparedSql.setInt(index++, limit);
             preparedSql.setInt(index++, offset);
 
-            ResultSet resultado = preparedSql.executeQuery();
+System.out.println("Executando a query: " + preparedSql.toString()); // Log da query completa
+            try (ResultSet resultado = preparedSql.executeQuery()) {
+                while (resultado.next()) {
+                    ModelVendas modelVendaFuncionario = new ModelVendas();
 
-            while (resultado.next()) {
-                ModelVendas modelVendaFuncionario = new ModelVendas();
+                    modelVendaFuncionario.setNome(resultado.getString("nome"));
+                    modelVendaFuncionario.setFt_total(resultado.getInt("foto_total"));
+                    modelVendaFuncionario.setEnc_total(resultado.getInt("encarte_total"));
+                    modelVendaFuncionario.setDig_total(resultado.getInt("digital_total"));
+                    modelVendaFuncionario.setSobras(resultado.getInt("sobras_total"));
 
-                // Definindo apenas os campos necessários
-                modelVendaFuncionario.setNome(resultado.getString("nome"));
-                modelVendaFuncionario.setFt_total(resultado.getInt("foto_total"));
-                modelVendaFuncionario.setEnc_total(resultado.getInt("encarte_total"));
-                modelVendaFuncionario.setDig_total(resultado.getInt("digital_total"));
-                modelVendaFuncionario.setSobras(resultado.getInt("sobras_total"));
+                    // Adiciona o valor da soma de ribbon
+                    modelVendaFuncionario.setRibbon_descontar(resultado.getInt("ribbon_descontar"));
+ // --- ADIÇÃO DOS LOGS ---
+                    System.out.println("------------------------------------");
+                    System.out.println("Dados do Funcionário:");
+                    System.out.println("Nome: " + modelVendaFuncionario.getNome());
+                    System.out.println("Foto Total: " + modelVendaFuncionario.getFt_total());
+                    System.out.println("Encarte Total: " + modelVendaFuncionario.getEnc_total());
+                    System.out.println("Digital Total: " + modelVendaFuncionario.getDig_total());
+                    System.out.println("Sobras Total: " + modelVendaFuncionario.getSobras());
+                    System.out.println("Ribbon a Descontar: " + modelVendaFuncionario.getRibbon_descontar());
+                    System.out.println("------------------------------------");
 
-
-                // Adicionando o objeto na lista
-                modelVendasFuncionarioList.add(modelVendaFuncionario);
+                    modelVendasFuncionarioList.add(modelVendaFuncionario);
+                }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao consultar vendas: " + e.getMessage());

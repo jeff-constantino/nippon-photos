@@ -221,6 +221,10 @@ public Boolean novaVenda(){
         return vendedor_id;
     }
 
+    private int ribbon_descontar;
+
+
+
 
 
     // Método para setar vendedor_id
@@ -274,6 +278,14 @@ public Boolean novaVenda(){
 
     public void setRibbon_dif(int ribbon_dif) {
         this.ribbon_dif = ribbon_dif;
+    }
+
+    public int getRibbon_descontar() {
+        return ribbon_descontar;
+    }
+
+    public void setRibbon_descontar(int ribbon_descontar) {
+        this.ribbon_descontar = ribbon_descontar;
     }
 
     @Override

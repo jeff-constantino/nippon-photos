@@ -614,8 +614,7 @@
                                                                                                 id="ribbon"
                                                                                                 name="ribbon" required
                                                                                                 value="${modelVendas.ribbon}">
-                                                                                            <option disabled>Tamanho do
-                                                                                                Papel
+                                                                                            <option disabled>Diferença de fotos
                                                                                             </option>
                                                                                             <option style="color: #00d25b"
                                                                                                     value="AUTORIZADO"

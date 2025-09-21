@@ -11,8 +11,27 @@ public class ModelFaltas implements  Serializable {
     private Date dataFalta;
     private String observacoes;
     private String nomeFuncionario;
+    private int dias_falta;
+    private int dsr_falta;
 
     // Getters e Setters
+
+
+    public int getDias_falta() {
+        return dias_falta;
+    }
+
+    public void setDias_falta(int dias_falta) {
+        this.dias_falta = dias_falta;
+    }
+
+    public int getDsr_falta() {
+        return dsr_falta;
+    }
+
+    public void setDsr_falta(int dsr_falta) {
+        this.dsr_falta = dsr_falta;
+    }
 
     public Long getId() {
         return id;

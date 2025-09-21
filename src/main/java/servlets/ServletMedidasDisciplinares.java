@@ -94,6 +94,8 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                 String dataFalta = request.getParameter("data_falta");
                 String observacoes = request.getParameter("falta_obs");
                 String nomeFuncionario = request.getParameter("nomeFuncionario");
+                String dias_falta  = request.getParameter("dias_falta");
+                String dsr_falta = request.getParameter("dsr_falta");
 
                 if (funcionarioId == null || funcionarioId.isEmpty()) {
                     msg = "Funcionário não selecionado.";
@@ -108,6 +110,9 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                     falta.setDataFalta(java.sql.Date.valueOf(dataFalta));
                     falta.setObservacoes(observacoes);
                     falta.setNomeFuncionario(nomeFuncionario);
+                    falta.setDias_falta(Integer.parseInt(dias_falta));
+                    falta.setDsr_falta(Integer.parseInt(dsr_falta));
+
 
                     dao.gravarFalta(falta);
                     msg = "Falta registrada com sucesso!";

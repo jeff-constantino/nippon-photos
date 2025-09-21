@@ -264,6 +264,23 @@
                                                                                                        value="">
                                                                                             </div>
 
+                                                                                            <div class="col-sm-1">
+                                                                                                <label class="float-label">DIAS:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control"
+                                                                                                       id="dias_falta" name="dias_falta" placeholder=""
+                                                                                                       style="background-color: white; color: black; font-weight: bold"
+                                                                                                >
+                                                                                            </div>
+                                                                                            <div class="col-sm-1">
+                                                                                                <label class="float-label">DSR:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control"
+                                                                                                       id="dsr_falta" name="dsr_falta" placeholder=""
+                                                                                                       style="background-color: white; color: black; font-weight: bold"
+                                                                                                >
+                                                                                            </div>
+
 
 
                                                                                         </div>

@@ -186,7 +186,7 @@ public class DAOSalarios {
             preparedSql.setInt(index++, limit);
             preparedSql.setInt(index++, offset);
 
-System.out.println("Executando a query: " + preparedSql.toString()); // Log da query completa
+
             try (ResultSet resultado = preparedSql.executeQuery()) {
                 while (resultado.next()) {
                     ModelVendas modelVendaFuncionario = new ModelVendas();
@@ -199,16 +199,7 @@ System.out.println("Executando a query: " + preparedSql.toString()); // Log da q
 
                     // Adiciona o valor da soma de ribbon
                     modelVendaFuncionario.setRibbon_descontar(resultado.getInt("ribbon_descontar"));
- // --- ADIÇÃO DOS LOGS ---
-                    System.out.println("------------------------------------");
-                    System.out.println("Dados do Funcionário:");
-                    System.out.println("Nome: " + modelVendaFuncionario.getNome());
-                    System.out.println("Foto Total: " + modelVendaFuncionario.getFt_total());
-                    System.out.println("Encarte Total: " + modelVendaFuncionario.getEnc_total());
-                    System.out.println("Digital Total: " + modelVendaFuncionario.getDig_total());
-                    System.out.println("Sobras Total: " + modelVendaFuncionario.getSobras());
-                    System.out.println("Ribbon a Descontar: " + modelVendaFuncionario.getRibbon_descontar());
-                    System.out.println("------------------------------------");
+
 
                     modelVendasFuncionarioList.add(modelVendaFuncionario);
                 }

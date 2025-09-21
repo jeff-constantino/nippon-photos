@@ -44,12 +44,14 @@ public class DAOMedidasDisciplinares {
     }
 
     public void gravarFalta(ModelFaltas falta) throws SQLException {
-        String sql = "INSERT INTO faltas (funcionario_id, data_falta, observacoes, nome_funcionario) VALUES (?, ?, UPPER(?),?)";
+        String sql = "INSERT INTO faltas (funcionario_id, data_falta, observacoes, nome_funcionario,dias_falta, dsr_falta) VALUES (?, ?, UPPER(?),?,?,?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, falta.getFuncionarioId());
             stmt.setDate(2, falta.getDataFalta());
             stmt.setString(3, falta.getObservacoes());
             stmt.setString(4, falta.getNomeFuncionario());
+            stmt.setInt(5, falta.getDias_falta());
+            stmt.setInt(6, falta.getDsr_falta());
 
             stmt.executeUpdate();
             connection.commit();
@@ -97,7 +99,7 @@ public class DAOMedidasDisciplinares {
         }
 
         // --- Faltas
-        String sqlFaltas = "SELECT COUNT(*) FROM faltas WHERE funcionario_id = ? AND data_falta BETWEEN ? AND ?";
+        String sqlFaltas = "SELECT SUM(dias_falta + dsr_falta) FROM faltas WHERE funcionario_id = ? AND data_falta BETWEEN ? AND ?";
         try (PreparedStatement stmt = connection.prepareStatement(sqlFaltas)) {
             stmt.setLong(1, funcionarioId);
             stmt.setDate(2, java.sql.Date.valueOf(dataInicial));

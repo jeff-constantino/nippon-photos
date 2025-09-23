@@ -144,6 +144,8 @@ public class DAOVales {
                 vale.setValor(rs.getBigDecimal("valor"));
                 vale.setData(rs.getDate("data").toLocalDate()); // corrigido conforme o nome da coluna
                 vale.setObservacao(rs.getString("observacao")); // corrigido conforme o nome da coluna
+                vale.setNome_funcionario(rs.getString("nome_funcionario"));
+                vale.setForma_pagamento(rs.getString("forma_pagamento"));
                 vales.add(vale);
             }
         }

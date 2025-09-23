@@ -252,6 +252,7 @@
                                             <th scope="col">NOME</th>
                                             <th scope="col">DATA</th>
                                             <th scope="col">VALOR</th>
+                                            <th scope="col">DESCRIÇÃO</th>
                                             <th scope="col">TIPO PGTO</th>
                                             <th scope="col">Id Vale</th>
                                             <th scope="col">OPÇÕES</th>
@@ -263,6 +264,7 @@
                                                 <td>${vale.nome_funcionario}</td>
                                                 <td><fmt:formatDate value="${vale.dataFormatadaParaFmt}" pattern="dd/MM/yyyy" /></td>
                                                 <td><fmt:formatNumber value="${vale.valor}" type="currency" currencySymbol="R$" /></td>
+                                                <td>${vale.observacao}</td>
                                                 <td>${vale.forma_pagamento}</td>
                                                 <td>${vale.id_vale}</td>
                                                 <td>
@@ -278,61 +280,65 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
-                </div>
+
+                    </div>
                 <div class="row ">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
 
-
                                 <h4 class="card-title" STYLE="text-align: center">RESULTADO DA BUSCA</h4>
 
-                                <div  style="overflow-x: hidden; overflow-y: hidden;">
-                                    <table class="table" id="tabelafuncconduta">
-                                        <c:if test="${not empty valesFiltrados}">
-                                            <hr />
-                                            <h5 class="mt-4">Resultados da Busca:</h5>
-                                            <div class="table-responsive">
-                                                <table class="table table-sm table-bordered table-hover">
-                                                    <thead class="table-dark">
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Funcionário</th>
-                                                        <th>Data</th>
-                                                        <th>Valor</th>
-                                                        <th>Observação</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <c:forEach var="vale" items="${valesFiltrados}">
-                                                        <tr>
-                                                            <td>${vale.id_vale}</td>
-                                                            <td>${vale.id_funcionario}</td>
-                                                            <td><fmt:formatDate value="${vale.dataFormatadaParaFmt}" pattern="dd/MM/yyyy" /></td>
-                                                            <td><fmt:formatNumber value="${vale.valor}" type="number" minFractionDigits="2" /></td>
-                                                            <td>${vale.observacao}</td>
-                                                        </tr>
-                                                    </c:forEach>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </c:if>
-
-                                    </table>
-                                    <!-- Controles de paginação -->
+                             <div  style="overflow-x: auto; overflow-y: hidden;">
 
 
-                                </div>
+
+
                                 <div class="table-responsive">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
+                                    <table class="table table-bordered" id="tabelafuncconduta">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">NOME</th>
+                                            <th scope="col">DATA</th>
+                                            <th scope="col">VALOR</th>
+                                            <th scope="col">DESCRIÇÃO</th>
+                                            <th scope="col">TIPO PGTO</th>
+                                            <th scope="col">Id Vale</th>
+                                            <th scope="col">OPÇÕES</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach var="vale" items="${valesFiltrados}">
+                                            <tr>
+                                                <td>${vale.nome_funcionario}</td>
+                                                <td><fmt:formatDate value="${vale.dataFormatadaParaFmt}" pattern="dd/MM/yyyy" /></td>
+                                                <td><fmt:formatNumber value="${vale.valor}" type="currency" currencySymbol="R$" /></td>
+                                                <td>${vale.observacao}</td>
+                                                <td>${vale.forma_pagamento}</td>
+                                                <td>${vale.id_vale}</td>
+                                                <td>
+                                                    <!-- Link para excluir o vale -->
+                                                    <a href="<%= request.getContextPath() %>/ServletVales?acao=excluirVale&idVale=${vale.id_vale}"
+                                                       class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este vale?')">Excluir</a>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                        </tbody>
                                     </table>
+
                                 </div>
                             </div>
                         </div>
+
                     </div>
+
                 </div>
+
+
+                </div>
+
 
 
             </div>

@@ -131,21 +131,60 @@
                             </div>
                         </div>
 
+                        <div class="modal fade" id="modalResetFechamento" data-bs-backdrop="static"
+                             data-bs-keyboard="false"  aria-labelledby="staticBackdropLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-xl mt-5">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Apagar Último Fechamento Diário</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="<%= request.getContextPath() %>/ServletFechaDia"
+                                              method="get" id="formResetFechamento">
+                                            <input type="hidden" name="acao" value="resetfechamento"/>
+                                            <div class="col-6">
+                                                <h4>Atenção!! Deseja apagar o último fechamento?</h4>
+
+                                                <div class="input-group mt-2">
+                                                    <button type="submit" class="btn btn-outline-danger">
+                                                        <h3>APAGAR</h3>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-light"
+                                                data-bs-dismiss="modal">Sair
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="row ">
                         <div class="col-12 grid-margin">
                             <div class="card">
 
                                 <div class="card-body" >
-                                    <button type="button" class="btn btn-outline-warning"
+                                    <button type="button" class="btn btn-outline-success"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modalLancaFechamento">
                                         <h4>Finalizar Dia</h4>
                                     </button>
-                                    <button type="button" class="btn btn-outline-danger"
+                                    <button type="button" class="btn btn-outline-warning"
                                             data-bs-toggle="modal"
                                             data-bs-target="#modalBuscaFechamento">
                                         <h4>Pesquisar Fechamentos</h4>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-danger"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalResetFechamento">
+                                        <h4>Resetar Fechamento</h4>
                                     </button>
 
 

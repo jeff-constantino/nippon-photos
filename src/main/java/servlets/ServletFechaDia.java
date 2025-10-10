@@ -74,6 +74,21 @@ public class ServletFechaDia extends ServletGenericUtil {
             return;
         }
 
+        if ("resetfechamento".equals(acao)) {
+            try {
+                daoFechaDia.resetFechamento();
+                request.setAttribute("msg", "Último fechamento apagado com sucesso!");
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("msg", "Erro ao apagar fechamento: " + e.getMessage());
+            }
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/fechadia.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
+
+
 
         // Lógica para "buscarfechamento"
         if ("buscarfechamento".equals(acao)) {

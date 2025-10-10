@@ -65,21 +65,21 @@ public class DAOContas {
             throw new IllegalArgumentException("ID da conta não pode ser nulo.");
         }
 
-        String sql = "UPDATE contas SET empresa = UPPER(?), itens = UPPER(?), valor = ?, data_de_pedido = ?, data_de_pagamento = ?, status = UPPER(?), pagamento = UPPER(?) WHERE conta_id = ?";
+        String sql = "UPDATE contas SET empresa = UPPER(?), itens = UPPER(?), valor = ?, " +
+                "data_de_pedido = ?, data_de_pagamento = ?, status = UPPER(?), pagamento = UPPER(?) " +
+                "WHERE conta_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, conta.getEmpresa());
             stmt.setString(2, conta.getItens());
             stmt.setDouble(3, conta.getValor());
 
-            // Verifica se data_de_pedido não é null
             if (conta.getData_de_pedido() != null) {
                 stmt.setDate(4, new java.sql.Date(conta.getData_de_pedido().getTime()));
             } else {
                 stmt.setNull(4, java.sql.Types.DATE);
             }
 
-            // Verifica se data_de_pagamento não é null
             if (conta.getData_de_pagamento() != null) {
                 stmt.setDate(5, new java.sql.Date(conta.getData_de_pagamento().getTime()));
             } else {
@@ -90,21 +90,27 @@ public class DAOContas {
             stmt.setString(7, conta.getPagamento());
             stmt.setLong(8, conta.getConta_id());
 
+            // ✅ executa o comando SQL
+            int linhasAfetadas = stmt.executeUpdate();
 
-                // Adiciona o commit aqui
-                connection.commit(); // Commit para confirmar a transação
-
+            // Só faz commit se realmente atualizou algo
+            if (linhasAfetadas > 0) {
+                connection.commit();
+                System.out.println("Conta atualizada com sucesso. ID: " + conta.getConta_id());
+            } else {
+                System.out.println("Nenhuma conta atualizada. Verifique o ID informado: " + conta.getConta_id());
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
             try {
-                // Se houver um erro, faz o rollback
                 connection.rollback();
             } catch (SQLException rollbackEx) {
                 rollbackEx.printStackTrace();
             }
         }
     }
+
 
 
 
@@ -155,7 +161,7 @@ public class DAOContas {
 
     public List<ModelContas> buscarContasRecentes() throws SQLException {
         List<ModelContas> contasRecentes = new ArrayList<>();
-        String sql = "SELECT * FROM contas WHERE data_de_pedido >= NOW() - INTERVAL '60 days' ORDER BY data_de_pedido DESC";
+        String sql = "SELECT * FROM contas WHERE data_de_pagamento >= NOW() - INTERVAL '60 days' ORDER BY data_de_pedido DESC";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
@@ -273,6 +279,33 @@ public class DAOContas {
         return contas;
     }
 
+    public List<ModelContas> buscarContasVencidas() throws SQLException {
+        List<ModelContas> contas = new ArrayList<>();
+        String sql = "SELECT * FROM contas WHERE data_de_pagamento < CURRENT_DATE AND status = 'A PAGAR'";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ModelContas conta = new ModelContas();
+                conta.setConta_id(rs.getLong("conta_id"));
+                conta.setNumero_pedido(rs.getLong("numero_pedido"));
+                conta.setEmpresa(rs.getString("empresa"));
+                conta.setItens(rs.getString("itens"));
+                conta.setValor(rs.getDouble("valor"));
+                conta.setData_de_pedido(rs.getDate("data_de_pedido"));
+                conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
+                conta.setStatus(rs.getString("status"));
+                conta.setPagamento(rs.getString("pagamento"));
+                contas.add(conta);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao buscar contas vencidas: " + e.getMessage());
+            throw e;
+        }
+        return contas;
+    }
+
+
 
     public List<ModelContas> listarContas(int pagina, int tamanho) throws SQLException {
         List<ModelContas> contas = new ArrayList<>();
@@ -321,29 +354,29 @@ public class DAOContas {
         preparedSql.executeUpdate();
         connection.commit();
     }
-    public void atualizarStatusPorNumeroPedido(Long numeroPedido) throws Exception {
-        String sql = "UPDATE contas SET status = ? WHERE numero_pedido = ?";
+    public void atualizarStatusPorNumeroPedido(Long numeroPedido, String formaPgto) throws Exception {
+        String sql = "UPDATE contas SET status = ?, pagamento = UPPER(?) WHERE numero_pedido = ?";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
-            // Define o novo status
-            preparedSql.setString(1, "PAGO"); // ou outro status que você deseje definir
-            preparedSql.setLong(2, numeroPedido);
+            // Define os valores dos parâmetros
+            preparedSql.setString(1, "PAGO"); // novo status
+            preparedSql.setString(2, formaPgto); // forma de pagamento vinda do form
+            preparedSql.setLong(3, numeroPedido); // número do pedido
 
             // Executa a atualização
             int rowsAffected = preparedSql.executeUpdate();
 
-            // Verifica se a atualização foi bem-sucedida
             if (rowsAffected == 0) {
                 throw new SQLException("Nenhuma conta encontrada com o número do pedido: " + numeroPedido);
             }
 
-            // Realiza o commit da transação
             connection.commit();
         } catch (SQLException e) {
-            connection.rollback(); // Reverte a transação em caso de erro
+            connection.rollback();
             throw new Exception("Erro ao atualizar o status da conta: " + e.getMessage());
         }
     }
+
     public BigDecimal buscarTotalContasPorPeriodo(String dataInicial, String dataFinal) throws SQLException {
         BigDecimal total = BigDecimal.ZERO;
         String sql = "SELECT SUM(valor) AS total_contas FROM contas WHERE data_de_pagamento >= ? AND data_de_pagamento <= ?";

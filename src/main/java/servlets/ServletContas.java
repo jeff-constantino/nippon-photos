@@ -93,23 +93,28 @@ public class ServletContas extends ServletGenericUtil {
 
             // Parte isolada para dar baixa
             if ("baixar".equals(acao)) {
+                String formaPgto = request.getParameter("formaPgto"); // <-- novo
+
                 if (numero_pedido != null && !numero_pedido.isEmpty()) {
                     try {
-                        daoContas.atualizarStatusPorNumeroPedido(Long.parseLong(numero_pedido)); // Mudar para Long
+                        daoContas.atualizarStatusPorNumeroPedido(Long.parseLong(numero_pedido), formaPgto);
                         msg = "Conta baixada como PAGO com sucesso!";
                     } catch (NumberFormatException e) {
                         msg = "Número do pedido inválido: " + numero_pedido;
                     } catch (SQLException e) {
                         msg = "Erro ao atualizar a conta: " + e.getMessage();
+                    } catch (Exception e) {
+                        msg = "Erro geral ao atualizar: " + e.getMessage();
                     }
                 } else {
                     msg = "Número do pedido não fornecido para baixar.";
                 }
-                // Retorna aqui após dar baixa, evitando outras operações
+
                 request.setAttribute("msg", msg);
                 response.sendRedirect(request.getContextPath() + "/ServletContas");
-                return; // Adiciona um return para parar a execução após dar baixa
+                return;
             }
+
 
             // Verifica se o ID da conta é válido para decidir entre atualização ou criação
             if (modelContas.getConta_id() != null) {

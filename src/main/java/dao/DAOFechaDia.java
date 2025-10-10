@@ -36,6 +36,30 @@ public class DAOFechaDia {
         return datasNaoFechadas;
     }
 
+    public ModelFechaDia resetFechamento() throws Exception {
+
+        // Apaga o último registro de cada tabela pela data mais recente
+        try (PreparedStatement ps1 = connection.prepareStatement(
+                "DELETE FROM controle_ribbon WHERE data_ribbon = (SELECT MAX(data_ribbon) FROM controle_ribbon)")) {
+            ps1.executeUpdate();
+        }
+
+        try (PreparedStatement ps2 = connection.prepareStatement(
+                "DELETE FROM conf_dia WHERE data_fechamento = (SELECT MAX(data_fechamento) FROM conf_dia)")) {
+            ps2.executeUpdate();
+        }
+
+        try (PreparedStatement ps3 = connection.prepareStatement(
+                "DELETE FROM fecha_dia WHERE data_fechamento = (SELECT MAX(data_fechamento) FROM fecha_dia)")) {
+            ps3.executeUpdate();
+        }
+
+        connection.commit(); // confirma alterações
+
+        return null;
+    }
+
+
 
     public boolean existeVendaParaData(Date data) {
         String query = "SELECT COUNT(*) FROM vendas WHERE data_venda = ?";
@@ -217,8 +241,6 @@ public class DAOFechaDia {
              PreparedStatement pstmtConfDia = connection.prepareStatement(sqlConfDia);
              PreparedStatement pstmtControleRibbon = connection.prepareStatement(sqlControleRibbon)) {
 
-            connection.setAutoCommit(false); // Desabilita o auto-commit
-
             // Inserção na tabela fecha_dia
             pstmtFechaDia.setDate(1, Date.valueOf(fechamento.getData_fechamento().toLocalDate()));
             pstmtFechaDia.setInt(2, fechamento.getTotal_ft_din());
@@ -322,22 +344,12 @@ public class DAOFechaDia {
             pstmtControleRibbon.setInt(26, fechamento.getSobras());
             pstmtControleRibbon.executeUpdate();
 
-            connection.commit(); // Finaliza a transação
+            connection.commit();
 
         } catch (SQLException e) {
-            try {
-                connection.rollback(); // Reverte a transação em caso de erro
-            } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace();
-            }
             e.printStackTrace();
-        } finally {
-            try {
-                connection.setAutoCommit(true); // Restaura o auto-commit
-            } catch (SQLException autoCommitEx) {
-                autoCommitEx.printStackTrace();
-            }
         }
+
 
     }
 

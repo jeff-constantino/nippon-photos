@@ -242,15 +242,20 @@
                                                                                                             ---------
                                                                                                         </option>
                                                                                                         <option style="color:white"
-                                                                                                                value="dinheiro" ${contas.pagamento == 'DINHEIRO' ? 'selected' : ''}>
+                                                                                                                value="DINHEIRO" ${contas.pagamento == 'DINHEIRO' ? 'selected' : ''}>
                                                                                                             DINHEIRO
                                                                                                         </option>
+
+                                                                                                        <option style="color:white"
+                                                                                                                value="BOLETO" ${contas.pagamento == 'BOLETO' ? 'selected' : ''}>
+                                                                                                            BOLETO
+                                                                                                        </option>
                                                                                                         <option style="color: #DAA520"
-                                                                                                                value="cartao" ${contas.pagamento == 'CARTAO' ? 'selected' : ''}>
+                                                                                                                value="CARTAO" ${contas.pagamento == 'CARTAO' ? 'selected' : ''}>
                                                                                                             CARTÃO
                                                                                                         </option>
                                                                                                         <option style="color: #00d25b"
-                                                                                                                value="pix" ${contas.pagamento == 'PIX' ? 'selected' : ''}>
+                                                                                                                value="PIX" ${contas.pagamento == 'PIX' ? 'selected' : ''}>
                                                                                                             PIX
                                                                                                         </option>
                                                                                                     </select>
@@ -391,35 +396,58 @@
 
 
                                         <!-- Modal -->
-                                        <div class="modal fade" id="modalGeral" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-xl mt-5">
+                                        <div class="modal fade" id="modalGeral" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                             aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg mt-5">
                                                 <div class="modal-content">
-                                                    <div class="modal-header">
+                                                    <div class="modal-header bg-dark text-white">
                                                         <h5 class="modal-title">Baixar Conta</h5>
-                                                        <button type="button" class="btn-close"
+                                                        <button type="button" class="btn-close btn-close-white"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
+
                                                     <div class="modal-body">
-                                                        <form action="<%= request.getContextPath() %>/ServletContas" method="post" id="formBaixarVenda">
+                                                        <form action="<%= request.getContextPath() %>/ServletContas" method="post" id="formBaixarVenda" class="p-3">
                                                             <input type="hidden" name="acao" value="baixar"/>
-                                                            <div class="col-3">
-                                                                <label for="numero_pedido" class="form-label">Número do Pedido:</label>
-                                                                <div class="input-group">
-                                                                    <input type="text" class="form-control" id="numero_pedido" name="numero_pedido" required placeholder="Digite o Nº do pedido"/>
-                                                                    <button type="submit" class="btn btn-outline-success">Baixar</button>
+
+                                                            <div class="row">
+                                                                <div class="col-2">
+                                                                    <label for="numero_pedido" class="form-label fw-bold">Número do Pedido</label>
+                                                                    <input type="text" class="form-control form-control-lg" id="numero_pedido"
+                                                                           name="numero_pedido" required
+                                                                           placeholder="Digite o Nº do pedido">
                                                                 </div>
+
+                                                                <div class="col-3">
+                                                                    <label for="formaPgto" class="form-label fw-bold">Forma de Pagamento</label>
+                                                                    <select class="form-select form-select-lg" id="formaPgto" name="formaPgto" required>
+                                                                        <option value="">Selecione...</option>
+                                                                        <option value="DINHEIRO">DINHEIRO</option>
+                                                                        <option value="BOLETO">BOLETO</option>
+                                                                        <option value="CARTAO">CARTÃO</option>
+                                                                        <option value="PIX">PIX</option>
+                                                                    </select>
+                                                                </div>
+
+
+                                                            </div>
+                                                            <div>
+                                                                <button type="submit" class="btn btn-outline-success">
+                                                                   <h4>BAIXAR CONTA</h4>
+                                                                </button>
                                                             </div>
                                                         </form>
-
                                                     </div>
+
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-outline-light"
-                                                                data-bs-dismiss="modal">Sair
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                            Fechar
                                                         </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
 
                                 </div>
@@ -586,18 +614,18 @@
                                                 <div class="card-body">
 
                                                     <div class="table-responsive ">
-                                                        <h2 style="text-align: center">CONTAS DOS ÚLTIMOS 60 DIAS</h2>
+                                                        <h2 style="text-align: center">CONTAS PAGAS NOS ÚLTIMOS 60 DIAS</h2>
                                                         <table class="table table-striped table-bordered minha-tabela">
                                                             <thead>
                                                             <tr>
                                                                 <th>Opções</th>
+                                                                <th>Status</th>
                                                                 <th>Nº Pedido</th>
                                                                 <th>Empresa</th>
                                                                 <th>Itens</th>
                                                                 <th>Valor</th>
                                                                 <th>Pedido</th>
                                                                 <th>Pagamento</th>
-                                                                <th>Status</th>
                                                                 <th>Pagamento</th>
                                                                 <th>ID</th>
 
@@ -611,28 +639,30 @@
                                                                         <tr>
                                                                             <td>
                                                                                 <button class="btn btn-outline-primary"
-                                                                                        onclick="editarConta(this, '${contas.data_de_pedido}', '${contas.data_de_pagamento}', '${contas.numero_pedido}', '${contas.conta_id}', '${contas.empresa}', '${contas.itens}', '${contas.valor}', '${contas.status}', '${contas.pagamento}',)">
+                                                                                        onclick="editarConta(this, '${contas.data_de_pedido}', '${contas.data_de_pagamento}', '${contas.numero_pedido}', '${contas.conta_id}', '${contas.empresa}', '${contas.itens}', '${contas.valor}', '${contas.status}', '${contas.pagamento}')">
                                                                                     Editar
                                                                                 </button>
                                                                             </td>
-                                                                            <td><c:out
-                                                                                    value="${contas.numero_pedido}"/></td>
+                                                                            <td>
+                                                                            <span class="<c:choose>
+                            <c:when test='${contas.status eq "PAGO"}'>text-success fw-bold</c:when>
+                            <c:when test='${contas.status eq "A PAGAR"}'>text-warning fw-bold</c:when>
+                            <c:when test='${contas.status eq "ATRASADO"}'>text-danger fw-bold</c:when>
+                            <c:otherwise>text-secondary</c:otherwise>
+                         </c:choose>">
+                <c:out value="${contas.status}"/>
+            </span></td>
+                                                                            <td><c:out value="${contas.numero_pedido}"/></td>
                                                                             <td><c:out value="${contas.empresa}"/></td>
                                                                             <td><c:out value="${contas.itens}"/></td>
-                                                                            <td><fmt:formatNumber value="${contas.valor}"
-                                                                                                  type="currency"
-                                                                                                  currencySymbol="R$"/></td>
-                                                                            <td><fmt:formatDate
-                                                                                    value="${contas.data_de_pedido}"
-                                                                                    pattern="dd/MM/yyyy"/></td>
-                                                                            <td><fmt:formatDate
-                                                                                    value="${contas.data_de_pagamento}"
-                                                                                    pattern="dd/MM/yyyy"/></td>
-                                                                            <td><c:out value="${contas.status}"/></td>
+                                                                            <td><fmt:formatNumber value="${contas.valor}" type="currency" currencySymbol="R$"/></td>
+                                                                            <td><fmt:formatDate value="${contas.data_de_pedido}" pattern="dd/MM/yyyy"/></td>
+                                                                            <td><fmt:formatDate value="${contas.data_de_pagamento}" pattern="dd/MM/yyyy"/></td>
                                                                             <td><c:out value="${contas.pagamento}"/></td>
                                                                             <td><c:out value="${contas.conta_id}"/></td>
                                                                         </tr>
                                                                     </c:forEach>
+
                                                                 </c:when>
                                                                 <c:otherwise>
                                                                     <tr>

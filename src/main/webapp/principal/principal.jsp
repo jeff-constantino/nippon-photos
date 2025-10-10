@@ -133,6 +133,52 @@
                         </div>
                     </div>
                 </div>
+                <div class="row ">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <h2 class="text-center">CONTAS VENCIDAS</h2>
+                                    <table class="table table-bordered">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th>Número do Pedido</th>
+                                            <th>Empresa</th>
+                                            <th>Itens</th>
+                                            <th>Valor</th>
+                                            <th>Data de Pedido</th>
+                                            <th>Data de Pagamento</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:choose>
+                                            <c:when test="${not empty contasVencidas}">
+                                                <c:forEach var="conta" items="${contasVencidas}">
+                                                    <tr>
+                                                        <td><c:out value="${conta.numero_pedido}"/></td>
+                                                        <td><c:out value="${conta.empresa}"/></td>
+                                                        <td><c:out value="${conta.itens}"/></td>
+                                                        <td><fmt:formatNumber value="${conta.valor}" type="currency" currencySymbol="R$" /></td>
+                                                        <td><fmt:formatDate value="${conta.data_de_pedido}" pattern="dd/MM/yyyy"/></td>
+                                                        <td><fmt:formatDate value="${conta.data_de_pagamento}" pattern="dd/MM/yyyy"/></td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <tr>
+                                                    <td colspan="6" class="text-center">Nenhuma conta vencida.</td>
+                                                </tr>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 
 

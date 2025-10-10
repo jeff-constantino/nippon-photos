@@ -34,6 +34,16 @@ public class ServletPrincipal extends HttpServlet {
         }
         request.setAttribute("contasVencendo", contasVencendo);
 
+// Buscar contas vencidas
+        List<ModelContas> contasVencidas = null;
+        try {
+            contasVencidas = daoContas.buscarContasVencidas();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        request.setAttribute("contasVencidas", contasVencidas);
+
+
         // Redireciona para a página principal
         RequestDispatcher dispatcher = request.getRequestDispatcher("principal/principal.jsp");
         dispatcher.forward(request, response);

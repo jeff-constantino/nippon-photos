@@ -24,49 +24,73 @@
   <link rel="stylesheet" type="text/css" href="css/main.css">
   <!--===============================================================================================-->
 </head>
+<style>
+    .texto-maximo {
+        color: #FFFFFF;
+        -webkit-text-stroke: 1.5px rgba(0,0,0,0.9);
+        text-shadow:
+                0px 0px 6px rgba(0,0,0,1);
+    }
+    .texto-destaque {
+        color: #FFFFFF;
+        text-shadow:
+                0px 0px 4px rgba(0,0,0,0.9),   /* sombra forte para contraste */
+                0px 0px 12px rgba(0,0,0,0.7);  /* reforço */
+    }
+</style>
 <body style="background-image: url('images/BG.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
 
 <div class="limiter">
-  <div class="container-login100" style=" align-content: center; align-items: center">
-    <div class="wrap-login100" style="width: 45%; align-content: center; align-items: center">
-      <div class="login100-pic js-tilt" data-tilt style="width: 55%">
-        <img src="images/img-01.webp" alt="IMG">
-      </div>
+    <div class="container-login100" style="display: flex; align-items: center; justify-content: center;">
 
-      <form class="login100-form validate-form" action="<%= request.getContextPath() %>/ServletLogin" method="post">
-    <span class="login100-form-title" style="font-size: 2vw;"> <!-- Aumentando o tamanho da fonte -->
-        Bem Vindo
-    </span>
-        <div><h4 class="msg">${msg}</h4></div>
-
-        <div class="wrap-input100 validate-input" data-validate="INSIRA O LOGIN">
-          <input class="input100" type="text" name="login" placeholder="Login" autofocus
-                 style="font-size: 1vw; height: 5vh;"> <!-- Aumentando o tamanho da fonte e altura conforme a tela -->
-          <span class="focus-input100"></span>
-          <span class="symbol-input100">
-            <i class="fa fa-user" aria-hidden="true"></i>
-        </span>
+        <!-- IMAGEM À ESQUERDA -->
+        <div class="login100-pic js-tilt" data-tilt
+             style="width: 30%; margin-right: 40px; display: flex; justify-content: center;">
+            <img src="images/img-01.png" alt="IMG" style="width: 80%;">
         </div>
 
-        <div class="wrap-input100 validate-input" data-validate="INSIRA A SENHA">
-          <input class="input100" type="password" name="senha" placeholder="Senha"
-                 style="font-size: 1vw; height: 5vh;"> <!-- Aumentando o tamanho da fonte e altura conforme a tela -->
-          <span class="focus-input100"></span>
-          <span class="symbol-input100">
-            <i class="fa fa-lock" aria-hidden="true"></i>
-        </span>
-        </div>
+        <!-- FORMULÁRIO CENTRALIZADO -->
+        <div class="wrap-login100" style="width: 40%; min-width: 350px;">
+            <form class="login100-form validate-form"
+                  action="<%= request.getContextPath() %>/ServletLogin" method="post">
 
-        <div class="container-login100-form-btn" style="padding-top: 2vh;">
-          <button class="login100-form-btn" style="font-size: 2vw; height: 7vh; width: 60vw;"> <!-- Ajustando o tamanho do botão -->
-            Login
-          </button>
+
+                <span class="login100-form-title texto-maximo" style="font-size: 2vw;">
+    Autenticação de usuário
+</span>
+
+                <div><h4 class="msg texto-destaque">${msg}</h4></div>
+
+                <div class="wrap-input100 validate-input" data-validate="INSIRA O LOGIN">
+                    <input class="input100" type="text" name="login" placeholder="Login" autofocus
+                           style="font-size: 1vw; height: 5vh;">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </span>
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate="INSIRA A SENHA">
+                    <input class="input100" type="password" name="senha" placeholder="Senha"
+                           style="font-size: 1vw; height: 5vh;">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                <i class="fa fa-lock" aria-hidden="true"></i>
+              </span>
+                </div>
+
+                <div class="container-login100-form-btn" style="padding-top: 2vh;">
+                    <button class="login100-form-btn"
+                            style="font-size: 2vw; height: 7vh; width: 60vw;">
+                        Entrar
+                    </button>
+                </div>
+
+            </form>
         </div>
-      </form>
 
     </div>
-  </div>
 </div>
 
 
@@ -90,6 +114,20 @@
 <script src="js/main.js"></script>
 
 </body>
+<footer style="
+    width: 100%;
+    background: rgba(0,0,0,0.85);
+    color: #ffffff;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 1vw;
+    font-family: Arial, sans-serif;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+">
+    © 2025 - Hashtag Software as a Service - Todos os direitos reservados
+</footer>
 </html>
 
 

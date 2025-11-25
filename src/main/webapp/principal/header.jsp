@@ -32,7 +32,7 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/css/style.css">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="<%= request.getContextPath() %>/assets/images/favicon.png" />
+    <link rel="shortcut icon" href="<%= request.getContextPath() %>/assets/images/favicon.ico" />
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 

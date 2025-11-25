@@ -290,13 +290,13 @@ iframe {
   font-family: Montserrat-Bold;
   font-size: 15px;
   line-height: 1.5;
-  color: #fff;
+  color: #0a0b0f;
   text-transform: uppercase;
   width: 100%;
   max-width: 400px; /* Aumenta o botão em telas grandes */
   height: 50px;
   border-radius: 25px;
-  background: #fac900;
+  background: #FFFFFF;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -305,7 +305,7 @@ iframe {
 }
 
 .login100-form-btn:hover {
-  background: #c49f04;
+  background:  #f2a654;
 }
 
 /*------------------------------------------------------------------

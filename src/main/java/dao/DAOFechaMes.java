@@ -5,6 +5,7 @@ import model.ModelConfig;
 import model.ModelFechaDia;
 import model.ModelFechaMes;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,10 +52,13 @@ public class DAOFechaMes {
 
         String sqlVales = "SELECT SUM(valor) AS total_vales FROM vales WHERE data >= ? AND data <= ?";
 
-        String sqlConfiguracao = "SELECT * FROM configuracao WHERE idconf = 2";
+        String sqlConfiguracao = "SELECT * FROM configuracao WHERE idconf = 1";
+
+        /* 🚀 NOVA QUERY */
+        String sqlMateriais = "SELECT qtd AS qtd_ribbon FROM conf_materiais WHERE id_conf = 1";
 
         try {
-            // Consulta fecha_dia
+            /* === Consulta fecha_dia === */
             try (PreparedStatement pst = connection.prepareStatement(sqlFechamento)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
@@ -70,7 +74,7 @@ public class DAOFechaMes {
                 }
             }
 
-            // Consulta conf_dia
+            /* === Consulta conf_dia === */
             try (PreparedStatement pst = connection.prepareStatement(sqlConfiguracoes)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
@@ -91,19 +95,19 @@ public class DAOFechaMes {
                 }
             }
 
-            // Consulta vales
+            /* === Consulta vales === */
             try (PreparedStatement pst = connection.prepareStatement(sqlVales)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next() && !resumoMensal.isEmpty()) {
                         ModelFechaMes resumo = resumoMensal.get(0);
-                        resumo.setValor_vale_total(rs.getBigDecimal("total_vales")); // <- novo campo com total dos vales
+                        resumo.setValor_vale_total(rs.getBigDecimal("total_vales"));
                     }
                 }
             }
 
-            // Consulta configuracao
+            /* === Consulta configuracao === */
             try (PreparedStatement pst = connection.prepareStatement(sqlConfiguracao)) {
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
@@ -136,6 +140,16 @@ public class DAOFechaMes {
                 }
             }
 
+            /* === Consulta conf_materiais (Apenas id_conf = 1) === */
+            try (PreparedStatement pst = connection.prepareStatement(sqlMateriais);
+                 ResultSet rs = pst.executeQuery()) {
+
+                if (rs.next() && !resumoMensal.isEmpty()) {
+                    ModelFechaMes resumo = resumoMensal.get(0);
+                    resumo.setQtd_ribbon(rs.getInt("qtd_ribbon"));
+                }
+            }
+
         } catch (SQLException e) {
             System.err.println("Erro ao executar as consultas: " + e.getMessage());
             throw e;
@@ -143,6 +157,8 @@ public class DAOFechaMes {
 
         return resumoMensal;
     }
+
+
 
 
     public void gravarFechamentoMes(ModelFechaMes fechamento) throws SQLException {

@@ -664,7 +664,7 @@
                                                                tabindex="-1"  id="total_revelado" name="total_revelado" value="${conf_diario.total_revelado}">
                                                     </div>
                                                     <div class="col-3">
-                                                        <label style="color: #f2a654">TOTAL REVELADO</label>
+                                                        <label style="color: #f2a654">TOTAL INFORMADO</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                                tabindex="-1"  id="total_informado" name="total_informado" value="${conf_diario.total_informado}">
@@ -674,7 +674,13 @@
                                                         <label style="color: #f2a654">DIFERENÇA RIBBONS</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                               tabindex="-1"  id="total_dif" name="total_dif" value="${conf_diario.total_dif}">
+                                                              tabindex="-1"  id="total_dif" name="total_dif" value="${
+                                                              (empty conf_diario.total_informado ? 0 : conf_diario.total_informado)
+                                                              -
+                                                           (empty conf_diario.total_revelado ? 0 : conf_diario.total_revelado)
+
+
+                                                        }">
                                                     </div>
                                                 </div>
                                             </div>
@@ -913,8 +919,8 @@
         calcularDiferenças();
     });
 
-    window.onload = function() {
-        // Função para calcular e alterar a cor da diferença
+    window.onload = function () {
+
         function calcularDiferenca(ribbonAtualId, oldRibbonId, revRibbonId, difRibbonId) {
             var totalRibbon = parseFloat(document.getElementById(ribbonAtualId).value) || 0;
             var oldRibbon = parseFloat(document.getElementById(oldRibbonId).value) || 0;
@@ -922,11 +928,9 @@
 
             var diferenca = oldRibbon - (totalRibbon + revRibbon);
 
-            // Exibindo o valor da diferença no campo difRibbonId
             var difRibbon = document.getElementById(difRibbonId);
-            difRibbon.value = diferenca.toFixed(0); // Exibe o valor sem casas decimais
+            difRibbon.value = diferenca.toFixed(0);
 
-            // Mudando a cor dependendo da diferença
             if (diferenca < 0) {
                 difRibbon.style.backgroundColor = '#f8d7da';
                 difRibbon.style.color = 'red';
@@ -938,14 +942,11 @@
             return diferenca;
         }
 
-        // Variável para somar as diferenças
-        var totalDiferenca = 0;
-
         // Função para atualizar o total da diferença
         function atualizarTotalDiferenca() {
-            totalDiferenca = 0;
+            let totalDiferenca = 0;
 
-            // Chamar a função para cada ribbon e somar as diferenças
+            // Recalcula todas as diferenças individualmente
             totalDiferenca += calcularDiferenca("ribbon_1_atual", "ribbon_1_conf", "rev_ribbon_1", "dif_ribbon_1");
             totalDiferenca += calcularDiferenca("ribbon_2_atual", "ribbon_2_conf", "rev_ribbon_2", "dif_ribbon_2");
             totalDiferenca += calcularDiferenca("ribbon_3_atual", "ribbon_3_conf", "rev_ribbon_3", "dif_ribbon_3");
@@ -953,14 +954,34 @@
             totalDiferenca += calcularDiferenca("ribbon_5_atual", "ribbon_5_conf", "rev_ribbon_5", "dif_ribbon_5");
             totalDiferenca += calcularDiferenca("ribbon_6_atual", "ribbon_6_conf", "rev_ribbon_6", "dif_ribbon_6");
 
-            // Exibir o total da diferença no campo total_dif
-            document.getElementById("total_dif").value = totalDiferenca.toFixed(0); // Exibe o total sem casas decimais
+            // Soma os valores de rev_ribbon_X
+            let rev1 = parseFloat(document.getElementById("rev_ribbon_1").value) || 0;
+            let rev2 = parseFloat(document.getElementById("rev_ribbon_2").value) || 0;
+            let rev3 = parseFloat(document.getElementById("rev_ribbon_3").value) || 0;
+            let rev4 = parseFloat(document.getElementById("rev_ribbon_4").value) || 0;
+            let rev5 = parseFloat(document.getElementById("rev_ribbon_5").value) || 0;
+            let rev6 = parseFloat(document.getElementById("rev_ribbon_6").value) || 0;
+
+// Calcula TOTAL REVELADO
+            let totalRevelado = totalDiferenca + rev1 + rev2 + rev3 + rev4 + rev5 + rev6;
+
+// Atualiza o campo
+            document.getElementById("total_revelado").value = totalRevelado.toFixed(0);
+
+            // calcula informado-revelado
+
+            let informado = parseFloat(document.getElementById("total_informado").value) || 0;
+
+
+            document.getElementById("total_dif").value =informado - totalRevelado;
+
         }
 
-        // Chamar a função inicial para calcular o total
+
+        // 👉 CHAMAR AO CARREGAR
         atualizarTotalDiferenca();
 
-        // Adicionar eventos de input para recalcular sempre que o valor de um campo "_atual" mudar
+        // 👉 ATUALIZAR QUANDO DIGITAR
         document.getElementById("ribbon_1_atual").addEventListener("input", atualizarTotalDiferenca);
         document.getElementById("ribbon_2_atual").addEventListener("input", atualizarTotalDiferenca);
         document.getElementById("ribbon_3_atual").addEventListener("input", atualizarTotalDiferenca);
@@ -968,37 +989,6 @@
         document.getElementById("ribbon_5_atual").addEventListener("input", atualizarTotalDiferenca);
         document.getElementById("ribbon_6_atual").addEventListener("input", atualizarTotalDiferenca);
     };
-
-    document.addEventListener("DOMContentLoaded", function () {
-        // Seleciona os inputs
-        const valorDin = document.getElementById("valor_din");
-        const valorDeb = document.getElementById("valor_deb");
-        const valorCred = document.getElementById("valor_cred");
-        const valorPix = document.getElementById("valor_pix");
-        const venda_total_dia = document.getElementById("venda_total_dia");
-
-        // Função para calcular a soma
-        function calcularTotal() {
-            const din = parseFloat(valorDin.value) || 0;
-            const deb = parseFloat(valorDeb.value) || 0;
-            const cred = parseFloat(valorCred.value) || 0;
-            const pix = parseFloat(valorPix.value) || 0;
-
-            // Atualiza o valor total
-            const total = din + deb + cred + pix;
-            venda_total_dia.value = total.toFixed(2); // Formata com duas casas decimais
-        }
-
-        // Executa o cálculo no carregamento inicial
-        calcularTotal();
-
-        // Adiciona listeners caso os valores sejam alterados dinamicamente
-        [valorDin, valorDeb, valorCred, valorPix].forEach(input => {
-            input.addEventListener("input", calcularTotal);
-        });
-    });
-
-
 
 </SCRIPT>
 

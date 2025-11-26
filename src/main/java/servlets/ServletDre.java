@@ -17,10 +17,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @WebServlet ("/ServletDre")
 public class ServletDre extends ServletGenericUtil {
@@ -161,9 +158,12 @@ public class ServletDre extends ServletGenericUtil {
 
             // Adicione aqui a lógica para obter os salários, se necessário
             BigDecimal totalSalarios = BigDecimal.ZERO;
+
             if (!vendasMesList.isEmpty()) {
-                totalSalarios = vendasMesList.get(0).getTotal_salarios();
+                totalSalarios = Optional.ofNullable(vendasMesList.get(0).getTotal_salarios())
+                        .orElse(BigDecimal.ZERO);
             }
+
 
             // Calcule a Receita Bruta e os Custos Operacionais
             BigDecimal receitaBruta = BigDecimal.ZERO;

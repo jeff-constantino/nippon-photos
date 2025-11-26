@@ -121,32 +121,32 @@
                                             <th scope="col">TOTAL DE ENCARTES</th>
                                             <th scope="col">TOTAL DE DIGITAIS</th>
                                             <th scope="col">TOTAL DE SOBRAS</th>
-                                            <th scope="col">TOTAL DE RIBBONS</th>
+                                            <th scope="col">QTD RIBBONS (KITS)</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <c:forEach items="${vendasMesList}" var="vl">
                                             <tr>
-                                                <td style="font-size: 1.2rem; vertical-align: middle;"><c:out value="${vl.total_ft}"/></td>
-                                                <td style="font-size: 1.2rem; vertical-align: middle;"><c:out value="${vl.total_enc}"/></td>
-                                                <td style="font-size: 1.2rem; vertical-align: middle;"><c:out value="${vl.total_dig}"/></td>
-                                                <td style="font-size: 1.2rem; vertical-align: middle;"><c:out value="${vl.total_sobras}"/></td>
-                                                <td style="font-size: 1.2rem; vertical-align: middle;">
+                                                <td><c:out value="${vl.total_ft}"/></td>
+                                                <td><c:out value="${vl.total_enc}"/></td>
+                                                <td><c:out value="${vl.total_dig}"/></td>
+                                                <td><c:out value="${vl.total_sobras}"/></td>
+
+                                                <td>
                                                     <c:choose>
-                                                        <c:when test="${vl.conf1_qtd != 0}">
-
-                                                            <fmt:formatNumber value="${(vl.total_ft + vl.total_sobras) / vl.conf1_qtd}" pattern="0.00"/>
-
+                                                        <c:when test="${vl.qtd_ribbon != null && vl.qtd_ribbon != 0}">
+                                                            <fmt:formatNumber
+                                                                    value="${(vl.total_ft + vl.total_sobras) / vl.qtd_ribbon}"
+                                                                    pattern="0.00"/>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <c:out value="Não aplicável"/>
-
                                                         </c:otherwise>
                                                     </c:choose>
-
                                                 </td>
                                             </tr>
                                         </c:forEach>
+
                                         </tbody>
                                     </table>
                                 </div>

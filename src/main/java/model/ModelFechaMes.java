@@ -200,6 +200,15 @@ public class ModelFechaMes implements Serializable {
     public void setRelatorioDiario(List<ModelFechaMes> relatorioDiario) { this.relatorioDiario = relatorioDiario; }
 
 
+    private Integer qtd_ribbon;
+
+    public Integer getQtd_ribbon() {
+        return qtd_ribbon;
+    }
+
+    public void setQtd_ribbon(Integer qtd_ribbon) {
+        this.qtd_ribbon = qtd_ribbon;
+    }
 
 
 
@@ -861,4 +870,6 @@ public class ModelFechaMes implements Serializable {
 
     public void setQtd_ribbons(int qtdRibbons) {
     }
+
+
 }

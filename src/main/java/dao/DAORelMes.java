@@ -49,7 +49,7 @@ public class DAORelMes {
         String sqlDespesas = "SELECT SUM(valor_despesa) AS despesa_total FROM despesas WHERE data_despesa >= ? AND data_despesa <= ?";
         String sqlContas = "SELECT SUM(valor) AS total_contas FROM contas WHERE data_de_pagamento >= ? AND data_de_pagamento <= ?";
         String sqlVales = "SELECT SUM(valor) AS total_vales FROM vales WHERE data >= ? AND data <= ?";
-        String sqlConfiguracao = "SELECT * FROM configuracao WHERE idconf = 2";
+        String sqlConfiguracao = "SELECT * FROM configuracao WHERE idconf = 1";
 
         // 🔽 BUSCA DE CONDUTAS
         int totalAdvert = 0;

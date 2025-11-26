@@ -33,65 +33,37 @@ public class ModelConfig {
     @Override
     public String toString() {
         return "ModelConfig{" +
-                "conf4_qtd=" + conf4_qtd +
-                ", conf3_qtd=" + conf3_qtd +
-                ", conf2_qtd=" + conf2_qtd +
-                ", conf1_qtd=" + conf1_qtd +
-                ", conf_name='" + conf_name + '\'' +
-                ", conf4_nome='" + conf4_nome + '\'' +
-                ", conf3_nome='" + conf3_nome + '\'' +
-                ", conf2_nome='" + conf2_nome + '\'' +
-                ", conf1_nome='" + conf1_nome + '\'' +
-                ", conf4_custo=" + conf4_custo +
-                ", conf3_custo=" + conf3_custo +
-                ", conf2_custo=" + conf2_custo +
-                ", conf1_custo=" + conf1_custo +
-                ", conf4_valor=" + conf4_valor +
-                ", conf3_valor=" + conf3_valor +
-                ", conf2_valor=" + conf2_valor +
-                ", conf1_valor2=" + conf1_valor2 +
+                "idconf=" + idconf +
                 ", conf1_valor=" + conf1_valor +
-                ", idconf=" + idconf +
+                ", conf1_valor2=" + conf1_valor2 +
+                ", conf2_valor=" + conf2_valor +
+                ", conf3_valor=" + conf3_valor +
+                ", conf4_valor=" + conf4_valor +
+                ", conf1_custo=" + conf1_custo +
+                ", conf2_custo=" + conf2_custo +
+                ", conf3_custo=" + conf3_custo +
+                ", conf4_custo=" + conf4_custo +
+                ", conf1_nome='" + conf1_nome + '\'' +
+                ", conf2_nome='" + conf2_nome + '\'' +
+                ", conf3_nome='" + conf3_nome + '\'' +
+                ", conf4_nome='" + conf4_nome + '\'' +
+                ", conf_name='" + conf_name + '\'' +
+                ", conf1_qtd=" + conf1_qtd +
+                ", conf2_qtd=" + conf2_qtd +
+                ", conf3_qtd=" + conf3_qtd +
+                ", conf4_qtd=" + conf4_qtd +
+                ", confName='" + confName + '\'' +
+                ", qtd=" + qtd +
+                ", valor=" + valor +
+                ", custo=" + custo +
                 '}';
     }
 
-    public String getConfName() {
-        return confName;
-    }
-
-    public void setConfName(String confName) {
-        this.confName = confName;
-    }
-
-    public int getQtd() {
-        return qtd;
-    }
-
-    public void setQtd(int qtd) {
-        this.qtd = qtd;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
-    public BigDecimal getCusto() {
-        return custo;
-    }
-
-    public void setCusto(BigDecimal custo) {
-        this.custo = custo;
-    }
-
-    public Long getidconf() {
+    public Long getIdconf() {
         return idconf;
     }
 
-    public void setidconf(Long idconf) {
+    public void setIdconf(Long idconf) {
         this.idconf = idconf;
     }
 
@@ -237,5 +209,37 @@ public class ModelConfig {
 
     public void setConf4_qtd(int conf4_qtd) {
         this.conf4_qtd = conf4_qtd;
+    }
+
+    public String getConfName() {
+        return confName;
+    }
+
+    public void setConfName(String confName) {
+        this.confName = confName;
+    }
+
+    public int getQtd() {
+        return qtd;
+    }
+
+    public void setQtd(int qtd) {
+        this.qtd = qtd;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public BigDecimal getCusto() {
+        return custo;
+    }
+
+    public void setCusto(BigDecimal custo) {
+        this.custo = custo;
     }
 }

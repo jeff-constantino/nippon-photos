@@ -19,7 +19,7 @@ public class DAOConfig {
     }
 
     public ModelConfig gravarConfig(ModelConfig modelConfig) throws Exception {
-        if (modelConfig.getidconf() != null && modelConfig.getidconf() > 0 && existeConfig(modelConfig.getidconf())) {
+        if (modelConfig.getIdconf() != null && modelConfig.getIdconf() > 0 && existeConfig(modelConfig.getIdconf())) {
             return atualizarConfig(modelConfig);
         } else {
             return inserirConfig(modelConfig);
@@ -57,7 +57,7 @@ public class DAOConfig {
             // Caso precise obter a chave gerada
             try (ResultSet generatedKeys = preparedSql.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    modelConfig.setidconf(generatedKeys.getLong(1)); // Supondo que idconf seja uma coluna auto-increment
+                    modelConfig.setIdconf(generatedKeys.getLong(1)); // Supondo que idconf seja uma coluna auto-increment
                 }
             }
         } catch (SQLException e) {
@@ -81,7 +81,7 @@ public class DAOConfig {
             preparedSql.setString(6, modelConfig.getConf3_nome());
             preparedSql.setString(7, modelConfig.getConf_name());
 
-            preparedSql.setLong(8, modelConfig.getidconf()); // Usando idconf no final
+            preparedSql.setLong(8, modelConfig.getIdconf()); // Usando idconf no final
 
             preparedSql.executeUpdate();
             connection.commit();
@@ -213,7 +213,7 @@ public class DAOConfig {
 
             while (rs.next()) {
                 ModelConfig material = new ModelConfig();
-                material.setidconf(rs.getLong("id_conf"));
+                material.setIdconf(rs.getLong("id_conf"));
                 material.setConf_name(rs.getString("conf_name"));
                 material.setConf1_valor(rs.getBigDecimal("valor"));
                 material.setConf1_qtd(rs.getInt("qtd"));
@@ -295,7 +295,7 @@ public class DAOConfig {
                 while (rs.next()) {
                     ModelConfig material = new ModelConfig();
                     // Se ModelConfig tiver campo para ID da tabela materiais:
-                    // material.setidconfMaterial(rs.getLong("id_conf"));
+                    // material.setIdconfMaterial(rs.getLong("id_conf"));
                     material.setConf_name(rs.getString("conf_name"));
                     material.setConf1_valor(rs.getBigDecimal("valor"));
                     material.setConf1_qtd(rs.getInt("qtd"));
@@ -324,7 +324,7 @@ public class DAOConfig {
             while (rs.next()) {
                 ModelConfig material = new ModelConfig();
                 // Se ModelConfig tiver campo para ID da tabela materiais:
-                // material.setidconfMaterial(rs.getLong("id_conf"));
+                // material.setIdconfMaterial(rs.getLong("id_conf"));
                 material.setConf_name(rs.getString("conf_name"));
                 material.setConf1_valor(rs.getBigDecimal("valor"));
                 material.setConf1_qtd(rs.getInt("qtd"));
@@ -364,7 +364,7 @@ public class DAOConfig {
             ResultSet resultSet = preparedSql.executeQuery();
             if (resultSet.next()) {
                 modelConfig = new ModelConfig();
-                modelConfig.setidconf(resultSet.getLong("idconf"));
+                modelConfig.setIdconf(resultSet.getLong("idconf"));
                 modelConfig.setConf_name(resultSet.getString("conf_name"));
 
                 modelConfig.setConf1_nome(resultSet.getString("conf1_nome"));
@@ -408,7 +408,7 @@ public class DAOConfig {
             while (resultSet.next()) {
                 ModelConfig modelConfig = new ModelConfig();
 
-                modelConfig.setidconf(resultSet.getLong("idconf"));
+                modelConfig.setIdconf(resultSet.getLong("idconf"));
                 modelConfig.setConf_name(resultSet.getString("conf_name"));
 
                 modelConfig.setConf1_nome(resultSet.getString("conf1_nome"));

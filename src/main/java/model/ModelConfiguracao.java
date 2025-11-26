@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class ModelConfiguracao implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Long idConf;
+    private Long idconf;
     private String chave;
     private String conf_name;
 
@@ -412,12 +412,12 @@ public class ModelConfiguracao implements java.io.Serializable {
         this.max_inss_4 = max_inss_4;
     }
 
-    public Long getIdConf() {
-        return idConf;
+    public Long getIdconf() {
+        return idconf;
     }
 
-    public void setIdConf(Long idConf) {
-        this.idConf = idConf;
+    public void setIdconf(Long idconf) {
+        this.idconf = idconf;
     }
 
     public String getChave() {

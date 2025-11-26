@@ -145,9 +145,9 @@
                                                                             <div class="col-sm-1">
                                                                                 <label class="float-label">ID:</label>
                                                                                 <span class="form-bar"></span>
-                                                                                <input type="text" class="form-control" style="background-color: black" id="idConf"
-                                                                                       name="idConf" placeholder=""
-                                                                                       value="${modelConfig.idConf}" readonly>
+                                                                                <input type="text" class="form-control" style="background-color: black" id="idconf"
+                                                                                       name="idconf" placeholder=""
+                                                                                       value="${modelConfig.idconf}" readonly>
                                                                             </div>
 
 
@@ -535,8 +535,8 @@
                                                                     <div class="col-sm-1">
                                                                         <label class="float-label">ID:</label>
                                                                         <span class="form-bar"></span>
-                                                                        <input type="text" class="form-control" style="background-color: black" id="idConf_financeiro"
-                                                                               name="idConf" placeholder=""
+                                                                        <input type="text" class="form-control" style="background-color: black" id="idconf_financeiro"
+                                                                               name="idconf" placeholder=""
                                                                                value="" readonly>
                                                                     </div>
 
@@ -628,8 +628,8 @@
                                                                     <div class="col-sm-1">
                                                                         <label class="float-label">ID:</label>
                                                                         <span class="form-bar"></span>
-                                                                        <input type="text" class="form-control" style="background-color: black" id="idConf_juros"
-                                                                               name="idConf" placeholder=""
+                                                                        <input type="text" class="form-control" style="background-color: black" id="idconf_juros"
+                                                                               name="idconf" placeholder=""
                                                                                value="" readonly>
                                                                     </div>
 
@@ -717,9 +717,9 @@
                                                                     <div class="col-sm-1">
                                                                         <label class="float-label">ID:</label>
                                                                         <span class="form-bar"></span>
-                                                                        <input type="text" class="form-control" style="background-color: black" id="idConf_salario"
-                                                                               name="idConf" placeholder=""
-                                                                               value="${configsSalarios[0].idConf}" readonly>
+                                                                        <input type="text" class="form-control" style="background-color: black" id="idconf_salario"
+                                                                               name="idconf" placeholder=""
+                                                                               value="${configsSalarios[0].idconf}" readonly>
                                                                     </div>
 
 
@@ -877,7 +877,7 @@
                                              <!-- Bloco 1 -->
                                              <tbody>
                                              <c:forEach items="${configs}" var="modelConf">
-                                                 <c:if test="${modelConf.idConf == 1}">
+                                                 <c:if test="${modelConf.idconf == 1}">
                                                      <tr>
                                                          <td>
                                                              <a class="btn btn-outline-success waves-effect waves-light"
@@ -885,7 +885,7 @@
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#modalProd"
                                                                 onclick="gerenciarConfig(
-                                                                    ${modelConf.idConf},
+                                                                    ${modelConf.idconf},
                                                                         '${modelConf.conf_name}',
                                                                         '${modelConf.conf1_nome}',
                                                                         '${modelConf.conf1_valor}',
@@ -897,7 +897,7 @@
                                                                  Editar
                                                              </a>
                                                          </td>
-                                                         <td><c:out value="${modelConf.idConf}"/></td>
+                                                         <td><c:out value="${modelConf.idconf}"/></td>
                                                          <td hidden="hidden"><c:out value="${modelConf.conf_name}"/></td>
                                                          <td><c:out value="${modelConf.conf1_nome}"/></td>
 
@@ -1056,7 +1056,7 @@
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#modalSalarios"
                                                                onclick="gerenciarSalario(
-                                                                   ${modelConfiguracao.idConf},
+                                                                   ${modelConfiguracao.idconf},
                                                                        '${modelConfiguracao.salario}',
                                                                        '${modelConfiguracao.comissao}',
                                                                        '${modelConfiguracao.comissao2}',
@@ -1065,7 +1065,7 @@
                                                                 Editar
                                                             </a>
                                                         </td>
-                                                        <td><c:out value="${modelConfiguracao.idConf}"/></td>
+                                                        <td><c:out value="${modelConfiguracao.idconf}"/></td>
 
                                                         <!-- Formatação do valor com JSTL -->
                                                         <td><fmt:formatNumber value="${modelConfiguracao.salario}" type="currency" currencySymbol="R$" /></td>
@@ -1142,7 +1142,7 @@
                                                            data-bs-toggle="modal"
                                                            data-bs-target="#modalCartao"
                                                            onclick="gerenciarCartao(
-                                                               ${modelConfiguracao.idConf},
+                                                               ${modelConfiguracao.idconf},
                                                                    '${modelConfiguracao.deb_visa_master}',
                                                                    '${modelConfiguracao.cred_visa_master}',
                                                                    '${modelConfiguracao.deb_outros}',
@@ -1151,7 +1151,7 @@
                                                             Editar
                                                         </a>
                                                     </td>
-                                                    <td><c:out value="${modelConfiguracao.idConf}"/></td>
+                                                    <td><c:out value="${modelConfiguracao.idconf}"/></td>
 
                                                     <!-- Formatação do valor com JSTL -->
                                                     <fmt:setLocale value="pt_BR" />
@@ -1391,9 +1391,9 @@
 
 
 
-       function gerenciarConfig(idConf, conf_name, conf1_nome, conf1_valor, conf2_nome, conf2_valor, conf3_nome, conf3_valor) {
+       function gerenciarConfig(idconf, conf_name, conf1_nome, conf1_valor, conf2_nome, conf2_valor, conf3_nome, conf3_valor) {
        // Preencher o campo idConf
-       document.getElementById('idConf').value = idConf; // Campo que irá receber o idConf
+       document.getElementById('idConf').value = idconf; // Campo que irá receber o idConf
        document.getElementById('conf_name').value = conf_name; // Campo para conf_name
 
 
@@ -1409,9 +1409,9 @@
        document.getElementById('conf3_valor').value = conf3_valor;
    }
 
-       function gerenciarSalario(idConf, salario, comissao, comissao2, fgts) {
+       function gerenciarSalario(idconf, salario, comissao, comissao2, fgts) {
        // Preencher o campo idConf
-       document.getElementById('idConf_salario').value = idConf;
+       document.getElementById('idConf_salario').value = idconf;
        document.getElementById('salario').value = salario;
        document.getElementById('comissao').value = comissao;
        document.getElementById('comissao2').value = comissao2;
@@ -1419,9 +1419,9 @@
 
    }
 
-       function gerenciarCartao(idConf, deb_visa_master, cred_visa_master, deb_outros, cred_outros) {
+       function gerenciarCartao(idconf, deb_visa_master, cred_visa_master, deb_outros, cred_outros) {
        // Preencher o campo idConf
-       document.getElementById('idConf_juros').value = idConf;
+       document.getElementById('idconf_juros').value = idconf;
        document.getElementById('deb_visa_master').value = deb_visa_master;
        document.getElementById('cred_visa_master').value = cred_visa_master;
        document.getElementById('deb_outros').value = deb_outros;
@@ -1471,9 +1471,9 @@
    }
    }
 
-       function gerenciarGeral(idConf, conf_name, conf1_nome, conf1_valor, conf1_qtd, conf1_custo, conf2_nome, conf2_valor, conf2_qtd, conf2_custo, conf3_nome, conf3_valor, conf3_qtd, conf3_custo) {
+       function gerenciarGeral(idconf, conf_name, conf1_nome, conf1_valor, conf1_qtd, conf1_custo, conf2_nome, conf2_valor, conf2_qtd, conf2_custo, conf3_nome, conf3_valor, conf3_qtd, conf3_custo) {
        // Preencher o campo idConf
-       document.getElementById('idConf_geral').value = idConf; // Campo que irá receber o idConf
+       document.getElementById('idConf_geral').value = idconf; // Campo que irá receber o idConf
        document.getElementById('conf_name_geral').value = conf_name; // Campo para conf_name
 
 

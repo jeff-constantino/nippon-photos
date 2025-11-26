@@ -49,7 +49,7 @@ public class DAORelMes {
         String sqlDespesas = "SELECT SUM(valor_despesa) AS despesa_total FROM despesas WHERE data_despesa >= ? AND data_despesa <= ?";
         String sqlContas = "SELECT SUM(valor) AS total_contas FROM contas WHERE data_de_pagamento >= ? AND data_de_pagamento <= ?";
         String sqlVales = "SELECT SUM(valor) AS total_vales FROM vales WHERE data >= ? AND data <= ?";
-        String sqlConfiguracao = "SELECT * FROM configuracao WHERE \"idConf\" = 2";
+        String sqlConfiguracao = "SELECT * FROM configuracao WHERE idconf = 2";
 
         // 🔽 BUSCA DE CONDUTAS
         int totalAdvert = 0;
@@ -168,7 +168,7 @@ public class DAORelMes {
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);
-                        resumo.setIdConf(rs.getLong("idConf"));
+                        resumo.setIdconf(rs.getLong("idconf"));
                         resumo.setConf1_valor(rs.getBigDecimal("conf1_valor"));
                         resumo.setConf1_valor2(rs.getBigDecimal("conf1_valor2"));
                         resumo.setConf2_valor(rs.getBigDecimal("conf2_valor"));

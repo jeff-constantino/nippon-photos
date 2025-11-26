@@ -57,7 +57,7 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 modelConfiguracao.setComissao2(comissao2);
 
                 if (configExistente != null) {
-                    modelConfiguracao.setIdConf(configExistente.getIdConf());
+                    modelConfiguracao.setIdconf(configExistente.getIdconf());
                 }
 
                 modelConfiguracao.setId_irrf_1(parseToLong(request.getParameter("id_irrf_1")));
@@ -101,7 +101,7 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 modelConfiguracao.setCred_outros(credOutros);
 
                 if (configExistente != null) {
-                    modelConfiguracao.setIdConf(configExistente.getIdConf());
+                    modelConfiguracao.setIdconf(configExistente.getIdconf());
                 }
                 daoConfiguracao.gravarConfigCartao(modelConfiguracao);
                 msg = "Configurações de Cartão salvas com sucesso!";

@@ -4,7 +4,7 @@
 
 CREATE TABLE IF NOT EXISTS public.configuracao
 (
-    "idConf" integer NOT NULL DEFAULT nextval('configuracao_id_seq'::regclass),
+    "idconf" integer NOT NULL DEFAULT nextval('configuracao_id_seq'::regclass),
     prod1_valor numeric(10,2),
     prod2_valor numeric(10,2),
     prod3_valor numeric(10,2),
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS public.configuracao
     prod1_nome character varying(255) COLLATE pg_catalog."default",
     prod2_nome character varying(255) COLLATE pg_catalog."default",
     prod3_nome character varying(255) COLLATE pg_catalog."default",
-    CONSTRAINT configuracao_pkey PRIMARY KEY ("idConf")
+    CONSTRAINT configuracao_pkey PRIMARY KEY ("idconf")
 )
 
 TABLESPACE pg_default;

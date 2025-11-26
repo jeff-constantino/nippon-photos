@@ -95,9 +95,9 @@
                                                                     <div class="col-sm-1">
                                                                         <label class="float-label">ID:</label>
                                                                         <span class="form-bar"></span>
-                                                                        <input type="text" class="form-control" style="background-color: black" id="idConf"
-                                                                               name="idConf" placeholder=""
-                                                                               value="${modelConfig.idConf}" readonly>
+                                                                        <input type="text" class="form-control" style="background-color: black" id="idconf"
+                                                                               name="idconf" placeholder=""
+                                                                               value="${modelConfig.idconf}" readonly>
                                                                     </div>
 
 
@@ -343,7 +343,7 @@
                                                            data-bs-toggle="modal"
                                                            data-bs-target="#modalProd"
                                                            onclick="gerenciar(
-                                                               ${modelConf.idConf},
+                                                               ${modelConf.idconf},
                                                                    '${modelConf.prod1_nome}',
                                                                    '${modelConf.prod1_valor}',
                                                                    '${modelConf.prod1_valor2}',
@@ -354,7 +354,7 @@
                                                             Editar
                                                         </a>
                                                     </td>
-                                                    <td><c:out value="${modelConf.idConf}"/></td>
+                                                    <td><c:out value="${modelConf.idconf}"/></td>
                                                     <td><c:out value="${modelConf.prod1_nome}"/></td>
                                                     <td><c:out value="${modelConf.prod1_valor}"/></td>
                                                     <td><c:out value="${modelConf.prod1_valor2}"/></td>

@@ -175,7 +175,7 @@ public class DAOFechaDia {
 
     public List<ModelConfig> consultarValor() throws Exception {
         List<ModelConfig> listaConfigs = new ArrayList<>();
-        String query = "SELECT conf1_valor, conf2_valor, conf3_valor FROM public.configuracao WHERE \"idConf\" = 1";
+        String query = "SELECT conf1_valor, conf2_valor, conf3_valor FROM public.configuracao WHERE idconf = 1";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(query);
              ResultSet resultSet = preparedSql.executeQuery()) {

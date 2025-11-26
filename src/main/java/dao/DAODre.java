@@ -48,7 +48,7 @@ public class DAODre {
         String sqlDespesas = "SELECT SUM(valor_despesa) AS despesa_total FROM despesas WHERE data_despesa >= ? AND data_despesa <= ?";
         String sqlContas = "SELECT SUM(valor) AS total_contas FROM contas WHERE data_de_pagamento >= ? AND data_de_pagamento <= ?";
         String sqlVales = "SELECT SUM(valor) AS total_vales FROM vales WHERE data >= ? AND data <= ?";
-        String sqlConfiguracao = "SELECT * FROM configuracao WHERE \"idConf\" = 1";
+        String sqlConfiguracao = "SELECT * FROM configuracao WHERE idconf = 1";
 
         // 🔽 NOVA CONSULTA SALÁRIOS
         String sqlSalarios = "SELECT SUM(salario_total2) AS total_salarios FROM salarios " +
@@ -188,7 +188,7 @@ public class DAODre {
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);
-                        resumo.setIdConf(rs.getLong("idConf"));
+                        resumo.setIdconf(rs.getLong("idconf"));
                         resumo.setConf1_valor(rs.getBigDecimal("conf1_valor"));
                         resumo.setConf2_valor(rs.getBigDecimal("conf2_valor"));
                         resumo.setConf3_valor(rs.getBigDecimal("conf3_valor"));
@@ -233,10 +233,10 @@ public class DAODre {
                         try (PreparedStatement pstCusto = connection.prepareStatement(sqlCustos);
                              ResultSet rsCusto = pstCusto.executeQuery()) {
                             while (rsCusto.next()) {
-                                int idConf = rsCusto.getInt("id_conf");
+                                int idconf = rsCusto.getInt("id_conf");
                                 BigDecimal custo = rsCusto.getBigDecimal("custo");
-                                if (idConf == 1) custoRibbon = custo;
-                                if (idConf == 2) custoEncarte = custo;
+                                if (idconf == 1) custoRibbon = custo;
+                                if (idconf == 2) custoEncarte = custo;
                             }
                         }
 

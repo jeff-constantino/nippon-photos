@@ -3,7 +3,7 @@ package model;
 import java.math.BigDecimal;
 
 public class ModelConfig {
-    private Long idConf;  // Adicionado o atributo id
+    private Long idconf;  // Adicionado o atributo id
     private BigDecimal conf1_valor;
     private BigDecimal conf1_valor2;
     private BigDecimal conf2_valor;
@@ -51,7 +51,7 @@ public class ModelConfig {
                 ", conf2_valor=" + conf2_valor +
                 ", conf1_valor2=" + conf1_valor2 +
                 ", conf1_valor=" + conf1_valor +
-                ", idConf=" + idConf +
+                ", idconf=" + idconf +
                 '}';
     }
 
@@ -87,12 +87,12 @@ public class ModelConfig {
         this.custo = custo;
     }
 
-    public Long getIdConf() {
-        return idConf;
+    public Long getidconf() {
+        return idconf;
     }
 
-    public void setIdConf(Long idConf) {
-        this.idConf = idConf;
+    public void setidconf(Long idconf) {
+        this.idconf = idconf;
     }
 
     public BigDecimal getConf1_valor() {

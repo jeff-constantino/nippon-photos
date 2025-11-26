@@ -50,7 +50,7 @@ public class ServletConfig extends ServletGenericUtil {
 
             // Preenche com os dados existentes do banco
             for (ModelConfig material : materiaisFixos) {
-                int index = (int) (material.getIdConf() - 1); // ID 1 = index 0, ID 2 = index 1, etc.
+                int index = (int) (material.getIdconf() - 1); // ID 1 = index 0, ID 2 = index 1, etc.
                 if (index >= 0 && index < 3) {
                     materiais[index] = material;
                 }
@@ -102,13 +102,13 @@ public class ServletConfig extends ServletGenericUtil {
             }
 
             // --- FLUXO EXISTENTE: CONFIGURAÇÕES GERAIS (tabela configuracao) ---
-            String idConfParam = request.getParameter("idConf");
+            String idconfParam = request.getParameter("idconf");
             ModelConfig modelConfig = new ModelConfig();
 
-            if (idConfParam != null && !idConfParam.isEmpty()) {
-                long id = Long.parseLong(idConfParam);
+            if (idconfParam != null && !idconfParam.isEmpty()) {
+                long id = Long.parseLong(idconfParam);
                 if (id > 0) {
-                    modelConfig.setIdConf(id);
+                    modelConfig.setIdconf(id);
                 }
             }
 

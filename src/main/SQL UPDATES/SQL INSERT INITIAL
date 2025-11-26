@@ -1,0 +1,68 @@
+INSERT INTO public.conf_irrf(
+	id_irrf, irrf, parcela_irrf, min_salario, max_salario)
+	VALUES
+	(?, ?, ?, ?, ?),
+	(?, ?, ?, ?, ?),
+	(?, ?, ?, ?, ?),
+	(?, ?, ?, ?, ?);
+
+INSERT INTO public.conf_irrf(
+	id_irrf, irrf, parcela_irrf, min_salario, max_salario)
+	VALUES
+	(1, 0.00, 0.00, 0.00, 3036.00),
+	(2, 7.5, 182.16, 3037.00, 3533.31),
+	(3, 15.00, 394.16, 3533.32, 4688.85),
+	(4, 22.50, 675.49, 4688.86, 5830.85);
+
+INSERT INTO public.conf_juros_cartao(
+    	idconf, deb_visa_master, cred_visa_master, deb_outros, cred_outros)
+    	VALUES (1, 0.87, 2.89, 2.07, 4.67);
+
+INSERT INTO public.conf_materiais(
+	id_conf, conf_name, valor, qtd, custo)
+	VALUES
+	(1, RIBBON, 973, 700, 1.3),
+	(2, ENCARTES, 5000, 10000, 0.50),
+	(3, ENVELOPE, 150.00, 200, 0.75);
+
+INSERT INTO public.conf_salarios(
+	idconf, salario, comissao, comissao2, fgts)
+	VALUES
+    	(1, 1518.00, 15.00, 20.00, 8.00);
+
+INSERT INTO public.configuracao(
+	idconf, conf1_valor, conf2_valor, conf3_valor, conf1_nome, conf2_nome, conf3_nome, conf1_valor2, conf1_qtd, conf2_qtd, conf3_qtd, conf_name, conf1_custo, conf2_custo, conf3_custo, conf4_nome, conf4_qtd, conf4_custo, conf4_valor)
+	VALUES (1, 15.00, 5.00, 5.00, "FOTOS", "ENCARTES", "DIGITAIS", 15.00, 0.00, 0.00, 0.00, "PRODUTOS", 0.00, 0.00, 0.00, 0, 0, 0.00, 0.00);
+
+
+INSERT INTO public.controle_ribbon(
+    id_controle, data_ribbon,
+    ribbon_1_atual, ribbon_2_atual, ribbon_3_atual, ribbon_4_atual, ribbon_5_atual, ribbon_6_atual,
+    rev_ribbon_1, rev_ribbon_2, rev_ribbon_3, rev_ribbon_4, rev_ribbon_5, rev_ribbon_6,
+    dif_ribbon_1, dif_ribbon_2, dif_ribbon_3, dif_ribbon_4, dif_ribbon_5, dif_ribbon_6,
+    troca_ribbon_1, troca_ribbon_2, troca_ribbon_3, troca_ribbon_4, troca_ribbon_5, troca_ribbon_6,
+    sobras,
+    old_ribbon_1, old_ribbon_2, old_ribbon_3, old_ribbon_4, old_ribbon_5, old_ribbon_6,
+    total_dif,
+    observacao_ribbon,
+    fim_ribbon_1, fim_ribbon_2, fim_ribbon_3, fim_ribbon_4, fim_ribbon_5, fim_ribbon_6)
+    VALUES (
+    1, '2025-10-31',
+    0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0,
+    0,
+    0, 0, 0, 0, 0, 0,
+    0,
+    '',
+    0, 0, 0, 0, 0, 0
+);
+
+INSERT INTO public.inss(
+	id_inss, inss, min_inss, max_inss, parcela)
+	VALUES
+	(1, 7.50, 10.00, 1518.00, 0),
+	(2, 9.00, 1518.01, 2793.88, 22.80),
+	(3, 12.00, 2793.89, 4190.83, 106.59),
+	(4, 14.00, 4190.84, 8157.41, 190.40);

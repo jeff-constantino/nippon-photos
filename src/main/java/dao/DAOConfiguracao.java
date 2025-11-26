@@ -24,7 +24,7 @@ public class DAOConfiguracao {
         try {
             String sql;
 
-            if (model.getIdConf() == null) {
+            if (model.getIdconf() == null) {
                 sql = "INSERT INTO conf_salarios (salario, comissao, fgts, comissao2) VALUES (?, ?, ?, ?)";
                 try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
                     stmt.setBigDecimal(1, model.getSalario());
@@ -35,18 +35,18 @@ public class DAOConfiguracao {
 
                     try (ResultSet rs = stmt.getGeneratedKeys()) {
                         if (rs.next()) {
-                            model.setIdConf(rs.getLong(1));
+                            model.setIdconf(rs.getLong(1));
                         }
                     }
                 }
             } else {
-                sql = "UPDATE conf_salarios SET salario=?, comissao=?, fgts=?, comissao2=? WHERE \"idConf\" =?";
+                sql = "UPDATE conf_salarios SET salario=?, comissao=?, fgts=?, comissao2=? WHERE idconf =?";
                 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                     stmt.setBigDecimal(1, model.getSalario());
                     stmt.setBigDecimal(2, model.getComissao());
                     stmt.setBigDecimal(3, model.getFgts());
                     stmt.setBigDecimal(4, model.getComissao2());
-                    stmt.setLong(5, model.getIdConf());
+                    stmt.setLong(5, model.getIdconf());
                     stmt.executeUpdate();
                 }
             }
@@ -149,7 +149,7 @@ public class DAOConfiguracao {
         try {
             String sql;
 
-            if (model.getIdConf() == null) {
+            if (model.getIdconf() == null) {
                 sql = "INSERT INTO conf_juros_cartao (deb_visa_master, cred_visa_master, deb_outros, cred_outros) VALUES (?, ?, ?, ?)";
                 try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
                     stmt.setBigDecimal(1, model.getDeb_visa_master());
@@ -160,18 +160,18 @@ public class DAOConfiguracao {
 
                     try (ResultSet rs = stmt.getGeneratedKeys()) {
                         if (rs.next()) {
-                            model.setIdConf(rs.getLong(1));
+                            model.setIdconf(rs.getLong(1));
                         }
                     }
                 }
             } else {
-                sql = "UPDATE conf_juros_cartao SET deb_visa_master=?, cred_visa_master=?, deb_outros=?, cred_outros=? WHERE \"idConf\" =?";
+                sql = "UPDATE conf_juros_cartao SET deb_visa_master=?, cred_visa_master=?, deb_outros=?, cred_outros=? WHERE idconf =?";
                 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                     stmt.setBigDecimal(1, model.getDeb_visa_master());
                     stmt.setBigDecimal(2, model.getCred_visa_master());
                     stmt.setBigDecimal(3, model.getDeb_outros());
                     stmt.setBigDecimal(4, model.getCred_outros());
-                    stmt.setLong(5, model.getIdConf());
+                    stmt.setLong(5, model.getIdconf());
                     stmt.executeUpdate();
                 }
             }
@@ -195,7 +195,7 @@ public class DAOConfiguracao {
 
             while (resultSet.next()) {
                 ModelConfiguracao modelConfiguracao = new ModelConfiguracao();
-                modelConfiguracao.setIdConf(resultSet.getLong("idConf"));
+                modelConfiguracao.setIdconf(resultSet.getLong("idconf"));
                 modelConfiguracao.setSalario(resultSet.getBigDecimal("salario"));
                 modelConfiguracao.setComissao(resultSet.getBigDecimal("comissao"));
                 modelConfiguracao.setFgts(resultSet.getBigDecimal("fgts"));
@@ -310,7 +310,7 @@ public class DAOConfiguracao {
 
             while (resultSet.next()) {
                 ModelConfiguracao modelConfiguracao = new ModelConfiguracao();
-                modelConfiguracao.setIdConf(resultSet.getLong("idConf"));
+                modelConfiguracao.setIdconf(resultSet.getLong("idconf"));
 
                 // Divide os valores por 100 diretamente no Java
                 BigDecimal debVisaMaster = resultSet.getBigDecimal("deb_visa_master").divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);

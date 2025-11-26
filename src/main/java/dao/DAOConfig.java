@@ -19,17 +19,17 @@ public class DAOConfig {
     }
 
     public ModelConfig gravarConfig(ModelConfig modelConfig) throws Exception {
-        if (modelConfig.getIdConf() != null && modelConfig.getIdConf() > 0 && existeConfig(modelConfig.getIdConf())) {
+        if (modelConfig.getidconf() != null && modelConfig.getidconf() > 0 && existeConfig(modelConfig.getidconf())) {
             return atualizarConfig(modelConfig);
         } else {
             return inserirConfig(modelConfig);
         }
     }
 
-    private boolean existeConfig(Long idConf) throws SQLException {
-        String sql = "SELECT 1 FROM public.configuracao WHERE \"idConf\" = ?";
+    private boolean existeConfig(Long idconf) throws SQLException {
+        String sql = "SELECT 1 FROM public.configuracao WHERE idconf = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, idConf);
+            stmt.setLong(1, idconf);
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next(); // true se encontrar
             }
@@ -57,7 +57,7 @@ public class DAOConfig {
             // Caso precise obter a chave gerada
             try (ResultSet generatedKeys = preparedSql.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    modelConfig.setIdConf(generatedKeys.getLong(1)); // Supondo que idConf seja uma coluna auto-increment
+                    modelConfig.setidconf(generatedKeys.getLong(1)); // Supondo que idconf seja uma coluna auto-increment
                 }
             }
         } catch (SQLException e) {
@@ -70,7 +70,7 @@ public class DAOConfig {
 
 
     private ModelConfig atualizarConfig(ModelConfig modelConfig) throws Exception {
-        String sql = "UPDATE public.configuracao SET conf1_valor = ?, conf2_valor = ?, conf3_valor = ?, conf1_nome = UPPER(?), conf2_nome = UPPER(?), conf3_nome = UPPER(?), conf_name = UPPER(?) WHERE \"idConf\" = ?";
+        String sql = "UPDATE public.configuracao SET conf1_valor = ?, conf2_valor = ?, conf3_valor = ?, conf1_nome = UPPER(?), conf2_nome = UPPER(?), conf3_nome = UPPER(?), conf_name = UPPER(?) WHERE idconf = ?";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
             preparedSql.setBigDecimal(1, modelConfig.getConf1_valor());
@@ -81,7 +81,7 @@ public class DAOConfig {
             preparedSql.setString(6, modelConfig.getConf3_nome());
             preparedSql.setString(7, modelConfig.getConf_name());
 
-            preparedSql.setLong(8, modelConfig.getIdConf()); // Usando idConf no final
+            preparedSql.setLong(8, modelConfig.getidconf()); // Usando idconf no final
 
             preparedSql.executeUpdate();
             connection.commit();
@@ -213,7 +213,7 @@ public class DAOConfig {
 
             while (rs.next()) {
                 ModelConfig material = new ModelConfig();
-                material.setIdConf(rs.getLong("id_conf"));
+                material.setidconf(rs.getLong("id_conf"));
                 material.setConf_name(rs.getString("conf_name"));
                 material.setConf1_valor(rs.getBigDecimal("valor"));
                 material.setConf1_qtd(rs.getInt("qtd"));
@@ -295,7 +295,7 @@ public class DAOConfig {
                 while (rs.next()) {
                     ModelConfig material = new ModelConfig();
                     // Se ModelConfig tiver campo para ID da tabela materiais:
-                    // material.setIdConfMaterial(rs.getLong("id_conf"));
+                    // material.setidconfMaterial(rs.getLong("id_conf"));
                     material.setConf_name(rs.getString("conf_name"));
                     material.setConf1_valor(rs.getBigDecimal("valor"));
                     material.setConf1_qtd(rs.getInt("qtd"));
@@ -324,7 +324,7 @@ public class DAOConfig {
             while (rs.next()) {
                 ModelConfig material = new ModelConfig();
                 // Se ModelConfig tiver campo para ID da tabela materiais:
-                // material.setIdConfMaterial(rs.getLong("id_conf"));
+                // material.setidconfMaterial(rs.getLong("id_conf"));
                 material.setConf_name(rs.getString("conf_name"));
                 material.setConf1_valor(rs.getBigDecimal("valor"));
                 material.setConf1_qtd(rs.getInt("qtd"));
@@ -342,11 +342,11 @@ public class DAOConfig {
     /**
      * Exclui material por ID
      */
-    public void excluirMaterial(Long idConf) throws Exception {
+    public void excluirMaterial(Long idconf) throws Exception {
         String sql = "DELETE FROM public.conf_materiais WHERE id_conf = ?";
 
         try (PreparedStatement preparedStmt = connection.prepareStatement(sql)) {
-            preparedStmt.setLong(1, idConf);
+            preparedStmt.setLong(1, idconf);
             int rowsAffected = preparedStmt.executeUpdate();
 
             if (rowsAffected == 0) {
@@ -356,15 +356,15 @@ public class DAOConfig {
             throw new Exception("Erro ao excluir material: " + e.getMessage(), e);
         }
     }
-    public ModelConfig consultarConfig(long idConf) throws Exception {
+    public ModelConfig consultarConfig(long idconf) throws Exception {
         ModelConfig modelConfig = null;
-        String sql = "SELECT * FROM public.configuracao WHERE \"idConf\" = ?";
+        String sql = "SELECT * FROM public.configuracao WHERE idconf = ?";
         try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
-            preparedSql.setLong(1, idConf);
+            preparedSql.setLong(1, idconf);
             ResultSet resultSet = preparedSql.executeQuery();
             if (resultSet.next()) {
                 modelConfig = new ModelConfig();
-                modelConfig.setIdConf(resultSet.getLong("idConf"));
+                modelConfig.setidconf(resultSet.getLong("idconf"));
                 modelConfig.setConf_name(resultSet.getString("conf_name"));
 
                 modelConfig.setConf1_nome(resultSet.getString("conf1_nome"));
@@ -408,7 +408,7 @@ public class DAOConfig {
             while (resultSet.next()) {
                 ModelConfig modelConfig = new ModelConfig();
 
-                modelConfig.setIdConf(resultSet.getLong("idConf"));
+                modelConfig.setidconf(resultSet.getLong("idconf"));
                 modelConfig.setConf_name(resultSet.getString("conf_name"));
 
                 modelConfig.setConf1_nome(resultSet.getString("conf1_nome"));

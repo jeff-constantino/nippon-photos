@@ -779,7 +779,7 @@ public class ModelFechaMes implements Serializable {
         this.conf4_qtd = conf4_qtd;
     }
 
-    public void setIdConf(long idConf) {
+    public void setIdconf(long idconf) {
     }
 
     public void setConfiguracao(ModelFechaMes configuracao) {

@@ -276,7 +276,7 @@
                         <div class="col-12 grid-margin">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title text-center">RELATÓRIO POR DIA</h4>
+                                    <h4 class="card-title text-center">VENDAS TOTAIS POR DIA</h4>
                                     <div class="d-flex flex-wrap justify-content-center mt-3">
 
                                         <c:forEach var="dia" items="${vendasMesList[0].relatorioDiario}" varStatus="status">

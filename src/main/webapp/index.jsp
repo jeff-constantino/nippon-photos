@@ -106,7 +106,7 @@
 
         <!-- LOGO -->
         <div class="login100-pic js-tilt" data-tilt>
-            <img src="images/img-01.png" alt="IMG">
+            <img src="images/img-01.webp" alt="IMG">
         </div>
 
         <!-- FORMULÁRIO -->

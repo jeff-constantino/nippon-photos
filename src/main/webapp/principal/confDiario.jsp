@@ -324,7 +324,8 @@
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_din" name="valor_din"
-                                                       placeholder="" value="${conf_diario.valor_din}"
+                                                       placeholder="" value="${conf_diario.valor_din - conf_diario.valor_despesa_din}"
+
                                                        style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                        >
                                             </div>
@@ -747,14 +748,20 @@
                                                            tabindex="-1"  id="valor_despesa_total" name="valor_despesa_total" value="${conf_diario.valor_despesa_total}">
                                                 </div>
                                                 <div class="d-flex flex-column align-items-center me-2">
+                                                    <label style="color: #f2a654">DESPESAS EM DINHEIRO</label>
+                                                    <input type="number" class="form-control" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                           tabindex="-1"  id="valor_despesa_din" name="valor_despesa_din" value="${conf_diario.valor_despesa_din}">
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center me-2">
                                                     <label style="color: #f2a654">VALES DO DIA</label>
                                                     <input type="number" class="form-control" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                            tabindex="-1"  id="valor_vale_total" name="valor_vale_total" value="${conf_diario.valor_vale_total}">
                                                 </div>
                                                 <div class="d-flex flex-column align-items-center">
                                                     <label style="color: #f2a654">VENDA TOTAL DO DIA</label>
-                                                    <input type="number" class="form-control" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
-                                                           tabindex="-1"  id="venda_total_dia" name="venda_total_dia" value="${conf_diario.venda_total_dia}">
+                                                    <input type="number" step="0.01" class="form-control" style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
+                                                           tabindex="-1"  id="venda_total_dia" name="venda_total_dia"
+                                                           value="">
                                                 </div>
                                             </div>
                                         </div>
@@ -989,6 +996,30 @@
         document.getElementById("ribbon_5_atual").addEventListener("input", atualizarTotalDiferenca);
         document.getElementById("ribbon_6_atual").addEventListener("input", atualizarTotalDiferenca);
     };
+
+
+    // Função que recalcula o total
+    function atualizarVendaTotalDia() {
+
+        // Obtém os valores (se vazio, usa 0)
+        let din   = parseFloat(document.getElementById("valor_din_real").value)  || 0;
+        let deb   = parseFloat(document.getElementById("valor_deb_real").value)  || 0;
+        let cred  = parseFloat(document.getElementById("valor_cred_real").value) || 0;
+        let pix   = parseFloat(document.getElementById("valor_pix_real").value)  || 0;
+        let valorDespDin =parseFloat(document.getElementById("valor_despesa_din").value) ||0;
+
+        // Soma todos
+        let total = din + deb + cred + pix + valorDespDin;
+
+        // Atualiza o input final
+        document.getElementById("venda_total_dia").value = total.toFixed(2);
+    }
+
+    // Adiciona listeners aos campos que devem disparar o cálculo
+    ["valor_din_real", "valor_deb_real", "valor_cred_real", "valor_pix_real"]
+        .forEach(id => {
+            document.getElementById(id).addEventListener("input", atualizarVendaTotalDia);
+        });
 
 </SCRIPT>
 

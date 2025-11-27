@@ -1,4 +1,4 @@
-AJUSTAR CONF DIA, DEDUZIR VALES E DESPESAS EM DIN DA CONFERENCIA (FECHAMENTO MES, VALORES REAIS SOMA VALES+DESPESAS)
+AJUSTAR CONF DIA, FECHAMENTO MES, VALORES REAIS SOMA VALES+DESPESAS)
 
 CRIAR BUSCA DE FECHAMENTO E DE DRE IGUAL BUSCA DE SALARIO
 ADCIONAR NO FECHA MES E DRE DINHEIRO EM CAIXA (VENDAS-DESPESAS-VALES-ETC)
@@ -18,3 +18,12 @@ criar comparativo de vendas mes/ano (relmes já tem a função para buscar por d
 
 
 
+    private BigDecimal receitas;
+    private BigDecimal salarios;
+    private BigDecimal despesas;
+    private BigDecimal despesadin;
+    private BigDecimal contas;
+    private BigDecimal vales;
+    private BigDecimal descontos;
+    private BigDecimal sangria;
+    private BigDecimal saldo;

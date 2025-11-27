@@ -54,6 +54,19 @@ public class ModelFechaMes implements Serializable {
     private int final_ribbon_6;
     private int total_sobras;
 
+    private BigDecimal receitas;
+    private BigDecimal salarios;
+    private BigDecimal despesas;
+    private BigDecimal despesadin;
+    private BigDecimal contas;
+    private BigDecimal vales;
+    private BigDecimal descontos;
+    private BigDecimal sangria;
+    private BigDecimal saldo;
+
+
+
+
 
     private BigDecimal resultadoDivisao;
 
@@ -130,6 +143,79 @@ public class ModelFechaMes implements Serializable {
     private BigDecimal valor_ribbons;
     private BigDecimal valor_enc;
     private BigDecimal valor_juros;
+
+
+    public BigDecimal getReceitas() {
+        return receitas;
+    }
+
+    public void setReceitas(BigDecimal receitas) {
+        this.receitas = receitas;
+    }
+
+    public BigDecimal getSalarios() {
+        return salarios;
+    }
+
+    public void setSalarios(BigDecimal salarios) {
+        this.salarios = salarios;
+    }
+
+    public BigDecimal getDespesas() {
+        return despesas;
+    }
+
+    public void setDespesas(BigDecimal despesas) {
+        this.despesas = despesas;
+    }
+
+    public BigDecimal getDespesadin() {
+        return despesadin;
+    }
+
+    public void setDespesadin(BigDecimal despesadin) {
+        this.despesadin = despesadin;
+    }
+
+    public BigDecimal getContas() {
+        return contas;
+    }
+
+    public void setContas(BigDecimal contas) {
+        this.contas = contas;
+    }
+
+    public BigDecimal getVales() {
+        return vales;
+    }
+
+    public void setVales(BigDecimal vales) {
+        this.vales = vales;
+    }
+
+    public BigDecimal getDescontos() {
+        return descontos;
+    }
+
+    public void setDescontos(BigDecimal descontos) {
+        this.descontos = descontos;
+    }
+
+    public BigDecimal getSangria() {
+        return sangria;
+    }
+
+    public void setSangria(BigDecimal sangria) {
+        this.sangria = sangria;
+    }
+
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
 
     public BigDecimal getValor_ribbons() {
         return valor_ribbons;

@@ -576,6 +576,63 @@
                     </div>
 
                 </div>
+                <div class="row">
+                    <div class="col-md-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title" style="text-align: center">FINANCEIRO</h4>
+                                <table class="table table-bordered" id="tabelafinanceiromes">
+                                    <div class="row">
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="receitas" style="font-size: 0.8rem;">RECEITA DE VENDAS</label>
+                                            <input type="text" class="form-control money" id="receitas" name="receitas"  style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="salarios" style="font-size: 0.8rem;">SALARIOS</label>
+                                            <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 0.8rem;">
+                                        </div>
+
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="despesas" style="font-size: 0.8rem; ">DESPESA TOTAL</label>
+                                            <input type="text" class="form-control money" id="despesas" name="despesas" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="despesadin" style="font-size: 0.8rem;">DESPESAS EM DINHEIRO</label>
+                                            <input type="text" class="form-control money" id="despesadin" name="despesadin" style="font-size: 0.8rem;">
+                                        </div>
+
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="contas" style="font-size: 0.8rem;">CONTAS PAGAS</label>
+                                            <input type="text" class="form-control money" id="contas" name="contas" style="font-size: 0.8rem;">
+
+                                        </div>
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="vales" style="font-size: 0.8rem;">VALES</label>
+                                            <input type="text" class="form-control money" id="vales" name="vales" style="font-size: 0.8rem;">
+                                        </div>
+
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="descontos" style="font-size: 0.8rem;">DESCONTOS</label>
+                                            <input type="text" class="form-control money" id="descontos" name="descontos" style="font-size: 0.8rem;">
+                                        </div>
+
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="sangria" style="font-size: 0.8rem;">SANGRIA DE CAIXA</label>
+                                            <input type="text" class="form-control money" id="sangria" name="sangria" style="font-size: 0.8rem;">
+                                        </div>
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                                <label for="saldo" style="font-size: 1.2rem;">SALDO EM CAIXA</label>
+                                            <input type="text" class="form-control money" id="saldo" name="saldo" style="font-size: 1.2rem;">
+                                        </div>
+                                    </div>
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                 
             </div>
             <!-- content-wrapper ends -->

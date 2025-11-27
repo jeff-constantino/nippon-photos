@@ -98,6 +98,7 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
             psConfDia.setBigDecimal(11, confDiario.getValor_pix_real());
             psConfDia.setBigDecimal(12, confDiario.getValor_pix_dif());
             psConfDia.setBigDecimal(13, confDiario.getValor_despesa_total());
+
             psConfDia.setBigDecimal(14, confDiario.getValor_vale_total());
             psConfDia.setBigDecimal(15, confDiario.getDesconto());
             psConfDia.setBigDecimal(16, confDiario.getVenda_total_dia());
@@ -266,6 +267,18 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
                 conf.setValor_despesa_total(valorDespesaTotal == null ? BigDecimal.ZERO : valorDespesaTotal);
             }
         }
+        // 3ª Consulta: Buscar soma das despesas para o mesmo dia em dinheiro
+        String sqlDespesaDin = "SELECT SUM(valor_despesa) AS valor_despesa_din FROM despesas WHERE data_despesa = ? AND pagamento_despesa = 'DINHEIRO'";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sqlDespesaDin)) {
+            stmt.setDate(1, new java.sql.Date(dataFechamento.getTime()));
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next() && conf != null) {
+                BigDecimal valorDespesaDin = rs.getBigDecimal("valor_despesa_din");
+                conf.setValor_despesa_din(valorDespesaDin == null ? BigDecimal.ZERO : valorDespesaDin);
+            }
+        }
 
 // 4ª Consulta: Buscar soma dos vales para o mesmo dia
         String sqlVale = "SELECT SUM(valor) AS valor_vale_total FROM vales WHERE data = ?";
@@ -310,6 +323,7 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
                     conf.setValor_pix_real(rs.getBigDecimal("valor_pix_real"));
                     conf.setValor_pix_dif(rs.getBigDecimal("valor_pix_dif"));
                     conf.setValor_despesa_total(rs.getBigDecimal("valor_despesa_total"));
+//                    conf.setValor_despesa_din(rs.getBigDecimal("valor_despesa_din"));
                     conf.setValor_vale_total(rs.getBigDecimal("valor_vale_total"));
                     conf.setDesconto(rs.getBigDecimal("desconto"));
                     conf.setVenda_total_dia(rs.getBigDecimal("venda_total_dia"));
@@ -346,7 +360,7 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
                     conf.setTotal_dif(rs.getInt("total_dif"));
                     conf.setObservacao_ribbon(rs.getString("observacao_ribbon"));
                     conf.setValor_despesa_total(rs.getBigDecimal("valor_despesa_total"));
-                    conf.setValor_vale_total(rs.getBigDecimal("valor_vale_total"));
+
                 }
             }
         }

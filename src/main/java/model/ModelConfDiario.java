@@ -21,6 +21,7 @@ public class ModelConfDiario implements Serializable {
     private BigDecimal valor_pix_real;
     private BigDecimal valor_pix_dif;
     private BigDecimal valor_despesa_total;
+    private BigDecimal valor_despesa_din;
     private BigDecimal valor_vale_total;
     private BigDecimal desconto;
     private BigDecimal venda_total_dia;
@@ -62,8 +63,13 @@ public class ModelConfDiario implements Serializable {
     private int total_dif;
 
 
+    public BigDecimal getValor_despesa_din() {
+        return valor_despesa_din;
+    }
 
-
+    public void setValor_despesa_din(BigDecimal valor_despesa_din) {
+        this.valor_despesa_din = valor_despesa_din;
+    }
 
     public String getObservacao_ribbon() {
         return observacao_ribbon;

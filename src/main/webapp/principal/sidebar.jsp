@@ -68,10 +68,10 @@
 
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletRelVenda">Vendas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletRelMes">Relatório do Mês</a></li>
-<%--                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletFuncionario">Funcionários</a></li>--%>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletContasDespesasRel">Contas e Despesas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletComparativoYoY">Comparativo de Vendas</a></li>
                     <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletRanking">Ranking de Funcionários</a></li>
+                    <%--                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletFuncionario">Funcionários</a></li>--%>
 
                 </ul>
             </div>
@@ -136,3 +136,5 @@
 <%--        </li>--%>
     </ul>
 </nav>
+<!-- Script para manter menu expandido -->
+<script src="<%= request.getContextPath() %>/js/menu.js"></script>

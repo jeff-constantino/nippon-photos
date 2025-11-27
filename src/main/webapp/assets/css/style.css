@@ -24206,7 +24206,7 @@ dl li {
   align-items: center;
   white-space: nowrap;
   padding: 0.8rem 10px 0.8rem 1.188rem;
-  color: 	#DAA520;
+  color: #FFFFFF;
   -webkit-transition-duration: 0.45s;
   -moz-transition-duration: 0.45s;
   -o-transition-duration: 0.45s;
@@ -24260,7 +24260,7 @@ dl li {
   margin-left: 1rem;
 }
 .sidebar .nav .nav-item.active > .nav-link {
-  background: #DAA520;
+  background: #daa520;
   position: relative;
 }
 .sidebar .nav .nav-item.active > .nav-link:before {
@@ -24471,7 +24471,7 @@ dl li {
   border-top: 0;
 }
 .sidebar .nav.sub-menu .nav-item .nav-link.active {
-  color: #ffffff;
+  color: #daa520;
   background: transparent;
   font-weight: 900;
 }
@@ -24482,8 +24482,9 @@ dl li {
   background: transparent;
 }
 .sidebar .nav:not(.sub-menu) > .nav-item:hover:not(.nav-category):not(.account-dropdown) > .nav-link {
-  background: #0f1015;
-  color: #ffffff;
+  background: #FFFFFF;
+;
+  color: #000000;
 }
 .sidebar .nav .menu-items:nth-child(5n+1) .nav-link .menu-icon i {
   color: #0090e7;

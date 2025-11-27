@@ -76,13 +76,13 @@ public class ServletRelVenda extends ServletGenericUtil {
             request.setAttribute("funcionarioId", funcionarioId);
 
             // Encaminha para o JSP
-            RequestDispatcher dispatcher = request.getRequestDispatcher("principal/relvendas.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/relvendas.jsp");
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("msg", "Erro ao buscar vendas: " + e.getMessage());
-            RequestDispatcher dispatcher = request.getRequestDispatcher("principal/relvendas.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/relvendas.jsp");
             dispatcher.forward(request, response);
         }
     }

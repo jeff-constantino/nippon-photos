@@ -39,6 +39,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
     <style>
         /* Esconde as setas dos inputs do tipo number */
         input[type="number"]::-webkit-inner-spin-button,
@@ -72,4 +73,5 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- jquery.maskMoney plugin -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
+
 </head>

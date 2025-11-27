@@ -28,7 +28,7 @@ public class ServletDre extends ServletGenericUtil {
         if ("relatorioMes".equals(acao)) {
             gerarDRE(request, response);
         } else {
-            response.sendRedirect("principal/dre.jsp");
+            response.sendRedirect(request.getContextPath() + "/principal/dre.jsp");
         }
     }
 
@@ -38,7 +38,7 @@ public class ServletDre extends ServletGenericUtil {
         if ("gravarDRE".equals(acao)) {
             gravarDRE(request, response);
         } else {
-            response.sendRedirect("principal/dre.jsp");
+            response.sendRedirect(request.getContextPath() + "/principal/dre.jsp");
         }
     }
 
@@ -56,7 +56,7 @@ public class ServletDre extends ServletGenericUtil {
             // Certifique-se de que os dados necessários da sessão existam
             if (receitaBruta == null || custosOperacionais == null || mes == null || ano == null) {
                 request.setAttribute("msg", "Erro: Dados do DRE não encontrados na sessão. Gere o relatório novamente.");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("principal/dre.jsp");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/dre.jsp");
                 dispatcher.forward(request, response);
                 return;
             }
@@ -123,7 +123,7 @@ public class ServletDre extends ServletGenericUtil {
         }
 
         // Mantenha a mesma página DRE
-        RequestDispatcher dispatcher = request.getRequestDispatcher("principal/dre.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/dre.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -213,7 +213,7 @@ public class ServletDre extends ServletGenericUtil {
             session.setAttribute("mes", mes);
             session.setAttribute("ano", ano);
 
-            RequestDispatcher rd = request.getRequestDispatcher("principal/dre.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("/principal/dre.jsp");
             rd.forward(request, response);
 
         } catch (SQLException e) {
@@ -221,7 +221,7 @@ public class ServletDre extends ServletGenericUtil {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("msg", "Erro ao buscar vendas: " + e.getMessage());
-            RequestDispatcher dispatcher = request.getRequestDispatcher("principal/fechames.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/fechames.jsp");
             dispatcher.forward(request, response);
         }
     }

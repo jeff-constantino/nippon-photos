@@ -3,6 +3,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>ACESSO AO SISTEMA</title>
   <meta charset="UTF-8">
@@ -25,12 +26,6 @@
   <!--===============================================================================================-->
 </head>
 <style>
-    .texto-maximo {
-        color: #FFFFFF;
-        -webkit-text-stroke: 1.5px rgba(0,0,0,0.9);
-        text-shadow:
-                0px 0px 6px rgba(0,0,0,1);
-    }
     .texto-destaque {
         color: #FFFFFF;
         text-shadow:
@@ -56,7 +51,7 @@
                   action="<%= request.getContextPath() %>/ServletLogin" method="post">
 
 
-                <span class="login100-form-title texto-maximo" style="font-size: 2vw;">
+                <span class="login100-form-title texto-destaque" style="font-size: 2vw;">
     Autenticação de usuário
 </span>
 

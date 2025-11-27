@@ -340,16 +340,43 @@ iframe {
 }
 
 @media (max-width: 768px) {
-  .wrap-login100 {
-    padding: 100px 80px 33px 80px;
+
+  .container-login100 {
+    flex-direction: column !important;
+    text-align: center;
   }
 
   .login100-pic {
-    display: none;
+    display: block !important;
+    width: 60% !important;
+    margin: 0 auto 20px auto !important;
+  }
+
+  .login100-pic img {
+    width: 100% !important;
+  }
+
+  .wrap-login100 {
+    width: 90% !important;
+    padding: 20px !important;
+    max-width: 400px !important;
   }
 
   .login100-form {
-    width: 100%;
+    width: 100% !important;
+  }
+
+  .login100-form-title {
+    font-size: 6vw !important;
+  }
+
+  .input100 {
+    font-size: 4vw !important;
+  }
+
+  .login100-form-btn {
+    font-size: 5vw !important;
+    width: 80vw !important;
   }
 }
 

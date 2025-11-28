@@ -439,18 +439,19 @@
                                 <table class="table" id="tabelareldespesas">
                                         <thead>
                                         <tr>
-                                            <th scope="col">Id Despesa</th>
+
                                             <th scope="col">Nome Despesa</th>
                                             <th scope="col">Descrição</th>
                                             <th scope="col">Valor</th>
                                             <th scope="col">Data</th>
                                             <th scope="col">Forma de Pagamento</th>
+                                            <th scope="col">Id Despesa</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <c:forEach items="${despesasMes}" var="despesa">
                                             <tr>
-                                                <td><c:out value="${despesa.id_despesa}"/></td>
+
                                                 <td><c:out value="${despesa.nome_despesa}"/></td>
                                                 <td><c:out value="${despesa.descricao_despesa}"/></td>
                                                 <td>
@@ -460,6 +461,7 @@
                                                     <fmt:formatDate value="${despesa.data_despesa}" pattern="dd/MM/yyyy"/>
                                                 </td>
                                                 <td><c:out value="${despesa.pagamento_despesa}"/></td>
+                                                <td><c:out value="${despesa.id_despesa}"/></td>
                                             </tr>
                                         </c:forEach>
                                         </tbody>
@@ -488,6 +490,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">CONTAS PAGAS NO MÊS</h4>
+                                <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                     <tr>
@@ -538,6 +541,7 @@
 
 
                                 </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -548,6 +552,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">OUTRAS DESPESAS DO MÊS</h4>
+                                <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                     <tr>
@@ -576,6 +581,7 @@
 
 
                                 </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -586,6 +592,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">FINANCEIRO</h4>
+                                <div class="table-responsive">
                                 <table class="table table-bordered" id="tabelafinanceiromes">
                                     <div class="row">
                                         <div class="col-3 mb-3" style="text-align: center">
@@ -633,6 +640,7 @@
 
 
                                 </table>
+                                </div>
                             </div>
                         </div>
                     </div>

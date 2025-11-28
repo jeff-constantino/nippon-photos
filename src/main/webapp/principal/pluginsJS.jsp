@@ -15,7 +15,9 @@
 <script src="<%= request.getContextPath() %>/assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
 <script src="<%= request.getContextPath() %>/assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
 <script src="<%= request.getContextPath() %>/assets/js/jquery.cookie.js" type="text/javascript"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"></script>
 <script src="<%= request.getContextPath() %>/assets/js/jquery.maskMoney.js" type="text/javascript"></script>
 
 

@@ -69,7 +69,7 @@ public class ServletFechaMes extends ServletGenericUtil {
 
             List<ModelFechaMes> vendasMesList = daoFechaMes.buscarFechamentoMensal(dataInicial, dataFinal);
             request.setAttribute("vendasMesList", vendasMesList);
-            System.out.println(vendasMesList);
+
 
             List<ModelConfiguracao> configsJuros = daoConfiguracao.consultarJuros();
             request.setAttribute("configsJuros", configsJuros);

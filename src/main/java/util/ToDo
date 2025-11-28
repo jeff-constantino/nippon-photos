@@ -1,8 +1,8 @@
+AJUSTAR RELATORIO DO MES (RESPONSIVO
 AJUSTAR CONF DIA, FECHAMENTO MES, VALORES REAIS SOMA VALES+DESPESAS)
 
 CRIAR BUSCA DE FECHAMENTO E DE DRE IGUAL BUSCA DE SALARIO
 ADCIONAR NO FECHA MES E DRE DINHEIRO EM CAIXA (VENDAS-DESPESAS-VALES-ETC)
-
 ADCIONAR CALCULO DE % DE JUROS DOS CARTÕES NO DRE
 
 confirmar se na DRE está descontando os custos de despesas/vales/contas em dinheiro do dinheiro em caixa.
@@ -14,10 +14,7 @@ desconto IR no salario (calcular se o salario bruto for X descontar a %) buscand
 AJUSTAR RELATORIO DE VENDAS
 criar comparativo de vendas mes/ano (relmes já tem a função para buscar por dia "vendasMesList")
 
-
-
-
-
+CRIAR BANCO E FUNÇOES PARA FECHAMENTO DO MES E DRE
     private BigDecimal receitas;
     private BigDecimal salarios;
     private BigDecimal despesas;

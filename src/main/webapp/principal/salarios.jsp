@@ -879,6 +879,14 @@
 
 
 <script>
+    // === DEBUG: VERIFICAR CONFIGURAÇÕES ===
+    console.log('=== CONFIGURAÇÕES CARREGADAS ===');
+    console.log('conf1_valor:', '${listaConfigs[0].conf1_valor}');
+    console.log('conf2_valor:', '${listaConfigs[0].conf2_valor}');
+    console.log('conf3_valor:', '${listaConfigs[0].conf3_valor}');
+    console.log('comissao:', '${configSalario.comissao}');
+    console.log('comissao2:', '${configSalario.comissao2}');
+    console.log('fgts:', '${configSalario.fgts}');
     // ===================================================================
     // CORREÇÃO: Consolidar todos os window.onload em DOMContentLoaded
     // ===================================================================

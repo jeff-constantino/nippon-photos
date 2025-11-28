@@ -145,7 +145,7 @@
                                                                             <div class="col-sm-1">
                                                                                 <label class="float-label">ID:</label>
                                                                                 <span class="form-bar"></span>
-                                                                                <input type="text" class="form-control" style="background-color: black" id="idconf"
+                                                                                <input type="text" class="form-control" style="background-color: black;color: #FFFFFF" id="idconf"
                                                                                        name="idconf" placeholder=""
                                                                                        value="${modelConfig.idconf}" readonly>
                                                                             </div>
@@ -1393,7 +1393,7 @@
 
        function gerenciarConfig(idconf, conf_name, conf1_nome, conf1_valor, conf2_nome, conf2_valor, conf3_nome, conf3_valor) {
        // Preencher o campo idConf
-       document.getElementById('idConf').value = idconf; // Campo que irá receber o idConf
+       document.getElementById('idconf').value = idconf; // Campo que irá receber o idConf
        document.getElementById('conf_name').value = conf_name; // Campo para conf_name
 
 

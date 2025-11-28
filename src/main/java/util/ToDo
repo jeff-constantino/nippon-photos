@@ -24,3 +24,5 @@ CRIAR BANCO E FUNÇOES PARA FECHAMENTO DO MES E DRE
     private BigDecimal descontos;
     private BigDecimal sangria;
     private BigDecimal saldo;
+
+    psql -U jeffe6510_admin

@@ -113,8 +113,9 @@
 
                                 <h4 class="card-title" style="text-align: center">RESUMO DO MÊS</h4>
 
-                                <div style="overflow-x: hidden; overflow-y: hidden">
-                                    <table class="table table-bordered text-center" id="tabelavendasmes"> <!-- Adicionando text-center -->
+                                <div class="table-responsive">
+
+                                <table class="table table-bordered text-center" id="tabelavendasmes"> <!-- Adicionando text-center -->
                                         <thead class="thead-light">
                                         <tr>
                                             <th scope="col">TOTAL DE FOTOS</th>
@@ -169,8 +170,9 @@
 
                                 <h4 class="card-title" style="text-align: center">RANKING DE VENDAS</h4>
 
-                                <div style="overflow-x: hidden; overflow-y: hidden">
-                                    <table class="table table-bordered" id="tabelaRankingmes">
+                                <div class="table-responsive">
+
+                                <table class="table table-bordered" id="tabelaRankingmes">
                                         <!-- Área para o gráfico com altura reduzida -->
                                         <div style="width: 100%; max-height: 150px; height: 150px;">
                                             <canvas id="vendasChart" style="max-height: 150px;"></canvas>
@@ -252,8 +254,9 @@
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">VALORES ANOTADOS</h4>
                                 <!-- Table Content -->
-                                <div style="overflow-x: hidden; overflow-y: hidden"  class="table-responsive">
-                                    <table class="table table-bordered" id="tabelavaloresmes" >
+                                <div class="table-responsive">
+
+                                <table class="table table-bordered" id="tabelavaloresmes" >
                                         <thead class="thead-light">
                                         <tr>
                                             <th scope="col" style="font-size: 1.2rem">TIPO</th>
@@ -310,8 +313,9 @@
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">VALORES REAIS</h4>
                                 <!-- Table Content -->
-                                <div style="overflow-x: hidden; overflow-y: hidden"  class="table-responsive">
-                                    <table class="table table-bordered" id="tabelavaloresrealmes">
+                                <div class="table-responsive">
+
+                                <table class="table table-bordered" id="tabelavaloresrealmes">
                                         <thead class="thead-light">
                                         <tr>
                                             <th scope="col" style="font-size: 1.2rem">TIPO</th>
@@ -367,8 +371,9 @@
                              <form method="post" action="<%=request.getContextPath()%>/ServletFechaMes">
                                 <h4 class="card-title" style="text-align: center">VALORES CONTA</h4>
                                 <!-- Table Content -->
-                                <div style="overflow-x: hidden; overflow-y: hidden">
-                                    <table class="table table-bordered" id="tabelavalorescontames">
+                                 <div class="table-responsive">
+
+                                 <table class="table table-bordered" id="tabelavalorescontames">
                                         <div class="row">
                                             <div class="col-6 mb-3">
                                                 <label for="debitoVm" style="font-size: 0.8rem;">DÉBITO V/M</label>
@@ -429,9 +434,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title" style="text-align: center">DESPESAS DO MÊS</h4>
-                                <div>
+                                <div class="table-responsive">
 
-                                    <table class="table" id="tabelareldespesas">
+                                <table class="table" id="tabelareldespesas">
                                         <thead>
                                         <tr>
                                             <th scope="col">Id Despesa</th>

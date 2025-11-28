@@ -94,8 +94,9 @@
 
                                 <h4 class="card-title" style="text-align: center">RELATÓRIO DE VENDAS</h4>
 
-                                <div style="overflow-x: hidden">
-                                    <table class="table table-bordered" id="tabelavendasmes">
+                                <div class="table-responsive">
+
+                                <table class="table table-bordered" id="tabelavendasmes">
                                         <thead class="thead-light">
                                         <tr>
                                             <th scope="col">DATA</th>
@@ -144,8 +145,9 @@
 
                                 <h4 class="card-title" STYLE="text-align: center">HISTÓRICO DE CONDUTA</h4>
 
-                                <div  style="overflow-x: hidden; overflow-y: hidden;">
-                                    <table class="table table-bordered" id="tabelafuncconduta">
+                                <div class="table-responsive">
+
+                                <table class="table table-bordered" id="tabelafuncconduta">
                                         <thead class="thead-light">
                                         <tr>
 
@@ -203,8 +205,9 @@
 
                                 <h4 class="card-title" STYLE="text-align: center">FINANCEIRO</h4>
 
-                                <div  style="overflow-x: hidden; overflow-y: hidden;">
-                                    <table class="table table-bordered" id="tabelafuncfinanceiro">
+                                <div class="table-responsive">
+
+                                <table class="table table-bordered" id="tabelafuncfinanceiro">
                                         <thead class="thead-light">
                                         <tr>
 

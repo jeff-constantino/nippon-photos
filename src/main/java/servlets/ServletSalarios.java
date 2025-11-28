@@ -39,6 +39,17 @@ public class ServletSalarios extends ServletGenericUtil{
             // Carrega todas as configurações para cálculo de produtos
             List<ModelConfig> listaConfigs = daoConfig.consultarTodasConfigs();
             request.setAttribute("listaConfigs", listaConfigs);
+            // Logo após carregar as configs, adicione:
+            System.out.println("=== DEBUG CONFIGS ===");
+            if (listaConfigs != null && !listaConfigs.isEmpty()) {
+                System.out.println("Qtd configs: " + listaConfigs.size());
+                ModelConfig config = listaConfigs.get(0);
+                System.out.println("conf1_valor: " + config.getConf1_valor());
+                System.out.println("conf2_valor: " + config.getConf2_valor());
+                System.out.println("conf3_valor: " + config.getConf3_valor());
+            } else {
+                System.out.println("listaConfigs está VAZIA ou NULL!");
+            }
 
             // Carrega as configurações de salário que contém o FGTS
             List<ModelConfiguracao> configsSalarios = daoConfiguracao.consultarSalarios();

@@ -634,6 +634,10 @@
                                             <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 1.2rem; background: #FFFFFF; color: black">
                                         </div>
                                         <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="receitas" style="font-size: 1.2rem">RECEITA EM DINHEIRO</label>
+                                            <input type="text" class="form-control money" id="receita_din" name="receita_din"  style="font-size: 1.2rem" value="${vendasMesList[0].valor_din_mes}">
+                                        </div>
+                                        <div class="col-3 mb-3" style="text-align: center">
                                                 <label for="saldo" style="font-size: 1.2rem;">SALDO EM CAIXA</label>
                                             <input type="text" class="form-control money" id="saldo" name="saldo" style="font-size: 1.2rem;" value=" ">
                                         </div>
@@ -1020,11 +1024,11 @@
 
     // Função para calcular saldo
     function calcularSaldo() {
-        let receitas = limparMascara($("#receitas").val());
+        let receita_din = limparMascara($("#receita_din").val());
         let despDin  = limparMascara($("#despesadin").val());
         let sangria  = limparMascara($("#sangria").val());
         let salarios = limparMascara($("#salarios").val());
-        let saldo = receitas - despDin - sangria - salarios;
+        let saldo = receita_din - despDin - sangria - salarios;
 
         // Formata o valor com separador de milhar
         let valorFormatado = saldo.toFixed(2);

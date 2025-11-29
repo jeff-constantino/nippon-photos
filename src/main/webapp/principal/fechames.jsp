@@ -638,8 +638,8 @@
                                             <input type="text" class="form-control money" id="receita_din" name="receita_din"  style="font-size: 1.2rem" value="${vendasMesList[0].valor_din_mes}">
                                         </div>
                                         <div class="col-3 mb-3" style="text-align: center">
-                                                <label for="saldo" style="font-size: 1.2rem;">SALDO EM CAIXA</label>
-                                            <input type="text" class="form-control money" id="saldo" name="saldo" style="font-size: 1.2rem;" value=" ">
+                                                <label for="saldo" style="font-size: 1.2rem; color: #d39e00">SALDO EM CAIXA</label>
+                                            <input type="text" class="form-control money" id="saldo" name="saldo" style="font-size: 1.2rem;color: #d39e00" value=" ">
                                         </div>
                                     </div>
 
@@ -1044,19 +1044,19 @@
     }
 
     $(document).ready(function() {
-        // Aplica a máscara maskMoney APENAS nos campos que NÃO são sangria e salários
-        $(".money").not("#sangria, #salarios").maskMoney({
+        // Aplica a máscara maskMoney APENAS nos campos que NÃO são sangria, salarios e despesadin
+        $(".money").not("#sangria, #salarios, #despesadin").maskMoney({
             showSymbol: true,
             symbol: "R$ ",
             decimal: ",",
             thousands: "."
         });
 
-        // Remove a classe .money dos campos sangria e salários para evitar conflitos
-        $("#sangria, #salarios").removeClass('money');
+        // Remove a classe .money dos campos sangria, salários e despesadin para evitar conflitos
+        $("#sangria, #salarios, #despesadin").removeClass('money');
 
         // Remove TODOS os eventos anteriores desses campos
-        $("#sangria, #salarios").off();
+        $("#sangria, #salarios, #despesadin").off();
 
         // Aplica máscara manual no campo SANGRIA
         $("#sangria").on('input', function(e) {
@@ -1080,8 +1080,19 @@
             setTimeout(calcularSaldo, 50);
         });
 
+        // Aplica máscara manual no campo DESPESAS EM DINHEIRO
+        $("#despesadin").on('input', function(e) {
+            aplicarMascaraManual(this);
+            setTimeout(calcularSaldo, 100);
+        });
+
+        $("#despesadin").on('blur', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularSaldo, 50);
+        });
+
         // Evento Enter
-        $("#sangria, #salarios").on('keypress', function(e) {
+        $("#sangria, #salarios, #despesadin").on('keypress', function(e) {
             if (e.which === 13) {
                 e.preventDefault();
                 $(this).blur();

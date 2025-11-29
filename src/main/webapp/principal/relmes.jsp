@@ -207,13 +207,10 @@
 
                                 <div class="table-responsive">
 
-                                <table class="table table-bordered" id="tabelafuncfinanceiro">
+                                    <table class="table table-bordered" id="tabelafuncfinanceiro">
                                         <thead class="thead-light">
                                         <tr>
-
-
                                             <th scope="col">DINHEIRO</th>
-
                                             <th scope="col">DÉBITO</th>
                                             <th scope="col">CRÉDITO</th>
                                             <th scope="col">PIX</th>
@@ -221,41 +218,47 @@
                                             <th scope="col">DESPESAS</th>
                                             <th scope="col">CONTAS</th>
                                             <th scope="col">VALES</th>
-
                                         </tr>
                                         </thead>
+
                                         <tbody>
+
+                                        <!-- MOSTRA SOMENTE A LINHA DA CONSULTA -->
                                         <c:forEach items="${vendasMesList}" var="fn">
                                             <tr>
-                                                <td>
-                                                    <c:out value="${fn.valor_din_mes}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${fn.valor_deb_mes}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${fn.valor_cred_mes}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${fn.valor_pix_mes}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${fn.desconto_mes}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${fn.valor_despesa_total}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${fn.valor_total_contas}"></c:out>
-                                                </td>
-                                                <td>
-                                                    <c:out value="${fn.valor_vale_total}"></c:out>
-                                                </td>
+                                                <td><c:out value="${fn.valor_din_mes}" /></td>
+                                                <td><c:out value="${fn.valor_deb_mes}" /></td>
+                                                <td><c:out value="${fn.valor_cred_mes}" /></td>
+                                                <td><c:out value="${fn.valor_pix_mes}" /></td>
+                                                <td><c:out value="${fn.desconto_mes}" /></td>
+                                                <td><c:out value="${fn.valor_despesa_total}" /></td>
+                                                <td><c:out value="${fn.valor_total_contas}" /></td>
+                                                <td><c:out value="${fn.valor_vale_total}" /></td>
                                             </tr>
                                         </c:forEach>
-                                        </tbody>
 
+                                        <!-- SOMATÓRIO (SEM MOSTRAR NADA NA TABELA) -->
+                                        <c:set var="totalGeral" value="0" />
+                                        <c:forEach items="${vendasMesList}" var="fn">
+                                            <c:set var="totalGeral"
+                                                   value="${totalGeral
+                       + fn.valor_din_mes
+                       + fn.valor_deb_mes
+                       + fn.valor_cred_mes
+                       + fn.valor_pix_mes}" />
+                                        </c:forEach>
+
+                                        <!-- LINHA FINAL DO TOTAL -->
+                                        <tr style="background: #000; color: #DAA520; font-weight: bold;">
+                                            <td colspan="4" style="text-align: right; color: #DAA520">TOTAL DO MÊS:</td>
+                                            <td colspan="4"style="color: #DAA520">
+                                                <fmt:formatNumber value="${totalGeral}" type="number" minFractionDigits="2" />
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
                                     </table>
+
                                     <!-- Controles de paginação -->
                                     <div class="pagination">
 

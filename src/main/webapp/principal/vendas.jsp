@@ -673,9 +673,70 @@
                                                                                 </div>
 
                                                                             </form>
-                                                                            </form>
+
 
                                                                         </div>
+                                                                        <div class="row">
+                                                                            <H4 style="color: #d39e00">CONFERÊNCIA DE TOTAIS</H4>
+                                                                        <div class="col-2">
+                                                                            <label>DINHEIRO INF</label>
+                                                                            <input type="text"
+                                                                                   class="form-control"
+                                                                                   placeholder=""
+                                                                                   style="background-color: black; color:#DAA520; font-weight: bold"
+                                                                                   id="conf_din_inf"
+                                                                                   name="conf_din_inf"
+                                                                                   required
+                                                                                   value=""
+                                                                                   readonly tabindex="-1">
+
+                                                                        </div>
+                                                                            <div class="col-2">
+                                                                                <label>CRÉDITO INF</label>
+                                                                                <input type="text"
+                                                                                       class="form-control"
+                                                                                       placeholder=""
+                                                                                       style="background-color: black; color:#DAA520; font-weight: bold"
+                                                                                       id="conf_credito_inf"
+                                                                                       name="conf_credito_inf"
+                                                                                       required
+                                                                                       value=""
+                                                                                       readonly tabindex="-1">
+
+                                                                            </div>
+
+                                                                            <div class="col-2">
+                                                                                <label>DÉBITO INF</label>
+                                                                                <input type="text"
+                                                                                       class="form-control"
+                                                                                       placeholder=""
+                                                                                       style="background-color: black; color:#DAA520; font-weight: bold"
+                                                                                       id="conf_debito_inf"
+                                                                                       name="conf_debito_inf"
+                                                                                       required
+                                                                                       value=""
+                                                                                       readonly tabindex="-1">
+
+                                                                            </div>
+
+                                                                            <div class="col-2">
+                                                                                <label>PIX INF</label>
+                                                                                <input type="text"
+                                                                                       class="form-control"
+                                                                                       placeholder=""
+                                                                                       style="background-color: black; color:#DAA520; font-weight: bold"
+                                                                                       id="conf_pix_inf"
+                                                                                       name="conf_pix_inf"
+                                                                                       required
+                                                                                       value=""
+                                                                                       readonly tabindex="-1">
+
+                                                                            </div>
+
+
+                                                                        </div>
+
+
 
                                                                     </div>
                                                                 </div>
@@ -1540,7 +1601,9 @@
                 const valorTotal = quantidade * valorProduto;
                 document.getElementById(produtoId + '_valor').value = valorTotal.toFixed(2);
 
-                atualizarTotalModal(); // Atualiza o total geral do modal
+                atualizarTotalModal();     // mantém seu total geral
+                atualizarConferencia();    // agora atualiza seus totais INF
+
             } else {
 
             }
@@ -1629,6 +1692,42 @@
 
             const aproveitamento = producao > 0 ? (vendas / producao) * 100 : 0;
             document.getElementById('aproveitamento').value = aproveitamento.toFixed(2) + " %"; // mostra com 2 casas decimais
+        }
+        function atualizarConferencia() {
+
+            function n(id) {
+                return parseFloat(document.getElementById(id).value) || 0;
+            }
+
+            // DINHEIRO
+            const totalDin =
+                n('prod1_din_valor') +
+                n('prod2_din_valor') +
+                n('prod3_din_valor');
+
+            // DÉBITO
+            const totalDeb =
+                n('prod1_deb_valor') +
+                n('prod2_deb_valor') +
+                n('prod3_deb_valor');
+
+            // CRÉDITO
+            const totalCred =
+                n('prod1_cred_valor') +
+                n('prod2_cred_valor') +
+                n('prod3_cred_valor');
+
+            // PIX
+            const totalPix =
+                n('prod1_pix_valor') +
+                n('prod2_pix_valor') +
+                n('prod3_pix_valor');
+
+            // Atualiza os campos
+            document.getElementById("conf_din_inf").value = totalDin.toFixed(2);
+            document.getElementById("conf_debito_inf").value = totalDeb.toFixed(2);
+            document.getElementById("conf_credito_inf").value = totalCred.toFixed(2);
+            document.getElementById("conf_pix_inf").value = totalPix.toFixed(2);
         }
 
 

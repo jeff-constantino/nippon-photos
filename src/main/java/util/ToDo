@@ -25,4 +25,9 @@ CRIAR BANCO E FUNÇOES PARA FECHAMENTO DO MES E DRE
     private BigDecimal sangria;
     private BigDecimal saldo;
 
-    psql -U jeffe6510_admin
+
+
+conf_din_inf=prod1_din_valor+prod2_din_valor+prod3_din_valor
+conf_debito_inf=prod1_deb_valor+prod2_deb_valor+prod3_deb_valor
+conf_credito_inf= prod1_cred_valor+prod2_cred_valor+prod3_cred_valor
+conf_pix_inf=prod1_pix_valor+prod2_cred_valor+prod3_cred_valor

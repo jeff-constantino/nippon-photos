@@ -596,45 +596,46 @@
                                 <table class="table table-bordered" id="tabelafinanceiromes">
                                     <div class="row">
                                         <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="receitas" style="font-size: 0.8rem;">RECEITA DE VENDAS</label>
-                                            <input type="text" class="form-control money" id="receitas" name="receitas"  style="font-size: 0.8rem;">
+                                            <label for="receitas" style="font-size: 1.2rem">RECEITA DE VENDAS</label>
+                                            <input type="text" class="form-control money" id="receitas" name="receitas"  style="font-size: 1.2rem" value="${totalDinheiro + totalDebito + totalCredito + totalPix}">
+                                        </div>
+
+
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="despesas" style="font-size: 1.2rem">DESPESA TOTAL</label>
+                                            <input type="text" class="form-control money" id="despesas" name="despesas" style="font-size: 1.2rem" value="${valorTotalDespesas}">
                                         </div>
                                         <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="salarios" style="font-size: 0.8rem;">SALARIOS</label>
-                                            <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 0.8rem;">
+                                            <label for="despesadin" style="font-size: 1.2rem">DESPESAS EM DINHEIRO</label>
+                                            <input type="text" class="form-control money" id="despesadin" name="despesadin" style="font-size: 1.2rem" value="${valorDespesasDin}">
                                         </div>
 
                                         <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="despesas" style="font-size: 0.8rem; ">DESPESA TOTAL</label>
-                                            <input type="text" class="form-control money" id="despesas" name="despesas" style="font-size: 0.8rem;">
-                                        </div>
-                                        <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="despesadin" style="font-size: 0.8rem;">DESPESAS EM DINHEIRO</label>
-                                            <input type="text" class="form-control money" id="despesadin" name="despesadin" style="font-size: 0.8rem;">
-                                        </div>
-
-                                        <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="contas" style="font-size: 0.8rem;">CONTAS PAGAS</label>
-                                            <input type="text" class="form-control money" id="contas" name="contas" style="font-size: 0.8rem;">
+                                            <label for="contas" style="font-size: 1.2rem">CONTAS PAGAS</label>
+                                            <input type="text" class="form-control money" id="contas" name="contas" style="font-size: 1.2rem" value="${valorTotalContas}">
 
                                         </div>
                                         <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="vales" style="font-size: 0.8rem;">VALES</label>
-                                            <input type="text" class="form-control money" id="vales" name="vales" style="font-size: 0.8rem;">
+                                            <label for="vales" style="font-size: 1.2rem">VALES</label>
+                                            <input type="text" class="form-control money" id="vales" name="vales" style="font-size: 1.2rem" value="${vendasMesList[0].valor_vale_total}">
                                         </div>
 
                                         <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="descontos" style="font-size: 0.8rem;">DESCONTOS</label>
-                                            <input type="text" class="form-control money" id="descontos" name="descontos" style="font-size: 0.8rem;">
+                                            <label for="descontos" style="font-size: 1.2rem">DESCONTOS</label>
+                                            <input type="text" class="form-control money" id="descontos" name="descontos" style="font-size: 1.2rem;" value="${vendasMesList[0].desconto_mes}">
                                         </div>
 
                                         <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="sangria" style="font-size: 0.8rem;">SANGRIA DE CAIXA</label>
-                                            <input type="text" class="form-control money" id="sangria" name="sangria" style="font-size: 0.8rem;">
+                                            <label for="sangria" style="font-size: 1.2rem">SANGRIA DE CAIXA</label>
+                                            <input type="text" class="form-control money" id="sangria" name="sangria" style="font-size: 1.2rem; background: #FFFFFF; color: black" value="0">
+                                        </div>
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="salarios" style="font-size: 1.2rem">SALARIOS</label>
+                                            <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 1.2rem; background: #FFFFFF; color: black">
                                         </div>
                                         <div class="col-3 mb-3" style="text-align: center">
                                                 <label for="saldo" style="font-size: 1.2rem;">SALDO EM CAIXA</label>
-                                            <input type="text" class="form-control money" id="saldo" name="saldo" style="font-size: 1.2rem;">
+                                            <input type="text" class="form-control money" id="saldo" name="saldo" style="font-size: 1.2rem;" value=" ">
                                         </div>
                                     </div>
 
@@ -920,7 +921,179 @@
         calcularJurosDebitoOutros();
         calcularJurosCreditoOutros();
     });
+    function limparMascara(valor) {
+        if (!valor) return 0;
 
+        // Remove qualquer repetição de "R$"
+        valor = valor.replace(/R\$/g, "").trim();
+
+        // Remove espaços
+        valor = valor.replace(/\s+/g, "");
+
+        // Agora remove apenas pontos de milhares
+        valor = valor.replace(/\./g, "");
+
+        // Troca vírgula por ponto
+        valor = valor.replace(",", ".");
+
+        return parseFloat(valor) || 0;
+    }
+
+
+
+    // FIX para o erro do maskMoney com jQuery 3.7.1
+    if (!$.browser) {
+        $.browser = {};
+    }
+    $.browser.msie = false;
+
+    // Função para limpar máscara
+    function limparMascara(valor) {
+        if (valor === undefined || valor === null || valor === '') return 0;
+
+        let s = String(valor).trim();
+
+        // Remove qualquer caractere que não seja número, vírgula ou ponto
+        s = s.replace(/[^\d,\.]/g, '');
+
+        // Se estiver vazio após limpeza
+        if (s === '') return 0;
+
+        // Identifica se usa vírgula (formato BR) ou ponto (formato US/servidor)
+        const temVirgula = s.indexOf(',') > -1;
+        const temPonto = s.indexOf('.') > -1;
+
+        if (temVirgula && temPonto) {
+            // Formato: 1.234,56 (BR com milhares)
+            s = s.replace(/\./g, '').replace(',', '.');
+        } else if (temVirgula && !temPonto) {
+            // Formato: 1234,56 (BR sem milhares)
+            s = s.replace(',', '.');
+        } else if (temPonto && !temVirgula) {
+            // Formato: 1234.56 (US) ou 1.234 (BR com milhares, sem centavos)
+            const partes = s.split('.');
+            if (partes.length > 2 || (partes.length === 2 && partes[1].length > 2)) {
+                // É separador de milhar: 1.234 ou 1.234.567
+                s = s.replace(/\./g, '');
+            }
+            // Senão, é decimal: 1234.56
+        }
+
+        const n = parseFloat(s);
+        return isNaN(n) ? 0 : n;
+    }
+
+    // Função para formatar valor monetário manualmente
+    function formatarMoeda(valor) {
+        if (!valor) return '';
+
+        // Remove tudo que não é número
+        let numero = valor.toString().replace(/\D/g, '');
+
+        // Converte para centavos
+        numero = (parseFloat(numero) / 100).toFixed(2);
+
+        // Formata com separadores
+        let partes = numero.split('.');
+        partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+        return 'R$ ' + partes.join(',');
+    }
+
+    // Função para aplicar máscara manualmente em um campo
+    function aplicarMascaraManual(campo) {
+        let valor = $(campo).val();
+
+        // Remove tudo que não é número
+        let apenasNumeros = valor.replace(/\D/g, '');
+
+        // Se estiver vazio, limpa o campo
+        if (!apenasNumeros) {
+            $(campo).val('');
+            return;
+        }
+
+        // Formata
+        let valorFormatado = formatarMoeda(apenasNumeros);
+        $(campo).val(valorFormatado);
+    }
+
+    // Função para calcular saldo
+    function calcularSaldo() {
+        let receitas = limparMascara($("#receitas").val());
+        let despDin  = limparMascara($("#despesadin").val());
+        let sangria  = limparMascara($("#sangria").val());
+        let salarios = limparMascara($("#salarios").val());
+        let saldo = receitas - despDin - sangria - salarios;
+
+        // Formata o valor com separador de milhar
+        let valorFormatado = saldo.toFixed(2);
+        let partes = valorFormatado.split('.');
+
+        // Adiciona separador de milhar
+        partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+        // Junta tudo com vírgula como separador decimal
+        valorFormatado = partes.join(',');
+
+        $("#saldo").val('R$ ' + valorFormatado);
+    }
+
+    $(document).ready(function() {
+        // Aplica a máscara maskMoney APENAS nos campos que NÃO são sangria e salários
+        $(".money").not("#sangria, #salarios").maskMoney({
+            showSymbol: true,
+            symbol: "R$ ",
+            decimal: ",",
+            thousands: "."
+        });
+
+        // Remove a classe .money dos campos sangria e salários para evitar conflitos
+        $("#sangria, #salarios").removeClass('money');
+
+        // Remove TODOS os eventos anteriores desses campos
+        $("#sangria, #salarios").off();
+
+        // Aplica máscara manual no campo SANGRIA
+        $("#sangria").on('input', function(e) {
+            aplicarMascaraManual(this);
+            setTimeout(calcularSaldo, 100);
+        });
+
+        $("#sangria").on('blur', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularSaldo, 50);
+        });
+
+        // Aplica máscara manual no campo SALÁRIOS
+        $("#salarios").on('input', function(e) {
+            aplicarMascaraManual(this);
+            setTimeout(calcularSaldo, 100);
+        });
+
+        $("#salarios").on('blur', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularSaldo, 50);
+        });
+
+        // Evento Enter
+        $("#sangria, #salarios").on('keypress', function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                $(this).blur();
+            }
+        });
+
+        // Calcula o saldo inicial
+        setTimeout(function() {
+            calcularSaldo();
+        }, 500);
+    });
+
+    // Calcula quando a página carregar completamente
+    window.addEventListener('load', function() {
+        setTimeout(calcularSaldo, 600);
+    });
 </script>
 </body>
 </html>

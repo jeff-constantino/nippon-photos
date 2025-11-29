@@ -118,6 +118,7 @@ public class ServletFechaMes extends ServletGenericUtil {
             session.setAttribute("vendasMesList", vendasMesList);
             session.setAttribute("valorTotalDespesas", BigDecimal.valueOf(valorDespesas));
             session.setAttribute("valorTotalContas", BigDecimal.valueOf(valorContas));
+
             session.setAttribute("mes", mes);
             session.setAttribute("ano", ano);
 

@@ -697,34 +697,34 @@
                                         <label style="color: #f2a654">VALES</label>
                                         <input type="text" class="form-control money text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
-                                               id="vales_mes" name="vales_mes" value="${vales_mes}" readonly tabindex="-1">
+                                               id="vales_mes" name="vales_mes" value="${vales_mes}" tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
                                         <label style="color: #f2a654">INSS</label>
                                         <input type="text" class="form-control money text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
-                                               id="inss" name="inss" value="${inss}" readonly tabindex="-1">
+                                               id="inss" name="inss" value="${inss}" tabindex="-1">
                                     </div>
                                     <div class="col-auto">
                                         <label style="color: #f2a654">PARCELA A DEDUZIR</label>
                                         <input type="text" class="form-control money text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
-                                               id="parcela" name="parcela" value="${parcela}" readonly tabindex="-1">
+                                               id="parcela" name="parcela" value="${parcela}" tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
                                         <label style="color: #f2a654">FGTS</label>
                                         <input type="text" class="form-control money text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
-                                               id="fgts" name="fgts" value="${fgts}" readonly tabindex="-1">
+                                               id="fgts" name="fgts" value="${fgts}" tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
                                         <label style="color: #f2a654">DESCONTOS DISCIPLINARES</label>
                                         <input type="text" class="form-control money text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
-                                               id="descontos_mes" name="descontos_mes" value="${descontos_mes}" readonly tabindex="-1">
+                                               id="descontos_mes" name="descontos_mes" value="${descontos_mes}" tabindex="-1">
                                     </div>
 
                                     <c:forEach var="mv" items="${vendasFuncionarioList}">
@@ -740,14 +740,14 @@
                                         <label style="color: #f2a654">DESCONTOS DE FOTOS</label>
                                         <input type="text" class="form-control money text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
-                                               id="desconto_fotos" name="desconto_fotos" value="${desconto_fotos}" readonly tabindex="-1">
+                                               id="desconto_fotos" name="desconto_fotos" value="${desconto_fotos}"  tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
                                         <label style="color: #f2a654">IMPOSTO DE RENDA</label>
                                         <input type="text" class="form-control money text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
-                                               id="descontos_ir" name="descontos_ir" value="${descontos_ir}" readonly tabindex="-1">
+                                               id="descontos_ir" name="descontos_ir" value="${descontos_ir}"  tabindex="-1">
                                     </div>
 
 

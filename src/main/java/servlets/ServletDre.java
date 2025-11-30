@@ -23,6 +23,7 @@ import java.util.*;
 public class ServletDre extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
 
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao");
         if ("relatorioMes".equals(acao)) {
@@ -32,15 +33,7 @@ public class ServletDre extends ServletGenericUtil {
         }
     }
 
-    // Adicionar o método doPost
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String acao = request.getParameter("acao");
-        if ("gravarDRE".equals(acao)) {
-            gravarDRE(request, response);
-        } else {
-            response.sendRedirect(request.getContextPath() + "/principal/dre.jsp");
-        }
-    }
+
 
     // Método para processar a gravação
     private void gravarDRE(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -153,41 +146,51 @@ public class ServletDre extends ServletGenericUtil {
         try {
             List<ModelFechaMes> vendasMesList = daoDre.buscarFechamentoMensal(dataInicial, dataFinal);
 
+            // ❗ Se não existe fechamento, volta para a página e mostra mensagem
+            if (vendasMesList == null || vendasMesList.isEmpty() ||
+                    vendasMesList.get(0).getValor_din_mes() == null) {
+
+                request.setAttribute("msg", "Não existe fechamento mensal para a data selecionada.");
+                request.setAttribute("vendasMesList", null);
+
+                RequestDispatcher rd = request.getRequestDispatcher("/principal/dre.jsp");
+                rd.forward(request, response);
+                return;
+            }
+
+            // Se existe fechamento, segue o fluxo normal
+            ModelFechaMes resumo = vendasMesList.get(0);
+
             BigDecimal valorContas = daoContas.buscarTotalContasPorPeriodo(dataInicial, dataFinal);
             BigDecimal valorDespesas = daoDespesas.buscarTotalDespesasPorPeriodo(dataInicial, dataFinal);
 
-            // Adicione aqui a lógica para obter os salários, se necessário
-            BigDecimal totalSalarios = BigDecimal.ZERO;
+            BigDecimal totalSalarios = Optional.ofNullable(resumo.getTotal_salarios()).orElse(BigDecimal.ZERO);
 
-            if (!vendasMesList.isEmpty()) {
-                totalSalarios = Optional.ofNullable(vendasMesList.get(0).getTotal_salarios())
-                        .orElse(BigDecimal.ZERO);
-            }
+            // Receita Bruta
+            BigDecimal receitaBruta =
+                    resumo.getValor_din_mes()
+                            .add(resumo.getValor_deb_mes())
+                            .add(resumo.getValor_cred_mes())
+                            .add(resumo.getValor_pix_mes());
+
+            // Custos Operacionais
+            BigDecimal totalRibbons = Optional.ofNullable(resumo.getTotal_ribbons()).orElse(BigDecimal.ZERO);
+            BigDecimal valorEnc = Optional.ofNullable(resumo.getValor_enc()).orElse(BigDecimal.ZERO);
+            BigDecimal jurosCartoes = Optional.ofNullable(resumo.getJuros_cartoes()).orElse(BigDecimal.ZERO);
+
+            BigDecimal custosOperacionais =
+                    totalRibbons
+                            .add(valorEnc)
+                            .add(jurosCartoes);
 
 
-            // Calcule a Receita Bruta e os Custos Operacionais
-            BigDecimal receitaBruta = BigDecimal.ZERO;
-            BigDecimal custosOperacionais = BigDecimal.ZERO;
-
-            if (!vendasMesList.isEmpty()) {
-                ModelFechaMes resumo = vendasMesList.get(0);
-                receitaBruta = resumo.getValor_din_mes()
-                        .add(resumo.getValor_deb_mes())
-                        .add(resumo.getValor_cred_mes())
-                        .add(resumo.getValor_pix_mes());
-
-                custosOperacionais = resumo.getTotal_ribbons()
-                        .add(resumo.getValor_enc())
-                        .add(resumo.getJuros_cartoes());
-            }
-
-            // Formate os valores para o JSP
+            // Formatação
             DecimalFormat df = new DecimalFormat("#,##0.00");
-            request.setAttribute("valorTotalContas", df.format(valorContas));
-            request.setAttribute("valorTotalDespesas", df.format(valorDespesas));
+            request.setAttribute("valorTotalContas", df.format(Optional.ofNullable(valorContas).orElse(BigDecimal.ZERO)));
+            request.setAttribute("valorTotalDespesas", df.format(Optional.ofNullable(valorDespesas).orElse(BigDecimal.ZERO)));
             request.setAttribute("valorTotalSalarios", df.format(totalSalarios));
 
-            // Adiciona nome do mês e ano
+            // Nome do mês
             int mes = 0, ano = 0;
             if (dataInicial != null && !dataInicial.isEmpty()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -197,16 +200,15 @@ public class ServletDre extends ServletGenericUtil {
                 mes = cal.get(Calendar.MONTH) + 1;
                 ano = cal.get(Calendar.YEAR);
                 SimpleDateFormat sdfMesAno = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR"));
-                String mesAnoFormatado = sdfMesAno.format(date);
-                request.setAttribute("mesAno", mesAnoFormatado);
+                request.setAttribute("mesAno", sdfMesAno.format(date));
             }
 
-            // Passa os valores calculados para o JSP
+            // Envia para JSP
             request.setAttribute("vendasMesList", vendasMesList);
             request.setAttribute("receitaBruta", receitaBruta);
             request.setAttribute("totalCustosOperacionais", custosOperacionais);
 
-            // Armazene os valores na sessão para uso no doPost
+            // Salva na sessão
             HttpSession session = request.getSession();
             session.setAttribute("receitaBruta", receitaBruta);
             session.setAttribute("totalCustosOperacionais", custosOperacionais);
@@ -225,4 +227,5 @@ public class ServletDre extends ServletGenericUtil {
             dispatcher.forward(request, response);
         }
     }
+
 }

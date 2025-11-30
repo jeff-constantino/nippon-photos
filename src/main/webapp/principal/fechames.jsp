@@ -638,8 +638,8 @@
                                             <input type="text" class="form-control money" id="receita_din" name="receita_din"  style="font-size: 1.2rem" value="${vendasMesList[0].valor_din_mes}">
                                         </div>
                                         <div class="col-3 mb-3" style="text-align: center">
-                                                <label for="saldo" style="font-size: 1.2rem; color: #d39e00">SALDO EM CAIXA</label>
-                                            <input type="text" class="form-control money" id="saldo" name="saldo" style="font-size: 1.2rem;color: #d39e00" value=" ">
+                                                <label for="saldo" style="font-size: 1.2rem; color: #DAA520">SALDO EM CAIXA</label>
+                                            <input type="text" class="form-control money" id="saldo" name="saldo" style="font-size: 1.2rem;color: #DAA520" value=" ">
                                         </div>
                                     </div>
 

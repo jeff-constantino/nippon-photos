@@ -1,8 +1,17 @@
+alterar cadastro de funcionario para selecionar qual comissão usar.
+alterar as somas de salarios, fecha mes, dre para incluir a soma de acordo com a comissão;
+
+
+
 CRIAR SANGRIA e buscar no fechames
 adcionar busca para despesas em din no fechames
-alterar gravar fechamento com os novos de saldo em caixa
-CRIAR BUSCA DE FECHAMENTO E DE DRE IGUAL BUSCA DE SALARIO
-alterar busca de fechamento com os novos de saldo em caixa
+alterar busca de fechamento e na dre com os novos de saldo em caixa
+alterar gravar fechamento e na dre com os novos de saldo em caixa
+adcionar salario no fecha mes :
+// CONSULTA SALÁRIOS
+        String sqlSalarios = "SELECT SUM(salario_total2) AS total_salarios FROM salarios " +
+                "WHERE mes >= ? AND mes <= ? AND ano >= ? AND ano <= ?";
+
 ADCIONAR NO DRE DINHEIRO EM CAIXA (igual ao fecha mes)
 confirmar se na DRE está descontando os custos de despesas/vales/contas em dinheiro do dinheiro em caixa.
 

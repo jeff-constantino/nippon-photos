@@ -83,24 +83,55 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form action="<%= request.getContextPath() %>/ServletDre" method="get" id="formDre" name="formDre">
-                                                        <input type="hidden" name="acao" value="relatorioMes">
-                                                        <div class="form-row align-items-center">
-                                                            <div class="col-auto">
-                                                                <label for="dataInicial">Data Inicial</label>
-                                                                <input type="date" class="form-control" id="dataInicial" name="dataInicial" required onchange="setData()" value="${dataInicial}">
+                                                    <c:choose>
+                                                        <c:when test="${empty mesesNaoFechados}">
+                                                            <div class="alert alert-info">
+                                                                <i class="fas fa-info-circle"></i>
+                                                                Não há meses pendentes para gerar o relatório DRE.
                                                             </div>
-                                                            <div class="col-auto">
-                                                                <label for="dataFinal">Data Final</label>
-                                                                <input type="date" class="form-control" id="dataFinal" name="dataFinal" required value="${dataFinal}">
-                                                            </div>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <p class="mb-3">Selecione um mês para gerar o relatório:</p>
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover">
 
-                                                            <div class="col-auto">
-                                                                <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
+                                                                    <tbody>
+                                                                    <c:forEach var="mesAno" items="${mesesNaoFechados}">
+                                                                        <tr>
+                                                                            <td>
+                                                                                <c:choose>
+                                                                                    <c:when test="${mesAno.mes == 1}">Janeiro</c:when>
+                                                                                    <c:when test="${mesAno.mes == 2}">Fevereiro</c:when>
+                                                                                    <c:when test="${mesAno.mes == 3}">Março</c:when>
+                                                                                    <c:when test="${mesAno.mes == 4}">Abril</c:when>
+                                                                                    <c:when test="${mesAno.mes == 5}">Maio</c:when>
+                                                                                    <c:when test="${mesAno.mes == 6}">Junho</c:when>
+                                                                                    <c:when test="${mesAno.mes == 7}">Julho</c:when>
+                                                                                    <c:when test="${mesAno.mes == 8}">Agosto</c:when>
+                                                                                    <c:when test="${mesAno.mes == 9}">Setembro</c:when>
+                                                                                    <c:when test="${mesAno.mes == 10}">Outubro</c:when>
+                                                                                    <c:when test="${mesAno.mes == 11}">Novembro</c:when>
+                                                                                    <c:when test="${mesAno.mes == 12}">Dezembro</c:when>
+                                                                                </c:choose>
+                                                                                / ${mesAno.ano}
+                                                                            </td>
+                                                                            <td>
+                                                                                <form action="<%= request.getContextPath() %>/ServletDre" method="get">
+                                                                                    <input type="hidden" name="acao" value="relatorioMes">
+                                                                                    <input type="hidden" name="mes" value="${mesAno.mes}">
+                                                                                    <input type="hidden" name="ano" value="${mesAno.ano}">
+                                                                                    <button type="submit" class="btn btn-primary btn-sm">
+                                                                                        <i class="fas fa-file-pdf"></i> Gerar Relatório
+                                                                                    </button>
+                                                                                </form>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </c:forEach>
+                                                                    </tbody>
+                                                                </table>
                                                             </div>
-                                                        </div>
-                                                    </form>
-
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>

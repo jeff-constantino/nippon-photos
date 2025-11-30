@@ -8,7 +8,9 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DAODre {
     private final Connection connection;
@@ -17,6 +19,31 @@ public class DAODre {
         this.connection = SingleConnectionBanco.getConnection();
     }
 
+
+    // Adicione este método na classe DAODre
+
+    public List<Map<String, Object>> buscarMesesNaoFechados() throws SQLException {
+        List<Map<String, Object>> mesesNaoFechados = new ArrayList<>();
+
+        String sql = "SELECT DISTINCT fm.mes, fm.ano " +
+                "FROM fecha_mes fm " +
+                "LEFT JOIN dre d ON fm.mes = d.mes AND fm.ano = d.ano " +
+                "WHERE d.mes IS NULL AND d.ano IS NULL " +
+                "ORDER BY fm.ano DESC, fm.mes DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Map<String, Object> mesAno = new HashMap<>();
+                mesAno.put("mes", rs.getInt("mes"));
+                mesAno.put("ano", rs.getInt("ano"));
+                mesesNaoFechados.add(mesAno);
+            }
+        }
+
+        return mesesNaoFechados;
+    }
 
     public List<ModelFechaMes> buscarFechamentoMensal(String dataInicial, String dataFinal) throws SQLException {
         List<ModelFechaMes> resumoMensal = new ArrayList<>();
@@ -309,6 +336,7 @@ public class DAODre {
         // ✅ Retorna apenas no final do método
         return resumoMensal;
     }
+
 
     public void gravarDRE(ModelDre dre) throws SQLException {
         // SQL para inserir os dados do DRE

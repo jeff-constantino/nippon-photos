@@ -51,11 +51,12 @@ public class DAOFechaMes {
                 "WHERE data_fechamento >= ? AND data_fechamento <= ?";
 
         String sqlVales = "SELECT SUM(valor) AS total_vales FROM vales WHERE data >= ? AND data <= ?";
-
         String sqlConfiguracao = "SELECT * FROM configuracao WHERE idconf = 1";
-
-        /* 🚀 NOVA QUERY */
         String sqlMateriais = "SELECT qtd AS qtd_ribbon FROM conf_materiais WHERE id_conf = 1";
+
+        // 🔽 CONSULTA SALÁRIOS (mantém a mesma SQL)
+        String sqlSalarios = "SELECT SUM(salario_total2) AS total_salarios FROM salarios " +
+                "WHERE mes >= ? AND mes <= ? AND ano >= ? AND ano <= ?";
 
         try {
             /* === Consulta fecha_dia === */
@@ -140,13 +141,28 @@ public class DAOFechaMes {
                 }
             }
 
-            /* === Consulta conf_materiais (Apenas id_conf = 1) === */
+            /* === Consulta conf_materiais === */
             try (PreparedStatement pst = connection.prepareStatement(sqlMateriais);
                  ResultSet rs = pst.executeQuery()) {
 
                 if (rs.next() && !resumoMensal.isEmpty()) {
                     ModelFechaMes resumo = resumoMensal.get(0);
                     resumo.setQtd_ribbon(rs.getInt("qtd_ribbon"));
+                }
+            }
+
+            // 🆕 CONSULTA SALÁRIOS - AGORA NA POSIÇÃO CORRETA (DEPOIS DE CRIAR O OBJETO)
+            try (PreparedStatement pst = connection.prepareStatement(sqlSalarios)) {
+                pst.setInt(1, dataInicio.getMonthValue()); // mês inicial
+                pst.setInt(2, dataFim.getMonthValue());     // mês final
+                pst.setInt(3, dataInicio.getYear());       // ano inicial
+                pst.setInt(4, dataFim.getYear());          // ano final
+
+                try (ResultSet rs = pst.executeQuery()) {
+                    if (rs.next() && !resumoMensal.isEmpty()) {
+                        ModelFechaMes resumo = resumoMensal.get(0);
+                        resumo.setTotal_salarios(rs.getBigDecimal("total_salarios"));
+                    }
                 }
             }
 

@@ -631,7 +631,7 @@
                                         </div>
                                         <div class="col-3 mb-3" style="text-align: center">
                                             <label for="salarios" style="font-size: 1.2rem">SALARIOS</label>
-                                            <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 1.2rem; background: #FFFFFF; color: black">
+                                            <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 1.2rem; background: #FFFFFF; color: black" value="${valorTotalSalarios}">
                                         </div>
                                         <div class="col-3 mb-3" style="text-align: center">
                                             <label for="receitas" style="font-size: 1.2rem">RECEITA EM DINHEIRO</label>

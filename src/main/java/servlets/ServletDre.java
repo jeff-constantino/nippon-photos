@@ -7,8 +7,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.ModelContas;
-import model.ModelDespesas;
 import model.ModelDre;
 import model.ModelFechaMes;
 
@@ -17,26 +15,45 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
-@WebServlet ("/ServletDre")
+@WebServlet("/ServletDre")
 public class ServletDre extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
 
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String acao = request.getParameter("acao");
+
         if ("relatorioMes".equals(acao)) {
             gerarDRE(request, response);
         } else {
-            response.sendRedirect(request.getContextPath() + "/principal/dre.jsp");
+            // Carrega os meses não fechados ao abrir a página
+            carregarMesesNaoFechados(request);
+            RequestDispatcher rd = request.getRequestDispatcher("/principal/dre.jsp");
+            rd.forward(request, response);
         }
     }
 
+    // 🆕 MÉTODO DOPOST - Para processar o formulário de gravação
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String acao = request.getParameter("acao");
 
+        if ("gravarDRE".equals(acao)) {
+            gravarDRE(request, response);
+        } else {
+            // Se não tiver ação definida, redireciona para o doGet
+            doGet(request, response);
+        }
+    }
 
     // Método para processar a gravação
-    private void gravarDRE(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void gravarDRE(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         HttpSession session = request.getSession();
 
         try {
@@ -49,6 +66,7 @@ public class ServletDre extends ServletGenericUtil {
             // Certifique-se de que os dados necessários da sessão existam
             if (receitaBruta == null || custosOperacionais == null || mes == null || ano == null) {
                 request.setAttribute("msg", "Erro: Dados do DRE não encontrados na sessão. Gere o relatório novamente.");
+                carregarMesesNaoFechados(request);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/dre.jsp");
                 dispatcher.forward(request, response);
                 return;
@@ -73,9 +91,10 @@ public class ServletDre extends ServletGenericUtil {
 
             // Calcule os totais
             BigDecimal totalImpostos = icms.add(pis).add(cofins).add(inss).add(irpj).add(csll);
-            BigDecimal totalDespesasAdm = aluguel.add(salarios).add(contas).add(despesasGerais).add(bonificacoes).add(prestacoes).add(internet).add(outrasDesp);
+            BigDecimal totalDespesasAdm = aluguel.add(salarios).add(contas).add(despesasGerais)
+                    .add(bonificacoes).add(prestacoes).add(internet).add(outrasDesp);
 
-            // Calcule o lucro líquido (já usando os valores da sessão)
+            // Calcule o lucro líquido
             BigDecimal lucroBruto = receitaBruta.subtract(custosOperacionais);
             BigDecimal lucroLiquido = lucroBruto.subtract(totalImpostos).subtract(totalDespesasAdm);
 
@@ -115,7 +134,8 @@ public class ServletDre extends ServletGenericUtil {
             request.setAttribute("msg", "Erro ao gravar o DRE: " + e.getMessage());
         }
 
-        // Mantenha a mesma página DRE
+        // Recarrega a lista e mantém a mesma página DRE
+        carregarMesesNaoFechados(request);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/dre.jsp");
         dispatcher.forward(request, response);
     }
@@ -127,17 +147,41 @@ public class ServletDre extends ServletGenericUtil {
         }
         try {
             // Remove R$, pontos e substitui vírgula por ponto
-            String cleanedValue = value.replace("R$", "").replace(".", "").replace(",", ".").trim();
+            String cleanedValue = value.replace("R$", "").replace(".", "")
+                    .replace(",", ".").trim();
             return new BigDecimal(cleanedValue);
         } catch (NumberFormatException e) {
-            // Retorna 0 se a conversão falhar
             return BigDecimal.ZERO;
         }
     }
 
-    private void gerarDRE(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String dataInicial = request.getParameter("dataInicial");
-        String dataFinal = request.getParameter("dataFinal");
+    // Carrega meses não fechados
+    private void carregarMesesNaoFechados(HttpServletRequest request) {
+        try {
+            DAODre daoDre = new DAODre();
+            List<Map<String, Object>> mesesNaoFechados = daoDre.buscarMesesNaoFechados();
+            request.setAttribute("mesesNaoFechados", mesesNaoFechados);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            request.setAttribute("msgErro", "Erro ao buscar meses pendentes: " + e.getMessage());
+        }
+    }
+
+    // Gera o relatório DRE
+    private void gerarDRE(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String mesParam = request.getParameter("mes");
+        String anoParam = request.getParameter("ano");
+
+        int mes = Integer.parseInt(mesParam);
+        int ano = Integer.parseInt(anoParam);
+
+        LocalDate dataInicio = LocalDate.of(ano, mes, 1);
+        LocalDate dataFim = dataInicio.withDayOfMonth(dataInicio.lengthOfMonth());
+
+        String dataInicial = dataInicio.toString();
+        String dataFinal = dataFim.toString();
 
         DAODre daoDre = new DAODre();
         DAOContas daoContas = new DAOContas();
@@ -146,74 +190,51 @@ public class ServletDre extends ServletGenericUtil {
         try {
             List<ModelFechaMes> vendasMesList = daoDre.buscarFechamentoMensal(dataInicial, dataFinal);
 
-            // ❗ Se não existe fechamento, volta para a página e mostra mensagem
             if (vendasMesList == null || vendasMesList.isEmpty() ||
                     vendasMesList.get(0).getValor_din_mes() == null) {
-
                 request.setAttribute("msg", "Não existe fechamento mensal para a data selecionada.");
                 request.setAttribute("vendasMesList", null);
-
+                carregarMesesNaoFechados(request);
                 RequestDispatcher rd = request.getRequestDispatcher("/principal/dre.jsp");
                 rd.forward(request, response);
                 return;
             }
 
-            // Se existe fechamento, segue o fluxo normal
             ModelFechaMes resumo = vendasMesList.get(0);
 
             BigDecimal valorContas = daoContas.buscarTotalContasPorPeriodo(dataInicial, dataFinal);
             BigDecimal valorDespesas = daoDespesas.buscarTotalDespesasPorPeriodo(dataInicial, dataFinal);
-
             BigDecimal totalSalarios = Optional.ofNullable(resumo.getTotal_salarios()).orElse(BigDecimal.ZERO);
 
-            // Receita Bruta
-            BigDecimal receitaBruta =
-                    resumo.getValor_din_mes()
-                            .add(resumo.getValor_deb_mes())
-                            .add(resumo.getValor_cred_mes())
-                            .add(resumo.getValor_pix_mes());
+            BigDecimal receitaBruta = resumo.getValor_din_mes()
+                    .add(resumo.getValor_deb_mes())
+                    .add(resumo.getValor_cred_mes())
+                    .add(resumo.getValor_pix_mes());
 
-            // Custos Operacionais
             BigDecimal totalRibbons = Optional.ofNullable(resumo.getTotal_ribbons()).orElse(BigDecimal.ZERO);
             BigDecimal valorEnc = Optional.ofNullable(resumo.getValor_enc()).orElse(BigDecimal.ZERO);
             BigDecimal jurosCartoes = Optional.ofNullable(resumo.getJuros_cartoes()).orElse(BigDecimal.ZERO);
+            BigDecimal custosOperacionais = totalRibbons.add(valorEnc).add(jurosCartoes);
 
-            BigDecimal custosOperacionais =
-                    totalRibbons
-                            .add(valorEnc)
-                            .add(jurosCartoes);
-
-
-            // Formatação
             DecimalFormat df = new DecimalFormat("#,##0.00");
             request.setAttribute("valorTotalContas", df.format(Optional.ofNullable(valorContas).orElse(BigDecimal.ZERO)));
             request.setAttribute("valorTotalDespesas", df.format(Optional.ofNullable(valorDespesas).orElse(BigDecimal.ZERO)));
             request.setAttribute("valorTotalSalarios", df.format(totalSalarios));
 
-            // Nome do mês
-            int mes = 0, ano = 0;
-            if (dataInicial != null && !dataInicial.isEmpty()) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = sdf.parse(dataInicial);
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(date);
-                mes = cal.get(Calendar.MONTH) + 1;
-                ano = cal.get(Calendar.YEAR);
-                SimpleDateFormat sdfMesAno = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR"));
-                request.setAttribute("mesAno", sdfMesAno.format(date));
-            }
+            SimpleDateFormat sdfMesAno = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR"));
+            request.setAttribute("mesAno", sdfMesAno.format(java.sql.Date.valueOf(dataInicio)));
 
-            // Envia para JSP
             request.setAttribute("vendasMesList", vendasMesList);
             request.setAttribute("receitaBruta", receitaBruta);
             request.setAttribute("totalCustosOperacionais", custosOperacionais);
 
-            // Salva na sessão
             HttpSession session = request.getSession();
             session.setAttribute("receitaBruta", receitaBruta);
             session.setAttribute("totalCustosOperacionais", custosOperacionais);
             session.setAttribute("mes", mes);
             session.setAttribute("ano", ano);
+
+            carregarMesesNaoFechados(request);
 
             RequestDispatcher rd = request.getRequestDispatcher("/principal/dre.jsp");
             rd.forward(request, response);
@@ -223,9 +244,9 @@ public class ServletDre extends ServletGenericUtil {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("msg", "Erro ao buscar vendas: " + e.getMessage());
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/fechames.jsp");
+            carregarMesesNaoFechados(request);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/dre.jsp");
             dispatcher.forward(request, response);
         }
     }
-
 }

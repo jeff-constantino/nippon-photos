@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -70,6 +71,18 @@ public class ServletFechaMes extends ServletGenericUtil {
             List<ModelFechaMes> vendasMesList = daoFechaMes.buscarFechamentoMensal(dataInicial, dataFinal);
             request.setAttribute("vendasMesList", vendasMesList);
 
+            // 🆕 BUSCAR SALÁRIOS QUE JÁ VEM NO ModelFechaMes
+            BigDecimal totalSalarios = BigDecimal.ZERO;
+            if (vendasMesList != null && !vendasMesList.isEmpty()) {
+                ModelFechaMes resumo = vendasMesList.get(0);
+                totalSalarios = resumo.getTotal_salarios();
+                if (totalSalarios == null) {
+                    totalSalarios = BigDecimal.ZERO;
+                }
+            }
+
+            DecimalFormat df = new DecimalFormat("#,##0.00");
+            request.setAttribute("valorTotalSalarios", df.format(totalSalarios));
 
             List<ModelConfiguracao> configsJuros = daoConfiguracao.consultarJuros();
             request.setAttribute("configsJuros", configsJuros);
@@ -112,12 +125,12 @@ public class ServletFechaMes extends ServletGenericUtil {
                 request.setAttribute("mesAno", mesAnoFormatado);
             }
 
-
             // Salva na sessão para reutilizar no doPost
             HttpSession session = request.getSession();
             session.setAttribute("vendasMesList", vendasMesList);
             session.setAttribute("valorTotalDespesas", BigDecimal.valueOf(valorDespesas));
             session.setAttribute("valorTotalContas", BigDecimal.valueOf(valorContas));
+            session.setAttribute("valorTotalSalarios", totalSalarios); // 🆕 Salva salários na sessão
 
             session.setAttribute("mes", mes);
             session.setAttribute("ano", ano);

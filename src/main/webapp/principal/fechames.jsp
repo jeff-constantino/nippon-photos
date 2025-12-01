@@ -630,7 +630,7 @@
                                             <input type="text" class="form-control money" id="sangria" name="sangria" style="font-size: 1.2rem; background: #FFFFFF; color: black" value="0">
                                         </div>
                                         <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="salarios" style="font-size: 1.2rem">SALARIOS</label>
+                                            <label for="salarios" style="font-size: 1.2rem">SALÁRIOS LIQUÍDOS</label>
                                             <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 1.2rem; background: #FFFFFF; color: black" value="${valorTotalSalarios}">
                                         </div>
                                         <div class="col-3 mb-3" style="text-align: center">

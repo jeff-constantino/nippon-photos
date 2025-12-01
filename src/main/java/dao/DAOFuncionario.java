@@ -42,7 +42,7 @@ public class DAOFuncionario {
         }
 
         // Ordenação: primeiro as vendas mais atuais
-        sql.append(" ORDER BY v.data_venda DESC LIMIT ? OFFSET ?");
+        sql.append(" ORDER BY v.data_venda ASC LIMIT ? OFFSET ?");
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql.toString())) {
             int index = 1;

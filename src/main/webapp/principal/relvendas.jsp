@@ -132,107 +132,139 @@
                                         <tr>
                                             <th scope="col">NOME</th>
                                             <th scope="col">DATA</th>
+
                                             <th scope="col">Ft Din</th>
                                             <th scope="col">Ft Deb</th>
                                             <th scope="col">Ft Cred</th>
                                             <th scope="col">Ft Pix</th>
+                                            <th scope="col" style="color:#28a745;">Total FT</th> <!-- ADICIONADO -->
+
                                             <th scope="col">Enc Din</th>
                                             <th scope="col">Enc Deb</th>
                                             <th scope="col">Enc Cred</th>
                                             <th scope="col">Enc Pix</th>
+
                                             <th scope="col">Dig Din</th>
                                             <th scope="col">Dig Deb</th>
                                             <th scope="col">Dig Cred</th>
                                             <th scope="col">Dig Pix</th>
+
                                             <th scope="col">Sobras</th>
                                             <th scope="col">Id Venda</th>
                                         </tr>
                                         </thead>
+
                                         <tbody>
                                         <c:forEach items="${vendasList}" var="mv">
                                             <tr>
                                                 <td><c:out value="${mv.nome}" /></td>
                                                 <td><fmt:formatDate value="${mv.data_venda}" pattern="dd/MM/yyyy"/></td>
+
                                                 <td><c:out value="${mv.prod1_din}" /></td>
                                                 <td><c:out value="${mv.prod1_deb}" /></td>
                                                 <td><c:out value="${mv.prod1_cred}" /></td>
                                                 <td><c:out value="${mv.prod1_pix}" /></td>
+
+                                                <!-- TOTAL FT POR LINHA -->
+                                                <td style="color:#daa520; font-weight:bold;">
+                                                    <c:out value="${mv.prod1_din + mv.prod1_deb + mv.prod1_cred + mv.prod1_pix}" />
+                                                </td>
+
                                                 <td><c:out value="${mv.prod2_din}" /></td>
                                                 <td><c:out value="${mv.prod2_deb}" /></td>
                                                 <td><c:out value="${mv.prod2_cred}" /></td>
                                                 <td><c:out value="${mv.prod2_pix}" /></td>
+
                                                 <td><c:out value="${mv.prod3_din}" /></td>
                                                 <td><c:out value="${mv.prod3_deb}" /></td>
                                                 <td><c:out value="${mv.prod3_cred}" /></td>
                                                 <td><c:out value="${mv.prod3_pix}" /></td>
+
                                                 <td><c:out value="${mv.sobras}" /></td>
                                                 <td><c:out value="${mv.venda_id}" /></td>
                                             </tr>
 
-                                            <%-- Acumulando os valores para cada coluna --%>
+                                            <%-- Acumulando os valores --%>
                                             <c:set var="totalProd1Din" value="${totalProd1Din + mv.prod1_din}"  />
                                             <c:set var="totalProd1Deb" value="${totalProd1Deb + mv.prod1_deb}" />
                                             <c:set var="totalProd1Cred" value="${totalProd1Cred + mv.prod1_cred}" />
                                             <c:set var="totalProd1Pix" value="${totalProd1Pix + mv.prod1_pix}" />
+
                                             <c:set var="totalProd2Din" value="${totalProd2Din + mv.prod2_din}" />
                                             <c:set var="totalProd2Deb" value="${totalProd2Deb + mv.prod2_deb}" />
                                             <c:set var="totalProd2Cred" value="${totalProd2Cred + mv.prod2_cred}" />
                                             <c:set var="totalProd2Pix" value="${totalProd2Pix + mv.prod2_pix}" />
+
                                             <c:set var="totalProd3Din" value="${totalProd3Din + mv.prod3_din}" />
                                             <c:set var="totalProd3Deb" value="${totalProd3Deb + mv.prod3_deb}" />
                                             <c:set var="totalProd3Cred" value="${totalProd3Cred + mv.prod3_cred}" />
                                             <c:set var="totalProd3Pix" value="${totalProd3Pix + mv.prod3_pix}" />
+
                                             <c:set var="totalSobras" value="${totalSobras + mv.sobras}" />
                                         </c:forEach>
 
-                                        <%-- Agora sim, calcular os totais agrupados --%>
+                                        <%-- Totais agrupados --%>
                                         <c:set var="totalFT" value="${totalProd1Din + totalProd1Deb + totalProd1Cred + totalProd1Pix}" />
                                         <c:set var="totalENC" value="${totalProd2Din + totalProd2Deb + totalProd2Cred + totalProd2Pix}" />
                                         <c:set var="totalDIGI" value="${totalProd3Din + totalProd3Deb + totalProd3Cred + totalProd3Pix}" />
 
-                                        <%-- Repetição do cabeçalho antes dos totais --%>
+                                        <%-- Cabeçalho antes dos totais --%>
                                         <tr class="table-secondary">
-                                            <th scope="col"></th>
-                                            <th scope="col"></th>
-                                            <th scope="col">Ft Din</th>
-                                            <th scope="col">Ft Deb</th>
-                                            <th scope="col">Ft Cred</th>
-                                            <th scope="col">Ft Pix</th>
-                                            <th scope="col">Enc Din</th>
-                                            <th scope="col">Enc Deb</th>
-                                            <th scope="col">Enc Cred</th>
-                                            <th scope="col">Enc Pix</th>
-                                            <th scope="col">Dig Din</th>
-                                            <th scope="col">Dig Deb</th>
-                                            <th scope="col">Dig Cred</th>
-                                            <th scope="col">Dig Pix</th>
-                                            <th scope="col">Sobras</th>
-                                            <th scope="col">Id Venda</th>
+                                            <th></th>
+                                            <th></th>
+
+                                            <th>Ft Din</th>
+                                            <th>Ft Deb</th>
+                                            <th>Ft Cred</th>
+                                            <th>Ft Pix</th>
+                                            <th>Total FT</th>
+
+                                            <th>Enc Din</th>
+                                            <th>Enc Deb</th>
+                                            <th>Enc Cred</th>
+                                            <th>Enc Pix</th>
+
+                                            <th>Dig Din</th>
+                                            <th>Dig Deb</th>
+                                            <th>Dig Cred</th>
+                                            <th>Dig Pix</th>
+
+                                            <th>Sobras</th>
+                                            <th>Id Venda</th>
                                         </tr>
 
-                                        <%-- Totais detalhados --%>
+                                        <%-- LINHA DE TOTAIS --%>
                                         <tr>
-                                            <td colspan="2" style="color: #f2a654"><strong>Total:</strong></td>
-                                            <td style="color: #f2a654"><c:out value="${totalProd1Din}" /></td>
-                                            <td style="color: #f2a654"><c:out value="${totalProd1Deb}" /></td>
-                                            <td style="color: #f2a654"><c:out value="${totalProd1Cred}" /></td>
-                                            <td style="color: #f2a654"><c:out value="${totalProd1Pix}" /></td>
-                                            <td style="color: #f2a654"><c:out value="${totalProd2Din}" /></td>
-                                            <td style="color: #f2a654"><c:out value="${totalProd2Deb}" /></td>
-                                            <td style="color: #f2a654"><c:out value="${totalProd2Cred}" /></td>
-                                            <td style="color: #f2a654"><c:out value="${totalProd2Pix}" /></td>
-                                            <td style="color: #f2a654"><c:out value="${totalProd3Din}" /></td>
-                                            <td style="color: #f2a654"><c:out value="${totalProd3Deb}" /></td>
-                                            <td style="color: #f2a654"><c:out value="${totalProd3Cred}" /></td>
-                                            <td style="color: #f2a654"><c:out value="${totalProd3Pix}" /></td>
-                                            <td style="color: #f2a654"><c:out value="${totalSobras}" /></td>
+                                            <td colspan="2" style="color:#f2a654"><strong>Total:</strong></td>
+
+                                            <td style="color:#f2a654"><c:out value="${totalProd1Din}" /></td>
+                                            <td style="color:#f2a654"><c:out value="${totalProd1Deb}" /></td>
+                                            <td style="color:#f2a654"><c:out value="${totalProd1Cred}" /></td>
+                                            <td style="color:#f2a654"><c:out value="${totalProd1Pix}" /></td>
+
+                                            <!-- TOTAL FT FINAL -->
+                                            <td style="color:#28a745; font-weight:bold;">
+                                                <c:out value="${totalFT}" />
+                                            </td>
+
+                                            <td style="color:#f2a654"><c:out value="${totalProd2Din}" /></td>
+                                            <td style="color:#f2a654"><c:out value="${totalProd2Deb}" /></td>
+                                            <td style="color:#f2a654"><c:out value="${totalProd2Cred}" /></td>
+                                            <td style="color:#f2a654"><c:out value="${totalProd2Pix}" /></td>
+
+                                            <td style="color:#f2a654"><c:out value="${totalProd3Din}" /></td>
+                                            <td style="color:#f2a654"><c:out value="${totalProd3Deb}" /></td>
+                                            <td style="color:#f2a654"><c:out value="${totalProd3Cred}" /></td>
+                                            <td style="color:#f2a654"><c:out value="${totalProd3Pix}" /></td>
+
+                                            <td style="color:#f2a654"><c:out value="${totalSobras}" /></td>
                                             <td></td>
                                         </tr>
-
 
                                         </tbody>
                                     </table>
                                 </div>
+
 
                             </div>
                             <div class="table-responsive">

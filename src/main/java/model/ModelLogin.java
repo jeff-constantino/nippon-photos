@@ -16,9 +16,19 @@ public class ModelLogin implements Serializable{
     private String vendas;
     private String vales;
     private long id_funcionario;
+    private String comissao;
 
+    public void setVendas(String vendas) {
+        this.vendas = vendas;
+    }
 
+    public String getComissao() {
+        return comissao;
+    }
 
+    public void setComissao(String comissao) {
+        this.comissao = comissao;
+    }
 
     public Boolean isNovo(){
         if(this.id == null){

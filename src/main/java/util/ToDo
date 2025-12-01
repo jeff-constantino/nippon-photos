@@ -1,8 +1,8 @@
 CD IdeaProjects\nippon-photos
 mvn clean package
-ADCIONAR MEDIA DE FOTOS NO RANKING FUNCIONÁRIOS
-adcionar bonificações, adc noturno no salario
 alterar cadastro de funcionario para selecionar qual comissão usar.
+adcionar bonificações, adc noturno no salario
+
 alterar as somas de salarios, fecha mes, dre para incluir a soma de acordo com a comissão;
 
 

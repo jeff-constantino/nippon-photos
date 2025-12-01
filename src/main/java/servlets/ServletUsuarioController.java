@@ -114,15 +114,21 @@ public class ServletUsuarioController extends ServletGenericUtil{
             String email = request.getParameter("email");
             String senha = request.getParameter("senha");
             String status = request.getParameter("status");
+            String comissao = request.getParameter("comissao");
 
+            // AQUI ESTAVA O PROBLEMA — agora corrigido
             ModelLogin modelLogin = new ModelLogin();
+            modelLogin.setComissao(comissao);
 
-            //condição ternaria.. valida..? se sim : se não
+            // Condição ternária para ID
             modelLogin.setId(id != null && !id.isEmpty() ? Long.parseLong(id) : null);
             modelLogin.setNome(nome);
             modelLogin.setStatus(status);
+            modelLogin.setComissao(comissao); // <-- ESTA LINHA É OBRIGATÓRIA
 
-            if (daoUsuarioRepository.validarLogin(modelLogin.getNome())&& modelLogin.getId() == null) //"Para criar um novo usuario com o mesmo nome"
+
+
+            if (daoUsuarioRepository.validarLogin(modelLogin.getNome()) && modelLogin.getId() == null) //"Para criar um novo usuario com o mesmo nome"
             {
                 msg = "Funcionário com o mesmo nome já Cadastrado";
 
@@ -143,7 +149,7 @@ public class ServletUsuarioController extends ServletGenericUtil{
 
             request.setAttribute("msg", msg);
             request.setAttribute("modelLogin", modelLogin);//para manter os dados na tela
-            request.setAttribute("totalPagina",daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
+            request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
             RequestDispatcher redireciona = request.getRequestDispatcher("/principal/usuario.jsp");
             redireciona.forward(request, response);
 

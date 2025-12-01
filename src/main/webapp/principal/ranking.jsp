@@ -56,7 +56,7 @@
 
                                                                       <!-- Espaço vazio para alinhar o botão -->
                                                                       <div class="col-auto">
-                                                                          <label for="ranking" class="invisible">Ranking</label>
+                                                                          <label class="invisible">Ranking</label>
                                                                           <button type="submit" class="btn btn-primary form-control">Gerar Ranking</button>
                                                                       </div>
                                                                   </div>
@@ -125,80 +125,95 @@
 
                                 <!-- Script para gerar o gráfico -->
                                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
                                 <script>
                                     const ctxVendasMini = document.getElementById('vendasChartMini').getContext('2d');
 
                                     var nomesVendasMini = [];
                                     var totalVendasMini = [];
+                                    var mediaVendasMini = [];  // <- NOVO (média por dia)
 
                                     <c:forEach var="venda" items="${vendasList}">
-                                    nomesVendasMini.push("${venda.nome}");          // Nome do funcionário
-                                    totalVendasMini.push(${venda.totalFotosVendidas}); // Total de vendas
+                                    nomesVendasMini.push([
+                                        "${venda.nome}",
+                                        "${venda.totalFotosVendidas} fotos",
+                                        "Média: " + (
+                                            Number(${venda.diasTrabalhados}) > 0
+                                                ? Number(${venda.totalFotosVendidas}) / Number(${venda.diasTrabalhados})
+                                                : 0
+                                        ).toFixed(0) + "/dia"
+                                    ]);
+
+
+
+
+
+                                    totalVendasMini.push(${venda.totalFotosVendidas});
+
+                                    var dias = ${venda.diasTrabalhados};
+                                    var total = ${venda.totalFotosVendidas};
+
+                                    mediaVendasMini.push(dias > 0 ? (total / dias) : 0);
+
                                     </c:forEach>
 
                                     const vendasChartMini = new Chart(ctxVendasMini, {
-                                        type: 'bar', // Tipo de gráfico: 'bar' para barra
+                                        type: 'bar',
                                         data: {
-                                            labels: nomesVendasMini, // Nomes dos funcionários no eixo X
+                                            labels: nomesVendasMini,
                                             datasets: [{
                                                 label: 'Fotos Vendidas',
-                                                data: totalVendasMini, // Total de vendas no eixo Y
+                                                data: totalVendasMini,
                                                 backgroundColor: [
-                                                    'rgba(50,205,50)', // Cor vibrante 1
-                                                    'rgba(54, 162, 235)', // Cor vibrante 2 (azul)
-                                                    'rgba(255, 206, 86)', // Cor vibrante 3 (amarelo)
-                                                    'rgba(75, 192, 192)', // Cor vibrante 4 (verde claro)
-                                                    'rgba(153, 102, 255)', // Cor vibrante 5 (roxo)
-                                                    'rgba(255, 99, 132)' // Cor vibrante 6 (laranja)
-                                                ], // Cores vibrantes para as barras
+                                                    'rgba(50,205,50)',
+                                                    'rgba(54, 162, 235)',
+                                                    'rgba(255, 206, 86)',
+                                                    'rgba(75, 192, 192)',
+                                                    'rgba(153, 102, 255)',
+                                                    'rgba(255, 99, 132)'
+                                                ],
                                                 borderColor: [
-                                                    'rgba(107,142,35, 1)', // Cor da borda vibrante 1
-                                                    'rgba(54, 162, 235, 1)', // Cor da borda vibrante 2
-                                                    'rgba(255, 206, 86, 1)', // Cor da borda vibrante 3
-                                                    'rgba(75, 192, 192, 1)', // Cor da borda vibrante 4
-                                                    'rgba(153, 102, 255, 1)', // Cor da borda vibrante 5
-                                                    'rgba(255, 99, 132, 1)' // Cor da borda vibrante 6
-                                                ], // Cores da borda das barras
+                                                    'rgba(107,142,35, 1)',
+                                                    'rgba(54, 162, 235, 1)',
+                                                    'rgba(255, 206, 86, 1)',
+                                                    'rgba(75, 192, 192, 1)',
+                                                    'rgba(153, 102, 255, 1)',
+                                                    'rgba(255, 99, 132, 1)'
+                                                ],
                                                 borderWidth: 1
                                             }]
                                         },
                                         options: {
-                                            responsive: true, // Gráfico responsivo
-                                            maintainAspectRatio: false, // Permite que o gráfico se ajuste ao tamanho do contêiner
+                                            responsive: true,
+                                            maintainAspectRatio: false,
                                             animation: {
-                                                duration: 1500, // Duração da animação
-                                                easing: 'easeInOutCubic' // Efeito de animação
+                                                duration: 1500,
+                                                easing: 'easeInOutCubic'
                                             },
                                             scales: {
                                                 y: {
-                                                    beginAtZero: false, // O gráfico começa no 0
+                                                    beginAtZero: false,
                                                     title: {
-                                                        display: false,
-                                                        text: 'Fotos Vendidas', // Título do eixo Y
-                                                        font: {
-                                                            size: 16
-                                                        }
+                                                        display: false
                                                     },
                                                     ticks: {
                                                         font: {
-                                                            size: 14, // Tamanho da fonte do eixo Y
+                                                            size: 14,
                                                             weight: 'bold'
                                                         }
                                                     }
                                                 },
                                                 x: {
                                                     title: {
-                                                        display: false, // Título do eixo X oculto
+                                                        display: false
                                                     },
                                                     ticks: {
                                                         font: {
-                                                            size: 14, // Tamanho da fonte do eixo X
+                                                            size: 14,
                                                             weight: 'bold'
                                                         },
-                                                        // Modificando os labels para mostrar nome + quantidade de fotos
-                                                        callback: function(value, index, values) {
-                                                            return nomesVendasMini[index] + '\n- ' + totalVendasMini[index]  ; // Nome + Quantidade de fotos
-                                                        }
+                                                        // AQUI MOSTRA: NOME / TOTAL / MÉDIA
+
                                                     }
                                                 }
                                             },
@@ -206,7 +221,7 @@
                                                 legend: {
                                                     labels: {
                                                         font: {
-                                                            size: 14, // Tamanho da fonte da legenda
+                                                            size: 14,
                                                             weight: 'bold'
                                                         }
                                                     }
@@ -219,6 +234,7 @@
                         </div>
                     </div>
                 </div>
+
 
 
                 <!-- RANKING DE PRODUÇÃO -->

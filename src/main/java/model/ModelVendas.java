@@ -47,6 +47,9 @@ public class ModelVendas implements Serializable {
 
     public int ribbon_dif;
 
+    private int diasTrabalhados;
+    public int getDiasTrabalhados() { return diasTrabalhados; }
+    public void setDiasTrabalhados(int diasTrabalhados) { this.diasTrabalhados = diasTrabalhados; }
 
 
 

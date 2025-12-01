@@ -86,6 +86,7 @@ public class ServletFechaMes extends ServletGenericUtil {
 
             List<ModelConfiguracao> configsJuros = daoConfiguracao.consultarJuros();
             request.setAttribute("configsJuros", configsJuros);
+            System.out.println(configsJuros);
 
             List<ModelLogin> funcionarios = daoFuncionario.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);

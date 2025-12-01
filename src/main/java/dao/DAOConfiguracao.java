@@ -20,6 +20,35 @@ public class DAOConfiguracao {
         connection = SingleConnectionBanco.getConnection();
     }
 
+    /**
+     * Atualiza os juros de cartão no banco de dados
+     * Os valores já vêm divididos por 100 do Servlet
+     */
+    public void atualizarJurosCartao(ModelConfiguracao model) throws SQLException {
+        try {
+            String sql = "UPDATE conf_juros_cartao SET deb_visa_master=?, cred_visa_master=?, deb_outros=?, cred_outros=? WHERE idconf=?";
+
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setBigDecimal(1, model.getDeb_visa_master());
+                stmt.setBigDecimal(2, model.getCred_visa_master());
+                stmt.setBigDecimal(3, model.getDeb_outros());
+                stmt.setBigDecimal(4, model.getCred_outros());
+                stmt.setLong(5, model.getIdconf());
+
+                int rowsAffected = stmt.executeUpdate();
+
+                if (rowsAffected == 0) {
+                    throw new SQLException("Nenhum registro foi atualizado. Verifique se o ID existe.");
+                }
+
+                connection.commit();
+            }
+        } catch (SQLException e) {
+            connection.rollback();
+            throw e;
+        }
+    }
+
     public ModelConfiguracao gravarConfig(ModelConfiguracao model) throws SQLException {
         try {
             String sql;
@@ -303,7 +332,7 @@ public class DAOConfiguracao {
 
     public List<ModelConfiguracao> consultarJuros() throws Exception {
         List<ModelConfiguracao> listaJuros = new ArrayList<>();
-        String sql = "SELECT * FROM public.conf_juros_cartao"; // Certifique-se de que a tabela existe
+        String sql = "SELECT * FROM public.conf_juros_cartao";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql);
              ResultSet resultSet = preparedSql.executeQuery()) {
@@ -312,23 +341,18 @@ public class DAOConfiguracao {
                 ModelConfiguracao modelConfiguracao = new ModelConfiguracao();
                 modelConfiguracao.setIdconf(resultSet.getLong("idconf"));
 
-                // Divide os valores por 100 diretamente no Java
-                BigDecimal debVisaMaster = resultSet.getBigDecimal("deb_visa_master").divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
-                BigDecimal credVisaMaster = resultSet.getBigDecimal("cred_visa_master").divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
-                BigDecimal debOutros = resultSet.getBigDecimal("deb_outros").divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
-                BigDecimal credOutros = resultSet.getBigDecimal("cred_outros").divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
-
-                modelConfiguracao.setDeb_visa_master(debVisaMaster);
-                modelConfiguracao.setCred_visa_master(credVisaMaster);
-                modelConfiguracao.setDeb_outros(debOutros);
-                modelConfiguracao.setCred_outros(credOutros);
+                // NÃO DIVIDE MAIS - apenas pega o valor direto do banco
+                modelConfiguracao.setDeb_visa_master(resultSet.getBigDecimal("deb_visa_master"));
+                modelConfiguracao.setCred_visa_master(resultSet.getBigDecimal("cred_visa_master"));
+                modelConfiguracao.setDeb_outros(resultSet.getBigDecimal("deb_outros"));
+                modelConfiguracao.setCred_outros(resultSet.getBigDecimal("cred_outros"));
 
                 listaJuros.add(modelConfiguracao);
             }
 
         } catch (SQLException e) {
-            System.err.println("Erro ao consultar configurações: " + e.getMessage()); // Captura erros de SQL
-            throw e; // Repropaga a exceção para ser tratada na camada superior
+            System.err.println("Erro ao consultar configurações: " + e.getMessage());
+            throw e;
         }
 
         return listaJuros;

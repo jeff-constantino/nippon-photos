@@ -11,6 +11,7 @@ import model.ModelConfiguracao;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,10 +81,11 @@ public class ServletConfig extends ServletGenericUtil {
 
 
     @Override
-      protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String tipoConfig = request.getParameter("tipo_config");
             String acao = request.getParameter("acao");
+
             if ("limparMsg".equals(acao)) {
                 // limpe sua mensagem da sessão, se for o caso
                 request.getSession().removeAttribute("msg");
@@ -91,14 +93,20 @@ public class ServletConfig extends ServletGenericUtil {
                 return; // NÃO segue para gravação
             }
 
-
-
             // --- NOVO FLUXO: MATERIAIS (tabela conf_materiais) ---
             if ("materiais".equals(tipoConfig)) {
                 processarMateriais(request);
                 request.setAttribute("msg", "Materiais gravados com sucesso!");
                 doGet(request, response);
                 return; // encerra aqui para não seguir para o fluxo de 'configuracao'
+            }
+
+            // --- NOVO FLUXO: JUROS DE CARTÃO ---
+            if ("cartao".equals(acao)) {
+                processarJurosCartao(request);
+                request.setAttribute("msg", "Juros de cartão atualizados com sucesso!");
+                doGet(request, response);
+                return;
             }
 
             // --- FLUXO EXISTENTE: CONFIGURAÇÕES GERAIS (tabela configuracao) ---
@@ -111,7 +119,6 @@ public class ServletConfig extends ServletGenericUtil {
                     modelConfig.setIdconf(id);
                 }
             }
-
 
             // Configura os nomes
             modelConfig.setConf1_nome(request.getParameter("conf1_nome"));
@@ -193,10 +200,10 @@ public class ServletConfig extends ServletGenericUtil {
     }
 
 
-    /**
-     * Processa o formulário de materiais
-     * Cada produto será gravado separadamente
-     */
+/**
+ * Processa o formulário de materiais
+ * Cada produto será gravado separadamente
+ */
     /**
      * Processa os 3 materiais do formulário
      */
@@ -225,6 +232,52 @@ public class ServletConfig extends ServletGenericUtil {
                 nome2, valor2, qtd2, custo2,
                 nome3, valor3, qtd3, custo3
         );
+    }
+
+    /**
+     * Processa os juros de cartão
+     * Divide os valores por 100 antes de salvar no banco
+     */
+    private void processarJurosCartao(HttpServletRequest request) throws Exception {
+        String idconf = request.getParameter("idconf");
+        String debVisaMaster = request.getParameter("deb_visa_master");
+        String credVisaMaster = request.getParameter("cred_visa_master");
+        String debOutros = request.getParameter("deb_outros");
+        String credOutros = request.getParameter("cred_outros");
+
+        ModelConfiguracao modelConfig = new ModelConfiguracao();
+
+        // Define o ID
+        if (idconf != null && !idconf.isEmpty()) {
+            modelConfig.setIdconf(Long.parseLong(idconf));
+        }
+
+        // Converte os valores de porcentagem (divide por 100)
+        // Exemplo: usuário digita 1.37, salva 0.0137 no banco
+        modelConfig.setDeb_visa_master(dividirPor100(debVisaMaster));
+        modelConfig.setCred_visa_master(dividirPor100(credVisaMaster));
+        modelConfig.setDeb_outros(dividirPor100(debOutros));
+        modelConfig.setCred_outros(dividirPor100(credOutros));
+
+        // Chama o DAO para salvar
+        daoConfiguracao.atualizarJurosCartao(modelConfig);
+    }
+
+    /**
+     * Divide o valor por 100 para converter de porcentagem para decimal
+     */
+    private BigDecimal dividirPor100(String valor) {
+        if (valor != null && !valor.isEmpty()) {
+            try {
+                valor = valor.replace(",", ".");
+                BigDecimal valorDecimal = new BigDecimal(valor);
+                return valorDecimal.divide(new BigDecimal("100"), 4, RoundingMode.HALF_UP);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                return BigDecimal.ZERO;
+            }
+        }
+        return BigDecimal.ZERO;
     }
 
     /**

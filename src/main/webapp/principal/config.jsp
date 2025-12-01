@@ -1143,10 +1143,10 @@
                                                            data-bs-target="#modalCartao"
                                                            onclick="gerenciarCartao(
                                                                ${modelConfiguracao.idconf},
-                                                                   '${modelConfiguracao.deb_visa_master}',
-                                                                   '${modelConfiguracao.cred_visa_master}',
-                                                                   '${modelConfiguracao.deb_outros}',
-                                                                   '${modelConfiguracao.cred_outros}'
+                                                                   '<fmt:formatNumber value="${modelConfiguracao.deb_visa_master * 100}" pattern="0.00" />',
+                                                                   '<fmt:formatNumber value="${modelConfiguracao.cred_visa_master * 100}" pattern="0.00" />',
+                                                                   '<fmt:formatNumber value="${modelConfiguracao.deb_outros * 100}" pattern="0.00" />',
+                                                                   '<fmt:formatNumber value="${modelConfiguracao.cred_outros * 100}" pattern="0.00" />'
                                                                    )">
                                                             Editar
                                                         </a>
@@ -1167,10 +1167,6 @@
                                                     <td>
                                                         <fmt:formatNumber value="${modelConfiguracao.cred_outros}" pattern="0.00%" />
                                                     </td>
-
-
-
-
                                                 </tr>
 
 

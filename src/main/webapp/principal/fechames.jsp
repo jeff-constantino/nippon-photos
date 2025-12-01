@@ -693,9 +693,7 @@
     $(document).ready(function () {
         var msg = "${msg}";
         if (msg) {
-            $('#msgModal').modal('show'); // Exibe o modal com a mensagem
-
-            // Remove a mensagem da sessão após exibi-la
+            $('#msgModal').modal('show');
             $.post("${pageContext.request.contextPath}/ServletVendas", { acao: "limparMsg" });
         }
     });
@@ -733,125 +731,75 @@
     document.querySelectorAll('input[type="number"]').forEach(input => {
         input.addEventListener('keydown', function(event) {
             if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-                event.preventDefault(); // Impede a alteração do valor
+                event.preventDefault();
             }
         });
     });
 
-    // Adiciona o evento keydown ao documento
     document.addEventListener('keydown', navigateFocusableElements);
-    // Fim de navegação por setas
 
-
-
-
-    // Inicializa o tooltip com um delay reduzido para aparecer mais rápido
+    // Inicializa o tooltip
     $(document).ready(function(){
         $('#tooltipButton').tooltip({
-            delay: { "show": 100, "hide": 100 } // O tooltip vai aparecer em 100ms
+            delay: { "show": 100, "hide": 100 }
         });
     });
 
-
-
-
-
     function setData() {
-        // Obtém o valor do campo dataInicial
         var dataInicial = document.getElementById("dataInicial").value;
 
         if (dataInicial) {
-            // Divide a data inicial em dia, mês e ano
-            var partesData = dataInicial.split('-'); // Assume que o formato é yyyy-mm-dd
+            var partesData = dataInicial.split('-');
             var ano = parseInt(partesData[0], 10);
-            var mes = parseInt(partesData[1], 10) - 1; // Mês é 0-based no JavaScript
+            var mes = parseInt(partesData[1], 10) - 1;
             var dia = parseInt(partesData[2], 10);
 
-            // Cria um objeto Date com os valores extraídos
             var data = new Date(ano, mes, dia);
 
-            // Verifica se a data é válida
             if (!isNaN(data.getTime())) {
-                // Calcula o último dia do mês da data inicial
                 var ultimoDia = new Date(ano, mes + 1, 0);
-
-                // Formata a data final no padrão yyyy-mm-dd
                 var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
-                var mesFinal = String(mes + 1).padStart(2, '0'); // Ajusta o mês para exibição (1-12)
+                var mesFinal = String(mes + 1).padStart(2, '0');
                 var dataFinal = ano + '-' + mesFinal + '-' + diaFinal;
-
-                // Define o valor do campo dataFinal
                 document.getElementById("dataFinal").value = dataFinal;
             } else {
                 console.error("Data inicial inválida.");
-                document.getElementById("dataFinal").value = ""; // Limpa o campo se a data for inválida
+                document.getElementById("dataFinal").value = "";
             }
         } else {
             console.error("Data inicial não selecionada.");
-            document.getElementById("dataFinal").value = ""; // Limpa o campo se a data inicial estiver vazia
+            document.getElementById("dataFinal").value = "";
         }
     }
 
-    // Função para inicializar os campos de data ao abrir o modal
     function initializeDates() {
-        // Obtém a data atual
         var today = new Date();
-
-        // Formata a data inicial no padrão yyyy-mm-dd
         var diaInicial = String(today.getDate()).padStart(2, '0');
         var mesInicial = String(today.getMonth() + 1).padStart(2, '0');
         var anoInicial = today.getFullYear();
         var dataInicial = anoInicial + '-' + mesInicial + '-' + diaInicial;
 
-        // Calcula o último dia do mês atual
         var ultimoDia = new Date(anoInicial, today.getMonth() + 1, 0);
-
-        // Formata a data final no padrão yyyy-mm-dd
         var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
-        var mesFinal = String(today.getMonth() + 1).padStart(2, '0'); // Usa o mês da data inicial
+        var mesFinal = String(today.getMonth() + 1).padStart(2, '0');
         var anoFinal = today.getFullYear();
         var dataFinal = anoFinal + '-' + mesFinal + '-' + diaFinal;
 
-        // Define os valores dos campos
         document.getElementById("dataInicial").value = dataInicial;
         document.getElementById("dataFinal").value = dataFinal;
     }
 
-    // Inicializa os campos de data quando o modal é aberto
     document.addEventListener('DOMContentLoaded', function () {
-        const modal = document.getElementById('modalData'); // Substitua 'meuModal' pelo ID do seu modal
+        const modal = document.getElementById('modalData');
         if (modal) {
             modal.addEventListener('shown.bs.modal', function () {
-                // Verifica se os campos já foram inicializados
                 if (!document.getElementById("dataInicial").value) {
                     initializeDates();
                 }
             });
         }
 
-        // Adiciona o evento onchange ao campo dataInicial
         document.getElementById("dataInicial").addEventListener('change', setData);
-    });
-
-
-    // Aplica a máscara em todos os inputs com a classe .money
-    $(".money").maskMoney({
-        showSymbol: true,
-        symbol: "R$ ",
-        decimal: ",",
-        thousands: "."
-    });
-
-    function removerMascara(valor) {
-        return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '');
-    }
-
-    // Remove a máscara de todos os inputs com a classe .money ao enviar o formulário
-    $("#formConta").on("submit", function(e) {
-        $(".money").each(function() {
-            var valorSemMascara = removerMascara($(this).val());
-            $(this).val(valorSemMascara);
-        });
     });
 
     // Passa os valores de juros para o JavaScript
@@ -860,92 +808,9 @@
     var debitoOutrosJuros = <%= juros != null ? juros.getDeb_outros() : 0 %>;
     var creditoOutrosJuros = <%= juros != null ? juros.getCred_outros() : 0 %>;
 
-
-    // Função para formatar o valor monetário (substitui vírgula por ponto)
-    function formatarValorMonetario(valor) {
-        return parseFloat(valor.replace(/\./g, '').replace(',', '.')) || 0;
-    }
-
-    // Função para calcular os juros de débito Visa/Master
-    function calcularJurosDebitoVm() {
-        var debitoVm = formatarValorMonetario(document.getElementById('debitoVm').value);
-        var jurosCalculado = debitoVm * debitoVmJuros;
-        document.getElementById('jurosDebitoVm').value = jurosCalculado.toFixed(2).replace('.', ',');
-    }
-
-    // Função para calcular os juros de crédito Visa/Master
-    function calcularJurosCreditoVm() {
-        var creditoVm = formatarValorMonetario(document.getElementById('creditoVm').value);
-        var jurosCalculado = creditoVm * creditoVmJuros;
-        document.getElementById('jurosCreditoVm').value = jurosCalculado.toFixed(2).replace('.', ',');
-    }
-
-    // Função para calcular os juros de débito outros
-    function calcularJurosDebitoOutros() {
-        var debitoOutros = formatarValorMonetario(document.getElementById('debitoOutros').value);
-        var jurosCalculado = debitoOutros * debitoOutrosJuros;
-        document.getElementById('jurosDebitoOutros').value = jurosCalculado.toFixed(2).replace('.', ',');
-    }
-
-    // Função para calcular os juros de crédito outros
-    function calcularJurosCreditoOutros() {
-        var creditoOutros = formatarValorMonetario(document.getElementById('creditoOutros').value);
-        var jurosCalculado = creditoOutros * creditoOutrosJuros;
-        document.getElementById('jurosCreditoOutros').value = jurosCalculado.toFixed(2).replace('.', ',');
-    }
-
-    // Adiciona listeners para os campos
-    function adicionarListeners() {
-        // Débito Visa/Master
-        var debitoVm = document.getElementById('debitoVm');
-        debitoVm.addEventListener('input', calcularJurosDebitoVm);
-        debitoVm.addEventListener('blur', calcularJurosDebitoVm);
-
-        // Crédito Visa/Master
-        var creditoVm = document.getElementById('creditoVm');
-        creditoVm.addEventListener('input', calcularJurosCreditoVm);
-        creditoVm.addEventListener('blur', calcularJurosCreditoVm);
-
-        // Débito Outros
-        var debitoOutros = document.getElementById('debitoOutros');
-        debitoOutros.addEventListener('input', calcularJurosDebitoOutros);
-        debitoOutros.addEventListener('blur', calcularJurosDebitoOutros);
-
-        // Crédito Outros
-        var creditoOutros = document.getElementById('creditoOutros');
-        creditoOutros.addEventListener('input', calcularJurosCreditoOutros);
-        creditoOutros.addEventListener('blur', calcularJurosCreditoOutros);
-    }
-
-    // Executa os cálculos ao carregar a página
-    $(document).ready(function() {
-        adicionarListeners();
-        calcularJurosDebitoVm();
-        calcularJurosCreditoVm();
-        calcularJurosDebitoOutros();
-        calcularJurosCreditoOutros();
-    });
-    function limparMascara(valor) {
-        if (!valor) return 0;
-
-        // Remove qualquer repetição de "R$"
-        valor = valor.replace(/R\$/g, "").trim();
-
-        // Remove espaços
-        valor = valor.replace(/\s+/g, "");
-
-        // Agora remove apenas pontos de milhares
-        valor = valor.replace(/\./g, "");
-
-        // Troca vírgula por ponto
-        valor = valor.replace(",", ".");
-
-        return parseFloat(valor) || 0;
-    }
-
-
-
-    // FIX para o erro do maskMoney com jQuery 3.7.1
+    // ============================================================================
+    // FIX PARA O ERRO DO MASKMONEY COM JQUERY 3.7.1
+    // ============================================================================
     if (!$.browser) {
         $.browser = {};
     }
@@ -956,31 +821,22 @@
         if (valor === undefined || valor === null || valor === '') return 0;
 
         let s = String(valor).trim();
-
-        // Remove qualquer caractere que não seja número, vírgula ou ponto
         s = s.replace(/[^\d,\.]/g, '');
 
-        // Se estiver vazio após limpeza
         if (s === '') return 0;
 
-        // Identifica se usa vírgula (formato BR) ou ponto (formato US/servidor)
         const temVirgula = s.indexOf(',') > -1;
         const temPonto = s.indexOf('.') > -1;
 
         if (temVirgula && temPonto) {
-            // Formato: 1.234,56 (BR com milhares)
             s = s.replace(/\./g, '').replace(',', '.');
         } else if (temVirgula && !temPonto) {
-            // Formato: 1234,56 (BR sem milhares)
             s = s.replace(',', '.');
         } else if (temPonto && !temVirgula) {
-            // Formato: 1234.56 (US) ou 1.234 (BR com milhares, sem centavos)
             const partes = s.split('.');
             if (partes.length > 2 || (partes.length === 2 && partes[1].length > 2)) {
-                // É separador de milhar: 1.234 ou 1.234.567
                 s = s.replace(/\./g, '');
             }
-            // Senão, é decimal: 1234.56
         }
 
         const n = parseFloat(s);
@@ -991,13 +847,9 @@
     function formatarMoeda(valor) {
         if (!valor) return '';
 
-        // Remove tudo que não é número
         let numero = valor.toString().replace(/\D/g, '');
-
-        // Converte para centavos
         numero = (parseFloat(numero) / 100).toFixed(2);
 
-        // Formata com separadores
         let partes = numero.split('.');
         partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
@@ -1007,19 +859,72 @@
     // Função para aplicar máscara manualmente em um campo
     function aplicarMascaraManual(campo) {
         let valor = $(campo).val();
-
-        // Remove tudo que não é número
         let apenasNumeros = valor.replace(/\D/g, '');
 
-        // Se estiver vazio, limpa o campo
         if (!apenasNumeros) {
             $(campo).val('');
             return;
         }
 
-        // Formata
         let valorFormatado = formatarMoeda(apenasNumeros);
         $(campo).val(valorFormatado);
+    }
+
+    // ============================================================================
+    // CÁLCULO DE JUROS (COM MÁSCARA MANUAL)
+    // ============================================================================
+
+    // Função para calcular os juros de débito Visa/Master
+    function calcularJurosDebitoVm() {
+        var debitoVm = limparMascara(document.getElementById('debitoVm').value);
+        var jurosCalculado = debitoVm * debitoVmJuros;
+
+        // Formata o resultado manualmente
+        let valorFormatado = jurosCalculado.toFixed(2);
+        let partes = valorFormatado.split('.');
+        partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        valorFormatado = 'R$ ' + partes.join(',');
+
+        document.getElementById('jurosDebitoVm').value = valorFormatado;
+    }
+
+    // Função para calcular os juros de crédito Visa/Master
+    function calcularJurosCreditoVm() {
+        var creditoVm = limparMascara(document.getElementById('creditoVm').value);
+        var jurosCalculado = creditoVm * creditoVmJuros;
+
+        let valorFormatado = jurosCalculado.toFixed(2);
+        let partes = valorFormatado.split('.');
+        partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        valorFormatado = 'R$ ' + partes.join(',');
+
+        document.getElementById('jurosCreditoVm').value = valorFormatado;
+    }
+
+    // Função para calcular os juros de débito outros
+    function calcularJurosDebitoOutros() {
+        var debitoOutros = limparMascara(document.getElementById('debitoOutros').value);
+        var jurosCalculado = debitoOutros * debitoOutrosJuros;
+
+        let valorFormatado = jurosCalculado.toFixed(2);
+        let partes = valorFormatado.split('.');
+        partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        valorFormatado = 'R$ ' + partes.join(',');
+
+        document.getElementById('jurosDebitoOutros').value = valorFormatado;
+    }
+
+    // Função para calcular os juros de crédito outros
+    function calcularJurosCreditoOutros() {
+        var creditoOutros = limparMascara(document.getElementById('creditoOutros').value);
+        var jurosCalculado = creditoOutros * creditoOutrosJuros;
+
+        let valorFormatado = jurosCalculado.toFixed(2);
+        let partes = valorFormatado.split('.');
+        partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        valorFormatado = 'R$ ' + partes.join(',');
+
+        document.getElementById('jurosCreditoOutros').value = valorFormatado;
     }
 
     // Função para calcular saldo
@@ -1030,84 +935,152 @@
         let salarios = limparMascara($("#salarios").val());
         let saldo = receita_din - despDin - sangria - salarios;
 
-        // Formata o valor com separador de milhar
         let valorFormatado = saldo.toFixed(2);
         let partes = valorFormatado.split('.');
-
-        // Adiciona separador de milhar
         partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-        // Junta tudo com vírgula como separador decimal
         valorFormatado = partes.join(',');
 
         $("#saldo").val('R$ ' + valorFormatado);
     }
 
+    // ============================================================================
+    // INICIALIZAÇÃO DOS CAMPOS
+    // ============================================================================
+
     $(document).ready(function() {
-        // Aplica a máscara maskMoney APENAS nos campos que NÃO são sangria, salarios e despesadin
-        $(".money").not("#sangria, #salarios, #despesadin").maskMoney({
+        // Lista de campos que usarão máscara MANUAL
+        const camposManual = [
+            '#debitoVm', '#jurosDebitoVm',
+            '#creditoVm', '#jurosCreditoVm',
+            '#debitoOutros', '#jurosDebitoOutros',
+            '#creditoOutros', '#jurosCreditoOutros',
+            '#sangria', '#salarios', '#despesadin'
+        ];
+
+        // Remove a classe .money desses campos para evitar conflitos
+        $(camposManual.join(', ')).removeClass('money');
+
+        // Remove TODOS os eventos anteriores desses campos
+        $(camposManual.join(', ')).off();
+
+        // Aplica a máscara maskMoney APENAS nos campos que NÃO estão na lista manual
+        $(".money").not(camposManual.join(', ')).maskMoney({
             showSymbol: true,
             symbol: "R$ ",
             decimal: ",",
             thousands: "."
         });
 
-        // Remove a classe .money dos campos sangria, salários e despesadin para evitar conflitos
-        $("#sangria, #salarios, #despesadin").removeClass('money');
+        // ========================================================================
+        // APLICA MÁSCARA MANUAL NOS CAMPOS DE DÉBITO/CRÉDITO
+        // ========================================================================
 
-        // Remove TODOS os eventos anteriores desses campos
-        $("#sangria, #salarios, #despesadin").off();
+        // Débito Visa/Master
+        $("#debitoVm").on('input', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularJurosDebitoVm, 100);
+        });
+        $("#debitoVm").on('blur', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularJurosDebitoVm, 50);
+        });
 
-        // Aplica máscara manual no campo SANGRIA
-        $("#sangria").on('input', function(e) {
+        // Crédito Visa/Master
+        $("#creditoVm").on('input', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularJurosCreditoVm, 100);
+        });
+        $("#creditoVm").on('blur', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularJurosCreditoVm, 50);
+        });
+
+        // Débito Outros
+        $("#debitoOutros").on('input', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularJurosDebitoOutros, 100);
+        });
+        $("#debitoOutros").on('blur', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularJurosDebitoOutros, 50);
+        });
+
+        // Crédito Outros
+        $("#creditoOutros").on('input', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularJurosCreditoOutros, 100);
+        });
+        $("#creditoOutros").on('blur', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularJurosCreditoOutros, 50);
+        });
+
+        // ========================================================================
+        // MÁSCARA MANUAL PARA SANGRIA, SALÁRIOS E DESPESAS
+        // ========================================================================
+
+        $("#sangria").on('input', function() {
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 100);
         });
-
         $("#sangria").on('blur', function() {
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 50);
         });
 
-        // Aplica máscara manual no campo SALÁRIOS
-        $("#salarios").on('input', function(e) {
+        $("#salarios").on('input', function() {
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 100);
         });
-
         $("#salarios").on('blur', function() {
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 50);
         });
 
-        // Aplica máscara manual no campo DESPESAS EM DINHEIRO
-        $("#despesadin").on('input', function(e) {
+        $("#despesadin").on('input', function() {
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 100);
         });
-
         $("#despesadin").on('blur', function() {
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 50);
         });
 
-        // Evento Enter
-        $("#sangria, #salarios, #despesadin").on('keypress', function(e) {
+        // Evento Enter para todos os campos manuais
+        $(camposManual.join(', ')).on('keypress', function(e) {
             if (e.which === 13) {
                 e.preventDefault();
                 $(this).blur();
             }
         });
 
-        // Calcula o saldo inicial
+        // Calcula os valores iniciais
         setTimeout(function() {
+            calcularJurosDebitoVm();
+            calcularJurosCreditoVm();
+            calcularJurosDebitoOutros();
+            calcularJurosCreditoOutros();
             calcularSaldo();
         }, 500);
     });
 
     // Calcula quando a página carregar completamente
     window.addEventListener('load', function() {
-        setTimeout(calcularSaldo, 600);
+        setTimeout(function() {
+            calcularJurosDebitoVm();
+            calcularJurosCreditoVm();
+            calcularJurosDebitoOutros();
+            calcularJurosCreditoOutros();
+            calcularSaldo();
+        }, 600);
+    });
+
+    // Remove a máscara antes de enviar o formulário
+    $("#formConta, form").on("submit", function() {
+        $(".money, input[id*='debito'], input[id*='credito'], input[id*='juros'], #sangria, #salarios, #despesadin").each(function() {
+            var valorSemMascara = limparMascara($(this).val());
+            $(this).val(valorSemMascara);
+        });
     });
 </script>
 </body>

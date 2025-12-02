@@ -342,6 +342,10 @@ public class ServletSalarios extends ServletGenericUtil { // Mantenha o nome da 
             model.setMes(mes);
             model.setAno(ano);
 
+            // --- INÍCIO DA CORREÇÃO: CAPTURA DO TIPO DE COMISSÃO ---
+            model.setTipoComissao(req.getParameter("tipo_comissao"));
+            // --- FIM DA CORREÇÃO ---
+
             model.setQtdFotos(parseIntFromElement(req.getParameter("ft_total")));
             model.setQtdArquivos(parseIntFromElement(req.getParameter("dig_total")));
             model.setQtdSobras(parseIntFromElement(req.getParameter("sobras")));
@@ -370,6 +374,16 @@ public class ServletSalarios extends ServletGenericUtil { // Mantenha o nome da 
             model.setSalario_total(parseBigDecimal(req.getParameter("salario_total")));
             model.setDescontos_1(parseBigDecimal(req.getParameter("descontos_total")));
             model.setSalario_liquido1(parseBigDecimal(req.getParameter("salario_liquido")));
+
+            // Note: Comissao2, Salario_total2 e Descontos_2 não estavam aqui, mas se existirem no formulário
+            // e no Model, devem ser adicionados aqui também, assim como no DAO.
+            // Se eles não existirem no formulário de edição, os valores no banco não serão alterados
+            // se o DAO não exigir um setter para eles, mas o seu DAO atualiza eles.
+            // Se você precisar dos campos 2, adicione-os aqui:
+            // model.setComissao2(parseBigDecimal(req.getParameter("comissao2")));
+            // model.setSalario_total2(parseBigDecimal(req.getParameter("salario_total2")));
+            // model.setDescontos_2(parseBigDecimal(req.getParameter("descontos_2")));
+            // model.setSalario_liquido2(parseBigDecimal(req.getParameter("salario_liquido2")));
 
             DAOSalarios dao = new DAOSalarios();
             dao.atualizarSalario(model);

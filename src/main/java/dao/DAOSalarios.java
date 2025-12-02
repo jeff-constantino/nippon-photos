@@ -145,8 +145,9 @@ public class DAOSalarios {
                 "mes, ano, funcionario_id, nome_funcionario, qtd_fotos, qtd_arquivos, qtd_sobras, " +
                 "atrasos, faltas, advertencias, suspensoes, dsr, valor_atrasos, valor_faltas, " +
                 "valor_suspensoes, vales, inss, fgts, venda_total, comissao, salario_total, salario_liquido1, " +
-                "comissao2, salario_total2, salario_liquido2, aproveitamento, descontos_mes, descontos_1, descontos_2, parcela) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "comissao2, salario_total2, salario_liquido2, aproveitamento, descontos_mes, descontos_1, descontos_2, parcela, " +
+                "tipo_comissao) " + // <<< ADIÇÃO DA COLUNA AQUI
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; // <<< ADIÇÃO DO ? AQUI
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, model.getMes());
@@ -179,6 +180,9 @@ public class DAOSalarios {
             stmt.setBigDecimal(28, model.getDescontos_1());
             stmt.setBigDecimal(29, model.getDescontos_2());
             stmt.setBigDecimal(30, model.getParcela());
+
+            // <<< ADIÇÃO DO SETTER AQUI, NO ÍNDICE 31 (30 + 1)
+            stmt.setString(31, model.getTipoComissao());
 
             stmt.execute();
             connection.commit();
@@ -241,6 +245,8 @@ public class DAOSalarios {
                 salario.setDescontos_mes(rs.getBigDecimal("descontos_mes"));
                 salario.setDescontos_1(rs.getBigDecimal("descontos_1"));
                 salario.setDescontos_2(rs.getBigDecimal("descontos_2"));
+                // <<< ADIÇÃO DO GETTER AQUI
+                salario.setTipoComissao(rs.getString("tipo_comissao"));
 
 
                 lista.add(salario);
@@ -253,9 +259,8 @@ public class DAOSalarios {
 
 
     public void atualizarSalario(ModelSalarios model) throws Exception {
-        // LOG: Verificar dados recebidos
 
-
+        // 1. AJUSTE NO SQL: Adicionar 'tipo_comissao'
         String sql = "UPDATE salarios SET " +
                 "qtd_fotos = ?, " +
                 "qtd_arquivos = ?, " +
@@ -282,46 +287,40 @@ public class DAOSalarios {
                 "comissao2 = ?, " +
                 "salario_total2 = ?, " +
                 "descontos_2 = ?, " +
-                "salario_liquido2 = ? " +
+                "salario_liquido2 = ?, " +
+                "tipo_comissao = ? " + // <<< NOVA COLUNA ADICIONADA
                 "WHERE id_salario = ?";
 
-
-
         try {
-            // Verificar se connection não é null
             if (connection == null) {
                 throw new Exception("Connection é null!");
             }
-
-            // Verificar se connection está fechada
             if (connection.isClosed()) {
                 throw new Exception("Connection está fechada!");
             }
 
-
-
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 int i = 1;
 
-                // Vendas
+                // Vendas (1-4)
                 stmt.setInt(i++, model.getQtdFotos());
                 stmt.setInt(i++, model.getQtdArquivos());
                 stmt.setInt(i++, model.getQtdSobras());
                 stmt.setBigDecimal(i++, model.getAproveitamento());
 
-                // Conduta
+                // Conduta (5-9)
                 stmt.setInt(i++, model.getAdvertencias());
                 stmt.setInt(i++, model.getFaltas());
                 stmt.setInt(i++, model.getSuspensoes());
                 stmt.setInt(i++, model.getDsr());
                 stmt.setDouble(i++, model.getAtrasos());
 
-                // Valores de descontos
+                // Valores de descontos (10-12)
                 stmt.setBigDecimal(i++, model.getValorFaltas());
                 stmt.setBigDecimal(i++, model.getValorSuspensoes());
                 stmt.setBigDecimal(i++, model.getValorAtrasos());
 
-                // Salários e benefícios
+                // Salários e benefícios (13-18)
                 stmt.setBigDecimal(i++, model.getVenda_total());
                 stmt.setBigDecimal(i++, model.getVales());
                 stmt.setBigDecimal(i++, model.getInss());
@@ -329,19 +328,22 @@ public class DAOSalarios {
                 stmt.setBigDecimal(i++, model.getFgts());
                 stmt.setBigDecimal(i++, model.getDescontos_mes());
 
-                // Primeira linha de salário
+                // Primeira linha de salário (19-22)
                 stmt.setBigDecimal(i++, model.getComissao());
                 stmt.setBigDecimal(i++, model.getSalario_total());
                 stmt.setBigDecimal(i++, model.getDescontos_1());
                 stmt.setBigDecimal(i++, model.getSalario_liquido1());
 
-                // Segunda linha de salário
+                // Segunda linha de salário (23-26)
                 stmt.setBigDecimal(i++, model.getComissao2());
                 stmt.setBigDecimal(i++, model.getSalario_total2());
                 stmt.setBigDecimal(i++, model.getDescontos_2());
                 stmt.setBigDecimal(i++, model.getSalario_liquido2());
 
-                // WHERE
+                // 2. AJUSTE NO PREPARED STATEMENT: ADICIONAR O TIPO DE COMISSÃO
+                stmt.setString(i++, model.getTipoComissao()); // <<< NOVO PARÂMETRO
+
+                // WHERE (28)
                 stmt.setInt(i++, model.getIdSalario());
 
 
@@ -349,22 +351,17 @@ public class DAOSalarios {
 
 
                 if (rowsAffected == 0) {
-                    // Verificar se o registro existe
+                    // ... (lógica de verificação de ID) ...
                     String selectSql = "SELECT COUNT(*) FROM salarios WHERE id_salario = ?";
                     try (PreparedStatement selectStmt = connection.prepareStatement(selectSql)) {
                         selectStmt.setInt(1, model.getIdSalario());
                         try (ResultSet rs = selectStmt.executeQuery()) {
                             rs.next();
-                            int count = rs.getInt(1);
-
+                            // int count = rs.getInt(1); // Linha comentada no original
                         }
                     }
                     throw new Exception("Nenhum registro foi atualizado. ID não encontrado: " + model.getIdSalario());
                 }
-
-
-
-
 
             }
         } catch (SQLException e) {

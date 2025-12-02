@@ -55,6 +55,24 @@ public class ModelSalarios implements Serializable {
 
     private int ribbon_descontar;
     private String tipoComissao;
+    private BigDecimal adcNoturno;
+    private BigDecimal bonificacoes;
+
+    public BigDecimal getAdcNoturno() {
+        return adcNoturno;
+    }
+
+    public void setAdcNoturno(BigDecimal adcNoturno) {
+        this.adcNoturno = adcNoturno;
+    }
+
+    public BigDecimal getBonificacoes() {
+        return bonificacoes;
+    }
+
+    public void setBonificacoes(BigDecimal bonificacoes) {
+        this.bonificacoes = bonificacoes;
+    }
 
     public String getTipoComissao() {
         return tipoComissao;

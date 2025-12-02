@@ -281,6 +281,10 @@ public class ServletSalarios extends ServletGenericUtil { // Mantenha o nome da 
             model.setInss(parseBigDecimal(req.getParameter("inss")));
             model.setParcela(parseBigDecimal(req.getParameter("parcela")));
             model.setFgts(parseBigDecimal(req.getParameter("fgts")));
+            // NOVO: Adicional Noturno e Bonificações
+            model.setAdcNoturno(parseBigDecimal(req.getParameter("adc_noturno")));
+            model.setBonificacoes(parseBigDecimal(req.getParameter("bonificacoes")));
+
 
             model.setVenda_total(parseBigDecimal(req.getParameter("venda_total")));
             model.setComissao(parseBigDecimal(req.getParameter("comissao")));
@@ -368,6 +372,10 @@ public class ServletSalarios extends ServletGenericUtil { // Mantenha o nome da 
             model.setInss(parseBigDecimal(req.getParameter("inss")));
             model.setParcela(parseBigDecimal(req.getParameter("parcela")));
             model.setFgts(parseBigDecimal(req.getParameter("fgts")));
+            // NOVO: Adicional Noturno e Bonificações
+            model.setAdcNoturno(parseBigDecimal(req.getParameter("adc_noturno")));
+            model.setBonificacoes(parseBigDecimal(req.getParameter("bonificacoes")));
+
             model.setDescontos_mes(parseBigDecimal(req.getParameter("descontos_mes")));
 
             model.setComissao(parseBigDecimal(req.getParameter("comissao")));

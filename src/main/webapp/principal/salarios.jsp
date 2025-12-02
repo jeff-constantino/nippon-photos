@@ -329,6 +329,12 @@
                                                                                    style="background-color: #2c2c2c; color: white"
                                                                                    id="descontos_irResultado" name="descontos_ir" readonly>
                                                                         </div>
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: #2c2c2c; color: white"
+                                                                                   id="descontos_totalResultado" name="descontos_total" readonly>
+                                                                        </div>
                                                                     </div>
 
                                                                     <!-- Segunda linha: APENAS UMA COMISSÃO E SALÁRIO -->
@@ -354,11 +360,23 @@
                                                                                    id="salario_totalResultadoField" name="salario_total" readonly>
                                                                         </div>
 
+
+                                                                        <!-- NOVO CAMPO 1: ADC. NOTURNO -->
                                                                         <div class="col-auto">
-                                                                            <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
-                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                            <label style="color: #f2a654">ADC. NOTURNO</label>
+                                                                            <input type="number" step="0.01"
+                                                                                   class="form-control text-center fw-bold"
                                                                                    style="background-color: #2c2c2c; color: white"
-                                                                                   id="descontos_totalResultado" name="descontos_total" readonly>
+                                                                                   id="adc_noturnoResultado" name="adc_noturno">
+                                                                        </div>
+
+                                                                        <!-- NOVO CAMPO 2: BONIFICAÇÕES -->
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">BONIFICAÇÕES</label>
+                                                                            <input type="number" step="0.01"
+                                                                                   class="form-control text-center fw-bold"
+                                                                                   style="background-color: #2c2c2c; color: white"
+                                                                                   id="bonificacoesResultado" name="bonificacoes">
                                                                         </div>
 
                                                                         <div class="col-auto ms-3">
@@ -456,7 +474,7 @@
 
 
                 </div>
-                <form action="<%= request.getContextPath() %>/ServletSalarios" method="post" id="formGravarVenda" name="formGravarVenda">
+                  <form action="<%= request.getContextPath() %>/ServletSalarios" method="post" id="formGravarVenda" name="formGravarVenda">
                     <input type="hidden" name="acao" value="gravarVenda">
                     <input type="hidden" name="mesAno" value="${mesAno}">
 
@@ -737,6 +755,13 @@
                                                    id="descontos_ir" name="descontos_ir"
                                                    value="${descontos_ir}" tabindex="-1">
                                         </div>
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #2c2c2c; color: white"
+                                                   id="descontos_total" name="descontos_total"
+                                                   value="${descontos_1}" readonly tabindex="-1">
+                                        </div>
                                     </div>
 
                                     <!-- Segunda linha: APENAS UMA COMISSÃO E SALÁRIO -->
@@ -765,13 +790,25 @@
                                                    id="salario_total" name="salario_total"
                                                    value="${salario_total}">
                                         </div>
+
+
                                         <div class="col-auto">
-                                            <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
+                                            <label style="color: #f2a654">BONIFICAÇÕES</label>
                                             <input type="text" class="form-control money text-center fw-bold"
                                                    style="background-color: #2c2c2c; color: white"
-                                                   id="descontos_total" name="descontos_total"
-                                                   value="${descontos_1}" readonly tabindex="-1">
+                                                   id="bonificacoes" name="bonificacoes"
+                                                   value="${bonificacoes}" tabindex="-1">
                                         </div>
+
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">ADC. NOTURNO</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #2c2c2c; color: white"
+                                                   id="adc_noturno" name="adc_noturno"
+                                                   value="${adc_noturno}" tabindex="-1">
+                                        </div>
+
+
                                         <div class="col-auto ms-3">
                                             <label style="color: #f2a654">SALÁRIO LÍQUIDO</label>
                                             <input type="text" class="form-control money text-center fw-bold"
@@ -809,6 +846,7 @@
                             </div>
                         </div>
                     </div>
+                </div>
                 </form>
 
 
@@ -849,17 +887,6 @@
 
 
 <script>
-    // === DEBUG: VERIFICAR CONFIGURAÇÕES ===
-    console.log('=== CONFIGURAÇÕES CARREGADAS ===');
-    console.log('conf1_valor:', '${listaConfigs[0].conf1_valor}');
-    console.log('conf2_valor:', '${listaConfigs[0].conf2_valor}');
-    console.log('conf3_valor:', '${listaConfigs[0].conf3_valor}');
-    console.log('comissao:', '${configSalario.comissao}');
-    console.log('comissao2:', '${configSalario.comissao2}');
-    console.log('fgts:', '${configSalario.fgts}');
-    console.log('Tipo Comissão Ativa:', '${tipoComissao}');
-    console.log('Valor Comissão Ativa:', '${valorComissaoAtiva}');
-
     // ===================================================================
     // JQUERY READY
     // ===================================================================
@@ -882,7 +909,7 @@
     function navigateFocusableElements(event) {
         const focusableElements = Array.from(
             document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
-        ).filter(element => !element.disabled && element.tabIndex !== -1);
+        ).filter(element => !element.disabled && element.tabIndex !== 1);
 
         if (focusableElements.length === 0) return;
 
@@ -1007,7 +1034,8 @@
     }
 
     function removerMascara(valor) {
-        if (!valor || typeof valor !== 'string') return '0';
+        if (valor === null || valor === undefined) return '0';
+        if (typeof valor !== 'string') return String(valor);
         return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '').trim();
     }
 
@@ -1096,7 +1124,84 @@
         calcularSalariosLiquidos();
     }
 
+    // ===================================================================
+    // Função que centraliza cálculo de INSS / FGTS / IRRF
+    // Inclui adicionalNoturno na base de cálculo (como combinado)
+    // ===================================================================
+    function calcularImpostos(vendaTotal, adicionalNoturno) {
+        const inssInput = document.getElementById('inss');
+        const parcelaInput = document.getElementById('parcela');
+        const fgtsInput = document.getElementById('fgts');
+        const descontosIrInput = document.getElementById('descontos_ir');
+
+        // base de cálculo: comissão 1 sobre venda + adicional noturno (adicional entra na base)
+        let baseCalculoComissao1 = (vendaTotal * (comissao1Valor / 100)) + (adicionalNoturno || 0);
+
+        if (isNaN(baseCalculoComissao1) || baseCalculoComissao1 <= 0) {
+            if (inssInput) inssInput.value = '0.00';
+            if (parcelaInput) parcelaInput.value = '0.00';
+            if (fgtsInput) fgtsInput.value = '0.00';
+            if (descontosIrInput) descontosIrInput.value = '0.00';
+            return;
+        }
+
+        // Cálculo do INSS (sempre com base na Comissão 1)
+        let aliquotaInss = 0;
+        let parcelaDeduzirInss = 0;
+
+        for (let faixa of faixasInss) {
+            if (baseCalculoComissao1 >= faixa.min && baseCalculoComissao1 <= faixa.max) {
+                aliquotaInss = faixa.aliquota / 100;
+                parcelaDeduzirInss = faixa.parcela || 0;
+                break;
+            }
+        }
+
+        if (aliquotaInss === 0 && baseCalculoComissao1 > faixasInss[faixasInss.length - 1].max) {
+            const ultimaFaixa = faixasInss[faixasInss.length - 1];
+            aliquotaInss = ultimaFaixa.aliquota / 100;
+            parcelaDeduzirInss = ultimaFaixa.parcela || 0;
+        }
+
+        const valorInss = (baseCalculoComissao1 * aliquotaInss) - parcelaDeduzirInss;
+        if (inssInput) inssInput.value = isNaN(valorInss) ? '0.00' : valorInss.toFixed(2);
+
+        // Cálculo do FGTS (sempre com base na Comissão 1)
+        const valorFgts = baseCalculoComissao1 * (fgtsAliquota / 100);
+        if (fgtsInput) fgtsInput.value = isNaN(valorFgts) ? '0.00' : valorFgts.toFixed(2);
+
+        // Cálculo do IRRF
+        const baseCalculoIrrf = baseCalculoComissao1 - (isNaN(valorInss) ? 0 : valorInss);
+
+        let aliquotaIrrf = 0;
+        let parcelaDeduzirIrrf = 0;
+
+        for (let faixa of faixasIrrf) {
+            if (baseCalculoIrrf >= faixa.min && baseCalculoIrrf <= faixa.max) {
+                aliquotaIrrf = faixa.aliquota / 100;
+                parcelaDeduzirIrrf = faixa.parcela || 0;
+                break;
+            }
+        }
+
+        if (aliquotaIrrf === 0 && baseCalculoIrrf > faixasIrrf[faixasIrrf.length - 1].max) {
+            const ultimaFaixa = faixasIrrf[faixasIrrf.length - 1];
+            aliquotaIrrf = ultimaFaixa.aliquota / 100;
+            parcelaDeduzirIrrf = ultimaFaixa.parcela || 0;
+        }
+
+        const valorIrrf = (baseCalculoIrrf * aliquotaIrrf) - parcelaDeduzirIrrf;
+        const valorIrrfFinal = isNaN(valorIrrf) ? 0 : (valorIrrf < 0 ? 0 : valorIrrf);
+
+        if (descontosIrInput) descontosIrInput.value = valorIrrfFinal.toFixed(2);
+        if (parcelaInput) parcelaInput.value = parcelaDeduzirIrrf.toFixed(2);
+    }
+
+    // ===================================================================
+    // Função principal de cálculo dos salários (salarioTotal e salarioLiquido)
+    // ===================================================================
     function calcularSalariosLiquidos() {
+
         const vendaTotalInput = document.getElementById('venda_total');
         const inssInput = document.getElementById('inss');
         const fgtsInput = document.getElementById('fgts');
@@ -1108,15 +1213,26 @@
         const salarioTotalInput = document.getElementById('salario_total');
         const salarioLiquidoInput = document.getElementById('salario_liquido');
 
+        // NOVOS CAMPOS
+        const adcNoturnoInput = document.getElementById('adc_noturno');
+        const bonificacoesInput = document.getElementById('bonificacoes');
+
         if (!vendaTotalInput) return;
 
         let vendaTotal = parseFloat(vendaTotalInput.value || 0);
+        if (isNaN(vendaTotal)) vendaTotal = parseFloat(removerMascara(vendaTotalInput.value)) || 0;
+
+        // ler inss/fgts/descontos_ir já calculados no evento (ou recalculados por calcularImpostos)
         let inss = parseFloat(inssInput?.value || 0);
         let fgts = parseFloat(fgtsInput?.value || 0);
         let vales = parseFloat(valesInput?.value || 0);
         let descontos = parseFloat(descontosInput?.value || 0);
         let valorRibbon = parseFloat(descontoFotos?.value || 0);
         let descontosIr = parseFloat(descontosIrInput?.value || 0);
+
+        // ler adicional noturno e bonificações (removendo máscara)
+        const adicionalNoturno = parseFloat(removerMascara(adcNoturnoInput?.value)) || 0;
+        const bonificacoes = parseFloat(removerMascara(bonificacoesInput?.value)) || 0;
 
         const horasAtraso = converterHorasParaDecimal(atrasosInput?.value || '0:00');
         const salarioBaseComissao = vendaTotal * (comissaoAtiva / 100);
@@ -1128,13 +1244,20 @@
             valorDescontoAtrasosInput.value = descontoAtraso.toFixed(2);
         }
 
-        // Salário Total calculado com a comissão ativa do funcionário
-        const salarioTotal = vendaTotal * (comissaoAtiva / 100);
+        // =======================
+        // SALÁRIO TOTAL
+        // =======================
+        // salário baseado em comissão ativa
+        let salarioTotal = vendaTotal * (comissaoAtiva / 100);
+
+        // ➕ ADC NOTURNO → SOMA AO SALÁRIO TOTAL
+        salarioTotal += adicionalNoturno;
+
         if (salarioTotalInput) salarioTotalInput.value = salarioTotal.toFixed(2);
 
-        // CORREÇÃO: Descontos baseados no tipo de comissão
-        // INSS e FGTS já foram calculados com base na Comissão 1
-        // A diferença está apenas em QUAIS descontos aplicar
+        // =======================
+        // DESCONTOS
+        // =======================
         let descontosTotal;
         if (tipoComissao === 'COMISSÃO 1') {
             // Comissão 1: desconta INSS, mas NÃO desconta FGTS
@@ -1145,9 +1268,17 @@
         }
 
         const descontosTotalInput = document.getElementById('descontos_total');
-        if (descontosTotalInput) descontosTotalInput.value = descontosTotal.toFixed(2);
+        if (descontosTotalInput) {
+            descontosTotalInput.value = (isNaN(descontosTotal) ? 0 : descontosTotal).toFixed(2);
+        }
 
-        const salarioLiquido = salarioTotal - descontosTotal;
+        // =======================
+        // SALÁRIO LÍQUIDO
+        // =======================
+        let salarioLiquido = salarioTotal - (isNaN(descontosTotal) ? 0 : descontosTotal);
+
+        // ➕ BONIFICAÇÕES → SOMA SOMENTE NO LÍQUIDO
+        salarioLiquido += bonificacoes;
 
         if (salarioLiquidoInput) {
             salarioLiquidoInput.value = salarioLiquido.toLocaleString('pt-BR', {
@@ -1192,6 +1323,9 @@
 
         // Event listeners para cálculos
         const vendaTotalInput = document.getElementById('venda_total');
+        const adcNoturnoInput = document.getElementById('adc_noturno');
+        const bonificacoesInput = document.getElementById('bonificacoes');
+
         if (vendaTotalInput) {
             vendaTotalInput.addEventListener('input', function () {
                 let vendaTotal = parseFloat(this.value);
@@ -1209,64 +1343,23 @@
                     if (parcelaInput) parcelaInput.value = '0.00';
                     if (fgtsInput) fgtsInput.value = '0.00';
                     if (descontosIrInput) descontosIrInput.value = '0.00';
+
+                    // ➕ ZERAR ADC. NOTURNO E BONIFICAÇÃO
+                    const adcNoturnoInputLocal = document.getElementById('adc_noturno');
+                    const bonificacaoInputLocal = document.getElementById('bonificacoes');
+
+                    if (adcNoturnoInputLocal) adcNoturnoInputLocal.value = '0.00';
+                    if (bonificacaoInputLocal) bonificacaoInputLocal.value = '0.00';
+
                     calcularSalariosLiquidos();
                     return;
                 }
 
-                // IMPORTANTE: INSS e FGTS sempre calculados com base na COMISSÃO 1
-                const baseCalculoComissao1 = vendaTotal * (comissao1Valor / 100);
+                // ler adicional noturno atual (com máscara)
+                const adicionalNoturno = parseFloat(removerMascara(document.getElementById('adc_noturno')?.value)) || 0;
 
-                // Cálculo do INSS (sempre com base na Comissão 1)
-                let aliquotaInss = 0;
-                let parcelaDeduzirInss = 0;
-
-                for (let faixa of faixasInss) {
-                    if (baseCalculoComissao1 >= faixa.min && baseCalculoComissao1 <= faixa.max) {
-                        aliquotaInss = faixa.aliquota / 100;
-                        parcelaDeduzirInss = faixa.parcela || 0;
-                        break;
-                    }
-                }
-
-                if (aliquotaInss === 0 && baseCalculoComissao1 > faixasInss[faixasInss.length - 1].max) {
-                    const ultimaFaixa = faixasInss[faixasInss.length - 1];
-                    aliquotaInss = ultimaFaixa.aliquota / 100;
-                    parcelaDeduzirInss = ultimaFaixa.parcela || 0;
-                }
-
-                const valorInss = (baseCalculoComissao1 * aliquotaInss) - parcelaDeduzirInss;
-                if (inssInput) inssInput.value = valorInss.toFixed(2);
-
-                // Cálculo do FGTS (sempre com base na Comissão 1)
-                const valorFgts = baseCalculoComissao1 * (fgtsAliquota / 100);
-                if (fgtsInput) fgtsInput.value = valorFgts.toFixed(2);
-
-                // NOVO: Cálculo do IRRF
-                // Base de cálculo do IRRF = Salário Bruto - INSS
-                const baseCalculoIrrf = baseCalculoComissao1 - valorInss;
-
-                let aliquotaIrrf = 0;
-                let parcelaDeduzirIrrf = 0;
-
-                for (let faixa of faixasIrrf) {
-                    if (baseCalculoIrrf >= faixa.min && baseCalculoIrrf <= faixa.max) {
-                        aliquotaIrrf = faixa.aliquota / 100;
-                        parcelaDeduzirIrrf = faixa.parcela || 0;
-                        break;
-                    }
-                }
-
-                if (aliquotaIrrf === 0 && baseCalculoIrrf > faixasIrrf[faixasIrrf.length - 1].max) {
-                    const ultimaFaixa = faixasIrrf[faixasIrrf.length - 1];
-                    aliquotaIrrf = ultimaFaixa.aliquota / 100;
-                    parcelaDeduzirIrrf = ultimaFaixa.parcela || 0;
-                }
-
-                const valorIrrf = (baseCalculoIrrf * aliquotaIrrf) - parcelaDeduzirIrrf;
-                const valorIrrfFinal = valorIrrf < 0 ? 0 : valorIrrf;
-
-                if (descontosIrInput) descontosIrInput.value = valorIrrfFinal.toFixed(2);
-                if (parcelaInput) parcelaInput.value = parcelaDeduzirIrrf.toFixed(2);
+                // Chama função que calcula INSS/FGTS/IRRF já incluindo o adicional noturno na base
+                calcularImpostos(vendaTotal, adicionalNoturno);
 
                 calcularDescontosDisciplinares();
                 calcularSalariosLiquidos();
@@ -1278,9 +1371,27 @@
         const atrasosInput = document.getElementById('atrasos_horas');
         const difFotos = document.getElementById('dif_fotos');
 
+        // Dispara cálculo do salário líquido
         if (valesInput) valesInput.addEventListener('input', calcularSalariosLiquidos);
         if (descontosInput) descontosInput.addEventListener('input', calcularSalariosLiquidos);
         if (atrasosInput) atrasosInput.addEventListener('input', calcularSalariosLiquidos);
+
+        // quando mudar o adicional noturno precisamos recalcular impostos + salários
+        if (adcNoturnoInput) {
+            adcNoturnoInput.addEventListener('input', function() {
+                // ler vendaTotal atual
+                const vendaTotalAtual = parseFloat(document.getElementById('venda_total')?.value) || parseFloat(removerMascara(document.getElementById('venda_total')?.value)) || 0;
+                const adicionalAtual = parseFloat(removerMascara(adcNoturnoInput.value)) || 0;
+                calcularImpostos(vendaTotalAtual, adicionalAtual);
+                calcularDescontosDisciplinares();
+                calcularSalariosLiquidos();
+            });
+        }
+
+        // bonificações só altera o líquido
+        if (bonificacoesInput) bonificacoesInput.addEventListener('input', calcularSalariosLiquidos);
+
+        // Dif fotos mantém a função própria
         if (difFotos) difFotos.addEventListener('input', calcularCustoFoto);
 
         // Inicialização final
@@ -1474,7 +1585,14 @@
         setValue('salario_totalResultadoField', formatarNumeroParaInput(salario.salario_total));
         setValue('descontos_totalResultado', formatarNumeroParaInput(salario.descontos_1));
         setValue('salario_liquidoResultado', formatarNumeroParaInput(salario.salario_liquido1));
+
+        // ==========================
+        // 🔥 NOVOS CAMPOS SOLICITADOS
+        // ==========================
+        setValue('adc_noturnoResultado', formatarNumeroParaInput(salario.adcNoturno));
+        setValue('bonificacoesResultado', formatarNumeroParaInput(salario.bonificacoes));
     }
+
 
     // ===================================================================
     // SALVAR EDIÇÃO
@@ -1532,5 +1650,6 @@
         }
     }
 </script>
+
 </body>
 </html>

@@ -1082,7 +1082,7 @@
         let vendaTotal = parseFloat(vendaTotalInput.value || 0);
         if (isNaN(vendaTotal)) vendaTotal = parseFloat(removerMascara(vendaTotalInput.value)) || 0;
 
-        const baseCalculo = vendaTotal * (comissaoAtiva / 100);
+        const baseCalculo = vendaTotal * (comissao1Valor / 100);
         const valorDia = baseCalculo / 30;
 
         const totalFaltas = parseInt(inputFaltas?.getAttribute('data-faltas')) || 0;
@@ -1200,6 +1200,9 @@
     // ===================================================================
     // Função principal de cálculo dos salários (salarioTotal e salarioLiquido)
     // ===================================================================
+    // ===================================================================
+    // Função principal de cálculo dos salários (salarioTotal e salarioLiquido)
+    // ===================================================================
     function calcularSalariosLiquidos() {
 
         const vendaTotalInput = document.getElementById('venda_total');
@@ -1235,7 +1238,9 @@
         const bonificacoes = parseFloat(removerMascara(bonificacoesInput?.value)) || 0;
 
         const horasAtraso = converterHorasParaDecimal(atrasosInput?.value || '0:00');
-        const salarioBaseComissao = vendaTotal * (comissaoAtiva / 100);
+
+        // 🎯 CORREÇÃO: Usar comissao1Valor (salário base) para calcular valor/hora
+        const salarioBaseComissao = vendaTotal * (comissao1Valor / 100);
         const salarioHora = salarioBaseComissao / 220;
         const descontoAtraso = horasAtraso * salarioHora;
 
@@ -1245,7 +1250,7 @@
         }
 
         // =======================
-        // SALÁRIO TOTAL
+        // SALÁRIO TOTAL (AQUI CONTINUA USANDO comissaoAtiva)
         // =======================
         // salário baseado em comissão ativa
         let salarioTotal = vendaTotal * (comissaoAtiva / 100);

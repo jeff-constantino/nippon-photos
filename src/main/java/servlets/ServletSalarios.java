@@ -16,11 +16,15 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @WebServlet("/ServletSalarios")
-public class ServletSalarios extends ServletGenericUtil{
+public class ServletSalarios extends ServletGenericUtil { // Mantenha o nome da sua classe
 
+    // =========================================================================================
+    // =================================== MÉTODOS GET =========================================
+    // =========================================================================================
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String acao = request.getParameter("acao");
@@ -30,16 +34,24 @@ public class ServletSalarios extends ServletGenericUtil{
 
         try {
             DAOSalarios relatorio = new DAOSalarios();
-            DAOConfiguracao daoConfiguracao = new DAOConfiguracao(); // instância do DAO de config
+            DAOConfiguracao daoConfiguracao = new DAOConfiguracao();
             DAOConfig daoConfig = new DAOConfig();
+
+            // Atributo para manter o funcionário selecionado no formulário após a ação
+            request.setAttribute("funcionarioIdSelecionado", funcionarioId);
 
             // Carrega INSS e adiciona ao request
             ModelConfiguracao configInss = daoConfiguracao.buscarFaixasInss();
             request.setAttribute("configInss", configInss);
+
+            // NOVO: Carrega IRRF e adiciona ao request
+            ModelConfiguracao configIrrf = daoConfiguracao.buscarFaixasIrrf();
+            request.setAttribute("configIrrf", configIrrf);
+
             // Carrega todas as configurações para cálculo de produtos
             List<ModelConfig> listaConfigs = daoConfig.consultarTodasConfigs();
             request.setAttribute("listaConfigs", listaConfigs);
-            // Logo após carregar as configs, adicione:
+
             System.out.println("=== DEBUG CONFIGS ===");
             if (listaConfigs != null && !listaConfigs.isEmpty()) {
                 System.out.println("Qtd configs: " + listaConfigs.size());
@@ -55,7 +67,7 @@ public class ServletSalarios extends ServletGenericUtil{
             List<ModelConfiguracao> configsSalarios = daoConfiguracao.consultarSalarios();
             ModelConfiguracao configSalario = null;
             if (configsSalarios != null && !configsSalarios.isEmpty()) {
-                configSalario = configsSalarios.get(0); // pegar primeira config, por exemplo
+                configSalario = configsSalarios.get(0);
             }
             request.setAttribute("configSalario", configSalario);
 
@@ -66,11 +78,31 @@ public class ServletSalarios extends ServletGenericUtil{
             List<ModelVendas> vendasFuncionarioList = new ArrayList<>();
             RequestDispatcher dispatcher;
 
-            if ("imprimirVendasFuncionario".equals(acao)) {
+            if ("imprimirVendasFuncionario".equals(acao) && dataInicial != null && !dataInicial.isEmpty() && funcionarioId != null && !funcionarioId.isEmpty()) {
                 // Conversões
                 LocalDate dataIni = LocalDate.parse(dataInicial);
                 LocalDate dataFin = LocalDate.parse(dataFinal);
                 Long funcId = Long.parseLong(funcionarioId);
+
+                // NOVO: Busca qual comissão o funcionário usa
+                String tipoComissao = relatorio.buscarComissaoFuncionario(funcId);
+
+                // Busca o valor da comissão correspondente
+                BigDecimal valorComissao = BigDecimal.ZERO;
+                if (configSalario != null) {
+                    if ("COMISSÃO 1".equalsIgnoreCase(tipoComissao)) {
+                        valorComissao = configSalario.getComissao();
+                    } else if ("COMISSÃO 2".equalsIgnoreCase(tipoComissao)) {
+                        valorComissao = configSalario.getComissao2();
+                    }
+                }
+
+                request.setAttribute("tipoComissao", tipoComissao);
+                request.setAttribute("valorComissaoAtiva", valorComissao);
+
+                System.out.println("=== COMISSÃO DO FUNCIONÁRIO ===");
+                System.out.println("Tipo de comissão: " + tipoComissao);
+                System.out.println("Valor da comissão: " + valorComissao);
 
                 // Busca e soma dos vales
                 DAOVales daoVales = new DAOVales();
@@ -80,10 +112,7 @@ public class ServletSalarios extends ServletGenericUtil{
                 // Busca resumo de conduta
                 DAOMedidasDisciplinares daoCondutas = new DAOMedidasDisciplinares();
                 ModelCondutaResumo resumoConduta = daoCondutas.buscarResumoConduta(funcId, dataIni, dataFin);
-
                 request.setAttribute("resumoConduta", resumoConduta);
-
-
 
                 int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
                 int resultadosPorPagina = 10;
@@ -97,14 +126,11 @@ public class ServletSalarios extends ServletGenericUtil{
                 request.setAttribute("paginaAtual", paginaAtual);
                 request.setAttribute("totalPaginas", totalPaginas);
             }
+
             if ("buscaSalario".equals(acao)) {
-
-
                 String funcionarioIdParam = request.getParameter("funcionarioId");
                 String mesParam = request.getParameter("mes");
                 String anoParam = request.getParameter("ano");
-
-
 
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
@@ -113,7 +139,6 @@ public class ServletSalarios extends ServletGenericUtil{
                     if (funcionarioIdParam == null || funcionarioIdParam.isEmpty() ||
                             mesParam == null || mesParam.isEmpty() ||
                             anoParam == null || anoParam.isEmpty()) {
-
                         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                         out.write("{\"erro\": \"Parâmetros obrigatórios ausentes ou inválidos.\"}");
                         out.flush();
@@ -129,7 +154,6 @@ public class ServletSalarios extends ServletGenericUtil{
                         List<ModelSalarios> listaSalarios = dao.buscarSalariosPorMesAnoFuncionario(mes, ano, funcId);
 
                         Gson gson = new Gson();
-
                         if (listaSalarios != null && !listaSalarios.isEmpty()) {
                             String json = gson.toJson(listaSalarios);
                             out.print(json);
@@ -137,7 +161,6 @@ public class ServletSalarios extends ServletGenericUtil{
                             out.print("[]");
                         }
                         out.flush();
-
                     } catch (NumberFormatException e) {
                         response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                         out.write("{\"erro\": \"Formato inválido nos parâmetros numéricos.\"}");
@@ -151,15 +174,8 @@ public class ServletSalarios extends ServletGenericUtil{
                 } catch (IOException ioEx) {
                     ioEx.printStackTrace();
                 }
-
                 return;
             }
-
-
-
-
-
-
 
             request.setAttribute("dataInicial", dataInicial);
             request.setAttribute("dataFinal", dataFinal);
@@ -182,7 +198,7 @@ public class ServletSalarios extends ServletGenericUtil{
             HttpSession session = request.getSession();
             session.setAttribute("mes", mes);
             session.setAttribute("ano", ano);
-            
+
             String msg = request.getParameter("msg");
             if (msg != null && !msg.isEmpty()) {
                 request.setAttribute("msg", msg);
@@ -190,6 +206,7 @@ public class ServletSalarios extends ServletGenericUtil{
 
             dispatcher = request.getRequestDispatcher("principal/salarios.jsp");
             dispatcher.forward(request, response);
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("msg", "Erro ao buscar vendas: " + e.getMessage());
@@ -197,6 +214,10 @@ public class ServletSalarios extends ServletGenericUtil{
             dispatcher.forward(request, response);
         }
     }
+
+    // =========================================================================================
+    // =================================== MÉTODOS POST =========================================
+    // =========================================================================================
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -216,28 +237,28 @@ public class ServletSalarios extends ServletGenericUtil{
             }
 
             ModelSalarios model = new ModelSalarios();
-
             model.setFuncionarioId(Long.parseLong(funcionarioIdStr));
             model.setNomeFuncionario(req.getParameter("nome"));
 
-            String mesAnoStr = req.getParameter("mesAno");
+            // --- INÍCIO DO CÁLCULO DE MÊS/ANO PARA REDIRECIONAMENTO ---
             int mes = 0, ano = 0;
-
+            String mesAnoStr = req.getParameter("mesAno");
             if (mesAnoStr != null && !mesAnoStr.isEmpty()) {
                 try {
+                    // Assume que o formato do input é "Outubro 2025"
                     Date data = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR")).parse(mesAnoStr);
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(data);
-                    mes = cal.get(Calendar.MONTH) + 1;
+                    mes = cal.get(Calendar.MONTH) + 1; // Mês baseado em 1
                     ano = cal.get(Calendar.YEAR);
                 } catch (Exception e) {
                     System.out.println("Erro ao converter mesAno: " + mesAnoStr + " -> " + e.getMessage());
                 }
             }
+            // --- FIM DO CÁLCULO DE MÊS/ANO PARA REDIRECIONAMENTO ---
 
             model.setMes(mes);
             model.setAno(ano);
-
             model.setQtdFotos(parseIntFromElement(req.getParameter("ft_total")));
             model.setQtdEnc(parseIntFromElement(req.getParameter("enc_total")));
             model.setQtdArquivos(parseIntFromElement(req.getParameter("dig_total")));
@@ -255,29 +276,42 @@ public class ServletSalarios extends ServletGenericUtil{
             model.setValorFaltas(parseBigDecimal(req.getParameter("inputFaltas")));
             model.setValorSuspensoes(parseBigDecimal(req.getParameter("inputSuspensoes")));
             model.setValorAtrasos(parseBigDecimal(req.getParameter("valor_desconto_atrasos")));
+
             model.setVales(parseBigDecimal(req.getParameter("vales_mes")));
             model.setInss(parseBigDecimal(req.getParameter("inss")));
             model.setParcela(parseBigDecimal(req.getParameter("parcela")));
             model.setFgts(parseBigDecimal(req.getParameter("fgts")));
 
             model.setVenda_total(parseBigDecimal(req.getParameter("venda_total")));
-
             model.setComissao(parseBigDecimal(req.getParameter("comissao")));
             model.setSalario_total(parseBigDecimal(req.getParameter("salario_total")));
             model.setSalario_liquido1(parseBigDecimal(req.getParameter("salario_liquido")));
 
-            model.setComissao2(parseBigDecimal(req.getParameter("comissao2")));
-            model.setSalario_total2(parseBigDecimal(req.getParameter("salario_total2")));
-            model.setSalario_liquido2(parseBigDecimal(req.getParameter("salario_liquido2")));
             model.setDescontos_mes(parseBigDecimal(req.getParameter("descontos_mes")));
-            model.setDescontos_1(parseBigDecimal(req.getParameter("descontos_1")));
-            model.setDescontos_2(parseBigDecimal(req.getParameter("descontos_2")));
+            model.setDescontos_1(parseBigDecimal(req.getParameter("descontos_total")));
+
+            // NOVO: Captura o tipo de comissão
+            model.setTipoComissao(req.getParameter("tipo_comissao"));
 
             // Grava no banco
             DAOSalarios dao = new DAOSalarios();
             dao.gravarSalarios(model);
 
-            resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("Salário registrado com sucesso!", "UTF-8"));
+            // --- INÍCIO DA CORREÇÃO DE REDIRECIONAMENTO ---
+            // Recarrega o contexto completo da página
+            String dataIniStr = PrimeiroDiaDoMes(mes, ano);
+            String dataFinStr = UltimoDiaDoMes(mes, ano);
+
+            String urlRedirecionamento = req.getContextPath() + "/ServletSalarios?"
+                    + "acao=imprimirVendasFuncionario&" // Força o doGet a carregar todos os dados (vendas, vales, etc.)
+                    + "funcionarioId=" + funcionarioIdStr + "&"
+                    + "dataInicial=" + URLEncoder.encode(dataIniStr, "UTF-8") + "&"
+                    + "dataFinal=" + URLEncoder.encode(dataFinStr, "UTF-8") + "&"
+                    + "msg=" + URLEncoder.encode("Salário registrado com sucesso!", "UTF-8");
+
+            resp.sendRedirect(urlRedirecionamento);
+            // --- FIM DA CORREÇÃO DE REDIRECIONAMENTO ---
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -285,50 +319,10 @@ public class ServletSalarios extends ServletGenericUtil{
         }
     }
 
-    // Método para buscar salário
-    private void buscarSalario(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            String mesStr = req.getParameter("mes");
-            String anoStr = req.getParameter("ano");
-            String funcionarioIdStr = req.getParameter("funcionarioId");
-
-            if (mesStr == null || anoStr == null || funcionarioIdStr == null) {
-                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                resp.getWriter().write("{\"erro\": \"Parâmetros obrigatórios não informados\"}");
-                return;
-            }
-
-            int mes = Integer.parseInt(mesStr);
-            int ano = Integer.parseInt(anoStr);
-            long funcionarioId = Long.parseLong(funcionarioIdStr);
-
-            DAOSalarios dao = new DAOSalarios();
-            List<ModelSalarios> salarios = dao.buscarSalariosPorMesAnoFuncionario(mes, ano, funcionarioId);
-
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
-
-            Gson gson = new Gson();
-            String json = gson.toJson(salarios);
-            resp.getWriter().write(json);
-
-        } catch (NumberFormatException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"erro\": \"Parâmetros inválidos\"}");
-        } catch (Exception e) {
-            e.printStackTrace();
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("{\"erro\": \"Erro interno do servidor: " + e.getMessage() + "\"}");
-        }
-    }
-
-    // Método para editar salário
+    // Método para editar salário (mantido o original)
     private void editarSalario(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-
-
-
-
+            // ... (implementação original do editarSalario) ...
             String idSalarioStr = req.getParameter("idSalario");
             if (idSalarioStr == null || idSalarioStr.isEmpty()) {
                 resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("ID do salário não informado.", "UTF-8"));
@@ -336,40 +330,35 @@ public class ServletSalarios extends ServletGenericUtil{
             }
 
             ModelSalarios model = new ModelSalarios();
-
-            // ID do registro a ser atualizado
             model.setIdSalario(Integer.parseInt(idSalarioStr));
-
-            // Dados básicos
-            model.setFuncionarioId(Long.parseLong(req.getParameter("funcionarioId")));
+            String funcionarioIdStr = req.getParameter("funcionarioId");
+            model.setFuncionarioId(Long.parseLong(funcionarioIdStr));
             model.setNomeFuncionario(req.getParameter("nome"));
-            model.setMes(Integer.parseInt(req.getParameter("mes")));
-            model.setAno(Integer.parseInt(req.getParameter("ano")));
 
-            // Dados de vendas
+            // Recalcula mes/ano para o redirecionamento
+            int mes = Integer.parseInt(req.getParameter("mes"));
+            int ano = Integer.parseInt(req.getParameter("ano"));
+
+            model.setMes(mes);
+            model.setAno(ano);
+
             model.setQtdFotos(parseIntFromElement(req.getParameter("ft_total")));
             model.setQtdArquivos(parseIntFromElement(req.getParameter("dig_total")));
             model.setQtdSobras(parseIntFromElement(req.getParameter("sobras")));
             model.setAproveitamento(parseBigDecimal(req.getParameter("aproveitamento")));
 
-
-
-            // Histórico de conduta
             model.setAdvertencias(parseIntOrZero(req.getParameter("advertencias")));
             model.setFaltas(parseIntOrZero(req.getParameter("faltas")));
             model.setSuspensoes(parseIntOrZero(req.getParameter("suspensoes")));
             model.setDsr(parseIntOrZero(req.getParameter("dsr")));
 
-            // Atrasos
             String atrasos = req.getParameter("atrasos_horas");
             model.setAtrasos(convertHorasParaDecimal(atrasos));
 
-            // Valores de descontos
             model.setValorFaltas(parseBigDecimal(req.getParameter("inputFaltas")));
             model.setValorSuspensoes(parseBigDecimal(req.getParameter("inputSuspensoes")));
             model.setValorAtrasos(parseBigDecimal(req.getParameter("valor_desconto_atrasos")));
 
-            // Salários e benefícios
             model.setVenda_total(parseBigDecimal(req.getParameter("venda_total")));
             model.setVales(parseBigDecimal(req.getParameter("vales_mes")));
             model.setInss(parseBigDecimal(req.getParameter("inss")));
@@ -377,24 +366,27 @@ public class ServletSalarios extends ServletGenericUtil{
             model.setFgts(parseBigDecimal(req.getParameter("fgts")));
             model.setDescontos_mes(parseBigDecimal(req.getParameter("descontos_mes")));
 
-            // Primeira linha de salário
             model.setComissao(parseBigDecimal(req.getParameter("comissao")));
             model.setSalario_total(parseBigDecimal(req.getParameter("salario_total")));
-            model.setDescontos_1(parseBigDecimal(req.getParameter("descontos_1")));
+            model.setDescontos_1(parseBigDecimal(req.getParameter("descontos_total")));
             model.setSalario_liquido1(parseBigDecimal(req.getParameter("salario_liquido")));
 
-            // Segunda linha de salário
-            model.setComissao2(parseBigDecimal(req.getParameter("comissao2")));
-            model.setSalario_total2(parseBigDecimal(req.getParameter("salario_total2")));
-            model.setDescontos_2(parseBigDecimal(req.getParameter("descontos_2")));
-            model.setSalario_liquido2(parseBigDecimal(req.getParameter("salario_liquido2")));
-
-
-            // Atualizar no banco
             DAOSalarios dao = new DAOSalarios();
             dao.atualizarSalario(model);
 
-            resp.sendRedirect(req.getContextPath() + "/ServletSalarios?msg=" + URLEncoder.encode("Salário atualizado com sucesso!", "UTF-8"));
+            // --- INÍCIO DA CORREÇÃO DE REDIRECIONAMENTO PARA EDIÇÃO ---
+            String dataIniStr = PrimeiroDiaDoMes(mes, ano);
+            String dataFinStr = UltimoDiaDoMes(mes, ano);
+
+            String urlRedirecionamento = req.getContextPath() + "/ServletSalarios?"
+                    + "acao=imprimirVendasFuncionario&" // Força o doGet a carregar todos os dados
+                    + "funcionarioId=" + funcionarioIdStr + "&"
+                    + "dataInicial=" + URLEncoder.encode(dataIniStr, "UTF-8") + "&"
+                    + "dataFinal=" + URLEncoder.encode(dataFinStr, "UTF-8") + "&"
+                    + "msg=" + URLEncoder.encode("Salário atualizado com sucesso!", "UTF-8");
+
+            resp.sendRedirect(urlRedirecionamento);
+            // --- FIM DA CORREÇÃO DE REDIRECIONAMENTO PARA EDIÇÃO ---
 
         } catch (Exception e) {
             System.out.println("=== ERRO NO SERVLET ===");
@@ -405,9 +397,33 @@ public class ServletSalarios extends ServletGenericUtil{
         }
     }
 
+    // =========================================================================================
+    // =================================== MÉTODOS HELPERS =====================================
+    // =========================================================================================
 
+    // MÉTODOS ADICIONADOS PARA RECARREGAR O CONTEXTO CORRETAMENTE
+    private String PrimeiroDiaDoMes(int mes, int ano) {
+        if (mes <= 0 || ano <= 0) return "";
+        try {
+            LocalDate data = LocalDate.of(ano, mes, 1);
+            return data.toString(); // Formato yyyy-MM-dd
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
-    // Helpers
+    private String UltimoDiaDoMes(int mes, int ano) {
+        if (mes <= 0 || ano <= 0) return "";
+        try {
+            LocalDate data = LocalDate.of(ano, mes, 1).with(TemporalAdjusters.lastDayOfMonth());
+            return data.toString(); // Formato yyyy-MM-dd
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     private int parseIntOrZero(String str) {
         if (str == null || str.trim().isEmpty()) return 0;
         try {
@@ -417,11 +433,10 @@ public class ServletSalarios extends ServletGenericUtil{
         }
     }
 
-    // Método para extrair valores dos elementos da tabela
     private int parseIntFromElement(String str) {
         if (str == null || str.trim().isEmpty()) return 0;
         try {
-            // Remove qualquer formatação se houver
+            // Remove vírgulas, pontos e espaços para parsear um número inteiro (ex: 1.000 -> 1000)
             str = str.replace(",", "").replace(".", "").trim();
             return Integer.parseInt(str);
         } catch (Exception e) {
@@ -431,14 +446,12 @@ public class ServletSalarios extends ServletGenericUtil{
 
     private BigDecimal parseBigDecimal(String valor) {
         if (valor == null || valor.trim().isEmpty()) return BigDecimal.ZERO;
-
         valor = valor.trim().replace("R$", "").replace("\u00A0", "").replace(" ", "");
 
-        // Se contém vírgula, trata como formato BR; senão, assume padrão americano
+        // Trata formato brasileiro (1.000,50 -> 1000.50)
         if (valor.contains(",")) {
             valor = valor.replace(".", "").replace(",", ".");
         }
-
         try {
             return new BigDecimal(valor);
         } catch (Exception e) {
@@ -446,8 +459,6 @@ public class ServletSalarios extends ServletGenericUtil{
             return BigDecimal.ZERO;
         }
     }
-
-
 
     private double convertHorasParaDecimal(String horasMinutos) {
         if (horasMinutos == null || horasMinutos.trim().isEmpty()) return 0;
@@ -461,8 +472,4 @@ public class ServletSalarios extends ServletGenericUtil{
             return 0;
         }
     }
-
-
-
-
 }

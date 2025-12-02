@@ -54,6 +54,15 @@ public class ModelSalarios implements Serializable {
     private BigDecimal descontos_2;
 
     private int ribbon_descontar;
+    private String tipoComissao;
+
+    public String getTipoComissao() {
+        return tipoComissao;
+    }
+
+    public void setTipoComissao(String tipoComissao) {
+        this.tipoComissao = tipoComissao;
+    }
 
     public int getRibbon_descontar() {
         return ribbon_descontar;
@@ -318,4 +327,6 @@ public class ModelSalarios implements Serializable {
     public void setSalario_liquido2(BigDecimal salario_liquido2) {
         this.salario_liquido2 = salario_liquido2;
     }
+
+
 }

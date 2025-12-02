@@ -276,9 +276,10 @@
                                                             </div>
 
                                                             <!-- SALÁRIOS E COMISSÕES -->
+                                                            <!-- SALÁRIOS E COMISSÕES -->
                                                             <div class="card mb-3">
                                                                 <div class="card-body">
-                                                                    <!-- Primeira linha -->
+                                                                    <!-- Primeira linha: Venda Total, Vales, INSS, Parcela, FGTS, Descontos -->
                                                                     <div class="row align-items-center mb-3">
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">VENDA TOTAL</label>
@@ -300,11 +301,12 @@
                                                                                    style="background-color: #2c2c2c; color: white"
                                                                                    id="inssResultado" name="inss">
                                                                         </div>
+
                                                                         <div class="col-auto">
-                                                                            <label style="color: #f2a654">PARCELA A DEDUZIR</label>
+                                                                            <label style="color: #f2a654">PARCELA A DEDUZIR (IRRF)</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
                                                                                    style="background-color: #2c2c2c; color: white"
-                                                                                   id="parcelaResultado" name="parcela">
+                                                                                   id="parcelaResultado" name="parcela" readonly>
                                                                         </div>
 
                                                                         <div class="col-auto">
@@ -320,67 +322,50 @@
                                                                                    style="background-color: #2c2c2c; color: white"
                                                                                    id="descontos_mesResultado" name="descontos_mes">
                                                                         </div>
+
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">IMPOSTO DE RENDA</label>
+                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
+                                                                                   style="background-color: #2c2c2c; color: white"
+                                                                                   id="descontos_irResultado" name="descontos_ir" readonly>
+                                                                        </div>
                                                                     </div>
 
-                                                                    <!-- Segunda linha -->
-                                                                    <div class="row align-items-center mb-3">
+                                                                    <!-- Segunda linha: APENAS UMA COMISSÃO E SALÁRIO -->
+                                                                    <div class="row align-items-center">
+                                                                        <div class="col-auto">
+                                                                            <label style="color: #f2a654">TIPO DE COMISSÃO</label>
+                                                                            <input type="text" class="form-control text-center fw-bold"
+                                                                                   style="background-color: #2c2c2c; color: white"
+                                                                                   id="tipoComissaoResultado" name="tipo_comissao" readonly>
+                                                                        </div>
+
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">COMISSÃO %</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
                                                                                    style="background-color: #f2a654; color: black"
-                                                                                   id="comissaoResultado" name="comissao">
+                                                                                   id="comissaoResultado" name="comissao" readonly>
                                                                         </div>
 
                                                                         <div class="col-auto ms-3">
                                                                             <label style="color: #f2a654">SALÁRIO TOTAL</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
                                                                                    style="background-color: #f2a654; color: black"
-                                                                                   id="salario_totalResultadoField" name="salario_total">
+                                                                                   id="salario_totalResultadoField" name="salario_total" readonly>
                                                                         </div>
 
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
                                                                                    style="background-color: #2c2c2c; color: white"
-                                                                                   id="descontos_1Resultado" name="descontos_1">
+                                                                                   id="descontos_totalResultado" name="descontos_total" readonly>
                                                                         </div>
 
                                                                         <div class="col-auto ms-3">
                                                                             <label style="color: #f2a654">SALÁRIO LÍQUIDO</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
                                                                                    style="background-color: #f2a654; color: black"
-                                                                                   id="salario_liquidoResultado" name="salario_liquido">
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <!-- Terceira linha -->
-                                                                    <div class="row align-items-center">
-                                                                        <div class="col-auto">
-                                                                            <label style="color: #f2a654">COMISSÃO %</label>
-                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: #f2a654; color: black"
-                                                                                   id="comissao2Resultado" name="comissao2">
-                                                                        </div>
-
-                                                                        <div class="col-auto ms-3">
-                                                                            <label style="color: #f2a654">SALÁRIO TOTAL</label>
-                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: #f2a654; color: black"
-                                                                                   id="salario_total2Resultado" name="salario_total2">
-                                                                        </div>
-
-                                                                        <div class="col-auto">
-                                                                            <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
-                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: #2c2c2c; color: white"
-                                                                                   id="descontos_2Resultado" name="descontos_2">
-                                                                        </div>
-
-                                                                        <div class="col-auto ms-3">
-                                                                            <label style="color: #f2a654">SALÁRIO LÍQUIDO 2</label>
-                                                                            <input type="number" step="0.01" class="form-control text-center fw-bold"
-                                                                                   style="background-color: #f2a654; color: black"
-                                                                                   id="salario_liquido2Resultado" name="salario_liquido2">
+                                                                                   id="salario_liquidoResultado" name="salario_liquido" readonly>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -684,137 +669,122 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <!-- Primeira linha: Vendas, vales, inss, fgts, descontos -->
-                                <div class="row align-items-center mb-3">
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">VENDA TOTAL</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #2c2c2c; color: white"
-                                               id="venda_total" name="venda_total" value="${venda_total}" tabindex="-1">
-                                    </div>
-
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">VALES</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #2c2c2c; color: white"
-                                               id="vales_mes" name="vales_mes" value="${vales_mes}" tabindex="-1">
-                                    </div>
-
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">INSS</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #2c2c2c; color: white"
-                                               id="inss" name="inss" value="${inss}" tabindex="-1">
-                                    </div>
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">PARCELA A DEDUZIR</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #2c2c2c; color: white"
-                                               id="parcela" name="parcela" value="${parcela}" tabindex="-1">
-                                    </div>
-
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">FGTS</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #2c2c2c; color: white"
-                                               id="fgts" name="fgts" value="${fgts}" tabindex="-1">
-                                    </div>
-
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">DESCONTOS DISCIPLINARES</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #2c2c2c; color: white"
-                                               id="descontos_mes" name="descontos_mes" value="${descontos_mes}" tabindex="-1">
-                                    </div>
-
-                                    <c:forEach var="mv" items="${vendasFuncionarioList}">
+                                <div class="card-body">
+                                    <!-- Primeira linha: Vendas, vales, inss, fgts, descontos -->
+                                    <div class="row align-items-center mb-3">
                                         <div class="col-auto">
-                                            <label style="color: #f2a654">DIFERENÇA DE FOTOS</label>
+                                            <label style="color: #f2a654">VENDA TOTAL</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #2c2c2c; color: white"
+                                                   id="venda_total" name="venda_total"
+                                                   value="${venda_total}" tabindex="-1">
+                                        </div>
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">VALES</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #2c2c2c; color: white"
+                                                   id="vales_mes" name="vales_mes"
+                                                   value="${vales_mes}" tabindex="-1">
+                                        </div>
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">INSS</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #2c2c2c; color: white"
+                                                   id="inss" name="inss"
+                                                   value="${inss}" tabindex="-1">
+                                        </div>
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">PARCELA A DEDUZIR</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #2c2c2c; color: white"
+                                                   id="parcela" name="parcela"
+                                                   value="${parcela}" tabindex="-1">
+                                        </div>
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">FGTS</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #2c2c2c; color: white"
+                                                   id="fgts" name="fgts"
+                                                   value="${fgts}" tabindex="-1">
+                                        </div>
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">DESCONTOS DISCIPLINARES</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #2c2c2c; color: white"
+                                                   id="descontos_mes" name="descontos_mes"
+                                                   value="${descontos_mes}" tabindex="-1">
+                                        </div>
+                                        <c:forEach var="mv" items="${vendasFuncionarioList}">
+                                            <div class="col-auto">
+                                                <label style="color: #f2a654">DIFERENÇA DE FOTOS</label>
+                                                <input type="text" class="form-control text-center fw-bold"
+                                                       style="background-color: #2c2c2c; color: white"
+                                                       id="dif_fotos" name="dif_fotos"
+                                                       value="${mv.ribbon_descontar}" readonly tabindex="-1">
+                                            </div>
+                                        </c:forEach>
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">DESCONTOS DE FOTOS</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #2c2c2c; color: white"
+                                                   id="desconto_fotos" name="desconto_fotos"
+                                                   value="${desconto_fotos}" tabindex="-1">
+                                        </div>
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">IMPOSTO DE RENDA</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #2c2c2c; color: white"
+                                                   id="descontos_ir" name="descontos_ir"
+                                                   value="${descontos_ir}" tabindex="-1">
+                                        </div>
+                                    </div>
+
+                                    <!-- Segunda linha: APENAS UMA COMISSÃO E SALÁRIO -->
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">TIPO DE COMISSÃO</label>
                                             <input type="text" class="form-control text-center fw-bold"
                                                    style="background-color: #2c2c2c; color: white"
-                                                   id="dif_fotos" name="dif_fotos"
-                                                   value="${mv.ribbon_descontar}" readonly tabindex="-1">
+                                                   readonly tabindex="-1"
+                                                   id="tipo_comissao_display"
+                                                   value="${tipoComissao}">
                                         </div>
-                                    </c:forEach>
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">DESCONTOS DE FOTOS</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #2c2c2c; color: white"
-                                               id="desconto_fotos" name="desconto_fotos" value="${desconto_fotos}"  tabindex="-1">
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">COMISSÃO %</label>
+                                            <input type="text" class="form-control text-center fw-bold"
+                                                   style="background-color: #f2a654; color: black"
+                                                   readonly tabindex="-1"
+                                                   id="comissao" name="comissao"
+                                                   value="${valorComissaoAtiva}%">
+                                        </div>
+                                        <div class="col-auto ms-3">
+                                            <label style="color: #f2a654">SALÁRIO TOTAL</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #f2a654; color: black"
+                                                   readonly tabindex="-1"
+                                                   id="salario_total" name="salario_total"
+                                                   value="${salario_total}">
+                                        </div>
+                                        <div class="col-auto">
+                                            <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #2c2c2c; color: white"
+                                                   id="descontos_total" name="descontos_total"
+                                                   value="${descontos_1}" readonly tabindex="-1">
+                                        </div>
+                                        <div class="col-auto ms-3">
+                                            <label style="color: #f2a654">SALÁRIO LÍQUIDO</label>
+                                            <input type="text" class="form-control money text-center fw-bold"
+                                                   style="background-color: #f2a654; color: black"
+                                                   readonly tabindex="-1"
+                                                   id="salario_liquido" name="salario_liquido"
+                                                   value="${salario_liquido}">
+                                        </div>
                                     </div>
 
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">IMPOSTO DE RENDA</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #2c2c2c; color: white"
-                                               id="descontos_ir" name="descontos_ir" value="${descontos_ir}"  tabindex="-1">
-                                    </div>
+                                    <input type="hidden" name="id_salario" id="id_salario" value="">
+                                    <input type="hidden" name="tipo_comissao" id="tipo_comissao" value="${tipoComissao}">
 
-
-                                </div>
-
-                                <!-- Segunda linha: Comissão 1 e Salário Líquido 1 -->
-                                <div class="row align-items-center mb-3">
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">COMISSÃO %</label>
-                                        <input type="text" class="form-control text-center fw-bold"
-                                               style="background-color: #f2a654; color: black"
-                                               readonly tabindex="-1" id="comissao" name="comissao" value="${comissao}%" >
-                                    </div>
-                                    <div class="col-auto ms-3">
-                                        <label style="color: #f2a654">SALÁRIO TOTAL</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #f2a654; color: black"
-                                               readonly tabindex="-1" id="salario_total" name="salario_total" value="${salario_total}">
-                                    </div>
-
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #2c2c2c; color: white"
-                                               id="descontos_1" name="descontos_1" value="${descontos_1}" readonly tabindex="-1">
-                                    </div>
-
-                                    <div class="col-auto ms-3">
-                                        <label style="color: #f2a654">SALÁRIO LÍQUIDO</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #f2a654; color: black"
-                                               readonly tabindex="-1" id="salario_liquido" name="salario_liquido" value="${salario_liquido}">
-                                    </div>
-
-                                </div>
-
-                                <!-- Terceira linha: Comissão 2 e Salário Líquido 2 -->
-                                <div class="row align-items-center">
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">COMISSÃO %</label>
-                                        <input type="text" class="form-control text-center fw-bold"
-                                               style="background-color: #f2a654; color: black"
-                                               readonly tabindex="-1" id="comissao2" name="comissao2" value="${comissao2}%" >
-
-                                    </div>
-                                    <div class="col-auto ms-3">
-                                        <label style="color: #f2a654">SALÁRIO TOTAL</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #f2a654; color: black"
-                                               readonly tabindex="-1" id="salario_total2" name="salario_total2" value="${salario_total2}">
-                                    </div>
-
-                                    <div class="col-auto">
-                                        <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #2c2c2c; color: white"
-                                               id="descontos_2" name="descontos_2" value="${descontos_2}" readonly tabindex="-1">
-                                    </div>
-
-                                    <div class="col-auto ms-3">
-                                        <label style="color: #f2a654">SALÁRIO LÍQUIDO 2</label>
-                                        <input type="text" class="form-control money text-center fw-bold"
-                                               style="background-color: #f2a654; color: black"
-                                               readonly tabindex="-1" id="salario_liquido2" name="salario_liquido2" value="${salario_liquido2}">
-                                    </div>
-                                </div>
-                                <input type="hidden" name="id_salario" id="id_salario" value="">
 
 
                             </div>
@@ -887,10 +857,12 @@
     console.log('comissao:', '${configSalario.comissao}');
     console.log('comissao2:', '${configSalario.comissao2}');
     console.log('fgts:', '${configSalario.fgts}');
-    // ===================================================================
-    // CORREÇÃO: Consolidar todos os window.onload em DOMContentLoaded
-    // ===================================================================
+    console.log('Tipo Comissão Ativa:', '${tipoComissao}');
+    console.log('Valor Comissão Ativa:', '${valorComissaoAtiva}');
 
+    // ===================================================================
+    // JQUERY READY
+    // ===================================================================
     $(document).ready(function () {
         var msg = "${msg}";
         if (msg) {
@@ -947,15 +919,26 @@
     document.addEventListener('keydown', navigateFocusableElements);
 
     // ===================================================================
-    // CONFIGURAÇÕES DO BACKEND
+    // CONFIGURAÇÕES DO BACKEND - COMISSÃO ÚNICA
     // ===================================================================
     const conf1_valor = parseFloat('${listaConfigs[0].conf1_valor}');
     const conf2_valor = parseFloat('${listaConfigs[0].conf2_valor}');
     const conf3_valor = parseFloat('${listaConfigs[0].conf3_valor}');
 
-    const comissao = parseFloat('${configSalario.comissao}');
-    const comissao2 = parseFloat('${configSalario.comissao2}');
+    // Comissões disponíveis
+    const comissao1Valor = parseFloat('${configSalario.comissao}');
+    const comissao2Valor = parseFloat('${configSalario.comissao2}');
+
+    // NOVO: Usar apenas a comissão ativa do funcionário
+    const comissaoAtiva = parseFloat('${valorComissaoAtiva}');
+    const tipoComissao = '${tipoComissao}';
     const fgtsAliquota = parseFloat('${configSalario.fgts}');
+
+    console.log('=== COMISSÃO ATIVA ===');
+    console.log('Tipo:', tipoComissao);
+    console.log('Valor:', comissaoAtiva);
+    console.log('Comissão 1:', comissao1Valor);
+    console.log('Comissão 2:', comissao2Valor);
 
     const faixasInss = [
         {
@@ -984,6 +967,34 @@
         }
     ];
 
+    // NOVO: Faixas de IRRF
+    const faixasIrrf = [
+        {
+            min: parseFloat('${configIrrf.min_irrf_1}'),
+            max: parseFloat('${configIrrf.max_irrf_1}'),
+            aliquota: parseFloat('${configIrrf.irrf_1}'),
+            parcela: parseFloat('${configIrrf.parcela_irrf_1}')
+        },
+        {
+            min: parseFloat('${configIrrf.min_irrf_2}'),
+            max: parseFloat('${configIrrf.max_irrf_2}'),
+            aliquota: parseFloat('${configIrrf.irrf_2}'),
+            parcela: parseFloat('${configIrrf.parcela_irrf_2}')
+        },
+        {
+            min: parseFloat('${configIrrf.min_irrf_3}'),
+            max: parseFloat('${configIrrf.max_irrf_3}'),
+            aliquota: parseFloat('${configIrrf.irrf_3}'),
+            parcela: parseFloat('${configIrrf.parcela_irrf_3}')
+        },
+        {
+            min: parseFloat('${configIrrf.min_irrf_4}'),
+            max: parseFloat('${configIrrf.max_irrf_4}'),
+            aliquota: parseFloat('${configIrrf.irrf_4}'),
+            parcela: parseFloat('${configIrrf.parcela_irrf_4}')
+        }
+    ];
+
     // ===================================================================
     // FUNÇÕES AUXILIARES
     // ===================================================================
@@ -1008,13 +1019,12 @@
     }
 
     // ===================================================================
-    // FUNÇÃO CORRIGIDA: atualizarFuncionarioSelecionado
+    // FUNÇÃO: atualizarFuncionarioSelecionado
     // ===================================================================
     function atualizarFuncionarioSelecionado(formId) {
         const select = document.getElementById("funcionarioId");
         const form = document.getElementById(formId);
 
-        // CORREÇÃO: Verifica se os elementos existem antes de acessar
         if (!select || !form) {
             console.warn(`Elementos não encontrados - select: ${!!select}, form: ${!!form}`);
             return;
@@ -1031,7 +1041,7 @@
     }
 
     // ===================================================================
-    // CÁLCULOS DE SALÁRIO
+    // CÁLCULOS DE SALÁRIO - USANDO COMISSÃO ÚNICA
     // ===================================================================
     function calcularDescontosDisciplinares() {
         const vendaTotalInput = document.getElementById('venda_total');
@@ -1044,7 +1054,7 @@
         let vendaTotal = parseFloat(vendaTotalInput.value || 0);
         if (isNaN(vendaTotal)) vendaTotal = parseFloat(removerMascara(vendaTotalInput.value)) || 0;
 
-        const baseCalculo = vendaTotal * (comissao / 100);
+        const baseCalculo = vendaTotal * (comissaoAtiva / 100);
         const valorDia = baseCalculo / 30;
 
         const totalFaltas = parseInt(inputFaltas?.getAttribute('data-faltas')) || 0;
@@ -1081,6 +1091,7 @@
 
         const faltaFoto = parseFloat(difFotos.value || 0);
         const custoFoto = faltaFoto * conf1_valor;
+
         descontoFotos.value = custoFoto.toFixed(2);
         calcularSalariosLiquidos();
     }
@@ -1093,10 +1104,9 @@
         const descontosInput = document.getElementById('descontos_mes');
         const atrasosInput = document.getElementById('atrasos_horas');
         const descontoFotos = document.getElementById('desconto_fotos');
-        const salarioTotal1Input = document.getElementById('salario_total');
-        const salarioTotal2Input = document.getElementById('salario_total2');
-        const salarioLiquido1Input = document.getElementById('salario_liquido');
-        const salarioLiquido2Input = document.getElementById('salario_liquido2');
+        const descontosIrInput = document.getElementById('descontos_ir');
+        const salarioTotalInput = document.getElementById('salario_total');
+        const salarioLiquidoInput = document.getElementById('salario_liquido');
 
         if (!vendaTotalInput) return;
 
@@ -1106,9 +1116,10 @@
         let vales = parseFloat(valesInput?.value || 0);
         let descontos = parseFloat(descontosInput?.value || 0);
         let valorRibbon = parseFloat(descontoFotos?.value || 0);
+        let descontosIr = parseFloat(descontosIrInput?.value || 0);
 
         const horasAtraso = converterHorasParaDecimal(atrasosInput?.value || '0:00');
-        const salarioBaseComissao = vendaTotal * (comissao / 100);
+        const salarioBaseComissao = vendaTotal * (comissaoAtiva / 100);
         const salarioHora = salarioBaseComissao / 220;
         const descontoAtraso = horasAtraso * salarioHora;
 
@@ -1117,32 +1128,29 @@
             valorDescontoAtrasosInput.value = descontoAtraso.toFixed(2);
         }
 
-        const salarioTotal1 = vendaTotal * (comissao / 100);
-        const salarioTotal2 = vendaTotal * (comissao2 / 100);
+        // Salário Total calculado com a comissão ativa do funcionário
+        const salarioTotal = vendaTotal * (comissaoAtiva / 100);
+        if (salarioTotalInput) salarioTotalInput.value = salarioTotal.toFixed(2);
 
-        if (salarioTotal1Input) salarioTotal1Input.value = salarioTotal1.toFixed(2);
-        if (salarioTotal2Input) salarioTotal2Input.value = salarioTotal2.toFixed(2);
-
-        const descontos_1 = inss + vales + descontos + descontoAtraso + valorRibbon;
-        const descontos_2 = inss + fgts + vales + descontos + descontoAtraso + valorRibbon;
-
-        const descontos1Input = document.getElementById('descontos_1');
-        const descontos2Input = document.getElementById('descontos_2');
-
-        if (descontos1Input) descontos1Input.value = descontos_1.toFixed(2);
-        if (descontos2Input) descontos2Input.value = descontos_2.toFixed(2);
-
-        const salarioLiquido1 = salarioTotal1 - descontos_1;
-        const salarioLiquido2 = salarioTotal2 - descontos_2;
-
-        if (salarioLiquido1Input) {
-            salarioLiquido1Input.value = salarioLiquido1.toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL'
-            });
+        // CORREÇÃO: Descontos baseados no tipo de comissão
+        // INSS e FGTS já foram calculados com base na Comissão 1
+        // A diferença está apenas em QUAIS descontos aplicar
+        let descontosTotal;
+        if (tipoComissao === 'COMISSÃO 1') {
+            // Comissão 1: desconta INSS, mas NÃO desconta FGTS
+            descontosTotal = inss + vales + descontos + descontoAtraso + valorRibbon + descontosIr;
+        } else {
+            // Comissão 2: desconta INSS E FGTS
+            descontosTotal = inss + fgts + vales + descontos + descontoAtraso + valorRibbon + descontosIr;
         }
-        if (salarioLiquido2Input) {
-            salarioLiquido2Input.value = salarioLiquido2.toLocaleString('pt-BR', {
+
+        const descontosTotalInput = document.getElementById('descontos_total');
+        if (descontosTotalInput) descontosTotalInput.value = descontosTotal.toFixed(2);
+
+        const salarioLiquido = salarioTotal - descontosTotal;
+
+        if (salarioLiquidoInput) {
+            salarioLiquidoInput.value = salarioLiquido.toLocaleString('pt-BR', {
                 style: 'currency',
                 currency: 'BRL'
             });
@@ -1153,7 +1161,7 @@
     // EVENT LISTENERS
     // ===================================================================
     document.addEventListener('DOMContentLoaded', function() {
-        // CORREÇÃO: Inicializar carregamento do relatório
+        // Inicializar carregamento do relatório
         fetch('ServletRelVenda')
             .then(response => response.text())
             .then(data => {
@@ -1162,7 +1170,7 @@
             })
             .catch(error => console.error('Erro:', error));
 
-        // CORREÇÃO: Tentar atualizar funcionário se o formulário existir
+        // Tentar atualizar funcionário se o formulário existir
         if (document.getElementById('formAdvertencia')) {
             atualizarFuncionarioSelecionado('formAdvertencia');
         }
@@ -1194,42 +1202,71 @@
                 const inssInput = document.getElementById('inss');
                 const parcelaInput = document.getElementById('parcela');
                 const fgtsInput = document.getElementById('fgts');
+                const descontosIrInput = document.getElementById('descontos_ir');
 
                 if (isNaN(vendaTotal) || vendaTotal <= 0) {
                     if (inssInput) inssInput.value = '0.00';
                     if (parcelaInput) parcelaInput.value = '0.00';
                     if (fgtsInput) fgtsInput.value = '0.00';
+                    if (descontosIrInput) descontosIrInput.value = '0.00';
                     calcularSalariosLiquidos();
                     return;
                 }
 
-                const baseCalculo = vendaTotal * (comissao / 100);
+                // IMPORTANTE: INSS e FGTS sempre calculados com base na COMISSÃO 1
+                const baseCalculoComissao1 = vendaTotal * (comissao1Valor / 100);
 
-                // Cálculo do INSS
+                // Cálculo do INSS (sempre com base na Comissão 1)
                 let aliquotaInss = 0;
-                let parcelaDeduzir = 0;
+                let parcelaDeduzirInss = 0;
 
                 for (let faixa of faixasInss) {
-                    if (baseCalculo >= faixa.min && baseCalculo <= faixa.max) {
+                    if (baseCalculoComissao1 >= faixa.min && baseCalculoComissao1 <= faixa.max) {
                         aliquotaInss = faixa.aliquota / 100;
-                        parcelaDeduzir = faixa.parcela || 0;
+                        parcelaDeduzirInss = faixa.parcela || 0;
                         break;
                     }
                 }
 
-                if (aliquotaInss === 0 && baseCalculo > faixasInss[faixasInss.length - 1].max) {
+                if (aliquotaInss === 0 && baseCalculoComissao1 > faixasInss[faixasInss.length - 1].max) {
                     const ultimaFaixa = faixasInss[faixasInss.length - 1];
                     aliquotaInss = ultimaFaixa.aliquota / 100;
-                    parcelaDeduzir = ultimaFaixa.parcela || 0;
+                    parcelaDeduzirInss = ultimaFaixa.parcela || 0;
                 }
 
-                const valorInss = (baseCalculo * aliquotaInss) - parcelaDeduzir;
+                const valorInss = (baseCalculoComissao1 * aliquotaInss) - parcelaDeduzirInss;
                 if (inssInput) inssInput.value = valorInss.toFixed(2);
-                if (parcelaInput) parcelaInput.value = parcelaDeduzir.toFixed(2);
 
-                // Cálculo do FGTS
-                const valorFgts = baseCalculo * (fgtsAliquota / 100);
+                // Cálculo do FGTS (sempre com base na Comissão 1)
+                const valorFgts = baseCalculoComissao1 * (fgtsAliquota / 100);
                 if (fgtsInput) fgtsInput.value = valorFgts.toFixed(2);
+
+                // NOVO: Cálculo do IRRF
+                // Base de cálculo do IRRF = Salário Bruto - INSS
+                const baseCalculoIrrf = baseCalculoComissao1 - valorInss;
+
+                let aliquotaIrrf = 0;
+                let parcelaDeduzirIrrf = 0;
+
+                for (let faixa of faixasIrrf) {
+                    if (baseCalculoIrrf >= faixa.min && baseCalculoIrrf <= faixa.max) {
+                        aliquotaIrrf = faixa.aliquota / 100;
+                        parcelaDeduzirIrrf = faixa.parcela || 0;
+                        break;
+                    }
+                }
+
+                if (aliquotaIrrf === 0 && baseCalculoIrrf > faixasIrrf[faixasIrrf.length - 1].max) {
+                    const ultimaFaixa = faixasIrrf[faixasIrrf.length - 1];
+                    aliquotaIrrf = ultimaFaixa.aliquota / 100;
+                    parcelaDeduzirIrrf = ultimaFaixa.parcela || 0;
+                }
+
+                const valorIrrf = (baseCalculoIrrf * aliquotaIrrf) - parcelaDeduzirIrrf;
+                const valorIrrfFinal = valorIrrf < 0 ? 0 : valorIrrf;
+
+                if (descontosIrInput) descontosIrInput.value = valorIrrfFinal.toFixed(2);
+                if (parcelaInput) parcelaInput.value = parcelaDeduzirIrrf.toFixed(2);
 
                 calcularDescontosDisciplinares();
                 calcularSalariosLiquidos();
@@ -1250,9 +1287,7 @@
         calcularVendaTotal();
 
         const comissaoInput = document.getElementById('comissao');
-        const comissao2Input = document.getElementById('comissao2');
-        if (comissaoInput) comissaoInput.value = comissao.toFixed(2);
-        if (comissao2Input) comissao2Input.value = comissao2.toFixed(2);
+        if (comissaoInput) comissaoInput.value = comissaoAtiva.toFixed(2);
 
         calcularDescontosDisciplinares();
         calcularCustoFoto();
@@ -1289,7 +1324,6 @@
         var dia = parseInt(partesData[2], 10);
 
         var data = new Date(ano, mes, dia);
-
         if (!isNaN(data.getTime())) {
             var ultimoDia = new Date(ano, mes + 1, 0);
             var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
@@ -1432,18 +1466,14 @@
         setValue('parcelaResultado', formatarNumeroParaInput(salario.parcela));
         setValue('fgtsResultado', formatarNumeroParaInput(salario.fgts));
         setValue('descontos_mesResultado', formatarNumeroParaInput(salario.descontos_mes));
+        setValue('descontos_irResultado', formatarNumeroParaInput(salario.descontos_ir));
 
-        // Salário 1ª linha
+        // Salário linha única
+        setValue('tipoComissaoResultado', salario.tipoComissao || 'N/A');
         setValue('comissaoResultado', formatarNumeroParaInput(salario.comissao));
         setValue('salario_totalResultadoField', formatarNumeroParaInput(salario.salario_total));
-        setValue('descontos_1Resultado', formatarNumeroParaInput(salario.descontos_1));
+        setValue('descontos_totalResultado', formatarNumeroParaInput(salario.descontos_1));
         setValue('salario_liquidoResultado', formatarNumeroParaInput(salario.salario_liquido1));
-
-        // Salário 2ª linha
-        setValue('comissao2Resultado', formatarNumeroParaInput(salario.comissao2));
-        setValue('salario_total2Resultado', formatarNumeroParaInput(salario.salario_total2));
-        setValue('descontos_2Resultado', formatarNumeroParaInput(salario.descontos_2));
-        setValue('salario_liquido2Resultado', formatarNumeroParaInput(salario.salario_liquido2));
     }
 
     // ===================================================================
@@ -1451,7 +1481,6 @@
     // ===================================================================
     function salvarEdicaoViaSubmit() {
         const formEdicao = document.getElementById('formEdicao');
-
         if (!formEdicao) {
             alert('Erro: Formulário não encontrado.');
             return;

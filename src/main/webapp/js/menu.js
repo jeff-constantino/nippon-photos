@@ -118,10 +118,10 @@
             if (menu) {
                 menu.classList.remove('show');
 
-                // Remove active de todos os links
-                var links = menu.querySelectorAll('a.nav-link, li.nav-item');
-                for (var j = 0; j < links.length; j++) {
-                    links[j].classList.remove('active');
+                // Remove active de TODOS os elementos do menu
+                var elementos = menu.querySelectorAll('.active');
+                for (var j = 0; j < elementos.length; j++) {
+                    elementos[j].classList.remove('active');
                 }
 
                 // Remove active do link pai
@@ -168,23 +168,41 @@
 
                 var ativo = false;
 
-                // Verifica condições para ativar o link
-                // 1. Match exato do servlet na URL
-                if (lastPart === servletName) {
-                    ativo = true;
-                    console.log('  Match servlet exato:', servletName);
-                }
+                console.log('  Analisando link:', servletName, '| URL:', lastPart);
 
-                // 2. Servlet corresponde ao JSP atual
-                else if (jspCorrespondente && lastPart === jspCorrespondente.replace('.jsp', '')) {
-                    ativo = true;
-                    console.log('  Match JSP correspondente:', jspCorrespondente);
+                // REGRA ESPECIAL: ServletContas != ServletContasDespesasRel
+                if (lastPart === 'servletcontas' || lastPart === 'contas.jsp') {
+                    // Só ativa se o link for EXATAMENTE ServletContas
+                    if (servletName === 'servletcontas') {
+                        ativo = true;
+                        console.log('  ✓ Match EXATO para Contas (Financeiro)');
+                    }
                 }
-
-                // 3. URL contém o href (apenas se não houver ambiguidade)
-                else if (currentPath.indexOf(servletName) !== -1 && servletName.length > 8) {
-                    ativo = true;
-                    console.log('  Match parcial (específico):', servletName);
+                // REGRA ESPECIAL: ServletContasDespesasRel
+                else if (lastPart === 'servletcontasdespesasrel' || lastPart === 'contasdespesasrel.jsp') {
+                    // Só ativa se o link for EXATAMENTE ServletContasDespesasRel
+                    if (servletName === 'servletcontasdespesasrel') {
+                        ativo = true;
+                        console.log('  ✓ Match EXATO para Contas e Despesas (Relatório)');
+                    }
+                }
+                // Outros casos
+                else {
+                    // 1. Match exato do servlet na URL
+                    if (lastPart === servletName) {
+                        ativo = true;
+                        console.log('  ✓ Match servlet exato:', servletName);
+                    }
+                    // 2. Servlet corresponde ao JSP atual
+                    else if (jspCorrespondente && lastPart === jspCorrespondente.replace('.jsp', '')) {
+                        ativo = true;
+                        console.log('  ✓ Match JSP correspondente:', jspCorrespondente);
+                    }
+                    // 3. URL contém o servlet (apenas se não for ambíguo e for longo o suficiente)
+                    else if (currentPath.indexOf(servletName) !== -1 && servletName.length > 10) {
+                        ativo = true;
+                        console.log('  ✓ Match parcial (específico):', servletName);
+                    }
                 }
 
                 if (ativo) {
@@ -227,9 +245,26 @@
                 for (var j = 0; j < todosMenus.length; j++) {
                     if (todosMenus[j] !== targetId) {
                         var outroMenu = document.getElementById(todosMenus[j]);
-                        if (outroMenu && outroMenu.classList.contains('show')) {
+                        if (outroMenu) {
+                            // Remove a classe show
                             outroMenu.classList.remove('show');
-                            console.log('Fechando menu ao clicar:', todosMenus[j]);
+
+                            // Remove TODOS os active desse menu
+                            var elementosAtivos = outroMenu.querySelectorAll('.active');
+                            for (var k = 0; k < elementosAtivos.length; k++) {
+                                elementosAtivos[k].classList.remove('active');
+                            }
+
+                            // Remove active do link pai do menu
+                            var linkPaiOutro = document.querySelector('[href="#' + todosMenus[j] + '"]');
+                            if (linkPaiOutro) {
+                                linkPaiOutro.classList.remove('active');
+                                linkPaiOutro.setAttribute('aria-expanded', 'false');
+                                var liPaiOutro = linkPaiOutro.closest('li.nav-item');
+                                if (liPaiOutro) liPaiOutro.classList.remove('active');
+                            }
+
+                            console.log('Fechando menu ao clicar (e removendo active):', todosMenus[j]);
                         }
                     }
                 }
@@ -238,45 +273,82 @@
         console.log('Listeners de click instalados nos menus');
     }, 500);
 
-    // FORCE: Monitora continuamente e fecha menus indevidos (fallback)
+    // FORCE: Monitora apenas MÚLTIPLOS menus abertos simultaneamente (não interfere com cliques)
+    var ultimaVerificacao = Date.now();
     setInterval(function() {
-        var currentPath = window.location.pathname.toLowerCase();
-        var lastPart = currentPath.split('/').pop();
-
-        // Determina qual menu DEVERIA estar aberto
-        var menuCorreto = null;
-
-        if (lastPart.indexOf('servletcontas') === 0 && lastPart !== 'servletcontasdespesasrel') {
-            menuCorreto = 'financeiro';
-        } else if (lastPart === 'servletcontasdespesasrel' || lastPart === 'contasdespesasrel.jsp') {
-            menuCorreto = 'relatorio';
-        } else if (['servletfechadia', 'servletconfdiario', 'servletfechames', 'servletdre',
-            'servletdespesas', 'servletsalarios', 'servletvales'].indexOf(lastPart) !== -1) {
-            menuCorreto = 'financeiro';
-        } else if (['servletrelvenda', 'servletrelmes', 'servletcomparativoyoy', 'servletranking'].indexOf(lastPart) !== -1) {
-            menuCorreto = 'relatorio';
-        } else if (['servletusuariocontroller', 'servletconfig', 'servletcontroleribbon',
-            'servletmedidasdisciplinares'].indexOf(lastPart) !== -1) {
-            menuCorreto = 'auth';
+        // Só verifica se já passou tempo suficiente desde o último click (evita interferir com navegação)
+        if (Date.now() - ultimaVerificacao < 2000) {
+            return;
         }
 
-        if (menuCorreto) {
-            var menusParaFechar = ['financeiro', 'relatorio', 'auth'].filter(function(m) {
-                return m !== menuCorreto;
-            });
+        var menusAbertos = [];
+        var todosMenus = ['financeiro', 'relatorio', 'auth'];
 
-            var fechouAlgum = false;
-            for (var i = 0; i < menusParaFechar.length; i++) {
-                var menu = document.getElementById(menusParaFechar[i]);
-                if (menu && menu.classList.contains('show')) {
-                    menu.classList.remove('show');
-                    fechouAlgum = true;
+        // Conta quantos menus estão abertos
+        for (var i = 0; i < todosMenus.length; i++) {
+            var menu = document.getElementById(todosMenus[i]);
+            if (menu && menu.classList.contains('show')) {
+                menusAbertos.push(todosMenus[i]);
+            }
+        }
+
+        // Se há MAIS DE UM menu aberto, fecha os incorretos
+        if (menusAbertos.length > 1) {
+            console.log('⚠️ MÚLTIPLOS MENUS ABERTOS:', menusAbertos);
+
+            var currentPath = window.location.pathname.toLowerCase();
+            var lastPart = currentPath.split('/').pop();
+
+            // Determina qual menu DEVERIA estar aberto
+            var menuCorreto = null;
+
+            if (lastPart.indexOf('servletcontas') === 0 && lastPart !== 'servletcontasdespesasrel') {
+                menuCorreto = 'financeiro';
+            } else if (lastPart === 'servletcontasdespesasrel' || lastPart === 'contasdespesasrel.jsp') {
+                menuCorreto = 'relatorio';
+            } else if (['servletfechadia', 'servletconfdiario', 'servletfechames', 'servletdre',
+                'servletdespesas', 'servletsalarios', 'servletvales'].indexOf(lastPart) !== -1) {
+                menuCorreto = 'financeiro';
+            } else if (['servletrelvenda', 'servletrelmes', 'servletcomparativoyoy', 'servletranking'].indexOf(lastPart) !== -1) {
+                menuCorreto = 'relatorio';
+            } else if (['servletusuariocontroller', 'servletconfig', 'servletcontroleribbon',
+                'servletmedidasdisciplinares'].indexOf(lastPart) !== -1) {
+                menuCorreto = 'auth';
+            }
+
+            if (menuCorreto) {
+                // Fecha apenas os menus que NÃO deveriam estar abertos
+                for (var i = 0; i < menusAbertos.length; i++) {
+                    if (menusAbertos[i] !== menuCorreto) {
+                        var menu = document.getElementById(menusAbertos[i]);
+                        if (menu) {
+                            menu.classList.remove('show');
+
+                            // Remove TODOS os active desse menu
+                            var elementosAtivos = menu.querySelectorAll('.active');
+                            for (var k = 0; k < elementosAtivos.length; k++) {
+                                elementosAtivos[k].classList.remove('active');
+                            }
+
+                            // Remove active do link pai
+                            var linkPai = document.querySelector('[href="#' + menusAbertos[i] + '"]');
+                            if (linkPai) {
+                                linkPai.classList.remove('active');
+                                linkPai.setAttribute('aria-expanded', 'false');
+                                var liPai = linkPai.closest('li.nav-item');
+                                if (liPai) liPai.classList.remove('active');
+                            }
+
+                            console.log('  → Fechou:', menusAbertos[i], '(removeu active)');
+                        }
+                    }
                 }
             }
-
-            if (fechouAlgum) {
-                console.log('⚠️ FORCE: Fechou menus indevidos. Menu correto:', menuCorreto);
-            }
         }
-    }, 1000); // Verifica a cada 1 segundo
+    }, 500); // Verifica a cada 0.5 segundo
+
+    // Reseta o timer ao detectar clicks
+    document.addEventListener('click', function() {
+        ultimaVerificacao = Date.now();
+    });
 })();

@@ -345,7 +345,7 @@
                 }
             }
         }
-    }, 500); // Verifica a cada 0.5 segundo
+    }, 500); // Verifica a cada 0.5 segundos
 
     // Reseta o timer ao detectar clicks
     document.addEventListener('click', function() {

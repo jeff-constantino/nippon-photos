@@ -1450,15 +1450,25 @@
         }
 
 
+        // function verEditar(id, nome) {
+        //     document.getElementById('vendedor_id').value = id;
+        //     document.getElementById('vendedor').value = nome;
+        //
+        //     // Rola até o fim do modal
+        //     var modal = $('#modalLancaVenda'); // Substitua pelo ID do seu modal
+        //     modal.animate({scrollTop: modal[0].scrollHeight}, 1000); // Rola suavemente para o fim em 1 segundo
+        // }
         function verEditar(id, nome) {
             document.getElementById('vendedor_id').value = id;
             document.getElementById('vendedor').value = nome;
 
-            // Rola até o fim do modal
-            var modal = $('#modalLancaVenda'); // Substitua pelo ID do seu modal
-            modal.animate({scrollTop: modal[0].scrollHeight}, 1000); // Rola suavemente para o fim em 1 segundo
-        }
+            var modal = $('#modalLancaVenda');
+            var campoData = $('#outer_dataVenda'); // elemento alvo
 
+            modal.animate({
+                scrollTop: campoData.offset().top - modal.offset().top + modal.scrollTop()
+            }, 700); // 700ms = rolagem suave
+        }
 
         function limparFormVendas() {
             // Limpa os campos do formulário

@@ -1,8 +1,6 @@
 CD IdeaProjects\nippon-photos
 mvn clean package
 
-adcionar bonificações, adc noturno no salario
-
 alterar as somas de salarios, fecha mes, dre para incluir a soma de acordo com a comissão;
 CRIAR SANGRIA e buscar no fechames
 adcionar busca para despesas em din no fechames

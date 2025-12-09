@@ -211,4 +211,72 @@
     } else {
         expandirMenu();
     }
+
+    // ADICIONAL: Previne que cliques em links do menu abram outros menus
+    setTimeout(function() {
+        var todosLinksMenu = document.querySelectorAll('.sidebar a[data-bs-toggle="collapse"]');
+
+        for (var i = 0; i < todosLinksMenu.length; i++) {
+            todosLinksMenu[i].addEventListener('click', function(e) {
+                console.log('Click detectado no menu:', this.getAttribute('href'));
+
+                // Fecha todos os outros menus quando um for clicado
+                var targetId = this.getAttribute('href').substring(1);
+                var todosMenus = ['financeiro', 'relatorio', 'auth'];
+
+                for (var j = 0; j < todosMenus.length; j++) {
+                    if (todosMenus[j] !== targetId) {
+                        var outroMenu = document.getElementById(todosMenus[j]);
+                        if (outroMenu && outroMenu.classList.contains('show')) {
+                            outroMenu.classList.remove('show');
+                            console.log('Fechando menu ao clicar:', todosMenus[j]);
+                        }
+                    }
+                }
+            });
+        }
+        console.log('Listeners de click instalados nos menus');
+    }, 500);
+
+    // FORCE: Monitora continuamente e fecha menus indevidos (fallback)
+    setInterval(function() {
+        var currentPath = window.location.pathname.toLowerCase();
+        var lastPart = currentPath.split('/').pop();
+
+        // Determina qual menu DEVERIA estar aberto
+        var menuCorreto = null;
+
+        if (lastPart.indexOf('servletcontas') === 0 && lastPart !== 'servletcontasdespesasrel') {
+            menuCorreto = 'financeiro';
+        } else if (lastPart === 'servletcontasdespesasrel' || lastPart === 'contasdespesasrel.jsp') {
+            menuCorreto = 'relatorio';
+        } else if (['servletfechadia', 'servletconfdiario', 'servletfechames', 'servletdre',
+            'servletdespesas', 'servletsalarios', 'servletvales'].indexOf(lastPart) !== -1) {
+            menuCorreto = 'financeiro';
+        } else if (['servletrelvenda', 'servletrelmes', 'servletcomparativoyoy', 'servletranking'].indexOf(lastPart) !== -1) {
+            menuCorreto = 'relatorio';
+        } else if (['servletusuariocontroller', 'servletconfig', 'servletcontroleribbon',
+            'servletmedidasdisciplinares'].indexOf(lastPart) !== -1) {
+            menuCorreto = 'auth';
+        }
+
+        if (menuCorreto) {
+            var menusParaFechar = ['financeiro', 'relatorio', 'auth'].filter(function(m) {
+                return m !== menuCorreto;
+            });
+
+            var fechouAlgum = false;
+            for (var i = 0; i < menusParaFechar.length; i++) {
+                var menu = document.getElementById(menusParaFechar[i]);
+                if (menu && menu.classList.contains('show')) {
+                    menu.classList.remove('show');
+                    fechouAlgum = true;
+                }
+            }
+
+            if (fechouAlgum) {
+                console.log('⚠️ FORCE: Fechou menus indevidos. Menu correto:', menuCorreto);
+            }
+        }
+    }, 1000); // Verifica a cada 1 segundo
 })();

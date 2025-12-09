@@ -69,6 +69,25 @@
         }
     </style>
 
+    <!-- FIX: Força menus do sidebar a ficarem fechados quando não tiverem .show -->
+    <style>
+        /* Força que menus sem .show fiquem escondidos */
+        .sidebar .collapse:not(.show) {
+            display: none !important;
+            height: 0 !important;
+            overflow: hidden !important;
+        }
+
+        .sidebar .collapse.show {
+            display: block !important;
+        }
+
+        /* Previne transições que possam causar problemas */
+        .sidebar .collapse {
+            transition: none !important;
+        }
+    </style>
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- jquery.maskMoney plugin -->

@@ -661,16 +661,19 @@
 
 
                                                                                 <div>
-                                                                                    <button class="btn btn-outline-success waves-effect waves-light">
-                                                                                       <h4>GRAVAR VENDA</h4>
-                                                                                    </button>
-                                                                                    <button type="button"
-                                                                                            class="btn btn-outline-warning waves-effect waves-light"
-                                                                                            onclick="limparFormVendas();">
-                                                                                        <h4>LIMPAR</h4>
+                                                                                    <button class="btn btn-outline-success waves-effect waves-light"
+                                                                                            style="font-size: 1.4rem; font-weight: bold; padding: 12px 20px; text-align: center;">
+                                                                                        GRAVAR VENDA
                                                                                     </button>
 
+                                                                                    <button type="button"
+                                                                                            class="btn btn-outline-warning waves-effect waves-light"
+                                                                                            onclick="limparFormVendas();"
+                                                                                            style="font-size: 1.4rem; font-weight: bold; padding: 12px 20px; text-align: center;">
+                                                                                        LIMPAR
+                                                                                    </button>
                                                                                 </div>
+
 
                                                                             </form>
 

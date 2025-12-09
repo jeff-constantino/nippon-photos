@@ -55,7 +55,7 @@ public class DAOFechaMes {
         String sqlMateriais = "SELECT qtd AS qtd_ribbon FROM conf_materiais WHERE id_conf = 1";
 
         // 🔽 CONSULTA SALÁRIOS (mantém a mesma SQL)
-        String sqlSalarios = "SELECT SUM(salario_liquido2) AS total_salarios FROM salarios " +
+        String sqlSalarios = "SELECT SUM(salario_liquido1) AS total_salarios FROM salarios " +
                 "WHERE mes >= ? AND mes <= ? AND ano >= ? AND ano <= ?";
 
         try {

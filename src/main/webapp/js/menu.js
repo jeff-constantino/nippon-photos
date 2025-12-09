@@ -1,12 +1,22 @@
 // Script para manter menu expandido após navegação
 (function() {
+    // Previne execução múltipla
+    if (window.menuJsExecutado) {
+        console.log('Script já foi executado, ignorando...');
+        return;
+    }
+    window.menuJsExecutado = true;
+
     function expandirMenu() {
         var currentPath = window.location.pathname.toLowerCase();
-        console.log('Script carregado - URL:', currentPath);
+        console.log('=== INÍCIO SCRIPT MENU ===');
+        console.log('URL atual:', currentPath);
 
-        // Mapeamento: nome do arquivo/servlet -> ID do menu
+        // Mapeamento PRECISO: path -> menu (mais específico primeiro)
         var pathToMenu = {
-            // Financeiro
+            // Financeiro - ORDEM IMPORTA: mais específico primeiro
+            'servletcontas': 'financeiro',
+            'contas.jsp': 'financeiro',
             'servletfechadia': 'financeiro',
             'fechadia.jsp': 'financeiro',
             'servletconfdiario': 'financeiro',
@@ -15,8 +25,6 @@
             'fechames.jsp': 'financeiro',
             'servletdre': 'financeiro',
             'dre.jsp': 'financeiro',
-            'servletcontas': 'financeiro',
-            'contas.jsp': 'financeiro',
             'servletdespesas': 'financeiro',
             'despesas.jsp': 'financeiro',
             'servletsalarios': 'financeiro',
@@ -24,13 +32,13 @@
             'servletvales': 'financeiro',
             'vales.jsp': 'financeiro',
 
-            // Relatório
+            // Relatório - ORDEM IMPORTA: mais específico primeiro
+            'servletcontasdespesasrel': 'relatorio', // MAIS ESPECÍFICO
+            'contasdespesasrel.jsp': 'relatorio',    // MAIS ESPECÍFICO
             'servletrelvenda': 'relatorio',
             'relvenda.jsp': 'relatorio',
             'servletrelmes': 'relatorio',
             'relmes.jsp': 'relatorio',
-            'servletcontasdespesasrel': 'relatorio',
-            'contasdespesasrel.jsp': 'relatorio',
             'servletcomparativoyoy': 'relatorio',
             'comparativoyoy.jsp': 'relatorio',
             'servletranking': 'relatorio',
@@ -47,149 +55,160 @@
             'medidasdisciplinares.jsp': 'auth'
         };
 
-        // Mapeamento específico: qual servlet corresponde a qual JSP
+        // Mapeamento servlet -> JSP para correspondência reversa
         var servletToJsp = {
+            'servletcontas': 'contas.jsp',
+            'servletcontasdespesasrel': 'contasdespesasrel.jsp',
             'servletdre': 'dre.jsp',
-            'servletrelmes': 'relmes.jsp',
-            'servletcontasdespesasrel': 'contasdespesasrel.jsp'
+            'servletrelmes': 'relmes.jsp'
         };
 
-        // Encontra qual menu deve estar ativo
+        // Extrai o último segmento da URL
+        var pathParts = currentPath.split('/');
+        var lastPart = pathParts[pathParts.length - 1].toLowerCase();
+        console.log('Último segmento da URL:', lastPart);
+
+        // Encontra o menu correto - ORDEM IMPORTA
         var menuAtivo = null;
         var pathEncontrado = null;
 
-        // Primeiro tenta encontrar um match exato (path completo)
+        // 1. Tenta match EXATO primeiro (prioridade máxima)
         for (var path in pathToMenu) {
-            var pathParts = currentPath.split('/');
-            var lastPart = pathParts[pathParts.length - 1].toLowerCase();
-
-            // Match exato: o path é exatamente o último segmento da URL
             if (lastPart === path || lastPart === path.replace('.jsp', '')) {
                 menuAtivo = pathToMenu[path];
                 pathEncontrado = path;
-                console.log('Match EXATO encontrado:', path);
+                console.log('✓ Match EXATO:', path, '-> menu:', menuAtivo);
                 break;
             }
         }
 
-        // Se não encontrou match exato, tenta match parcial
+        // 2. Se não achou exato, tenta match PARCIAL (apenas se não for ambíguo)
         if (!menuAtivo) {
-            for (var path in pathToMenu) {
+            // Ordena paths por tamanho (mais longo primeiro) para priorizar matches mais específicos
+            var pathsOrdenados = Object.keys(pathToMenu).sort(function(a, b) {
+                return b.length - a.length;
+            });
+
+            for (var i = 0; i < pathsOrdenados.length; i++) {
+                var path = pathsOrdenados[i];
                 if (currentPath.indexOf(path) !== -1) {
                     menuAtivo = pathToMenu[path];
                     pathEncontrado = path;
-                    console.log('Match PARCIAL encontrado:', path);
+                    console.log('✓ Match PARCIAL:', path, '-> menu:', menuAtivo);
                     break;
                 }
             }
         }
 
-        console.log('Menu ativo determinado:', menuAtivo, 'Path:', pathEncontrado);
         if (!menuAtivo) {
-            console.log('Nenhum menu correspondente encontrado');
+            console.log('✗ Nenhum menu correspondente');
             return;
         }
 
-        // Expande o menu
-        var menuElement = document.getElementById(menuAtivo);
-        if (menuElement) {
-            menuElement.classList.add('show');
-            console.log('Menu expandido:', menuAtivo);
+        console.log('Menu escolhido:', menuAtivo);
 
-            // FORÇA o fechamento dos outros menus
-            var todosMenus = ['financeiro', 'relatorio', 'auth'];
-            for (var i = 0; i < todosMenus.length; i++) {
-                if (todosMenus[i] !== menuAtivo) {
-                    var outroMenu = document.getElementById(todosMenus[i]);
-                    if (outroMenu) {
-                        outroMenu.classList.remove('show');
-                        console.log('Menu fechado:', todosMenus[i]);
+        // FECHA TODOS os menus primeiro (reset completo)
+        var todosMenus = ['financeiro', 'relatorio', 'auth'];
+        console.log('Fechando todos os menus...');
 
-                        // Remove active de todos os links desse menu
-                        var outrosLinks = outroMenu.querySelectorAll('a.nav-link.active, li.nav-item.active');
-                        for (var j = 0; j < outrosLinks.length; j++) {
-                            outrosLinks[j].classList.remove('active');
-                        }
+        for (var i = 0; i < todosMenus.length; i++) {
+            var menuId = todosMenus[i];
+            var menu = document.getElementById(menuId);
 
-                        // Remove active do link pai também
-                        var outroPai = document.querySelector('[href="#' + todosMenus[i] + '"]');
-                        if (outroPai) {
-                            outroPai.classList.remove('active');
-                            outroPai.setAttribute('aria-expanded', 'false');
-                            var outroPaiLi = outroPai.closest('li.nav-item');
-                            if (outroPaiLi) outroPaiLi.classList.remove('active');
-                        }
-                    }
+            if (menu) {
+                menu.classList.remove('show');
+
+                // Remove active de todos os links
+                var links = menu.querySelectorAll('a.nav-link, li.nav-item');
+                for (var j = 0; j < links.length; j++) {
+                    links[j].classList.remove('active');
                 }
+
+                // Remove active do link pai
+                var linkPai = document.querySelector('[href="#' + menuId + '"]');
+                if (linkPai) {
+                    linkPai.classList.remove('active');
+                    linkPai.setAttribute('aria-expanded', 'false');
+                    var liPai = linkPai.closest('li.nav-item');
+                    if (liPai) liPai.classList.remove('active');
+                }
+
+                console.log('  - Fechado:', menuId);
             }
         }
 
-        // Ativa o link pai do menu
-        var parentLink = document.querySelector('[href="#' + menuAtivo + '"]');
-        if (parentLink) {
-            parentLink.setAttribute('aria-expanded', 'true');
-            parentLink.classList.add('active');
-            var parentLi = parentLink.closest('li.nav-item');
-            if (parentLi) parentLi.classList.add('active');
-        }
-
-        // Ativa o submenu específico
+        // ABRE apenas o menu correto
+        var menuElement = document.getElementById(menuAtivo);
         if (menuElement) {
+            menuElement.classList.add('show');
+            console.log('✓ Menu aberto:', menuAtivo);
+
+            // Ativa o link pai
+            var parentLink = document.querySelector('[href="#' + menuAtivo + '"]');
+            if (parentLink) {
+                parentLink.setAttribute('aria-expanded', 'true');
+                parentLink.classList.add('active');
+                var parentLi = parentLink.closest('li.nav-item');
+                if (parentLi) parentLi.classList.add('active');
+                console.log('✓ Link pai ativado');
+            }
+
+            // ATIVA o submenu específico
             var subMenuLinks = menuElement.querySelectorAll('a.nav-link');
+            var linkAtivado = false;
+
             for (var i = 0; i < subMenuLinks.length; i++) {
                 var link = subMenuLinks[i];
                 var href = link.getAttribute('href');
                 if (!href) continue;
 
                 var hrefLower = href.toLowerCase();
-                console.log('Verificando link:', href);
-
-                // Extrai o nome do servlet do href (ex: ServletDre)
                 var servletName = href.split('/').pop().toLowerCase();
-
-                // Verifica se o servlet corresponde ao JSP atual
                 var jspCorrespondente = servletToJsp[servletName];
 
-                // Verifica múltiplas condições
                 var ativo = false;
 
-                // Condição 1: href está na URL atual
-                if (currentPath.indexOf(hrefLower) !== -1) {
+                // Verifica condições para ativar o link
+                // 1. Match exato do servlet na URL
+                if (lastPart === servletName) {
                     ativo = true;
-                    console.log('Match 1: href está na URL');
+                    console.log('  Match servlet exato:', servletName);
                 }
 
-                // Condição 2: URL atual está no href
-                if (hrefLower.indexOf(currentPath.split('/').pop()) !== -1) {
+                // 2. Servlet corresponde ao JSP atual
+                else if (jspCorrespondente && lastPart === jspCorrespondente.replace('.jsp', '')) {
                     ativo = true;
-                    console.log('Match 2: URL está no href');
+                    console.log('  Match JSP correspondente:', jspCorrespondente);
                 }
 
-                // Condição 3: servlet corresponde ao JSP atual
-                if (jspCorrespondente && currentPath.indexOf(jspCorrespondente) !== -1) {
+                // 3. URL contém o href (apenas se não houver ambiguidade)
+                else if (currentPath.indexOf(servletName) !== -1 && servletName.length > 8) {
                     ativo = true;
-                    console.log('Match 3: servlet corresponde ao JSP -', servletName, '->', jspCorrespondente);
+                    console.log('  Match parcial (específico):', servletName);
                 }
 
                 if (ativo) {
                     link.classList.add('active');
-                    var parentLi = link.closest('li.nav-item');
-                    if (parentLi) parentLi.classList.add('active');
-                    console.log('Link ativado:', href);
-                    break;
+                    var li = link.closest('li.nav-item');
+                    if (li) li.classList.add('active');
+                    console.log('✓ Link ativado:', href);
+                    linkAtivado = true;
+                    break; // Ativa apenas UM link
                 }
             }
+
+            if (!linkAtivado) {
+                console.log('✗ Nenhum link específico ativado');
+            }
         }
+
+        console.log('=== FIM SCRIPT MENU ===');
     }
 
-    // Executa quando o DOM estiver pronto
+    // Executa apenas uma vez quando o DOM estiver pronto
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', expandirMenu);
     } else {
         expandirMenu();
-    }
-
-    if (typeof jQuery !== 'undefined') {
-        jQuery(document).ready(expandirMenu);
     }
 })();

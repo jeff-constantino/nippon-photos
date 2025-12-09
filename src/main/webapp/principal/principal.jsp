@@ -138,7 +138,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <h2 class="text-center">CONTAS VENCIDAS</h2>
+                                    <h2 class="text-center">CONTAS ATRASADAS</h2>
                                     <table class="table table-bordered">
                                         <thead class="thead-light">
                                         <tr>

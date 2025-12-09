@@ -118,7 +118,7 @@
                                                                         <div class="card-block">
 
 
-                                                                            <form action="<%= request.getContextPath() %>/ServletContas"
+                                                                            <form action="<%= request.getContextPath() %>/ServletFinanContas"
                                                                                   method="post" id="lançarConta"
                                                                                   name="lançarConta">
                                                                                 <input type="hidden" name="acao"
@@ -329,7 +329,7 @@
                                                 <div class="modal-body" style="height: calc(100% - 56px); overflow:  hidden;"> <!-- Ajusta altura do corpo do modal e remove rolagem -->
                                                     <div class="container-fluid h-100"> <!-- Altura total do container -->
 
-                                                        <form id="modalContas" action="ServletContas" method="get">
+                                                        <form id="modalContas" action="ServletFinanContas" method="get">
                                                             <input type="hidden" name="acao" value="imprimirRelatorioContas">
                                                             <input type="hidden" name="pagina" id="pagina" value="1"> <!-- ID para manipulação via JavaScript -->
                                                             <div class="row h-100"> <!-- Altura total para a linha -->
@@ -407,7 +407,7 @@
                                                     </div>
 
                                                     <div class="modal-body">
-                                                        <form action="<%= request.getContextPath() %>/ServletContas" method="post" id="formBaixarVenda" class="p-3">
+                                                        <form action="<%= request.getContextPath() %>/ServletFinanContas" method="post" id="formBaixarVenda" class="p-3">
                                                             <input type="hidden" name="acao" value="baixar"/>
 
                                                             <div class="row">
@@ -479,7 +479,7 @@
                                     <div class="table-responsive">
 
 
-                                        <form action="<%= request.getContextPath() %>/ServletContas" method="post"
+                                        <form action="<%= request.getContextPath() %>/ServletFinanContas" method="post"
                                               style="overflow-x: hidden" id="formContas">
 
 
@@ -813,7 +813,7 @@
             if (confirm("Tem certeza que deseja excluir a conta " + contaID + "?")) {
                 $.ajax({
                     method: 'GET', // Mudando para GET
-                    url: '<%= request.getContextPath() %>/ServletContas',
+                    url: '<%= request.getContextPath() %>/ServletFinanContas',
                     data: {acao: 'deletar', conta_id: contaID}, // Usando conta_id
                     success: function (response) {
                         alert("Conta excluída com sucesso!");
@@ -854,7 +854,7 @@
 
         function carregarContas(pagina = 1) {
             $.ajax({
-                url: 'ServletContas',
+                url: 'ServletFinanContas',
                 method: 'GET',
                 data: {
                     acao: 'imprimirRelatorioContas',

@@ -39,14 +39,17 @@
             <div class="collapse" id="financeiro">
                 <ul class="nav flex-column sub-menu">
 
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletFechaDia">Fechamento Diário</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletConfDiario">Conferência Diária</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletFechaMes">Fechamento do Mês</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletDre">DRE</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletContas">Contas</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletDespesas">Despesas</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletSalarios">Salários</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletVales">Vales</a></li>
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletFechaDia">Fechamento Diário</a></li>
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletConfDiario">Conferência Diária</a></li>
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletFechaMes">Fechamento do Mês</a></li>
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletDre">DRE</a></li>
+
+                    <%-- CHAVE DO PROBLEMA: Contas (Financeiro) --%>
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletFinanContas">Contas</a></li>
+
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletDespesas">Despesas</a></li>
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletSalarios">Salários</a></li>
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletVales">Vales</a></li>
 
 
                 </ul>
@@ -57,20 +60,23 @@
 
         <li class="nav-item menu-items">
             <a class="nav-link" data-bs-toggle="collapse" href="#relatorio" aria-expanded="false" aria-controls="relatorio">
-              <span class="menu-icon">
-                <i class="mdi mdi-chart-bar"></i>
-              </span>
+      <span class="menu-icon">
+        <i class="mdi mdi-chart-bar"></i>
+      </span>
                 <span class="menu-title">Relatório</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="relatorio">
                 <ul class="nav flex-column sub-menu">
 
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletRelVenda">Vendas</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletRelMes">Relatório do Mês</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletContasDespesasRel">Contas e Despesas</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletComparativoYoY">Comparativo de Vendas</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletRanking">Ranking de Funcionários</a></li>
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="relatorio" href="<%= request.getContextPath() %>/ServletRelVenda">Vendas</a></li>
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="relatorio" href="<%= request.getContextPath() %>/ServletRelMes">Relatório do Mês</a></li>
+
+                    <%-- CHAVE DO PROBLEMA: Contas e Despesas (Relatório) --%>
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="relatorio" href="<%= request.getContextPath() %>/ServletContasDespesasRel">Contas e Despesas</a></li>
+
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="relatorio" href="<%= request.getContextPath() %>/ServletComparativoYoY">Comparativo de Vendas</a></li>
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="relatorio" href="<%= request.getContextPath() %>/ServletRanking">Ranking de Funcionários</a></li>
                     <%--                    <li class="nav-item"> <a class="nav-link" href="<%= request.getContextPath() %>/ServletFuncionario">Funcionários</a></li>--%>
 
                 </ul>
@@ -136,5 +142,3 @@
 <%--        </li>--%>
     </ul>
 </nav>
-<!-- Script para manter menu expandido -->
-<script src="<%= request.getContextPath() %>/js/menu.js"></script>

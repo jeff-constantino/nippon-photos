@@ -14,8 +14,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-@WebServlet("/ServletContas")
-public class ServletContas extends ServletGenericUtil {
+@WebServlet("/ServletFinanContas")
+public class ServletFinanContas extends ServletGenericUtil {
     private DAOContas daoContas;
 
     @Override
@@ -111,7 +111,7 @@ public class ServletContas extends ServletGenericUtil {
                 }
 
                 request.setAttribute("msg", msg);
-                response.sendRedirect(request.getContextPath() + "/ServletContas");
+                response.sendRedirect(request.getContextPath() + "/ServletFinanContas");
                 return;
             }
 
@@ -131,8 +131,8 @@ public class ServletContas extends ServletGenericUtil {
             request.setAttribute("msg", msg);
             request.setAttribute("modelContas", modelContas);
 
-            // Redireciona para a servlet ServletContas após gravar ou atualizar
-            response.sendRedirect(request.getContextPath() + "/ServletContas");
+            // Redireciona para a servlet ServletFinanContas após gravar ou atualizar
+            response.sendRedirect(request.getContextPath() + "/ServletFinanContas");
 
         } catch (Exception e) {
             e.printStackTrace();

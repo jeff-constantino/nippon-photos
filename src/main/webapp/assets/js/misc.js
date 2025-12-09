@@ -46,11 +46,13 @@
       addActiveClass($this);
     })
 
-    //Close other submenu in sidebar on opening any
-
+    // ❌ DESABILITADO: Conflita com nosso script menu.js
+    // O menu.js agora controla totalmente o comportamento dos menus
+    /*
     sidebar.on('show.bs.collapse', '.collapse', function() {
       sidebar.find('.collapse.show').collapse('hide');
     });
+    */
 
 
     //Change sidebar and content-wrapper height
@@ -106,6 +108,6 @@
         }
       }
     })
-    
+
   });
 })(jQuery);

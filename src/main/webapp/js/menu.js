@@ -7,10 +7,49 @@
     }
     window.menuJsExecutado = true;
 
+    // BLOQUEIO PREVENTIVO: Impede Bootstrap de abrir múltiplos menus
+    document.addEventListener('DOMContentLoaded', function() {
+        var todosMenus = ['financeiro', 'relatorio', 'auth'];
+
+        // Remove show de todos os menus IMEDIATAMENTE
+        for (var i = 0; i < todosMenus.length; i++) {
+            var menu = document.getElementById(todosMenus[i]);
+            if (menu && menu.classList.contains('show')) {
+                menu.classList.remove('show');
+                console.log('🚫 Bloqueio preventivo:', todosMenus[i]);
+            }
+        }
+    });
+
+    // Executa IMEDIATAMENTE (não espera DOMContentLoaded)
+    if (document.getElementById('financeiro')) {
+        var todosMenus = ['financeiro', 'relatorio', 'auth'];
+        for (var i = 0; i < todosMenus.length; i++) {
+            var menu = document.getElementById(todosMenus[i]);
+            if (menu && menu.classList.contains('show')) {
+                menu.classList.remove('show');
+                console.log('🚫 Bloqueio IMEDIATO:', todosMenus[i]);
+            }
+        }
+    }
+
     function expandirMenu() {
         var currentPath = window.location.pathname.toLowerCase();
         console.log('=== INÍCIO SCRIPT MENU ===');
         console.log('URL atual:', currentPath);
+
+        // PREVENÇÃO IMEDIATA: Fecha tudo antes mesmo de começar
+        var todosMenus = ['financeiro', 'relatorio', 'auth'];
+        for (var i = 0; i < todosMenus.length; i++) {
+            var menu = document.getElementById(todosMenus[i]);
+            if (menu) {
+                menu.classList.remove('show');
+                var elementos = menu.querySelectorAll('.active');
+                for (var j = 0; j < elementos.length; j++) {
+                    elementos[j].classList.remove('active');
+                }
+            }
+        }
 
         // Mapeamento PRECISO: path -> menu (mais específico primeiro)
         var pathToMenu = {
@@ -345,7 +384,7 @@
                 }
             }
         }
-    }, 500); // Verifica a cada 0.5 segundos
+    }, 500); // Verifica a cada 0.5 segundo
 
     // Reseta o timer ao detectar clicks
     document.addEventListener('click', function() {

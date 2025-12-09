@@ -662,12 +662,12 @@
 
                                                                                 <div>
                                                                                     <button class="btn btn-outline-success waves-effect waves-light">
-                                                                                        Salvar
+                                                                                       <h4>GRAVAR VENDA</h4>
                                                                                     </button>
                                                                                     <button type="button"
                                                                                             class="btn btn-outline-warning waves-effect waves-light"
                                                                                             onclick="limparFormVendas();">
-                                                                                        Limpar
+                                                                                        <h4>LIMPAR</h4>
                                                                                     </button>
 
                                                                                 </div>

@@ -1205,6 +1205,19 @@
     // ===================================================================
     function calcularSalariosLiquidos() {
 
+        // Função para parse seguro (remove máscara só quando necessário)
+        function parseValor(input) {
+            if (!input) return 0;
+            let valor = (input.value || "") + "";
+
+            // Se vier com vírgula ou R$, remove máscara
+            if (valor.includes(",") || valor.includes("R$")) {
+                return parseFloat(removerMascara(valor)) || 0;
+            }
+
+            return parseFloat(valor) || 0;
+        }
+
         const vendaTotalInput = document.getElementById('venda_total');
         const inssInput = document.getElementById('inss');
         const fgtsInput = document.getElementById('fgts');
@@ -1222,24 +1235,25 @@
 
         if (!vendaTotalInput) return;
 
-        let vendaTotal = parseFloat(vendaTotalInput.value || 0);
-        if (isNaN(vendaTotal)) vendaTotal = parseFloat(removerMascara(vendaTotalInput.value)) || 0;
+        // 🔎 Venda total
+        let vendaTotal = parseValor(vendaTotalInput);
 
-        // ler inss/fgts/descontos_ir já calculados no evento (ou recalculados por calcularImpostos)
-        let inss = parseFloat(inssInput?.value || 0);
-        let fgts = parseFloat(fgtsInput?.value || 0);
-        let vales = parseFloat(valesInput?.value || 0);
-        let descontos = parseFloat(descontosInput?.value || 0);
-        let valorRibbon = parseFloat(descontoFotos?.value || 0);
-        let descontosIr = parseFloat(descontosIrInput?.value || 0);
+        // 🔎 Descontos com parse seguro
+        let inss = parseValor(inssInput);
+        let fgts = parseValor(fgtsInput);
+        let vales = parseValor(valesInput);
+        let descontos = parseValor(descontosInput);
+        let valorRibbon = parseValor(descontoFotos);
+        let descontosIr = parseValor(descontosIrInput);
 
-        // ler adicional noturno e bonificações (removendo máscara)
-        const adicionalNoturno = parseFloat(removerMascara(adcNoturnoInput?.value)) || 0;
-        const bonificacoes = parseFloat(removerMascara(bonificacoesInput?.value)) || 0;
+        // 🔎 ADC e BONIFICAÇÕES
+        const adicionalNoturno = parseValor(adcNoturnoInput);
+        const bonificacoes = parseValor(bonificacoesInput);
 
+        // Horas de atraso
         const horasAtraso = converterHorasParaDecimal(atrasosInput?.value || '0:00');
 
-        // 🎯 CORREÇÃO: Usar comissao1Valor (salário base) para calcular valor/hora
+        // 🎯 Cálculo comissão 1 para atrasos
         const salarioBaseComissao = vendaTotal * (comissao1Valor / 100);
         const salarioHora = salarioBaseComissao / 220;
         const descontoAtraso = horasAtraso * salarioHora;
@@ -1250,13 +1264,10 @@
         }
 
         // =======================
-        // SALÁRIO TOTAL (AQUI CONTINUA USANDO comissaoAtiva)
+        // SALÁRIO TOTAL
         // =======================
-        // salário baseado em comissão ativa
         let salarioTotal = vendaTotal * (comissaoAtiva / 100);
-
-        // ➕ ADC NOTURNO → SOMA AO SALÁRIO TOTAL
-        salarioTotal += adicionalNoturno;
+        salarioTotal += adicionalNoturno; // ➕ adicional noturno
 
         if (salarioTotalInput) salarioTotalInput.value = salarioTotal.toFixed(2);
 
@@ -1264,11 +1275,10 @@
         // DESCONTOS
         // =======================
         let descontosTotal;
+
         if (tipoComissao === 'COMISSÃO 1') {
-            // Comissão 1: desconta INSS, mas NÃO desconta FGTS
             descontosTotal = inss + vales + descontos + descontoAtraso + valorRibbon + descontosIr;
         } else {
-            // Comissão 2: desconta INSS E FGTS
             descontosTotal = inss + fgts + vales + descontos + descontoAtraso + valorRibbon + descontosIr;
         }
 
@@ -1281,9 +1291,7 @@
         // SALÁRIO LÍQUIDO
         // =======================
         let salarioLiquido = salarioTotal - (isNaN(descontosTotal) ? 0 : descontosTotal);
-
-        // ➕ BONIFICAÇÕES → SOMA SOMENTE NO LÍQUIDO
-        salarioLiquido += bonificacoes;
+        salarioLiquido += bonificacoes; // ➕ bonificações somente no líquido
 
         if (salarioLiquidoInput) {
             salarioLiquidoInput.value = salarioLiquido.toLocaleString('pt-BR', {
@@ -1292,6 +1300,7 @@
             });
         }
     }
+
 
     // ===================================================================
     // EVENT LISTENERS

@@ -176,7 +176,7 @@
     bottom: 0;
     left: 0;
 ">
-    © 2025 - Hashtag Software as a Service - Todos os direitos reservados
+    © 2025 - #SaaS Desenvolvido por Jeff Constantino - Todos os direitos reservados
 </footer>
 
 </html>

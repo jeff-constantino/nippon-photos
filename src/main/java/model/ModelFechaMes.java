@@ -842,4 +842,9 @@ public class ModelFechaMes implements Serializable {
     }
 
 
+    public void setIdconf(long idconf) {
+    }
+
+    public void setQtd_ribbon(int qtdRibbon) {
+    }
 }

@@ -1046,6 +1046,10 @@
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 50);
         });
+        $("#vales").on('blur', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularSaldo, 50);
+        });
 
         // Evento Enter para todos os campos manuais
         $(camposManual.join(', ')).on('keypress', function(e) {

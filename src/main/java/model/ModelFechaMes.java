@@ -3,7 +3,6 @@ package model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ModelFechaMes implements Serializable {
@@ -56,16 +55,13 @@ public class ModelFechaMes implements Serializable {
 
     private BigDecimal receitas;
     private BigDecimal salarios;
-    private BigDecimal despesas;
+
     private BigDecimal despesadin;
-    private BigDecimal contas;
-    private BigDecimal vales;
-    private BigDecimal descontos;
+
+
+
     private BigDecimal sangria;
     private BigDecimal saldo;
-
-
-
 
 
     private BigDecimal resultadoDivisao;
@@ -144,101 +140,12 @@ public class ModelFechaMes implements Serializable {
     private BigDecimal valor_enc;
     private BigDecimal valor_juros;
 
-
-    public BigDecimal getReceitas() {
-        return receitas;
+    public long getId() {
+        return id;
     }
 
-    public void setReceitas(BigDecimal receitas) {
-        this.receitas = receitas;
-    }
-
-    public BigDecimal getSalarios() {
-        return salarios;
-    }
-
-    public void setSalarios(BigDecimal salarios) {
-        this.salarios = salarios;
-    }
-
-    public BigDecimal getDespesas() {
-        return despesas;
-    }
-
-    public void setDespesas(BigDecimal despesas) {
-        this.despesas = despesas;
-    }
-
-    public BigDecimal getDespesadin() {
-        return despesadin;
-    }
-
-    public void setDespesadin(BigDecimal despesadin) {
-        this.despesadin = despesadin;
-    }
-
-    public BigDecimal getContas() {
-        return contas;
-    }
-
-    public void setContas(BigDecimal contas) {
-        this.contas = contas;
-    }
-
-    public BigDecimal getVales() {
-        return vales;
-    }
-
-    public void setVales(BigDecimal vales) {
-        this.vales = vales;
-    }
-
-    public BigDecimal getDescontos() {
-        return descontos;
-    }
-
-    public void setDescontos(BigDecimal descontos) {
-        this.descontos = descontos;
-    }
-
-    public BigDecimal getSangria() {
-        return sangria;
-    }
-
-    public void setSangria(BigDecimal sangria) {
-        this.sangria = sangria;
-    }
-
-    public BigDecimal getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
-    }
-
-    public BigDecimal getValor_ribbons() {
-        return valor_ribbons;
-    }
-
-    public void setValor_ribbons(BigDecimal valor_ribbons) {
-        this.valor_ribbons = valor_ribbons;
-    }
-
-    public BigDecimal getValor_enc() {
-        return valor_enc;
-    }
-
-    public void setValor_enc(BigDecimal valor_enc) {
-        this.valor_enc = valor_enc;
-    }
-
-    public BigDecimal getValor_juros() {
-        return valor_juros;
-    }
-
-    public void setValor_juros(BigDecimal valor_juros) {
-        this.valor_juros = valor_juros;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public long getId_conf() {
@@ -249,302 +156,21 @@ public class ModelFechaMes implements Serializable {
         this.id_conf = id_conf;
     }
 
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
-
-    public int getQtd() {
-        return qtd;
-    }
-
-    public void setQtd(int qtd) {
-        this.qtd = qtd;
-    }
-
-    public BigDecimal getCusto() {
-        return custo;
-    }
-
-    public void setCusto(BigDecimal custo) {
-        this.custo = custo;
-    }
-
-    public int getDia() { return dia; }
-    public void setDia(int dia) { this.dia = dia; }
-
-    public String getDiaSemana() { return diaSemana; }
-    public void setDiaSemana(String diaSemana) { this.diaSemana = diaSemana; }
-
-    public BigDecimal getVenda_total_dia() { return venda_total_dia; }
-    public void setVenda_total_dia(BigDecimal venda_total_dia) { this.venda_total_dia = venda_total_dia; }
-
-    public List<ModelFechaMes> getRelatorioDiario() { return relatorioDiario; }
-    public void setRelatorioDiario(List<ModelFechaMes> relatorioDiario) { this.relatorioDiario = relatorioDiario; }
-
-
-    private Integer qtd_ribbon;
-
-    public Integer getQtd_ribbon() {
-        return qtd_ribbon;
-    }
-
-    public void setQtd_ribbon(Integer qtd_ribbon) {
-        this.qtd_ribbon = qtd_ribbon;
-    }
-
-
-
-
-
-
-
-    public void setFormattedDate(String formattedDate) {
-        this.formattedDate = formattedDate;
-    }
-
-    public int getTotal_advert() {
-        return total_advert;
-    }
-
-    public void setTotal_advert(int total_advert) {
-        this.total_advert = total_advert;
-    }
-
-    public int getTotal_faltas() {
-        return total_faltas;
-    }
-
-    public void setTotal_faltas(int total_faltas) {
-        this.total_faltas = total_faltas;
-    }
-
-    public int getTotal_susp() {
-        return total_susp;
-    }
-
-    public void setTotal_susp(int total_susp) {
-        this.total_susp = total_susp;
-    }
-
-    public int getTotal_condutas() {
-        return total_condutas;
-    }
-
-    public void setTotal_condutas(int total_condutas) {
-        this.total_condutas = total_condutas;
-    }
-
-    public BigDecimal getDebitoVm() {
-        return debitoVm;
-    }
-
-    public void setDebitoVm(BigDecimal debitoVm) {
-        this.debitoVm = debitoVm;
-    }
-
-    public BigDecimal getCreditoVm() {
-        return creditoVm;
-    }
-
-    public void setCreditoVm(BigDecimal creditoVm) {
-        this.creditoVm = creditoVm;
-    }
-
-    public BigDecimal getDebitoOutros() {
-        return debitoOutros;
-    }
-
-    public void setDebitoOutros(BigDecimal debitoOutros) {
-        this.debitoOutros = debitoOutros;
-    }
-
-    public BigDecimal getCreditoOutros() {
-        return creditoOutros;
-    }
-
-    public void setCreditoOutros(BigDecimal creditoOutros) {
-        this.creditoOutros = creditoOutros;
-    }
-
-    public BigDecimal getJuros_cartoes() {
-        return juros_cartoes;
-    }
-
-    public void setJuros_cartoes(BigDecimal juros_cartoes) {
-        this.juros_cartoes = juros_cartoes;
-    }
-
-    public int getMes() {
-        return mes;
-    }
-
-    public void setMes(int mes) {
-        this.mes = mes;
-    }
-
-    public int getAno() {
-        return ano;
-    }
-
-    public void setAno(int ano) {
-        this.ano = ano;
-    }
-
-    public BigDecimal getTotal_ribbons() {
-        return total_ribbons;
-    }
-
-    public void setTotal_ribbons(BigDecimal total_ribbons) {
-        this.total_ribbons = total_ribbons;
-    }
-
-    public BigDecimal getTotal_geral() {
-        return total_geral;
-    }
-
-    public void setTotal_geral(BigDecimal total_geral) {
-        this.total_geral = total_geral;
-    }
-
-    public BigDecimal getValor_total_despesas() {
-        return valor_total_despesas;
-    }
-
-    public void setValor_total_despesas(BigDecimal valor_total_despesas) {
-        this.valor_total_despesas = valor_total_despesas;
-    }
-
-    public BigDecimal getValor_total_contas() {
-        return valor_total_contas;
-    }
-
-    public void setValor_total_contas(BigDecimal valor_total_contas) {
-        this.valor_total_contas = valor_total_contas;
+    public LocalDate getData_fechamento() {
+        return data_fechamento;
     }
 
     public void setData_fechamento(LocalDate data_fechamento) {
         this.data_fechamento = data_fechamento;
-        this.formattedDate = data_fechamento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-    }
-
-
-    public BigDecimal getValor_despesa_total() {
-        return valor_despesa_total;
-    }
-
-    public void setValor_despesa_total(BigDecimal valor_despesa_total) {
-        this.valor_despesa_total = valor_despesa_total;
-    }
-
-    public BigDecimal getValor_vale_total() {
-        return valor_vale_total;
-    }
-
-    public void setValor_vale_total(BigDecimal valor_vale_total) {
-        this.valor_vale_total = valor_vale_total;
-    }
-
-    public BigDecimal getDesconto_mes() {
-        return desconto_mes;
-    }
-
-    public void setDesconto_mes(BigDecimal desconto_mes) {
-        this.desconto_mes = desconto_mes;
-    }
-
-    public BigDecimal getVenda_total_mes() {
-        return venda_total_mes;
-    }
-
-    public void setVenda_total_mes(BigDecimal venda_total_mes) {
-        this.venda_total_mes = venda_total_mes;
     }
 
     public String getFormattedDate() {
         return formattedDate;
     }
 
-    public BigDecimal getValor_din_mes() {
-        return valor_din_mes;
+    public void setFormattedDate(String formattedDate) {
+        this.formattedDate = formattedDate;
     }
-
-    public void setValor_din_mes(BigDecimal valor_din_mes) {
-        this.valor_din_mes = valor_din_mes;
-    }
-
-    public BigDecimal getValor_din_mes_real() {
-        return valor_din_mes_real;
-    }
-
-    public void setValor_din_mes_real(BigDecimal valor_din_mes_real) {
-        this.valor_din_mes_real = valor_din_mes_real;
-    }
-
-    public BigDecimal getValor_deb_mes() {
-        return valor_deb_mes;
-    }
-
-    public void setValor_deb_mes(BigDecimal valor_deb_mes) {
-        this.valor_deb_mes = valor_deb_mes;
-    }
-
-    public BigDecimal getValor_deb_mes_real() {
-        return valor_deb_mes_real;
-    }
-
-    public void setValor_deb_mes_real(BigDecimal valor_deb_mes_real) {
-        this.valor_deb_mes_real = valor_deb_mes_real;
-    }
-
-    public BigDecimal getValor_cred_mes() {
-        return valor_cred_mes;
-    }
-
-    public void setValor_cred_mes(BigDecimal valor_cred_mes) {
-        this.valor_cred_mes = valor_cred_mes;
-    }
-
-    public BigDecimal getValor_cred_mes_real() {
-        return valor_cred_mes_real;
-    }
-
-    public void setValor_cred_mes_real(BigDecimal valor_cred_mes_real) {
-        this.valor_cred_mes_real = valor_cred_mes_real;
-    }
-
-    public BigDecimal getValor_pix_mes() {
-        return valor_pix_mes;
-    }
-
-    public void setValor_pix_mes(BigDecimal valor_pix_mes) {
-        this.valor_pix_mes = valor_pix_mes;
-    }
-
-    public BigDecimal getValor_pix_mes_real() {
-        return valor_pix_mes_real;
-    }
-
-    public void setValor_pix_mes_real(BigDecimal valor_pix_mes_real) {
-        this.valor_pix_mes_real = valor_pix_mes_real;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public LocalDate getData_fechamento() {
-        return data_fechamento;
-    }
-
-
 
     public int getFinal_ft_din() {
         return final_ft_din;
@@ -666,6 +292,102 @@ public class ModelFechaMes implements Serializable {
         this.total_dig = total_dig;
     }
 
+    public BigDecimal getValor_din_mes() {
+        return valor_din_mes;
+    }
+
+    public void setValor_din_mes(BigDecimal valor_din_mes) {
+        this.valor_din_mes = valor_din_mes;
+    }
+
+    public BigDecimal getValor_din_mes_real() {
+        return valor_din_mes_real;
+    }
+
+    public void setValor_din_mes_real(BigDecimal valor_din_mes_real) {
+        this.valor_din_mes_real = valor_din_mes_real;
+    }
+
+    public BigDecimal getValor_deb_mes() {
+        return valor_deb_mes;
+    }
+
+    public void setValor_deb_mes(BigDecimal valor_deb_mes) {
+        this.valor_deb_mes = valor_deb_mes;
+    }
+
+    public BigDecimal getValor_deb_mes_real() {
+        return valor_deb_mes_real;
+    }
+
+    public void setValor_deb_mes_real(BigDecimal valor_deb_mes_real) {
+        this.valor_deb_mes_real = valor_deb_mes_real;
+    }
+
+    public BigDecimal getValor_cred_mes() {
+        return valor_cred_mes;
+    }
+
+    public void setValor_cred_mes(BigDecimal valor_cred_mes) {
+        this.valor_cred_mes = valor_cred_mes;
+    }
+
+    public BigDecimal getValor_cred_mes_real() {
+        return valor_cred_mes_real;
+    }
+
+    public void setValor_cred_mes_real(BigDecimal valor_cred_mes_real) {
+        this.valor_cred_mes_real = valor_cred_mes_real;
+    }
+
+    public BigDecimal getValor_pix_mes() {
+        return valor_pix_mes;
+    }
+
+    public void setValor_pix_mes(BigDecimal valor_pix_mes) {
+        this.valor_pix_mes = valor_pix_mes;
+    }
+
+    public BigDecimal getValor_pix_mes_real() {
+        return valor_pix_mes_real;
+    }
+
+    public void setValor_pix_mes_real(BigDecimal valor_pix_mes_real) {
+        this.valor_pix_mes_real = valor_pix_mes_real;
+    }
+
+    public BigDecimal getValor_despesa_total() {
+        return valor_despesa_total;
+    }
+
+    public void setValor_despesa_total(BigDecimal valor_despesa_total) {
+        this.valor_despesa_total = valor_despesa_total;
+    }
+
+    public BigDecimal getValor_vale_total() {
+        return valor_vale_total;
+    }
+
+    public void setValor_vale_total(BigDecimal valor_vale_total) {
+        this.valor_vale_total = valor_vale_total;
+    }
+
+    public BigDecimal getDesconto_mes() {
+        return desconto_mes;
+    }
+
+    public void setDesconto_mes(BigDecimal desconto_mes) {
+        this.desconto_mes = desconto_mes;
+    }
+
+    public BigDecimal getVenda_total_mes() {
+        return venda_total_mes;
+    }
+
+    public void setVenda_total_mes(BigDecimal venda_total_mes) {
+        this.venda_total_mes = venda_total_mes;
+    }
+
     public BigDecimal getFinal_descontos() {
         return final_descontos;
     }
@@ -728,6 +450,48 @@ public class ModelFechaMes implements Serializable {
 
     public void setTotal_sobras(int total_sobras) {
         this.total_sobras = total_sobras;
+    }
+
+    public BigDecimal getReceitas() {
+        return receitas;
+    }
+
+    public void setReceitas(BigDecimal receitas) {
+        this.receitas = receitas;
+    }
+
+    public BigDecimal getSalarios() {
+        return salarios;
+    }
+
+    public void setSalarios(BigDecimal salarios) {
+        this.salarios = salarios;
+    }
+
+    public BigDecimal getDespesadin() {
+        return despesadin;
+    }
+
+    public void setDespesadin(BigDecimal despesadin) {
+        this.despesadin = despesadin;
+    }
+
+
+
+    public BigDecimal getSangria() {
+        return sangria;
+    }
+
+    public void setSangria(BigDecimal sangria) {
+        this.sangria = sangria;
+    }
+
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
     }
 
     public BigDecimal getConf1_valor() {
@@ -874,84 +638,204 @@ public class ModelFechaMes implements Serializable {
         this.conf4_qtd = conf4_qtd;
     }
 
-    public void setIdconf(long idconf) {
+    public BigDecimal getJuros_cartoes() {
+        return juros_cartoes;
     }
 
-    public void setConfiguracao(ModelFechaMes configuracao) {
+    public void setJuros_cartoes(BigDecimal juros_cartoes) {
+        this.juros_cartoes = juros_cartoes;
     }
 
-    @Override
-    public String toString() {
-        return "ModelFechaMes{" +
-                "id=" + id +
-                ", data_fechamento=" + data_fechamento +
-                ", formattedDate='" + formattedDate + '\'' +
-                ", final_ft_din=" + final_ft_din +
-                ", final_ft_deb=" + final_ft_deb +
-                ", final_ft_cred=" + final_ft_cred +
-                ", final_ft_pix=" + final_ft_pix +
-                ", final_enc_din=" + final_enc_din +
-                ", final_enc_deb=" + final_enc_deb +
-                ", final_enc_cred=" + final_enc_cred +
-                ", final_enc_pix=" + final_enc_pix +
-                ", final_dig_din=" + final_dig_din +
-                ", final_dig_deb=" + final_dig_deb +
-                ", final_dig_cred=" + final_dig_cred +
-                ", final_dig_pix=" + final_dig_pix +
-                ", total_ft=" + total_ft +
-                ", total_enc=" + total_enc +
-                ", total_dig=" + total_dig +
-                ", valor_din_mes=" + valor_din_mes +
-                ", valor_din_mes_real=" + valor_din_mes_real +
-                ", valor_deb_mes=" + valor_deb_mes +
-                ", valor_deb_mes_real=" + valor_deb_mes_real +
-                ", valor_cred_mes=" + valor_cred_mes +
-                ", valor_cred_mes_real=" + valor_cred_mes_real +
-                ", valor_pix_mes=" + valor_pix_mes +
-                ", valor_pix_mes_real=" + valor_pix_mes_real +
-                ", valor_despesa_total=" + valor_despesa_total +
-                ", valor_vale_total=" + valor_vale_total +
-                ", desconto_mes=" + desconto_mes +
-                ", venda_total_mes=" + venda_total_mes +
-                ", final_descontos=" + final_descontos +
-                ", final_ribbon_1=" + final_ribbon_1 +
-                ", final_ribbon_2=" + final_ribbon_2 +
-                ", final_ribbon_3=" + final_ribbon_3 +
-                ", final_ribbon_4=" + final_ribbon_4 +
-                ", final_ribbon_5=" + final_ribbon_5 +
-                ", final_ribbon_6=" + final_ribbon_6 +
-                ", total_sobras=" + total_sobras +
-                ", resultadoDivisao=" + resultadoDivisao +
-                ", conf1_valor=" + conf1_valor +
-                ", conf1_valor2=" + conf1_valor2 +
-                ", conf2_valor=" + conf2_valor +
-                ", conf3_valor=" + conf3_valor +
-                ", conf4_valor=" + conf4_valor +
-                ", conf1_custo=" + conf1_custo +
-                ", conf2_custo=" + conf2_custo +
-                ", conf3_custo=" + conf3_custo +
-                ", conf4_custo=" + conf4_custo +
-                ", conf1_nome='" + conf1_nome + '\'' +
-                ", conf2_nome='" + conf2_nome + '\'' +
-                ", conf3_nome='" + conf3_nome + '\'' +
-                ", conf4_nome='" + conf4_nome + '\'' +
-                ", conf_name='" + conf_name + '\'' +
-                ", conf1_qtd=" + conf1_qtd +
-                ", conf2_qtd=" + conf2_qtd +
-                ", conf3_qtd=" + conf3_qtd +
-                ", conf4_qtd=" + conf4_qtd +
-                ", juros_cartoes=" + juros_cartoes +
-                ", mes=" + mes +
-                ", ano=" + ano +
-                ", total_ribbons=" + total_ribbons +
-                ", total_geral=" + total_geral +
-                ", valor_total_despesas=" + valor_total_despesas +
-                ", valor_total_contas=" + valor_total_contas +
-                ", debitoVm=" + debitoVm +
-                ", creditoVm=" + creditoVm +
-                ", debitoOutros=" + debitoOutros +
-                ", creditoOutros=" + creditoOutros +
-                '}';
+    public int getMes() {
+        return mes;
+    }
+
+    public void setMes(int mes) {
+        this.mes = mes;
+    }
+
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
+    public BigDecimal getTotal_ribbons() {
+        return total_ribbons;
+    }
+
+    public void setTotal_ribbons(BigDecimal total_ribbons) {
+        this.total_ribbons = total_ribbons;
+    }
+
+    public BigDecimal getTotal_geral() {
+        return total_geral;
+    }
+
+    public void setTotal_geral(BigDecimal total_geral) {
+        this.total_geral = total_geral;
+    }
+
+    public BigDecimal getValor_total_despesas() {
+        return valor_total_despesas;
+    }
+
+    public void setValor_total_despesas(BigDecimal valor_total_despesas) {
+        this.valor_total_despesas = valor_total_despesas;
+    }
+
+    public BigDecimal getValor_total_contas() {
+        return valor_total_contas;
+    }
+
+    public void setValor_total_contas(BigDecimal valor_total_contas) {
+        this.valor_total_contas = valor_total_contas;
+    }
+
+    public BigDecimal getDebitoVm() {
+        return debitoVm;
+    }
+
+    public void setDebitoVm(BigDecimal debitoVm) {
+        this.debitoVm = debitoVm;
+    }
+
+    public BigDecimal getCreditoVm() {
+        return creditoVm;
+    }
+
+    public void setCreditoVm(BigDecimal creditoVm) {
+        this.creditoVm = creditoVm;
+    }
+
+    public BigDecimal getDebitoOutros() {
+        return debitoOutros;
+    }
+
+    public void setDebitoOutros(BigDecimal debitoOutros) {
+        this.debitoOutros = debitoOutros;
+    }
+
+    public BigDecimal getCreditoOutros() {
+        return creditoOutros;
+    }
+
+    public void setCreditoOutros(BigDecimal creditoOutros) {
+        this.creditoOutros = creditoOutros;
+    }
+
+    public int getTotal_advert() {
+        return total_advert;
+    }
+
+    public void setTotal_advert(int total_advert) {
+        this.total_advert = total_advert;
+    }
+
+    public int getTotal_faltas() {
+        return total_faltas;
+    }
+
+    public void setTotal_faltas(int total_faltas) {
+        this.total_faltas = total_faltas;
+    }
+
+    public int getTotal_susp() {
+        return total_susp;
+    }
+
+    public void setTotal_susp(int total_susp) {
+        this.total_susp = total_susp;
+    }
+
+    public int getTotal_condutas() {
+        return total_condutas;
+    }
+
+    public void setTotal_condutas(int total_condutas) {
+        this.total_condutas = total_condutas;
+    }
+
+    public int getDia() {
+        return dia;
+    }
+
+    public void setDia(int dia) {
+        this.dia = dia;
+    }
+
+    public String getDiaSemana() {
+        return diaSemana;
+    }
+
+    public void setDiaSemana(String diaSemana) {
+        this.diaSemana = diaSemana;
+    }
+
+    public BigDecimal getVenda_total_dia() {
+        return venda_total_dia;
+    }
+
+    public void setVenda_total_dia(BigDecimal venda_total_dia) {
+        this.venda_total_dia = venda_total_dia;
+    }
+
+    public List<ModelFechaMes> getRelatorioDiario() {
+        return relatorioDiario;
+    }
+
+    public void setRelatorioDiario(List<ModelFechaMes> relatorioDiario) {
+        this.relatorioDiario = relatorioDiario;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public int getQtd() {
+        return qtd;
+    }
+
+    public void setQtd(int qtd) {
+        this.qtd = qtd;
+    }
+
+    public BigDecimal getCusto() {
+        return custo;
+    }
+
+    public void setCusto(BigDecimal custo) {
+        this.custo = custo;
+    }
+
+    public BigDecimal getValor_ribbons() {
+        return valor_ribbons;
+    }
+
+    public void setValor_ribbons(BigDecimal valor_ribbons) {
+        this.valor_ribbons = valor_ribbons;
+    }
+
+    public BigDecimal getValor_enc() {
+        return valor_enc;
+    }
+
+    public void setValor_enc(BigDecimal valor_enc) {
+        this.valor_enc = valor_enc;
+    }
+
+    public BigDecimal getValor_juros() {
+        return valor_juros;
+    }
+
+    public void setValor_juros(BigDecimal valor_juros) {
+        this.valor_juros = valor_juros;
     }
 
     public void setQtd_ribbons(int qtdRibbons) {

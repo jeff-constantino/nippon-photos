@@ -34,6 +34,7 @@
                 <div class="row">
 
                 </div>
+                <form method="post" action="<%=request.getContextPath()%>/ServletFechaMes">
                 <div class="row">
                     <div class="col-sm-4 grid-margin">
 
@@ -368,7 +369,7 @@
                         <div class="card">
                             <div class="card-body">
 
-                             <form method="post" action="<%=request.getContextPath()%>/ServletFechaMes">
+
                                 <h4 class="card-title" style="text-align: center">VALORES CONTA</h4>
                                 <!-- Table Content -->
                                  <div class="table-responsive">
@@ -415,14 +416,9 @@
 
 
                                     </table>
-                                    <div style="align-items: center">
 
-                                        <button type="submit" class="btn btn-outline-success" STYLE="font-size: large">
-                                            Gravar Fechamento do Mês
-                                        </button>
-                                    </div>
                                 </div>
-                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -597,7 +593,7 @@
                                     <div class="row">
                                         <div class="col-3 mb-3" style="text-align: center">
                                             <label for="receitas" style="font-size: 1.2rem">RECEITA DE VENDAS</label>
-                                            <input type="text" class="form-control money" id="receitas" name="receitas"  style="font-size: 1.2rem" value="${totalDinheiro + totalDebito + totalCredito + totalPix}">
+                                            <input type="text" class="form-control money" id="receitas" name="receitas"  style="font-size: 1.2rem" value="${totalDinheiroReal + totalDebitoReal + totalCreditoReal + totalPixReal}">
                                         </div>
 
 
@@ -646,11 +642,20 @@
 
                                 </table>
                                 </div>
+                                <div style="text-align: center; margin-top: 20px;">
+                                    <button type="submit" class="btn btn-outline-success" STYLE="font-size: large">
+                                        Gravar Fechamento do Mês
+                                    </button>
+                                </div>
                             </div>
                         </div>
+
                     </div>
 
+
                 </div>
+                </form>
+
                 
             </div>
             <!-- content-wrapper ends -->

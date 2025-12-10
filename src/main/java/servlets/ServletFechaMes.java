@@ -161,8 +161,8 @@ public class ServletFechaMes extends ServletGenericUtil {
             @SuppressWarnings("unchecked")
             List<ModelFechaMes> vendasMesList = (List<ModelFechaMes>) session.getAttribute("vendasMesList");
 
-            BigDecimal valorTotalDespesas = (BigDecimal) session.getAttribute("valorTotalDespesas");
-            BigDecimal valorTotalContas = (BigDecimal) session.getAttribute("valorTotalContas");
+            BigDecimal valorTotalDespesas = (BigDecimal) session.getAttribute("despesas");
+            BigDecimal valorTotalContas = (BigDecimal) session.getAttribute("contas");
             int mes = (int) session.getAttribute("mes");
             int ano = (int) session.getAttribute("ano");
 
@@ -202,6 +202,12 @@ public class ServletFechaMes extends ServletGenericUtil {
             BigDecimal debitoOutros = parseBigDecimal(request.getParameter("debitoOutros"));
             BigDecimal creditoOutros = parseBigDecimal(request.getParameter("creditoOutros"));
 
+            BigDecimal receitas = parseBigDecimal(request.getParameter("receitas"));
+            BigDecimal salarios = parseBigDecimal(request.getParameter("salarios"));
+            BigDecimal sangria = parseBigDecimal(request.getParameter("sangria"));
+            BigDecimal despesadin = parseBigDecimal(request.getParameter("despesadin"));
+            BigDecimal saldo = parseBigDecimal(request.getParameter("saldo"));
+
             ModelFechaMes fechamento = new ModelFechaMes();
             fechamento.setMes(mes);
             fechamento.setAno(ano);
@@ -227,6 +233,11 @@ public class ServletFechaMes extends ServletGenericUtil {
             fechamento.setCreditoVm(creditoVm);
             fechamento.setDebitoOutros(debitoOutros);
             fechamento.setCreditoOutros(creditoOutros);
+            fechamento.setDespesadin(despesadin);
+            fechamento.setSalarios(salarios);
+            fechamento.setSangria(sangria);
+            fechamento.setReceitas(receitas);
+            fechamento.setSaldo(saldo);
 
             DAOFechaMes dao = new DAOFechaMes();
             dao.gravarFechamentoMes(fechamento);

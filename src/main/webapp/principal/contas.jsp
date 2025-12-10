@@ -644,7 +644,7 @@
                                                                         <tr>
                                                                             <td>
                                                                                 <c:set var="valorFormatado">
-                                                                                    <fmt:formatNumber value="${contas.valor}" type="currency" currencySymbol="R$"/>
+                                                                                    <fmt:formatNumber value="${contas.valor}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
                                                                                 </c:set>
 
                                                                                 <button class="btn btn-outline-primary"

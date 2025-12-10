@@ -13,6 +13,8 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 @WebServlet("/ServletFinanContas")
 public class ServletFinanContas extends ServletGenericUtil {

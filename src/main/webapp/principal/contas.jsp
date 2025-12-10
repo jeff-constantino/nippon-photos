@@ -570,15 +570,20 @@
                                                                         ---------
                                                                     </option>
                                                                     <option style="color:white"
-                                                                            value="dinheiro" ${contas.pagamento == 'DINHEIRO' ? 'selected' : ''}>
+                                                                            value="DINHEIRO" ${contas.pagamento == 'DINHEIRO' ? 'selected' : ''}>
                                                                         DINHEIRO
                                                                     </option>
+
+                                                                    <option style="color:white"
+                                                                            value="BOLETO" ${contas.pagamento == 'BOLETO' ? 'selected' : ''}>
+                                                                        BOLETO
+                                                                    </option>
                                                                     <option style="color: #DAA520"
-                                                                            value="cartao" ${contas.pagamento == 'CARTAO' ? 'selected' : ''}>
+                                                                            value="CARTAO" ${contas.pagamento == 'CARTAO' ? 'selected' : ''}>
                                                                         CARTÃO
                                                                     </option>
                                                                     <option style="color: #00d25b"
-                                                                            value="pix" ${contas.pagamento == 'PIX' ? 'selected' : ''}>
+                                                                            value="PIX" ${contas.pagamento == 'PIX' ? 'selected' : ''}>
                                                                         PIX
                                                                     </option>
                                                                 </select>
@@ -638,8 +643,12 @@
                                                                     <c:forEach var="contas" items="${contasRecentes}">
                                                                         <tr>
                                                                             <td>
+                                                                                <c:set var="valorFormatado">
+                                                                                    <fmt:formatNumber value="${contas.valor}" type="currency" currencySymbol="R$"/>
+                                                                                </c:set>
+
                                                                                 <button class="btn btn-outline-primary"
-                                                                                        onclick="editarConta(this, '${contas.data_de_pedido}', '${contas.data_de_pagamento}', '${contas.numero_pedido}', '${contas.conta_id}', '${contas.empresa}', '${contas.itens}', '${contas.valor}', '${contas.status}', '${contas.pagamento}')">
+                                                                                        onclick="editarConta(this, '${contas.data_de_pedido}', '${contas.data_de_pagamento}', '${contas.numero_pedido}', '${contas.conta_id}', '${contas.empresa}', '${contas.itens}', '${valorFormatado}', '${contas.status}', '${contas.pagamento}')">
                                                                                     Editar
                                                                                 </button>
                                                                             </td>
@@ -787,16 +796,29 @@
             return valor.replace(/\./g, '').replace(',', '.').replace('R$ ', '');
         }
 
-        $("#formContas").on("submit", function (e) {
+       $("#formContas").on("submit", function (e) {
+           e.preventDefault(); // Impede o submit
 
-            var valor2 = removerMascara($("#conf1_valor2").val());
+           // Pega o valor do campo
+           var valorAtual = $("#conf1_valor2").val();
+           console.log("Valor antes de limpar:", valorAtual); // Debug
 
+           // Limpa completamente
+           var valorLimpo = valorAtual.toString()
+               .replace('R$', '')
+               .trim()
+               .replace(/\./g, '')
+               .replace(',', '.');
 
+           console.log("Valor depois de limpar:", valorLimpo); // Debug
 
+           // Atualiza o campo
+           $("#conf1_valor2").val(valorLimpo);
 
+           // Submete o form via JavaScript puro
+           document.getElementById('formContas').submit();
+       });
 
-            $("#conf1_valor2").val(valor2);
-        });
         $("#lançarConta").on("submit", function (e) {
             var valor1 = removerMascara($("#conf1_valor").val());
 
@@ -835,20 +857,26 @@
             return data;
         }
 
-        function editarConta(button, dataPedido, dataPagamento, numeroPedido, conta_id, empresa, itens, valor, status, pagamento) {
+       function editarConta(button, dataPedido, dataPagamento, numeroPedido, conta_id, empresa, itens, valor, status, pagamento) {
 
-            document.getElementById('data_de_pedido2').value = formatarData(dataPedido);
-            document.getElementById('data_de_pagamento2').value = formatarData(dataPagamento);
-            document.getElementById('pedido2').value = numeroPedido;
-            document.getElementById('idPedido').value = conta_id;
-            document.getElementById('empresa2').value = empresa;
-            document.getElementById('itens2').value = itens;
-            document.getElementById('conf1_valor2').value = valor;
-            document.getElementById('status2').value = status;
-            document.getElementById('pagamento2').value = pagamento;
+           document.getElementById('data_de_pedido2').value = formatarData(dataPedido);
+           document.getElementById('data_de_pagamento2').value = formatarData(dataPagamento);
+           document.getElementById('pedido2').value = numeroPedido;
+           document.getElementById('idPedido').value = conta_id;
+           document.getElementById('empresa2').value = empresa;
+           document.getElementById('itens2').value = itens;
 
+           // Limpa o campo antes
+           $("#conf1_valor2").val('');
 
-        }
+           // Aguarda um momento e define o valor
+           setTimeout(function() {
+               $("#conf1_valor2").val(valor);
+           }, 50);
+
+           document.getElementById('status2').value = status;
+           document.getElementById('pagamento2').value = pagamento;
+       }
 
 
 

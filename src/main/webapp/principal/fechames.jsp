@@ -933,7 +933,8 @@
         let despDin  = limparMascara($("#despesadin").val());
         let sangria  = limparMascara($("#sangria").val());
         let salarios = limparMascara($("#salarios").val());
-        let saldo = receita_din - despDin - sangria - salarios;
+        let vales = limparMascara($("#vales").val());
+        let saldo = receita_din - despDin - sangria - salarios-vales;
 
         let valorFormatado = saldo.toFixed(2);
         let partes = valorFormatado.split('.');

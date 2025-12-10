@@ -955,8 +955,9 @@
             '#creditoVm', '#jurosCreditoVm',
             '#debitoOutros', '#jurosDebitoOutros',
             '#creditoOutros', '#jurosCreditoOutros',
-            '#sangria', '#salarios', '#despesadin'
+            '#sangria', '#salarios', '#despesadin', '#vales'
         ];
+
 
         // Remove a classe .money desses campos para evitar conflitos
         $(camposManual.join(', ')).removeClass('money');
@@ -1046,10 +1047,15 @@
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 50);
         });
+        $("#vales").on('input', function() {
+            aplicarMascaraManual(this);
+            setTimeout(calcularSaldo, 100);
+        });
         $("#vales").on('blur', function() {
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 50);
         });
+
 
         // Evento Enter para todos os campos manuais
         $(camposManual.join(', ')).on('keypress', function(e) {

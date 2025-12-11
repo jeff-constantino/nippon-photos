@@ -86,7 +86,7 @@ public class ServletFechaMes extends ServletGenericUtil {
 
             List<ModelConfiguracao> configsJuros = daoConfiguracao.consultarJuros();
             request.setAttribute("configsJuros", configsJuros);
-            System.out.println(configsJuros);
+
 
             List<ModelLogin> funcionarios = daoFuncionario.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);
@@ -176,13 +176,14 @@ public class ServletFechaMes extends ServletGenericUtil {
 
             BigDecimal totalRibbons = BigDecimal.ZERO;
 
-            if (resumo.getConf1_qtd() > 0) {
-                BigDecimal conf1Qtd = BigDecimal.valueOf(resumo.getConf1_qtd());
+            if (resumo.getQtd_ribbon() > 0) {
+                BigDecimal qtdRibbon = BigDecimal.valueOf(resumo.getQtd_ribbon());
                 BigDecimal totalFt = BigDecimal.valueOf(resumo.getTotal_ft());
                 BigDecimal totalSobras = BigDecimal.valueOf(resumo.getTotal_sobras());
 
-                totalRibbons = totalFt.add(totalSobras).divide(conf1Qtd, 2, RoundingMode.HALF_UP);
+                totalRibbons = totalFt.add(totalSobras).divide(qtdRibbon, 2, RoundingMode.HALF_UP);
             }
+
 
             BigDecimal valorDin = resumo.getValor_din_mes_real() != null ? resumo.getValor_din_mes_real() : BigDecimal.ZERO;
             BigDecimal valorDeb = resumo.getValor_deb_mes_real() != null ? resumo.getValor_deb_mes_real() : BigDecimal.ZERO;
@@ -205,8 +206,14 @@ public class ServletFechaMes extends ServletGenericUtil {
             BigDecimal receitas = parseBigDecimal(request.getParameter("receitas"));
             BigDecimal salarios = parseBigDecimal(request.getParameter("salarios"));
             BigDecimal sangria = parseBigDecimal(request.getParameter("sangria"));
-            BigDecimal despesadin = parseBigDecimal(request.getParameter("despesadin"));
+            BigDecimal despesasdin = parseBigDecimal(request.getParameter("despesasdin"));
             BigDecimal saldo = parseBigDecimal(request.getParameter("saldo"));
+            BigDecimal receitadin = parseBigDecimal(request.getParameter("receitadin"));
+            BigDecimal desconto = parseBigDecimal(request.getParameter("descontos"));
+
+            BigDecimal contas= parseBigDecimal(request.getParameter("contas"));
+            BigDecimal despesas = parseBigDecimal(request.getParameter("despesas"));
+
 
             ModelFechaMes fechamento = new ModelFechaMes();
             fechamento.setMes(mes);
@@ -222,25 +229,31 @@ public class ServletFechaMes extends ServletGenericUtil {
             fechamento.setValor_cred_mes_real(valorCred);
             fechamento.setValor_pix_mes_real(valorPix);
             fechamento.setTotal_geral(totalGeral);
+            fechamento.setJurosdebvm(jurosDebitoVm);
+            fechamento.setJuroscredvm(jurosCreditoVm);
+            fechamento.setJurosdeboutros(jurosDebitoOutros);
+            fechamento.setJuroscredoutros(jurosCreditoOutros);
             fechamento.setJuros_cartoes(totalJuros);
 
-            fechamento.setValor_total_despesas(valorTotalDespesas);
-            fechamento.setValor_total_contas(valorTotalContas);
+            fechamento.setValor_total_despesas(despesas);
+            fechamento.setValor_total_contas(contas);
             fechamento.setValor_vale_total(resumo.getValor_vale_total());
-            fechamento.setDesconto_mes(resumo.getDesconto_mes());
+            fechamento.setDesconto_mes(desconto);
 
             fechamento.setDebitoVm(debitoVm);
             fechamento.setCreditoVm(creditoVm);
             fechamento.setDebitoOutros(debitoOutros);
             fechamento.setCreditoOutros(creditoOutros);
-            fechamento.setDespesadin(despesadin);
+            fechamento.setDespesasdin(despesasdin);
             fechamento.setSalarios(salarios);
             fechamento.setSangria(sangria);
             fechamento.setReceitas(receitas);
             fechamento.setSaldo(saldo);
+            fechamento.setReceitadin(receitadin);
 
             DAOFechaMes dao = new DAOFechaMes();
             dao.gravarFechamentoMes(fechamento);
+
 
             request.setAttribute("msg", "Fechamento do mês gravado com sucesso!");
 
@@ -259,10 +272,49 @@ public class ServletFechaMes extends ServletGenericUtil {
             return BigDecimal.ZERO;
         }
         try {
-            // Remove pontos (milhar) e troca vírgula por ponto (decimal)
-            String normalized = value.trim().replace(".", "").replace(",", ".");
+            String normalized = value.trim();
+
+            // Remove "R$" e espaços
+            normalized = normalized.replace("R$", "").trim();
+
+            // Remove espaços internos
+            normalized = normalized.replace(" ", "");
+
+            // Se está vazio após limpeza
+            if (normalized.isEmpty()) {
+                return BigDecimal.ZERO;
+            }
+
+            // Conta pontos e vírgulas
+            long pontos = normalized.chars().filter(ch -> ch == '.').count();
+            long virgulas = normalized.chars().filter(ch -> ch == ',').count();
+
+            // Formato brasileiro com vírgula decimal: 1.234,56 ou 1234,56
+            if (virgulas > 0) {
+                normalized = normalized.replace(".", "").replace(",", ".");
+            }
+            // Formato com múltiplos pontos (milhar): 1.234.567
+            else if (pontos > 1) {
+                normalized = normalized.replace(".", "");
+            }
+            // Formato com um ponto - precisa verificar se é decimal ou milhar
+            else if (pontos == 1) {
+                int pontoPos = normalized.indexOf(".");
+                int digitosDepois = normalized.length() - pontoPos - 1;
+
+                // Se tem 1 ou 2 dígitos após o ponto, é decimal (ex: 123.45)
+                // Se tem 3+ dígitos, é milhar (ex: 1.234)
+                if (digitosDepois > 2) {
+                    normalized = normalized.replace(".", "");
+                }
+                // Senão, já está no formato correto (decimal com ponto)
+            }
+
             return new BigDecimal(normalized);
+
         } catch (NumberFormatException e) {
+            System.err.println("Erro ao converter valor: '" + value + "' -> normalized tentou ser: " + value.trim().replace("R$", "").trim());
+            e.printStackTrace();
             return BigDecimal.ZERO;
         }
     }

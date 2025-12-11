@@ -273,7 +273,7 @@ public class DAODre {
 
                         // Adicionar ao resumo mensal
                         ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);
-                        resumo.setQtd_ribbons(qtdRibbons);
+                        resumo.setQtd_ribbon(qtdRibbons);
                         resumo.setTotal_enc(qtdEncartes);
                         resumo.setTotal_ribbons(totalRibbons);
                         resumo.setValor_enc(totalEncartes);

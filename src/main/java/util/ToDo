@@ -1,7 +1,10 @@
 CD IdeaProjects\nippon-photos
 mvn clean package
 
-CORRIGIR ERRO AO EDITAR CONTA, VALOR FICA ALTO
+491625.00
+
+
+
 alterar as somas de salarios, fecha mes, dre para incluir a soma de acordo com a comissão;
 CRIAR SANGRIA e buscar no fechames
 adcionar busca para despesas em din no fechames
@@ -22,10 +25,16 @@ CRIAR BANCO E FUNÇOES PARA FECHAMENTO DO MES E DRE
    ALTER TABLE public.fecha_mes
    ADD COLUMN receitas NUMERIC(15,2),
    ADD COLUMN salarios NUMERIC(15,2),
-   ADD COLUMN despesadin NUMERIC(15,2),
+   ADD COLUMN despesadin NUMERIC(15,2)
    ADD COLUMN sangria NUMERIC(15,2),
    ADD COLUMN saldo NUMERIC(15,2);
 
+    private BigDecimal receitas;
+    private BigDecimal salarios;
+    private BigDecimal despesadin;
+    private BigDecimal sangria;
+    private BigDecimal saldo;
+    private BigDecimal resultadoDivisao;
 
 
 

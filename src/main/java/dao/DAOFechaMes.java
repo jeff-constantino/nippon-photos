@@ -180,8 +180,9 @@ public class DAOFechaMes {
                 "valor_din_mes_real, valor_deb_mes_real, valor_cred_mes_real, valor_pix_mes_real, " +
                 "total_geral, juros_cartoes, valor_total_despesas, valor_total_contas, " +
                 "valor_vale_total, desconto_mes, debito_vm, credito_vm, debito_outros, credito_outros, " +
-                "receitas, salarios, despesasdin, sangria, saldo" +
-                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "receitas, salarios, despesasdin, sangria, saldo, receitadin, " +
+                "jurosdebvm, juroscredvm, jurosdeboutros, juroscredoutros" +
+                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, fechamento.getMes());
@@ -210,9 +211,14 @@ public class DAOFechaMes {
             pst.setBigDecimal(21, fechamento.getCreditoOutros());
             pst.setBigDecimal(22, fechamento.getReceitas());
             pst.setBigDecimal(23, fechamento.getSalarios());
-            pst.setBigDecimal(24, fechamento.getDespesadin());
+            pst.setBigDecimal(24, fechamento.getDespesasdin());
             pst.setBigDecimal(25, fechamento.getSangria());
             pst.setBigDecimal(26, fechamento.getSaldo());
+            pst.setBigDecimal(27, fechamento.getReceitadin());
+            pst.setBigDecimal(28, fechamento.getJurosdebvm());
+            pst.setBigDecimal(29, fechamento.getJuroscredvm());
+            pst.setBigDecimal(30, fechamento.getJurosdeboutros());
+            pst.setBigDecimal(31, fechamento.getJuroscredoutros());
 
             pst.executeUpdate();
             connection.commit();

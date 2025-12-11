@@ -34,7 +34,7 @@
                 <div class="row">
 
                 </div>
-                <form method="post" action="<%=request.getContextPath()%>/ServletFechaMes">
+
                 <div class="row">
                     <div class="col-sm-4 grid-margin">
 
@@ -83,31 +83,87 @@
 
                 </div>
                 <div class="row">
-                    <div class="col-lg-3 grid-margin">
-                        <div class="card" >
-                            <div class="card-body" style="text-align: center">
-                                <!-- Card 1 -->
-                                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalData">
-                                    <h4>Gerar Relatório</h4>
-                                </button>
-                                <c:if test="${not empty msg}">
-                                    <div>
-                                        <span style="color:#1ad76b; text-align: center">${msg}</span>
+                    <div class="col-sm-4 grid-margin">
+
+
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalBusca" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl mt-5">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+
+                                                    <form action="<%= request.getContextPath() %>/ServletFechaMes" method="get" id="formBuscaMes" name="formBuscaMes">
+                                                        <input type="hidden" name="acao" value="relatorioMes">
+                                                        <div class="form-row align-items-center">
+                                                            <div class="col-auto">
+                                                                <label for="dataInicial">Data Inicial</label>
+                                                                <input type="date" class="form-control" id="dataInicial" name="dataInicial" required onchange="setData()" value="${dataInicial}">
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <label for="dataFinal">Data Final</label>
+                                                                <input type="date" class="form-control" id="dataFinal" name="dataFinal" required value="${dataFinal}">
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </c:if>
+                                </div>
+
                             </div>
+
 
                         </div>
                     </div>
-                    <div class="col-lg-3 grid-margin">
-                        <div class="card" >
-                            <div class="card-body" style="text-align: center">
-                                <!-- Card 1 -->
-                                <h2 style="text-transform: uppercase;">${mesAno}</h2>
-                            </div>
 
+
+                </div>
+              <form method="post" action="<%=request.getContextPath()%>/ServletFechaMes">
+                <div class="row">
+                    <div class="row">
+                        <!-- Card Esquerda -->
+                        <div class="col-lg-4 grid-margin">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalData">
+                                        <h4>GERAR FECHAMENTO</h4>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Centro -->
+                        <div class="col-lg-4 grid-margin">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h2 style="text-transform: uppercase;">${mesAno}</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Direita -->
+                        <div class="col-lg-4 grid-margin">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalBusca">
+                                        <h4>BUSCAR FECHAMENTO</h4>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
@@ -587,13 +643,27 @@
                     <div class="col-md-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title" style="text-align: center">FINANCEIRO</h4>
+                                <h4 class="card-title" style="text-align: center">RESUMO FINANCEIRO</h4>
                                 <div class="table-responsive">
                                 <table class="table table-bordered" id="tabelafinanceiromes">
                                     <div class="row">
                                         <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="receitas" style="font-size: 1.2rem">RECEITA DE VENDAS</label>
+                                            <label for="receitas" style="font-size: 1.2rem">RECEITA BRUTA</label>
                                             <input type="text" class="form-control money" id="receitas" name="receitas"  style="font-size: 1.2rem" value="${totalDinheiroReal + totalDebitoReal + totalCreditoReal + totalPixReal}">
+                                        </div>
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="receitas" style="font-size: 1.2rem">RECEITA DINHEIRO</label>
+                                            <input type="text" class="form-control money" id="receitadin" name="receitadin"  style="font-size: 1.2rem" value="${totalDinheiroReal}">
+                                        </div>
+
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="receitacartoes" style="font-size: 1.2rem">RECEITA CARTÕES</label>
+                                            <input type="text" class="form-control money" id="receitacartoes" name="receitacartoes"  style="font-size: 1.2rem" value="${totalDebitoReal + totalCreditoReal}">
+                                        </div>
+
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="receitacartoes" style="font-size: 1.2rem">RECEITA PIX</label>
+                                            <input type="text" class="form-control money" id="receitapix" name="receitapix"  style="font-size: 1.2rem" value="${totalPixReal}">
                                         </div>
 
 
@@ -602,14 +672,18 @@
                                             <input type="text" class="form-control money" id="despesas" name="despesas" style="font-size: 1.2rem" value="${valorTotalDespesas}">
                                         </div>
                                         <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="despesadin" style="font-size: 1.2rem">DESPESAS EM DINHEIRO</label>
-                                            <input type="text" class="form-control money" id="despesadin" name="despesadin" style="font-size: 1.2rem" value="${valorDespesasDin}">
+                                            <label for="despesasdin" style="font-size: 1.2rem">DESPESAS EM DINHEIRO</label>
+                                            <input type="text" class="form-control money" id="despesasdin" name="despesasdin" style="font-size: 1.2rem" value="${valorDespesasDin}">
                                         </div>
 
                                         <div class="col-3 mb-3" style="text-align: center">
                                             <label for="contas" style="font-size: 1.2rem">CONTAS PAGAS</label>
                                             <input type="text" class="form-control money" id="contas" name="contas" style="font-size: 1.2rem" value="${valorTotalContas}">
 
+                                        </div>
+                                        <div class="col-3 mb-3" style="text-align: center">
+                                            <label for="salarios" style="font-size: 1.2rem">SALÁRIOS LIQUÍDOS</label>
+                                            <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 1.2rem" value="${valorTotalSalarios}">
                                         </div>
                                         <div class="col-3 mb-3" style="text-align: center">
                                             <label for="vales" style="font-size: 1.2rem">VALES</label>
@@ -623,16 +697,10 @@
 
                                         <div class="col-3 mb-3" style="text-align: center">
                                             <label for="sangria" style="font-size: 1.2rem">SANGRIA DE CAIXA</label>
-                                            <input type="text" class="form-control money" id="sangria" name="sangria" style="font-size: 1.2rem; background: #FFFFFF; color: black" value="0">
+                                            <input type="text" class="form-control money" id="sangria" name="sangria" style="font-size: 1.2rem" value="0">
                                         </div>
-                                        <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="salarios" style="font-size: 1.2rem">SALÁRIOS LIQUÍDOS</label>
-                                            <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 1.2rem; background: #FFFFFF; color: black" value="${valorTotalSalarios}">
-                                        </div>
-                                        <div class="col-3 mb-3" style="text-align: center">
-                                            <label for="receitas" style="font-size: 1.2rem">RECEITA EM DINHEIRO</label>
-                                            <input type="text" class="form-control money" id="receita_din" name="receita_din"  style="font-size: 1.2rem" value="${vendasMesList[0].valor_din_mes}">
-                                        </div>
+
+
                                         <div class="col-3 mb-3" style="text-align: center">
                                                 <label for="saldo" style="font-size: 1.2rem; color: #DAA520">SALDO EM CAIXA</label>
                                             <input type="text" class="form-control money" id="saldo" name="saldo" style="font-size: 1.2rem;color: #DAA520" value=" ">
@@ -646,6 +714,7 @@
                                     <button type="submit" class="btn btn-outline-success" STYLE="font-size: large">
                                         Gravar Fechamento do Mês
                                     </button>
+
                                 </div>
                             </div>
                         </div>
@@ -934,12 +1003,12 @@
 
     // Função para calcular saldo
     function calcularSaldo() {
-        let receita_din = limparMascara($("#receita_din").val());
-        let despDin  = limparMascara($("#despesadin").val());
+        let receitadin = limparMascara($("#receitadin").val());
+        let despDin  = limparMascara($("#despesasdin").val());
         let sangria  = limparMascara($("#sangria").val());
         let salarios = limparMascara($("#salarios").val());
         let vales = limparMascara($("#vales").val());
-        let saldo = receita_din - despDin - sangria - salarios-vales;
+        let saldo = receitadin - despDin - sangria - salarios-vales;
 
         let valorFormatado = saldo.toFixed(2);
         let partes = valorFormatado.split('.');
@@ -960,9 +1029,8 @@
             '#creditoVm', '#jurosCreditoVm',
             '#debitoOutros', '#jurosDebitoOutros',
             '#creditoOutros', '#jurosCreditoOutros',
-            '#sangria', '#salarios', '#despesadin', '#vales'
+            '#sangria', '#salarios', '#despesasdin', '#vales'
         ];
-
 
         // Remove a classe .money desses campos para evitar conflitos
         $(camposManual.join(', ')).removeClass('money');
@@ -977,6 +1045,26 @@
             decimal: ",",
             thousands: "."
         });
+
+        // Formata os campos que já vêm preenchidos do servidor
+        setTimeout(function() {
+            $(".money").not(camposManual.join(', ')).each(function() {
+                let campo = $(this);
+                let valor = campo.val();
+
+                if (valor && valor.trim() !== '') {
+                    let valorLimpo = limparMascara(valor);
+
+                    // Formata manualmente usando toLocaleString
+                    let valorFormatado = valorLimpo.toLocaleString('pt-BR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+
+                    campo.val('R$ ' + valorFormatado);
+                }
+            });
+        }, 100);
 
         // ========================================================================
         // APLICA MÁSCARA MANUAL NOS CAMPOS DE DÉBITO/CRÉDITO
@@ -1044,14 +1132,15 @@
             setTimeout(calcularSaldo, 50);
         });
 
-        $("#despesadin").on('input', function() {
+        $("#despesasdin").on('input', function() {
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 100);
         });
-        $("#despesadin").on('blur', function() {
+        $("#despesasdin").on('blur', function() {
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 50);
         });
+
         $("#vales").on('input', function() {
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 100);
@@ -1060,7 +1149,6 @@
             aplicarMascaraManual(this);
             setTimeout(calcularSaldo, 50);
         });
-
 
         // Evento Enter para todos os campos manuais
         $(camposManual.join(', ')).on('keypress', function(e) {
@@ -1091,13 +1179,27 @@
         }, 600);
     });
 
-    // Remove a máscara antes de enviar o formulário
     $("#formConta, form").on("submit", function() {
-        $(".money, input[id*='debito'], input[id*='credito'], input[id*='juros'], #sangria, #salarios, #despesadin").each(function() {
-            var valorSemMascara = limparMascara($(this).val());
-            $(this).val(valorSemMascara);
+        const camposParaLimpar = [
+            'receitas', 'despesas', 'despesasdin', 'contas',
+            'salarios', 'vales', 'descontos', 'sangria',
+            'receitadin', 'saldo',
+            'debitoVm', 'jurosDebitoVm',
+            'creditoVm', 'jurosCreditoVm',
+            'debitoOutros', 'jurosDebitoOutros',
+            'creditoOutros', 'jurosCreditoOutros'
+        ];
+
+        camposParaLimpar.forEach(function(nomeCampo) {
+            let campo = document.getElementById(nomeCampo);
+            if (campo && campo.value) {
+                let valorLimpo = limparMascara(campo.value);
+                campo.value = valorLimpo.toFixed(2);
+            }
         });
     });
+
+
 </script>
 </body>
 </html>

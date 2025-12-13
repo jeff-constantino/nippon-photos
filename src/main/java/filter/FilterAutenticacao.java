@@ -16,80 +16,77 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-
-
-@WebFilter(urlPatterns = {"/principal/*"})/*intercepta todas as requisi��es do projeto ou mapeamento*/
+@WebFilter(urlPatterns = {"/principal/*"})
 public class FilterAutenticacao implements Filter {
 
     private static Connection connection;
 
-    public FilterAutenticacao() {
-    }
-
-    public void destroy() { /*encerra os processos quando  parar o servidor*/
+    @Override
+    public void init(FilterConfig fConfig) throws ServletException {
+        connection = SingleConnectionBanco.getConnection();
         try {
-            connection.close();
+            connection.setAutoCommit(false);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-
-
-
-
     }
 
-
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+
         try {
-
             HttpServletRequest req = (HttpServletRequest) request;
-            HttpSession session = req.getSession();
 
-            String usuarioLogado = (String) session.getAttribute("usuario");
+            // 🔧 AJUSTE CRÍTICO 1: não cria sessão automaticamente
+            HttpSession session = req.getSession(false);
 
-            String urlParaAutenticar = req.getServletPath(); /*url q esta sendo acessada*/
+            String usuarioLogado = (session != null)
+                    ? (String) session.getAttribute("usuario")
+                    : null;
 
-            /*Validar se esta logado, senao redireciona a tela de login*/
+            String urlParaAutenticar = req.getServletPath();
 
-            if (usuarioLogado == null && !urlParaAutenticar.equalsIgnoreCase("/principal/ServletLogin")) { /*nao esta logado*/
+            // 🔧 AJUSTE CRÍTICO 2: URLs públicas
+            boolean urlPublica =
+                    urlParaAutenticar.equals("/principal/ServletLogin") ||
+                            urlParaAutenticar.equals("/principal/paginaPublica.jsp");
 
-                RequestDispatcher redireciona = request.getRequestDispatcher("/index.jsp?url=" +urlParaAutenticar);
+            if (usuarioLogado == null && !urlPublica) {
+
+                RequestDispatcher redireciona =
+                        request.getRequestDispatcher("/index.jsp?url=" + urlParaAutenticar);
+
                 request.setAttribute("msg", "Por favor realize o login!");
                 redireciona.forward(request, response);
-                /*para a execucao e redireciona ao login*/
-            }else {
-
-                connection.setAutoCommit(false); // Setar autocommit para off
-                chain.doFilter(request, response);
-                connection.commit();/*deu tudo certo, comita as altera��es no BD*/
+                return; // 🔧 AJUSTE CRÍTICO 3: garante parada do fluxo
             }
 
+            connection.setAutoCommit(false);
+            chain.doFilter(request, response);
+            connection.commit();
+
         } catch (Exception e) {
-            e.printStackTrace();
-            RequestDispatcher redireciona = request.getRequestDispatcher("erro.jsp");
-            request.setAttribute("msg", e.getMessage());
-            redireciona.forward(request, response);
 
             try {
                 connection.rollback();
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
+
+            e.printStackTrace();
+            RequestDispatcher redireciona = request.getRequestDispatcher("erro.jsp");
+            request.setAttribute("msg", e.getMessage());
+            redireciona.forward(request, response);
         }
     }
 
-    /*inicia os processos ou recursos quando o servidor sobe o projeto (iniciar conexao com BD)*/
-    public void init(FilterConfig fConfig) throws ServletException {
-
-        connection = SingleConnectionBanco.getConnection();
+    @Override
+    public void destroy() {
         try {
-            connection.setAutoCommit(false); // Setar autocommit para off
+            connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-
-
     }
-
 }

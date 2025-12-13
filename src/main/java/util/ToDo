@@ -26,6 +26,8 @@ confirmar se na DRE está descontando os custos de despesas/vales/contas em dinh
 ADCIONAR CALCULO DE % DE JUROS DOS CARTÕES NO DRE
 criar comparativo de vendas mes/ano (relmes já tem a função para buscar por dia "vendasMesList")
 
+criar cadastro completo de funcionários (foto, documentos, etc)
+
 CRIAR BANCO E FUNÇOES PARA FECHAMENTO DO MES E DRE
    ALTER TABLE public.fecha_mes
    ADD COLUMN receitas NUMERIC(15,2),

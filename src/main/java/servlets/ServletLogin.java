@@ -30,7 +30,7 @@ public class ServletLogin extends HttpServlet {
         // Se a ação for logout, invalida a sessão e redireciona para a página de login
         if (acao != null && acao.equals("logout")) {
             request.getSession().invalidate(); // Invalida a sessão
-            response.sendRedirect(request.getContextPath() + "/index.jsp"); // Redireciona para a página de login
+            response.sendRedirect(request.getContextPath() + "/crediario.jsp"); // Redireciona para a página de login
             return;
         }
 
@@ -72,12 +72,12 @@ public class ServletLogin extends HttpServlet {
                     RequestDispatcher redirecionar = request.getRequestDispatcher(url); /* Redireciona */
                     redirecionar.forward(request, response);
                 } else {
-                    RequestDispatcher redirecionar = request.getRequestDispatcher("/index.jsp"); /* Redireciona */
+                    RequestDispatcher redirecionar = request.getRequestDispatcher("/crediario.jsp"); /* Redireciona */
                     request.setAttribute("msg", "Informe o Login e Senha corretamente!");
                     redirecionar.forward(request, response);
                 }
             } else {
-                RequestDispatcher redirecionar = request.getRequestDispatcher("index.jsp"); /* Redireciona */
+                RequestDispatcher redirecionar = request.getRequestDispatcher("crediario.jsp"); /* Redireciona */
                 request.setAttribute("msg", "Informe o Login e Senha corretamente!");
                 redirecionar.forward(request, response);
             }

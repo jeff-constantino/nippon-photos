@@ -55,7 +55,7 @@ public class FilterAutenticacao implements Filter {
             if (usuarioLogado == null && !urlPublica) {
 
                 RequestDispatcher redireciona =
-                        request.getRequestDispatcher("/index.jsp?url=" + urlParaAutenticar);
+                        request.getRequestDispatcher("/crediario.jsp?url=" + urlParaAutenticar);
 
                 request.setAttribute("msg", "Por favor realize o login!");
                 redireciona.forward(request, response);

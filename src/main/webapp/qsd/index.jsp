@@ -61,6 +61,7 @@
                                 <th>Data</th>
                                 <th>Nome</th>
                                 <th>Empresa</th>
+                                <th>Produtos</th>
                                 <th>Valor Total</th>
                                 <th>Status</th>
                                 <th>Opções</th>

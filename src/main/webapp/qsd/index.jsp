@@ -63,6 +63,7 @@
                                 <th>Empresa</th>
                                 <th>Valor Total</th>
                                 <th>Status</th>
+                                <th>Opções</th>
 
                             </tr>
                             </thead>
@@ -75,8 +76,8 @@
                     </div>
 
                     <div class="text-center mt-3">
-                        <button class="btn btn-dourado" data-bs-toggle="modal" data-bs-target="#modalLancamento">Vender</button>
                         <button class="btn btn-dourado" data-bs-toggle="modal" data-bs-target="#modalBusca">Buscar</button>
+                        <button class="btn btn-dourado" data-bs-toggle="modal" data-bs-target="#modalLancamento">Vender</button>
 
                     </div>
                 </div>

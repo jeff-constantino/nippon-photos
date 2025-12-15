@@ -35,6 +35,8 @@ public class ServletFechaMes extends ServletGenericUtil {
 
         if ("relatorioMes".equals(acao)) {
             gerarRelatorioMensal(request, response);
+        } else if ("buscarFechamento".equals(acao)) {
+            buscarFechamentoGravado(request, response);
         }
     }
 
@@ -68,16 +70,12 @@ public class ServletFechaMes extends ServletGenericUtil {
             }
             request.setAttribute("valorTotalDespesas", valorDespesas);
 
-            double valorDespesasDin =
-                    daoDespesas.somarDespesasDinheiroPorPeriodo(dataInicial, dataFinal);
-
+            double valorDespesasDin = daoDespesas.somarDespesasDinheiroPorPeriodo(dataInicial, dataFinal);
             request.setAttribute("valorDespesasDin", valorDespesasDin);
-
 
             List<ModelFechaMes> vendasMesList = daoFechaMes.buscarFechamentoMensal(dataInicial, dataFinal);
             request.setAttribute("vendasMesList", vendasMesList);
 
-            // 🆕 BUSCAR SALÁRIOS QUE JÁ VEM NO ModelFechaMes
             BigDecimal totalSalarios = BigDecimal.ZERO;
             if (vendasMesList != null && !vendasMesList.isEmpty()) {
                 ModelFechaMes resumo = vendasMesList.get(0);
@@ -92,7 +90,6 @@ public class ServletFechaMes extends ServletGenericUtil {
 
             List<ModelConfiguracao> configsJuros = daoConfiguracao.consultarJuros();
             request.setAttribute("configsJuros", configsJuros);
-
 
             List<ModelLogin> funcionarios = daoFuncionario.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);
@@ -116,7 +113,6 @@ public class ServletFechaMes extends ServletGenericUtil {
             request.setAttribute("dataFinal", dataFinal);
             request.setAttribute("funcionarioId", funcionarioId);
 
-            // Adiciona nome do mês e ano + grava mês/ano na sessão
             int mes = 0, ano = 0;
             if (dataInicial != null && !dataInicial.isEmpty()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -132,15 +128,12 @@ public class ServletFechaMes extends ServletGenericUtil {
                 request.setAttribute("mesAno", mesAnoFormatado);
             }
 
-            // Salva na sessão para reutilizar no doPost
             HttpSession session = request.getSession();
             session.setAttribute("vendasMesList", vendasMesList);
             session.setAttribute("valorTotalDespesas", BigDecimal.valueOf(valorDespesas));
             session.setAttribute("valorDespesasDin", BigDecimal.valueOf(valorDespesasDin));
-
             session.setAttribute("valorTotalContas", BigDecimal.valueOf(valorContas));
-            session.setAttribute("valorTotalSalarios", totalSalarios); // 🆕 Salva salários na sessão
-
+            session.setAttribute("valorTotalSalarios", totalSalarios);
             session.setAttribute("mes", mes);
             session.setAttribute("ano", ano);
 
@@ -157,22 +150,104 @@ public class ServletFechaMes extends ServletGenericUtil {
         }
     }
 
-    // ============================
-    // doPost: Grava o fechamento
-    // ============================
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private void buscarFechamentoGravado(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            int mes = Integer.parseInt(request.getParameter("mes"));
+            int ano = Integer.parseInt(request.getParameter("ano"));
 
+            DAOFechaMes daoFechaMes = new DAOFechaMes();
+            ModelFechaMes fechamentoExistente = daoFechaMes.buscarFechamentoPorMesAno(mes, ano);
+
+            if (fechamentoExistente == null) {
+                request.setAttribute("msg", "Nenhum fechamento encontrado para " + mes + "/" + ano);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("principal/fechames.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
+
+            // Buscar dados complementares usando as datas do mês
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, ano);
+            cal.set(Calendar.MONTH, mes - 1);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            String dataInicial = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+
+            cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+            String dataFinal = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+
+            DAOContas daoContas = new DAOContas();
+            DAODespesas daoDespesas = new DAODespesas();
+            DAOFuncionario daoFuncionario = new DAOFuncionario();
+            DAOConfiguracao daoConfiguracao = new DAOConfiguracao();
+
+            List<ModelContas> contasMes = daoContas.buscarContasRelMes(dataInicial, dataFinal);
+            request.setAttribute("contasMes", contasMes);
+
+            List<ModelDespesas> despesasMes = daoDespesas.listarDespesasPorPeriodo(dataInicial, dataFinal);
+            request.setAttribute("despesasMes", despesasMes);
+
+            List<ModelVendas> vendasList = daoFuncionario.consultarRanking(dataInicial, dataFinal, 0, 10);
+            request.setAttribute("vendasList", vendasList);
+
+            List<ModelConfiguracao> configsJuros = daoConfiguracao.consultarJuros();
+            request.setAttribute("configsJuros", configsJuros);
+
+            // Criar um ModelFechaMes para simular dados do resumo
+            ModelFechaMes resumoMes = new ModelFechaMes();
+            resumoMes.setTotal_ft(fechamentoExistente.getTotal_ft());
+            resumoMes.setTotal_enc(fechamentoExistente.getTotal_enc());
+            resumoMes.setTotal_dig(fechamentoExistente.getTotal_dig());
+            resumoMes.setTotal_sobras(fechamentoExistente.getTotal_sobras());
+            resumoMes.setValor_din_mes_real(fechamentoExistente.getValor_din_mes_real());
+            resumoMes.setValor_deb_mes_real(fechamentoExistente.getValor_deb_mes_real());
+            resumoMes.setValor_cred_mes_real(fechamentoExistente.getValor_cred_mes_real());
+            resumoMes.setValor_pix_mes_real(fechamentoExistente.getValor_pix_mes_real());
+            resumoMes.setValor_vale_total(fechamentoExistente.getValor_vale_total());
+            resumoMes.setDesconto_mes(fechamentoExistente.getDesconto_mes());
+
+            List<ModelFechaMes> vendasMesList = List.of(resumoMes);
+            request.setAttribute("vendasMesList", vendasMesList);
+
+            request.setAttribute("fechamentoExistente", fechamentoExistente);
+            request.setAttribute("valorTotalDespesas", fechamentoExistente.getValor_total_despesas());
+            request.setAttribute("valorTotalContas", fechamentoExistente.getValor_total_contas());
+            request.setAttribute("valorTotalSalarios", fechamentoExistente.getSalarios());
+
+            SimpleDateFormat sdfMesAno = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR"));
+            cal.set(Calendar.YEAR, ano);
+            cal.set(Calendar.MONTH, mes - 1);
+            String mesAnoFormatado = sdfMesAno.format(cal.getTime());
+            request.setAttribute("mesAno", mesAnoFormatado);
+
+            HttpSession session = request.getSession();
+            session.setAttribute("mes", mes);
+            session.setAttribute("ano", ano);
+            session.setAttribute("fechamentoExistenteId", fechamentoExistente.getId());
+
+            request.setAttribute("msg", "Fechamento carregado com sucesso!");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("principal/fechames.jsp");
+            dispatcher.forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("msg", "Erro ao buscar fechamento: " + e.getMessage());
+            RequestDispatcher dispatcher = request.getRequestDispatcher("principal/fechames.jsp");
+            dispatcher.forward(request, response);
+        }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
 
             @SuppressWarnings("unchecked")
             List<ModelFechaMes> vendasMesList = (List<ModelFechaMes>) session.getAttribute("vendasMesList");
 
-            BigDecimal valorTotalDespesas = (BigDecimal) session.getAttribute("despesas");
-            BigDecimal valorTotalContas = (BigDecimal) session.getAttribute("contas");
             int mes = (int) session.getAttribute("mes");
             int ano = (int) session.getAttribute("ano");
+
+            DAOFechaMes dao = new DAOFechaMes();
+            ModelFechaMes fechamentoExistente = dao.buscarFechamentoPorMesAno(mes, ano);
 
             if (vendasMesList == null || vendasMesList.isEmpty()) {
                 request.setAttribute("msg", "Não há dados para gravar o fechamento.");
@@ -183,15 +258,12 @@ public class ServletFechaMes extends ServletGenericUtil {
             ModelFechaMes resumo = vendasMesList.get(0);
 
             BigDecimal totalRibbons = BigDecimal.ZERO;
-
-            if (resumo.getQtd_ribbon() > 0) {
+            if (resumo.getQtd_ribbon() != null && resumo.getQtd_ribbon() > 0) {
                 BigDecimal qtdRibbon = BigDecimal.valueOf(resumo.getQtd_ribbon());
                 BigDecimal totalFt = BigDecimal.valueOf(resumo.getTotal_ft());
                 BigDecimal totalSobras = BigDecimal.valueOf(resumo.getTotal_sobras());
-
                 totalRibbons = totalFt.add(totalSobras).divide(qtdRibbon, 2, RoundingMode.HALF_UP);
             }
-
 
             BigDecimal valorDin = resumo.getValor_din_mes_real() != null ? resumo.getValor_din_mes_real() : BigDecimal.ZERO;
             BigDecimal valorDeb = resumo.getValor_deb_mes_real() != null ? resumo.getValor_deb_mes_real() : BigDecimal.ZERO;
@@ -218,12 +290,14 @@ public class ServletFechaMes extends ServletGenericUtil {
             BigDecimal saldo = parseBigDecimal(request.getParameter("saldo"));
             BigDecimal receitadin = parseBigDecimal(request.getParameter("receitadin"));
             BigDecimal desconto = parseBigDecimal(request.getParameter("descontos"));
-
-            BigDecimal contas= parseBigDecimal(request.getParameter("contas"));
+            BigDecimal contas = parseBigDecimal(request.getParameter("contas"));
             BigDecimal despesas = parseBigDecimal(request.getParameter("despesas"));
 
-
             ModelFechaMes fechamento = new ModelFechaMes();
+            if (fechamentoExistente != null) {
+                fechamento.setId(fechamentoExistente.getId());
+            }
+
             fechamento.setMes(mes);
             fechamento.setAno(ano);
             fechamento.setTotal_ft(resumo.getTotal_ft());
@@ -259,11 +333,13 @@ public class ServletFechaMes extends ServletGenericUtil {
             fechamento.setSaldo(saldo);
             fechamento.setReceitadin(receitadin);
 
-            DAOFechaMes dao = new DAOFechaMes();
-            dao.gravarFechamentoMes(fechamento);
-
-
-            request.setAttribute("msg", "Fechamento do mês gravado com sucesso!");
+            if (fechamentoExistente != null) {
+                dao.atualizarFechamentoMes(fechamento);
+                request.setAttribute("msg", "Fechamento do mês atualizado com sucesso!");
+            } else {
+                dao.gravarFechamentoMes(fechamento);
+                request.setAttribute("msg", "Fechamento do mês gravado com sucesso!");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -273,59 +349,40 @@ public class ServletFechaMes extends ServletGenericUtil {
         request.getRequestDispatcher("principal/fechames.jsp").forward(request, response);
     }
 
-
-
     private BigDecimal parseBigDecimal(String value) {
         if (value == null || value.trim().isEmpty()) {
             return BigDecimal.ZERO;
         }
         try {
             String normalized = value.trim();
-
-            // Remove "R$" e espaços
             normalized = normalized.replace("R$", "").trim();
-
-            // Remove espaços internos
             normalized = normalized.replace(" ", "");
 
-            // Se está vazio após limpeza
             if (normalized.isEmpty()) {
                 return BigDecimal.ZERO;
             }
 
-            // Conta pontos e vírgulas
             long pontos = normalized.chars().filter(ch -> ch == '.').count();
             long virgulas = normalized.chars().filter(ch -> ch == ',').count();
 
-            // Formato brasileiro com vírgula decimal: 1.234,56 ou 1234,56
             if (virgulas > 0) {
                 normalized = normalized.replace(".", "").replace(",", ".");
-            }
-            // Formato com múltiplos pontos (milhar): 1.234.567
-            else if (pontos > 1) {
+            } else if (pontos > 1) {
                 normalized = normalized.replace(".", "");
-            }
-            // Formato com um ponto - precisa verificar se é decimal ou milhar
-            else if (pontos == 1) {
+            } else if (pontos == 1) {
                 int pontoPos = normalized.indexOf(".");
                 int digitosDepois = normalized.length() - pontoPos - 1;
-
-                // Se tem 1 ou 2 dígitos após o ponto, é decimal (ex: 123.45)
-                // Se tem 3+ dígitos, é milhar (ex: 1.234)
                 if (digitosDepois > 2) {
                     normalized = normalized.replace(".", "");
                 }
-                // Senão, já está no formato correto (decimal com ponto)
             }
 
             return new BigDecimal(normalized);
 
         } catch (NumberFormatException e) {
-            System.err.println("Erro ao converter valor: '" + value + "' -> normalized tentou ser: " + value.trim().replace("R$", "").trim());
+            System.err.println("Erro ao converter valor: '" + value + "'");
             e.printStackTrace();
             return BigDecimal.ZERO;
         }
     }
-
 }
-

@@ -2,6 +2,7 @@ CD IdeaProjects\nippon-photos
 mvn clean package
 
 
+ARRUMAR BUSCAR FECHAMENTO GRAVADO
 
 adcionar historico disciplinar para exibir as medidas de cada funcionario
 alterar as somas de salarios, fecha mes, dre para incluir a soma de acordo com a comissão;

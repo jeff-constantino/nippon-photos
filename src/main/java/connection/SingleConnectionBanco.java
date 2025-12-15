@@ -31,21 +31,28 @@ public class SingleConnectionBanco {
     private static void conectar() {
         try {
             if (connection == null) {
-                Class.forName("org.postgresql.Driver");/*carrega o driver de conexao do banco*/
+
+                Class.forName("org.postgresql.Driver");
+
                 connection = DriverManager.getConnection(banco, user, senha);
-                connection.setAutoCommit(false);/*para n�o efetuar altera��es no banco sem nosso comando*/
+                connection.setAutoCommit(false);
 
-
+                // ===== TESTE DEFINITIVO =====
+                var ps = connection.prepareStatement("SELECT current_user");
+                var rs = ps.executeQuery();
+                if (rs.next()) {
+                    System.out.println("USUARIO BANCO = " + rs.getString(1));
+                }
+                rs.close();
+                ps.close();
+                // ============================
 
             }
-
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
+
 
 
 }

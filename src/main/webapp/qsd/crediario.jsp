@@ -462,73 +462,197 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-        // ==========================================================
-        // FUNÇÃO: Ajusta a data final para o último dia do mês
-        // ==========================================================
-        function ajustarDataFinal() {
-            const dataInicioEl = document.getElementById('dataInicio');
-            const dataFimEl = document.getElementById('dataFim');
+        // ==================== COLOR PICKER ====================
+        const colorPicker = document.getElementById('background-color-picker');
+        const colorLabel = document.getElementById('color-picker-label');
+        const buttons = document.querySelectorAll('.btn-dourado');
+        const defaultColor = '#DAA520';
 
-            if (!dataInicioEl || !dataInicioEl.value) {
-                if (dataFimEl) {
-                    dataFimEl.value = '';
-                }
-                return;
-            }
+        function shadeColor(hex, percent) {
+            let R = parseInt(hex.substring(1, 3), 16);
+            let G = parseInt(hex.substring(3, 5), 16);
+            let B = parseInt(hex.substring(5, 7), 16);
 
-            const partes = dataInicioEl.value.split('-');
-            const ano = parseInt(partes[0], 10);
-            const mes = parseInt(partes[1], 10) - 1;
+            R = parseInt(R * (100 + percent) / 100);
+            G = parseInt(G * (100 + percent) / 100);
+            B = parseInt(B * (100 + percent) / 100);
 
-            const ultimoDia = new Date(ano, mes + 1, 0);
-            const diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
-            const mesFinal = String(mes + 1).padStart(2, '0');
+            R = (R < 255) ? R : 255;
+            G = (G < 255) ? G : 255;
+            B = (B < 255) ? B : 255;
 
-            if (dataFimEl) {
-                dataFimEl.value = `${ano}-${mesFinal}-${diaFinal}`;
+            return "#" +
+                ("0" + R.toString(16)).slice(-2) +
+                ("0" + G.toString(16)).slice(-2) +
+                ("0" + B.toString(16)).slice(-2);
+        }
+
+        function ajustarContraste(hex) {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            const luminosidade = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+            if (luminosidade < 0.5) {
+                colorLabel.classList.remove('text-dark');
+                colorLabel.classList.add('text-light');
+            } else {
+                colorLabel.classList.remove('text-light');
+                colorLabel.classList.add('text-dark');
             }
         }
 
-        // ==========================================================
-        // MODAL DE LANÇAMENTO: define data de hoje automaticamente
-        // ==========================================================
-        const modalLancamentoEl = document.getElementById('modalLancamento');
-        if (modalLancamentoEl) {
-            modalLancamentoEl.addEventListener('shown.bs.modal', function () {
-                const campoData = document.getElementById('datavenda');
-                if (campoData && !campoData.value) {
-                    const hoje = new Date().toISOString().split('T')[0];
-                    campoData.value = hoje;
+        function aplicarCor(novaCor) {
+            document.body.style.backgroundColor = novaCor;
+            const hoverCor = shadeColor(novaCor, -10);
+
+            buttons.forEach(button => {
+                button.style.backgroundColor = novaCor;
+                button.onmouseover = () => button.style.backgroundColor = hoverCor;
+                button.onmouseout = () => button.style.backgroundColor = novaCor;
+            });
+
+            ajustarContraste(novaCor);
+        }
+
+        if (colorPicker) {
+            colorPicker.addEventListener('input', () => aplicarCor(colorPicker.value));
+            aplicarCor(defaultColor);
+        }
+
+        // ==================== ABERTURA AUTOMÁTICA DE MODAIS ====================
+        <c:if test="${not empty modelReceber}">
+        new bootstrap.Modal(document.getElementById('modalReceber')).show();
+        </c:if>
+
+        <c:if test="${not empty listaRelatorio}">
+        new bootstrap.Modal(document.getElementById('modalRelatorio')).show();
+        </c:if>
+
+        // ==================== FUNÇÕES DE MOEDA ====================
+        function formatarMoeda(valorCentavos) {
+            const valor = (parseInt(valorCentavos) || 0) / 100;
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function limparMoedaParaNumero(str) {
+            return str.replace(/[^\d,]/g, '').replace(',', '.');
+        }
+
+        function aplicarMascaraMoeda(input) {
+            if (!input.value) input.value = 'R$ 0,00';
+
+            input.addEventListener('input', function() {
+                let valor = this.value.replace(/\D/g, '');
+                this.value = formatarMoeda(valor);
+            });
+
+            input.addEventListener('focus', function() {
+                if (this.value === 'R$ 0,00') this.value = '';
+            });
+
+            input.addEventListener('blur', function() {
+                if (!this.value.trim()) this.value = 'R$ 0,00';
+            });
+        }
+
+        // ==================== MODAL LANÇAMENTO ====================
+        const campoValorLancamento = document.getElementById('valor');
+        if (campoValorLancamento) aplicarMascaraMoeda(campoValorLancamento);
+
+        // ==================== MODAL RECEBER ====================
+        const campoValorTotalReadonly = document.querySelector('#modalReceber input[readonly][value*="R$"]');
+        const campoDesconto = document.getElementById('desconto');
+        const campoValorPago = document.getElementById('valorpago');
+
+        if (campoValorTotalReadonly && campoDesconto && campoValorPago) {
+            let total = parseFloat(limparMoedaParaNumero(campoValorTotalReadonly.value.replace('R$', ''))) || 0;
+            campoDesconto.value = '0';
+            campoValorPago.value = formatarMoeda(total * 100);
+
+            campoDesconto.addEventListener('input', function() {
+                let perc = parseInt(this.value.replace(/\D/g, '')) || 0;
+                if (perc > 100) perc = 100;
+                this.value = perc;
+
+                let final = total - (total * perc / 100);
+                campoValorPago.value = formatarMoeda(final * 100);
+            });
+
+            aplicarMascaraMoeda(campoValorPago);
+        }
+
+        // ==================== CORREÇÃO ANTES DO ENVIO ====================
+        document.querySelectorAll('#modalLancamento form, #modalReceber form')
+            .forEach(form => {
+                form.addEventListener('submit', function() {
+                    if (campoValorLancamento)
+                        campoValorLancamento.value = limparMoedaParaNumero(campoValorLancamento.value).replace('.', ',');
+
+                    if (campoValorPago)
+                        campoValorPago.value = limparMoedaParaNumero(campoValorPago.value).replace('.', ',');
+                });
+            });
+
+        // ==================== CLIENTE ====================
+        const clienteSelect = document.getElementById('clienteSelect');
+        const novoClienteFields = document.getElementById('novoClienteFields');
+        const novoNome = document.getElementById('novoNome');
+        const novaEmpresa = document.getElementById('novaEmpresa');
+        const hiddenCliente = document.getElementById('hiddenCliente');
+        const hiddenEmpresa = document.getElementById('hiddenEmpresa');
+
+        if (clienteSelect) {
+            clienteSelect.addEventListener('change', function() {
+                if (this.value === 'novo') {
+                    novoClienteFields.style.display = 'block';
+                } else {
+                    novoClienteFields.style.display = 'none';
+                    if (this.value) {
+                        const p = this.value.split('|');
+                        hiddenCliente.value = p[0];
+                        hiddenEmpresa.value = p[1];
+                    }
                 }
             });
         }
 
-        // ==========================================================
-        // MODAL DE RELATÓRIO: inicializa datas ao abrir
-        // ==========================================================
-        const modalRelatorioEl = document.getElementById('modalRelatorio');
-        if (modalRelatorioEl) {
-            modalRelatorioEl.addEventListener('shown.bs.modal', function () {
+        // ==================== DATA PADRÃO - LANÇAMENTO ====================
+        const modalLancamento = document.getElementById('modalLancamento');
+        if (modalLancamento) {
+            modalLancamento.addEventListener('shown.bs.modal', function() {
+                const campoData = document.getElementById('datavenda');
+                if (campoData && !campoData.value) {
+                    campoData.value = new Date().toISOString().split('T')[0];
+                }
+            });
+        }
+
+        // ==================== DATA RELATÓRIO ====================
+        function ajustarDataFinal() {
+            const ini = document.getElementById('dataInicio');
+            const fim = document.getElementById('dataFim');
+            if (!ini || !ini.value) return;
+
+            const [ano, mes] = ini.value.split('-');
+            const ultimoDia = new Date(ano, mes, 0).getDate();
+            fim.value = `${ano}-${mes}-${String(ultimoDia).padStart(2, '0')}`;
+        }
+
+        const modalRelatorio = document.getElementById('modalRelatorio');
+        if (modalRelatorio) {
+            modalRelatorio.addEventListener('shown.bs.modal', function() {
                 const dataInicio = document.getElementById('dataInicio');
-
-                if (dataInicio && !dataInicio.value) {
+                if (!dataInicio.value) {
                     const hoje = new Date();
-                    const ano = hoje.getFullYear();
-                    const mes = hoje.getMonth();
-
-                    dataInicio.value = `${ano}-${String(mes + 1).padStart(2, '0')}-01`;
+                    dataInicio.value = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}-01`;
                     ajustarDataFinal();
                 }
             });
         }
 
-        // ==========================================================
-        // EVENTO: ao mudar a data inicial, recalcula a data final
-        // ==========================================================
-        const dataInicioRelatorio = document.getElementById('dataInicio');
-        if (dataInicioRelatorio) {
-            dataInicioRelatorio.addEventListener('change', ajustarDataFinal);
-        }
+        const dataInicio = document.getElementById('dataInicio');
+        if (dataInicio) dataInicio.addEventListener('change', ajustarDataFinal);
 
     });
 </script>

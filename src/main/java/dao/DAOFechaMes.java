@@ -50,10 +50,13 @@ public class DAOFechaMes {
         String sqlVales = "SELECT SUM(valor) AS total_vales FROM vales WHERE data >= ? AND data <= ?";
         String sqlConfiguracao = "SELECT * FROM configuracao WHERE idconf = 1";
         String sqlMateriais = "SELECT qtd AS qtd_ribbon FROM conf_materiais WHERE id_conf = 1";
+
+        // 🔽 CONSULTA SALÁRIOS (mantém a mesma SQL)
         String sqlSalarios = "SELECT SUM(salario_liquido1) AS total_salarios FROM salarios " +
                 "WHERE mes >= ? AND mes <= ? AND ano >= ? AND ano <= ?";
 
         try {
+            /* === Consulta fecha_dia === */
             try (PreparedStatement pst = connection.prepareStatement(sqlFechamento)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
@@ -69,6 +72,7 @@ public class DAOFechaMes {
                 }
             }
 
+            /* === Consulta conf_dia === */
             try (PreparedStatement pst = connection.prepareStatement(sqlConfiguracoes)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
@@ -89,6 +93,7 @@ public class DAOFechaMes {
                 }
             }
 
+            /* === Consulta vales === */
             try (PreparedStatement pst = connection.prepareStatement(sqlVales)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
@@ -100,10 +105,12 @@ public class DAOFechaMes {
                 }
             }
 
+            /* === Consulta configuracao === */
             try (PreparedStatement pst = connection.prepareStatement(sqlConfiguracao)) {
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         ModelFechaMes resumo = resumoMensal.isEmpty() ? new ModelFechaMes() : resumoMensal.get(0);
+
                         resumo.setIdconf(rs.getLong("idconf"));
                         resumo.setConf1_valor(rs.getBigDecimal("conf1_valor"));
                         resumo.setConf1_valor2(rs.getBigDecimal("conf1_valor2"));
@@ -131,19 +138,22 @@ public class DAOFechaMes {
                 }
             }
 
+            /* === Consulta conf_materiais === */
             try (PreparedStatement pst = connection.prepareStatement(sqlMateriais);
                  ResultSet rs = pst.executeQuery()) {
+
                 if (rs.next() && !resumoMensal.isEmpty()) {
                     ModelFechaMes resumo = resumoMensal.get(0);
                     resumo.setQtd_ribbon(rs.getInt("qtd_ribbon"));
                 }
             }
 
+            // 🆕 CONSULTA SALÁRIOS - AGORA NA POSIÇÃO CORRETA (DEPOIS DE CRIAR O OBJETO)
             try (PreparedStatement pst = connection.prepareStatement(sqlSalarios)) {
-                pst.setInt(1, dataInicio.getMonthValue());
-                pst.setInt(2, dataFim.getMonthValue());
-                pst.setInt(3, dataInicio.getYear());
-                pst.setInt(4, dataFim.getYear());
+                pst.setInt(1, dataInicio.getMonthValue()); // mês inicial
+                pst.setInt(2, dataFim.getMonthValue());     // mês final
+                pst.setInt(3, dataInicio.getYear());       // ano inicial
+                pst.setInt(4, dataFim.getYear());          // ano final
 
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next() && !resumoMensal.isEmpty()) {
@@ -161,59 +171,8 @@ public class DAOFechaMes {
         return resumoMensal;
     }
 
-    public ModelFechaMes buscarFechamentoPorMesAno(int mes, int ano) throws SQLException {
-        String sql = "SELECT * FROM fecha_mes WHERE mes = ? AND ano = ?";
 
-        try (PreparedStatement pst = connection.prepareStatement(sql)) {
-            pst.setInt(1, mes);
-            pst.setInt(2, ano);
 
-            try (ResultSet rs = pst.executeQuery()) {
-                if (rs.next()) {
-                    ModelFechaMes fechamento = new ModelFechaMes();
-                    fechamento.setId(rs.getLong("id"));
-                    fechamento.setMes(rs.getInt("mes"));
-                    fechamento.setAno(rs.getInt("ano"));
-                    fechamento.setTotal_ft(rs.getInt("total_ft"));
-                    fechamento.setTotal_enc(rs.getInt("total_enc"));
-                    fechamento.setTotal_dig(rs.getInt("total_dig"));
-                    fechamento.setTotal_sobras(rs.getInt("total_sobras"));
-                    fechamento.setTotal_ribbons(rs.getBigDecimal("total_ribbons"));
-                    fechamento.setValor_din_mes_real(rs.getBigDecimal("valor_din_mes_real"));
-                    fechamento.setValor_deb_mes_real(rs.getBigDecimal("valor_deb_mes_real"));
-                    fechamento.setValor_cred_mes_real(rs.getBigDecimal("valor_cred_mes_real"));
-                    fechamento.setValor_pix_mes_real(rs.getBigDecimal("valor_pix_mes_real"));
-                    fechamento.setTotal_geral(rs.getBigDecimal("total_geral"));
-                    fechamento.setJuros_cartoes(rs.getBigDecimal("juros_cartoes"));
-                    fechamento.setValor_total_despesas(rs.getBigDecimal("valor_total_despesas"));
-                    fechamento.setValor_total_contas(rs.getBigDecimal("valor_total_contas"));
-                    fechamento.setValor_vale_total(rs.getBigDecimal("valor_vale_total"));
-                    fechamento.setDesconto_mes(rs.getBigDecimal("desconto_mes"));
-                    fechamento.setDebitoVm(rs.getBigDecimal("debito_vm"));
-                    fechamento.setCreditoVm(rs.getBigDecimal("credito_vm"));
-                    fechamento.setDebitoOutros(rs.getBigDecimal("debito_outros"));
-                    fechamento.setCreditoOutros(rs.getBigDecimal("credito_outros"));
-                    fechamento.setReceitas(rs.getBigDecimal("receitas"));
-                    fechamento.setSalarios(rs.getBigDecimal("salarios"));
-                    fechamento.setDespesasdin(rs.getBigDecimal("despesasdin"));
-                    fechamento.setSangria(rs.getBigDecimal("sangria"));
-                    fechamento.setSaldo(rs.getBigDecimal("saldo"));
-                    fechamento.setReceitadin(rs.getBigDecimal("receitadin"));
-                    fechamento.setJurosdebvm(rs.getBigDecimal("jurosdebvm"));
-                    fechamento.setJuroscredvm(rs.getBigDecimal("juroscredvm"));
-                    fechamento.setJurosdeboutros(rs.getBigDecimal("jurosdeboutros"));
-                    fechamento.setJuroscredoutros(rs.getBigDecimal("juroscredoutros"));
-
-                    return fechamento;
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Erro ao buscar fechamento por mês/ano: " + e.getMessage());
-            throw e;
-        }
-
-        return null;
-    }
 
     public void gravarFechamentoMes(ModelFechaMes fechamento) throws SQLException {
         String sql = "INSERT INTO fecha_mes (" +
@@ -233,16 +192,19 @@ public class DAOFechaMes {
             pst.setInt(5, fechamento.getTotal_dig());
             pst.setInt(6, fechamento.getTotal_sobras());
             pst.setBigDecimal(7, fechamento.getTotal_ribbons());
+
             pst.setBigDecimal(8, fechamento.getValor_din_mes_real());
             pst.setBigDecimal(9, fechamento.getValor_deb_mes_real());
             pst.setBigDecimal(10, fechamento.getValor_cred_mes_real());
             pst.setBigDecimal(11, fechamento.getValor_pix_mes_real());
+
             pst.setBigDecimal(12, fechamento.getTotal_geral());
             pst.setBigDecimal(13, fechamento.getJuros_cartoes());
             pst.setBigDecimal(14, fechamento.getValor_total_despesas());
             pst.setBigDecimal(15, fechamento.getValor_total_contas());
             pst.setBigDecimal(16, fechamento.getValor_vale_total());
             pst.setBigDecimal(17, fechamento.getDesconto_mes());
+
             pst.setBigDecimal(18, fechamento.getDebitoVm());
             pst.setBigDecimal(19, fechamento.getCreditoVm());
             pst.setBigDecimal(20, fechamento.getDebitoOutros());
@@ -267,55 +229,8 @@ public class DAOFechaMes {
         }
     }
 
-    public void atualizarFechamentoMes(ModelFechaMes fechamento) throws SQLException {
-        String sql = "UPDATE fecha_mes SET " +
-                "total_ft = ?, total_enc = ?, total_dig = ?, total_sobras = ?, total_ribbons = ?, " +
-                "valor_din_mes_real = ?, valor_deb_mes_real = ?, valor_cred_mes_real = ?, valor_pix_mes_real = ?, " +
-                "total_geral = ?, juros_cartoes = ?, valor_total_despesas = ?, valor_total_contas = ?, " +
-                "valor_vale_total = ?, desconto_mes = ?, debito_vm = ?, credito_vm = ?, debito_outros = ?, " +
-                "credito_outros = ?, receitas = ?, salarios = ?, despesasdin = ?, sangria = ?, saldo = ?, " +
-                "receitadin = ?, jurosdebvm = ?, juroscredvm = ?, jurosdeboutros = ?, juroscredoutros = ? " +
-                "WHERE mes = ? AND ano = ?";
 
-        try (PreparedStatement pst = connection.prepareStatement(sql)) {
-            pst.setInt(1, fechamento.getTotal_ft());
-            pst.setInt(2, fechamento.getTotal_enc());
-            pst.setInt(3, fechamento.getTotal_dig());
-            pst.setInt(4, fechamento.getTotal_sobras());
-            pst.setBigDecimal(5, fechamento.getTotal_ribbons());
-            pst.setBigDecimal(6, fechamento.getValor_din_mes_real());
-            pst.setBigDecimal(7, fechamento.getValor_deb_mes_real());
-            pst.setBigDecimal(8, fechamento.getValor_cred_mes_real());
-            pst.setBigDecimal(9, fechamento.getValor_pix_mes_real());
-            pst.setBigDecimal(10, fechamento.getTotal_geral());
-            pst.setBigDecimal(11, fechamento.getJuros_cartoes());
-            pst.setBigDecimal(12, fechamento.getValor_total_despesas());
-            pst.setBigDecimal(13, fechamento.getValor_total_contas());
-            pst.setBigDecimal(14, fechamento.getValor_vale_total());
-            pst.setBigDecimal(15, fechamento.getDesconto_mes());
-            pst.setBigDecimal(16, fechamento.getDebitoVm());
-            pst.setBigDecimal(17, fechamento.getCreditoVm());
-            pst.setBigDecimal(18, fechamento.getDebitoOutros());
-            pst.setBigDecimal(19, fechamento.getCreditoOutros());
-            pst.setBigDecimal(20, fechamento.getReceitas());
-            pst.setBigDecimal(21, fechamento.getSalarios());
-            pst.setBigDecimal(22, fechamento.getDespesasdin());
-            pst.setBigDecimal(23, fechamento.getSangria());
-            pst.setBigDecimal(24, fechamento.getSaldo());
-            pst.setBigDecimal(25, fechamento.getReceitadin());
-            pst.setBigDecimal(26, fechamento.getJurosdebvm());
-            pst.setBigDecimal(27, fechamento.getJuroscredvm());
-            pst.setBigDecimal(28, fechamento.getJurosdeboutros());
-            pst.setBigDecimal(29, fechamento.getJuroscredoutros());
-            pst.setInt(30, fechamento.getMes());
-            pst.setInt(31, fechamento.getAno());
 
-            pst.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            connection.rollback();
-            System.err.println("Erro ao atualizar fechamento do mês: " + e.getMessage());
-            throw e;
-        }
-    }
+
+
 }

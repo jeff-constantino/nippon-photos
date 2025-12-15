@@ -461,203 +461,77 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // ==================== COLOR PICKER ====================
-        const colorPicker = document.getElementById('background-color-picker');
-        const colorLabel = document.getElementById('color-picker-label');
-        const buttons = document.querySelectorAll('.btn-dourado');
-        const defaultColor = '#DAA520';
 
-        function shadeColor(hex, percent) {
-            let R = parseInt(hex.substring(1, 3), 16);
-            let G = parseInt(hex.substring(3, 5), 16);
-            let B = parseInt(hex.substring(5, 7), 16);
+        // ==========================================================
+        // FUNÇÃO: Ajusta a data final para o último dia do mês
+        // ==========================================================
+        function ajustarDataFinal() {
+            const dataInicioEl = document.getElementById('dataInicio');
+            const dataFimEl = document.getElementById('dataFim');
 
-            R = parseInt(R * (100 + percent) / 100);
-            G = parseInt(G * (100 + percent) / 100);
-            B = parseInt(B * (100 + percent) / 100);
+            if (!dataInicioEl || !dataInicioEl.value) {
+                if (dataFimEl) {
+                    dataFimEl.value = '';
+                }
+                return;
+            }
 
-            R = (R < 255) ? R : 255;
-            G = (G < 255) ? G : 255;
-            B = (B < 255) ? B : 255;
+            const partes = dataInicioEl.value.split('-');
+            const ano = parseInt(partes[0], 10);
+            const mes = parseInt(partes[1], 10) - 1;
 
-            return "#" +
-                ("0" + R.toString(16)).slice(-2) +
-                ("0" + G.toString(16)).slice(-2) +
-                ("0" + B.toString(16)).slice(-2);
-        }
+            const ultimoDia = new Date(ano, mes + 1, 0);
+            const diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+            const mesFinal = String(mes + 1).padStart(2, '0');
 
-        function ajustarContraste(hex) {
-            const r = parseInt(hex.slice(1, 3), 16);
-            const g = parseInt(hex.slice(3, 5), 16);
-            const b = parseInt(hex.slice(5, 7), 16);
-            const luminosidade = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-
-            if (luminosidade < 0.5) {
-                colorLabel.classList.remove('text-dark');
-                colorLabel.classList.add('text-light');
-            } else {
-                colorLabel.classList.remove('text-light');
-                colorLabel.classList.add('text-dark');
+            if (dataFimEl) {
+                dataFimEl.value = `${ano}-${mesFinal}-${diaFinal}`;
             }
         }
 
-        function aplicarCor(novaCor) {
-            document.body.style.backgroundColor = novaCor;
-            const hoverCor = shadeColor(novaCor, -10);
-
-            buttons.forEach(button => {
-                button.style.backgroundColor = novaCor;
-                button.onmouseover = () => button.style.backgroundColor = hoverCor;
-                button.onmouseout = () => button.style.backgroundColor = novaCor;
-            });
-
-            ajustarContraste(novaCor);
-        }
-
-        colorPicker.addEventListener('input', () => aplicarCor(colorPicker.value));
-        aplicarCor(defaultColor);
-
-        // ==================== ABERTURA AUTOMÁTICA DE MODAIS ====================
-        <c:if test="${not empty modelReceber}">
-        var modalReceber = new bootstrap.Modal(document.getElementById('modalReceber'));
-        modalReceber.show();
-        </c:if>
-
-        <c:if test="${not empty listaRelatorio}">
-        var modalRelatorio = new bootstrap.Modal(document.getElementById('modalRelatorio'));
-        modalRelatorio.show();
-        </c:if>
-
-        // ==================== FUNÇÕES DE MOEDA ====================
-        function formatarMoeda(valorCentavos) {
-            const valor = (parseInt(valorCentavos) || 0) / 100;
-            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
-
-        function limparMoedaParaNumero(str) {
-            return str.replace(/[^\d,]/g, '').replace(',', '.');
-        }
-
-        function aplicarMascaraMoeda(input, valorInicial = '0,00') {
-            if (!input.value) {
-                input.value = formatarMoeda(valorInicial.replace(',', ''));
-            }
-
-            input.addEventListener('input', function() {
-                let valor = this.value.replace(/\D/g, '');
-                this.value = formatarMoeda(valor);
-            });
-
-            input.addEventListener('focus', function() {
-                if (this.value === 'R$ 0,00') this.value = '';
-            });
-
-            input.addEventListener('blur', function() {
-                if (!this.value.trim()) this.value = 'R$ 0,00';
-            });
-        }
-
-        // ==================== MODAL LANÇAMENTO (VALOR TOTAL) ====================
-        const campoValorLancamento = document.getElementById('valor');
-        if (campoValorLancamento) {
-            aplicarMascaraMoeda(campoValorLancamento);
-        }
-
-        // ==================== MODAL RECEBER (DESCONTO % + VALOR PAGO AUTOMÁTICO) ====================
-        const campoValorTotalReadonly = document.querySelector('#modalReceber input[readonly][value*="R$"]');
-        const campoDesconto = document.getElementById('desconto');
-        const campoValorPago = document.getElementById('valorpago');
-
-        if (campoValorTotalReadonly && campoDesconto && campoValorPago) {
-            // Extrai o valor total (ex: "R$ 1.234,56" → 1234.56)
-            let valorTotalStr = campoValorTotalReadonly.value.replace('R$', '').trim();
-            let valorTotal = parseFloat(limparMoedaParaNumero(valorTotalStr)) || 0;
-
-            campoDesconto.placeholder = "Ex: 10 para 10%";
-            campoDesconto.value = '0';
-
-            // Inicia valor pago com o total
-            campoValorPago.value = formatarMoeda(Math.round(valorTotal * 100));
-
-            // Cálculo ao mudar desconto
-            campoDesconto.addEventListener('input', function() {
-                let percentual = parseFloat(this.value.replace(/\D/g, '')) || 0;
-                if (percentual > 100) percentual = 100;
-                this.value = percentual;
-
-                let valorDesconto = (valorTotal * percentual) / 100;
-                let valorFinal = valorTotal - valorDesconto;
-
-                campoValorPago.value = formatarMoeda(Math.round(valorFinal * 100));
-            });
-
-            // Permite edição manual do valor pago
-            aplicarMascaraMoeda(campoValorPago);
-        }
-
-        // ==================== CORREÇÃO DOS VALORES ANTES DO ENVIO ====================
-        const forms = document.querySelectorAll('#modalLancamento form, #modalReceber form');
-        forms.forEach(form => {
-            form.addEventListener('submit', function() {
-                // Valor do lançamento
-                if (campoValorLancamento && campoValorLancamento.value) {
-                    const limpo = limparMoedaParaNumero(campoValorLancamento.value);
-                    campoValorLancamento.value = limpo.replace('.', ',');
-                }
-
-                // Valor pago no receber
-                if (campoValorPago && campoValorPago.value) {
-                    const limpo = limparMoedaParaNumero(campoValorPago.value);
-                    campoValorPago.value = limpo.replace('.', ',');
-                }
-                // Desconto já está limpo (número inteiro %)
-            });
-        });
-
-        // ==================== SELEÇÃO DE CLIENTE NO LANÇAMENTO ====================
-        const clienteSelect = document.getElementById('clienteSelect');
-        const novoClienteFields = document.getElementById('novoClienteFields');
-        const novoNome = document.getElementById('novoNome');
-        const novaEmpresa = document.getElementById('novaEmpresa');
-        const hiddenCliente = document.getElementById('hiddenCliente');
-        const hiddenEmpresa = document.getElementById('hiddenEmpresa');
-
-        if (clienteSelect) {
-            clienteSelect.addEventListener('change', function() {
-                if (this.value === 'novo') {
-                    novoClienteFields.style.display = 'block';
-                    novoNome.required = true;
-                    novaEmpresa.required = true;
-                } else {
-                    novoClienteFields.style.display = 'none';
-                    novoNome.required = false;
-                    novaEmpresa.required = false;
-                    novoNome.value = '';
-                    novaEmpresa.value = '';
-
-                    if (this.value) {
-                        const parts = this.value.split('|');
-                        hiddenCliente.value = parts[0].trim();
-                        hiddenEmpresa.value = parts[1].trim();
-                    } else {
-                        hiddenCliente.value = '';
-                        hiddenEmpresa.value = '';
-                    }
+        // ==========================================================
+        // MODAL DE LANÇAMENTO: define data de hoje automaticamente
+        // ==========================================================
+        const modalLancamentoEl = document.getElementById('modalLancamento');
+        if (modalLancamentoEl) {
+            modalLancamentoEl.addEventListener('shown.bs.modal', function () {
+                const campoData = document.getElementById('datavenda');
+                if (campoData && !campoData.value) {
+                    const hoje = new Date().toISOString().split('T')[0];
+                    campoData.value = hoje;
                 }
             });
         }
 
-        // Preenche hidden com novo cliente ao enviar
-        const formLancamento = document.querySelector('#modalLancamento form');
-        if (formLancamento) {
-            formLancamento.addEventListener('submit', function() {
-                if (clienteSelect && clienteSelect.value === 'novo') {
-                    hiddenCliente.value = novoNome.value.trim();
-                    hiddenEmpresa.value = novaEmpresa.value.trim();
+        // ==========================================================
+        // MODAL DE RELATÓRIO: inicializa datas ao abrir
+        // ==========================================================
+        const modalRelatorioEl = document.getElementById('modalRelatorio');
+        if (modalRelatorioEl) {
+            modalRelatorioEl.addEventListener('shown.bs.modal', function () {
+                const dataInicio = document.getElementById('dataInicio');
+
+                if (dataInicio && !dataInicio.value) {
+                    const hoje = new Date();
+                    const ano = hoje.getFullYear();
+                    const mes = hoje.getMonth();
+
+                    dataInicio.value = `${ano}-${String(mes + 1).padStart(2, '0')}-01`;
+                    ajustarDataFinal();
                 }
             });
         }
+
+        // ==========================================================
+        // EVENTO: ao mudar a data inicial, recalcula a data final
+        // ==========================================================
+        const dataInicioRelatorio = document.getElementById('dataInicio');
+        if (dataInicioRelatorio) {
+            dataInicioRelatorio.addEventListener('change', ajustarDataFinal);
+        }
+
     });
 </script>
+
 </body>
 </html>

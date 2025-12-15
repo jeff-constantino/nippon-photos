@@ -80,6 +80,7 @@ public class DAOQSD {
 
         } catch (Exception e) {
             connection.rollback();
+            e.printStackTrace(); // IMPORTANTE PARA DEBUG
             throw e;
         }
 
@@ -131,6 +132,7 @@ public class DAOQSD {
 
         } catch (Exception e) {
             connection.rollback();
+            e.printStackTrace(); // IMPORTANTE PARA DEBUG
             throw e;
         }
 
@@ -144,7 +146,11 @@ public class DAOQSD {
 
         List<ModelCrediarioQSD> lista = new ArrayList<>();
 
-        String sql = "SELECT * FROM public.qsd WHERE LOWER(cliente) = LOWER(?) AND LOWER(empresa) = LOWER(?) ORDER BY datavenda DESC";
+        String sql =
+                "SELECT * FROM public.qsd " +
+                        "WHERE LOWER(cliente) = LOWER(?) " +
+                        "AND LOWER(empresa) = LOWER(?) " +
+                        "ORDER BY datavenda DESC";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cliente);
@@ -167,7 +173,10 @@ public class DAOQSD {
 
         List<ModelCrediarioQSD> lista = new ArrayList<>();
 
-        String sql = "SELECT * FROM public.qsd WHERE datavenda BETWEEN ? AND ? ORDER BY datavenda DESC";
+        String sql =
+                "SELECT * FROM public.qsd " +
+                        "WHERE datavenda BETWEEN ? AND ? " +
+                        "ORDER BY datavenda DESC";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setDate(1, new java.sql.Date(dataInicio.getTime()));
@@ -186,12 +195,17 @@ public class DAOQSD {
     /* =====================================================
        BUSCAR POR CLIENTE E PERÍODO
        ===================================================== */
-    public List<ModelCrediarioQSD> buscarPorClienteEPeriodo(String cliente, String empresa, Date dataInicio, Date dataFim) throws SQLException {
+    public List<ModelCrediarioQSD> buscarPorClienteEPeriodo(
+            String cliente, String empresa, Date dataInicio, Date dataFim) throws SQLException {
 
         List<ModelCrediarioQSD> lista = new ArrayList<>();
 
-        String sql = "SELECT * FROM public.qsd WHERE LOWER(cliente) = LOWER(?) AND LOWER(empresa) = LOWER(?) " +
-                "AND datavenda BETWEEN ? AND ? ORDER BY datavenda DESC";
+        String sql =
+                "SELECT * FROM public.qsd " +
+                        "WHERE LOWER(cliente) = LOWER(?) " +
+                        "AND LOWER(empresa) = LOWER(?) " +
+                        "AND datavenda BETWEEN ? AND ? " +
+                        "ORDER BY datavenda DESC";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cliente);
@@ -250,13 +264,16 @@ public class DAOQSD {
     }
 
     /* =====================================================
-       LISTA CLIENTES UNICOS
+       LISTA CLIENTES ÚNICOS
        ===================================================== */
     public List<ModelCrediarioQSD> getClientesUnicos() throws SQLException {
 
         List<ModelCrediarioQSD> lista = new ArrayList<>();
 
-        String sql = "SELECT DISTINCT cliente, empresa FROM public.qsd ORDER BY cliente";
+        String sql =
+                "SELECT DISTINCT cliente, empresa " +
+                        "FROM public.qsd " +
+                        "ORDER BY cliente";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {

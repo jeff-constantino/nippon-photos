@@ -604,7 +604,7 @@
                                                                                                name="ribbon_dif"
                                                                                                required
                                                                                                value=""
-                                                                                               readonly tabindex="-1">
+                                                                                                tabindex="-1">
                                                                                     </div>
 
 

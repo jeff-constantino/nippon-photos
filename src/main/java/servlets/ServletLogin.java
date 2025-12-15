@@ -77,7 +77,7 @@ public class ServletLogin extends HttpServlet {
                     redirecionar.forward(request, response);
                 }
             } else {
-                RequestDispatcher redirecionar = request.getRequestDispatcher("index.js"); /* Redireciona */
+                RequestDispatcher redirecionar = request.getRequestDispatcher("index.jsp"); /* Redireciona */
                 request.setAttribute("msg", "Informe o Login e Senha corretamente!");
                 redirecionar.forward(request, response);
             }

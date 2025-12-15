@@ -68,6 +68,12 @@ public class ServletFechaMes extends ServletGenericUtil {
             }
             request.setAttribute("valorTotalDespesas", valorDespesas);
 
+            double valorDespesasDin =
+                    daoDespesas.somarDespesasDinheiroPorPeriodo(dataInicial, dataFinal);
+
+            request.setAttribute("valorDespesasDin", valorDespesasDin);
+
+
             List<ModelFechaMes> vendasMesList = daoFechaMes.buscarFechamentoMensal(dataInicial, dataFinal);
             request.setAttribute("vendasMesList", vendasMesList);
 
@@ -130,6 +136,8 @@ public class ServletFechaMes extends ServletGenericUtil {
             HttpSession session = request.getSession();
             session.setAttribute("vendasMesList", vendasMesList);
             session.setAttribute("valorTotalDespesas", BigDecimal.valueOf(valorDespesas));
+            session.setAttribute("valorDespesasDin", BigDecimal.valueOf(valorDespesasDin));
+
             session.setAttribute("valorTotalContas", BigDecimal.valueOf(valorContas));
             session.setAttribute("valorTotalSalarios", totalSalarios); // 🆕 Salva salários na sessão
 

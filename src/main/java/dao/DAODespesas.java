@@ -200,6 +200,29 @@ public class DAODespesas {
 
         return despesasMes;
     }
+    public double somarDespesasDinheiroPorPeriodo(String dataInicio, String dataFim) throws SQLException {
+
+        String sql =
+                "SELECT COALESCE(SUM(valor_despesa), 0) AS total_dinheiro " +
+                        "FROM despesas " +
+                        "WHERE pagamento_despesa = 'DINHEIRO' " +
+                        "AND data_despesa >= ? " +
+                        "AND data_despesa <= ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setDate(1, java.sql.Date.valueOf(dataInicio));
+            stmt.setDate(2, java.sql.Date.valueOf(dataFim));
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("total_dinheiro");
+            }
+        }
+
+        return 0.0;
+    }
 
 
     public List<ModelDespesas> listarTodasDespesas(int pagina, int tamanho) throws SQLException {

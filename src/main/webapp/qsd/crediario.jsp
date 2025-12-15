@@ -201,7 +201,7 @@
                             <label class="form-label">Cliente</label>
                             <select id="clienteSelect" class="form-select" required>
                                 <option value="">Selecione um cliente cadastrado</option>
-                                <option value="novo">Adicionar Novo Cliente</option>
+                                <option value="novo" style="color: #d39e00; font: bold">Adicionar Novo Cliente</option>
                                 <c:forEach items="${listaClientes}" var="cli">
                                     <option value="${cli.cliente}|${cli.empresa}">${cli.cliente} - ${cli.empresa}</option>
                                 </c:forEach>

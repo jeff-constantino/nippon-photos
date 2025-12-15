@@ -43,35 +43,37 @@
                             <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                 <div class="d-flex d-sm-block d-md-flex align-items-center">
                                     <!-- Modal -->
-                                    <div class="modal fade" id="modalData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl mt-5">
+                                    <div class="modal fade" id="modalData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalDataLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-md"> <!-- tamanho médio -->
                                             <div class="modal-content">
+                                                <div class="modal-header justify-content-center">
+                                                    <h5 class="modal-title text-center w-100" id="modalDataLabel">Gerar Fechamento/h5>
+                                                </div>
                                                 <div class="modal-body">
-
                                                     <form action="<%= request.getContextPath() %>/ServletFechaMes" method="get" id="formBuscaMes" name="formBuscaMes">
                                                         <input type="hidden" name="acao" value="relatorioMes">
-                                                        <div class="form-row align-items-center">
-                                                            <div class="col-auto">
-                                                                <label for="dataInicial">Data Inicial</label>
+                                                        <div class="row g-3">
+                                                            <div class="col-12 col-md-6">
+                                                                <label for="dataInicial" class="form-label">Data Inicial</label>
                                                                 <input type="date" class="form-control" id="dataInicial" name="dataInicial" required onchange="setData()" value="${dataInicial}">
                                                             </div>
-                                                            <div class="col-auto">
-                                                                <label for="dataFinal">Data Final</label>
+                                                            <div class="col-12 col-md-6">
+                                                                <label for="dataFinal" class="form-label">Data Final</label>
                                                                 <input type="date" class="form-control" id="dataFinal" name="dataFinal" required value="${dataFinal}">
                                                             </div>
-                                                            <div class="col-auto">
-                                                                <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
+                                                            <div class="col-12 text-center mt-3">
+                                                                <button type="submit" class="btn btn-primary w-50">Imprimir Relatório</button>
                                                             </div>
                                                         </div>
                                                     </form>
-
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
+                                                <div class="modal-footer justify-content-center">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">FECHAR</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
 
                             </div>
@@ -90,35 +92,63 @@
                             <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                 <div class="d-flex d-sm-block d-md-flex align-items-center">
                                     <!-- Modal -->
-                                    <div class="modal fade" id="modalBusca" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl mt-5">
+                                    <!-- Modal BUSCAR FECHAMENTO - VERSÃO CORRIGIDA -->
+                                    <div class="modal fade" id="modalBusca" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalBuscaLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-md"> <!-- tamanho médio -->
                                             <div class="modal-content">
+                                                <div class="modal-header justify-content-center">
+                                                    <h5 class="modal-title text-center w-100" id="modalBuscaLabel">Buscar Fechamento</h5>
+                                                </div>
                                                 <div class="modal-body">
-
-                                                    <form action="<%= request.getContextPath() %>/ServletFechaMes" method="get" id="formBuscaFechamento" name="formBuscaFechamento">
-                                                        <input type="hidden" name="acao" value="buscaFechamento">
-                                                        <div class="form-row align-items-center">
-                                                            <div class="col-auto">
-                                                                <label for="dataInicial">Data Inicial</label>
-                                                                <input type="date" class="form-control" id="dataInicialFechamento" name="dataInicial" required onchange="setData()" value="${dataInicial}">
+                                                    <form action="<%= request.getContextPath() %>/ServletFechaMes" method="get" id="formBuscaFechamento">
+                                                        <input type="hidden" name="acao" value="buscarFechamento">
+                                                        <div class="row g-3">
+                                                            <div class="col-12 col-md-6">
+                                                                <label for="mesBusca" class="form-label">Selecione o Mês</label>
+                                                                <select class="form-select" id="mesBusca" name="mes" required>
+                                                                    <option value="">-- Selecione --</option>
+                                                                    <option value="1">Janeiro</option>
+                                                                    <option value="2">Fevereiro</option>
+                                                                    <option value="3">Março</option>
+                                                                    <option value="4">Abril</option>
+                                                                    <option value="5">Maio</option>
+                                                                    <option value="6">Junho</option>
+                                                                    <option value="7">Julho</option>
+                                                                    <option value="8">Agosto</option>
+                                                                    <option value="9">Setembro</option>
+                                                                    <option value="10">Outubro</option>
+                                                                    <option value="11">Novembro</option>
+                                                                    <option value="12">Dezembro</option>
+                                                                </select>
                                                             </div>
-                                                            <div class="col-auto">
-                                                                <label for="dataFinal">Data Final</label>
-                                                                <input type="date" class="form-control" id="dataFinalFechamento" name="dataFinal" required value="${dataFinal}">
+                                                            <div class="col-12 col-md-6">
+                                                                <label for="anoBusca" class="form-label">Selecione o Ano</label>
+                                                                <select class="form-select" id="anoBusca" name="ano" required>
+                                                                    <option value="">-- Selecione --</option>
+                                                                    <%
+                                                                        java.util.Calendar calBusca = java.util.Calendar.getInstance();
+                                                                        int anoAtualBusca = calBusca.get(java.util.Calendar.YEAR);
+                                                                        for(int i = 0; i < 20; i++) {
+                                                                            int anoBusca = anoAtualBusca - i;
+                                                                    %>
+                                                                    <option value="<%= anoBusca %>" <%= (i == 0) ? "selected" : "" %>><%= anoBusca %></option>
+                                                                    <% } %>
+                                                                </select>
                                                             </div>
-                                                            <div class="col-auto">
-                                                                <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
+                                                            <div class="col-12 text-center mt-3">
+                                                                <button type="submit" class="btn btn-success w-50">Buscar Fechamento</button>
                                                             </div>
                                                         </div>
                                                     </form>
-
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
+                                                <div class="modal-footer justify-content-center">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">FECHAR</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
+
                                 </div>
 
                             </div>
@@ -649,72 +679,78 @@
                                             <div class="row">
                                                 <div class="col-3 mb-3" style="text-align: center">
                                                     <label for="receitas" style="font-size: 1.2rem">RECEITA BRUTA</label>
-                                                    <input type="text" class="form-control money" id="receitas" name="receitas"  style="font-size: 1.2rem" value="${totalDinheiroReal + totalDebitoReal + totalCreditoReal + totalPixReal}">
+                                                    <input type="text" class="form-control money" id="receitas" name="receitas" style="font-size: 1.2rem"
+                                                           value="${fechamentoExistente != null ? fechamentoExistente.receitas : (totalDinheiroReal + totalDebitoReal + totalCreditoReal + totalPixReal)}">
                                                 </div>
                                                 <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="receitas" style="font-size: 1.2rem">RECEITA DINHEIRO</label>
-                                                    <input type="text" class="form-control money" id="receitadin" name="receitadin"  style="font-size: 1.2rem" value="${totalDinheiroReal}">
+                                                    <label for="receitadin" style="font-size: 1.2rem">RECEITA DINHEIRO</label>
+                                                    <input type="text" class="form-control money" id="receitadin" name="receitadin" style="font-size: 1.2rem"
+                                                           value="${fechamentoExistente != null ? fechamentoExistente.receitadin : totalDinheiroReal}">
                                                 </div>
 
                                                 <div class="col-3 mb-3" style="text-align: center">
                                                     <label for="receitacartoes" style="font-size: 1.2rem">RECEITA CARTÕES</label>
-                                                    <input type="text" class="form-control money" id="receitacartoes" name="receitacartoes"  style="font-size: 1.2rem" value="${totalDebitoReal + totalCreditoReal}">
+                                                    <input type="text" class="form-control money" id="receitacartoes" name="receitacartoes" style="font-size: 1.2rem"
+                                                           value="${totalDebitoReal + totalCreditoReal}">
                                                 </div>
 
                                                 <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="receitacartoes" style="font-size: 1.2rem">RECEITA PIX</label>
-                                                    <input type="text" class="form-control money" id="receitapix" name="receitapix"  style="font-size: 1.2rem" value="${totalPixReal}">
+                                                    <label for="receitapix" style="font-size: 1.2rem">RECEITA PIX</label>
+                                                    <input type="text" class="form-control money" id="receitapix" name="receitapix" style="font-size: 1.2rem"
+                                                           value="${totalPixReal}">
                                                 </div>
-
 
                                                 <div class="col-3 mb-3" style="text-align: center">
                                                     <label for="despesas" style="font-size: 1.2rem">DESPESA TOTAL</label>
-                                                    <input type="text" class="form-control money" id="despesas" name="despesas" style="font-size: 1.2rem" value="${valorTotalDespesas}">
+                                                    <input type="text" class="form-control money" id="despesas" name="despesas" style="font-size: 1.2rem"
+                                                           value="${valorTotalDespesas}">
                                                 </div>
                                                 <div class="col-3 mb-3" style="text-align: center">
                                                     <label for="despesasdin" style="font-size: 1.2rem">DESPESAS EM DINHEIRO</label>
-                                                    <input type="text" class="form-control money" id="despesasdin" name="despesasdin" style="font-size: 1.2rem" value="${valorDespesasDin}">
+                                                    <input type="text" class="form-control money" id="despesasdin" name="despesasdin" style="font-size: 1.2rem"
+                                                           value="${fechamentoExistente != null ? fechamentoExistente.despesasdin : valorDespesasDin}">
                                                 </div>
 
                                                 <div class="col-3 mb-3" style="text-align: center">
                                                     <label for="contas" style="font-size: 1.2rem">CONTAS PAGAS</label>
-                                                    <input type="text" class="form-control money" id="contas" name="contas" style="font-size: 1.2rem" value="${valorTotalContas}">
-
+                                                    <input type="text" class="form-control money" id="contas" name="contas" style="font-size: 1.2rem"
+                                                           value="${fechamentoExistente != null ? fechamentoExistente.contas : valorTotalContas}">
                                                 </div>
                                                 <div class="col-3 mb-3" style="text-align: center">
                                                     <label for="salarios" style="font-size: 1.2rem">SALÁRIOS LIQUÍDOS</label>
-                                                    <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 1.2rem" value="${valorTotalSalarios}">
+                                                    <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 1.2rem"
+                                                           value="${fechamentoExistente != null ? fechamentoExistente.salarios : valorTotalSalarios}">
                                                 </div>
                                                 <div class="col-3 mb-3" style="text-align: center">
                                                     <label for="vales" style="font-size: 1.2rem">VALES</label>
-                                                    <input type="text" class="form-control money" id="vales" name="vales" style="font-size: 1.2rem" value="${vendasMesList[0].valor_vale_total}">
+                                                    <input type="text" class="form-control money" id="vales" name="vales" style="font-size: 1.2rem"
+                                                           value="${(empty vendasMesList[0].valor_vale_total ? 0 : vendasMesList[0].valor_vale_total)}">
                                                 </div>
 
                                                 <div class="col-3 mb-3" style="text-align: center">
                                                     <label for="descontos" style="font-size: 1.2rem">DESCONTOS</label>
-                                                    <input type="text" class="form-control money" id="descontos" name="descontos" style="font-size: 1.2rem;" value="${vendasMesList[0].desconto_mes}">
+                                                    <input type="text" class="form-control money" id="descontos" name="descontos" style="font-size: 1.2rem"
+                                                           value="${(empty vendasMesList[0].desconto_mes ? 0 : vendasMesList[0].desconto_mes)}">
                                                 </div>
 
                                                 <div class="col-3 mb-3" style="text-align: center">
                                                     <label for="sangria" style="font-size: 1.2rem">SANGRIA DE CAIXA</label>
-                                                    <input type="text" class="form-control money" id="sangria" name="sangria" style="font-size: 1.2rem" value="0">
+                                                    <input type="text" class="form-control money" id="sangria" name="sangria" style="font-size: 1.2rem"
+                                                           value="${fechamentoExistente != null ? fechamentoExistente.sangria : 0}">
                                                 </div>
-
 
                                                 <div class="col-3 mb-3" style="text-align: center">
                                                     <label for="saldo" style="font-size: 1.2rem; color: #DAA520">SALDO EM CAIXA</label>
-                                                    <input type="text" class="form-control money" id="saldo" name="saldo" style="font-size: 1.2rem;color: #DAA520" value=" ">
+                                                    <input type="text" class="form-control money" id="saldo" name="saldo" style="font-size: 1.2rem;color: #DAA520"
+                                                           value="${fechamentoExistente != null ? fechamentoExistente.saldo : ''}">
                                                 </div>
                                             </div>
-
-
                                         </table>
                                     </div>
                                     <div style="text-align: center; margin-top: 20px;">
-                                        <button type="submit" class="btn btn-outline-success" STYLE="font-size: large">
-                                            Gravar Fechamento do Mês
+                                        <button type="submit" class="btn btn-outline-success" style="font-size: large">
+                                            ${fechamentoExistente != null ? 'Atualizar' : 'Gravar'} Fechamento do Mês
                                         </button>
-
                                     </div>
                                 </div>
                             </div>

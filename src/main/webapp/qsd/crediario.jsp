@@ -11,7 +11,7 @@
     <style>
         body {
             /* Definimos a cor inicial. Esta será mudada pelo JS */
-            background-color: #DAA520;
+            background-color: #3A86FF;
             transition: background-color 0.5s ease;
         }
 

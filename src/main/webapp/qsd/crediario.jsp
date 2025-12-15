@@ -66,6 +66,18 @@
         .alert {
             margin-top: 1rem;
         }
+        /* NOVO ESTILO: Alerta de sucesso com fundo preto e dourado */
+        .alert-success {
+            background-color: #000000;
+            color: #DAA520;
+            border-color: #DAA520;
+        }
+        /* Ajuste do botão de fechar para o novo esquema de cores */
+        .alert-success .btn-close {
+            color: #DAA520;
+            filter: invert(80%) sepia(20%) saturate(600%) hue-rotate(10deg) brightness(100%) contrast(80%);
+            opacity: 1; /* Garante que o ícone seja visível */
+        }
         .total-box {
             background-color: #1c1c1c;
             padding: 1rem;
@@ -168,7 +180,6 @@
     </div>
 </div>
 
-<!-- MODAL LANÇAMENTO -->
 <div class="modal fade" id="modalLancamento" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content card-preta">
@@ -184,7 +195,7 @@
                     <div class="row mb-3">
                         <div class="col-12 col-md-6 col-lg-4">
                             <label class="form-label">Data</label>
-                            <input type="date" class="form-control" name="datavenda" id="datavenda" required>
+                            <input type="date" class="form-control" name="datavenda" id="dataVendaLancamento" required>
                         </div>
                         <div class="col-12 col-md-6 col-lg-8">
                             <label class="form-label">Cliente</label>
@@ -233,7 +244,6 @@
     </div>
 </div>
 
-<!-- MODAL BUSCA -->
 <div class="modal fade" id="modalBusca" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content card-preta">
@@ -265,7 +275,6 @@
     </div>
 </div>
 
-<!-- MODAL RELATÓRIO -->
 <div class="modal fade" id="modalRelatorio" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content card-preta">
@@ -288,11 +297,11 @@
                         </div>
                         <div class="col-12 col-md-3 col-lg-4">
                             <label class="form-label">Data Início</label>
-                            <input type="date" class="form-control" name="dataInicio" id="dataInicio">
+                            <input type="date" class="form-control" name="dataInicio" id="dataInicialRelatorio">
                         </div>
                         <div class="col-12 col-md-3 col-lg-4">
                             <label class="form-label">Data Fim</label>
-                            <input type="date" class="form-control" name="dataFim" id="dataFim">
+                            <input type="date" class="form-control" name="dataFim" id="dataFinalRelatorio">
                         </div>
                     </div>
 
@@ -367,7 +376,6 @@
     </div>
 </div>
 
-<!-- MODAL RECEBER -->
 <div class="modal fade" id="modalReceber" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content card-preta">
@@ -431,12 +439,12 @@
                         <div class="col-12 col-md-6 col-lg-4">
                             <label class="form-label">Desconto</label>
                             <div class="input-group">
-                              <div class="input-group-prepend">
+                                <div class="input-group-prepend">
                                                                         <span class="input-group-text"
                                                                               style="color: #f2a654; font-weight: bold; background: #1c1c1c">%</span>
-                            </div>
-                            <input type="text" class="form-control" name="desconto" id="desconto"
-                                    value="">
+                                </div>
+                                <input type="text" class="form-control" name="desconto" id="desconto"
+                                       value="">
                             </div>
                         </div>
                     </div>
@@ -461,21 +469,31 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-
         // ==================== COLOR PICKER ====================
         const colorPicker = document.getElementById('background-color-picker');
         const colorLabel = document.getElementById('color-picker-label');
         const buttons = document.querySelectorAll('.btn-dourado');
-        const defaultColor = '#DAA520';
+
+        // Cor padrão do CSS para fallback (o azul original)
+        const defaultCSSColor = '#3A86FF';
+        // Cor padrão inicial do picker
+        const defaultPickerValue = '#DAA520';
+
+        // Chave de armazenamento
+        const STORAGE_KEY = 'credqsdBackgroundColor';
 
         function shadeColor(hex, percent) {
             let R = parseInt(hex.substring(1, 3), 16);
             let G = parseInt(hex.substring(3, 5), 16);
             let B = parseInt(hex.substring(5, 7), 16);
 
-            R = Math.min(255, parseInt(R * (100 + percent) / 100));
-            G = Math.min(255, parseInt(G * (100 + percent) / 100));
-            B = Math.min(255, parseInt(B * (100 + percent) / 100));
+            R = parseInt(R * (100 + percent) / 100);
+            G = parseInt(G * (100 + percent) / 100);
+            B = parseInt(B * (100 + percent) / 100);
+
+            R = (R < 255) ? R : 255;
+            G = (G < 255) ? G : 255;
+            B = (B < 255) ? B : 255;
 
             return "#" +
                 ("0" + R.toString(16)).slice(-2) +
@@ -489,8 +507,13 @@
             const b = parseInt(hex.slice(5, 7), 16);
             const luminosidade = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 
-            colorLabel.classList.toggle('text-light', luminosidade < 0.5);
-            colorLabel.classList.toggle('text-dark', luminosidade >= 0.5);
+            if (luminosidade < 0.5) {
+                colorLabel.classList.remove('text-dark');
+                colorLabel.classList.add('text-light');
+            } else {
+                colorLabel.classList.remove('text-light');
+                colorLabel.classList.add('text-dark');
+            }
         }
 
         function aplicarCor(novaCor) {
@@ -500,27 +523,39 @@
             buttons.forEach(button => {
                 button.style.backgroundColor = novaCor;
                 button.onmouseover = () => button.style.backgroundColor = hoverCor;
-                button.onmouseout  = () => button.style.backgroundColor = novaCor;
+                button.onmouseout = () => button.style.backgroundColor = novaCor;
             });
 
             ajustarContraste(novaCor);
+
+            // SALVAR: Armazena a nova cor no localStorage
+            localStorage.setItem(STORAGE_KEY, novaCor);
         }
 
-        if (colorPicker) {
-            colorPicker.addEventListener('input', () => aplicarCor(colorPicker.value));
-            aplicarCor(defaultColor);
-        }
+        // CARREGAR: Tenta obter a cor salva, ou usa o padrão
+        const savedColor = localStorage.getItem(STORAGE_KEY);
+        const initialColor = savedColor || defaultCSSColor;
+
+        // Define o valor inicial do Color Picker
+        colorPicker.value = savedColor || defaultPickerValue;
+
+        // Aplica a cor inicial (salva ou padrão) ao carregar a página
+        aplicarCor(initialColor);
+
+        // Adiciona listener para aplicar e salvar quando a cor for mudada
+        colorPicker.addEventListener('input', () => aplicarCor(colorPicker.value));
 
         // ==================== ABERTURA AUTOMÁTICA DE MODAIS ====================
-        if (typeof ABRIR_MODAL_RECEBER !== 'undefined' && ABRIR_MODAL_RECEBER) {
-            const modal = document.getElementById('modalReceber');
-            if (modal) new bootstrap.Modal(modal).show();
-        }
+        <c:if test="${not empty modelReceber}">
+        // Se a variável modelReceber existe, o modal de Receber deve ser aberto
+        var modalReceber = new bootstrap.Modal(document.getElementById('modalReceber'));
+        modalReceber.show();
+        </c:if>
 
-        if (typeof ABRIR_MODAL_RELATORIO !== 'undefined' && ABRIR_MODAL_RELATORIO) {
-            const modal = document.getElementById('modalRelatorio');
-            if (modal) new bootstrap.Modal(modal).show();
-        }
+        <c:if test="${not empty listaRelatorio}">
+        var modalRelatorio = new bootstrap.Modal(document.getElementById('modalRelatorio'));
+        modalRelatorio.show();
+        </c:if>
 
         // ==================== FUNÇÕES DE MOEDA ====================
         function formatarMoeda(valorCentavos) {
@@ -532,8 +567,10 @@
             return str.replace(/[^\d,]/g, '').replace(',', '.');
         }
 
-        function aplicarMascaraMoeda(input) {
-            if (!input) return;
+        function aplicarMascaraMoeda(input, valorInicial = '0,00') {
+            if (!input.value) {
+                input.value = formatarMoeda(valorInicial.replace(',', ''));
+            }
 
             input.addEventListener('input', function() {
                 let valor = this.value.replace(/\D/g, '');
@@ -549,82 +586,190 @@
             });
         }
 
-        // ==================== MODAL LANÇAMENTO ====================
+        // ==================== MODAL LANÇAMENTO (VALOR TOTAL) ====================
         const campoValorLancamento = document.getElementById('valor');
-        aplicarMascaraMoeda(campoValorLancamento);
-
-        const modalLancamento = document.getElementById('modalLancamento');
-        if (modalLancamento) {
-            modalLancamento.addEventListener('shown.bs.modal', function () {
-                const campoData = document.getElementById('datavenda');
-                if (campoData && !campoData.value) {
-                    campoData.value = new Date().toISOString().split('T')[0];
-                }
-            });
+        if (campoValorLancamento) {
+            aplicarMascaraMoeda(campoValorLancamento);
         }
 
-        // ==================== MODAL RECEBER ====================
+        // ==================== MODAL RECEBER (DESCONTO % + VALOR PAGO AUTOMÁTICO) ====================
         const campoValorTotalReadonly = document.querySelector('#modalReceber input[readonly][value*="R$"]');
         const campoDesconto = document.getElementById('desconto');
         const campoValorPago = document.getElementById('valorpago');
 
         if (campoValorTotalReadonly && campoDesconto && campoValorPago) {
-            let valorTotal = parseFloat(limparMoedaParaNumero(campoValorTotalReadonly.value)) || 0;
+            // Extrai o valor total (ex: "R$ 1.234,56" → 1234.56)
+            let valorTotalStr = campoValorTotalReadonly.value.replace('R$', '').trim();
+            let valorTotal = parseFloat(limparMoedaParaNumero(valorTotalStr)) || 0;
 
+            campoDesconto.placeholder = "Ex: 10 para 10%";
             campoDesconto.value = '0';
-            campoValorPago.value = formatarMoeda(valorTotal * 100);
 
+            // Inicia valor pago com o total
+            campoValorPago.value = formatarMoeda(Math.round(valorTotal * 100));
+
+            // Cálculo ao mudar desconto
             campoDesconto.addEventListener('input', function() {
-                let percentual = Math.min(100, parseInt(this.value.replace(/\D/g, '')) || 0);
+                let percentual = parseFloat(this.value.replace(/\D/g, '')) || 0;
+                if (percentual > 100) percentual = 100;
                 this.value = percentual;
 
-                let valorFinal = valorTotal - (valorTotal * percentual / 100);
-                campoValorPago.value = formatarMoeda(valorFinal * 100);
+                let valorDesconto = (valorTotal * percentual) / 100;
+                let valorFinal = valorTotal - valorDesconto;
+
+                campoValorPago.value = formatarMoeda(Math.round(valorFinal * 100));
             });
 
+            // Permite edição manual do valor pago
             aplicarMascaraMoeda(campoValorPago);
         }
 
-        // ==================== CORREÇÃO ANTES DO SUBMIT ====================
-        document.querySelectorAll('#modalLancamento form, #modalReceber form')
-            .forEach(form => {
-                form.addEventListener('submit', function() {
-                    if (campoValorLancamento)
-                        campoValorLancamento.value = limparMoedaParaNumero(campoValorLancamento.value).replace('.', ',');
+        // ==================== CORREÇÃO DOS VALORES ANTES DO ENVIO ====================
+        const forms = document.querySelectorAll('#modalLancamento form, #modalReceber form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function() {
+                // Valor do lançamento
+                if (campoValorLancamento && campoValorLancamento.value) {
+                    const limpo = limparMoedaParaNumero(campoValorLancamento.value);
+                    campoValorLancamento.value = limpo.replace('.', ',');
+                }
 
-                    if (campoValorPago)
-                        campoValorPago.value = limparMoedaParaNumero(campoValorPago.value).replace('.', ',');
-                });
+                // Valor pago no receber
+                if (campoValorPago && campoValorPago.value) {
+                    const limpo = limparMoedaParaNumero(campoValorPago.value);
+                    campoValorPago.value = limpo.replace('.', ',');
+                }
+                // Desconto já está limpo (número inteiro %)
             });
+        });
 
-        // ==================== RELATÓRIO (DATAS) ====================
-        function ajustarDataFinal() {
-            const ini = document.getElementById('dataInicio');
-            const fim = document.getElementById('dataFim');
-            if (!ini || !fim || !ini.value) return;
+        // ==================== SELEÇÃO DE CLIENTE NO LANÇAMENTO ====================
+        const clienteSelect = document.getElementById('clienteSelect');
+        const novoClienteFields = document.getElementById('novoClienteFields');
+        const novoNome = document.getElementById('novoNome');
+        const novaEmpresa = document.getElementById('novaEmpresa');
+        const hiddenCliente = document.getElementById('hiddenCliente');
+        const hiddenEmpresa = document.getElementById('hiddenEmpresa');
 
-            const [ano, mes] = ini.value.split('-');
-            const ultimoDia = new Date(ano, mes, 0).getDate();
-            fim.value = `${ano}-${mes}-${String(ultimoDia).padStart(2,'0')}`;
-        }
+        if (clienteSelect) {
+            clienteSelect.addEventListener('change', function() {
+                if (this.value === 'novo') {
+                    novoClienteFields.style.display = 'block';
+                    novoNome.required = true;
+                    novaEmpresa.required = true;
+                } else {
+                    novoClienteFields.style.display = 'none';
+                    novoNome.required = false;
+                    novaEmpresa.required = false;
+                    novoNome.value = '';
+                    novaEmpresa.value = '';
 
-        const modalRelatorio = document.getElementById('modalRelatorio');
-        if (modalRelatorio) {
-            modalRelatorio.addEventListener('shown.bs.modal', function () {
-                const ini = document.getElementById('dataInicio');
-                if (ini && !ini.value) {
-                    const hoje = new Date();
-                    ini.value = `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}-01`;
-                    ajustarDataFinal();
+                    if (this.value) {
+                        const parts = this.value.split('|');
+                        hiddenCliente.value = parts[0].trim();
+                        hiddenEmpresa.value = parts[1].trim();
+                    } else {
+                        hiddenCliente.value = '';
+                        hiddenEmpresa.value = '';
+                    }
                 }
             });
         }
 
-        const dataInicio = document.getElementById('dataInicio');
-        if (dataInicio) dataInicio.addEventListener('change', ajustarDataFinal);
+        // Preenche hidden com novo cliente ao enviar
+        const formLancamento = document.querySelector('#modalLancamento form');
+        if (formLancamento) {
+            formLancamento.addEventListener('submit', function() {
+                if (clienteSelect && clienteSelect.value === 'novo') {
+                    hiddenCliente.value = novoNome.value.trim();
+                    hiddenEmpresa.value = novaEmpresa.value.trim();
+                }
+            });
+        }
 
+        // ==================== NOVAS FUNÇÕES DE DATA ====================
+
+        // 1. MODAL LANÇAMENTO (Data de Venda = Hoje)
+        const modalLancamento = document.getElementById('modalLancamento');
+        if (modalLancamento) {
+            modalLancamento.addEventListener('shown.bs.modal', function () {
+                const campoDataVenda = document.getElementById('dataVendaLancamento');
+                if (campoDataVenda) {
+                    const today = new Date().toISOString().split('T')[0];
+                    campoDataVenda.value = today;
+                }
+            });
+        }
+
+        // 2. MODAL RECEBER (Data de Recebimento = Hoje)
+        const modalReceberElement = document.getElementById('modalReceber');
+        if (modalReceberElement) {
+            modalReceberElement.addEventListener('shown.bs.modal', function () {
+                const campoDataPagamento = document.getElementById('datapagamento');
+                if (campoDataPagamento) {
+                    const today = new Date().toISOString().split('T')[0];
+                    campoDataPagamento.value = today;
+                }
+            });
+        }
+
+        // 3. MODAL RELATÓRIO (Data Início/Fim e Data Fim = Último Dia do Mês)
+
+        const campoDataInicialRelatorio = document.getElementById('dataInicialRelatorio');
+        const campoDataFinalRelatorio = document.getElementById('dataFinalRelatorio');
+        const modalRelatorio = document.getElementById('modalRelatorio');
+
+        function setDataFinalRelatorio() {
+            if (campoDataInicialRelatorio && campoDataFinalRelatorio) {
+                var dataInicialStr = campoDataInicialRelatorio.value;
+
+                if (dataInicialStr) {
+                    var partesData = dataInicialStr.split('-');
+                    var ano = parseInt(partesData[0], 10);
+                    var mes = parseInt(partesData[1], 10) - 1;
+
+                    var ultimoDia = new Date(ano, mes + 1, 0);
+
+                    var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+                    var mesFinal = String(mes + 1).padStart(2, '0');
+                    var anoFinal = ultimoDia.getFullYear();
+                    var dataFinal = anoFinal + '-' + mesFinal + '-' + diaFinal;
+
+                    campoDataFinalRelatorio.value = dataFinal;
+                } else {
+                    campoDataFinalRelatorio.value = "";
+                }
+            }
+        }
+
+        function initializeDatesRelatorio() {
+            if (campoDataInicialRelatorio && campoDataFinalRelatorio && !campoDataInicialRelatorio.value) {
+                var today = new Date();
+                var ano = today.getFullYear();
+                var mes = today.getMonth();
+
+                var diaInicial = String(today.getDate()).padStart(2, '0');
+                var mesInicial = String(mes + 1).padStart(2, '0');
+                var dataInicialStr = ano + '-' + mesInicial + '-' + diaInicial;
+                campoDataInicialRelatorio.value = dataInicialStr;
+
+                var ultimoDia = new Date(ano, mes + 1, 0);
+                var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+                var dataFinalStr = ano + '-' + mesInicial + '-' + diaFinal;
+                campoDataFinalRelatorio.value = dataFinalStr;
+            }
+        }
+
+        if (campoDataInicialRelatorio) {
+            campoDataInicialRelatorio.addEventListener('change', setDataFinalRelatorio);
+        }
+
+        if (modalRelatorio) {
+            modalRelatorio.addEventListener('shown.bs.modal', function () {
+                initializeDatesRelatorio();
+            });
+        }
     });
 </script>
-
 </body>
 </html>

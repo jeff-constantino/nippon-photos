@@ -30,7 +30,7 @@ public class ServletLogin extends HttpServlet {
         // Se a ação for logout, invalida a sessão e redireciona para a página de login
         if (acao != null && acao.equals("logout")) {
             request.getSession().invalidate(); // Invalida a sessão
-            response.sendRedirect(request.getContextPath() + "/crediario.jsp"); // Redireciona para a página de login
+            response.sendRedirect(request.getContextPath() + "/principal/principal.jsp"); // Redireciona para a página de login
             return;
         }
 

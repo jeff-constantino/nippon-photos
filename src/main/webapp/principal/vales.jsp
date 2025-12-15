@@ -238,6 +238,59 @@
                                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalData">
                                     <h4>Buscar Vales</h4>
                                 </button>
+                                <h4 class="card-title" STYLE="text-align: center">RESULTADO DA BUSCA</h4>
+
+                                <div  style="overflow-x: auto; overflow-y: hidden;">
+
+
+
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="tabelafuncconduta">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">NOME</th>
+                                                <th scope="col">DATA</th>
+                                                <th scope="col">VALOR</th>
+                                                <th scope="col">DESCRIÇÃO</th>
+                                                <th scope="col">TIPO PGTO</th>
+                                                <th scope="col">Id Vale</th>
+                                                <th scope="col">OPÇÕES</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:forEach var="vale" items="${valesFiltrados}">
+                                                <tr>
+                                                    <td>${vale.nome_funcionario}</td>
+                                                    <td><fmt:formatDate value="${vale.dataFormatadaParaFmt}" pattern="dd/MM/yyyy" /></td>
+                                                    <td><fmt:formatNumber value="${vale.valor}" type="currency" currencySymbol="R$" /></td>
+                                                    <td>${vale.observacao}</td>
+                                                    <td>${vale.forma_pagamento}</td>
+                                                    <td>${vale.id_vale}</td>
+                                                    <td>
+                                                        <!-- Link para excluir o vale -->
+                                                        <a href="<%= request.getContextPath() %>/ServletVales?acao=excluirVale&idVale=${vale.id_vale}"
+                                                           class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este vale?')">Excluir</a>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    </div>
+                <div class="row ">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+
                                 <h4 class="card-title" STYLE="text-align: center">RELATÓRIO DE VALES NOS ULTIMOS 30 DIAS</h4>
 
                                 <div  style="overflow-x: auto; overflow-y: hidden;">
@@ -278,58 +331,6 @@
                                     </table>
 
                                 </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    </div>
-                <div class="row ">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-
-                                <h4 class="card-title" STYLE="text-align: center">RESULTADO DA BUSCA</h4>
-
-                             <div  style="overflow-x: auto; overflow-y: hidden;">
-
-
-
-
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="tabelafuncconduta">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">NOME</th>
-                                            <th scope="col">DATA</th>
-                                            <th scope="col">VALOR</th>
-                                            <th scope="col">DESCRIÇÃO</th>
-                                            <th scope="col">TIPO PGTO</th>
-                                            <th scope="col">Id Vale</th>
-                                            <th scope="col">OPÇÕES</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <c:forEach var="vale" items="${valesFiltrados}">
-                                            <tr>
-                                                <td>${vale.nome_funcionario}</td>
-                                                <td><fmt:formatDate value="${vale.dataFormatadaParaFmt}" pattern="dd/MM/yyyy" /></td>
-                                                <td><fmt:formatNumber value="${vale.valor}" type="currency" currencySymbol="R$" /></td>
-                                                <td>${vale.observacao}</td>
-                                                <td>${vale.forma_pagamento}</td>
-                                                <td>${vale.id_vale}</td>
-                                                <td>
-                                                    <!-- Link para excluir o vale -->
-                                                    <a href="<%= request.getContextPath() %>/ServletVales?acao=excluirVale&idVale=${vale.id_vale}"
-                                                       class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir este vale?')">Excluir</a>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                        </tbody>
-                                    </table>
-
-                                </div>
-                            </div>
                         </div>
 
                     </div>

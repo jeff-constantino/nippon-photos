@@ -306,7 +306,7 @@
                                                                             <label style="color: #f2a654">PARCELA A DEDUZIR (IRRF)</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
                                                                                    style="background-color: #2c2c2c; color: white"
-                                                                                   id="parcelaResultado" name="parcela" readonly>
+                                                                                   id="parcelaResultado" name="parcela" >
                                                                         </div>
 
                                                                         <div class="col-auto">
@@ -327,13 +327,13 @@
                                                                             <label style="color: #f2a654">IMPOSTO DE RENDA</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
                                                                                    style="background-color: #2c2c2c; color: white"
-                                                                                   id="descontos_irResultado" name="descontos_ir" readonly>
+                                                                                   id="descontos_irResultado" name="descontos_ir" >
                                                                         </div>
                                                                         <div class="col-auto">
                                                                             <label style="color: #f2a654">TOTAL DE DESCONTOS</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
                                                                                    style="background-color: #2c2c2c; color: white"
-                                                                                   id="descontos_totalResultado" name="descontos_total" readonly>
+                                                                                   id="descontos_totalResultado" name="descontos_total" >
                                                                         </div>
                                                                     </div>
 
@@ -357,7 +357,7 @@
                                                                             <label style="color: #f2a654">SALÁRIO TOTAL</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
                                                                                    style="background-color: #f2a654; color: black"
-                                                                                   id="salario_totalResultadoField" name="salario_total" readonly>
+                                                                                   id="salario_totalResultadoField" name="salario_total" >
                                                                         </div>
 
 
@@ -383,7 +383,7 @@
                                                                             <label style="color: #f2a654">SALÁRIO LÍQUIDO</label>
                                                                             <input type="number" step="0.01" class="form-control text-center fw-bold"
                                                                                    style="background-color: #f2a654; color: black"
-                                                                                   id="salario_liquidoResultado" name="salario_liquido" readonly>
+                                                                                   id="salario_liquidoResultado" name="salario_liquido" >
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -519,7 +519,7 @@
                                             <input type="text" class="form-control text-center fw-bold"
                                                    style="background-color: #2c2c2c; color: white"
                                                    id="ft_total" name="ft_total"
-                                                   value="${mv.ft_total}" readonly tabindex="-1">
+                                                   value="${mv.ft_total}"  tabindex="-1">
                                         </div>
 
                                         <div class="col-auto">
@@ -527,7 +527,7 @@
                                             <input type="text" class="form-control text-center fw-bold"
                                                    style="background-color: #2c2c2c; color: white"
                                                    id="enc_total" name="enc_total"
-                                                   value="${mv.enc_total}" readonly tabindex="-1">
+                                                   value="${mv.enc_total}"  tabindex="-1">
                                         </div>
 
                                         <div class="col-auto">
@@ -535,14 +535,14 @@
                                             <input type="text" class="form-control text-center fw-bold"
                                                    style="background-color: #2c2c2c; color: white"
                                                    id="dig_total" name="dig_total"
-                                                   value="${mv.dig_total}" readonly tabindex="-1">
+                                                   value="${mv.dig_total}"  tabindex="-1">
                                         </div>
 
                                         <div class="col-auto">
                                             <label style="color: #f2a654">TOTAL DE SOBRAS</label>
                                             <input type="text" class="form-control text-center fw-bold"
                                                    style="background-color: #2c2c2c; color: white"
-                                                   name="sobras" value="${mv.sobras}" readonly tabindex="-1">
+                                                   name="sobras" value="${mv.sobras}"  tabindex="-1">
                                         </div>
 
                                             <%-- Lógica JSP para calcular aproveitamento --%>
@@ -556,7 +556,7 @@
                                             <input type="text" class="form-control text-center fw-bold"
                                                    style="background-color: #2c2c2c; color: white"
                                                    value="<fmt:formatNumber value='${aproveitamento}' maxFractionDigits='2'/>%"
-                                                   readonly tabindex="-1">
+                                                    tabindex="-1">
 
                                             <!-- input real para enviar no POST -->
                                             <input type="hidden" name="aproveitamento" value="${aproveitamento}" />
@@ -600,7 +600,7 @@
                                         <input type="text" class="form-control text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
                                                name="advertencias"
-                                               value="${resumoConduta.totalAdvertencias}" readonly tabindex="-1">
+                                               value="${resumoConduta.totalAdvertencias}"  tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
@@ -608,7 +608,7 @@
                                         <input type="text" class="form-control text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
                                                name="faltas"
-                                               value="${resumoConduta.totalFaltas}" readonly tabindex="-1">
+                                               value="${resumoConduta.totalFaltas}"  tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
@@ -616,7 +616,7 @@
                                         <input type="text" class="form-control text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
                                                name="suspensoes"
-                                               value="${resumoConduta.totalDiasSuspensao}" readonly tabindex="-1">
+                                               value="${resumoConduta.totalDiasSuspensao}"  tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
@@ -624,7 +624,7 @@
                                         <input type="text" class="form-control text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
                                                name="dsr"
-                                               value="${resumoConduta.totalDsrSuspensao}" readonly tabindex="-1">
+                                               value="${resumoConduta.totalDsrSuspensao}"  tabindex="-1">
                                     </div>
 
                                 </div>
@@ -648,7 +648,7 @@
                                                style="background-color: #2c2c2c; color: white"
                                                id="inputFaltas" name="inputFaltas"
                                                value="R$ 0,00"
-                                               data-faltas="${resumoConduta.totalFaltas}" readonly tabindex="-1">
+                                               data-faltas="${resumoConduta.totalFaltas}"  tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
@@ -658,7 +658,7 @@
                                                id="inputSuspensoes" name="inputSuspensoes"
                                                value="R$ 0,00"
                                                data-suspensoes="${resumoConduta.totalDiasSuspensao}"
-                                               data-dsr="${resumoConduta.totalDsrSuspensao}" readonly tabindex="-1">
+                                               data-dsr="${resumoConduta.totalDsrSuspensao}"  tabindex="-1">
                                     </div>
 
                                     <div class="col-auto">
@@ -671,7 +671,7 @@
                                         <label style="color: #f2a654">VALOR DESCONTO ATRASOS</label>
                                         <input type="text" class="form-control text-center fw-bold"
                                                style="background-color: #2c2c2c; color: white"
-                                               id="valor_desconto_atrasos" name="valor_desconto_atrasos" value="R$ 0,00" readonly tabindex="-1">
+                                               id="valor_desconto_atrasos" name="valor_desconto_atrasos" value="R$ 0,00"  tabindex="-1">
                                     </div>
                                 </div>
 
@@ -738,7 +738,7 @@
                                                 <input type="text" class="form-control text-center fw-bold"
                                                        style="background-color: #2c2c2c; color: white"
                                                        id="dif_fotos" name="dif_fotos"
-                                                       value="${mv.ribbon_descontar}" readonly tabindex="-1">
+                                                       value="${mv.ribbon_descontar}" tabindex="-1">
                                             </div>
                                         </c:forEach>
                                         <div class="col-auto">
@@ -760,7 +760,7 @@
                                             <input type="text" class="form-control money text-center fw-bold"
                                                    style="background-color: #2c2c2c; color: white"
                                                    id="descontos_total" name="descontos_total"
-                                                   value="${descontos_1}" readonly tabindex="-1">
+                                                   value="${descontos_1}" tabindex="-1">
                                         </div>
                                     </div>
 
@@ -786,7 +786,7 @@
                                             <label style="color: #f2a654">SALÁRIO TOTAL</label>
                                             <input type="text" class="form-control money text-center fw-bold"
                                                    style="background-color: #f2a654; color: black"
-                                                   readonly tabindex="-1"
+                                                    tabindex="-1"
                                                    id="salario_total" name="salario_total"
                                                    value="${salario_total}">
                                         </div>
@@ -813,7 +813,7 @@
                                             <label style="color: #f2a654">SALÁRIO LÍQUIDO</label>
                                             <input type="text" class="form-control money text-center fw-bold"
                                                    style="background-color: #f2a654; color: black"
-                                                   readonly tabindex="-1"
+                                                    tabindex="-1"
                                                    id="salario_liquido" name="salario_liquido"
                                                    value="${salario_liquido}">
                                         </div>
@@ -1118,7 +1118,7 @@
         if (!difFotos || !descontoFotos) return;
 
         const faltaFoto = parseFloat(difFotos.value || 0);
-        const custoFoto = faltaFoto * conf1_valor;
+        const custoFoto = faltaFoto * (conf1_valor + conf2_valor);
 
         descontoFotos.value = custoFoto.toFixed(2);
         calcularSalariosLiquidos();

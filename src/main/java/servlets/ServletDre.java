@@ -177,21 +177,14 @@ public class ServletDre extends ServletGenericUtil {
         int mes = Integer.parseInt(mesParam);
         int ano = Integer.parseInt(anoParam);
 
-        LocalDate dataInicio = LocalDate.of(ano, mes, 1);
-        LocalDate dataFim = dataInicio.withDayOfMonth(dataInicio.lengthOfMonth());
-
-        String dataInicial = dataInicio.toString();
-        String dataFinal = dataFim.toString();
-
         DAODre daoDre = new DAODre();
-        DAOContas daoContas = new DAOContas();
-        DAODespesas daoDespesas = new DAODespesas();
+        DAOFechaMes daoFechaMes = new DAOFechaMes();
 
         try {
-            List<ModelFechaMes> vendasMesList = daoDre.buscarFechamentoMensal(dataInicial, dataFinal);
+            // Busca o fechamento mensal diretamente da tabela fecha_mes
+            ModelFechaMes fechamento = daoFechaMes.buscarFechamentoPorMesAno(mes, ano);
 
-            if (vendasMesList == null || vendasMesList.isEmpty() ||
-                    vendasMesList.get(0).getValor_din_mes() == null) {
+            if (fechamento == null) {
                 request.setAttribute("msg", "Não existe fechamento mensal para a data selecionada.");
                 request.setAttribute("vendasMesList", null);
                 carregarMesesNaoFechados(request);
@@ -200,37 +193,87 @@ public class ServletDre extends ServletGenericUtil {
                 return;
             }
 
-            ModelFechaMes resumo = vendasMesList.get(0);
+            // ===== BUSCAR CUSTOS DOS MATERIAIS =====
+            // Busca o custo unitário do ribbon e do encarte da tabela conf_materiais
+            BigDecimal custoUnitarioRibbon = daoDre.buscarCustoMaterial(1); // id_conf = 1 para ribbon
+            BigDecimal custoUnitarioEncarte = daoDre.buscarCustoMaterial(2); // id_conf = 2 para encarte
 
-            BigDecimal valorContas = daoContas.buscarTotalContasPorPeriodo(dataInicial, dataFinal);
-            BigDecimal valorDespesas = daoDespesas.buscarTotalDespesasPorPeriodo(dataInicial, dataFinal);
-            BigDecimal totalSalarios = Optional.ofNullable(resumo.getTotal_salarios()).orElse(BigDecimal.ZERO);
+            // ===== RECEITA BRUTA =====
+            // Já vem calculada no campo total_geral
+            BigDecimal receitaBruta = Optional.ofNullable(fechamento.getTotal_geral()).orElse(BigDecimal.ZERO);
 
-            BigDecimal receitaBruta = resumo.getValor_din_mes()
-                    .add(resumo.getValor_deb_mes())
-                    .add(resumo.getValor_cred_mes())
-                    .add(resumo.getValor_pix_mes());
+            // ===== SALÁRIOS TOTAIS =====
+            // Soma salarios + valor_vale_total
+            BigDecimal totalSalarios = Optional.ofNullable(fechamento.getSalarios()).orElse(BigDecimal.ZERO)
+                    .add(Optional.ofNullable(fechamento.getValor_vale_total()).orElse(BigDecimal.ZERO));
 
-            BigDecimal totalRibbons = Optional.ofNullable(resumo.getTotal_ribbons()).orElse(BigDecimal.ZERO);
-            BigDecimal valorEnc = Optional.ofNullable(resumo.getValor_enc()).orElse(BigDecimal.ZERO);
-            BigDecimal jurosCartoes = Optional.ofNullable(resumo.getJuros_cartoes()).orElse(BigDecimal.ZERO);
-            BigDecimal custosOperacionais = totalRibbons.add(valorEnc).add(jurosCartoes);
+            // ===== JUROS DOS CARTÕES =====
+            // Soma todos os juros: jurosdebvm + juroscredvm + jurosdeboutros + juroscredoutros
+            BigDecimal jurosCartoes = Optional.ofNullable(fechamento.getJurosdebvm()).orElse(BigDecimal.ZERO)
+                    .add(Optional.ofNullable(fechamento.getJuroscredvm()).orElse(BigDecimal.ZERO))
+                    .add(Optional.ofNullable(fechamento.getJurosdeboutros()).orElse(BigDecimal.ZERO))
+                    .add(Optional.ofNullable(fechamento.getJuroscredoutros()).orElse(BigDecimal.ZERO));
 
+            // ===== CUSTOS OPERACIONAIS =====
+            // Calcula o valor dos ribbons: (total_ft + total_sobras) * custo_unitario_ribbon
+            int totalFt = Optional.ofNullable(fechamento.getTotal_ft()).orElse(0);
+            int totalSobras = Optional.ofNullable(fechamento.getTotal_sobras()).orElse(0);
+            int quantidadeRibbons = totalFt + totalSobras;
+            BigDecimal valorRibbons = custoUnitarioRibbon.multiply(BigDecimal.valueOf(quantidadeRibbons));
+
+            // Calcula o valor total dos encartes usando total_ft como quantidade
+            int quantidadeEncartes = totalFt; // usa o mesmo total_ft
+            BigDecimal valorEncartes = custoUnitarioEncarte.multiply(BigDecimal.valueOf(quantidadeEncartes));
+
+            // Custos Operacionais = valor_ribbons + valor_encartes + juros_cartoes
+            BigDecimal custosOperacionais = valorRibbons.add(valorEncartes).add(jurosCartoes);
+
+            // ===== CONTAS E DESPESAS =====
+            BigDecimal valorContas = Optional.ofNullable(fechamento.getValor_total_contas()).orElse(BigDecimal.ZERO);
+            BigDecimal valorDespesas = Optional.ofNullable(fechamento.getValor_total_despesas()).orElse(BigDecimal.ZERO);
+
+            // Formatação para exibição
             DecimalFormat df = new DecimalFormat("#,##0.00");
-            request.setAttribute("valorTotalContas", df.format(Optional.ofNullable(valorContas).orElse(BigDecimal.ZERO)));
-            request.setAttribute("valorTotalDespesas", df.format(Optional.ofNullable(valorDespesas).orElse(BigDecimal.ZERO)));
+            request.setAttribute("valorTotalContas", df.format(valorContas));
+            request.setAttribute("valorTotalDespesas", df.format(valorDespesas));
             request.setAttribute("valorTotalSalarios", df.format(totalSalarios));
 
+            // Formata mês/ano
             SimpleDateFormat sdfMesAno = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR"));
-            request.setAttribute("mesAno", sdfMesAno.format(java.sql.Date.valueOf(dataInicio)));
+            LocalDate dataRef = LocalDate.of(ano, mes, 1);
+            request.setAttribute("mesAno", sdfMesAno.format(java.sql.Date.valueOf(dataRef)));
 
+            // ===== PREPARA DADOS PARA O JSP =====
+            // Cria uma lista com um único elemento para manter compatibilidade com o JSP
+            List<ModelFechaMes> vendasMesList = new ArrayList<>();
+
+            // Configura os valores que o JSP espera nos campos _mes (sem _real)
+            fechamento.setValor_din_mes(Optional.ofNullable(fechamento.getValor_din_mes_real()).orElse(BigDecimal.ZERO));
+            fechamento.setValor_deb_mes(Optional.ofNullable(fechamento.getValor_deb_mes_real()).orElse(BigDecimal.ZERO));
+            fechamento.setValor_cred_mes(Optional.ofNullable(fechamento.getValor_cred_mes_real()).orElse(BigDecimal.ZERO));
+            fechamento.setValor_pix_mes(Optional.ofNullable(fechamento.getValor_pix_mes_real()).orElse(BigDecimal.ZERO));
+
+            // Define o valor calculado dos ribbons (não o valor em kits que está na tabela)
+            fechamento.setTotal_ribbons(valorRibbons);
+
+            // Define o valor calculado dos encartes
+            fechamento.setValor_enc(valorEncartes);
+
+            // Define os juros calculados
+            fechamento.setJuros_cartoes(jurosCartoes);
+
+            vendasMesList.add(fechamento);
+
+            // Atributos para a JSP
             request.setAttribute("vendasMesList", vendasMesList);
             request.setAttribute("receitaBruta", receitaBruta);
             request.setAttribute("totalCustosOperacionais", custosOperacionais);
 
+            // Session para uso posterior
             HttpSession session = request.getSession();
             session.setAttribute("receitaBruta", receitaBruta);
             session.setAttribute("totalCustosOperacionais", custosOperacionais);
+            session.setAttribute("vendasMesList", vendasMesList);
             session.setAttribute("mes", mes);
             session.setAttribute("ano", ano);
 
@@ -240,10 +283,10 @@ public class ServletDre extends ServletGenericUtil {
             rd.forward(request, response);
 
         } catch (SQLException e) {
-            throw new ServletException("Erro ao gerar relatório mensal", e);
+            throw new ServletException("Erro ao gerar relatório DRE", e);
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("msg", "Erro ao buscar vendas: " + e.getMessage());
+            request.setAttribute("msg", "Erro ao buscar dados do DRE: " + e.getMessage());
             carregarMesesNaoFechados(request);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/dre.jsp");
             dispatcher.forward(request, response);

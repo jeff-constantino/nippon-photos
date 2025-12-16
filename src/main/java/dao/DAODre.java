@@ -45,6 +45,80 @@ public class DAODre {
         return mesesNaoFechados;
     }
 
+    public ModelFechaMes buscarFechamentoPorMesAno(int mes, int ano) throws SQLException {
+        String sql = "SELECT * FROM fecha_mes WHERE mes = ? AND ano = ?";
+
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setInt(1, mes);
+            pst.setInt(2, ano);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    ModelFechaMes fechamento = new ModelFechaMes();
+
+                    fechamento.setId(rs.getLong("id"));
+                    fechamento.setMes(rs.getInt("mes"));
+                    fechamento.setAno(rs.getInt("ano"));
+                    fechamento.setTotal_ft(rs.getInt("total_ft"));
+                    fechamento.setTotal_enc(rs.getInt("total_enc"));
+                    fechamento.setTotal_dig(rs.getInt("total_dig"));
+                    fechamento.setTotal_sobras(rs.getInt("total_sobras"));
+                    fechamento.setTotal_ribbons(rs.getBigDecimal("total_ribbons"));
+
+                    fechamento.setValor_din_mes_real(rs.getBigDecimal("valor_din_mes_real"));
+                    fechamento.setValor_deb_mes_real(rs.getBigDecimal("valor_deb_mes_real"));
+                    fechamento.setValor_cred_mes_real(rs.getBigDecimal("valor_cred_mes_real"));
+                    fechamento.setValor_pix_mes_real(rs.getBigDecimal("valor_pix_mes_real"));
+                    fechamento.setTotal_geral(rs.getBigDecimal("total_geral"));
+
+                    fechamento.setJuros_cartoes(rs.getBigDecimal("juros_cartoes"));
+                    fechamento.setJurosdebvm(rs.getBigDecimal("jurosdebvm"));
+                    fechamento.setJuroscredvm(rs.getBigDecimal("juroscredvm"));
+                    fechamento.setJurosdeboutros(rs.getBigDecimal("jurosdeboutros"));
+                    fechamento.setJuroscredoutros(rs.getBigDecimal("juroscredoutros"));
+
+                    fechamento.setValor_total_despesas(rs.getBigDecimal("valor_total_despesas"));
+                    fechamento.setValor_total_contas(rs.getBigDecimal("valor_total_contas"));
+                    fechamento.setValor_vale_total(rs.getBigDecimal("valor_vale_total"));
+                    fechamento.setDesconto_mes(rs.getBigDecimal("desconto_mes"));
+
+                    fechamento.setDebitoVm(rs.getBigDecimal("debito_vm"));
+                    fechamento.setCreditoVm(rs.getBigDecimal("credito_vm"));
+                    fechamento.setDebitoOutros(rs.getBigDecimal("debito_outros"));
+                    fechamento.setCreditoOutros(rs.getBigDecimal("credito_outros"));
+
+                    fechamento.setReceitas(rs.getBigDecimal("receitas"));
+                    fechamento.setSalarios(rs.getBigDecimal("salarios"));
+                    fechamento.setDespesasdin(rs.getBigDecimal("despesasdin"));
+                    fechamento.setSangria(rs.getBigDecimal("sangria"));
+                    fechamento.setSaldo(rs.getBigDecimal("saldo"));
+                    fechamento.setReceitadin(rs.getBigDecimal("receitadin"));
+
+                    return fechamento;
+                }
+            }
+        }
+
+        return null; // Retorna null se não encontrar fechamento para o mês/ano
+    }
+
+    // Método para buscar o custo unitário de um material
+    public BigDecimal buscarCustoMaterial(int idConf) throws SQLException {
+        String sql = "SELECT custo FROM conf_materiais WHERE id_conf = ?";
+
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setInt(1, idConf);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBigDecimal("custo");
+                }
+            }
+        }
+
+        return BigDecimal.ZERO; // Retorna zero se não encontrar o custo
+    }
+
     public List<ModelFechaMes> buscarFechamentoMensal(String dataInicial, String dataFinal) throws SQLException {
         List<ModelFechaMes> resumoMensal = new ArrayList<>();
 
@@ -232,7 +306,7 @@ public class DAODre {
             // =================== CONSULTA RIBBONS, ENCARTES E JUROS ===================
             String sqlMateriais = "SELECT " +
                     "(total_ft + total_sobras) AS qtd_ribbons, " +
-                    "total_enc AS qtd_encartes, " +
+                    "total_ft AS qtd_encartes, " +
                     "juros_cartoes " +
                     "FROM fecha_mes " +
                     "WHERE (ano > ? OR (ano = ? AND mes >= ?)) " +

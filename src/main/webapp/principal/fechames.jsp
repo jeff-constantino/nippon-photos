@@ -47,7 +47,7 @@
                                         <div class="modal-dialog modal-dialog-centered modal-md"> <!-- tamanho médio -->
                                             <div class="modal-content">
                                                 <div class="modal-header justify-content-center">
-                                                    <h5 class="modal-title text-center w-100" id="modalDataLabel">Gerar Fechamento/h5>
+                                                    <h5 class="modal-title text-center w-100" id="modalDataLabel">Gerar Fechamento</h5>
                                                 </div>
                                                 <div class="modal-body">
                                                     <form action="<%= request.getContextPath() %>/ServletFechaMes" method="get" id="formBuscaMes" name="formBuscaMes">

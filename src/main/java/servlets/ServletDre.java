@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.ModelDre;
 import model.ModelFechaMes;
+import util.ExcelDREGenerator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -155,6 +156,7 @@ public class ServletDre extends ServletGenericUtil {
         }
     }
 
+
     // Carrega meses não fechados
     private void carregarMesesNaoFechados(HttpServletRequest request) {
         try {
@@ -166,6 +168,7 @@ public class ServletDre extends ServletGenericUtil {
             request.setAttribute("msgErro", "Erro ao buscar meses pendentes: " + e.getMessage());
         }
     }
+
 
     // Gera o relatório DRE
     private void gerarDRE(HttpServletRequest request, HttpServletResponse response)
@@ -292,4 +295,104 @@ public class ServletDre extends ServletGenericUtil {
             dispatcher.forward(request, response);
         }
     }
+
+    // Adicione este método no seu ServletDre
+
+    private void exportarDREExcel(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession();
+
+        // Recupera dados da sessão
+        @SuppressWarnings("unchecked")
+        List<ModelFechaMes> vendasMesList = (List<ModelFechaMes>) session.getAttribute("vendasMesList");
+        Integer mes = (Integer) session.getAttribute("mes");
+        Integer ano = (Integer) session.getAttribute("ano");
+        BigDecimal receitaBruta = (BigDecimal) session.getAttribute("receitaBruta");
+        BigDecimal totalCustosOperacionais = (BigDecimal) session.getAttribute("totalCustosOperacionais");
+
+        if (vendasMesList == null || vendasMesList.isEmpty() || mes == null || ano == null) {
+            request.setAttribute("msg", "Não há dados do DRE para exportar. Gere o relatório primeiro.");
+            RequestDispatcher rd = request.getRequestDispatcher("/principal/dre.jsp");
+            rd.forward(request, response);
+            return;
+        }
+
+        ModelFechaMes fechamento = vendasMesList.get(0);
+
+        // Pega os valores dos impostos e despesas do request
+        BigDecimal icms = parseBigDecimal(request.getParameter("icms"));
+        BigDecimal pis = parseBigDecimal(request.getParameter("pis"));
+        BigDecimal cofins = parseBigDecimal(request.getParameter("cofins"));
+        BigDecimal inss = parseBigDecimal(request.getParameter("inss"));
+        BigDecimal irpj = parseBigDecimal(request.getParameter("irpj"));
+        BigDecimal csll = parseBigDecimal(request.getParameter("csll"));
+
+        BigDecimal totalImpostos = icms.add(pis).add(cofins).add(inss).add(irpj).add(csll);
+
+        BigDecimal aluguel = parseBigDecimal(request.getParameter("aluguel"));
+        BigDecimal bonificacoes = parseBigDecimal(request.getParameter("bonificacoes"));
+        BigDecimal prestacoes = parseBigDecimal(request.getParameter("prestacoes"));
+        BigDecimal internet = parseBigDecimal(request.getParameter("internet"));
+        BigDecimal outrasDespesas = parseBigDecimal(request.getParameter("outrasDesp"));
+
+        BigDecimal salarios = Optional.ofNullable(fechamento.getSalarios()).orElse(BigDecimal.ZERO)
+                .add(Optional.ofNullable(fechamento.getValor_vale_total()).orElse(BigDecimal.ZERO));
+        BigDecimal contas = Optional.ofNullable(fechamento.getValor_total_contas()).orElse(BigDecimal.ZERO);
+        BigDecimal despesas = Optional.ofNullable(fechamento.getValor_total_despesas()).orElse(BigDecimal.ZERO);
+
+        BigDecimal totalDespesasAdm = aluguel.add(salarios).add(contas).add(despesas)
+                .add(bonificacoes).add(prestacoes).add(internet).add(outrasDespesas);
+
+        // Formata o mês/ano
+        SimpleDateFormat sdfMesAno = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR"));
+        LocalDate dataRef = LocalDate.of(ano, mes, 1);
+        String mesAno = sdfMesAno.format(java.sql.Date.valueOf(dataRef));
+
+        try {
+            // Gera o Excel
+            ExcelDREGenerator generator = new ExcelDREGenerator();
+            byte[] excelBytes = generator.gerarDRE(
+                    fechamento, mesAno, totalImpostos, totalDespesasAdm,
+                    icms, pis, cofins, inss, irpj, csll,
+                    aluguel, bonificacoes, prestacoes, internet, outrasDespesas
+            );
+
+            // Define o tipo de resposta
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=DRE_" + mes + "_" + ano + ".xlsx");
+            response.setContentLength(excelBytes.length);
+
+            // Envia o arquivo
+            response.getOutputStream().write(excelBytes);
+            response.getOutputStream().flush();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("msg", "Erro ao gerar arquivo Excel: " + e.getMessage());
+            RequestDispatcher rd = request.getRequestDispatcher("/principal/dre.jsp");
+            rd.forward(request, response);
+        }
+    }
+
+//    // Método auxiliar para converter String para BigDecimal - Compatível Java 11
+//    private BigDecimal parseBigDecimal(String value) {
+//        if (value == null) {
+//            return BigDecimal.ZERO;
+//        }
+//
+//        String trimmed = value.trim();
+//        if (trimmed.isEmpty()) {
+//            return BigDecimal.ZERO;
+//        }
+//
+//        try {
+//            // Remove formatação brasileira
+//            String cleanValue = trimmed.replace(".", "").replace(",", ".");
+//            return new BigDecimal(cleanValue);
+//        } catch (NumberFormatException e) {
+//            return BigDecimal.ZERO;
+//        }
+//    }
 }

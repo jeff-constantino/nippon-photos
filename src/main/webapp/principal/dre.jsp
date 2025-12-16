@@ -484,6 +484,13 @@
                                             Gravar DRE
                                         </button>
                                     </div>
+                                    <!-- NOVO BOTÃO EXPORTAR EXCEL -->
+                                    <div style="text-align: center; margin-top: 10px;">
+                                        <button type="button" class="btn btn-outline-primary" style="font-size: large"
+                                                onclick="exportarParaExcel()">
+                                            <i class="fas fa-file-excel"></i> Exportar para Excel
+                                        </button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -1014,7 +1021,26 @@
        $('#hiddenContas').val(contas);
        $('#hiddenDespesasGerais').val(despesasGerais);
    });
+   function exportarParaExcel() {
+       // Pega todos os valores dos campos
+       const params = new URLSearchParams({
+           acao: 'exportarExcel',
+           icms: document.getElementById('icms').value || '0',
+           pis: document.getElementById('pis').value || '0',
+           cofins: document.getElementById('cofins').value || '0',
+           inss: document.getElementById('inss').value || '0',
+           irpj: document.getElementById('irpj').value || '0',
+           csll: document.getElementById('csll').value || '0',
+           aluguel: document.getElementById('aluguel').value || '0',
+           bonificacoes: document.getElementById('bonificacoes').value || '0',
+           prestacoes: document.getElementById('prestacoes').value || '0',
+           internet: document.getElementById('internet').value || '0',
+           outrasDesp: document.getElementById('outrasDesp').value || '0'
+       });
 
+       // Abre o download em nova janela
+       window.location.href = '<%= request.getContextPath() %>/ServletDre?' + params.toString();
+   }
 </SCRIPT>
 
 

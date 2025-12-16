@@ -99,6 +99,29 @@
           <scope>provided</scope>
       </dependency>
 
+      <!-- Apache POI para Excel -->
+      <dependency>
+          <groupId>org.apache.poi</groupId>
+          <artifactId>poi</artifactId>
+          <version>5.2.5</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.poi</groupId>
+          <artifactId>poi-ooxml</artifactId>
+          <version>5.2.5</version>
+      </dependency>
+
+      <!-- Dependências adicionais necessárias -->
+      <dependency>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-collections4</artifactId>
+          <version>4.4</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.xmlbeans</groupId>
+          <artifactId>xmlbeans</artifactId>
+          <version>5.1.1</version>
+      </dependency>
   </dependencies>
 
   <build>

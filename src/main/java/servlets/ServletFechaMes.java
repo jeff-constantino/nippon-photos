@@ -236,6 +236,7 @@ public class ServletFechaMes extends ServletGenericUtil {
 
             request.setAttribute("msg", "Fechamento carregado com sucesso!");
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/fechames.jsp");
+
             dispatcher.forward(request, response);
 
         } catch (Exception e) {

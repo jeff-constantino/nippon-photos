@@ -464,39 +464,39 @@
                                             <div class="row">
                                                 <div class="col-6 mb-3">
                                                     <label for="debitoVm" style="font-size: 0.8rem;">DÉBITO V/M</label>
-                                                    <input type="text" class="form-control money" id="debitoVm" name="debitoVm"  style="font-size: 0.8rem;">
+                                                    <input type="text" class="form-control money" id="debitoVm" name="debitoVm"  style="font-size: 0.8rem;" value="${fechamentoExistente.debitoVm != null ? fechamentoExistente.debitoVm : ''}">
                                                 </div>
                                                 <div class="col-6 mb-3">
                                                     <label for="jurosDebitoVm" style="font-size: 0.8rem;">JUROS</label>
-                                                    <input type="text" class="form-control money" id="jurosDebitoVm" name="jurosDebitoVm" style="font-size: 0.8rem;">
+                                                    <input type="text" class="form-control money" id="jurosDebitoVm" name="jurosDebitoVm" style="font-size: 0.8rem;" value="${fechamentoExistente.jurosdebvm != null ? fechamentoExistente.jurosdebvm : ''}">
                                                 </div>
 
                                                 <div class="col-6 mb-3">
                                                     <label for="creditoVm" style="font-size: 0.8rem;">CRÉDITO V/M</label>
-                                                    <input type="text" class="form-control money" id="creditoVm" name="creditoVm" style="font-size: 0.8rem;">
+                                                    <input type="text" class="form-control money" id="creditoVm" name="creditoVm" style="font-size: 0.8rem;" value="${fechamentoExistente.creditoVm != null ? fechamentoExistente.creditoVm : ''}">
 
                                                 </div>
                                                 <div class="col-6 mb-3">
                                                     <label for="jurosCreditoVm" style="font-size: 0.8rem;">JUROS</label>
-                                                    <input type="text" class="form-control money" id="jurosCreditoVm" name="jurosCreditoVm" style="font-size: 0.8rem;">
+                                                    <input type="text" class="form-control money" id="jurosCreditoVm" name="jurosCreditoVm" style="font-size: 0.8rem;" value="${fechamentoExistente.juroscredvm != null ? fechamentoExistente.juroscredvm : ''}">
                                                 </div>
 
                                                 <div class="col-6 mb-3">
                                                     <label for="debitoOutros" style="font-size: 0.8rem;">DÉBITO OUTROS</label>
-                                                    <input type="text" class="form-control money" id="debitoOutros" name="debitoOutros" style="font-size: 0.8rem;">
+                                                    <input type="text" class="form-control money" id="debitoOutros" name="debitoOutros" style="font-size: 0.8rem;" value="${fechamentoExistente.debitoOutros != null ? fechamentoExistente.debitoOutros : ''}">
                                                 </div>
                                                 <div class="col-6 mb-3">
                                                     <label for="jurosDebitoOutros" style="font-size: 0.8rem;">JUROS</label>
-                                                    <input type="text" class="form-control money" id="jurosDebitoOutros" name="jurosDebitoOutros" style="font-size: 0.8rem;">
+                                                    <input type="text" class="form-control money" id="jurosDebitoOutros" name="jurosDebitoOutros" style="font-size: 0.8rem;" value="${fechamentoExistente.jurosdeboutros != null ? fechamentoExistente.jurosdeboutros : ''}">
                                                 </div>
 
                                                 <div class="col-6 mb-3">
                                                     <label for="creditoOutros" style="font-size: 0.8rem;">CRÉDITO OUTROS</label>
-                                                    <input type="text" class="form-control money" id="creditoOutros" name="creditoOutros" style="font-size: 0.8rem;">
+                                                    <input type="text" class="form-control money" id="creditoOutros" name="creditoOutros" style="font-size: 0.8rem;" value="${fechamentoExistente.creditoOutros != null ? fechamentoExistente.creditoOutros : ''}">
                                                 </div>
                                                 <div class="col-6 mb-3">
                                                     <label for="jurosCreditoOutros" style="font-size: 0.8rem;">JUROS</label>
-                                                    <input type="text" class="form-control money" id="jurosCreditoOutros" name="jurosCreditoOutros" style="font-size: 0.8rem;">
+                                                    <input type="text" class="form-control money" id="jurosCreditoOutros" name="jurosCreditoOutros" style="font-size: 0.8rem;" value="${fechamentoExistente.juroscredoutros != null ? fechamentoExistente.juroscredoutros : ''}">
                                                 </div>
                                             </div>
 
@@ -714,7 +714,7 @@
                                                 <div class="col-3 mb-3" style="text-align: center">
                                                     <label for="contas" style="font-size: 1.2rem">CONTAS PAGAS</label>
                                                     <input type="text" class="form-control money" id="contas" name="contas" style="font-size: 1.2rem"
-                                                           value="${fechamentoExistente != null ? fechamentoExistente.contas : valorTotalContas}">
+                                                           value="${valorTotalContas}">
                                                 </div>
                                                 <div class="col-3 mb-3" style="text-align: center">
                                                     <label for="salarios" style="font-size: 1.2rem">SALÁRIOS LIQUÍDOS</label>
@@ -1196,10 +1196,7 @@
 
         // Calcula os valores iniciais
         setTimeout(function() {
-            calcularJurosDebitoVm();
-            calcularJurosCreditoVm();
-            calcularJurosDebitoOutros();
-            calcularJurosCreditoOutros();
+
             calcularSaldo();
         }, 500);
     });
@@ -1207,10 +1204,7 @@
     // Calcula quando a página carregar completamente
     window.addEventListener('load', function() {
         setTimeout(function() {
-            calcularJurosDebitoVm();
-            calcularJurosCreditoVm();
-            calcularJurosDebitoOutros();
-            calcularJurosCreditoOutros();
+
             calcularSaldo();
         }, 600);
     });

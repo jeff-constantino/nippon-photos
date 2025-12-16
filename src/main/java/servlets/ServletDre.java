@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
@@ -30,8 +31,11 @@ public class ServletDre extends ServletGenericUtil {
 
         if ("relatorioMes".equals(acao)) {
             gerarDRE(request, response);
-        } else {
-            // Carrega os meses não fechados ao abrir a página
+        } else if ("exportarExcel".equals(acao)) { // 👈 NOVO BLOCO PARA EXPORTAÇÃO
+            exportarDREExcel(request, response);
+        }
+        else {
+            // Ação padrão: Carrega a página DRE
             carregarMesesNaoFechados(request);
             RequestDispatcher rd = request.getRequestDispatcher("/principal/dre.jsp");
             rd.forward(request, response);
@@ -141,18 +145,32 @@ public class ServletDre extends ServletGenericUtil {
         dispatcher.forward(request, response);
     }
 
-    // Método auxiliar para converter String (com vírgula) para BigDecimal
+    // Método auxiliar para converter String (que vem da URL no formato americano X.XX) para BigDecimal
     private BigDecimal parseBigDecimal(String value) {
         if (value == null || value.trim().isEmpty()) {
             return BigDecimal.ZERO;
         }
+
+        // 1. Limpa a string (remove R$ e espaços, se houver)
+        String cleanedValue = value.replace("R$", "").trim();
+
+        // Tenta converter diretamente, assumindo o formato americano (X.XX)
         try {
-            // Remove R$, pontos e substitui vírgula por ponto
-            String cleanedValue = value.replace("R$", "").replace(".", "")
-                    .replace(",", ".").trim();
+            // Isso deve funcionar perfeitamente para "0.01" ou "1000.50"
             return new BigDecimal(cleanedValue);
         } catch (NumberFormatException e) {
-            return BigDecimal.ZERO;
+            // 2. Fallback: Se a string ainda tiver formatação brasileira (vírgula)
+            // ou algum caractere estranho que o JS não limpou, faz a limpeza BR -> US
+            try {
+                String finalCleaned = cleanedValue.replace(".", "") // Remove pontos de milhar
+                        .replace(",", "."); // Troca vírgula decimal por ponto
+                return new BigDecimal(finalCleaned);
+            } catch (NumberFormatException e2) {
+                // Em caso de falha de parsing, retorna ZERO
+                System.err.println("Erro irrecuperável ao converter valor: [" + value + "]");
+                e2.printStackTrace();
+                return BigDecimal.ZERO;
+            }
         }
     }
 
@@ -376,23 +394,5 @@ public class ServletDre extends ServletGenericUtil {
         }
     }
 
-//    // Método auxiliar para converter String para BigDecimal - Compatível Java 11
-//    private BigDecimal parseBigDecimal(String value) {
-//        if (value == null) {
-//            return BigDecimal.ZERO;
-//        }
-//
-//        String trimmed = value.trim();
-//        if (trimmed.isEmpty()) {
-//            return BigDecimal.ZERO;
-//        }
-//
-//        try {
-//            // Remove formatação brasileira
-//            String cleanValue = trimmed.replace(".", "").replace(",", ".");
-//            return new BigDecimal(cleanValue);
-//        } catch (NumberFormatException e) {
-//            return BigDecimal.ZERO;
-//        }
-//    }
+
 }

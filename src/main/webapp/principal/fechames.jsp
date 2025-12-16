@@ -807,7 +807,13 @@
             $.post("${pageContext.request.contextPath}/ServletVendas", { acao: "limparMsg" });
         }
     });
-
+    /* ===============================
+           PATCH PARA COMPATIBILIDADE DO JQUERY (MS.IE fix)
+           =============================== */
+    if (typeof $.browser === 'undefined') {
+        $.browser = {};
+        $.browser.msie = false;
+    }
     // Função para navegar entre elementos focáveis com as setas
     function navigateFocusableElements(event) {
         const focusableElements = Array.from(

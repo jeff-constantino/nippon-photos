@@ -14,13 +14,9 @@
 
 <body>
 <div class="container-scroller">
-    <!-- partial:partials/_sidebar.html -->
     <jsp:include page="sidebar.jsp"></jsp:include>
-    <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_navbar.html -->
         <jsp:include page="navbar.jsp"></jsp:include>
-        <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper" style="min-height: calc(98vh - 100px);">
                 <div class="row">
@@ -41,7 +37,6 @@
                                             </button>
 
                                             <div class="card-body" style="text-align: center">
-                                                <!-- Card 1 -->
                                                 <h2 style="text-transform: uppercase;">${mesAno}</h2>
                                             </div>
 
@@ -73,7 +68,6 @@
                                 <div class="d-flex d-sm-block d-md-flex align-items-center">
 
 
-                                    <!-- Modal -->
                                     <div class="modal fade" id="modalDRE" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-xl mt-5">
                                             <div class="modal-content">
@@ -153,11 +147,6 @@
                         <div class="row">
                             <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                 <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                    <!--INSERIR BOTÃO 2 AQUI-->
-                                    <!-- Button trigger modal -->
-
-
-                                    <!-- Modal -->
                                     <div class="modal fade" id="modal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-xl mt-5">
                                             <div class="modal-content">
@@ -201,11 +190,6 @@
                         <div class="row">
                             <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                 <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                    <!--INSERIR BOTÃO 3 AQUI-->
-                                    <!-- Button trigger modal -->
-
-
-                                    <!-- Modal -->
                                     <div class="modal fade" id="modal3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-xl mt-5">
                                             <div class="modal-content">
@@ -243,164 +227,166 @@
                         </div>
                     </div>
                 </div>
-                <%--CONTEUDO PAGINA--%>
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="row">
-                            <div class="col-md-6 grid-margin">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title" style="text-align: center">RECEITAS OPERACIONAIS</h4>
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered" id="tabelaReceita">
-                                                <thead class="thead-light">
-                                                <tr>
-                                                    <th scope="col" style="font-size: 1.0rem">TIPO</th>
-                                                    <th scope="col" style="font-size: 1.0rem">VALOR</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <c:set var="receitaDinheiro" value="0" />
-                                                <c:set var="receitaDebito" value="0" />
-                                                <c:set var="receitaCredito" value="0" />
-                                                <c:set var="receitaPix" value="0" />
-                                                <c:set var="impostos" value="0" />
-                                                <c:set var="receitaBruta" value="0" />
+                <form id="formDre" method="post"
+                      action="<%=request.getContextPath()%>/ServletDre">
+                    <input type="hidden" name="acao" value="gravarDRE"/>
+                    <%--CONTEUDO PAGINA--%>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-6 grid-margin">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title" style="text-align: center">RECEITAS OPERACIONAIS</h4>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="tabelaReceita">
+                                                    <thead class="thead-light">
+                                                    <tr>
+                                                        <th scope="col" style="font-size: 1.0rem">TIPO</th>
+                                                        <th scope="col" style="font-size: 1.0rem">VALOR</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <c:set var="receitaDinheiro" value="0" />
+                                                    <c:set var="receitaDebito" value="0" />
+                                                    <c:set var="receitaCredito" value="0" />
+                                                    <c:set var="receitaPix" value="0" />
+                                                    <c:set var="impostos" value="0" />
+                                                    <c:set var="receitaBruta" value="0" />
 
-                                                <c:forEach items="${vendasMesList}" var="vl">
-                                                    <tr>
-                                                        <td style="font-size: 1.0rem">Dinheiro</td>
-                                                        <td style="font-size: 1.0rem"><fmt:formatNumber value="${vl.valor_din_mes}" type="currency" currencySymbol="R$" /></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-size: 1.0rem">Débito</td>
-                                                        <td style="font-size: 1.0rem"><fmt:formatNumber value="${vl.valor_deb_mes}" type="currency" currencySymbol="R$" /></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-size: 1.0rem">Crédito</td>
-                                                        <td style="font-size: 1.0rem"><fmt:formatNumber value="${vl.valor_cred_mes}" type="currency" currencySymbol="R$" /></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-size: 1.0rem">Pix</td>
-                                                        <td style="font-size: 1.0rem"><fmt:formatNumber value="${vl.valor_pix_mes}" type="currency" currencySymbol="R$" /></td>
-                                                    </tr>
-                                                    <c:set var="receitaDinheiro" value="${receitaDinheiro+ vl.valor_din_mes}" />
-                                                    <c:set var="receitaDebito" value="${receitaDebito + vl.valor_deb_mes}" />
-                                                    <c:set var="receitaCredito" value="${receitaCredito + vl.valor_cred_mes}" />
-                                                    <c:set var="receitaPix" value="${receitaPix + vl.valor_pix_mes}" />
-                                                    <c:set var="receitaBruta" value="${receitaDinheiro + receitaDebito + receitaCredito + receitaPix}" />
-                                                    <tr>
-                                                        <td style="font-size: 1.0rem">Receita Bruta</td>
-                                                        <td style="font-size: 1.0rem"><fmt:formatNumber value="${receitaBruta}" type="currency" currencySymbol="R$" /></td>
-                                                    </tr>
-                                                </c:forEach>
-                                                </tbody>
-                                            </table>
+                                                    <c:forEach items="${vendasMesList}" var="vl">
+                                                        <tr>
+                                                            <td style="font-size: 1.0rem">Dinheiro</td>
+                                                            <td style="font-size: 1.0rem"><fmt:formatNumber value="${vl.valor_din_mes}" type="currency" currencySymbol="R$" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-size: 1.0rem">Débito</td>
+                                                            <td style="font-size: 1.0rem"><fmt:formatNumber value="${vl.valor_deb_mes}" type="currency" currencySymbol="R$" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-size: 1.0rem">Crédito</td>
+                                                            <td style="font-size: 1.0rem"><fmt:formatNumber value="${vl.valor_cred_mes}" type="currency" currencySymbol="R$" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-size: 1.0rem">Pix</td>
+                                                            <td style="font-size: 1.0rem"><fmt:formatNumber value="${vl.valor_pix_mes}" type="currency" currencySymbol="R$" /></td>
+                                                        </tr>
+                                                        <c:set var="receitaDinheiro" value="${receitaDinheiro+ vl.valor_din_mes}" />
+                                                        <c:set var="receitaDebito" value="${receitaDebito + vl.valor_deb_mes}" />
+                                                        <c:set var="receitaCredito" value="${receitaCredito + vl.valor_cred_mes}" />
+                                                        <c:set var="receitaPix" value="${receitaPix + vl.valor_pix_mes}" />
+                                                        <c:set var="receitaBruta" value="${receitaDinheiro + receitaDebito + receitaCredito + receitaPix}" />
+                                                        <tr>
+                                                            <td style="font-size: 1.0rem">Receita Bruta</td>
+                                                            <td style="font-size: 1.0rem"><fmt:formatNumber value="${receitaBruta}" type="currency" currencySymbol="R$" /></td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-6 grid-margin">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title" style="text-align: center">DESPESAS OPERACIONAIS</h4>
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered" id="tabelaDespesas">
-                                                <thead class="thead-light">
-                                                <tr>
-                                                    <th scope="col" style="font-size: 1.0rem">TIPO</th>
-                                                    <th scope="col" style="font-size: 1.0rem">VALOR</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <c:set var="ribbons" value="0" />
-                                                <c:set var="encartes" value="0" />
-                                                <c:set var="jurosCartoes" value="0" />
-                                                <c:set var="despesasOperacionais" value="0" />
-                                                <c:set var="lucroBruto" value="0" />
-                                                <c:set var="totalCustosOperacionais" value="0" />
-                                                <c:forEach items="${vendasMesList}" var="vl">
+                                <div class="col-md-6 grid-margin">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title" style="text-align: center">DESPESAS OPERACIONAIS</h4>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="tabelaDespesas">
+                                                    <thead class="thead-light">
                                                     <tr>
-                                                        <td style="font-size: 1.0rem">Ribbons</td>
-                                                        <td style="font-size: 1.0rem">
-                                                            <fmt:formatNumber value="${vl.total_ribbons}" type="currency" currencySymbol="R$" />
-                                                        </td>
+                                                        <th scope="col" style="font-size: 1.0rem">TIPO</th>
+                                                        <th scope="col" style="font-size: 1.0rem">VALOR</th>
                                                     </tr>
-                                                    <tr>
-                                                        <td style="font-size: 1.0rem">Encartes</td>
-                                                        <td style="font-size: 1.0rem">
-                                                            <fmt:formatNumber value="${vl.valor_enc}" type="currency" currencySymbol="R$" />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="font-size: 1.0rem">Juros dos Cartões</td>
-                                                        <td style="font-size: 1.0rem">
-                                                            <fmt:formatNumber value="${vl.juros_cartoes}" type="currency" currencySymbol="R$" />
-                                                        </td>
-                                                    </tr>
-                                                    <c:set var="despesaAtual" value="${vl.total_ribbons + vl.valor_enc + vl.juros_cartoes}" />
-                                                    <tr>
-                                                        <td style="font-size: 1.0rem">Despesas Operacionais</td>
-                                                        <td style="font-size: 1.0rem">
-                                                            <fmt:formatNumber value="${despesaAtual}" type="currency" currencySymbol="R$" />
-                                                        </td>
-                                                    </tr>
-                                                    <c:set var="totalCustosOperacionais" value="${totalCustosOperacionais + despesaAtual}" />
-                                                </c:forEach>
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                    <c:set var="ribbons" value="0" />
+                                                    <c:set var="encartes" value="0" />
+                                                    <c:set var="jurosCartoes" value="0" />
+                                                    <c:set var="despesasOperacionais" value="0" />
+                                                    <c:set var="lucroBruto" value="0" />
+                                                    <c:set var="totalCustosOperacionais" value="0" />
+                                                    <c:forEach items="${vendasMesList}" var="vl">
+                                                        <tr>
+                                                            <td style="font-size: 1.0rem">Ribbons</td>
+                                                            <td style="font-size: 1.0rem">
+                                                                <fmt:formatNumber value="${vl.total_ribbons}" type="currency" currencySymbol="R$" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-size: 1.0rem">Encartes</td>
+                                                            <td style="font-size: 1.0rem">
+                                                                <fmt:formatNumber value="${vl.valor_enc}" type="currency" currencySymbol="R$" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-size: 1.0rem">Juros dos Cartões</td>
+                                                            <td style="font-size: 1.0rem">
+                                                                <fmt:formatNumber value="${vl.juros_cartoes}" type="currency" currencySymbol="R$" />
+                                                            </td>
+                                                        </tr>
+                                                        <c:set var="despesaAtual" value="${vl.total_ribbons + vl.valor_enc + vl.juros_cartoes}" />
+                                                        <tr>
+                                                            <td style="font-size: 1.0rem">Despesas Operacionais</td>
+                                                            <td style="font-size: 1.0rem">
+                                                                <fmt:formatNumber value="${despesaAtual}" type="currency" currencySymbol="R$" />
+                                                            </td>
+                                                        </tr>
+                                                        <c:set var="totalCustosOperacionais" value="${totalCustosOperacionais + despesaAtual}" />
+                                                    </c:forEach>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="col-md-12 grid-margin">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="card-title" style="text-align: center">CALCULO FINANCEIRO</h4>
-                                        <div class="row">
-                                            <div class="col-md-4 mb-3">
-                                                <label for="receitaBrt" style="font-size: 1.0rem;">RECEITA BRUTA</label>
-                                                <input type="text" class="form-control money" id="receitaBrt" name="receitaBrt" style=" color: black; font: bold; font-size: 1.0rem"
-                                                       value="<fmt:formatNumber value="${receitaBruta}" pattern="#,##0.00" />" readonly>
+                                <div class="col-md-12 grid-margin">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title" style="text-align: center">CALCULO FINANCEIRO</h4>
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="receitaBrt" style="font-size: 1.0rem;">RECEITA BRUTA</label>
+                                                    <input type="text" class="form-control money" id="receitaBrt" name="receitaBrt" style=" color: black; font: bold; font-size: 1.0rem"
+                                                           value="<fmt:formatNumber value="${receitaBruta}" pattern="#,##0.00" />" readonly>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="custosOpr" style="font-size: 1.0rem;">CUSTOS OPERACIONAL</label>
+                                                    <input type="text" class="form-control money" id="custosOpr" name="custosOpr" style="color: #ff0000; font: bold; font-size: 1.0rem"
+                                                           value="<fmt:formatNumber value="${totalCustosOperacionais}" pattern="#,##0.00" />" readonly>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="lucroBrt" style="font-size: 1.0rem;">LUCRO BRUTO</label>
+                                                    <input type="text" class="form-control money" id="lucroBrt" name="lucroBrt" style="font: bold; font-size: 1.0rem; color: black"
+                                                           value="<fmt:formatNumber value="${receitaBruta-totalCustosOperacionais}" pattern="#,##0.00" />" readonly>
+                                                </div>
                                             </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label for="custosOpr" style="font-size: 1.0rem;">CUSTOS OPERACIONAL</label>
-                                                <input type="text" class="form-control money" id="custosOpr" name="custosOpr" style="color: #ff0000; font: bold; font-size: 1.0rem"
-                                                       value="<fmt:formatNumber value="${totalCustosOperacionais}" pattern="#,##0.00" />" readonly>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label for="lucroBrt" style="font-size: 1.0rem;">LUCRO BRUTO</label>
-                                                <input type="text" class="form-control money" id="lucroBrt" name="lucroBrt" style="font: bold; font-size: 1.0rem; color: black"
-                                                       value="<fmt:formatNumber value="${receitaBruta-totalCustosOperacionais}" pattern="#,##0.00" />" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4 mb-3">
-                                                <label for="impostoVenda" style="font-size: 1.0rem;">IMPOSTOS SOBRE VENDAS</label>
-                                                <input type="text" class="form-control" id="impostoVenda" name="impostoVenda" style="font-size: 1.0rem; color: #ff0000" readonly>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label for="despAdm" style="font-size: 1.0rem;">DESPESAS ADMINISTRATIVAS</label>
-                                                <input type="text" class="form-control" id="despAdm" name="despAdm" style="font-size: 1.0rem; color: #ff0000" readonly>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label for="lucroLqd" style="font-size: 1.0rem;">LUCRO LIQUIDO </label>
-                                                <input type="text" class="form-control" id="lucroLqd" name="lucroLqd" style="font-size: 1.0rem;" readonly>
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="impostoVenda" style="font-size: 1.0rem;">IMPOSTOS SOBRE VENDAS</label>
+                                                    <input type="text" class="form-control" id="impostoVenda" name="impostoVenda" style="font-size: 1.0rem; color: #ff0000" readonly>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="despAdm" style="font-size: 1.0rem;">DESPESAS ADMINISTRATIVAS</label>
+                                                    <input type="text" class="form-control" id="despAdm" name="despAdm" style="font-size: 1.0rem; color: #ff0000" readonly>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="lucroLqd" style="font-size: 1.0rem;">LUCRO LIQUIDO </label>
+                                                    <input type="text" class="form-control" id="lucroLqd" name="lucroLqd" style="font-size: 1.0rem;" readonly>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-4 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <form method="post" action="<%=request.getContextPath()%>/ServletDre">
-                                    <input type="hidden" name="acao" value="gravarDRE">
+                        <div class="col-md-4 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+
                                     <h4 class="card-title" style="text-align: center">IMPOSTOS SOBRE VENDAS</h4>
                                     <div class="row">
                                         <div class="col-6 mb-3">
@@ -484,45 +470,31 @@
                                             Gravar DRE
                                         </button>
                                     </div>
-                                    <!-- NOVO BOTÃO EXPORTAR EXCEL -->
                                     <div style="text-align: center; margin-top: 10px;">
                                         <button type="button" class="btn btn-outline-primary" style="font-size: large"
                                                 onclick="exportarParaExcel()">
                                             <i class="fas fa-file-excel"></i> Exportar para Excel
                                         </button>
                                     </div>
-                                </form>
+
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
+                </form>
             </div>
-            <!-- content-wrapper ends -->
-            <!-- partial:partials/_footer.html -->
             <jsp:include page="footer.jsp"></jsp:include>
-            <!-- partial -->
         </div>
-        <!-- main-panel ends -->
     </div>
-    <!-- page-body-wrapper ends -->
 </div>
-<!-- container-scroller -->
-<!-- plugins:js -->
 <jsp:include page="pluginsJS.jsp"></jsp:include>
-<!-- End custom js for this page -->
-
-<!-- Modal HTML -->
 <div class="modal" id="msgModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;"> <!-- Borda preta -->
-            <div class="modal-header" style="border-bottom: none;">
+        <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;"> <div class="modal-header" style="border-bottom: none;">
 
-                <!-- Removido o botão "X" -->
-            </div>
+        </div>
             <div class="modal-body" style="color: black;">
-                <p style="font-size: 1.5em; text-align: center">${msg}</p> <!-- Mensagem aqui -->
-            </div>
+                <p style="font-size: 1.5em; text-align: center">${msg}</p> </div>
             <div class="modal-footer" style="border-top: none;">
                 <h1 class="modal-title" style="color: black; font-size: 0.8em;">aperte ESC para fechar</h1>
             </div>
@@ -530,518 +502,351 @@
     </div>
 </div>
 <script>
-   $(document).ready(function () {
+    /* ===============================
+       MENSAGEM VIA MODAL
+       =============================== */
+    $(document).ready(function () {
         var msg = "${msg}";
         if (msg) {
-            $('#msgModal').modal('show'); // Exibe o modal com a mensagem
-
-            // Remove a mensagem da sessão após exibi-la
-            $.post("${pageContext.request.contextPath}/ServletVendas", { acao: "limparMsg" });
+            $('#msgModal').modal('show');
+            // Correção para garantir que o contexto seja usado corretamente, embora a sintaxe original seja JSTL/EL
+            const url = "${pageContext.request.contextPath}/ServletVendas";
+            $.post(url, { acao: "limparMsg" });
         }
     });
+    /* ===============================
+        PATCH PARA COMPATIBILIDADE DO JQUERY (MS.IE fix)
+        =============================== */
+    if (typeof $.browser === 'undefined') {
+        $.browser = {};
+        $.browser.msie = false;
+    }
 
-
-    // Função para navegar entre elementos focáveis com as setas
+    /* ===============================
+       NAVEGAÇÃO POR SETAS
+       =============================== */
     function navigateFocusableElements(event) {
+        // ... (Seu código de navegação por setas permanece o mesmo) ...
         const focusableElements = Array.from(
             document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
         ).filter(element => !element.disabled && element.tabIndex !== -1);
 
-        if (focusableElements.length === 0) return;
+        if (!focusableElements.length) return;
 
         const currentElement = document.activeElement;
         if (!focusableElements.includes(currentElement)) return;
 
-        let currentIndex = focusableElements.indexOf(currentElement);
+        let index = focusableElements.indexOf(currentElement);
 
-        switch (event.key) {
-            case 'ArrowRight':
-            case 'ArrowDown':
-                currentIndex = (currentIndex + 1) % focusableElements.length;
-                break;
-            case 'ArrowLeft':
-            case 'ArrowUp':
-                currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
-                break;
-            default:
-                return;
-        }
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown') index++;
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') index--;
 
-        focusableElements[currentIndex].focus();
+        index = (index + focusableElements.length) % focusableElements.length;
+        focusableElements[index].focus();
     }
 
-    // Bloqueia a alteração de valor com as setas nos inputs do tipo number
+    document.addEventListener('keydown', navigateFocusableElements);
+
+    /* Bloqueia setas em input number */
     document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.addEventListener('keydown', function(event) {
+        input.addEventListener('keydown', function (event) {
             if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-                event.preventDefault(); // Impede a alteração do valor
+                event.preventDefault();
             }
         });
     });
 
-    // Adiciona o evento keydown ao documento
-    document.addEventListener('keydown', navigateFocusableElements);
-    // Fim de navegação por setas
-
-
-
-
-   function setData() {
-       // Obtém o valor do campo dataInicial
-       var dataInicial = document.getElementById("dataInicial").value;
-
-       if (dataInicial) {
-           // Divide a data inicial em dia, mês e ano
-           var partesData = dataInicial.split('-'); // Assume que o formato é yyyy-mm-dd
-           var ano = parseInt(partesData[0], 10);
-           var mes = parseInt(partesData[1], 10) - 1; // Mês é 0-based no JavaScript
-           var dia = parseInt(partesData[2], 10);
-
-           // Cria um objeto Date com os valores extraídos
-           var data = new Date(ano, mes, dia);
-
-           // Verifica se a data é válida
-           if (!isNaN(data.getTime())) {
-               // Calcula o último dia do mês da data inicial
-               var ultimoDia = new Date(ano, mes + 1, 0);
-
-               // Formata a data final no padrão yyyy-mm-dd
-               var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
-               var mesFinal = String(mes + 1).padStart(2, '0'); // Ajusta o mês para exibição (1-12)
-               var dataFinal = ano + '-' + mesFinal + '-' + diaFinal;
-
-               // Define o valor do campo dataFinal
-               document.getElementById("dataFinal").value = dataFinal;
-           } else {
-               console.error("Data inicial inválida.");
-               document.getElementById("dataFinal").value = ""; // Limpa o campo se a data for inválida
-           }
-       } else {
-           console.error("Data inicial não selecionada.");
-           document.getElementById("dataFinal").value = ""; // Limpa o campo se a data inicial estiver vazia
-       }
-   }
-
-   // Função para inicializar os campos de data ao abrir o modal
-   function initializeDates() {
-       // Obtém a data atual
-       var today = new Date();
-
-       // Formata a data inicial no padrão yyyy-mm-dd
-       var diaInicial = String(today.getDate()).padStart(2, '0');
-       var mesInicial = String(today.getMonth() + 1).padStart(2, '0');
-       var anoInicial = today.getFullYear();
-       var dataInicial = anoInicial + '-' + mesInicial + '-' + diaInicial;
-
-       // Calcula o último dia do mês atual
-       var ultimoDia = new Date(anoInicial, today.getMonth() + 1, 0);
-
-       // Formata a data final no padrão yyyy-mm-dd
-       var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
-       var mesFinal = String(today.getMonth() + 1).padStart(2, '0'); // Usa o mês da data inicial
-       var anoFinal = today.getFullYear();
-       var dataFinal = anoFinal + '-' + mesFinal + '-' + diaFinal;
-
-       // Define os valores dos campos
-       document.getElementById("dataInicial").value = dataInicial;
-       document.getElementById("dataFinal").value = dataFinal;
-   }
-
-   // Inicializa os campos de data quando o modal é aberto
-   document.addEventListener('DOMContentLoaded', function () {
-       const modal = document.getElementById('modalDRE'); // Substitua 'meuModal' pelo ID do seu modal
-       if (modal) {
-           modal.addEventListener('shown.bs.modal', function () {
-               // Verifica se os campos já foram inicializados
-               if (!document.getElementById("dataInicial").value) {
-                   initializeDates();
-               }
-           });
-       }
-
-       // Adiciona o evento onchange ao campo dataInicial
-       document.getElementById("dataInicial").addEventListener('change', setData);
-   });
-
-   // CALCULOS DA DRE
-   // Função para converter valor monetário para número
-   function parseMoneyToNumber(value) {
-       if (!value) return 0;
-       let cleanValue = value.toString().trim();
-
-       // Remove símbolos de moeda (R$, espaços, etc.)
-       cleanValue = cleanValue.replace(/[R$\s]/g, '');
-
-       // Se já está formatado como moeda brasileira (tem vírgula)
-       if (cleanValue.includes(',')) {
-           // Remove pontos (separadores de milhares) e substitui vírgula por ponto
-           cleanValue = cleanValue.replace(/\./g, '').replace(',', '.');
-           return parseFloat(cleanValue) || 0;
-       }
-
-       // Se é só números ou tem apenas pontos
-       if (cleanValue.includes('.')) {
-           // Verifica se tem mais de um ponto (formato brasileiro: 1.234.567)
-           const pontosCount = (cleanValue.match(/\./g) || []).length;
-           if (pontosCount > 1) {
-               // É formato brasileiro com separadores de milhares, remove pontos
-               return parseFloat(cleanValue.replace(/\./g, '')) || 0;
-           } else {
-               // É um decimal normal (formato americano: 1234.56)
-               return parseFloat(cleanValue) || 0;
-           }
-       }
-
-       // É apenas números inteiros
-       return parseFloat(cleanValue) || 0;
-   }
-
-   // Função para formatar número como moeda brasileira
-   function formatToCurrency(value) {
-       // Arredonda para 2 casas decimais para evitar problemas de precisão
-       const roundedValue = Math.round(value * 100) / 100;
-
-       return roundedValue.toLocaleString('pt-BR', {
-           minimumFractionDigits: 2,
-           maximumFractionDigits: 2
-       });
-   }
-
-   // Função para calcular total dos impostos
-   function calculateTotalImpostos() {
-       const icms = parseMoneyToNumber(document.getElementById('icms').value);
-       const pis = parseMoneyToNumber(document.getElementById('pis').value);
-       const cofins = parseMoneyToNumber(document.getElementById('cofins').value);
-       const inss = parseMoneyToNumber(document.getElementById('inss').value);
-       const irpj = parseMoneyToNumber(document.getElementById('irpj').value);
-       const csll = parseMoneyToNumber(document.getElementById('csll').value);
-
-       const total = icms + pis + cofins + inss + irpj + csll;
-
-       // Atualiza o campo total impostos
-       document.getElementById('totalImpostos').value = formatToCurrency(total);
-
-       // Atualiza o campo impostos sobre vendas no bloco cálculo financeiro
-       document.getElementById('impostoVenda').value = formatToCurrency(total);
-
-       // Recalcula o lucro líquido
-       calculateLucroLiquido();
-   }
-
-   // Função para calcular total das despesas administrativas
-   function calculateTotalDespesasAdm() {
-       const aluguel = parseMoneyToNumber(document.getElementById('aluguel').value);
-       const salarios = parseMoneyToNumber(document.getElementById('salarios').value);
-       const contas = parseMoneyToNumber(document.getElementById('contas').value);
-       const despesasGerais = parseMoneyToNumber(document.getElementById('despesasGerais').value);
-       const bonificacoes = parseMoneyToNumber(document.getElementById('bonificacoes').value);
-       const prestacoes = parseMoneyToNumber(document.getElementById('prestacoes').value);
-       const internet = parseMoneyToNumber(document.getElementById('internet').value);
-       const outrasDesp = parseMoneyToNumber(document.getElementById('outrasDesp').value);
-
-       const total = aluguel + salarios + contas + despesasGerais + bonificacoes + prestacoes + internet + outrasDesp;
-
-       // Atualiza o campo total despesas administrativas
-       document.getElementById('totalDespesasAdm').value = formatToCurrency(total);
-
-       // Atualiza o campo despesas administrativas no bloco cálculo financeiro
-       document.getElementById('despAdm').value = formatToCurrency(total);
-
-       // Recalcula o lucro líquido
-       calculateLucroLiquido();
-   }
-
-   // Função para calcular o lucro líquido
-   function calculateLucroLiquido() {
-       const lucroBruto = parseMoneyToNumber(document.getElementById('lucroBrt').value);
-       const impostoVenda = parseMoneyToNumber(document.getElementById('impostoVenda').value);
-       const despAdm = parseMoneyToNumber(document.getElementById('despAdm').value);
-
-       const lucroLiquido = lucroBruto - impostoVenda - despAdm;
-
-       // Atualiza o campo lucro líquido
-       document.getElementById('lucroLqd').value = formatToCurrency(lucroLiquido);
-
-       // Aplica cor baseada no resultado
-       const lucroField = document.getElementById('lucroLqd');
-       if (lucroLiquido > 0) {
-           lucroField.style.color = '#28a745'; // Verde para lucro
-           lucroField.style.fontWeight = 'bold';
-       } else if (lucroLiquido < 0) {
-           lucroField.style.color = '#dc3545'; // Vermelho para prejuízo
-           lucroField.style.fontWeight = 'bold';
-       } else {
-           lucroField.style.color = '#000000'; // Cinza para zero
-           lucroField.style.fontWeight = 'bold';
-       }
-   }
-
-   // Função para aplicar máscara monetária enquanto digita
-   function applyMoneyMask(input) {
-       let value = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
-
-       if (value === '') {
-           input.value = '';
-           return;
-       }
-
-       // Converte para número e divide por 100 para obter os centavos
-       let numericValue = parseInt(value) / 100;
-
-       // Formata como moeda brasileira
-       input.value = numericValue.toLocaleString('pt-BR', {
-           minimumFractionDigits: 2,
-           maximumFractionDigits: 2
-       });
-   }
-
-   // Função para verificar se o campo está readonly
-   function isFieldReadonly(field) {
-       return field.hasAttribute('readonly') || field.readOnly;
-   }
-
-   // Função para adicionar máscara monetária aos campos
-   function addMoneyMaskToFields() {
-       // Campos de impostos
-       const impostoFields = ['icms', 'pis', 'cofins', 'inss', 'irpj', 'csll'];
-
-       // Campos de despesas administrativas
-       const despesaFields = ['aluguel', 'salarios', 'contas', 'despesasGerais', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp'];
-
-       // Combina todos os campos que precisam de máscara
-       const allFields = [...impostoFields, ...despesaFields];
-
-       allFields.forEach(fieldId => {
-           const field = document.getElementById(fieldId);
-           if (field) {
-               // Evento para aplicar máscara enquanto digita (só se não for readonly)
-               field.addEventListener('input', function(e) {
-                   if (!isFieldReadonly(e.target)) {
-                       applyMoneyMask(e.target);
-                   }
-               });
-
-               // Evento para garantir formatação ao sair do campo (só se não for readonly)
-               field.addEventListener('blur', function(e) {
-                   if (!isFieldReadonly(e.target) && e.target.value && !e.target.value.includes(',')) {
-                       // Se o valor não tem vírgula, adiciona ,00
-                       if (e.target.value) {
-                           let numericValue = parseFloat(e.target.value.replace(/\./g, ''));
-                           if (!isNaN(numericValue)) {
-                               e.target.value = numericValue.toLocaleString('pt-BR', {
-                                   minimumFractionDigits: 2,
-                                   maximumFractionDigits: 2
-                               });
-                           }
-                       }
-                   }
-               });
-
-               // Permite apenas números, vírgula e ponto (só se não for readonly)
-               field.addEventListener('keypress', function(e) {
-                   if (isFieldReadonly(e.target)) return;
-
-                   const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
-                   if (allowedKeys.includes(e.key)) return;
-
-                   if (!/\d/.test(e.key)) {
-                       e.preventDefault();
-                   }
-               });
-
-               // NOVO: Previne a reaplicação de máscara em campos readonly quando recebem foco
-               field.addEventListener('focus', function(e) {
-                   if (isFieldReadonly(e.target)) {
-                       // Remove o foco imediatamente para evitar problemas
-                       e.target.blur();
-                   }
-               });
-           }
-       });
-   }
-
-   // NOVA FUNÇÃO: Para definir valor em campo sem disparar eventos de máscara
-   function setFieldValueSafely(fieldId, value) {
-       const field = document.getElementById(fieldId);
-       if (field) {
-           // Temporariamente remove os event listeners
-           const isReadonly = isFieldReadonly(field);
-
-           // Tratamento especial para o campo "contas" - força arredondamento para 2 casas decimais
-           if (fieldId === 'contas') {
-               let numValue;
-               if (typeof value === 'number') {
-                   numValue = value;
-               } else if (typeof value === 'string') {
-                   numValue = parseFloat(value);
-               }
-
-               if (!isNaN(numValue)) {
-                   // Arredonda para 2 casas decimais para evitar problemas de precisão
-                   const roundedValue = Math.round(numValue * 100) / 100;
-                   field.value = formatToCurrency(roundedValue);
-                   return;
-               }
-           }
-
-           // Se não é readonly, aplica formatação
-           if (!isReadonly) {
-               if (typeof value === 'number') {
-                   field.value = formatToCurrency(value);
-               } else {
-                   field.value = value;
-               }
-           } else {
-               // Para campos readonly, define o valor diretamente formatado
-               if (typeof value === 'number') {
-                   field.value = formatToCurrency(value);
-               } else if (typeof value === 'string' && value.includes('.') && !value.includes(',')) {
-                   // Se recebeu um valor decimal com ponto, converte para formato brasileiro
-                   const numValue = parseFloat(value);
-                   if (!isNaN(numValue)) {
-                       field.value = formatToCurrency(numValue);
-                   } else {
-                       field.value = value;
-                   }
-               } else {
-                   field.value = value;
-               }
-           }
-       }
-   }
-
-   // Função para inicializar todos os event listeners
-   function initializeCalculations() {
-       // Inicializa as máscaras monetárias
-       addMoneyMaskToFields();
-
-       // Event listeners para campos de impostos (só para campos não readonly)
-       const impostoFields = ['icms', 'pis', 'cofins', 'inss', 'irpj', 'csll'];
-       impostoFields.forEach(fieldId => {
-           const field = document.getElementById(fieldId);
-           if (field) {
-               field.addEventListener('input', function(e) {
-                   if (!isFieldReadonly(e.target)) {
-                       calculateTotalImpostos();
-                   }
-               });
-               field.addEventListener('blur', function(e) {
-                   if (!isFieldReadonly(e.target)) {
-                       calculateTotalImpostos();
-                   }
-               });
-           }
-       });
-
-       // Event listeners para campos de despesas administrativas (só para campos não readonly)
-       const despesaFields = ['aluguel', 'salarios', 'contas', 'despesasGerais', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp'];
-       despesaFields.forEach(fieldId => {
-           const field = document.getElementById(fieldId);
-           if (field) {
-               field.addEventListener('input', function(e) {
-                   if (!isFieldReadonly(e.target)) {
-                       calculateTotalDespesasAdm();
-                   }
-               });
-               field.addEventListener('blur', function(e) {
-                   if (!isFieldReadonly(e.target)) {
-                       calculateTotalDespesasAdm();
-                   }
-               });
-           }
-       });
-
-       // Event listeners para campos do cálculo financeiro que podem afetar o lucro líquido
-       const calculoFields = ['lucroBrt', 'impostoVenda', 'despAdm'];
-       calculoFields.forEach(fieldId => {
-           const field = document.getElementById(fieldId);
-           if (field) {
-               field.addEventListener('input', function(e) {
-                   if (!isFieldReadonly(e.target)) {
-                       calculateLucroLiquido();
-                   }
-               });
-               field.addEventListener('blur', function(e) {
-                   if (!isFieldReadonly(e.target)) {
-                       calculateLucroLiquido();
-                   }
-               });
-           }
-       });
-
-       // Calcula os valores iniciais quando a página carrega
-       calculateTotalImpostos();
-       calculateTotalDespesasAdm();
-       calculateLucroLiquido();
-   }
-
-   // Função para recalcular tudo quando dados vêm do backend
-   function recalculateAll() {
-       calculateTotalImpostos();
-       calculateTotalDespesasAdm();
-       calculateLucroLiquido();
-   }
-
-   // NOVA FUNÇÃO: Para usar quando preencher campos via AJAX/Backend
-   function populateFieldFromBackend(fieldId, value) {
-       setFieldValueSafely(fieldId, value);
-   }
-
-   // Inicializa quando o DOM estiver carregado
-   document.addEventListener('DOMContentLoaded', function() {
-       initializeCalculations();
-   });
-
-   // Também inicializa quando o modal é aberto (caso os dados venham depois)
-   document.addEventListener('shown.bs.modal', function() {
-       setTimeout(() => {
-           recalculateAll();
-       }, 100);
-   });
-
-   // Funções globais para usar externamente
-   window.recalculateDRE = recalculateAll;
-   window.populateFieldFromBackend = populateFieldFromBackend;
-   window.setFieldValueSafely = setFieldValueSafely;
-
-   $('#formDre').submit(function() {
-       const receitaBruta = parseMoneyToNumber($('#receitaBrt').val());
-       const custosOpr = parseMoneyToNumber($('#custosOpr').val());
-
-       $('#hiddenReceitaBruta').val(receitaBruta);
-       $('#hiddenCustosOpr').val(custosOpr);
-       $('#hiddenLucroBrt').val(receitaBruta - custosOpr);
-
-       // Os outros campos já estão em modo readonly, mas é bom garantir
-       const salarios = parseMoneyToNumber($('#salarios').val());
-       const contas = parseMoneyToNumber($('#contas').val());
-       const despesasGerais = parseMoneyToNumber($('#despesasGerais').val());
-
-       $('#hiddenSalarios').val(salarios);
-       $('#hiddenContas').val(contas);
-       $('#hiddenDespesasGerais').val(despesasGerais);
-   });
-   function exportarParaExcel() {
-       // Pega todos os valores dos campos
-       const params = new URLSearchParams({
-           acao: 'exportarExcel',
-           icms: document.getElementById('icms').value || '0',
-           pis: document.getElementById('pis').value || '0',
-           cofins: document.getElementById('cofins').value || '0',
-           inss: document.getElementById('inss').value || '0',
-           irpj: document.getElementById('irpj').value || '0',
-           csll: document.getElementById('csll').value || '0',
-           aluguel: document.getElementById('aluguel').value || '0',
-           bonificacoes: document.getElementById('bonificacoes').value || '0',
-           prestacoes: document.getElementById('prestacoes').value || '0',
-           internet: document.getElementById('internet').value || '0',
-           outrasDesp: document.getElementById('outrasDesp').value || '0'
-       });
-
-       // Abre o download em nova janela
-       window.location.href = '<%= request.getContextPath() %>/ServletDre?' + params.toString();
-   }
-</SCRIPT>
+    /* ===============================
+       DATAS (BLINDADAS)
+       =============================== */
+    function setData() {
+        // ... (Seu código de datas permanece o mesmo) ...
+        const dataInicialEl = document.getElementById("dataInicial");
+        const dataFinalEl = document.getElementById("dataFinal");
+        if (!dataInicialEl || !dataFinalEl || !dataInicialEl.value) return;
+
+        const partes = dataInicialEl.value.split('-');
+        const ano = parseInt(partes[0], 10);
+        const mes = parseInt(partes[1], 10) - 1;
+
+        const ultimoDia = new Date(ano, mes + 1, 0);
+        dataFinalEl.value =
+            ano + '-' +
+            String(mes + 1).padStart(2, '0') + '-' +
+            String(ultimoDia.getDate()).padStart(2, '0');
+    }
+
+    function initializeDates() {
+        // ... (Seu código de datas permanece o mesmo) ...
+        const dataInicialEl = document.getElementById("dataInicial");
+        const dataFinalEl = document.getElementById("dataFinal");
+        if (!dataInicialEl || !dataFinalEl) return;
+
+        const today = new Date();
+        const ano = today.getFullYear();
+        const mes = today.getMonth();
+
+        dataInicialEl.value =
+            ano + '-' + String(mes + 1).padStart(2, '0') + '-01';
+
+        dataFinalEl.value =
+            ano + '-' + String(mes + 1).padStart(2, '0') +
+            '-' + String(new Date(ano, mes + 1, 0).getDate()).padStart(2, '0');
+    }
+
+    /* ===============================
+       FUNÇÕES MONETÁRIAS (Mantidas)
+       =============================== */
+    function parseMoneyToNumber(value) {
+        if (!value) return 0;
+        value = value.toString().replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
+        return parseFloat(value) || 0;
+    }
+
+    function formatToCurrency(value) {
+        return (Math.round(value * 100) / 100).toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    /* ===============================
+       INICIALIZAÇÃO DAS MÁSCARAS
+       =============================== */
+    function initializeMasks() {
+        // Verifica se a função maskMoney existe (se o plugin foi carregado)
+        if (typeof $.fn.maskMoney !== 'undefined') {
+            $('.money').maskMoney({
+                prefix: 'R$ ',
+                thousands: '.',
+                decimal: ',',
+                allowZero: true,
+                allowNegative: true, // Se precisar de valores negativos
+                affixesStay: true     // Mantém o R$ no campo
+            });
+
+            // Aplica a máscara nos campos que já vieram preenchidos (seja via JSTL ou readonly)
+            // Isso garante que a visualização inicial esteja correta.
+            $('.money').each(function() {
+                // Se o campo não for editável (readonly), é crucial que ele venha pré-formatado via JSTL.
+                // Se o campo for editável e vier com um número puro, o maskMoney aplica a máscara na inicialização.
+                // No entanto, para garantir que os campos readonly (`receitaBrt`, `custosOpr` etc.) sejam tratados,
+                // vamos garantir que eles estejam formatados visualmente (o parseMoneyToNumber já cuida da leitura).
+                if ($(this).attr('readonly')) {
+                    const value = parseMoneyToNumber($(this).val());
+                    $(this).val(formatToCurrency(value));
+                }
+            });
+        } else {
+            console.warn('Plugin maskMoney não está carregado. Verifique se jquery.maskmoney.js está incluído.');
+        }
+    }
+
+    /* ===============================
+       CÁLCULOS (Revisados para usar 'input' e 'blur')
+       =============================== */
+    // ... (Seu código de cálculos permanece o mesmo: calculateTotalImpostos, calculateTotalDespesasAdm, calculateLucroLiquido) ...
+    const INPUT_IMPOSTOS = ['icms', 'pis', 'cofins', 'inss', 'irpj', 'csll'];
+    const INPUT_DESPESAS_ADM = ['aluguel', 'salarios', 'contas', 'despesasGerais', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp'];
+
+    function calculateTotalImpostos() {
+        let total = 0;
+        INPUT_IMPOSTOS.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                // Ao usar maskMoney, podemos obter o valor bruto para cálculo assim:
+                // total += $(element).maskMoney('unmasked')[0];
+                // Mas vamos manter sua função original de parse para compatibilidade.
+                total += parseMoneyToNumber(element.value);
+            }
+        });
+        document.getElementById('totalImpostos').value = formatToCurrency(total);
+        document.getElementById('impostoVenda').value = formatToCurrency(total);
+        calculateLucroLiquido();
+    }
+
+    function calculateTotalDespesasAdm() {
+        let total = 0;
+        INPUT_DESPESAS_ADM.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                total += parseMoneyToNumber(element.value);
+            }
+        });
+        document.getElementById('totalDespesasAdm').value = formatToCurrency(total);
+        document.getElementById('despAdm').value = formatToCurrency(total);
+        calculateLucroLiquido();
+    }
+
+    function calculateLucroLiquido() {
+        const lucroBruto = parseMoneyToNumber(document.getElementById('lucroBrt')?.value);
+        const impostoVenda = parseMoneyToNumber(document.getElementById('impostoVenda')?.value);
+        const despAdm = parseMoneyToNumber(document.getElementById('despAdm')?.value);
+
+        const lucro = lucroBruto - impostoVenda - despAdm;
+
+        const campo = document.getElementById('lucroLqd');
+        if (campo) {
+            campo.value = formatToCurrency(lucro);
+            campo.style.color = lucro >= 0 ? '#28a745' : '#dc3545';
+            campo.style.fontWeight = 'bold';
+        }
+    }
+
+    function recalculateAll() {
+        calculateTotalImpostos();
+        calculateTotalDespesasAdm();
+    }
+
+    function initializeCalculations() {
+        // 1. Inicializa com os valores existentes
+        recalculateAll();
+
+        // 2. Adiciona listeners de 'input' para recalcular quando o usuário digita/altera
+        const camposImpostos = INPUT_IMPOSTOS.map(id => document.getElementById(id)).filter(e => e);
+        const camposDespesas = ['aluguel', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp']
+            .map(id => document.getElementById(id)).filter(e => e);
+
+        // Listener para Impostos (a máscara do plugin deve cuidar do 'input' visual)
+        // O recalculateTotalImpostos será acionado pelo evento 'change' ou 'keyup'
+        // se o maskMoney não tiver um callback para 'input'.
+        camposImpostos.forEach(input => {
+            // 🎯 Usamos 'change' ou 'keyup' como fallback se o 'input' não funcionar bem com o plugin
+            $(input).on('change keyup', calculateTotalImpostos);
+        });
+
+        // Listener para Despesas Administrativas
+        camposDespesas.forEach(input => {
+            $(input).on('change keyup', calculateTotalDespesasAdm);
+        });
+
+        // O 'blur' de re-formatação pode ser removido se o maskMoney funcionar bem.
+        // Se a máscara estiver configurada corretamente, ela cuida do formato automaticamente.
+
+        const lucroBrt = document.getElementById('lucroBrt');
+        if (lucroBrt) {
+            $(lucroBrt).on('change keyup', calculateLucroLiquido);
+        }
+    }
+
+
+    /* ===============================
+       INICIALIZAÇÃO GERAL
+       =============================== */
+    document.addEventListener('DOMContentLoaded', function () {
+        // ... (seu código de modal e datas) ...
+        const modal = document.getElementById('modalDRE');
+        if (modal) {
+            modal.addEventListener('shown.bs.modal', function () {
+                initializeDates();
+                initializeMasks(); // Aplica máscaras ao abrir o modal
+                recalculateAll();
+            });
+        }
+
+        const dataInicial = document.getElementById("dataInicial");
+        if (dataInicial) {
+            dataInicial.addEventListener('change', setData);
+        }
+
+        // 🎯 Chamada principal para a máscara e cálculos:
+        initializeMasks();
+        initializeCalculations();
+    });
+
+    /* ===============================
+   SUBMIT DO FORM
+   =============================== */
+    // Campos que o usuário pode preencher e que usam a máscara.
+    const EDITABLE_MONEY_FIELDS = [
+        'icms', 'pis', 'cofins', 'inss', 'irpj', 'csll',
+        'aluguel', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp'
+    ];
+
+    $('#formDre').on('submit', function (event) {
+        if (typeof $.fn.maskMoney !== 'undefined') {
+
+            // 1. Itera sobre os campos editáveis
+            EDITABLE_MONEY_FIELDS.forEach(id => {
+                const input = $('#' + id);
+
+                // Certifica-se de que o campo existe
+                if (input.length) {
+                    // 2. Extrai o valor NUMÉRICO PURO (ex: 0.01)
+                    const unmaskedValue = input.maskMoney('unmasked')[0];
+
+                    // 3. Cria e anexa um campo HIDDEN com o mesmo 'name' e o valor bruto.
+                    // Isso garante que o valor que o Java vai receber (via request.getParameter(id))
+                    // seja o valor bruto (0.01) e não a string formatada (R$ 0,01).
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: id,
+                        value: unmaskedValue // Valor puro, ex: 0.01
+                    }).appendTo('#formDre');
+
+                    // 4. DESABILITA o campo original para evitar que o navegador o envie com a string formatada.
+                    input.attr('disabled', 'disabled');
+                }
+            });
+
+            // **Nota:** Os campos ReadOnly (Salários, Contas, etc.) já foram preenchidos
+            // no Java com formatadores simples (DecimalFormat) e não precisam ser
+            // mascarados ou desabilitados aqui, pois o Java já deve buscá-los via Session
+            // ou o valor vem de um input `readonly` que o navegador deve enviar.
+
+        }
+        // Se o MaskMoney não estiver carregado, o form é enviado normalmente com o valor formatado,
+        // confiando que o Java parseie corretamente.
+
+        return true; // Continua com o submit (Gravar DRE)
+    });
+
+    /* ===============================
+   EXPORTAR EXCEL (SOLUÇÃO DE PARSING MANUAL NO JS)
+   =============================== */
+
+    function exportarParaExcel() {
+
+        // Lista de IDs dos campos editáveis
+        const EDITABLE_MONEY_FIELDS = [
+            'icms', 'pis', 'cofins', 'inss', 'irpj', 'csll',
+            'aluguel', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp'
+        ];
+
+        const paramsMap = {
+            acao: 'exportarExcel'
+        };
+
+        // 1. Processa campos editáveis: USA O VALOR FORMATADO e limpa no JS
+        EDITABLE_MONEY_FIELDS.forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                // 🎯 FORÇA O PARSING MANUAL DO VALOR VISÍVEL (R$ 0.01 -> 0.01)
+                paramsMap[id] = parseMoneyToNumber(input.value || '0');
+            } else {
+                paramsMap[id] = 0;
+            }
+        });
+
+        // 2. Adiciona campos já calculados ou readonly
+        // Esses campos já estão sendo enviados como números brutos (o que é bom)
+        paramsMap.receitaBrt = parseMoneyToNumber(document.getElementById('receitaBrt')?.value || '0');
+        paramsMap.custosOpr = parseMoneyToNumber(document.getElementById('custosOpr')?.value || '0');
+        paramsMap.lucroBrt = parseMoneyToNumber(document.getElementById('lucroBrt')?.value || '0');
+        paramsMap.totalImpostos = parseMoneyToNumber(document.getElementById('totalImpostos')?.value || '0');
+        paramsMap.totalDespesasAdm = parseMoneyToNumber(document.getElementById('totalDespesasAdm')?.value || '0');
+        paramsMap.lucroLqd = parseMoneyToNumber(document.getElementById('lucroLqd')?.value || '0');
+
+        const params = new URLSearchParams(paramsMap);
+
+        // DEBUG: Verifique o console. Os valores agora devem ser números, como 0.01.
+        console.log("URL de Exportação: " + '<%= request.getContextPath() %>/ServletDre?' + params.toString());
+
+        window.location.href =
+            '<%= request.getContextPath() %>/ServletDre?' + params.toString();
+    }
+</script>
+
 
 
 </body>

@@ -82,10 +82,11 @@
                                                                 <label for="ano">Ano</label>
                                                                 <select class="form-control" id="ano" name="ano" required>
                                                                     <option value="">Selecione o ano</option>
-                                                                    <c:forEach var="a" begin="${anoAtual - 10}" end="${anoAtual + 10}">
+                                                                    <c:forEach var="a" begin="${anoAtual}" end="${anoAtual - 19}" step="-1">
                                                                         <option value="${a}" <c:if test="${a == ano}">selected</c:if>>${a}</option>
                                                                     </c:forEach>
                                                                 </select>
+
                                                             </div>
 
                                                             <!-- Select de Funcionário -->

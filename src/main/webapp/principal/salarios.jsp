@@ -81,12 +81,18 @@
                                                             <div class="col-auto">
                                                                 <label for="ano">Ano</label>
                                                                 <select class="form-control" id="ano" name="ano" required>
-                                                                    <option value="">Selecione o ano</option>
-                                                                    <c:forEach var="a" begin="${anoAtual}" end="${anoAtual - 19}" step="-1">
-                                                                        <option value="${a}" <c:if test="${a == ano}">selected</c:if>>${a}</option>
-                                                                    </c:forEach>
-                                                                </select>
 
+                                                                        <option value="">-- Selecione --</option>
+                                                                        <%
+                                                                            java.util.Calendar calBusca = java.util.Calendar.getInstance();
+                                                                            int anoAtualBusca = calBusca.get(java.util.Calendar.YEAR);
+                                                                            for(int i = 0; i < 20; i++) {
+                                                                                int anoBusca = anoAtualBusca - i;
+                                                                        %>
+                                                                        <option value="<%= anoBusca %>" <%= (i == 0) ? "selected" : "" %>><%= anoBusca %></option>
+                                                                        <% } %>
+
+                                                                </select>
                                                             </div>
 
                                                             <!-- Select de Funcionário -->

@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.*;
+import util.ExcelDREGenerator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -16,29 +17,32 @@ import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
-@WebServlet("/ServletFechaMes")
-public class ServletFechaMes extends ServletGenericUtil {
+import model.ModelContas;
+import model.ModelDespesas;
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String acao = request.getParameter("acao");
 
-        if (acao == null || acao.isEmpty()) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/fechames.jsp");
-            dispatcher.forward(request, response);
-            return;
+    @WebServlet("/ServletFechaMes")
+    public class ServletFechaMes extends ServletGenericUtil {
+
+        protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            String acao = request.getParameter("acao");
+
+            if (acao == null || acao.isEmpty()) {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/fechames.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
+
+            if ("relatorioMes".equals(acao)) {
+                gerarRelatorioMensal(request, response);
+            } else if ("buscarFechamento".equals(acao)) {
+                buscarFechamentoGravado(request, response);
+            } else if ("exportarExcel".equals(acao)) { // <--- AÇÃO DE EXPORTAÇÃO
+                exportarFechamentoExcel(request, response);
+            }
         }
-
-        if ("relatorioMes".equals(acao)) {
-            gerarRelatorioMensal(request, response);
-        } else if ("buscarFechamento".equals(acao)) {
-            buscarFechamentoGravado(request, response);
-        }
-    }
 
     private void gerarRelatorioMensal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String dataInicial = request.getParameter("dataInicial");
@@ -145,6 +149,8 @@ public class ServletFechaMes extends ServletGenericUtil {
             session.setAttribute("valorTotalSalarios", totalSalarios);
             session.setAttribute("mes", mes);
             session.setAttribute("ano", ano);
+            session.setAttribute("contasMes", contasMes); // Adicionar esta linha
+            session.setAttribute("despesasMes", despesasMes); // Adicionar esta linha
 
             RequestDispatcher rd = request.getRequestDispatcher("principal/fechames.jsp");
             rd.forward(request, response);
@@ -246,6 +252,177 @@ public class ServletFechaMes extends ServletGenericUtil {
             dispatcher.forward(request, response);
         }
     }
+        private void exportarFechamentoExcel(HttpServletRequest request, HttpServletResponse response)
+                throws ServletException, IOException {
+
+            HttpSession session = request.getSession();
+
+            // Recupera Mês e Ano da sessão
+            Integer mes = (Integer) session.getAttribute("mes");
+            Integer ano = (Integer) session.getAttribute("ano");
+
+            if (mes == null || ano == null) {
+                request.setAttribute("msg", "Erro: O mês e ano do relatório não foram encontrados. Gere ou busque o fechamento do mês antes de exportar.");
+                RequestDispatcher rd = request.getRequestDispatcher("/principal/fechames.jsp");
+                rd.forward(request, response);
+                return;
+            }
+
+            // ===== RECUPERA AS LISTAS DE DESPESAS E CONTAS DA SESSÃO =====
+            @SuppressWarnings("unchecked")
+            List<ModelContas> contasMes = (List<ModelContas>) session.getAttribute("contasMes");
+            @SuppressWarnings("unchecked")
+            List<ModelDespesas> despesasMes = (List<ModelDespesas>) session.getAttribute("despesasMes");
+
+            System.out.println("DEBUG EXCEL: Tentativa de exportar mês/ano: " + mes + "/" + ano);
+            System.out.println("DEBUG EXCEL: Contas na Sessão (Tamanho): " + (contasMes != null ? contasMes.size() : "NULL"));
+            System.out.println("DEBUG EXCEL: Despesas na Sessão (Tamanho): " + (despesasMes != null ? despesasMes.size() : "NULL"));
+
+            // Se as listas não estiverem na sessão, busca do banco
+            if (contasMes == null || despesasMes == null) {
+                System.out.println("DEBUG EXCEL: LISTAS VAZIAS NA SESSÃO. Tentando recarregar do banco de dados...");
+
+                // Determinar as datas inicial e final do mês
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.YEAR, ano);
+                cal.set(Calendar.MONTH, mes - 1);
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                String dataInicial = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+
+                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+                String dataFinal = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
+
+                try {
+                    DAOContas daoContas = new DAOContas();
+                    DAODespesas daoDespesas = new DAODespesas();
+
+                    contasMes = daoContas.buscarContasRelMes(dataInicial, dataFinal);
+                    despesasMes = daoDespesas.listarDespesasPorPeriodo(dataInicial, dataFinal);
+
+                    // Salvar na sessão
+                    session.setAttribute("contasMes", contasMes);
+                    session.setAttribute("despesasMes", despesasMes);
+
+                    System.out.println("DEBUG EXCEL: Listas recarregadas - Contas: " + contasMes.size() + ", Despesas: " + despesasMes.size());
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    request.setAttribute("msg", "Erro ao recarregar dados detalhados para exportação: " + e.getMessage());
+                    RequestDispatcher rd = request.getRequestDispatcher("/principal/fechames.jsp");
+                    rd.forward(request, response);
+                    return;
+                }
+            }
+
+            // Se ainda estiver vazio, cria listas vazias para evitar erro
+            if (contasMes == null) contasMes = new ArrayList<>();
+            if (despesasMes == null) despesasMes = new ArrayList<>();
+
+            System.out.println("DEBUG EXCEL: Recebido da URL: jurosCreditoVm=" + request.getParameter("jurosCreditoVm") +
+                    ", contas=" + request.getParameter("contas"));
+
+            // Recupera todos os valores da URL
+            BigDecimal debitoVm = parseBigDecimal(request.getParameter("debitoVm"));
+            BigDecimal jurosDebitoVm = parseBigDecimal(request.getParameter("jurosDebitoVm"));
+            BigDecimal creditoVm = parseBigDecimal(request.getParameter("creditoVm"));
+            BigDecimal jurosCreditoVm = parseBigDecimal(request.getParameter("jurosCreditoVm"));
+            BigDecimal debitoOutros = parseBigDecimal(request.getParameter("debitoOutros"));
+            BigDecimal jurosDebitoOutros = parseBigDecimal(request.getParameter("jurosDebitoOutros"));
+            BigDecimal creditoOutros = parseBigDecimal(request.getParameter("creditoOutros"));
+            BigDecimal jurosCreditoOutros = parseBigDecimal(request.getParameter("jurosCreditoOutros"));
+
+            // Resumo Financeiro
+            BigDecimal receitas = parseBigDecimal(request.getParameter("receitas"));
+            BigDecimal receitadin = parseBigDecimal(request.getParameter("receitadin"));
+            BigDecimal receitacartoes = parseBigDecimal(request.getParameter("receitacartoes"));
+            BigDecimal receitapix = parseBigDecimal(request.getParameter("receitapix"));
+
+            BigDecimal despesas = parseBigDecimal(request.getParameter("despesas"));
+            BigDecimal despesasdin = parseBigDecimal(request.getParameter("despesasdin"));
+            BigDecimal contas = parseBigDecimal(request.getParameter("contas"));
+            BigDecimal salarios = parseBigDecimal(request.getParameter("salarios"));
+            BigDecimal vales = parseBigDecimal(request.getParameter("vales"));
+            BigDecimal descontos = parseBigDecimal(request.getParameter("descontos"));
+            BigDecimal sangria = parseBigDecimal(request.getParameter("sangria"));
+            BigDecimal saldo = parseBigDecimal(request.getParameter("saldo"));
+
+            // Cria Map para organizar dados do Resumo
+            Map<String, BigDecimal> dadosExportacao = new LinkedHashMap<>();
+
+            SimpleDateFormat sdfMesAno = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR"));
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, ano);
+            cal.set(Calendar.MONTH, mes - 1);
+            String mesAnoFormatado = sdfMesAno.format(cal.getTime());
+
+            // Adiciona dados ao mapa
+            dadosExportacao.put("Mês de Referência", null);
+            dadosExportacao.put(mesAnoFormatado, null);
+
+            // RECEITAS
+            dadosExportacao.put(" ", null);
+            dadosExportacao.put("--- RESUMO FINANCEIRO ---", null);
+            dadosExportacao.put("Receita Bruta", receitas);
+            dadosExportacao.put("Receita Dinheiro", receitadin);
+            dadosExportacao.put("Receita Cartões", receitacartoes);
+            dadosExportacao.put("Receita Pix", receitapix);
+
+            // DESPESAS
+            dadosExportacao.put("  ", null);
+            dadosExportacao.put("--- DESPESAS ---", null);
+            dadosExportacao.put("Total Despesa", despesas);
+            dadosExportacao.put("Despesas em Dinheiro", despesasdin);
+            dadosExportacao.put("Contas Pagas", contas);
+            dadosExportacao.put("Salários Líquidos", salarios);
+            dadosExportacao.put("Vales", vales);
+            dadosExportacao.put("Descontos", descontos);
+            dadosExportacao.put("Sangria de Caixa", sangria);
+            dadosExportacao.put("SALDO EM CAIXA", saldo);
+
+            // VALORES CONTA / JUROS
+            dadosExportacao.put("   ", null);
+            dadosExportacao.put("--- VALORES CONTA / JUROS ---", null);
+            dadosExportacao.put("Débito V/M", debitoVm);
+            dadosExportacao.put("Juros Débito V/M", jurosDebitoVm);
+            dadosExportacao.put("Crédito V/M", creditoVm);
+            dadosExportacao.put("Juros Crédito V/M", jurosCreditoVm);
+            dadosExportacao.put("Débito Outros", debitoOutros);
+            dadosExportacao.put("Juros Débito Outros", jurosDebitoOutros);
+            dadosExportacao.put("Crédito Outros", creditoOutros);
+            dadosExportacao.put("Juros Crédito Outros", jurosCreditoOutros);
+
+            try {
+                ExcelDREGenerator generator = new ExcelDREGenerator();
+
+                System.out.println("DEBUG EXCEL: Enviando para o Excel - Contas: " + contasMes.size() +
+                        ", Despesas: " + despesasMes.size());
+
+                // Gera Excel com as listas detalhadas
+                byte[] excelBytes = generator.gerarRelatorioFechaMes(
+                        dadosExportacao,
+                        mesAnoFormatado,
+                        contasMes,      // Lista de Contas
+                        despesasMes     // Lista de Despesas
+                );
+
+                // Envia o arquivo
+                response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                response.setHeader("Content-Disposition",
+                        "attachment; filename=Fechamento_" + mes + "_" + ano + ".xlsx");
+                response.setContentLength(excelBytes.length);
+
+                response.getOutputStream().write(excelBytes);
+                response.getOutputStream().flush();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("msg", "Erro ao gerar arquivo Excel: " + e.getMessage());
+                RequestDispatcher rd = request.getRequestDispatcher("/principal/fechames.jsp");
+                rd.forward(request, response);
+            }
+        }
+
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {

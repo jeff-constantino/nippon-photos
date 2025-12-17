@@ -99,16 +99,30 @@
           <scope>provided</scope>
       </dependency>
 
-      <!-- Apache POI para Excel -->
+      <!-- Apache POI para Excel - Versão mais recente sem vulnerabilidades -->
       <dependency>
           <groupId>org.apache.poi</groupId>
           <artifactId>poi</artifactId>
-          <version>5.2.5</version>
+          <version>5.4.0</version>
       </dependency>
       <dependency>
           <groupId>org.apache.poi</groupId>
           <artifactId>poi-ooxml</artifactId>
-          <version>5.2.5</version>
+          <version>5.4.0</version>
+          <exclusions>
+              <!-- Excluir log4j do POI para evitar conflitos -->
+              <exclusion>
+                  <groupId>org.apache.logging.log4j</groupId>
+                  <artifactId>log4j-api</artifactId>
+              </exclusion>
+          </exclusions>
+      </dependency>
+
+      <!-- FORÇAR versão segura do Apache Commons Lang3 (corrige CVE-2025-48924) -->
+      <dependency>
+          <groupId>org.apache.commons</groupId>
+          <artifactId>commons-lang3</artifactId>
+          <version>3.18.0</version>
       </dependency>
 
       <!-- Dependências adicionais necessárias -->
@@ -120,7 +134,14 @@
       <dependency>
           <groupId>org.apache.xmlbeans</groupId>
           <artifactId>xmlbeans</artifactId>
-          <version>5.1.1</version>
+          <version>5.2.1</version>
+      </dependency>
+
+      <!-- SLF4J para substituir Log4j e remover o aviso -->
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-nop</artifactId>
+          <version>2.0.9</version>
       </dependency>
   </dependencies>
 

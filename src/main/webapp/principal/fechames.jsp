@@ -748,8 +748,13 @@
                                         </table>
                                     </div>
                                     <div style="text-align: center; margin-top: 20px;">
-                                        <button type="submit" class="btn btn-outline-success" style="font-size: large">
+                                        <button type="submit" class="btn btn-outline-success" style="font-size: large; margin-right: 15px;">
                                             ${fechamentoExistente != null ? 'Atualizar' : 'Gravar'} Fechamento do Mês
+                                        </button>
+
+                                        <button type="button" class="btn btn-outline-primary" style="font-size: large"
+                                                onclick="exportarParaExcelFechaMes()">
+                                            <i class="fas fa-file-excel"></i> Exportar para Excel
                                         </button>
                                     </div>
                                 </div>
@@ -1058,6 +1063,57 @@
         valorFormatado = partes.join(',');
 
         $("#saldo").val('R$ ' + valorFormatado);
+    }
+    /* ===============================
+   EXPORTAR EXCEL FECHAMENTO DO MÊS
+   =============================== */
+    function exportarParaExcelFechaMes() {
+
+        // Lista de IDs dos campos que contêm dados para exportação (editáveis ou calculados)
+        // Inclui todos os campos do RESUMO FINANCEIRO e VALORES CONTA.
+        const FIELDS_TO_EXPORT = [
+            'debitoVm', 'jurosDebitoVm',
+            'creditoVm', 'jurosCreditoVm',
+            'debitoOutros', 'jurosDebitoOutros',
+            'creditoOutros', 'jurosCreditoOutros',
+            'receitas', 'receitadin', 'receitacartoes', 'receitapix',
+            'despesas', 'despesasdin', 'contas', 'salarios', 'vales',
+            'descontos', 'sangria', 'saldo'
+            // Nota: O valor dos juros calculados virá formatado, mas usaremos limparMascara.
+        ];
+
+        const paramsMap = {
+            acao: 'exportarExcel'
+        };
+
+        // 1. Processa todos os campos e anexa o valor bruto (numérico) ao mapa.
+        FIELDS_TO_EXPORT.forEach(id => {
+            const input = document.getElementById(id);
+            let valorBruto = 0;
+
+            if (input) {
+                // Usa a função de limpeza que já está testada e que retorna um número.
+                valorBruto = limparMascara(input.value || '0');
+            }
+
+            // Adiciona ao mapa. O valor 0.01 será enviado como string "0.01"
+            paramsMap[id] = valorBruto;
+        });
+
+        // 2. Adiciona Parâmetros de Data de Referência
+        // (Pegamos o mês/ano do fechamento que foi buscado, se aplicável, ou tentamos obter do servidor)
+        // Para simplificar, vou confiar que o Servlet pode buscar esses dados via Session/Attribute
+        // ou usaremos a data que o usuário buscou.
+
+        // Se a página foi carregada com dados de um mês específico (fechamentoExistente)
+        // você precisará que a Servlet mande esses dados para o JS ou para o JSP via hidden input.
+        // Vamos assumir que a Servlet pode buscar o mês/ano de referência da Sessão (como no DRE).
+
+        // Debug
+        console.log("URL de Exportação (FechaMes): " + '<%= request.getContextPath() %>/ServletFechaMes?' + new URLSearchParams(paramsMap).toString());
+
+        window.location.href =
+            '<%= request.getContextPath() %>/ServletFechaMes?' + new URLSearchParams(paramsMap).toString();
     }
 
     // ============================================================================

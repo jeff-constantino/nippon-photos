@@ -1,6 +1,8 @@
 package util;
 
 import model.ModelFechaMes;
+import model.ModelContas; // Importado para listas de detalhe
+import model.ModelDespesas; // Importado para listas de detalhe
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -8,9 +10,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class ExcelDREGenerator {
 
@@ -27,11 +30,10 @@ public class ExcelDREGenerator {
     private CellStyle subtotalStyle;
     private CellStyle positiveStyle;
     private CellStyle negativeStyle;
+    private CellStyle dateStyle; // Novo estilo para datas
 
     public ExcelDREGenerator() {
-        this.workbook = new XSSFWorkbook();
-        this.sheet = workbook.createSheet("DRE");
-        createStyles();
+        // O workbook será criado em cada método de geração para garantir que os relatórios sejam arquivos independentes.
     }
 
     private void createStyles() {
@@ -75,6 +77,11 @@ public class ExcelDREGenerator {
         normalStyle.setBorderBottom(BorderStyle.THIN);
         normalStyle.setBorderLeft(BorderStyle.THIN);
         normalStyle.setBorderRight(BorderStyle.THIN);
+
+        // Estilo data
+        dateStyle = workbook.createCellStyle();
+        dateStyle.cloneStyleFrom(normalStyle);
+        dateStyle.setDataFormat(workbook.createDataFormat().getFormat("dd/MM/yyyy"));
 
         // Estilo moeda
         currencyStyle = workbook.createCellStyle();
@@ -128,25 +135,19 @@ public class ExcelDREGenerator {
                            BigDecimal prestacoes, BigDecimal internet,
                            BigDecimal outrasDespesas) throws IOException {
 
+        // --- INICIALIZAÇÃO ESPECÍFICA DRE ---
+        this.workbook = new XSSFWorkbook();
+        this.sheet = workbook.createSheet("DRE");
+        this.rowNum = 0;
+        createStyles();
+        // ------------------------------------
+
         // Configurar largura das colunas
         sheet.setColumnWidth(0, 8000);  // Coluna de descrição
         sheet.setColumnWidth(1, 5000);  // Coluna de valores
 
         // ========== TÍTULO ==========
-        Row titleRow = sheet.createRow(rowNum++);
-        Cell titleCell = titleRow.createCell(0);
-        titleCell.setCellValue("DEMONSTRAÇÃO DO RESULTADO DO EXERCÍCIO (DRE)");
-        titleCell.setCellStyle(titleStyle);
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 1));
-        titleRow.setHeightInPoints(25);
-
-        // Subtítulo com mês/ano
-        Row subtitleRow = sheet.createRow(rowNum++);
-        Cell subtitleCell = subtitleRow.createCell(0);
-        subtitleCell.setCellValue(mesAno.toUpperCase());
-        subtitleCell.setCellStyle(titleStyle);
-        sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 1));
-        subtitleRow.setHeightInPoints(20);
+            createSheetTitle(sheet, "DRE MENSAL", mesAno, 1);
 
         rowNum++; // Linha em branco
 
@@ -248,6 +249,96 @@ public class ExcelDREGenerator {
         return outputStream.toByteArray();
     }
 
+
+    /**
+     * Gera o relatório de Fechamento Mensal, incluindo as abas de detalhe.
+     */
+    public byte[] gerarRelatorioFechaMes(
+            Map<String, BigDecimal> dados,
+            String mesAno,
+            List<ModelContas> contasMes,
+            List<ModelDespesas> despesasMes) throws IOException {
+
+        // --- INICIALIZAÇÃO ESPECÍFICA FECHAMENTO ---
+        this.workbook = new XSSFWorkbook();
+        this.sheet = workbook.createSheet("Resumo_Fechamento");
+        this.rowNum = 0;
+        createStyles();
+        // --------------------------------------------
+
+        // Configurar largura das colunas
+        sheet.setColumnWidth(0, 9000);  // Coluna de descrição
+        sheet.setColumnWidth(1, 5000);  // Coluna de valores
+
+        // ========== TÍTULO DO RESUMO ==========
+        createSheetTitle(sheet, "RELATÓRIO DE FECHAMENTO MENSAL", mesAno, 1);
+
+        // ========== DADOS DO MAPA (RESUMO) ==========
+
+        for (Map.Entry<String, BigDecimal> entry : dados.entrySet()) {
+            String description = entry.getKey();
+            BigDecimal value = entry.getValue();
+
+            if (description.startsWith("---") && description.endsWith("---")) {
+                createSectionHeader(description.replace("---", "").trim().toUpperCase());
+            } else if (value == null) {
+                rowNum++;
+            } else if (description.contains("SALDO EM CAIXA")) {
+                createTotalRow(description, value);
+            } else {
+                createDataRow(description, value);
+            }
+        }
+
+        // ======================================
+        // ADICIONAR TABELAS DETALHADAS (NOVAS ABAS)
+        // ======================================
+
+        // 1. Despesas Detalhe
+        if (despesasMes != null && !despesasMes.isEmpty()) {
+            createDetailedSheetDespesas(despesasMes, mesAno);
+        }
+
+        // 2. Contas Detalhe
+        if (contasMes != null && !contasMes.isEmpty()) {
+            createDetailedSheetContas(contasMes, mesAno);
+        }
+
+        // Gera o arquivo (Workbook)
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+
+        return outputStream.toByteArray();
+    }
+
+
+    // =========================================================================
+    // MÉTODOS AUXILIARES
+    // =========================================================================
+
+    // Método auxiliar para criar o título e subtítulo
+    private void createSheetTitle(Sheet targetSheet, String title, String mesAno, int mergeColumns) {
+        // Título
+        Row titleRow = targetSheet.createRow(rowNum++);
+        Cell titleCell = titleRow.createCell(0);
+        titleCell.setCellValue(title);
+        titleCell.setCellStyle(titleStyle);
+        targetSheet.addMergedRegion(new CellRangeAddress(0, 0, 0, mergeColumns));
+        titleRow.setHeightInPoints(25);
+
+        // Subtítulo
+        Row subtitleRow = targetSheet.createRow(rowNum++);
+        Cell subtitleCell = subtitleRow.createCell(0);
+        subtitleCell.setCellValue(mesAno.toUpperCase());
+        subtitleCell.setCellStyle(titleStyle);
+        targetSheet.addMergedRegion(new CellRangeAddress(1, 1, 0, mergeColumns));
+        subtitleRow.setHeightInPoints(20);
+
+        rowNum++; // Linha em branco
+    }
+
+
     private void createSectionHeader(String title) {
         Row row = sheet.createRow(rowNum++);
         Cell cell = row.createCell(0);
@@ -303,6 +394,146 @@ public class ExcelDREGenerator {
         } else {
             descCell.setCellStyle(totalStyle);
             valueCell.setCellStyle(totalStyle);
+        }
+    }
+
+    // =========================================================================
+    // MÉTODOS PARA DETALHES DAS TABELAS (NOVAS SHEETS)
+    // =========================================================================
+
+
+    private void createDetailedSheetDespesas(List<ModelDespesas> despesasMes, String mesAno) {
+        Sheet despesaSheet = workbook.createSheet("Despesas_Detalhes");
+        this.sheet = despesaSheet;
+        this.rowNum = 0;
+
+        // Headers e Título
+        createSheetTitle(despesaSheet, "DETALHE DE DESPESAS DO MÊS", mesAno, 5);
+
+        String[] headers = {"Nome Despesa", "Descrição", "Valor", "Data", "Forma de Pagamento", "ID Despesa"};
+        Row headerRow = despesaSheet.createRow(rowNum++);
+
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(headerStyle);
+            despesaSheet.setColumnWidth(i, i == 1 ? 8000 : 4000); // Descrição maior
+        }
+
+        // Corpo da Tabela
+        for (ModelDespesas despesa : despesasMes) {
+            Row row = despesaSheet.createRow(rowNum++);
+
+            // 0: Nome Despesa
+            Cell nomeCell = row.createCell(0);
+            nomeCell.setCellValue(despesa.getNome_despesa());
+            nomeCell.setCellStyle(normalStyle);
+
+            // 1: Descrição
+            Cell descCell = row.createCell(1);
+            descCell.setCellValue(despesa.getDescricao_despesa());
+            descCell.setCellStyle(normalStyle);
+
+            // 2: Valor (Moeda)
+            Cell valorCell = row.createCell(2);
+            valorCell.setCellValue(despesa.getValor_despesa());
+            valorCell.setCellStyle(currencyStyle);
+
+            // 3: Data
+            Cell dataCell = row.createCell(3);
+            if (despesa.getData_despesa() != null) {
+                dataCell.setCellValue(despesa.getData_despesa());
+                dataCell.setCellStyle(dateStyle);
+            } else {
+                dataCell.setCellStyle(normalStyle);
+            }
+
+            // 4: Forma de Pagamento
+            Cell pagCell = row.createCell(4);
+            pagCell.setCellValue(despesa.getPagamento_despesa());
+            pagCell.setCellStyle(normalStyle);
+
+            // 5: ID Despesa
+            Cell idCell = row.createCell(5);
+            idCell.setCellValue(despesa.getId_despesa());
+            idCell.setCellStyle(normalStyle);
+        }
+    }
+
+    private void createDetailedSheetContas(List<ModelContas> contasMes, String mesAno) {
+        Sheet contasSheet = workbook.createSheet("Contas_Pagas_Detalhes");
+        this.sheet = contasSheet;
+        this.rowNum = 0;
+
+        // Headers e Título
+        createSheetTitle(contasSheet, "DETALHE DE CONTAS PAGAS NO MÊS", mesAno, 8);
+
+        String[] headers = {"Nº Pedido", "Empresa", "Itens", "Valor", "Data Pedido", "Data Pagamento", "Status", "Pagamento", "ID"};
+        Row headerRow = contasSheet.createRow(rowNum++);
+
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(headerStyle);
+            contasSheet.setColumnWidth(i, i == 2 ? 6000 : 4000); // Itens um pouco maior
+        }
+
+        // Corpo da Tabela
+        for (ModelContas contas : contasMes) {
+            Row row = contasSheet.createRow(rowNum++);
+
+            // 0: Nº Pedido
+            Cell pedidoCell = row.createCell(0);
+            pedidoCell.setCellValue(contas.getNumero_pedido());
+            pedidoCell.setCellStyle(normalStyle);
+
+            // 1: Empresa
+            Cell empresaCell = row.createCell(1);
+            empresaCell.setCellValue(contas.getEmpresa());
+            empresaCell.setCellStyle(normalStyle);
+
+            // 2: Itens
+            Cell itensCell = row.createCell(2);
+            itensCell.setCellValue(contas.getItens());
+            itensCell.setCellStyle(normalStyle);
+
+            // 3: Valor (Moeda)
+            Cell valorCell = row.createCell(3);
+            valorCell.setCellValue(contas.getValor());
+            valorCell.setCellStyle(currencyStyle);
+
+            // 4: Data Pedido
+            Cell pedidoDataCell = row.createCell(4);
+            if (contas.getData_de_pedido() != null) {
+                pedidoDataCell.setCellValue(contas.getData_de_pedido());
+                pedidoDataCell.setCellStyle(dateStyle);
+            } else {
+                pedidoDataCell.setCellStyle(normalStyle);
+            }
+
+            // 5: Data Pagamento
+            Cell pagamentoDataCell = row.createCell(5);
+            if (contas.getData_de_pagamento() != null) {
+                pagamentoDataCell.setCellValue(contas.getData_de_pagamento());
+                pagamentoDataCell.setCellStyle(dateStyle);
+            } else {
+                pagamentoDataCell.setCellStyle(normalStyle);
+            }
+
+            // 6: Status
+            Cell statusCell = row.createCell(6);
+            statusCell.setCellValue(contas.getStatus());
+            statusCell.setCellStyle(normalStyle);
+
+            // 7: Pagamento
+            Cell pagamentoCell = row.createCell(7);
+            pagamentoCell.setCellValue(contas.getPagamento());
+            pagamentoCell.setCellStyle(normalStyle);
+
+            // 8: ID
+            Cell idCell = row.createCell(8);
+            idCell.setCellValue(contas.getConta_id());
+            idCell.setCellStyle(normalStyle);
         }
     }
 }

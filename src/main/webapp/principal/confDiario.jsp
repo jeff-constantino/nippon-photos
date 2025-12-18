@@ -365,7 +365,7 @@
                                         <div  class="row mt-3 text-center d-flex justify-content-center">
                                             <div class="col-2">
 
-                                                <label class="float-label">DINHEIRO ENTREGUE:</label>
+                                                <label class="float-label">DINHEIRO REAL:</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_din_real" name="valor_din_real"
@@ -374,7 +374,7 @@
                                                 >
                                             </div>
                                             <div class="col-2">
-                                                <label class="float-label">DÉBITO NA CONTA:</label>
+                                                <label class="float-label">DÉBITO REAL:</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_deb_real" name="valor_deb_real"
@@ -386,7 +386,7 @@
 
 
                                             <div class="col-2">
-                                                <label class="float-label">CRÉDITO NA CONTA:</label>
+                                                <label class="float-label">CRÉDITO REAL:</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_cred_real" name="valor_cred_real"
@@ -398,7 +398,7 @@
 
 
                                             <div class="col-2">
-                                                <label class="float-label">PIX NA CONTA:</label>
+                                                <label class="float-label">PIX REAL:</label>
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_pix_real" name="valor_pix_real"

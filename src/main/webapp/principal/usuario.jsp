@@ -87,15 +87,49 @@
                                                                                                 <span class="form-bar"></span>
                                                                                                 <input type="text" class="form-control" id="id2" name="id" placeholder="" readonly value="${modelLogin.id}">
                                                                                             </div>
-                                                                                            <div class="col-8">
+                                                                                            <div class="col-3">
                                                                                                 <label class="float-label">NOME:</label>
                                                                                                 <span class="form-bar"></span>
                                                                                                 <input type="text" class="form-control" id="nome2" name="nome" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.nome}" autofocus>
 
                                                                                             </div>
+<%--                              NOVOS CAMPOS--%>
+                                                                                            <div class="col-3">
+                                                                                                <label class="float-label">RG:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control" id="rg2" name="rg" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.rg}">
+
+                                                                                            </div>
+                                                                                            <div class="col-3">
+                                                                                                <label class="float-label">CPF:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control" id="cpf2" name="cpf" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.cpf}">
+
+                                                                                            </div>
+                                                                                            <div class="col-3">
+                                                                                                <label class="float-label">PIS:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control" id="pis2" name="pis" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.pis}">
+
+                                                                                            </div>
+                                                                                            <div class="col-3">
+                                                                                                <label class="float-label">TELEFONE:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control" id="telefone2" name="telefone" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.telefone}">
+
+                                                                                            </div>
+
+                                                                                            <div class="col-12">
+                                                                                                <label class="float-label">ENDEREÇO:</label>
+                                                                                                <span class="form-bar"></span>
+                                                                                                <input type="text" class="form-control" id="endereco2" name="endereco" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.endereco}">
+
+                                                                                            </div>
+                                                                                            <br>
+<%--                       FIM NOVOS CAMPOS--%>
 
 
-                                                                                            <div class="form-group">
+                                                                                            <div class="col-3 form-group">
 
                                                                                                 <label>STATUS</label>
                                                                                                 <select class="form-select" id="status1" name="status" required>
@@ -118,7 +152,7 @@
 
                                                                                                 </select>
                                                                                             </div>
-                                                                                            <div class="form-group">
+                                                                                            <div class="col-3 form-group">
                                                                                                 <label>COMISSÃO</label>
 
                                                                                                 <select class="form-select" id="comissao" name="comissao" required>
@@ -257,6 +291,7 @@
                                                                                                         <tr>
                                                                                                             <th scope="col">ID</th>
                                                                                                             <th scope="col">NOME</th>
+
                                                                                                             <th scope="col">GERENCIAR</th>
 
                                                                                                         </tr>
@@ -305,142 +340,174 @@
                 <div class="row ">
                     <div class="col-12 grid-margin">
                         <div class="card">
-                            <div class="card-body" >
-                                <h4 class="card-title">FUNCIONÁRIOS</h4> <span style="color:#1ad76b; text-align: center">${msg}</span>
-                                <div class="table-responsive"style="overflow-x: hidden">
-                                    <table class="table" >
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                        <form action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formUser2" name="formUser2" >
-                                            <input type="hidden" name="acao" acao value="">
-                                            <div class="row">
+                            <div class="card-body">
+                                <h4 class="card-title">FUNCIONÁRIOS</h4>
+                                <span style="color:#1ad76b; text-align: center">${msg}</span>
 
-                                                <div class="col-sm-1">
-                                                    <label class="float-label" >ID:</label>
-                                                    <span class="form-bar"></span>
-                                                    <input type="text" class="form-control" id="id" name="id" placeholder="" style="background-color: black" readonly value="${modelLogin.id}">
-                                                </div>
-                                                <div class="col-8">
-                                                    <label class="float-label">NOME:</label>
-                                                    <span class="form-bar"></span>
-                                                    <input type="text" class="form-control" id="nome" name="nome" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.nome}">
+                                <div class="table-responsive" style="overflow-x: hidden">
+                                    <form action="<%= request.getContextPath() %>/ServletUsuarioController"
+                                          method="post" id="formUser2" name="formUser2">
 
-                                                    <br>
-                                                    <div class="form-group">
+                                        <input type="hidden" name="acao" value="">
 
-                                                        <label>STATUS</label>
-                                                        <select class="form-select" id="status2" name="status" required>
-                                                            <option disabled="disabled">Selecione o Status</option>
-                                                            <option style="color: #00d25b" value="Ativo"  <%
-                                                                modelLogin =(ModelLogin) request.getAttribute("modelLogin");
-                                                                if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Ativo")){
-                                                                    out.print(" ");
-                                                                    out.print("selected=\"selected\"");
-                                                                    out.print(" ");
-                                                                }%>>Ativo</option>
+                                        <div class="row">
 
-                                                            <option style="color: #bf3322" value="Inativo" <%
-                                                                modelLogin =(ModelLogin) request.getAttribute("modelLogin");
-                                                                if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Inativo")){
-                                                                    out.print(" ");
-                                                                    out.print("selected=\"selected\"");
-                                                                    out.print(" ");
-                                                                }%>>Inativo</option>
-
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>COMISSÃO</label>
-
-                                                        <select class="form-select" id="comissao2" name="comissao" required>
-                                                            <option disabled="disabled">Selecione a Comissão</option>
-
-                                                            <option value="Comissão 1"
-                                                                    <%
-                                                                        if (modelLogin != null && "Comissão 1".equalsIgnoreCase(modelLogin.getComissao())) {
-                                                                            out.print("selected=\"selected\"");
-                                                                        }
-                                                                    %>>
-                                                                Comissão 1
-                                                            </option>
-
-                                                            <option value="Comissão 2"
-                                                                    <%
-                                                                        if (modelLogin != null && "Comissão 2".equalsIgnoreCase(modelLogin.getComissao())) {
-                                                                            out.print("selected=\"selected\"");
-                                                                        }
-                                                                    %>>
-                                                                Comissão 2
-                                                            </option>
-                                                        </select>
-
-                                                    </div>
-
-                                                </div>
-
-
-                                                <br>
-
-                                                <div>
-                                                    <button  class="btn btn-outline-success waves-effect waves-light" >Atualizar</button>
-                                                    <button type="button"  class="btn btn-outline-danger waves-effect waves-light" onclick="criarDeleteComAjax();" >Excluir</button>
-                                                </div>
-
+                                            <!-- ID -->
+                                            <div class="col-sm-1 mb-3">
+                                                <label>ID:</label>
+                                                <input type="text" class="form-control" id="id" name="id"
+                                                       style="background-color: black" readonly
+                                                       value="${modelLogin.id}">
                                             </div>
 
-                                        </form>
+                                            <!-- Nome -->
+                                            <div class="col-sm-4 mb-3">
+                                                <label>NOME:</label>
+                                                <input type="text" class="form-control" id="nome" name="nome"
+                                                       style="background-color: black" required
+                                                       value="${modelLogin.nome}">
+                                            </div>
 
-                                    </table>
-                                    <h5>Funcionários Ativos:</h5>
+                                            <!-- RG -->
+                                            <div class="col-sm-2 mb-3">
+                                                <label>RG:</label>
+                                                <input type="text" class="form-control" id="rg" name="rg"
+                                                       style="background-color: black" required
+                                                       value="${modelLogin.rg}">
+                                            </div>
 
+                                            <!-- CPF -->
+                                            <div class="col-sm-2 mb-3">
+                                                <label>CPF:</label>
+                                                <input type="text" class="form-control" id="cpf" name="cpf"
+                                                       style="background-color: black" required
+                                                       value="${modelLogin.cpf}">
+                                            </div>
 
+                                            <!-- PIS -->
+                                            <div class="col-sm-2 mb-3">
+                                                <label>PIS:</label>
+                                                <input type="text" class="form-control" id="pis" name="pis"
+                                                       style="background-color: black" required
+                                                       value="${modelLogin.pis}">
+                                            </div>
 
+                                            <!-- Telefone -->
+                                            <div class="col-sm-2 mb-3">
+                                                <label>TELEFONE:</label>
+                                                <input type="text" class="form-control" id="telefone" name="telefone"
+                                                       style="background-color: black" required
+                                                       value="${modelLogin.telefone}">
+                                            </div>
 
+                                            <!-- Endereço (linha inteira) -->
+                                            <div class="col-12 mb-3">
+                                                <label>ENDEREÇO:</label>
+                                                <input type="text" class="form-control" id="endereco2" name="endereco"
+                                                       style="background-color: black" required
+                                                       value="${modelLogin.endereco}">
+                                            </div>
 
+                                            <!-- STATUS -->
+                                            <div class="col-sm-3 mb-3">
+                                                <label>STATUS</label>
+                                                <select class="form-select" id="status2" name="status" required>
+                                                    <option disabled>Selecione o Status</option>
 
-                                    <div style="overflow-x: hidden; overflow-y: hidden">
-                                        <div>
-                                            <table class="table" id="tabelaresultadosview">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">ID</th>
-                                                    <th scope="col">NOME</th>
-                                                    <th scope="col">STATUS</th>
-                                                    <th scope="col">GERENCIAR</th>
+                                                    <option value="Ativo"
+                                                            <%
+                                                                modelLogin = (ModelLogin) request.getAttribute("modelLogin");
+                                                                if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Ativo")) {
+                                                                    out.print("selected=\"selected\"");
+                                                                }
+                                                            %>>
+                                                        Ativo
+                                                    </option>
 
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <c:forEach items="${modelLogins}" var ="mL">
-                                                    <tr>
-                                                        <td>
-                                                            <c:out value="${mL.id}"></c:out>
-                                                        </td>
-                                                        <td>
-                                                            <c:out value="${mL.nome}"></c:out>
-                                                            </span>
+                                                    <option value="Inativo"
+                                                            <%
+                                                                if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Inativo")) {
+                                                                    out.print("selected=\"selected\"");
+                                                                }
+                                                            %>>
+                                                        Inativo
+                                                    </option>
+                                                </select>
+                                            </div>
 
-                                                        </td>
-                                                        <td>
-                                                            <c:out value="${mL.status}"></c:out>
-                                                            </span>
+                                            <!-- Comissão -->
+                                            <div class="col-sm-3 mb-3">
+                                                <label>COMISSÃO</label>
+                                                <select class="form-select" id="comissao2" name="comissao" required>
+                                                    <option disabled>Selecione a Comissão</option>
 
-                                                        </td>
-                                                        <td><a class="btn btn-outline-success waves-effect waves-light" href="<%= request.getContextPath() %>/ServletUsuarioController?acao=buscarEditar&id=${mL.id}" >Gerenciar</a></td>
+                                                    <option value="Comissão 1"
+                                                            <%
+                                                                if (modelLogin != null && "Comissão 1".equalsIgnoreCase(modelLogin.getComissao())) {
+                                                                    out.print("selected=\"selected\"");
+                                                                }
+                                                            %>>
+                                                        Comissão 1
+                                                    </option>
 
-                                                    </tr>
+                                                    <option value="Comissão 2"
+                                                            <%
+                                                                if (modelLogin != null && "Comissão 2".equalsIgnoreCase(modelLogin.getComissao())) {
+                                                                    out.print("selected=\"selected\"");
+                                                                }
+                                                            %>>
+                                                        Comissão 2
+                                                    </option>
+                                                </select>
+                                            </div>
 
-                                                </c:forEach>
-
-
-                                                </tbody>
-                                            </table>
+                                            <!-- Botões -->
+                                            <div class="col-12 mt-2">
+                                                <button class="btn btn-outline-success">Atualizar</button>
+                                                <button type="button"
+                                                        class="btn btn-outline-danger"
+                                                        onclick="criarDeleteComAjax();">
+                                                    Excluir
+                                                </button>
+                                            </div>
 
                                         </div>
+                                    </form>
 
+                                    <h5>Funcionários Ativos:</h5>
+
+                                    <!-- Tabela -->
+                                    <div style="overflow-x: hidden; overflow-y: hidden">
+                                        <table class="table" id="tabelaresultadosview">
+                                            <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>NOME</th>
+                                                <th>STATUS</th>
+                                                <th>GERENCIAR</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:forEach items="${modelLogins}" var="mL">
+                                                <tr>
+                                                    <td>${mL.id}</td>
+                                                    <td>${mL.nome}</td>
+                                                    <td>${mL.status}</td>
+                                                    <td>
+                                                        <a class="btn btn-outline-success"
+                                                           href="<%= request.getContextPath() %>/ServletUsuarioController?acao=buscarEditar&id=${mL.id}">
+                                                            Gerenciar
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                            </tbody>
+                                        </table>
                                     </div>
 
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>

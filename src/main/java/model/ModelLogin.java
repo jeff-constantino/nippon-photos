@@ -17,6 +17,52 @@ public class ModelLogin implements Serializable{
     private String vales;
     private long id_funcionario;
     private String comissao;
+    private String rg;
+    private String cpf;
+    private String pis;
+    private String telefone;
+    private String endereco;
+
+
+    public String getRg() {
+        return rg;
+    }
+
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getPis() {
+        return pis;
+    }
+
+    public void setPis(String pis) {
+        this.pis = pis;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
 
     public void setVendas(String vendas) {
         this.vendas = vendas;

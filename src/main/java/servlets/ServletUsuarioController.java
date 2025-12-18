@@ -115,8 +115,13 @@ public class ServletUsuarioController extends ServletGenericUtil{
             String senha = request.getParameter("senha");
             String status = request.getParameter("status");
             String comissao = request.getParameter("comissao");
+            String rg = request.getParameter("rg");
+            String cpf = request.getParameter("cpf");
+            String pis = request.getParameter("pis");
+            String telefone = request.getParameter("telefone");
+            String endereco = request.getParameter("endereco");
 
-            // AQUI ESTAVA O PROBLEMA — agora corrigido
+
             ModelLogin modelLogin = new ModelLogin();
             modelLogin.setComissao(comissao);
 
@@ -124,11 +129,16 @@ public class ServletUsuarioController extends ServletGenericUtil{
             modelLogin.setId(id != null && !id.isEmpty() ? Long.parseLong(id) : null);
             modelLogin.setNome(nome);
             modelLogin.setStatus(status);
-            modelLogin.setComissao(comissao); // <-- ESTA LINHA É OBRIGATÓRIA
+            modelLogin.setComissao(comissao);
+            modelLogin.setRg(rg);
+            modelLogin.setCpf(cpf);
+            modelLogin.setPis(pis);
+            modelLogin.setTelefone(telefone);
+            modelLogin.setEndereco(endereco);
 
 
 
-            if (daoUsuarioRepository.validarLogin(modelLogin.getNome()) && modelLogin.getId() == null) //"Para criar um novo usuario com o mesmo nome"
+            if (daoUsuarioRepository.validarLogin(modelLogin.getNome()) && modelLogin.getId() == null)
             {
                 msg = "Funcionário com o mesmo nome já Cadastrado";
 
@@ -172,6 +182,11 @@ public class ServletUsuarioController extends ServletGenericUtil{
                 String email = request.getParameter("email");
                 String senha = request.getParameter("senha");
                 String status = request.getParameter("status");
+                String rg = request.getParameter("rg");
+                String cpf = request.getParameter("cpf");
+                String pis = request.getParameter("pis");
+                String telefone = request.getParameter("telefone");
+                String endereco = request.getParameter("endereco");
 
                 ModelLogin modelLogin = new ModelLogin();
 

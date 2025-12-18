@@ -25,25 +25,34 @@ public class DAOUsuarioRepository {
 
         if (objeto.isNovo()) {
 
-            String sql = "INSERT INTO model_login (nome, status, comissao, usuario_id) VALUES (UPPER(?), UPPER(?), UPPER(?), ?)";
+            String sql = "INSERT INTO model_login (nome, status, comissao, usuario_id,rg, cpf, pis,telefone, endereco) VALUES (UPPER(?), UPPER(?), UPPER(?), ?, ?,?,?, ?, UPPER(?))";
             PreparedStatement preparedSql = connection.prepareStatement(sql);
 
             preparedSql.setString(1, objeto.getNome());
             preparedSql.setString(2, objeto.getStatus());
             preparedSql.setString(3, objeto.getComissao());
             preparedSql.setLong(4, userLogado);
+            preparedSql.setString(5, objeto.getRg());
+            preparedSql.setString(6, objeto.getCpf());
+            preparedSql.setString(7, objeto.getPis());
+            preparedSql.setString(8, objeto.getTelefone());
+            preparedSql.setString(9, objeto.getEndereco());
 
             preparedSql.execute();
 
             connection.commit();
         } else {
-            String sql = "UPDATE model_login SET nome = UPPER(?), status = UPPER(?), comissao = UPPER(?) WHERE id = " + objeto.getId();
+            String sql = "UPDATE model_login SET nome = UPPER(?), status = UPPER(?), comissao = UPPER(?), rg = UPPER(?), cpf = UPPER(?), pis = UPPER(?), telefone = UPPER(?), endereco = UPPER(?)  WHERE id = " + objeto.getId();
             PreparedStatement preparedSql = connection.prepareStatement(sql);
 
             preparedSql.setString(1, objeto.getNome());
             preparedSql.setString(2, objeto.getStatus());
             preparedSql.setString(3, objeto.getComissao());
-
+            preparedSql.setString(4, objeto.getRg());
+            preparedSql.setString(5, objeto.getCpf());
+            preparedSql.setString(6, objeto.getPis());
+            preparedSql.setString(7, objeto.getTelefone());
+            preparedSql.setString(8, objeto.getEndereco());
 
 
             preparedSql.executeUpdate();
@@ -71,6 +80,12 @@ public class DAOUsuarioRepository {
             modelLogin.setId(resultSet.getLong("id"));
             modelLogin.setNome(resultSet.getString("nome"));
             modelLogin.setStatus(resultSet.getString("status"));
+            modelLogin.setRg(resultSet.getString("rg"));
+            modelLogin.setCpf(resultSet.getString("cpf"));
+            modelLogin.setPis(resultSet.getString("pis"));
+            modelLogin.setTelefone(resultSet.getString("telefone"));
+            modelLogin.setEndereco(resultSet.getString("endereco"));
+
             retorno.add(modelLogin);
         }
 
@@ -91,6 +106,11 @@ public class DAOUsuarioRepository {
             modelLogin.setId(resultSet.getLong("id"));
             modelLogin.setNome(resultSet.getString("nome"));
             modelLogin.setStatus(resultSet.getString("status"));
+            modelLogin.setRg(resultSet.getString("rg"));
+            modelLogin.setCpf(resultSet.getString("cpf"));
+            modelLogin.setPis(resultSet.getString("pis"));
+            modelLogin.setTelefone(resultSet.getString("telefone"));
+            modelLogin.setEndereco(resultSet.getString("endereco"));
             retorno.add(modelLogin);
         }
         return retorno;
@@ -151,6 +171,11 @@ public class DAOUsuarioRepository {
             modelLogin.setNome(resultado.getString("nome"));
             modelLogin.setStatus(resultado.getString("status"));
             modelLogin.setComissao(resultado.getString("comissao"));
+            modelLogin.setRg(resultado.getString("rg"));
+            modelLogin.setCpf(resultado.getString("cpf"));
+            modelLogin.setPis(resultado.getString("pis"));
+            modelLogin.setTelefone(resultado.getString("telefone"));
+            modelLogin.setEndereco(resultado.getString("endereco"));
 
 
 
@@ -174,6 +199,12 @@ public class DAOUsuarioRepository {
             modelLogin.setNome(resultado.getString("nome"));
             modelLogin.setStatus(resultado.getString("status"));
             modelLogin.setComissao(resultado.getString("comissao"));
+            modelLogin.setRg(resultado.getString("rg"));
+            modelLogin.setCpf(resultado.getString("cpf"));
+            modelLogin.setPis(resultado.getString("pis"));
+            modelLogin.setTelefone(resultado.getString("telefone"));
+            modelLogin.setEndereco(resultado.getString("endereco"));
+
 
 
 
@@ -198,6 +229,11 @@ public class DAOUsuarioRepository {
             modelLogin.setNome(resultado.getString("nome"));
             modelLogin.setStatus(resultado.getString("status"));
             modelLogin.setComissao(resultado.getString("comissao"));
+            modelLogin.setRg(resultado.getString("rg"));
+            modelLogin.setCpf(resultado.getString("cpf"));
+            modelLogin.setPis(resultado.getString("pis"));
+            modelLogin.setTelefone(resultado.getString("telefone"));
+            modelLogin.setEndereco(resultado.getString("endereco"));
 
 
 
@@ -222,6 +258,11 @@ public class DAOUsuarioRepository {
             modelLogin.setNome(resultado.getString("nome"));
             modelLogin.setStatus(resultado.getString("status"));
             modelLogin.setComissao(resultado.getString("comissao"));
+            modelLogin.setRg(resultado.getString("rg"));
+            modelLogin.setCpf(resultado.getString("cpf"));
+            modelLogin.setPis(resultado.getString("pis"));
+            modelLogin.setTelefone(resultado.getString("telefone"));
+            modelLogin.setEndereco(resultado.getString("endereco"));
 
 
 
@@ -243,6 +284,11 @@ public class DAOUsuarioRepository {
             modelLogin.setNome(resultado.getString("nome"));
             modelLogin.setStatus(resultado.getString("status"));
             modelLogin.setComissao(resultado.getString("comissao"));
+            modelLogin.setRg(resultado.getString("rg"));
+            modelLogin.setCpf(resultado.getString("cpf"));
+            modelLogin.setPis(resultado.getString("pis"));
+            modelLogin.setTelefone(resultado.getString("telefone"));
+            modelLogin.setEndereco(resultado.getString("endereco"));
 
 
 
@@ -267,6 +313,7 @@ public class DAOUsuarioRepository {
             modelLogin.setId(resultado.getLong("id"));
             modelLogin.setNome(resultado.getString("nome"));
             modelLogin.setStatus(resultado.getString("status"));
+            modelLogin.setRg(resultado.getString("rg"));
             modelLogin.setComissao(resultado.getString("comissao"));
 
 

@@ -97,25 +97,25 @@
                                                                                             <div class="col-3">
                                                                                                 <label class="float-label">RG:</label>
                                                                                                 <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control" id="rg2" name="rg" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.rg}">
+                                                                                                <input type="text" class="form-control" id="rg2" name="rg" maxlength="12" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.rg}">
 
                                                                                             </div>
                                                                                             <div class="col-3">
                                                                                                 <label class="float-label">CPF:</label>
                                                                                                 <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control" id="cpf2" name="cpf" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.cpf}">
+                                                                                                <input type="text" class="form-control" id="cpf2" name="cpf" maxlength="14" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.cpf}">
 
                                                                                             </div>
                                                                                             <div class="col-3">
                                                                                                 <label class="float-label">PIS:</label>
                                                                                                 <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control" id="pis2" name="pis" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.pis}">
+                                                                                                <input type="text" class="form-control" id="pis2" name="pis" maxlength="14" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.pis}">
 
                                                                                             </div>
                                                                                             <div class="col-3">
                                                                                                 <label class="float-label">TELEFONE:</label>
                                                                                                 <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control" id="telefone2" name="telefone" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.telefone}">
+                                                                                                <input type="text" class="form-control" id="telefone2" name="telefone" maxlength="15" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.telefone}">
 
                                                                                             </div>
 
@@ -371,7 +371,7 @@
                                             <!-- RG -->
                                             <div class="col-sm-2 mb-3">
                                                 <label>RG:</label>
-                                                <input type="text" class="form-control" id="rg" name="rg"
+                                                <input type="text" class="form-control" id="rg" name="rg" maxlength="12"
                                                        style="background-color: black" required
                                                        value="${modelLogin.rg}">
                                             </div>
@@ -379,7 +379,7 @@
                                             <!-- CPF -->
                                             <div class="col-sm-2 mb-3">
                                                 <label>CPF:</label>
-                                                <input type="text" class="form-control" id="cpf" name="cpf"
+                                                <input type="text" class="form-control" id="cpf" name="cpf" maxlength="14"
                                                        style="background-color: black" required
                                                        value="${modelLogin.cpf}">
                                             </div>
@@ -387,7 +387,7 @@
                                             <!-- PIS -->
                                             <div class="col-sm-2 mb-3">
                                                 <label>PIS:</label>
-                                                <input type="text" class="form-control" id="pis" name="pis"
+                                                <input type="text" class="form-control" id="pis" name="pis" maxlength="14"
                                                        style="background-color: black" required
                                                        value="${modelLogin.pis}">
                                             </div>
@@ -395,13 +395,13 @@
                                             <!-- Telefone -->
                                             <div class="col-sm-2 mb-3">
                                                 <label>TELEFONE:</label>
-                                                <input type="text" class="form-control" id="telefone" name="telefone"
+                                                <input type="text" class="form-control" id="telefone" name="telefone" maxlength="15"
                                                        style="background-color: black" required
                                                        value="${modelLogin.telefone}">
                                             </div>
 
                                             <!-- Endereço (linha inteira) -->
-                                            <div class="col-12 mb-3">
+                                            <div class="col-8 mb-3">
                                                 <label>ENDEREÇO:</label>
                                                 <input type="text" class="form-control" id="endereco2" name="endereco"
                                                        style="background-color: black" required
@@ -724,8 +724,167 @@
 
 
 
+   // ============================ MÁSCARAS ===============================
+
+   // Mascara CPF
+   function mascaraCPF(value) {
+       return value
+           .replace(/\D/g, "")
+           .replace(/(\d{3})(\d)/, "$1.$2")
+           .replace(/(\d{3})(\d)/, "$1.$2")
+           .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+   }
+
+   // Mascara PIS
+   function mascaraPIS(value) {
+       return value
+           .replace(/\D/g, "")
+           .replace(/(\d{3})(\d)/, "$1.$2")
+           .replace(/(\d{5})(\d)/, "$1.$2")
+           .replace(/(\d{5}\.\d{2})(\d{1,2})$/, "$1-$2");
+   }
+
+   // Mascara Telefone
+   function mascaraTelefone(value) {
+       return value
+           .replace(/\D/g, "")
+           .replace(/(\d{2})(\d)/, "($1) $2")
+           .replace(/(\d{5})(\d)/, "$1-$2");
+   }
+
+   // ============================ APLICAÇÃO DAS MÁSCARAS ===============================
+
+   document.getElementById("cpf2").addEventListener("input", function () {
+       this.value = mascaraCPF(this.value);
+   });
+
+   document.getElementById("pis2").addEventListener("input", function () {
+       this.value = mascaraPIS(this.value);
+   });
+
+   document.getElementById("telefone2").addEventListener("input", function () {
+       this.value = mascaraTelefone(this.value);
+   });
+
+   document.getElementById("cpf").addEventListener("input", function () {
+       this.value = mascaraCPF(this.value);
+   });
+
+   document.getElementById("pis").addEventListener("input", function () {
+       this.value = mascaraPIS(this.value);
+   });
+
+   document.getElementById("telefone").addEventListener("input", function () {
+       this.value = mascaraTelefone(this.value);
+   });
 
 
+   // ============================ BLOQUEAR LETRAS NOS CAMPOS NUMÉRICOS ===============================
+
+   ["cpf2", "pis2", "telefone2", "rg2" ,"cpf", "pis", "telefone", "rg"  ].forEach(id => {
+       document.getElementById(id).addEventListener("keypress", function (e) {
+           if (!/[0-9]/.test(e.key)) {
+               e.preventDefault();
+           }
+       });
+   });
+
+
+   // ============================ LIMITES DE TAMANHO ===============================
+
+   document.getElementById("cpf2").maxLength = 14; // 000.000.000-00
+   document.getElementById("pis2").maxLength = 14; // 000.00000.00-0
+   document.getElementById("telefone2").maxLength = 15; // (00) 00000-0000
+   document.getElementById("rg2").maxLength = 15;
+   document.getElementById("cpf").maxLength = 14; // 000.000.000-00
+   document.getElementById("pis").maxLength = 14; // 000.00000.00-0
+   document.getElementById("telefone").maxLength = 15; // (00) 00000-0000
+   document.getElementById("rg").maxLength = 15;
+
+   // ============================ VALIDAÇÃO DE CPF REAL ===============================
+
+   function validarCPF(cpf) {
+       cpf = cpf.replace(/\D/g, "");
+
+       if (cpf.length !== 11) return false;
+       if (/^(.)\1+$/.test(cpf)) return false;
+
+       let soma = 0, resto;
+
+       for (let i = 1; i <= 9; i++)
+           soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+
+       resto = (soma * 10) % 11;
+       if (resto === 10 || resto === 11) resto = 0;
+       if (resto !== parseInt(cpf.substring(9, 10))) return false;
+
+       soma = 0;
+       for (let i = 1; i <= 10; i++)
+           soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+
+       resto = (soma * 10) % 11;
+       if (resto === 10 || resto === 11) resto = 0;
+       return resto === parseInt(cpf.substring(10, 11));
+   }
+
+   // ============================ VALIDAÇÃO DE PIS REAL ===============================
+
+   function validarPIS(pis) {
+       pis = pis.replace(/\D/g, "");
+
+       if (pis.length !== 11) return false;
+
+       const pesos = [3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+       let soma = 0;
+
+       for (let i = 0; i < 10; i++) {
+           soma += parseInt(pis.charAt(i)) * pesos[i];
+       }
+
+       const resto = soma % 11;
+       const digito = resto < 2 ? 0 : 11 - resto;
+
+       return digito === parseInt(pis.charAt(10));
+   }
+
+
+   // ============================ BLOQUEAR SUBMIT ===============================
+
+   document.getElementById("formUser").addEventListener("submit", function (e) {
+
+       let cpf  = document.getElementById("cpf")  ? document.getElementById("cpf").value  : "";
+       let cpf2 = document.getElementById("cpf2") ? document.getElementById("cpf2").value : "";
+
+       let pis  = document.getElementById("pis")  ? document.getElementById("pis").value  : "";
+       let pis2 = document.getElementById("pis2") ? document.getElementById("pis2").value : "";
+
+       // ================= CPF =================
+       if (cpf !== "" && !validarCPF(cpf)) {
+           alert("CPF inválido. Corrija antes de enviar.");
+           e.preventDefault();
+           return;
+       }
+
+       if (cpf2 !== "" && !validarCPF(cpf2)) {
+           alert("CPF inválido. Corrija antes de enviar.");
+           e.preventDefault();
+           return;
+       }
+
+       // ================= PIS =================
+       if (pis !== "" && !validarPIS(pis)) {
+           alert("PIS inválido. Corrija antes de enviar.");
+           e.preventDefault();
+           return;
+       }
+
+       if (pis2 !== "" && !validarPIS(pis2)) {
+           alert("PIS inválido. Corrija antes de enviar.");
+           e.preventDefault();
+           return;
+       }
+
+   });
 
 
 </SCRIPT>

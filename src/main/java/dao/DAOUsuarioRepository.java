@@ -314,6 +314,10 @@ public class DAOUsuarioRepository {
             modelLogin.setNome(resultado.getString("nome"));
             modelLogin.setStatus(resultado.getString("status"));
             modelLogin.setRg(resultado.getString("rg"));
+            modelLogin.setCpf(resultado.getString("cpf"));
+            modelLogin.setPis(resultado.getString("pis"));
+            modelLogin.setTelefone(resultado.getString("telefone"));
+            modelLogin.setEndereco(resultado.getString("endereco"));
             modelLogin.setComissao(resultado.getString("comissao"));
 
 

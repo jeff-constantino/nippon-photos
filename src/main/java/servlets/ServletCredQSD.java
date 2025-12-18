@@ -208,6 +208,7 @@ public class ServletCredQSD extends HttpServlet {
         request.setAttribute("listaRelatorio", lista);
         request.setAttribute("totalRecebido", totalRecebido);
         request.setAttribute("totalAReceber", totalAReceber);
+        request.setAttribute("abrirModalRelatorio", true);
         try {
             request.setAttribute("listaClientes", dao.getClientesUnicos());
         } catch (Exception ex) {

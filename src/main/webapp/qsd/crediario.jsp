@@ -474,12 +474,8 @@
         const colorLabel = document.getElementById('color-picker-label');
         const buttons = document.querySelectorAll('.btn-dourado');
 
-        // Cor padrão do CSS para fallback (o azul original)
         const defaultCSSColor = '#3A86FF';
-        // Cor padrão inicial do picker
         const defaultPickerValue = '#DAA520';
-
-        // Chave de armazenamento
         const STORAGE_KEY = 'credqsdBackgroundColor';
 
         function shadeColor(hex, percent) {
@@ -527,34 +523,25 @@
             });
 
             ajustarContraste(novaCor);
-
-            // SALVAR: Armazena a nova cor no localStorage
             localStorage.setItem(STORAGE_KEY, novaCor);
         }
 
-        // CARREGAR: Tenta obter a cor salva, ou usa o padrão
         const savedColor = localStorage.getItem(STORAGE_KEY);
         const initialColor = savedColor || defaultCSSColor;
-
-        // Define o valor inicial do Color Picker
         colorPicker.value = savedColor || defaultPickerValue;
-
-        // Aplica a cor inicial (salva ou padrão) ao carregar a página
         aplicarCor(initialColor);
-
-        // Adiciona listener para aplicar e salvar quando a cor for mudada
         colorPicker.addEventListener('input', () => aplicarCor(colorPicker.value));
 
         // ==================== ABERTURA AUTOMÁTICA DE MODAIS ====================
         <c:if test="${not empty modelReceber}">
-        // Se a variável modelReceber existe, o modal de Receber deve ser aberto
         var modalReceber = new bootstrap.Modal(document.getElementById('modalReceber'));
         modalReceber.show();
         </c:if>
 
         <c:if test="${not empty listaRelatorio}">
-        var modalRelatorio = new bootstrap.Modal(document.getElementById('modalRelatorio'));
-        modalRelatorio.show();
+        // Corrigido: usar let em vez de var para evitar redeclaração
+        let modalRelatorioInstance = new bootstrap.Modal(document.getElementById('modalRelatorio'));
+        modalRelatorioInstance.show();
         </c:if>
 
         // ==================== FUNÇÕES DE MOEDA ====================
@@ -598,17 +585,13 @@
         const campoValorPago = document.getElementById('valorpago');
 
         if (campoValorTotalReadonly && campoDesconto && campoValorPago) {
-            // Extrai o valor total (ex: "R$ 1.234,56" → 1234.56)
             let valorTotalStr = campoValorTotalReadonly.value.replace('R$', '').trim();
             let valorTotal = parseFloat(limparMoedaParaNumero(valorTotalStr)) || 0;
 
             campoDesconto.placeholder = "Ex: 10 para 10%";
             campoDesconto.value = '0';
-
-            // Inicia valor pago com o total
             campoValorPago.value = formatarMoeda(Math.round(valorTotal * 100));
 
-            // Cálculo ao mudar desconto
             campoDesconto.addEventListener('input', function() {
                 let percentual = parseFloat(this.value.replace(/\D/g, '')) || 0;
                 if (percentual > 100) percentual = 100;
@@ -620,7 +603,6 @@
                 campoValorPago.value = formatarMoeda(Math.round(valorFinal * 100));
             });
 
-            // Permite edição manual do valor pago
             aplicarMascaraMoeda(campoValorPago);
         }
 
@@ -628,18 +610,15 @@
         const forms = document.querySelectorAll('#modalLancamento form, #modalReceber form');
         forms.forEach(form => {
             form.addEventListener('submit', function() {
-                // Valor do lançamento
                 if (campoValorLancamento && campoValorLancamento.value) {
                     const limpo = limparMoedaParaNumero(campoValorLancamento.value);
                     campoValorLancamento.value = limpo.replace('.', ',');
                 }
 
-                // Valor pago no receber
                 if (campoValorPago && campoValorPago.value) {
                     const limpo = limparMoedaParaNumero(campoValorPago.value);
                     campoValorPago.value = limpo.replace('.', ',');
                 }
-                // Desconto já está limpo (número inteiro %)
             });
         });
 
@@ -676,7 +655,6 @@
             });
         }
 
-        // Preenche hidden com novo cliente ao enviar
         const formLancamento = document.querySelector('#modalLancamento form');
         if (formLancamento) {
             formLancamento.addEventListener('submit', function() {
@@ -687,7 +665,7 @@
             });
         }
 
-        // ==================== NOVAS FUNÇÕES DE DATA ====================
+        // ==================== FUNÇÕES DE DATA ====================
 
         // 1. MODAL LANÇAMENTO (Data de Venda = Hoje)
         const modalLancamento = document.getElementById('modalLancamento');
@@ -714,10 +692,10 @@
         }
 
         // 3. MODAL RELATÓRIO (Data Início/Fim e Data Fim = Último Dia do Mês)
-
         const campoDataInicialRelatorio = document.getElementById('dataInicialRelatorio');
         const campoDataFinalRelatorio = document.getElementById('dataFinalRelatorio');
-        const modalRelatorio = document.getElementById('modalRelatorio');
+        // Corrigido: usar const em vez de const duplicado
+        const modalRelatorioElement = document.getElementById('modalRelatorio');
 
         function setDataFinalRelatorio() {
             if (campoDataInicialRelatorio && campoDataFinalRelatorio) {
@@ -764,8 +742,8 @@
             campoDataInicialRelatorio.addEventListener('change', setDataFinalRelatorio);
         }
 
-        if (modalRelatorio) {
-            modalRelatorio.addEventListener('shown.bs.modal', function () {
+        if (modalRelatorioElement) {
+            modalRelatorioElement.addEventListener('shown.bs.modal', function () {
                 initializeDatesRelatorio();
             });
         }

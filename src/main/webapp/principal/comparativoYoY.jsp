@@ -24,13 +24,9 @@
 
 <body>
 <div class="container-scroller">
-    <!-- partial:partials/_sidebar.html -->
     <jsp:include page="sidebar.jsp"></jsp:include>
-    <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_navbar.html -->
         <jsp:include page="navbar.jsp"></jsp:include>
-        <!-- partial -->
         <div class="main-panel">
             <div class="content-wrapper" style="min-height: calc(98vh - 100px);">
                 <div class="row">
@@ -47,7 +43,6 @@
                             <div class="card-body">
                                 <h5 class="card-title text-center mb-3">Período 1</h5>
 
-                                <!-- Selects de Mês e Ano lado a lado -->
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-group">
@@ -82,7 +77,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Inputs 2 em 2 -->
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-group">
@@ -90,7 +84,6 @@
                                             <input type="text" class="form-control" id="valorTotal1" readonly style="background: black; color: #DAA520; font-size: 1.0rem">
                                         </div>
                                     </div>
-
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label>Ribbons</label>
@@ -106,7 +99,6 @@
                                             <input type="text" class="form-control" id="fotosVendidas1" readonly style="background: black; color: #DAA520; font-size: 1.0rem">
                                         </div>
                                     </div>
-
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label>Sobras</label>
@@ -115,7 +107,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Tabela de vendas diárias -->
                                 <div class="mt-4">
                                     <h6 class="text-center mb-3">Vendas por Dia</h6>
                                     <div style="max-height: 400px; overflow-y: auto;">
@@ -135,7 +126,6 @@
                                         </table>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -180,7 +170,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Inputs 2 em 2 -->
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-group">
@@ -188,7 +177,6 @@
                                             <input type="text" class="form-control" id="valorTotal2" readonly style="background: black; color: #DAA520; font-size: 1.0rem">
                                         </div>
                                     </div>
-
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label>Ribbons</label>
@@ -204,7 +192,6 @@
                                             <input type="text" class="form-control" id="fotosVendidas2" readonly style="background: black; color: #DAA520; font-size: 1.0rem">
                                         </div>
                                     </div>
-
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label>Sobras</label>
@@ -232,7 +219,6 @@
                                         </table>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -277,7 +263,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Inputs 2 em 2 -->
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-group">
@@ -285,7 +270,6 @@
                                             <input type="text" class="form-control" id="valorTotal3" readonly style="background: black; color: #DAA520; font-size: 1.0rem">
                                         </div>
                                     </div>
-
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label>Ribbons</label>
@@ -301,7 +285,6 @@
                                             <input type="text" class="form-control" id="fotosVendidas3" readonly style="background: black; color: #DAA520; font-size: 1.0rem">
                                         </div>
                                     </div>
-
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label>Sobras</label>
@@ -329,7 +312,6 @@
                                         </table>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -374,7 +356,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Inputs 2 em 2 -->
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="form-group">
@@ -382,7 +363,6 @@
                                             <input type="text" class="form-control" id="valorTotal4" readonly style="background: black; color: #DAA520; font-size: 1.0rem">
                                         </div>
                                     </div>
-
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label>Ribbons</label>
@@ -398,7 +378,6 @@
                                             <input type="text" class="form-control" id="fotosVendidas4" readonly style="background: black; color: #DAA520; font-size: 1.0rem">
                                         </div>
                                     </div>
-
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label>Sobras</label>
@@ -426,35 +405,22 @@
                                         </table>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
 
                 </div>
-
-
             </div>
-            <!-- content-wrapper ends -->
-            <!-- partial:partials/_footer.html -->
             <jsp:include page="footer.jsp"></jsp:include>
-            <!-- partial -->
         </div>
-        <!-- main-panel ends -->
     </div>
-    <!-- page-body-wrapper ends -->
 </div>
-<!-- container-scroller -->
-<!-- plugins:js -->
 <jsp:include page="pluginsJS.jsp"></jsp:include>
-<!-- End custom js for this page -->
 
-<!-- Modal HTML -->
 <div class="modal" id="msgModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;">
-            <div class="modal-header" style="border-bottom: none;">
-            </div>
+            <div class="modal-header" style="border-bottom: none;"></div>
             <div class="modal-body" style="color: black;">
                 <p style="font-size: 1.5em; text-align: center">${msg}</p>
             </div>
@@ -474,12 +440,9 @@
         }
     });
 
-    // Função para aplicar cores baseadas no valor das vendas
     function aplicarCoresVendas() {
         setTimeout(function() {
             const celulas = document.querySelectorAll('#vendasDiarias1 tr td:nth-child(3), #vendasDiarias2 tr td:nth-child(3), #vendasDiarias3 tr td:nth-child(3), #vendasDiarias4 tr td:nth-child(3)');
-
-            console.log('Aplicando cores em ' + celulas.length + ' células');
 
             celulas.forEach(td => {
                 let texto = td.textContent.trim();
@@ -488,41 +451,31 @@
                     return;
                 }
 
-                let valor = texto.replace('R$', '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.').trim();
+                let valor = texto.replace('R$', '').replace('.', '').replace(',', '.').trim();
                 let numero = parseFloat(valor);
-
-                console.log('Valor: ' + texto + ' -> ' + numero);
 
                 if (!isNaN(numero)) {
                     if (numero <= 999.99) {
                         td.style.color = 'red';
-                        td.style.fontWeight = 'bold';
                     } else if (numero <= 1999.99) {
                         td.style.color = 'white';
-                        td.style.fontWeight = 'bold';
                     } else if (numero <= 2999.99) {
                         td.style.color = 'yellow';
-                        td.style.fontWeight = 'bold';
                     } else if (numero <= 3999.99) {
                         td.style.color = '#00ccff';
-                        td.style.fontWeight = 'bold';
                     } else {
                         td.style.color = 'fuchsia';
-                        td.style.fontWeight = 'bold';
                     }
                 }
             });
         }, 100);
     }
 
-    // Função para carregar dados quando o select mudar
     function carregarDados(periodo) {
         const mes = document.getElementById('mes' + periodo).value;
         const ano = document.getElementById('ano' + periodo).value;
 
         if (mes && ano) {
-            console.log(`Carregando dados do Período ${periodo}: ${mes}/${ano}`);
-
             $.ajax({
                 url: '${pageContext.request.contextPath}/ServletComparativoYoY',
                 type: 'GET',
@@ -533,8 +486,6 @@
                     periodo: periodo
                 },
                 success: function(response) {
-                    console.log('Resposta recebida para período ' + periodo);
-
                     $('#valorTotal' + periodo).val('R$ ' + response.valorTotal);
                     $('#fotosVendidas' + periodo).val(response.fotosVendidas);
                     $('#sobras' + periodo).val(response.sobras);
@@ -554,7 +505,6 @@
                     }
                     $('#vendasDiarias' + periodo).html(html);
 
-                    console.log('Tabela atualizada, aplicando cores...');
                     aplicarCoresVendas();
                 },
                 error: function(xhr, status, error) {
@@ -565,7 +515,6 @@
         }
     }
 
-    // Função para navegar entre elementos focáveis com as setas
     function navigateFocusableElements(event) {
         const focusableElements = Array.from(
             document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
@@ -594,7 +543,6 @@
         focusableElements[currentIndex].focus();
     }
 
-    // Bloqueia a alteração de valor com as setas nos inputs do tipo number
     document.querySelectorAll('input[type="number"]').forEach(input => {
         input.addEventListener('keydown', function(event) {
             if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
@@ -603,9 +551,8 @@
         });
     });
 
-    // Adiciona o evento keydown ao documento
     document.addEventListener('keydown', navigateFocusableElements);
 </script>
 
 </body>
-</html>
+</htm

@@ -47,15 +47,13 @@ public class FilterAutenticacao implements Filter {
 
             String urlParaAutenticar = req.getServletPath();
 
-            // 🔧 AJUSTE CRÍTICO 2: URLs públicas
-            boolean urlPublica =
-                    urlParaAutenticar.equals("/principal/ServletLogin") ||
-                            urlParaAutenticar.equals("/principal/paginaPublica.jsp");
+
+            boolean urlPublica = urlParaAutenticar.equals("/principal/ServletLogin");
 
             if (usuarioLogado == null && !urlPublica) {
 
                 RequestDispatcher redireciona =
-                        request.getRequestDispatcher("/crediario.jsp?url=" + urlParaAutenticar);
+                        request.getRequestDispatcher("/index.jsp?url=" + urlParaAutenticar);
 
                 request.setAttribute("msg", "Por favor realize o login!");
                 redireciona.forward(request, response);

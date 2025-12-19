@@ -474,100 +474,235 @@
         }
     });
 
-    // Função para carregar dados quando o select mudar
-    function carregarDados(periodo) {
-        const mes = document.getElementById('mes' + periodo).value;
-        const ano = document.getElementById('ano' + periodo).value;
+    // Função para aplicar cores baseadas no valor das vendas
+    function aplicarCoresVendas() {
+        // Aguarda um pouco para garantir que o DOM foi atualizado
+        setTimeout(function() {
+            // Seleciona todas as células de total vendido (terceira coluna de cada tbody)
+            const celulas = document.querySelectorAll('#vendasDiarias1 tr td:nth-child(3), #vendasDiarias2 tr td:nth-child(3), #vendasDiarias3 tr td:nth-child(3), #vendasDiarias4 tr td:nth-child(3)');
 
-        if (mes && ano) {
-            console.log(`Carregando dados do Período ${periodo}: ${mes}/${ano}`);
+            console.log('Aplicando cores em ' + celulas.length + ' células');
 
-            // Chamada AJAX para buscar os dados
-            $.ajax({
-                url: '${pageContext.request.contextPath}/ServletComparativoYoY',
-                type: 'GET',
-                data: {
-                    acao: 'buscarDados',
-                    mes: mes,
-                    ano: ano,
-                    periodo: periodo
-                },
-                success: function(response) {
-                    // Preencher os campos de resumo
-                    $('#valorTotal' + periodo).val('R$ ' + response.valorTotal);
-                    $('#fotosVendidas' + periodo).val(response.fotosVendidas);
-                    $('#sobras' + periodo).val(response.sobras);
-                    $('#ribbons' + periodo).val(response.ribbons);
+            celulas.forEach(td => {
+                let texto = td.textContent.trim();
 
-                    // Preencher a tabela de vendas diárias
-                    let html = '';
-                    if (response.vendasDiarias && response.vendasDiarias.length > 0) {
-                        response.vendasDiarias.forEach(function(dia) {
-                            html += '<tr>';
-                            html += '<td>' + dia.dia + '</td>';
-                            html += '<td>' + dia.diaSemana + '</td>';
-                            html += '<td>R$ ' + dia.totalVendido + '</td>';
-                            html += '</tr>';
-                        });
-                    } else {
-                        html = '<tr><td colspan="3" class="text-center">Sem vendas neste período</td></tr>';
-                    }
-                    $('#vendasDiarias' + periodo).html(html);
-
-                    // Aplica as cores após carregar os dados
-                    aplicarCoresVendas();
-                },
-                error: function(xhr, status, error) {
-                    console.error('Erro ao buscar dados:', error);
-                    alert('Erro ao buscar dados do período ' + periodo);
+                // Ignora células com mensagens
+                if (texto.includes('Selecione') || texto.includes('Sem vendas')) {
+                    return;
                 }
-            });
-        }
-    }
 
-    // Função para navegar entre elementos focáveis com as setas
-    function navigateFocusableElements(event) {
-        const focusableElements = Array.from(
-            document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
-        ).filter(element => !element.disabled && element.tabIndex !== -1);
+                // Remove "R$" e espaços, converte vírgulas/pontos para formato numérico
+                let valor = texto.replace('R
 
-        if (focusableElements.length === 0) return;
+                // Função para navegar entre elementos focáveis com as setas
+                function navigateFocusableElements(event) {
+                    const focusableElements = Array.from(
+                        document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
+                    ).filter(element => !element.disabled && element.tabIndex !== -1);
 
-        const currentElement = document.activeElement;
-        if (!focusableElements.includes(currentElement)) return;
+                    if (focusableElements.length === 0) return;
 
-        let currentIndex = focusableElements.indexOf(currentElement);
+                    const currentElement = document.activeElement;
+                    if (!focusableElements.includes(currentElement)) return;
 
-        switch (event.key) {
-            case 'ArrowRight':
-            case 'ArrowDown':
-                currentIndex = (currentIndex + 1) % focusableElements.length;
-                break;
-            case 'ArrowLeft':
-            case 'ArrowUp':
-                currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
-                break;
-            default:
-                return;
-        }
+                    let currentIndex = focusableElements.indexOf(currentElement);
 
-        focusableElements[currentIndex].focus();
-    }
+                    switch (event.key) {
+                        case 'ArrowRight':
+                        case 'ArrowDown':
+                            currentIndex = (currentIndex + 1) % focusableElements.length;
+                            break;
+                        case 'ArrowLeft':
+                        case 'ArrowUp':
+                            currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
+                            break;
+                        default:
+                            return;
+                    }
 
-    // Bloqueia a alteração de valor com as setas nos inputs do tipo number
-    document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.addEventListener('keydown', function(event) {
-            if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-                event.preventDefault();
+                    focusableElements[currentIndex].focus();
+                }
+
+                // Bloqueia a alteração de valor com as setas nos inputs do tipo number
+                document.querySelectorAll('input[type="number"]').forEach(input => {
+                    input.addEventListener('keydown', function(event) {
+                        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                            event.preventDefault();
+                        }
+                    });
+                });
+
+                // Adiciona o evento keydown ao documento
+                document.addEventListener('keydown', navigateFocusableElements);
+
+                // Aplicar cores nos valores das vendas diárias
+                aplicarCoresVendas();
+</script>
+
+<script>
+    // Função para aplicar cores baseadas no valor das vendas
+    function aplicarCoresVendas() {
+        // Seleciona todas as células de total vendido (terceira coluna de cada tbody)
+        const celulas = document.querySelectorAll('#vendasDiarias1 td:nth-child(3), #vendasDiarias2 td:nth-child(3), #vendasDiarias3 td:nth-child(3), #vendasDiarias4 td:nth-child(3)');
+
+        celulas.forEach(td => {
+            let texto = td.textContent.trim();
+
+            // Remove "R$" e converte vírgulas/pontos para formato numérico
+            let valor = texto.replace('R
+
+                </body>
+        </html>, '').replace(/\./g, '').replace(',', '.').trim();
+            let numero = parseFloat(valor);
+
+            if (!isNaN(numero)) {
+                if (numero <= 999.99) {
+                    td.style.color = 'red';
+                    td.style.fontWeight = 'bold';
+                } else if (numero <= 1999.99) {
+                    td.style.color = 'white';
+                    td.style.fontWeight = 'bold';
+                } else if (numero <= 2999.99) {
+                    td.style.color = 'yellow';
+                    td.style.fontWeight = 'bold';
+                } else if (numero <= 3999.99) {
+                    td.style.color = '#00ccff'; // azul claro
+                    td.style.fontWeight = 'bold';
+                } else {
+                    td.style.color = 'fuchsia';
+                    td.style.fontWeight = 'bold';
+                }
             }
         });
-    });
+    }
+</script>
 
-    // Adiciona o evento keydown ao documento
-    document.addEventListener('keydown', navigateFocusableElements);
+</body>
+</html>, '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.').trim();
+let numero = parseFloat(valor);
 
-    // Aplicar cores nos valores das vendas diárias
-    aplicarCoresVendas();
+console.log('Valor: ' + texto + ' -> ' + numero);
+
+if (!isNaN(numero)) {
+if (numero <= 999.99) {
+td.style.color = 'red';
+td.style.fontWeight = 'bold';
+} else if (numero <= 1999.99) {
+td.style.color = 'white';
+td.style.fontWeight = 'bold';
+} else if (numero <= 2999.99) {
+td.style.color = 'yellow';
+td.style.fontWeight = 'bold';
+} else if (numero <= 3999.99) {
+td.style.color = '#00ccff'; // azul claro
+td.style.fontWeight = 'bold';
+} else {
+td.style.color = 'fuchsia';
+td.style.fontWeight = 'bold';
+}
+}
+});
+}, 100);
+}
+
+// Função para carregar dados quando o select mudar
+function carregarDados(periodo) {
+const mes = document.getElementById('mes' + periodo).value;
+const ano = document.getElementById('ano' + periodo).value;
+
+if (mes && ano) {
+console.log(`Carregando dados do Período ${periodo}: ${mes}/${ano}`);
+
+// Chamada AJAX para buscar os dados
+$.ajax({
+url: '${pageContext.request.contextPath}/ServletComparativoYoY',
+type: 'GET',
+data: {
+acao: 'buscarDados',
+mes: mes,
+ano: ano,
+periodo: periodo
+},
+success: function(response) {
+console.log('Resposta recebida para período ' + periodo);
+
+// Preencher os campos de resumo
+$('#valorTotal' + periodo).val('R$ ' + response.valorTotal);
+$('#fotosVendidas' + periodo).val(response.fotosVendidas);
+$('#sobras' + periodo).val(response.sobras);
+$('#ribbons' + periodo).val(response.ribbons);
+
+// Preencher a tabela de vendas diárias
+let html = '';
+if (response.vendasDiarias && response.vendasDiarias.length > 0) {
+response.vendasDiarias.forEach(function(dia) {
+html += '<tr>';
+html += '<td>' + dia.dia + '</td>';
+html += '<td>' + dia.diaSemana + '</td>';
+html += '<td>R$ ' + dia.totalVendido + '</td>';
+html += '</tr>';
+});
+} else {
+html = '<tr><td colspan="3" class="text-center">Sem vendas neste período</td></tr>';
+}
+$('#vendasDiarias' + periodo).html(html);
+
+console.log('Tabela atualizada, aplicando cores...');
+
+// Aplica as cores após carregar os dados
+aplicarCoresVendas();
+},
+error: function(xhr, status, error) {
+console.error('Erro ao buscar dados:', error);
+alert('Erro ao buscar dados do período ' + periodo);
+}
+});
+}
+}
+
+// Função para navegar entre elementos focáveis com as setas
+function navigateFocusableElements(event) {
+const focusableElements = Array.from(
+document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
+).filter(element => !element.disabled && element.tabIndex !== -1);
+
+if (focusableElements.length === 0) return;
+
+const currentElement = document.activeElement;
+if (!focusableElements.includes(currentElement)) return;
+
+let currentIndex = focusableElements.indexOf(currentElement);
+
+switch (event.key) {
+case 'ArrowRight':
+case 'ArrowDown':
+currentIndex = (currentIndex + 1) % focusableElements.length;
+break;
+case 'ArrowLeft':
+case 'ArrowUp':
+currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
+break;
+default:
+return;
+}
+
+focusableElements[currentIndex].focus();
+}
+
+// Bloqueia a alteração de valor com as setas nos inputs do tipo number
+document.querySelectorAll('input[type="number"]').forEach(input => {
+input.addEventListener('keydown', function(event) {
+if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+event.preventDefault();
+}
+});
+});
+
+// Adiciona o evento keydown ao documento
+document.addEventListener('keydown', navigateFocusableElements);
+
+// Aplicar cores nos valores das vendas diárias
+aplicarCoresVendas();
 </script>
 
 <script>

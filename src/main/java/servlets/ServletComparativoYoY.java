@@ -100,7 +100,7 @@ public class ServletComparativoYoY extends ServletGenericUtil {
             resultado.put("valorTotal", formatarValor(valorTotal));
 
             // Total de fotos vendidas (ft + enc + dig)
-            int fotosVendidas = dados.getTotal_ft() + dados.getTotal_enc() + dados.getTotal_dig();
+            int fotosVendidas = dados.getTotal_ft();
             System.out.println("Fotos vendidas: " + fotosVendidas);
             resultado.put("fotosVendidas", fotosVendidas);
 

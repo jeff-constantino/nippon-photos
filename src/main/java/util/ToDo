@@ -2,8 +2,7 @@ CD IdeaProjects\nippon-photos
 mvn clean package
 
 
-ARRUMAR BUSCAR FECHAMENTO GRAVADO
-
+ADCIONAR FOTO DO FUNCIONÁRIO NO CADASTRO
 adcionar historico disciplinar para exibir as medidas de cada funcionario
 
 CRIAR SANGRIA e buscar no fechames

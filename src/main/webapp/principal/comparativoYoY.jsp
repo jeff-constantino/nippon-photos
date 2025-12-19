@@ -34,8 +34,8 @@
         <div class="main-panel">
             <div class="content-wrapper" style="min-height: calc(98vh - 100px);">
                 <div class="row">
-                    <div class="col-12 text-center">
-                        <h3 class="mb-4" style="color: black">Comparativo de Vendas</h3>
+                    <div class="col-12">
+                        <h3 class="mb-4">Comparativo de Vendas - Ano sobre Ano (YoY)</h3>
                     </div>
                 </div>
 
@@ -513,6 +513,9 @@
                         html = '<tr><td colspan="3" class="text-center">Sem vendas neste período</td></tr>';
                     }
                     $('#vendasDiarias' + periodo).html(html);
+
+                    // Aplica as cores após carregar os dados
+                    aplicarCoresVendas();
                 },
                 error: function(xhr, status, error) {
                     console.error('Erro ao buscar dados:', error);
@@ -562,6 +565,47 @@
 
     // Adiciona o evento keydown ao documento
     document.addEventListener('keydown', navigateFocusableElements);
+
+    // Aplicar cores nos valores das vendas diárias
+    aplicarCoresVendas();
+</script>
+
+<script>
+    // Função para aplicar cores baseadas no valor das vendas
+    function aplicarCoresVendas() {
+        // Seleciona todas as células de total vendido (terceira coluna de cada tbody)
+        const celulas = document.querySelectorAll('#vendasDiarias1 td:nth-child(3), #vendasDiarias2 td:nth-child(3), #vendasDiarias3 td:nth-child(3), #vendasDiarias4 td:nth-child(3)');
+
+        celulas.forEach(td => {
+            let texto = td.textContent.trim();
+
+            // Remove "R$" e converte vírgulas/pontos para formato numérico
+            let valor = texto.replace('R
+
+                </body>
+        </html>, '').replace(/\./g, '').replace(',', '.').trim();
+            let numero = parseFloat(valor);
+
+            if (!isNaN(numero)) {
+                if (numero <= 999.99) {
+                    td.style.color = 'red';
+                    td.style.fontWeight = 'bold';
+                } else if (numero <= 1999.99) {
+                    td.style.color = 'white';
+                    td.style.fontWeight = 'bold';
+                } else if (numero <= 2999.99) {
+                    td.style.color = 'yellow';
+                    td.style.fontWeight = 'bold';
+                } else if (numero <= 3999.99) {
+                    td.style.color = '#00ccff'; // azul claro
+                    td.style.fontWeight = 'bold';
+                } else {
+                    td.style.color = 'fuchsia';
+                    td.style.fontWeight = 'bold';
+                }
+            }
+        });
+    }
 </script>
 
 </body>

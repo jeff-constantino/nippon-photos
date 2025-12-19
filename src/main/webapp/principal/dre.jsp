@@ -42,8 +42,8 @@
 
 
 
-                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal3">
-                                                <h4>Configurações Gerais</h4>
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalBusca">
+                                                <h4>Buscar DRE</h4>
                                             </button>
                                         </div>
 
@@ -79,7 +79,7 @@
                                                 <div class="modal-body">
                                                     <c:choose>
                                                         <c:when test="${empty mesesNaoFechados}">
-                                                            <div class="alert alert-info">
+                                                            <div class="alert alert-warning">
                                                                 <i class="fas fa-info-circle"></i>
                                                                 Não há meses pendentes para gerar o relatório DRE.
                                                             </div>
@@ -144,45 +144,7 @@
                     <div class="col-sm-4 grid-margin">
 
 
-                        <div class="row">
-                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                                <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                    <div class="modal fade" id="modal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl mt-5">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="staticRanking">RANKING</h5>
 
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="container-fluid">
-                                                        <div class="row">
-                                                            <div class="col-lg-6 grid-margin stretch-card">
-                                                                <H5>CORPO DO RANKING</H5>
-                                                            </div>
-
-
-
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-
-                        </div>
                     </div>
                     <div class="col-sm-4 grid-margin">
 
@@ -190,31 +152,56 @@
                         <div class="row">
                             <div class="col-8 col-sm-12 col-xl-8 my-auto">
                                 <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                    <div class="modal fade" id="modal3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl mt-5">
+                                    <div class="modal fade" id="modalBusca" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-md"> <!-- tamanho médio -->
                                             <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="staticFinalizar">FINALIZAR</h5>
-
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <div class="modal-header justify-content-center">
+                                                    <h5 class="modal-title text-center w-100" id="modalBuscaLabel">Buscar Fechamento</h5>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div class="container-fluid">
-                                                        <div class="row">
-                                                            <div class="col-lg-6 grid-margin stretch-card">
-                                                                <H5>CORPO DA FINALIZAÇÃO</H5>
+                                                    <form action="<%= request.getContextPath() %>/ServletDre" method="get" id="formBuscaDre">
+                                                        <input type="hidden" name="acao" value="buscarDre">
+                                                        <div class="row g-3">
+                                                            <div class="col-12 col-md-6">
+                                                                <label for="mesBusca" class="form-label">Selecione o Mês</label>
+                                                                <select class="form-select" id="mesBusca" name="mes" required>
+                                                                    <option value="">-- Selecione --</option>
+                                                                    <option value="1">Janeiro</option>
+                                                                    <option value="2">Fevereiro</option>
+                                                                    <option value="3">Março</option>
+                                                                    <option value="4">Abril</option>
+                                                                    <option value="5">Maio</option>
+                                                                    <option value="6">Junho</option>
+                                                                    <option value="7">Julho</option>
+                                                                    <option value="8">Agosto</option>
+                                                                    <option value="9">Setembro</option>
+                                                                    <option value="10">Outubro</option>
+                                                                    <option value="11">Novembro</option>
+                                                                    <option value="12">Dezembro</option>
+                                                                </select>
                                                             </div>
-
-
-
-
+                                                            <div class="col-12 col-md-6">
+                                                                <label for="anoBusca" class="form-label">Selecione o Ano</label>
+                                                                <select class="form-select" id="anoBusca" name="ano" required>
+                                                                    <option value="">-- Selecione --</option>
+                                                                    <%
+                                                                        java.util.Calendar calBusca = java.util.Calendar.getInstance();
+                                                                        int anoAtualBusca = calBusca.get(java.util.Calendar.YEAR);
+                                                                        for(int i = 0; i < 20; i++) {
+                                                                            int anoBusca = anoAtualBusca - i;
+                                                                    %>
+                                                                    <option value="<%= anoBusca %>" <%= (i == 0) ? "selected" : "" %>><%= anoBusca %></option>
+                                                                    <% } %>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-12 text-center mt-3">
+                                                                <button type="submit" class="btn btn-success w-50">Buscar DRE</button>
+                                                            </div>
                                                         </div>
-
-                                                    </div>
-
+                                                    </form>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
+                                                <div class="modal-footer justify-content-center">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">FECHAR</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -391,27 +378,27 @@
                                     <div class="row">
                                         <div class="col-6 mb-3">
                                             <label for="icms" style="font-size: 1.0rem;">ICMS</label>
-                                            <input type="text" class="form-control money" id="icms" name="icms" style="font-size: 1.0rem;">
+                                            <input type="text" class="form-control money" id="icms" name="icms" style="font-size: 1.0rem;" value="${icmsValue}">
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="pis" style="font-size: 1.0rem;">PIS</label>
-                                            <input type="text" class="form-control money" id="pis" name="pis" style="font-size: 1.0rem;">
+                                            <input type="text" class="form-control money" id="pis" name="pis" style="font-size: 1.0rem;" value="${pisValue}">
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="cofins" style="font-size: 1.0rem;">COFINS</label>
-                                            <input type="text" class="form-control money" id="cofins" name="cofins" style="font-size: 1.0rem;">
+                                            <input type="text" class="form-control money" id="cofins" name="cofins" style="font-size: 1.0rem;" value="${cofinsValue}">
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="inss" style="font-size: 1.0rem;">INSS</label>
-                                            <input type="text" class="form-control money" id="inss" name="inss" style="font-size: 1.0rem;">
+                                            <input type="text" class="form-control money" id="inss" name="inss" style="font-size: 1.0rem;" value="${inssValue}">
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="irpj" style="font-size: 1.0rem;">IRPJ</label>
-                                            <input type="text" class="form-control money" id="irpj" name="irpj" style="font-size: 1.0rem;">
+                                            <input type="text" class="form-control money" id="irpj" name="irpj" style="font-size: 1.0rem;" value="${irpjValue}">
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="csll" style="font-size: 1.0rem;">CSLL</label>
-                                            <input type="text" class="form-control money" id="csll" name="csll" style="font-size: 1.0rem;">
+                                            <input type="text" class="form-control money" id="csll" name="csll" style="font-size: 1.0rem;" value="${csllValue}">
                                         </div>
                                     </div>
                                     <hr>
@@ -426,7 +413,7 @@
                                     <div class="row">
                                         <div class="col-6 mb-3">
                                             <label for="aluguel" style="font-size: 1.0rem;">Aluguel</label>
-                                            <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 1.0rem;">
+                                            <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 1.0rem;" value="${aluguelValue}">
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="salarios" style="font-size: 1.0rem;">Salários</label>
@@ -442,19 +429,19 @@
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="bonificacoes" style="font-size: 1.0rem;">Bonificações</label>
-                                            <input type="text" class="form-control money" id="bonificacoes" name="bonificacoes" style="font-size: 1.0rem;">
+                                            <input type="text" class="form-control money" id="bonificacoes" name="bonificacoes" style="font-size: 1.0rem;" value="${bonificacoesValue}">
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="prestacoes" style="font-size: 1.0rem;">Prestações de Equipamentos</label>
-                                            <input type="text" class="form-control money" id="prestacoes" name="prestacoes" style="font-size: 1.0rem;">
+                                            <input type="text" class="form-control money" id="prestacoes" name="prestacoes" style="font-size: 1.0rem;" value="${prestacoesValue}">
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="internet" style="font-size: 1.0rem;">Internet</label>
-                                            <input type="text" class="form-control money" id="internet" name="internet" style="font-size: 1.0rem;">
+                                            <input type="text" class="form-control money" id="internet" name="internet" style="font-size: 1.0rem;" value="${internetValue}">
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="outrasDesp" style="font-size: 1.0rem;">Outras Despesas</label>
-                                            <input type="text" class="form-control money" id="outrasDesp" name="outrasDesp" style="font-size: 1.0rem;">
+                                            <input type="text" class="form-control money" id="outrasDesp" name="outrasDesp" style="font-size: 1.0rem;" value="${outrasDespValue}">
                                         </div>
                                     </div>
                                     <hr>
@@ -509,11 +496,11 @@
         var msg = "${msg}";
         if (msg) {
             $('#msgModal').modal('show');
-            // Correção para garantir que o contexto seja usado corretamente, embora a sintaxe original seja JSTL/EL
             const url = "${pageContext.request.contextPath}/ServletVendas";
             $.post(url, { acao: "limparMsg" });
         }
     });
+
     /* ===============================
         PATCH PARA COMPATIBILIDADE DO JQUERY (MS.IE fix)
         =============================== */
@@ -526,7 +513,6 @@
        NAVEGAÇÃO POR SETAS
        =============================== */
     function navigateFocusableElements(event) {
-        // ... (Seu código de navegação por setas permanece o mesmo) ...
         const focusableElements = Array.from(
             document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
         ).filter(element => !element.disabled && element.tabIndex !== -1);
@@ -560,7 +546,6 @@
        DATAS (BLINDADAS)
        =============================== */
     function setData() {
-        // ... (Seu código de datas permanece o mesmo) ...
         const dataInicialEl = document.getElementById("dataInicial");
         const dataFinalEl = document.getElementById("dataFinal");
         if (!dataInicialEl || !dataFinalEl || !dataInicialEl.value) return;
@@ -577,7 +562,6 @@
     }
 
     function initializeDates() {
-        // ... (Seu código de datas permanece o mesmo) ...
         const dataInicialEl = document.getElementById("dataInicial");
         const dataFinalEl = document.getElementById("dataFinal");
         if (!dataInicialEl || !dataFinalEl) return;
@@ -595,7 +579,7 @@
     }
 
     /* ===============================
-       FUNÇÕES MONETÁRIAS (Mantidas)
+       FUNÇÕES MONETÁRIAS
        =============================== */
     function parseMoneyToNumber(value) {
         if (!value) return 0;
@@ -614,38 +598,28 @@
        INICIALIZAÇÃO DAS MÁSCARAS
        =============================== */
     function initializeMasks() {
-        // Verifica se a função maskMoney existe (se o plugin foi carregado)
         if (typeof $.fn.maskMoney !== 'undefined') {
             $('.money').maskMoney({
                 prefix: 'R$ ',
                 thousands: '.',
                 decimal: ',',
                 allowZero: true,
-                allowNegative: true, // Se precisar de valores negativos
-                affixesStay: true     // Mantém o R$ no campo
+                allowNegative: true,
+                affixesStay: true
             });
 
-            // Aplica a máscara nos campos que já vieram preenchidos (seja via JSTL ou readonly)
-            // Isso garante que a visualização inicial esteja correta.
             $('.money').each(function() {
-                // Se o campo não for editável (readonly), é crucial que ele venha pré-formatado via JSTL.
-                // Se o campo for editável e vier com um número puro, o maskMoney aplica a máscara na inicialização.
-                // No entanto, para garantir que os campos readonly (`receitaBrt`, `custosOpr` etc.) sejam tratados,
-                // vamos garantir que eles estejam formatados visualmente (o parseMoneyToNumber já cuida da leitura).
                 if ($(this).attr('readonly')) {
                     const value = parseMoneyToNumber($(this).val());
                     $(this).val(formatToCurrency(value));
                 }
             });
-        } else {
-            console.warn('Plugin maskMoney não está carregado. Verifique se jquery.maskmoney.js está incluído.');
         }
     }
 
     /* ===============================
-       CÁLCULOS (Revisados para usar 'input' e 'blur')
+       CÁLCULOS
        =============================== */
-    // ... (Seu código de cálculos permanece o mesmo: calculateTotalImpostos, calculateTotalDespesasAdm, calculateLucroLiquido) ...
     const INPUT_IMPOSTOS = ['icms', 'pis', 'cofins', 'inss', 'irpj', 'csll'];
     const INPUT_DESPESAS_ADM = ['aluguel', 'salarios', 'contas', 'despesasGerais', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp'];
 
@@ -653,12 +627,7 @@
         let total = 0;
         INPUT_IMPOSTOS.forEach(id => {
             const element = document.getElementById(id);
-            if (element) {
-                // Ao usar maskMoney, podemos obter o valor bruto para cálculo assim:
-                // total += $(element).maskMoney('unmasked')[0];
-                // Mas vamos manter sua função original de parse para compatibilidade.
-                total += parseMoneyToNumber(element.value);
-            }
+            if (element) total += parseMoneyToNumber(element.value);
         });
         document.getElementById('totalImpostos').value = formatToCurrency(total);
         document.getElementById('impostoVenda').value = formatToCurrency(total);
@@ -669,9 +638,7 @@
         let total = 0;
         INPUT_DESPESAS_ADM.forEach(id => {
             const element = document.getElementById(id);
-            if (element) {
-                total += parseMoneyToNumber(element.value);
-            }
+            if (element) total += parseMoneyToNumber(element.value);
         });
         document.getElementById('totalDespesasAdm').value = formatToCurrency(total);
         document.getElementById('despAdm').value = formatToCurrency(total);
@@ -699,29 +666,18 @@
     }
 
     function initializeCalculations() {
-        // 1. Inicializa com os valores existentes
         recalculateAll();
-
-        // 2. Adiciona listeners de 'input' para recalcular quando o usuário digita/altera
         const camposImpostos = INPUT_IMPOSTOS.map(id => document.getElementById(id)).filter(e => e);
         const camposDespesas = ['aluguel', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp']
             .map(id => document.getElementById(id)).filter(e => e);
 
-        // Listener para Impostos (a máscara do plugin deve cuidar do 'input' visual)
-        // O recalculateTotalImpostos será acionado pelo evento 'change' ou 'keyup'
-        // se o maskMoney não tiver um callback para 'input'.
         camposImpostos.forEach(input => {
-            // 🎯 Usamos 'change' ou 'keyup' como fallback se o 'input' não funcionar bem com o plugin
             $(input).on('change keyup', calculateTotalImpostos);
         });
 
-        // Listener para Despesas Administrativas
         camposDespesas.forEach(input => {
             $(input).on('change keyup', calculateTotalDespesasAdm);
         });
-
-        // O 'blur' de re-formatação pode ser removido se o maskMoney funcionar bem.
-        // Se a máscara estiver configurada corretamente, ela cuida do formato automaticamente.
 
         const lucroBrt = document.getElementById('lucroBrt');
         if (lucroBrt) {
@@ -729,17 +685,15 @@
         }
     }
 
-
     /* ===============================
        INICIALIZAÇÃO GERAL
        =============================== */
     document.addEventListener('DOMContentLoaded', function () {
-        // ... (seu código de modal e datas) ...
         const modal = document.getElementById('modalDRE');
         if (modal) {
             modal.addEventListener('shown.bs.modal', function () {
                 initializeDates();
-                initializeMasks(); // Aplica máscaras ao abrir o modal
+                initializeMasks();
                 recalculateAll();
             });
         }
@@ -749,87 +703,45 @@
             dataInicial.addEventListener('change', setData);
         }
 
-        // 🎯 Chamada principal para a máscara e cálculos:
         initializeMasks();
         initializeCalculations();
+        preencherCamposDRE(); // Chama a função de preenchimento
     });
 
     /* ===============================
-   SUBMIT DO FORM
-   =============================== */
-    // Campos que o usuário pode preencher e que usam a máscara.
+       SUBMIT DO FORM
+       =============================== */
     const EDITABLE_MONEY_FIELDS = [
         'icms', 'pis', 'cofins', 'inss', 'irpj', 'csll',
         'aluguel', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp'
     ];
 
     $('#formDre').on('submit', function (event) {
-        if (typeof $.fn.maskMoney !== 'undefined') {
-
-            // 1. Itera sobre os campos editáveis
-            EDITABLE_MONEY_FIELDS.forEach(id => {
-                const input = $('#' + id);
-
-                // Certifica-se de que o campo existe
-                if (input.length) {
-                    // 2. Extrai o valor NUMÉRICO PURO (ex: 0.01)
-                    const unmaskedValue = input.maskMoney('unmasked')[0];
-
-                    // 3. Cria e anexa um campo HIDDEN com o mesmo 'name' e o valor bruto.
-                    // Isso garante que o valor que o Java vai receber (via request.getParameter(id))
-                    // seja o valor bruto (0.01) e não a string formatada (R$ 0,01).
-                    $('<input>').attr({
-                        type: 'hidden',
-                        name: id,
-                        value: unmaskedValue // Valor puro, ex: 0.01
-                    }).appendTo('#formDre');
-
-                    // 4. DESABILITA o campo original para evitar que o navegador o envie com a string formatada.
-                    input.attr('disabled', 'disabled');
-                }
-            });
-
-            // **Nota:** Os campos ReadOnly (Salários, Contas, etc.) já foram preenchidos
-            // no Java com formatadores simples (DecimalFormat) e não precisam ser
-            // mascarados ou desabilitados aqui, pois o Java já deve buscá-los via Session
-            // ou o valor vem de um input `readonly` que o navegador deve enviar.
-
-        }
-        // Se o MaskMoney não estiver carregado, o form é enviado normalmente com o valor formatado,
-        // confiando que o Java parseie corretamente.
-
-        return true; // Continua com o submit (Gravar DRE)
+        EDITABLE_MONEY_FIELDS.forEach(id => {
+            const input = $('#' + id);
+            if (input.length > 0) {
+                const valorNumerico = parseMoneyToNumber(input.val());
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: id,
+                    value: valorNumerico
+                }).appendTo('#formDre');
+                input.prop('disabled', true);
+            }
+        });
+        return true;
     });
 
     /* ===============================
-   EXPORTAR EXCEL (SOLUÇÃO DE PARSING MANUAL NO JS)
-   =============================== */
-
+       EXPORTAR EXCEL
+       =============================== */
     function exportarParaExcel() {
-
-        // Lista de IDs dos campos editáveis
-        const EDITABLE_MONEY_FIELDS = [
-            'icms', 'pis', 'cofins', 'inss', 'irpj', 'csll',
-            'aluguel', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp'
-        ];
-
-        const paramsMap = {
-            acao: 'exportarExcel'
-        };
-
-        // 1. Processa campos editáveis: USA O VALOR FORMATADO e limpa no JS
+        const paramsMap = { acao: 'exportarExcel' };
         EDITABLE_MONEY_FIELDS.forEach(id => {
             const input = document.getElementById(id);
-            if (input) {
-                // 🎯 FORÇA O PARSING MANUAL DO VALOR VISÍVEL (R$ 0.01 -> 0.01)
-                paramsMap[id] = parseMoneyToNumber(input.value || '0');
-            } else {
-                paramsMap[id] = 0;
-            }
+            paramsMap[id] = parseMoneyToNumber(input?.value || '0');
         });
 
-        // 2. Adiciona campos já calculados ou readonly
-        // Esses campos já estão sendo enviados como números brutos (o que é bom)
         paramsMap.receitaBrt = parseMoneyToNumber(document.getElementById('receitaBrt')?.value || '0');
         paramsMap.custosOpr = parseMoneyToNumber(document.getElementById('custosOpr')?.value || '0');
         paramsMap.lucroBrt = parseMoneyToNumber(document.getElementById('lucroBrt')?.value || '0');
@@ -838,12 +750,48 @@
         paramsMap.lucroLqd = parseMoneyToNumber(document.getElementById('lucroLqd')?.value || '0');
 
         const params = new URLSearchParams(paramsMap);
+        window.location.href = '<%= request.getContextPath() %>/ServletDre?' + params.toString();
+    }
 
-        // DEBUG: Verifique o console. Os valores agora devem ser números, como 0.01.
-        console.log("URL de Exportação: " + '<%= request.getContextPath() %>/ServletDre?' + params.toString());
+    /* ===============================
+       PREENCHER CAMPOS DA DRE CARREGADA
+       =============================== */
+    function preencherCamposDRE() {
+        const campos = {
+            'icms': '${icmsValue}',
+            'pis': '${pisValue}',
+            'cofins': '${cofinsValue}',
+            'inss': '${inssValue}',
+            'irpj': '${irpjValue}',
+            'csll': '${csllValue}',
+            'aluguel': '${aluguelValue}',
+            'bonificacoes': '${bonificacoesValue}',
+            'prestacoes': '${prestacoesValue}',
+            'internet': '${internetValue}',
+            'outrasDesp': '${outrasDespValue}'
+        };
 
-        window.location.href =
-            '<%= request.getContextPath() %>/ServletDre?' + params.toString();
+        Object.keys(campos).forEach(id => {
+            const valor = campos[id];
+            // CORREÇÃO AQUI: Enganando a IDE/JSP Parser com concatenação
+            if (valor && valor.trim() !== '' && !valor.includes('$' + '{')) {
+                const input = document.getElementById(id);
+                if (input) {
+                    const valorNumerico = parseFloat(valor.replace(',', '.'));
+                    if (!isNaN(valorNumerico)) {
+                        input.value = 'R$ ' + valorNumerico.toLocaleString('pt-BR', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                        console.log(`✅ Campo ${id} preenchido com: ${input.value}`);
+                    }
+                }
+            }
+        });
+
+        setTimeout(() => {
+            recalculateAll();
+        }, 100);
     }
 </script>
 

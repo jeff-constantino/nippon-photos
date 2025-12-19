@@ -413,20 +413,42 @@ public class DAODre {
 
 
     public void gravarDRE(ModelDre dre) throws SQLException {
-        // SQL para inserir os dados do DRE
-        String sql = "INSERT INTO dre (mes, ano, receita_bruta, custos_operacionais, lucro_bruto, icms, pis, cofins, inss, irpj, csll, total_impostos, aluguel, salarios, contas, despesas_gerais, bonificacoes, prestacoes, internet, outras_despesas, total_despesas_adm, lucro_liquido, data_gravacao) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // Verifica se já existe registro para esse mês/ano
+        boolean exists = existeRegistro(dre.getMes(), dre.getAno());
 
-        // Verifica se já existe um registro para o mesmo mês/ano
-        if (existeRegistro(dre.getMes(), dre.getAno())) {
-            // Se existe, atualiza
-            sql = "UPDATE dre SET receita_bruta=?, custos_operacionais=?, lucro_bruto=?, icms=?, pis=?, cofins=?, inss=?, irpj=?, csll=?, total_impostos=?, aluguel=?, salarios=?, contas=?, despesas_gerais=?, bonificacoes=?, prestacoes=?, internet=?, outras_despesas=?, total_despesas_adm=?, lucro_liquido=?, data_gravacao=? WHERE mes=? AND ano=?";
+        String sql;
+
+        if (exists) {
+            // UPDATE
+            sql = "UPDATE dre SET " +
+                    "receita_bruta=?, custos_operacionais=?, lucro_bruto=?, " +
+                    "icms=?, pis=?, cofins=?, inss=?, irpj=?, csll=?, total_impostos=?, " +
+                    "aluguel=?, salarios=?, contas=?, despesas_gerais=?, bonificacoes=?, " +
+                    "prestacoes=?, internet=?, outras_despesas=?, total_despesas_adm=?, " +
+                    "lucro_liquido=?, data_gravacao=?, " +
+                    // 🆕 Campos adicionais
+                    "receita_dinheiro=?, receita_debito=?, receita_credito=?, receita_pix=?, " +
+                    "custos_ribbons=?, custos_encartes=?, custos_juros_cartoes=? " +
+                    "WHERE mes=? AND ano=?";
+        } else {
+            // INSERT
+            sql = "INSERT INTO dre (" +
+                    "mes, ano, receita_bruta, custos_operacionais, lucro_bruto, " +
+                    "icms, pis, cofins, inss, irpj, csll, total_impostos, " +
+                    "aluguel, salarios, contas, despesas_gerais, bonificacoes, " +
+                    "prestacoes, internet, outras_despesas, total_despesas_adm, " +
+                    "lucro_liquido, data_gravacao, " +
+                    // 🆕 Campos adicionais
+                    "receita_dinheiro, receita_debito, receita_credito, receita_pix, " +
+                    "custos_ribbons, custos_encartes, custos_juros_cartoes" +
+                    ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         }
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             int index = 1;
 
-            // Setar os parâmetros
-            if (existeRegistro(dre.getMes(), dre.getAno())) {
+            if (exists) {
+                // Parâmetros do UPDATE (ordem do SET)
                 statement.setBigDecimal(index++, dre.getReceita_bruta());
                 statement.setBigDecimal(index++, dre.getCustos_operacionais());
                 statement.setBigDecimal(index++, dre.getLucro_bruto());
@@ -449,11 +471,21 @@ public class DAODre {
                 statement.setBigDecimal(index++, dre.getLucro_liquido());
                 statement.setDate(index++, Date.valueOf(LocalDate.now()));
 
-                // Parâmetros de WHERE
+                // 🆕 Novos campos
+                statement.setBigDecimal(index++, dre.getReceita_dinheiro());
+                statement.setBigDecimal(index++, dre.getReceita_debito());
+                statement.setBigDecimal(index++, dre.getReceita_credito());
+                statement.setBigDecimal(index++, dre.getReceita_pix());
+                statement.setBigDecimal(index++, dre.getCustos_ribbons());
+                statement.setBigDecimal(index++, dre.getCustos_encartes());
+                statement.setBigDecimal(index++, dre.getCustos_juros_cartoes());
+
+                // WHERE do UPDATE
                 statement.setInt(index++, dre.getMes());
                 statement.setInt(index++, dre.getAno());
 
             } else {
+                // Parâmetros do INSERT (ordem das colunas)
                 statement.setInt(index++, dre.getMes());
                 statement.setInt(index++, dre.getAno());
                 statement.setBigDecimal(index++, dre.getReceita_bruta());
@@ -477,6 +509,15 @@ public class DAODre {
                 statement.setBigDecimal(index++, dre.getTotal_despesas_adm());
                 statement.setBigDecimal(index++, dre.getLucro_liquido());
                 statement.setDate(index++, Date.valueOf(LocalDate.now()));
+
+                // 🆕 Novos campos
+                statement.setBigDecimal(index++, dre.getReceita_dinheiro());
+                statement.setBigDecimal(index++, dre.getReceita_debito());
+                statement.setBigDecimal(index++, dre.getReceita_credito());
+                statement.setBigDecimal(index++, dre.getReceita_pix());
+                statement.setBigDecimal(index++, dre.getCustos_ribbons());
+                statement.setBigDecimal(index++, dre.getCustos_encartes());
+                statement.setBigDecimal(index++, dre.getCustos_juros_cartoes());
             }
 
             statement.executeUpdate();
@@ -486,6 +527,66 @@ public class DAODre {
             connection.rollback();
             throw e;
         }
+    }
+    // Adicione este método na classe DAODre
+
+    public ModelDre buscarDREPorMesAno(int mes, int ano) throws SQLException {
+        String sql = "SELECT * FROM dre WHERE mes = ? AND ano = ?";
+
+        try (PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setInt(1, mes);
+            pst.setInt(2, ano);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    ModelDre dre = new ModelDre();
+
+                    dre.setId_dre(rs.getLong("id_dre"));
+                    dre.setMes(rs.getInt("mes"));
+                    dre.setAno(rs.getInt("ano"));
+                    dre.setReceita_bruta(rs.getBigDecimal("receita_bruta"));
+                    dre.setCustos_operacionais(rs.getBigDecimal("custos_operacionais"));
+                    dre.setLucro_bruto(rs.getBigDecimal("lucro_bruto"));
+
+                    // Impostos
+                    dre.setIcms(rs.getBigDecimal("icms"));
+                    dre.setPis(rs.getBigDecimal("pis"));
+                    dre.setCofins(rs.getBigDecimal("cofins"));
+                    dre.setInss(rs.getBigDecimal("inss"));
+                    dre.setIrpj(rs.getBigDecimal("irpj"));
+                    dre.setCsll(rs.getBigDecimal("csll"));
+                    dre.setTotal_impostos(rs.getBigDecimal("total_impostos"));
+
+                    // Despesas administrativas
+                    dre.setAluguel(rs.getBigDecimal("aluguel"));
+                    dre.setSalarios(rs.getBigDecimal("salarios"));
+                    dre.setContas(rs.getBigDecimal("contas"));
+                    dre.setDespesas_gerais(rs.getBigDecimal("despesas_gerais"));
+                    dre.setBonificacoes(rs.getBigDecimal("bonificacoes"));
+                    dre.setPrestacoes(rs.getBigDecimal("prestacoes"));
+                    dre.setInternet(rs.getBigDecimal("internet"));
+                    dre.setOutras_despesas(rs.getBigDecimal("outras_despesas"));
+                    dre.setTotal_despesas_adm(rs.getBigDecimal("total_despesas_adm"));
+
+                    // Resultado
+                    dre.setLucro_liquido(rs.getBigDecimal("lucro_liquido"));
+                    dre.setData_gravacao(rs.getDate("data_gravacao"));
+
+                    // Campos adicionais
+                    dre.setReceita_dinheiro(rs.getBigDecimal("receita_dinheiro"));
+                    dre.setReceita_debito(rs.getBigDecimal("receita_debito"));
+                    dre.setReceita_credito(rs.getBigDecimal("receita_credito"));
+                    dre.setReceita_pix(rs.getBigDecimal("receita_pix"));
+                    dre.setCustos_ribbons(rs.getBigDecimal("custos_ribbons"));
+                    dre.setCustos_encartes(rs.getBigDecimal("custos_encartes"));
+                    dre.setCustos_juros_cartoes(rs.getBigDecimal("custos_juros_cartoes"));
+
+                    return dre;
+                }
+            }
+        }
+
+        return null; // Retorna null se não encontrar a DRE
     }
 
     // Método auxiliar para verificar se o registro já existe

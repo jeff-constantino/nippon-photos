@@ -33,6 +33,8 @@ public class ServletDre extends ServletGenericUtil {
             gerarDRE(request, response);
         } else if ("exportarExcel".equals(acao)) { // 👈 NOVO BLOCO PARA EXPORTAÇÃO
             exportarDREExcel(request, response);
+        }else if ("buscarDre".equals(acao)) {
+            buscarDREExistente(request, response);
         }
         else {
             // Ação padrão: Carrega a página DRE
@@ -55,6 +57,144 @@ public class ServletDre extends ServletGenericUtil {
             doGet(request, response);
         }
     }
+    // Método para buscar DRE já gravada
+    private void buscarDREExistente(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String mesParam = request.getParameter("mes");
+        String anoParam = request.getParameter("ano");
+
+        if (mesParam == null || anoParam == null || mesParam.isEmpty() || anoParam.isEmpty()) {
+            request.setAttribute("msg", "Por favor, selecione o mês e o ano.");
+            carregarMesesNaoFechados(request);
+            RequestDispatcher rd = request.getRequestDispatcher("/principal/dre.jsp");
+            rd.forward(request, response);
+            return;
+        }
+
+        int mes = Integer.parseInt(mesParam);
+        int ano = Integer.parseInt(anoParam);
+
+        DAODre daoDre = new DAODre();
+        DAOFechaMes daoFechaMes = new DAOFechaMes();
+
+        try {
+            // 🔍 BUSCA A DRE JÁ GRAVADA
+            ModelDre dreExistente = daoDre.buscarDREPorMesAno(mes, ano);
+
+            if (dreExistente == null) {
+                request.setAttribute("msg", "Não existe DRE gravada para " + mes + "/" + ano + ". Gere o relatório primeiro.");
+                carregarMesesNaoFechados(request);
+                RequestDispatcher rd = request.getRequestDispatcher("/principal/dre.jsp");
+                rd.forward(request, response);
+                return;
+            }
+
+            // 🔍 BUSCA O FECHAMENTO MENSAL PARA EXIBIR AS TABELAS
+            ModelFechaMes fechamento = daoFechaMes.buscarFechamentoPorMesAno(mes, ano);
+
+            if (fechamento == null) {
+                request.setAttribute("msg", "Fechamento mensal não encontrado para " + mes + "/" + ano);
+                carregarMesesNaoFechados(request);
+                RequestDispatcher rd = request.getRequestDispatcher("/principal/dre.jsp");
+                rd.forward(request, response);
+                return;
+            }
+
+            // ===== PREPARAR OS DADOS PARA EXIBIÇÃO =====
+
+            // Buscar custos dos materiais
+            BigDecimal custoUnitarioRibbon = daoDre.buscarCustoMaterial(1);
+            BigDecimal custoUnitarioEncarte = daoDre.buscarCustoMaterial(2);
+
+            // Calcular valores dos materiais
+            int totalFt = Optional.ofNullable(fechamento.getTotal_ft()).orElse(0);
+            int totalSobras = Optional.ofNullable(fechamento.getTotal_sobras()).orElse(0);
+            int quantidadeRibbons = totalFt + totalSobras;
+            BigDecimal valorRibbons = custoUnitarioRibbon.multiply(BigDecimal.valueOf(quantidadeRibbons));
+
+            int quantidadeEncartes = totalFt;
+            BigDecimal valorEncartes = custoUnitarioEncarte.multiply(BigDecimal.valueOf(quantidadeEncartes));
+
+            // Somar juros dos cartões
+            BigDecimal jurosCartoes = Optional.ofNullable(fechamento.getJurosdebvm()).orElse(BigDecimal.ZERO)
+                    .add(Optional.ofNullable(fechamento.getJuroscredvm()).orElse(BigDecimal.ZERO))
+                    .add(Optional.ofNullable(fechamento.getJurosdeboutros()).orElse(BigDecimal.ZERO))
+                    .add(Optional.ofNullable(fechamento.getJuroscredoutros()).orElse(BigDecimal.ZERO));
+
+            // Configurar valores para o JSP exibir nas tabelas
+            fechamento.setValor_din_mes(Optional.ofNullable(fechamento.getValor_din_mes_real()).orElse(BigDecimal.ZERO));
+            fechamento.setValor_deb_mes(Optional.ofNullable(fechamento.getValor_deb_mes_real()).orElse(BigDecimal.ZERO));
+            fechamento.setValor_cred_mes(Optional.ofNullable(fechamento.getValor_cred_mes_real()).orElse(BigDecimal.ZERO));
+            fechamento.setValor_pix_mes(Optional.ofNullable(fechamento.getValor_pix_mes_real()).orElse(BigDecimal.ZERO));
+            fechamento.setTotal_ribbons(valorRibbons);
+            fechamento.setValor_enc(valorEncartes);
+            fechamento.setJuros_cartoes(jurosCartoes);
+
+            List<ModelFechaMes> vendasMesList = new ArrayList<>();
+            vendasMesList.add(fechamento);
+
+            // Formatação para exibição
+            DecimalFormat df = new DecimalFormat("#,##0.00");
+
+            // ===== VALORES FORMATADOS DOS CAMPOS EDITÁVEIS (DA DRE GRAVADA) =====
+            request.setAttribute("icmsValue", df.format(dreExistente.getIcms()));
+            request.setAttribute("pisValue", df.format(dreExistente.getPis()));
+            request.setAttribute("cofinsValue", df.format(dreExistente.getCofins()));
+            request.setAttribute("inssValue", df.format(dreExistente.getInss()));
+            request.setAttribute("irpjValue", df.format(dreExistente.getIrpj()));
+            request.setAttribute("csllValue", df.format(dreExistente.getCsll()));
+
+            request.setAttribute("aluguelValue", df.format(dreExistente.getAluguel()));
+            request.setAttribute("bonificacoesValue", df.format(dreExistente.getBonificacoes()));
+            request.setAttribute("prestacoesValue", df.format(dreExistente.getPrestacoes()));
+            request.setAttribute("internetValue", df.format(dreExistente.getInternet()));
+            request.setAttribute("outrasDespValue", df.format(dreExistente.getOutras_despesas()));
+
+            // Valores readonly (da tabela fecha_mes)
+            BigDecimal totalSalarios = Optional.ofNullable(fechamento.getSalarios()).orElse(BigDecimal.ZERO)
+                    .add(Optional.ofNullable(fechamento.getValor_vale_total()).orElse(BigDecimal.ZERO));
+            BigDecimal valorContas = Optional.ofNullable(fechamento.getValor_total_contas()).orElse(BigDecimal.ZERO);
+            BigDecimal valorDespesas = Optional.ofNullable(fechamento.getValor_total_despesas()).orElse(BigDecimal.ZERO);
+
+            request.setAttribute("valorTotalSalarios", df.format(totalSalarios));
+            request.setAttribute("valorTotalContas", df.format(valorContas));
+            request.setAttribute("valorTotalDespesas", df.format(valorDespesas));
+
+            // Formata mês/ano
+            SimpleDateFormat sdfMesAno = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR"));
+            LocalDate dataRef = LocalDate.of(ano, mes, 1);
+            request.setAttribute("mesAno", sdfMesAno.format(java.sql.Date.valueOf(dataRef)));
+
+            // Atributos para JSP
+            request.setAttribute("vendasMesList", vendasMesList);
+            request.setAttribute("receitaBruta", dreExistente.getReceita_bruta());
+            request.setAttribute("totalCustosOperacionais", dreExistente.getCustos_operacionais());
+            request.setAttribute("msg", "DRE de " + mes + "/" + ano + " carregada com sucesso! Você pode editar e regravar.");
+
+            // Session para uso posterior (permitir regravação)
+            HttpSession session = request.getSession();
+            session.setAttribute("receitaBruta", dreExistente.getReceita_bruta());
+            session.setAttribute("totalCustosOperacionais", dreExistente.getCustos_operacionais());
+            session.setAttribute("vendasMesList", vendasMesList);
+            session.setAttribute("mes", mes);
+            session.setAttribute("ano", ano);
+
+            carregarMesesNaoFechados(request);
+
+            RequestDispatcher rd = request.getRequestDispatcher("/principal/dre.jsp");
+            rd.forward(request, response);
+
+        } catch (SQLException e) {
+            throw new ServletException("Erro ao buscar DRE", e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("msg", "Erro ao buscar DRE: " + e.getMessage());
+            carregarMesesNaoFechados(request);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/dre.jsp");
+            dispatcher.forward(request, response);
+        }
+    }
 
     // Método para processar a gravação
     private void gravarDRE(HttpServletRequest request, HttpServletResponse response)
@@ -62,14 +202,18 @@ public class ServletDre extends ServletGenericUtil {
         HttpSession session = request.getSession();
 
         try {
-            // Recupere os dados da sessão
+            // ===== DADOS DA SESSÃO =====
             BigDecimal receitaBruta = (BigDecimal) session.getAttribute("receitaBruta");
             BigDecimal custosOperacionais = (BigDecimal) session.getAttribute("totalCustosOperacionais");
             Integer mes = (Integer) session.getAttribute("mes");
             Integer ano = (Integer) session.getAttribute("ano");
 
-            // Certifique-se de que os dados necessários da sessão existam
-            if (receitaBruta == null || custosOperacionais == null || mes == null || ano == null) {
+            // 🆕 BUSCAR A LISTA DE VENDAS DA SESSÃO
+            @SuppressWarnings("unchecked")
+            List<ModelFechaMes> vendasMesList = (List<ModelFechaMes>) session.getAttribute("vendasMesList");
+
+            // Certifique-se de que os dados necessários existem
+            if (receitaBruta == null || custosOperacionais == null || mes == null || ano == null || vendasMesList == null || vendasMesList.isEmpty()) {
                 request.setAttribute("msg", "Erro: Dados do DRE não encontrados na sessão. Gere o relatório novamente.");
                 carregarMesesNaoFechados(request);
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/dre.jsp");
@@ -77,7 +221,21 @@ public class ServletDre extends ServletGenericUtil {
                 return;
             }
 
-            // Recupere os valores dos campos de impostos e despesas
+            // 🆕 EXTRAIR OS VALORES DAS RECEITAS E CUSTOS DO FECHAMENTO
+            ModelFechaMes fechamento = vendasMesList.get(0);
+
+            // Receitas por tipo de pagamento
+            BigDecimal receitaDinheiro = Optional.ofNullable(fechamento.getValor_din_mes()).orElse(BigDecimal.ZERO);
+            BigDecimal receitaDebito = Optional.ofNullable(fechamento.getValor_deb_mes()).orElse(BigDecimal.ZERO);
+            BigDecimal receitaCredito = Optional.ofNullable(fechamento.getValor_cred_mes()).orElse(BigDecimal.ZERO);
+            BigDecimal receitaPix = Optional.ofNullable(fechamento.getValor_pix_mes()).orElse(BigDecimal.ZERO);
+
+            // Custos operacionais detalhados
+            BigDecimal custosRibbons = Optional.ofNullable(fechamento.getTotal_ribbons()).orElse(BigDecimal.ZERO);
+            BigDecimal custosEncartes = Optional.ofNullable(fechamento.getValor_enc()).orElse(BigDecimal.ZERO);
+            BigDecimal custosJurosCartoes = Optional.ofNullable(fechamento.getJuros_cartoes()).orElse(BigDecimal.ZERO);
+
+            // ===== VALORES DOS CAMPOS DO FORMULÁRIO =====
             BigDecimal icms = parseBigDecimal(request.getParameter("icms"));
             BigDecimal pis = parseBigDecimal(request.getParameter("pis"));
             BigDecimal cofins = parseBigDecimal(request.getParameter("cofins"));
@@ -94,22 +252,23 @@ public class ServletDre extends ServletGenericUtil {
             BigDecimal internet = parseBigDecimal(request.getParameter("internet"));
             BigDecimal outrasDesp = parseBigDecimal(request.getParameter("outrasDesp"));
 
-            // Calcule os totais
+            // ===== CÁLCULOS =====
             BigDecimal totalImpostos = icms.add(pis).add(cofins).add(inss).add(irpj).add(csll);
             BigDecimal totalDespesasAdm = aluguel.add(salarios).add(contas).add(despesasGerais)
                     .add(bonificacoes).add(prestacoes).add(internet).add(outrasDesp);
 
-            // Calcule o lucro líquido
             BigDecimal lucroBruto = receitaBruta.subtract(custosOperacionais);
             BigDecimal lucroLiquido = lucroBruto.subtract(totalImpostos).subtract(totalDespesasAdm);
 
-            // Crie o objeto ModelDre
+            // ===== CRIAR O OBJETO MODELDRE =====
             ModelDre dre = new ModelDre();
             dre.setMes(mes);
             dre.setAno(ano);
             dre.setReceita_bruta(receitaBruta);
             dre.setCustos_operacionais(custosOperacionais);
             dre.setLucro_bruto(lucroBruto);
+
+            // Impostos
             dre.setIcms(icms);
             dre.setPis(pis);
             dre.setCofins(cofins);
@@ -117,6 +276,8 @@ public class ServletDre extends ServletGenericUtil {
             dre.setIrpj(irpj);
             dre.setCsll(csll);
             dre.setTotal_impostos(totalImpostos);
+
+            // Despesas administrativas
             dre.setAluguel(aluguel);
             dre.setSalarios(salarios);
             dre.setContas(contas);
@@ -126,9 +287,20 @@ public class ServletDre extends ServletGenericUtil {
             dre.setInternet(internet);
             dre.setOutras_despesas(outrasDesp);
             dre.setTotal_despesas_adm(totalDespesasAdm);
+
+            // Lucro líquido
             dre.setLucro_liquido(lucroLiquido);
 
-            // Chame o DAO para salvar
+            // 🆕 CAMPOS QUE ESTAVAM FALTANDO
+            dre.setReceita_dinheiro(receitaDinheiro);
+            dre.setReceita_debito(receitaDebito);
+            dre.setReceita_credito(receitaCredito);
+            dre.setReceita_pix(receitaPix);
+            dre.setCustos_ribbons(custosRibbons);
+            dre.setCustos_encartes(custosEncartes);
+            dre.setCustos_juros_cartoes(custosJurosCartoes);
+
+            // ===== SALVAR NO BANCO =====
             DAODre daoDre = new DAODre();
             daoDre.gravarDRE(dre);
 
@@ -145,32 +317,40 @@ public class ServletDre extends ServletGenericUtil {
         dispatcher.forward(request, response);
     }
 
-    // Método auxiliar para converter String (que vem da URL no formato americano X.XX) para BigDecimal
     private BigDecimal parseBigDecimal(String value) {
         if (value == null || value.trim().isEmpty()) {
             return BigDecimal.ZERO;
         }
 
-        // 1. Limpa a string (remove R$ e espaços, se houver)
-        String cleanedValue = value.replace("R$", "").trim();
-
-        // Tenta converter diretamente, assumindo o formato americano (X.XX)
         try {
-            // Isso deve funcionar perfeitamente para "0.01" ou "1000.50"
-            return new BigDecimal(cleanedValue);
-        } catch (NumberFormatException e) {
-            // 2. Fallback: Se a string ainda tiver formatação brasileira (vírgula)
-            // ou algum caractere estranho que o JS não limpou, faz a limpeza BR -> US
-            try {
-                String finalCleaned = cleanedValue.replace(".", "") // Remove pontos de milhar
-                        .replace(",", "."); // Troca vírgula decimal por ponto
-                return new BigDecimal(finalCleaned);
-            } catch (NumberFormatException e2) {
-                // Em caso de falha de parsing, retorna ZERO
-                System.err.println("Erro irrecuperável ao converter valor: [" + value + "]");
-                e2.printStackTrace();
-                return BigDecimal.ZERO;
+            // Remove espaços em branco
+            String cleanedValue = value.trim();
+
+            // Log para debug
+            System.out.println("Parsing value: [" + value + "] -> cleaned: [" + cleanedValue + "]");
+
+            // Remove R$ e espaços
+            cleanedValue = cleanedValue.replace("R$", "").trim();
+
+            // Verifica se é um número no formato americano (vindo do JS)
+            // Ex: "0.01", "1000.50"
+            if (cleanedValue.matches("^\\d+(\\.\\d+)?$")) {
+                BigDecimal result = new BigDecimal(cleanedValue);
+                System.out.println("Parsed successfully (American format): " + result);
+                return result;
             }
+
+            // Fallback: formato brasileiro (1.000,50)
+            // Remove pontos de milhar e troca vírgula por ponto
+            cleanedValue = cleanedValue.replace(".", "").replace(",", ".");
+            BigDecimal result = new BigDecimal(cleanedValue);
+            System.out.println("Parsed successfully (Brazilian format): " + result);
+            return result;
+
+        } catch (NumberFormatException e) {
+            System.err.println("Erro ao converter valor: [" + value + "]");
+            e.printStackTrace();
+            return BigDecimal.ZERO;
         }
     }
 

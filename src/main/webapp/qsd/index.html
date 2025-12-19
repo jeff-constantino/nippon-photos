@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <title>Redirecionando...</title>
 
-    <!-- Redirecionamento imediato -->
-    <meta http-equiv="refresh" content="0; url=../ServletCredQSD">
+    <script>
+        // Pega o caminho base do projeto (ex: /nippon_photos_war/)
+        const path = window.location.pathname.split('/')[1];
+        // Redireciona para o domínio + contexto + servlet
+        window.location.href = "/" + path + "/ServletCredQSD";
+    </script>
 </head>
 <body>
 <p>Redirecionando para o sistema de crediário...</p>

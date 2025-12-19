@@ -34,7 +34,7 @@ public class ServletCredQSD extends HttpServlet {
                 carregar(request, response);
             } else {
                 request.setAttribute("listaClientes", dao.getClientesUnicos());
-                request.getRequestDispatcher("/qsd/index.jsp").forward(request, response);
+                request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
             }
         } catch (Exception e) {
             try {
@@ -43,7 +43,7 @@ public class ServletCredQSD extends HttpServlet {
                 // Ignorar erro ao carregar lista de clientes em caso de falha
             }
             request.setAttribute("msg", "Erro: " + e.getMessage());
-            request.getRequestDispatcher("/qsd/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
         }
     }
 
@@ -66,7 +66,7 @@ public class ServletCredQSD extends HttpServlet {
                 // Ignorar erro ao carregar lista de clientes em caso de falha
             }
             request.setAttribute("msg", "Erro: " + e.getMessage());
-            request.getRequestDispatcher("/qsd/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
         }
     }
 
@@ -92,7 +92,7 @@ public class ServletCredQSD extends HttpServlet {
         } catch (Exception ex) {
             // Ignorar erro ao carregar lista de clientes
         }
-        request.getRequestDispatcher("/qsd/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
     }
 
     private void receber(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -126,7 +126,7 @@ public class ServletCredQSD extends HttpServlet {
         } catch (Exception ex) {
             // Ignorar erro ao carregar lista de clientes
         }
-        request.getRequestDispatcher("/qsd/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
     }
 
     private void buscar(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -153,7 +153,7 @@ public class ServletCredQSD extends HttpServlet {
         } catch (Exception ex) {
             // Ignorar erro ao carregar lista de clientes
         }
-        request.getRequestDispatcher("/qsd/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
     }
 
     private void relatorio(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -214,7 +214,7 @@ public class ServletCredQSD extends HttpServlet {
         } catch (Exception ex) {
             // Ignorar erro ao carregar lista de clientes
         }
-        request.getRequestDispatcher("/qsd/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
     }
 
     private void carregar(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -228,6 +228,6 @@ public class ServletCredQSD extends HttpServlet {
         } catch (Exception ex) {
             // Ignorar erro ao carregar lista de clientes
         }
-        request.getRequestDispatcher("/qsd/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
     }
 }

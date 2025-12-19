@@ -5,33 +5,10 @@ mvn clean package
 ARRUMAR BUSCAR FECHAMENTO GRAVADO
 
 adcionar historico disciplinar para exibir as medidas de cada funcionario
-alterar as somas de salarios, fecha mes, dre para incluir a soma de acordo com a comissão;
+
 CRIAR SANGRIA e buscar no fechames
 
-alterar busca de fechamento e na dre com os novos de saldo em caixa
-alterar gravar  dre com os novos de saldo em caixa
-ADCIONAR NO DRE DINHEIRO EM CAIXA (igual ao fecha mes)
-confirmar se na DRE está descontando os custos de despesas/vales/contas em dinheiro do dinheiro em caixa.
 
-ADCIONAR CALCULO DE % DE JUROS DOS CARTÕES NO DRE
-criar comparativo de vendas mes/ano (relmes já tem a função para buscar por dia "vendasMesList")
-
-criar cadastro completo de funcionários (foto, documentos, etc)
-
-CRIAR BANCO E FUNÇOES PARA DRE
-   ALTER TABLE public.dre
-   ADD COLUMN receitas NUMERIC(15,2),
-   ADD COLUMN salarios NUMERIC(15,2),
-   ADD COLUMN despesadin NUMERIC(15,2)
-   ADD COLUMN sangria NUMERIC(15,2),
-   ADD COLUMN saldo NUMERIC(15,2);
-
-    private BigDecimal receitas;
-    private BigDecimal salarios;
-    private BigDecimal despesadin;
-    private BigDecimal sangria;
-    private BigDecimal saldo;
-    private BigDecimal resultadoDivisao;
 
 
 

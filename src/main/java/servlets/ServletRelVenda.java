@@ -31,13 +31,13 @@ public class ServletRelVenda extends ServletGenericUtil {
 
     @Override
     // Obtendo os parâmetros da requisição
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Obtendo os parâmetros da requisição
         String acao = request.getParameter("acao");
         String dataInicial = request.getParameter("dataInicial");
         String dataFinal = request.getParameter("dataFinal");
         String funcionarioId = request.getParameter("funcionarioId");
-        String status = request.getParameter("status");
 
         try {
             // Instancia o DAO para buscar os funcionários (incluindo inativos se necessário)
@@ -51,23 +51,11 @@ public class ServletRelVenda extends ServletGenericUtil {
             List<ModelVendas> vendasList = new ArrayList<>();
 
             if ("imprimirRelatorioVendas".equals(acao)) {
-                int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
-                int registrosPorPagina = 30;
-                int offset = (paginaAtual - 1) * registrosPorPagina;
-
-                // Busca de vendas com paginação
-                vendasList = relatorio.consultarVendas(funcionarioId, dataInicial, dataFinal, offset, registrosPorPagina);
+                // Busca TODAS as vendas sem paginação
+                vendasList = relatorio.consultarVendasSemPaginacao(funcionarioId, dataInicial, dataFinal);
 
                 // Adiciona vendasList no request para o JSP
                 request.setAttribute("vendasList", vendasList);
-
-                // Lógica para cálculo de total de páginas
-                int totalVendas = relatorio.contarVendas(funcionarioId, dataInicial, dataFinal);
-                int totalPaginas = (int) Math.ceil(totalVendas / (double) registrosPorPagina);
-
-                // Adiciona totalPaginas e paginaAtual no request
-                request.setAttribute("totalPaginas", totalPaginas);
-                request.setAttribute("paginaAtual", paginaAtual);
             }
 
             // Adiciona os filtros ao request para que sejam preservados no JSP

@@ -30,71 +30,71 @@
                     <div class="col-sm-4 grid-margin">
 
 
-                                <div class="row">
-                                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                                        <div class="d-flex d-sm-block d-md-flex align-items-center">
-<!-- Modal -->
-                                            <div class="modal fade" id="modalData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-xl mt-5">
-                                                    <div class="modal-content">
-                                                          <div class="modal-body">
-                                                            <c:if test="${not empty msg}">
-                                                                <div>
-                                                                    <span style="color:#1ad76b; text-align: center">${msg}</span>
-                                                                </div>
-                                                            </c:if>
-                                                            <form action="<%= request.getContextPath() %>/ServletRelVenda" method="get" id="formDataVenda" name="formDataVenda">
-                                                                <input type="hidden" name="acao" value="imprimirRelatorioVendas">
-                                                                <div class="form-row align-items-center">
-                                                                    <div class="col-auto">
-                                                                        <label for="dataInicial">Data Inicial</label>
-                                                                        <input type="date" class="form-control" id="dataInicial" name="dataInicial" required onchange="setData()"  value="${dataInicial}">
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <label for="dataFinal">Data Final</label>
-                                                                        <input type="date" class="form-control" id="dataFinal" name="dataFinal" required value="${dataFinal}">
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <label>Funcionário</label>
-                                                                        <select class="form-control" id="funcionarioId" name="funcionarioId">
-                                                                            <option value="">Selecione um Funcionário</option>
-                                                                            <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
-                                                                                <c:if test="${funcionario.status == 'ATIVO'}">
-                                                                                    <option value="${funcionario.id}"
-                                                                                            class="text-success"
-                                                                                            <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
-                                                                                            ${funcionario.nome}
-                                                                                    </option>
-                                                                                </c:if>
-                                                                            </c:forEach>
-                                                                            <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
-                                                                                <c:if test="${funcionario.status != 'ATIVO'}">
-                                                                                    <option value="${funcionario.id}"
-                                                                                            class="text-danger"
-                                                                                            <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
-                                                                                            ${funcionario.nome}
-                                                                                    </option>
-                                                                                </c:if>
-                                                                            </c:forEach>
-                                                                        </select>
-
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modalData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl mt-5">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <c:if test="${not empty msg}">
+                                                        <div>
+                                                            <span style="color:#1ad76b; text-align: center">${msg}</span>
                                                         </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
+                                                    </c:if>
+                                                    <form action="<%= request.getContextPath() %>/ServletRelVenda" method="get" id="formDataVenda" name="formDataVenda">
+                                                        <input type="hidden" name="acao" value="imprimirRelatorioVendas">
+                                                        <div class="form-row align-items-center">
+                                                            <div class="col-auto">
+                                                                <label for="dataInicial">Data Inicial</label>
+                                                                <input type="date" class="form-control" id="dataInicial" name="dataInicial" required onchange="setData()"  value="${dataInicial}">
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <label for="dataFinal">Data Final</label>
+                                                                <input type="date" class="form-control" id="dataFinal" name="dataFinal" required value="${dataFinal}">
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <label>Funcionário</label>
+                                                                <select class="form-control" id="funcionarioId" name="funcionarioId">
+                                                                    <option value="">Selecione um Funcionário</option>
+                                                                    <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                        <c:if test="${funcionario.status == 'ATIVO'}">
+                                                                            <option value="${funcionario.id}"
+                                                                                    class="text-success"
+                                                                                    <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
+                                                                                    ${funcionario.nome}
+                                                                            </option>
+                                                                        </c:if>
+                                                                    </c:forEach>
+                                                                    <c:forEach var="funcionario" items="${funcionarios}" varStatus="status">
+                                                                        <c:if test="${funcionario.status != 'ATIVO'}">
+                                                                            <option value="${funcionario.id}"
+                                                                                    class="text-danger"
+                                                                                    <c:if test="${funcionario.id == funcionarioId}">selected</c:if>>
+                                                                                    ${funcionario.nome}
+                                                                            </option>
+                                                                        </c:if>
+                                                                    </c:forEach>
+                                                                </select>
+
+                                                            </div>
+                                                            <div class="col-auto">
+                                                                <button type="submit" class="btn btn-primary">Imprimir Relatório</button>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    </form>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
+                                </div>
+
+                            </div>
 
 
                         </div>
@@ -109,178 +109,173 @@
                                 <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalData">
                                     <h4>Gerar Relatório</h4>
                                 </button>
-                                <h4 class="card-title" STYLE="text-align: center">RELATÓRIO DE VENDAS POR FUNCIONÁRIO</h4>
+                                <h4 class="card-title text-center">RELATÓRIO DE VENDAS</h4>
 
-                                <div style="overflow-x: auto; overflow-y: hidden;">
-                                    <%-- Inicializando as variáveis de soma para cada coluna --%>
-                                    <c:set var="totalProd1Din" value="0" />
-                                    <c:set var="totalProd1Deb" value="0" />
-                                    <c:set var="totalProd1Cred" value="0" />
-                                    <c:set var="totalProd1Pix" value="0" />
-                                    <c:set var="totalProd2Din" value="0" />
-                                    <c:set var="totalProd2Deb" value="0" />
-                                    <c:set var="totalProd2Cred" value="0" />
-                                    <c:set var="totalProd2Pix" value="0" />
-                                    <c:set var="totalProd3Din" value="0" />
-                                    <c:set var="totalProd3Deb" value="0" />
-                                    <c:set var="totalProd3Cred" value="0" />
-                                    <c:set var="totalProd3Pix" value="0" />
-                                    <c:set var="totalSobras" value="0" />
+                                <%-- SEÇÃO DE TOTAIS NO TOPO --%>
+                                <%-- Calculando os totais --%>
+                                <c:set var="totalProd1Din" value="0" />
+                                <c:set var="totalProd1Deb" value="0" />
+                                <c:set var="totalProd1Cred" value="0" />
+                                <c:set var="totalProd1Pix" value="0" />
+                                <c:set var="totalProd2Din" value="0" />
+                                <c:set var="totalProd2Deb" value="0" />
+                                <c:set var="totalProd2Cred" value="0" />
+                                <c:set var="totalProd2Pix" value="0" />
+                                <c:set var="totalProd3Din" value="0" />
+                                <c:set var="totalProd3Deb" value="0" />
+                                <c:set var="totalProd3Cred" value="0" />
+                                <c:set var="totalProd3Pix" value="0" />
+                                <c:set var="totalSobras" value="0" />
 
-                                    <table class="table" id="tabelarelvendas">
-                                        <thead>
+                                <c:forEach items="${vendasList}" var="mv">
+                                    <c:set var="totalProd1Din" value="${totalProd1Din + mv.prod1_din}" />
+                                    <c:set var="totalProd1Deb" value="${totalProd1Deb + mv.prod1_deb}" />
+                                    <c:set var="totalProd1Cred" value="${totalProd1Cred + mv.prod1_cred}" />
+                                    <c:set var="totalProd1Pix" value="${totalProd1Pix + mv.prod1_pix}" />
+                                    <c:set var="totalProd2Din" value="${totalProd2Din + mv.prod2_din}" />
+                                    <c:set var="totalProd2Deb" value="${totalProd2Deb + mv.prod2_deb}" />
+                                    <c:set var="totalProd2Cred" value="${totalProd2Cred + mv.prod2_cred}" />
+                                    <c:set var="totalProd2Pix" value="${totalProd2Pix + mv.prod2_pix}" />
+                                    <c:set var="totalProd3Din" value="${totalProd3Din + mv.prod3_din}" />
+                                    <c:set var="totalProd3Deb" value="${totalProd3Deb + mv.prod3_deb}" />
+                                    <c:set var="totalProd3Cred" value="${totalProd3Cred + mv.prod3_cred}" />
+                                    <c:set var="totalProd3Pix" value="${totalProd3Pix + mv.prod3_pix}" />
+                                    <c:set var="totalSobras" value="${totalSobras + mv.sobras}" />
+                                </c:forEach>
+
+                                <c:set var="totalFT" value="${totalProd1Din + totalProd1Deb + totalProd1Cred + totalProd1Pix}" />
+                                <c:set var="totalENC" value="${totalProd2Din + totalProd2Deb + totalProd2Cred + totalProd2Pix}" />
+                                <c:set var="totalDIGI" value="${totalProd3Din + totalProd3Deb + totalProd3Cred + totalProd3Pix}" />
+
+                                <%-- Cards dos totais gerais --%>
+                                <div class="row text-center mt-4 mb-4">
+                                    <div class="col-md-4">
+                                        <div class="card" style="background-color: #28a745;">
+                                            <div class="card-body">
+                                                <h5 style="color: white;">TOTAL FOTOS</h5>
+                                                <h2 style="color: white; font-weight: bold;">${totalFT}</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card" style="background-color: #007bff;">
+                                            <div class="card-body">
+                                                <h5 style="color: white;">TOTAL ENCARTES</h5>
+                                                <h2 style="color: white; font-weight: bold;">${totalENC}</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card" style="background-color: #ffc107;">
+                                            <div class="card-body">
+                                                <h5 style="color: white;">TOTAL DIGITAIS</h5>
+                                                <h2 style="color: white; font-weight: bold;">${totalDIGI}</h2>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <%-- Tabela de resumo dos totais --%>
+                                <div class="table-responsive mb-4">
+                                    <table class="table table-bordered">
+                                        <thead class="table-secondary">
+                                        <tr>
+                                            <th></th>
+                                            <th>Ft Din</th>
+                                            <th>Ft Deb</th>
+                                            <th>Ft Cred</th>
+                                            <th>Ft Pix</th>
+                                            <th style="background-color: #28a745; color: white;">Total FT</th>
+                                            <th>Enc Din</th>
+                                            <th>Enc Deb</th>
+                                            <th>Enc Cred</th>
+                                            <th>Enc Pix</th>
+                                            <th>Dig Din</th>
+                                            <th>Dig Deb</th>
+                                            <th>Dig Cred</th>
+                                            <th>Dig Pix</th>
+                                            <th>Sobras</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr style="font-size: 1.1rem; font-weight: bold;">
+                                            <td style="color:#f2a654">TOTAL:</td>
+                                            <td style="color:#f2a654">${totalProd1Din}</td>
+                                            <td style="color:#f2a654">${totalProd1Deb}</td>
+                                            <td style="color:#f2a654">${totalProd1Cred}</td>
+                                            <td style="color:#f2a654">${totalProd1Pix}</td>
+                                            <td style="color:#28a745; font-size: 1.3rem;">${totalFT}</td>
+                                            <td style="color:#f2a654">${totalProd2Din}</td>
+                                            <td style="color:#f2a654">${totalProd2Deb}</td>
+                                            <td style="color:#f2a654">${totalProd2Cred}</td>
+                                            <td style="color:#f2a654">${totalProd2Pix}</td>
+                                            <td style="color:#f2a654">${totalProd3Din}</td>
+                                            <td style="color:#f2a654">${totalProd3Deb}</td>
+                                            <td style="color:#f2a654">${totalProd3Cred}</td>
+                                            <td style="color:#f2a654">${totalProd3Pix}</td>
+                                            <td style="color:#f2a654">${totalSobras}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <%-- TABELA DETALHADA COM SCROLL --%>
+                                <h5 class="text-center mb-3">Detalhamento das Vendas</h5>
+                                <div style="max-height: 600px; overflow-y: auto; overflow-x: auto;">
+                                    <table class="table table-striped table-bordered table-hover" id="tabelarelvendas">
+                                        <thead style="position: sticky; top: 0; background-color: #2a3038; z-index: 10;">
                                         <tr>
                                             <th scope="col">NOME</th>
                                             <th scope="col">DATA</th>
-
                                             <th scope="col">Ft Din</th>
                                             <th scope="col">Ft Deb</th>
                                             <th scope="col">Ft Cred</th>
                                             <th scope="col">Ft Pix</th>
-                                            <th scope="col" style="color:#28a745;">Total FT</th> <!-- ADICIONADO -->
-
+                                            <th scope="col" style="color:#28a745;">Total FT</th>
                                             <th scope="col">Enc Din</th>
                                             <th scope="col">Enc Deb</th>
                                             <th scope="col">Enc Cred</th>
                                             <th scope="col">Enc Pix</th>
-
                                             <th scope="col">Dig Din</th>
                                             <th scope="col">Dig Deb</th>
                                             <th scope="col">Dig Cred</th>
                                             <th scope="col">Dig Pix</th>
-
                                             <th scope="col">Sobras</th>
                                             <th scope="col">Id Venda</th>
                                         </tr>
                                         </thead>
-
                                         <tbody>
                                         <c:forEach items="${vendasList}" var="mv">
                                             <tr>
                                                 <td><c:out value="${mv.nome}" /></td>
                                                 <td><fmt:formatDate value="${mv.data_venda}" pattern="dd/MM/yyyy"/></td>
-
                                                 <td><c:out value="${mv.prod1_din}" /></td>
                                                 <td><c:out value="${mv.prod1_deb}" /></td>
                                                 <td><c:out value="${mv.prod1_cred}" /></td>
                                                 <td><c:out value="${mv.prod1_pix}" /></td>
-
-                                                <!-- TOTAL FT POR LINHA -->
                                                 <td style="color:#daa520; font-weight:bold;">
                                                     <c:out value="${mv.prod1_din + mv.prod1_deb + mv.prod1_cred + mv.prod1_pix}" />
                                                 </td>
-
                                                 <td><c:out value="${mv.prod2_din}" /></td>
                                                 <td><c:out value="${mv.prod2_deb}" /></td>
                                                 <td><c:out value="${mv.prod2_cred}" /></td>
                                                 <td><c:out value="${mv.prod2_pix}" /></td>
-
                                                 <td><c:out value="${mv.prod3_din}" /></td>
                                                 <td><c:out value="${mv.prod3_deb}" /></td>
                                                 <td><c:out value="${mv.prod3_cred}" /></td>
                                                 <td><c:out value="${mv.prod3_pix}" /></td>
-
                                                 <td><c:out value="${mv.sobras}" /></td>
                                                 <td><c:out value="${mv.venda_id}" /></td>
                                             </tr>
-
-                                            <%-- Acumulando os valores --%>
-                                            <c:set var="totalProd1Din" value="${totalProd1Din + mv.prod1_din}"  />
-                                            <c:set var="totalProd1Deb" value="${totalProd1Deb + mv.prod1_deb}" />
-                                            <c:set var="totalProd1Cred" value="${totalProd1Cred + mv.prod1_cred}" />
-                                            <c:set var="totalProd1Pix" value="${totalProd1Pix + mv.prod1_pix}" />
-
-                                            <c:set var="totalProd2Din" value="${totalProd2Din + mv.prod2_din}" />
-                                            <c:set var="totalProd2Deb" value="${totalProd2Deb + mv.prod2_deb}" />
-                                            <c:set var="totalProd2Cred" value="${totalProd2Cred + mv.prod2_cred}" />
-                                            <c:set var="totalProd2Pix" value="${totalProd2Pix + mv.prod2_pix}" />
-
-                                            <c:set var="totalProd3Din" value="${totalProd3Din + mv.prod3_din}" />
-                                            <c:set var="totalProd3Deb" value="${totalProd3Deb + mv.prod3_deb}" />
-                                            <c:set var="totalProd3Cred" value="${totalProd3Cred + mv.prod3_cred}" />
-                                            <c:set var="totalProd3Pix" value="${totalProd3Pix + mv.prod3_pix}" />
-
-                                            <c:set var="totalSobras" value="${totalSobras + mv.sobras}" />
                                         </c:forEach>
-
-                                        <%-- Totais agrupados --%>
-                                        <c:set var="totalFT" value="${totalProd1Din + totalProd1Deb + totalProd1Cred + totalProd1Pix}" />
-                                        <c:set var="totalENC" value="${totalProd2Din + totalProd2Deb + totalProd2Cred + totalProd2Pix}" />
-                                        <c:set var="totalDIGI" value="${totalProd3Din + totalProd3Deb + totalProd3Cred + totalProd3Pix}" />
-
-                                        <%-- Cabeçalho antes dos totais --%>
-                                        <tr class="table-secondary">
-                                            <th></th>
-                                            <th></th>
-
-                                            <th>Ft Din</th>
-                                            <th>Ft Deb</th>
-                                            <th>Ft Cred</th>
-                                            <th>Ft Pix</th>
-                                            <th>Total FT</th>
-
-                                            <th>Enc Din</th>
-                                            <th>Enc Deb</th>
-                                            <th>Enc Cred</th>
-                                            <th>Enc Pix</th>
-
-                                            <th>Dig Din</th>
-                                            <th>Dig Deb</th>
-                                            <th>Dig Cred</th>
-                                            <th>Dig Pix</th>
-
-                                            <th>Sobras</th>
-                                            <th>Id Venda</th>
-                                        </tr>
-
-                                        <%-- LINHA DE TOTAIS --%>
-                                        <tr>
-                                            <td colspan="2" style="color:#f2a654"><strong>Total:</strong></td>
-
-                                            <td style="color:#f2a654"><c:out value="${totalProd1Din}" /></td>
-                                            <td style="color:#f2a654"><c:out value="${totalProd1Deb}" /></td>
-                                            <td style="color:#f2a654"><c:out value="${totalProd1Cred}" /></td>
-                                            <td style="color:#f2a654"><c:out value="${totalProd1Pix}" /></td>
-
-                                            <!-- TOTAL FT FINAL -->
-                                            <td style="color:#28a745; font-weight:bold;">
-                                                <c:out value="${totalFT}" />
-                                            </td>
-
-                                            <td style="color:#f2a654"><c:out value="${totalProd2Din}" /></td>
-                                            <td style="color:#f2a654"><c:out value="${totalProd2Deb}" /></td>
-                                            <td style="color:#f2a654"><c:out value="${totalProd2Cred}" /></td>
-                                            <td style="color:#f2a654"><c:out value="${totalProd2Pix}" /></td>
-
-                                            <td style="color:#f2a654"><c:out value="${totalProd3Din}" /></td>
-                                            <td style="color:#f2a654"><c:out value="${totalProd3Deb}" /></td>
-                                            <td style="color:#f2a654"><c:out value="${totalProd3Cred}" /></td>
-                                            <td style="color:#f2a654"><c:out value="${totalProd3Pix}" /></td>
-
-                                            <td style="color:#f2a654"><c:out value="${totalSobras}" /></td>
-                                            <td></td>
-                                        </tr>
-
                                         </tbody>
                                     </table>
                                 </div>
 
-
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-condensed">
-                                    <tbody>
-                                    <tr class="fw-bold">
-                                        <td>TOTAL FOTOS: ${totalFT}</td>
-                                        <td>TOTAL ENCARTES: ${totalENC}</td>
-                                        <td>TOTAL DIGITAIS: ${totalDIGI}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
 
 
@@ -303,13 +298,12 @@
 <!-- Modal HTML -->
 <div class="modal" id="msgModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;"> <!-- Borda preta -->
+        <div class="modal-content" style="background-color: #f2a654; color: black; border: 5px solid black;">
             <div class="modal-header" style="border-bottom: none;">
 
-                <!-- Removido o botão "X" -->
             </div>
             <div class="modal-body" style="color: black;">
-                <p style="font-size: 1.5em; text-align: center">${msg}</p> <!-- Mensagem aqui -->
+                <p style="font-size: 1.5em; text-align: center">${msg}</p>
             </div>
             <div class="modal-footer" style="border-top: none;">
                 <h1 class="modal-title" style="color: black; font-size: 0.8em;">aperte ESC para fechar</h1>
@@ -322,12 +316,10 @@
 
 <script>
 
-   $(document).ready(function () {
+    $(document).ready(function () {
         var msg = "${msg}";
         if (msg) {
-            $('#msgModal').modal('show'); // Exibe o modal com a mensagem
-
-            // Remove a mensagem da sessão após exibi-la
+            $('#msgModal').modal('show');
             $.post("${pageContext.request.contextPath}/ServletVendas", { acao: "limparMsg" });
         }
     });
@@ -365,7 +357,7 @@
     document.querySelectorAll('input[type="number"]').forEach(input => {
         input.addEventListener('keydown', function(event) {
             if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-                event.preventDefault(); // Impede a alteração do valor
+                event.preventDefault();
             }
         });
     });
@@ -386,82 +378,66 @@
     }
 
 
-   function setData() {
-       // Obtém o valor do campo dataInicial
-       var dataInicial = document.getElementById("dataInicial").value;
+    function setData() {
+        var dataInicial = document.getElementById("dataInicial").value;
 
-       if (dataInicial) {
-           // Divide a data inicial em dia, mês e ano
-           var partesData = dataInicial.split('-'); // Assume que o formato é yyyy-mm-dd
-           var ano = parseInt(partesData[0], 10);
-           var mes = parseInt(partesData[1], 10) - 1; // Mês é 0-based no JavaScript
-           var dia = parseInt(partesData[2], 10);
+        if (dataInicial) {
+            var partesData = dataInicial.split('-');
+            var ano = parseInt(partesData[0], 10);
+            var mes = parseInt(partesData[1], 10) - 1;
+            var dia = parseInt(partesData[2], 10);
 
-           // Cria um objeto Date com os valores extraídos
-           var data = new Date(ano, mes, dia);
+            var data = new Date(ano, mes, dia);
 
-           // Verifica se a data é válida
-           if (!isNaN(data.getTime())) {
-               // Calcula o último dia do mês da data inicial
-               var ultimoDia = new Date(ano, mes + 1, 0);
+            if (!isNaN(data.getTime())) {
+                var ultimoDia = new Date(ano, mes + 1, 0);
 
-               // Formata a data final no padrão yyyy-mm-dd
-               var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
-               var mesFinal = String(mes + 1).padStart(2, '0'); // Ajusta o mês para exibição (1-12)
-               var dataFinal = ano + '-' + mesFinal + '-' + diaFinal;
+                var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+                var mesFinal = String(mes + 1).padStart(2, '0');
+                var dataFinal = ano + '-' + mesFinal + '-' + diaFinal;
 
-               // Define o valor do campo dataFinal
-               document.getElementById("dataFinal").value = dataFinal;
-           } else {
-               console.error("Data inicial inválida.");
-               document.getElementById("dataFinal").value = ""; // Limpa o campo se a data for inválida
-           }
-       } else {
-           console.error("Data inicial não selecionada.");
-           document.getElementById("dataFinal").value = ""; // Limpa o campo se a data inicial estiver vazia
-       }
-   }
+                document.getElementById("dataFinal").value = dataFinal;
+            } else {
+                console.error("Data inicial inválida.");
+                document.getElementById("dataFinal").value = "";
+            }
+        } else {
+            console.error("Data inicial não selecionada.");
+            document.getElementById("dataFinal").value = "";
+        }
+    }
 
-   // Função para inicializar os campos de data ao abrir o modal
-   function initializeDates() {
-       // Obtém a data atual
-       var today = new Date();
+    function initializeDates() {
+        var today = new Date();
 
-       // Formata a data inicial no padrão yyyy-mm-dd
-       var diaInicial = String(today.getDate()).padStart(2, '0');
-       var mesInicial = String(today.getMonth() + 1).padStart(2, '0');
-       var anoInicial = today.getFullYear();
-       var dataInicial = anoInicial + '-' + mesInicial + '-' + diaInicial;
+        var diaInicial = String(today.getDate()).padStart(2, '0');
+        var mesInicial = String(today.getMonth() + 1).padStart(2, '0');
+        var anoInicial = today.getFullYear();
+        var dataInicial = anoInicial + '-' + mesInicial + '-' + diaInicial;
 
-       // Calcula o último dia do mês atual
-       var ultimoDia = new Date(anoInicial, today.getMonth() + 1, 0);
+        var ultimoDia = new Date(anoInicial, today.getMonth() + 1, 0);
 
-       // Formata a data final no padrão yyyy-mm-dd
-       var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
-       var mesFinal = String(today.getMonth() + 1).padStart(2, '0'); // Usa o mês da data inicial
-       var anoFinal = today.getFullYear();
-       var dataFinal = anoFinal + '-' + mesFinal + '-' + diaFinal;
+        var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+        var mesFinal = String(today.getMonth() + 1).padStart(2, '0');
+        var anoFinal = today.getFullYear();
+        var dataFinal = anoFinal + '-' + mesFinal + '-' + diaFinal;
 
-       // Define os valores dos campos
-       document.getElementById("dataInicial").value = dataInicial;
-       document.getElementById("dataFinal").value = dataFinal;
-   }
+        document.getElementById("dataInicial").value = dataInicial;
+        document.getElementById("dataFinal").value = dataFinal;
+    }
 
-   // Inicializa os campos de data quando o modal é aberto
-   document.addEventListener('DOMContentLoaded', function () {
-       const modal = document.getElementById('modalData'); // Substitua 'meuModal' pelo ID do seu modal
-       if (modal) {
-           modal.addEventListener('shown.bs.modal', function () {
-               // Verifica se os campos já foram inicializados
-               if (!document.getElementById("dataInicial").value) {
-                   initializeDates();
-               }
-           });
-       }
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('modalData');
+        if (modal) {
+            modal.addEventListener('shown.bs.modal', function () {
+                if (!document.getElementById("dataInicial").value) {
+                    initializeDates();
+                }
+            });
+        }
 
-       // Adiciona o evento onchange ao campo dataInicial
-       document.getElementById("dataInicial").addEventListener('change', setData);
-   });
+        document.getElementById("dataInicial").addEventListener('change', setData);
+    });
 </script>
 </body>
 </html>

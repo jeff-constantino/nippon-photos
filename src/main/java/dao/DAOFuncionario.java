@@ -192,7 +192,75 @@ public class DAOFuncionario {
         return totalRegistros;
     }
 
+    public List<ModelVendas> consultarVendasSemPaginacao(String funcionarioId, String dataInicial, String dataFinal) throws Exception {
+        List<ModelVendas> modelVendasList = new ArrayList<>();
 
+        // Constrói a consulta SQL base SEM LIMIT e OFFSET
+        StringBuilder sql = new StringBuilder("SELECT v.*, l.nome FROM vendas v ")
+                .append("INNER JOIN model_login l ON v.vendedor_id = l.id ")
+                .append("WHERE 1=1 ");
+
+        // Adiciona a condição para o ID do funcionário, se fornecido
+        if (funcionarioId != null && !funcionarioId.isEmpty()) {
+            sql.append(" AND l.id = ?");
+        }
+
+        // Adiciona as condições de data, se fornecidas
+        if (dataInicial != null && !dataInicial.isEmpty() && dataFinal != null && !dataFinal.isEmpty()) {
+            sql.append(" AND v.data_venda BETWEEN TO_DATE(?, 'YYYY-MM-DD') AND TO_DATE(?, 'YYYY-MM-DD')");
+        }
+
+        // Ordenação
+        sql.append(" ORDER BY v.data_venda ASC");
+
+        try (PreparedStatement preparedSql = connection.prepareStatement(sql.toString())) {
+            int index = 1;
+
+            // Define o parâmetro do ID do funcionário, se necessário
+            if (funcionarioId != null && !funcionarioId.isEmpty()) {
+                preparedSql.setLong(index++, Long.parseLong(funcionarioId));
+            }
+
+            // Define os parâmetros de data, se necessário
+            if (dataInicial != null && !dataInicial.isEmpty() && dataFinal != null && !dataFinal.isEmpty()) {
+                preparedSql.setString(index++, dataInicial);
+                preparedSql.setString(index++, dataFinal);
+            }
+
+            // Executa a consulta
+            ResultSet resultado = preparedSql.executeQuery();
+
+            // Processa os resultados
+            while (resultado.next()) {
+                ModelVendas modelVenda = new ModelVendas();
+                modelVenda.setVenda_id(resultado.getLong("venda_id"));
+                modelVenda.setVendedor_id(resultado.getString("vendedor_id"));
+                modelVenda.setNome(resultado.getString("nome"));
+                modelVenda.setProd1_din(resultado.getInt("prod1_din"));
+                modelVenda.setProd1_deb(resultado.getInt("prod1_deb"));
+                modelVenda.setProd1_cred(resultado.getInt("prod1_cred"));
+                modelVenda.setProd1_pix(resultado.getInt("prod1_pix"));
+                modelVenda.setProd2_din(resultado.getInt("prod2_din"));
+                modelVenda.setProd2_deb(resultado.getInt("prod2_deb"));
+                modelVenda.setProd2_cred(resultado.getInt("prod2_cred"));
+                modelVenda.setProd2_pix(resultado.getInt("prod2_pix"));
+                modelVenda.setProd3_din(resultado.getInt("prod3_din"));
+                modelVenda.setProd3_deb(resultado.getInt("prod3_deb"));
+                modelVenda.setProd3_cred(resultado.getInt("prod3_cred"));
+                modelVenda.setProd3_pix(resultado.getInt("prod3_pix"));
+                modelVenda.setSobras(resultado.getInt("sobras"));
+                modelVenda.setData_venda(resultado.getDate("data_venda"));
+
+                modelVendasList.add(modelVenda);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao consultar vendas: " + e.getMessage());
+        }
+
+        return modelVendasList;
+    }
 
 
     public List<ModelVendas> consultarVendasFuncionario(String funcionarioId, String dataInicial, String dataFinal, int offset, int limit) throws Exception {

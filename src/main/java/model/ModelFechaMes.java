@@ -429,6 +429,8 @@ public class ModelFechaMes implements Serializable {
         this.ano = ano;
     }
 
+
+
     public BigDecimal getTotal_ribbons() {
         return total_ribbons;
     }
@@ -465,7 +467,15 @@ public class ModelFechaMes implements Serializable {
         this.data_fechamento = data_fechamento;
         this.formattedDate = data_fechamento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
+    private BigDecimal total_ribbons_decimal;
 
+    public BigDecimal getTotal_ribbons_decimal() {
+        return total_ribbons_decimal;
+    }
+
+    public void setTotal_ribbons_decimal(BigDecimal total_ribbons_decimal) {
+        this.total_ribbons_decimal = total_ribbons_decimal;
+    }
 
     public BigDecimal getValor_despesa_total() {
         return valor_despesa_total;

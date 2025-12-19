@@ -442,35 +442,50 @@
 
     function aplicarCoresVendas() {
         setTimeout(function() {
-            const celulas = document.querySelectorAll('#vendasDiarias1 tr td:nth-child(3), #vendasDiarias2 tr td:nth-child(3), #vendasDiarias3 tr td:nth-child(3), #vendasDiarias4 tr td:nth-child(3)');
+            const celulas = $("td:nth-child(3)");
 
-            celulas.forEach(td => {
-                let texto = td.textContent.trim();
+            celulas.each(function() {
+                let td = $(this);
+                let texto = td.text().trim();
 
-                if (texto.includes('Selecione') || texto.includes('Sem vendas')) {
+                if (!texto || texto.includes('Total') || texto.includes('Selecione') || texto.includes('Sem vendas')) {
                     return;
                 }
 
-                let valor = texto.replace('R$', '').replace('.', '').replace(',', '.').trim();
-                let numero = parseFloat(valor);
+                // LIMPEZA PARA FORMATO "1,715.00" detectado no seu console
+                let valorLimpo = texto
+                    .replace("R$", "")
+                    .replace(/,/g, "")    // Remove a vírgula (milhar)
+                    .trim();              // O ponto decimal o JS já entende
+
+                let numero = parseFloat(valorLimpo);
 
                 if (!isNaN(numero)) {
+                    let cor = '';
+
                     if (numero <= 999.99) {
-                        td.style.color = 'red';
+                        cor = 'red';
                     } else if (numero <= 1999.99) {
-                        td.style.color = 'white';
+                        cor = 'white';
                     } else if (numero <= 2999.99) {
-                        td.style.color = 'yellow';
+                        cor = 'yellow';
                     } else if (numero <= 3999.99) {
-                        td.style.color = '#00ccff';
+                        cor = '#00ccff';
                     } else {
-                        td.style.color = 'fuchsia';
+                        cor = 'fuchsia';
                     }
+
+                    // Aplicando apenas a cor com !important para garantir a prioridade
+                    td.css('color', cor + ' !important');
+
+                    // Sobrescrevendo o atributo style para garantir que o tema não use negrito
+                    td.attr('style', function(i, s) {
+                        return 'color: ' + cor + ' !important; font-weight: normal !important;';
+                    });
                 }
             });
-        }, 100);
+        }, 300);
     }
-
     function carregarDados(periodo) {
         const mes = document.getElementById('mes' + periodo).value;
         const ano = document.getElementById('ano' + periodo).value;
@@ -555,4 +570,4 @@
 </script>
 
 </body>
-</htm
+</html

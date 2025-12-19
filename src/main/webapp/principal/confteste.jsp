@@ -39,7 +39,7 @@
                                             <div class="modal-content">
                                                 <div class="modal-body">
                                                     <c:if test="${not empty msg}">
-                                                        <div class="alert alert-warning">${msg}</div>
+                                                        <div>${msg}</div>
                                                     </c:if>
                                                     <%-- INSERIR PAGINA MODAL AQUI--%>
                                                     <form action="<%= request.getContextPath() %>/ServletDespesas" method="post" id="gravarDespesa" name="lançarDespesa">

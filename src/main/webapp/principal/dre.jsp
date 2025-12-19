@@ -79,7 +79,7 @@
                                                 <div class="modal-body">
                                                     <c:choose>
                                                         <c:when test="${empty mesesNaoFechados}">
-                                                            <div class="alert alert-warning">
+                                                            <div>
                                                                 <i class="fas fa-info-circle"></i>
                                                                 Não há meses pendentes para gerar o relatório DRE.
                                                             </div>

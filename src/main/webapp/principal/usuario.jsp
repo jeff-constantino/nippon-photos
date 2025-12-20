@@ -77,7 +77,7 @@
                                                                                 <div class="card-block">
 
 
-                                                                                    <form class="form-material"  action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formUser" >
+                                                                                    <form class="form-material" enctype="multipart/form-data" action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formUser" >
 
 
                                                                                         <div class="row">
@@ -87,6 +87,15 @@
                                                                                                 <span class="form-bar"></span>
                                                                                                 <input type="text" class="form-control" id="id2" name="id" placeholder="" readonly value="${modelLogin.id}">
                                                                                             </div>
+                                                                                            <div class="col-3 input-group mb-4">
+                                                                                                <div class="input-group-prepend">
+                                                                                                    <img src="" id="fotoembase64" width="200px">
+
+                                                                                                </div>
+                                                                                                <input type="file"  id="filefoto" name="filefoto" onchange="visualizarImg('fotoembase64','filefoto')" class="form-control-file">
+
+                                                                                            </div>
+
                                                                                             <div class="col-3">
                                                                                                 <label class="float-label">NOME:</label>
                                                                                                 <span class="form-bar"></span>
@@ -126,10 +135,11 @@
 
                                                                                             </div>
                                                                                             <br>
+                                                                                            <br>
 <%--                       FIM NOVOS CAMPOS--%>
 
 
-                                                                                            <div class="col-3 form-group">
+                                                                                            <div class="col-3 form-group" style="margin-top: 15px">
 
                                                                                                 <label>STATUS</label>
                                                                                                 <select class="form-select" id="status1" name="status" required>
@@ -152,7 +162,7 @@
 
                                                                                                 </select>
                                                                                             </div>
-                                                                                            <div class="col-3 form-group">
+                                                                                            <div class="col-3 form-group" style="margin-top: 15px">
                                                                                                 <label>COMISSÃO</label>
 
                                                                                                 <select class="form-select" id="comissao" name="comissao" required>
@@ -346,7 +356,7 @@
 
                                 <div class="table-responsive" style="overflow-x: hidden">
                                     <form action="<%= request.getContextPath() %>/ServletUsuarioController"
-                                          method="post" id="formUser2" name="formUser2">
+                                          method="post" id="formUser2" name="formUser2" enctype="multipart/form-data">
 
                                         <input type="hidden" name="acao" value="">
 
@@ -366,6 +376,17 @@
                                                 <input type="text" class="form-control" id="nome" name="nome"
                                                        style="background-color: black" required
                                                        value="${modelLogin.nome}">
+                                            </div>
+                                            <div class="col-3 input-group mb-4">
+                                                <div class="input-group-prepend">
+                                                    <c:if test="${modelLogin.fotouser != '' && modelLogin.fotouser != null}">
+                                                        <img id="fotoembase642" src="${modelLogin.fotouser}" width="200px">
+                                                    </c:if>
+                                                    <c:if test="${modelLogin.fotouser == '' || modelLogin.fotouser == null}">
+                                                        <img id="fotoembase642" src="assets/images/user.png" width="200px">
+                                                    </c:if>
+                                                </div>
+                                                <input type="file" id="filefoto2" name="filefoto" onchange="visualizarImg('fotoembase642','filefoto2')" class="form-control-file">
                                             </div>
 
                                             <!-- RG -->
@@ -403,7 +424,7 @@
                                             <!-- Endereço (linha inteira) -->
                                             <div class="col-8 mb-3">
                                                 <label>ENDEREÇO:</label>
-                                                <input type="text" class="form-control" id="endereco2" name="endereco"
+                                                <input type="text" class="form-control" id="endereco" name="endereco"
                                                        style="background-color: black" required
                                                        value="${modelLogin.endereco}">
                                             </div>
@@ -885,7 +906,21 @@
        }
 
    });
+function visualizarImg(fotoembase64 , filefoto){
+    var preview = document.getElementById(fotoembase64);
+    var fileUser = document.getElementById(filefoto).files[0];
+    var reader = new FileReader();
 
+    reader.onloadend = function (){
+        preview.src = reader.result;
+    }
+    if (fileUser){
+        reader.readAsDataURL(fileUser);
+    }else {
+        preview.src = "";
+    }
+
+}
 
 </SCRIPT>
 </body>

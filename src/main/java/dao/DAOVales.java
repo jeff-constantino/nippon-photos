@@ -21,7 +21,7 @@ public class DAOVales {
         List<ModelVales> vales = new ArrayList<>();
 
         String sql = "SELECT id_vale, nome_funcionario, data, observacao, valor, forma_pagamento " +
-                "FROM vales WHERE data >= ?";
+                "FROM vales WHERE data >= ? ORDER BY data DESC";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             LocalDate trintaDiasAtras = LocalDate.now().minusDays(30);

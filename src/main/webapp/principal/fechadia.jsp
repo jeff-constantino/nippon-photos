@@ -484,7 +484,7 @@
                                                         <label style="color: #f2a654">Ribbon 1 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_1_atual" name="ribbon_1_atual" value="${fechamento.ribbon_1_atual}" required>
+                                                               id="ribbon_1_atual" name="ribbon_1_atual"  required>
 
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -500,7 +500,7 @@
                                                         <label style="color: #f2a654">Ribbon 2 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_2_atual" name="ribbon_2_atual" value="${fechamento.ribbon_2_atual}" required>
+                                                               id="ribbon_2_atual" name="ribbon_2_atual"  required>
 
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -530,7 +530,7 @@
                                                         <label style="color: #f2a654">Ribbon 3 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_3_atual" name="ribbon_3_atual" value="${fechamento.ribbon_3_atual}" required>
+                                                               id="ribbon_3_atual" name="ribbon_3_atual"  required>
 
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -542,7 +542,7 @@
                                                         <label style="color: #f2a654">Ribbon 4 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_4_atual" name="ribbon_4_atual" value="${fechamento.ribbon_4_atual}" required>
+                                                               id="ribbon_4_atual" name="ribbon_4_atual" required>
 
                                                         <label style="color: white">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -572,7 +572,7 @@
                                                         <label style="color: #f2a654">Ribbon 5 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_5_atual" name="ribbon_5_atual" value="${fechamento.ribbon_5_atual}" required>
+                                                               id="ribbon_5_atual" name="ribbon_5_atual"  required>
 
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""
@@ -584,7 +584,7 @@
                                                         <label style="color: #f2a654">Ribbon 6 Atual</label>
                                                         <input type="number" class="form-control" placeholder=""
                                                                style="text-align: center; background-color: white; color: black; font-weight: bold"
-                                                               id="ribbon_6_atual" name="ribbon_6_atual" value="${fechamento.ribbon_6_atual}" required>
+                                                               id="ribbon_6_atual" name="ribbon_6_atual"  required>
 
                                                         <label style="color: #f2a654">Revelado</label>
                                                         <input type="number" class="form-control" placeholder=""

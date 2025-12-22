@@ -50,6 +50,7 @@
                     <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletDespesas">Despesas</a></li>
                     <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletSalarios">Salários</a></li>
                     <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletVales">Vales</a></li>
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletAssociado">Gestão de Associado</a></li>
 
 
                 </ul>

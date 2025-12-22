@@ -9,5 +9,31 @@ CRIAR SANGRIA e buscar no fechames
 
 
 
+ADCIONAR AO BUSCAR O SELECIONAR O USUARUIO, EXIBIR O TOTAL DE FOTOS VENDIDAS NO MODAL LANÇAMENTO
+<div class="col-2">
+                                                                                        <label>Total Vendas</label>
+                                                                                        <input type="text"
+                                                                                               class="form-control"
+                                                                                               placeholder=""
+                                                                                               style="background-color: black; color:#DAA520; font-weight: bold"
+                                                                                               id="total_vendido"
+                                                                                               name="total_vendido"
+                                                                                               required
+                                                                                               value=""
+                                                                                               readonly tabindex="-1">
 
+                                                                                    </div>
 
+ MÓDULO FINANCEIRO:
+
+Cálculos de custos (fotos, encartes, FGTS, INSS)
+Total bruto, líquido
+Gravar mês de referência
+Relatório mensal
+
+2️⃣ MÓDULO RELATÓRIOS:
+
+Relatórios gerenciais
+Filtros por período
+Exportação de dados
+Gráficos/estatísticas

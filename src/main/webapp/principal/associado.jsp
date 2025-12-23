@@ -74,7 +74,7 @@
                                                                             <label for="percentual_extras">Percentual de Extras (%) *</label>
                                                                             <input type="text" class="form-control" id="percentual_extras"
                                                                                    name="percentual_extras" value="${modelConfig.percentual_extras}" required>
-                                                                            <small class="text-muted">Ex: 50 para 50%</small>
+                                                                            <small class="text-muted">Ex: 0.50 para 50%</small>
                                                                         </div>
                                                                     </div>
 
@@ -2336,27 +2336,56 @@
         document.getElementById("conf_pix_inf").value = totalPix.toFixed(2);
     }
 
-    // ========== FUNÇÕES DE MÁSCARA PARA INPUTS ==========
+    // ========== MÁSCARAS DE VALOR EM TEMPO REAL ==========
 
     /**
-     * Formata valor monetário em INPUT: R$ 1.000,00
+     * Formata valor monetário enquanto digita
      */
-    function formatarMoedaInput(input) {
+    function formatarMoedaDigitacao(input) {
         let valor = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+
+        if (valor === '' || valor === '0') {
+            input.value = '';
+            return;
+        }
+
+        // Converte para número e formata
+        const valorNumerico = parseInt(valor);
+
+        // Separa reais e centavos
+        const centavos = valorNumerico % 100;
+        const reais = Math.floor(valorNumerico / 100);
+
+        // Formata os reais com separador de milhares
+        const reaisFormatados = reais.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        const centavosFormatados = centavos.toString().padStart(2, '0');
+
+        input.value = 'R$ ' + reaisFormatados + ',' + centavosFormatados;
+    }
+
+    /**
+     * Formata quantidade enquanto digita
+     */
+    function formatarQuantidadeDigitacao(input) {
+        let valor = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+
+        if (valor === '' || valor === '0') {
+            input.value = '';
+            return;
+        }
+
+        // Remove zeros à esquerda
+        valor = valor.replace(/^0+/, '');
 
         if (valor === '') {
             input.value = '';
             return;
         }
 
-        // Converte para centavos
-        valor = (parseInt(valor) / 100).toFixed(2);
+        // Formata com separador de milhares
+        valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-        // Formata com separadores
-        valor = valor.replace('.', ',');
-        valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-
-        input.value = 'R$ ' + valor;
+        input.value = valor;
     }
 
     /**
@@ -2368,24 +2397,6 @@
     }
 
     /**
-     * Formata quantidade: 1.000
-     */
-    function formatarQuantidade(input) {
-        let valor = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
-
-        if (valor === '') {
-            input.value = '';
-            return;
-        }
-
-        // Adiciona separadores de milhares
-        valor = parseInt(valor).toString();
-        valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-
-        input.value = valor;
-    }
-
-    /**
      * Remove formatação de quantidade para enviar ao servidor
      */
     function removerFormatacaoQuantidade(valor) {
@@ -2393,63 +2404,164 @@
         return valor.replace(/\./g, '');
     }
 
-    // ========== APLICAR MÁSCARAS NOS CAMPOS ==========
+    // ========== APLICAR MÁSCARAS COM FORMATAÇÃO EM TEMPO REAL ==========
 
     document.addEventListener('DOMContentLoaded', function() {
 
-        // CAMPOS DE VALORES MONETÁRIOS (Produtos)
-        const camposMoeda = [
-            'conf1_valor', 'conf2_valor', 'conf3_valor', // Modal Produtos
-            'conf1_valor_mat', 'conf2_valor_mat', 'conf3_valor_mat', // Modal Materiais - Valores
-            'conf1_custo_mat', 'conf2_custo_mat', 'conf3_custo_mat'  // Modal Materiais - Custos
+        // ===== CAMPOS DE VALORES MONETÁRIOS =====
+        const camposMoedaReal = [
+            // Modal Produtos
+            'conf1_valor', 'conf2_valor', 'conf3_valor',
+            // Modal Materiais - Valores
+            'conf1_valor_mat', 'conf2_valor_mat', 'conf3_valor_mat',
+            // Modal Materiais - Custos
+            'conf1_custo_mat', 'conf2_custo_mat', 'conf3_custo_mat',
+            // Modal Financeiro - FGTS e INSS
+            'fgts_valor', 'inss_valor'
         ];
 
-        camposMoeda.forEach(id => {
+        camposMoedaReal.forEach(id => {
             const campo = document.getElementById(id);
             if (campo) {
-                // Formata ao carregar (se já tiver valor)
-                if (campo.value) {
-                    campo.value = 'R$ ' + parseFloat(campo.value).toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                // Formata valor existente ao carregar (SE vier do banco como "5.00")
+                if (campo.value && campo.value !== '0' && campo.value !== '' && !campo.value.includes('R$')) {
+                    const valorNumerico = parseFloat(campo.value.replace(',', '.'));
+                    if (!isNaN(valorNumerico) && valorNumerico > 0) {
+                        // Converte para centavos (ex: 5.00 → 500)
+                        const valorCentavos = Math.round(valorNumerico * 100);
+                        campo.value = valorCentavos.toString();
+                        formatarMoedaDigitacao(campo);
+                    }
                 }
 
-                // Formata ao digitar (USANDO formatarMoedaInput)
-                campo.addEventListener('blur', function() {
-                    formatarMoedaInput(this);
+                // Formata enquanto digita (input)
+                campo.addEventListener('input', function() {
+                    const cursorPos = this.selectionStart;
+                    const valorAntes = this.value.length;
+
+                    formatarMoedaDigitacao(this);
+
+                    const valorDepois = this.value.length;
+                    const diferenca = valorDepois - valorAntes;
+
+                    // Ajusta posição do cursor
+                    const novaPosicao = cursorPos + diferenca;
+                    this.setSelectionRange(novaPosicao, novaPosicao);
                 });
 
-                // Remove formatação antes de enviar
-                campo.closest('form').addEventListener('submit', function() {
-                    campo.value = removerFormatacaoMoeda(campo.value);
+                // Garante formatação ao sair do campo
+                campo.addEventListener('blur', function() {
+                    if (this.value === '' || this.value === 'R$ 0,00') {
+                        this.value = '';
+                    } else {
+                        formatarMoedaDigitacao(this);
+                    }
+                });
+
+                // Limpa ao focar se estiver zerado
+                campo.addEventListener('focus', function() {
+                    if (this.value === 'R$ 0,00' || this.value === '') {
+                        this.value = '';
+                    }
                 });
             }
         });
 
-        // CAMPOS DE QUANTIDADE (Materiais)
-        const camposQuantidade = [
+        // ===== CAMPOS DE QUANTIDADE =====
+        const camposQuantidadeReal = [
             'conf1_qtd_mat', 'conf2_qtd_mat', 'conf3_qtd_mat'
         ];
 
-        camposQuantidade.forEach(id => {
+        camposQuantidadeReal.forEach(id => {
             const campo = document.getElementById(id);
             if (campo) {
-                // Formata ao carregar (se já tiver valor)
-                if (campo.value && campo.value !== '0') {
-                    campo.value = parseInt(campo.value).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                // Formata valor existente ao carregar
+                if (campo.value && campo.value !== '0' && campo.value !== '') {
+                    const valorNumerico = parseInt(campo.value.replace(/\D/g, ''));
+                    if (!isNaN(valorNumerico) && valorNumerico > 0) {
+                        campo.value = valorNumerico.toString();
+                        formatarQuantidadeDigitacao(campo);
+                    }
                 }
 
-                // Formata ao digitar
-                campo.addEventListener('blur', function() {
-                    formatarQuantidade(this);
+                // Formata enquanto digita
+                campo.addEventListener('input', function() {
+                    formatarQuantidadeDigitacao(this);
                 });
 
-                // Remove formatação antes de enviar
-                campo.closest('form').addEventListener('submit', function() {
-                    campo.value = removerFormatacaoQuantidade(campo.value);
+                // Garante formatação ao sair
+                campo.addEventListener('blur', function() {
+                    if (this.value === '' || this.value === '0') {
+                        this.value = '';
+                    } else {
+                        formatarQuantidadeDigitacao(this);
+                    }
                 });
             }
         });
-    });
 
+        // ===== REMOVE FORMATAÇÃO ANTES DE ENVIAR OS FORMULÁRIOS =====
+
+        // Modal Produtos (configForm)
+        const formConfig = document.getElementById('configForm');
+        if (formConfig) {
+            formConfig.addEventListener('submit', function(e) {
+                console.log('📤 Submit formConfig');
+                ['conf1_valor', 'conf2_valor', 'conf3_valor'].forEach(id => {
+                    const campo = document.getElementById(id);
+                    if (campo && campo.value) {
+                        console.log('Antes:', campo.value);
+                        campo.value = removerFormatacaoMoeda(campo.value);
+                        console.log('Depois:', campo.value);
+                    }
+                });
+            });
+        }
+
+        // Modal Custos (formCustos)
+        const formCustos = document.getElementById('formCustos');
+        if (formCustos) {
+            formCustos.addEventListener('submit', function(e) {
+                console.log('📤 Submit formCustos');
+                // Remove formatação dos valores
+                ['conf1_valor_mat', 'conf2_valor_mat', 'conf3_valor_mat',
+                    'conf1_custo_mat', 'conf2_custo_mat', 'conf3_custo_mat'].forEach(id => {
+                    const campo = document.getElementById(id);
+                    if (campo && campo.value) {
+                        console.log(id + ' Antes:', campo.value);
+                        campo.value = removerFormatacaoMoeda(campo.value);
+                        console.log(id + ' Depois:', campo.value);
+                    }
+                });
+
+                // Remove formatação das quantidades
+                ['conf1_qtd_mat', 'conf2_qtd_mat', 'conf3_qtd_mat'].forEach(id => {
+                    const campo = document.getElementById(id);
+                    if (campo && campo.value) {
+                        console.log(id + ' Antes:', campo.value);
+                        campo.value = removerFormatacaoQuantidade(campo.value);
+                        console.log(id + ' Depois:', campo.value);
+                    }
+                });
+            });
+        }
+
+        // Modal Financeiro (formFinanceiro)
+        const formFinanceiro = document.getElementById('formFinanceiro');
+        if (formFinanceiro) {
+            formFinanceiro.addEventListener('submit', function(e) {
+                console.log('📤 Submit formFinanceiro');
+                ['fgts_valor', 'inss_valor'].forEach(id => {
+                    const campo = document.getElementById(id);
+                    if (campo && campo.value) {
+                        console.log(id + ' Antes:', campo.value);
+                        campo.value = removerFormatacaoMoeda(campo.value);
+                        console.log(id + ' Depois:', campo.value);
+                    }
+                });
+            });
+        }
+    });
 
     // ========== CHECKBOX SOBRAS EXTRAS (CORRIGIDO) ==========
     document.addEventListener('DOMContentLoaded', function() {
@@ -2890,8 +3002,8 @@
 
         switch(periodo) {
             case 'ultimo_mes':
-                mesInicial = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1);
-                mesFinal = new Date(hoje.getFullYear(), hoje.getMonth(), 0);
+                mesInicial = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+                mesFinal   = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
                 break;
 
             case 'ultimos_3':
@@ -3049,6 +3161,84 @@
         const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
         return meses[mes - 1] + '/' + ano;
     }
+
+    // Adicione este código ao final do seu <SCRIPT> existente
+
+    // Função para definir data final baseada na data inicial
+    function setDataFinanceiro() {
+        var dataInicial = document.getElementById("data_inicial_fin").value;
+
+        if (dataInicial) {
+            var partesData = dataInicial.split('-');
+            var ano = parseInt(partesData[0], 10);
+            var mes = parseInt(partesData[1], 10) - 1;
+            var dia = parseInt(partesData[2], 10);
+
+            var data = new Date(ano, mes, dia);
+
+            if (!isNaN(data.getTime())) {
+                // Calcula o último dia do mês da data inicial
+                var ultimoDia = new Date(ano, mes + 1, 0);
+
+                // Formata a data final no padrão yyyy-mm-dd
+                var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+                var mesFinal = String(mes + 1).padStart(2, '0');
+                var dataFinal = ano + '-' + mesFinal + '-' + diaFinal;
+
+                document.getElementById("data_final_fin").value = dataFinal;
+            } else {
+                console.error("Data inicial inválida.");
+                document.getElementById("data_final_fin").value = "";
+            }
+        } else {
+            console.error("Data inicial não selecionada.");
+            document.getElementById("data_final_fin").value = "";
+        }
+    }
+
+    // Função para inicializar as datas do modal financeiro
+    function initializeDatesFinanceiro() {
+        var today = new Date();
+
+        // Formata a data inicial (primeiro dia do mês atual)
+        var diaInicial = '01'; // Sempre o primeiro dia do mês
+        var mesInicial = String(today.getMonth() + 1).padStart(2, '0');
+        var anoInicial = today.getFullYear();
+        var dataInicial = anoInicial + '-' + mesInicial + '-' + diaInicial;
+
+        // Calcula o último dia do mês atual
+        var ultimoDia = new Date(anoInicial, today.getMonth() + 1, 0);
+
+        // Formata a data final
+        var diaFinal = String(ultimoDia.getDate()).padStart(2, '0');
+        var mesFinal = String(today.getMonth() + 1).padStart(2, '0');
+        var anoFinal = today.getFullYear();
+        var dataFinal = anoFinal + '-' + mesFinal + '-' + diaFinal;
+
+        // Define os valores dos campos
+        document.getElementById("data_inicial_fin").value = dataInicial;
+        document.getElementById("data_final_fin").value = dataFinal;
+    }
+
+    // Adiciona eventos quando o documento carregar
+    document.addEventListener('DOMContentLoaded', function () {
+        // Evento quando o modal financeiro é aberto
+        var modalFinanceiro = document.getElementById('modalFinanceiro');
+        if (modalFinanceiro) {
+            modalFinanceiro.addEventListener('shown.bs.modal', function () {
+                // Inicializa as datas apenas se ainda não foram preenchidas
+                if (!document.getElementById("data_inicial_fin").value) {
+                    initializeDatesFinanceiro();
+                }
+            });
+        }
+
+        // Adiciona evento onchange ao campo data_inicial_fin
+        var dataInicialFin = document.getElementById("data_inicial_fin");
+        if (dataInicialFin) {
+            dataInicialFin.addEventListener('change', setDataFinanceiro);
+        }
+    });
 </SCRIPT>
 
 

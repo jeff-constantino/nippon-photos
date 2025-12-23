@@ -103,6 +103,30 @@ public class ServletAssociado extends ServletGenericUtil {
                 return;
             }
 
+            // ========== AÇÃO: BUSCAR TOTAL VENDIDO NO MÊS ==========
+            if ("buscarTotalVendidoMes".equals(acao)) {
+                String vendedorId = request.getParameter("vendedor_id");
+                String mes = request.getParameter("mes");
+                String ano = request.getParameter("ano");
+
+                try {
+                    int totalFotos = daoAssociado.buscarTotalFotosVendidasMes(Long.parseLong(vendedorId), Integer.parseInt(mes), Integer.parseInt(ano));
+
+                    Map<String, Object> resultado = new HashMap<>();
+                    resultado.put("total_fotos", totalFotos);
+
+                    String jsonResponse = new Gson().toJson(resultado);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(jsonResponse);
+                } catch (Exception e) {
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+                }
+                return;
+            }
+
             // ========== AÇÃO: GERENCIAR VENDA ==========
             if ("gerenciarVenda".equals(acao) && idVenda != null && !idVenda.isEmpty()) {
                 try {
@@ -371,19 +395,37 @@ public class ServletAssociado extends ServletGenericUtil {
                     fin.setEncartes_extras(Integer.parseInt(totalEncExtras));
                 }
 
-                // Custos
-                fin.setCusto_fotos_sobras(request.getParameter("custo_fotos_sobras"));
-                fin.setCusto_encartes(request.getParameter("custo_encartes"));
-                fin.setFgts(request.getParameter("fgts_valor"));
-                fin.setInss(request.getParameter("inss_valor"));
-                fin.setParcela_inss(request.getParameter("parcela_inss"));
+                // ========== FUNÇÃO AUXILIAR PARA REMOVER FORMATAÇÃO ==========
+                // Remove "R$ ", pontos e vírgulas, converte para BigDecimal
+                java.util.function.Function<String, java.math.BigDecimal> limparValor = (valor) -> {
+                    if (valor == null || valor.isEmpty()) return java.math.BigDecimal.ZERO;
+                    try {
+                        // Remove "R$ ", espaços, pontos (separador de milhar)
+                        // Substitui vírgula por ponto (separador decimal)
+                        String limpo = valor.replace("R$", "")
+                                .replace(" ", "")
+                                .replace(".", "")
+                                .replace(",", ".");
+                        return new java.math.BigDecimal(limpo);
+                    } catch (NumberFormatException e) {
+                        return java.math.BigDecimal.ZERO;
+                    }
+                };
 
-                // Financeiro
-                fin.setTotal_bruto(request.getParameter("total_bruto"));
-                fin.setValor_extras(request.getParameter("valor_extras"));
-                fin.setCustos_fotos(request.getParameter("custos_totais"));
-                fin.setRestituir(request.getParameter("restituir"));
-                fin.setSaldo_liquido(request.getParameter("saldo_liquido"));
+                // Custos (com formatação monetária)
+                fin.setCusto_fotos_sobras(limparValor.apply(request.getParameter("custo_fotos_sobras")));
+                fin.setCusto_encartes(limparValor.apply(request.getParameter("custo_encartes")));
+                fin.setFgts(limparValor.apply(request.getParameter("fgts_valor")));
+                fin.setInss(limparValor.apply(request.getParameter("inss_valor")));
+                fin.setParcela_inss(limparValor.apply(request.getParameter("parcela_inss")));
+
+                // Financeiro (com formatação monetária)
+                fin.setTotal_bruto(limparValor.apply(request.getParameter("total_bruto")));
+                fin.setTotal_vendas(limparValor.apply(request.getParameter("total_vendas")));
+                fin.setValor_extras(limparValor.apply(request.getParameter("valor_extras")));
+                fin.setCustos_fotos(limparValor.apply(request.getParameter("custos_totais")));
+                fin.setRestituir(limparValor.apply(request.getParameter("restituir")));
+                fin.setSaldo_liquido(limparValor.apply(request.getParameter("saldo_liquido")));
 
                 daoAssociado.salvarFinanceiro(fin, super.getUserLogado(request));
 

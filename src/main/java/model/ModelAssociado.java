@@ -105,19 +105,20 @@ public class ModelAssociado implements Serializable {
     private Integer encartes_extras;
 
     // Custos
-    private String custo_fotos_sobras;
-    private String custo_encartes;
-    private String fgts;
-    private String inss;
-    private String parcela_inss;
-    private String inss_desc;
+    private java.math.BigDecimal custo_fotos_sobras;
+    private java.math.BigDecimal custo_encartes;
+    private java.math.BigDecimal fgts;
+    private java.math.BigDecimal inss;
+    private java.math.BigDecimal parcela_inss;
+    private java.math.BigDecimal inss_desc;
 
     // Financeiro
-    private String total_bruto;
-    private String valor_extras;
-    private String custos_fotos;
-    private String restituir;
-    private String saldo_liquido;
+    private java.math.BigDecimal total_bruto;
+    private java.math.BigDecimal total_vendas;
+    private java.math.BigDecimal valor_extras;
+    private java.math.BigDecimal custos_fotos;
+    private java.math.BigDecimal restituir;
+    private java.math.BigDecimal saldo_liquido;
 
     // Auditoria
     private Long usuario_cad_id;
@@ -734,91 +735,99 @@ public class ModelAssociado implements Serializable {
         this.encartes_extras = encartes_extras;
     }
 
-    public String getCusto_fotos_sobras() {
+    public java.math.BigDecimal getCusto_fotos_sobras() {
         return custo_fotos_sobras;
     }
 
-    public void setCusto_fotos_sobras(String custo_fotos_sobras) {
+    public void setCusto_fotos_sobras(java.math.BigDecimal custo_fotos_sobras) {
         this.custo_fotos_sobras = custo_fotos_sobras;
     }
 
-    public String getCusto_encartes() {
+    public java.math.BigDecimal getCusto_encartes() {
         return custo_encartes;
     }
 
-    public void setCusto_encartes(String custo_encartes) {
+    public void setCusto_encartes(java.math.BigDecimal custo_encartes) {
         this.custo_encartes = custo_encartes;
     }
 
-    public String getFgts() {
+    public java.math.BigDecimal getFgts() {
         return fgts;
     }
 
-    public void setFgts(String fgts) {
+    public void setFgts(java.math.BigDecimal fgts) {
         this.fgts = fgts;
     }
 
-    public String getInss() {
+    public java.math.BigDecimal getInss() {
         return inss;
     }
 
-    public void setInss(String inss) {
+    public void setInss(java.math.BigDecimal inss) {
         this.inss = inss;
     }
 
-    public String getParcela_inss() {
+    public java.math.BigDecimal getParcela_inss() {
         return parcela_inss;
     }
 
-    public void setParcela_inss(String parcela_inss) {
+    public void setParcela_inss(java.math.BigDecimal parcela_inss) {
         this.parcela_inss = parcela_inss;
     }
 
-    public String getInss_desc() {
+    public java.math.BigDecimal getInss_desc() {
         return inss_desc;
     }
 
-    public void setInss_desc(String inss_desc) {
+    public void setInss_desc(java.math.BigDecimal inss_desc) {
         this.inss_desc = inss_desc;
     }
 
-    public String getTotal_bruto() {
+    public java.math.BigDecimal getTotal_bruto() {
         return total_bruto;
     }
 
-    public void setTotal_bruto(String total_bruto) {
+    public void setTotal_bruto(java.math.BigDecimal total_bruto) {
         this.total_bruto = total_bruto;
     }
 
-    public String getValor_extras() {
+    public java.math.BigDecimal getTotal_vendas() {
+        return total_vendas;
+    }
+
+    public void setTotal_vendas(java.math.BigDecimal total_vendas) {
+        this.total_vendas = total_vendas;
+    }
+
+    public java.math.BigDecimal getValor_extras() {
         return valor_extras;
     }
 
-    public void setValor_extras(String valor_extras) {
+    public void setValor_extras(java.math.BigDecimal valor_extras) {
         this.valor_extras = valor_extras;
     }
 
-    public String getCustos_fotos() {
+    public java.math.BigDecimal getCustos_fotos() {
         return custos_fotos;
     }
 
-    public void setCustos_fotos(String custos_fotos) {
+    public void setCustos_fotos(java.math.BigDecimal custos_fotos) {
         this.custos_fotos = custos_fotos;
     }
 
-    public String getRestituir() {
+    public java.math.BigDecimal getRestituir() {
         return restituir;
     }
 
-    public void setRestituir(String restituir) {
+    public void setRestituir(java.math.BigDecimal restituir) {
         this.restituir = restituir;
     }
 
-    public String getSaldo_liquido() {
+    public java.math.BigDecimal getSaldo_liquido() {
         return saldo_liquido;
     }
 
-    public void setSaldo_liquido(String saldo_liquido) {
+    public void setSaldo_liquido(java.math.BigDecimal saldo_liquido) {
         this.saldo_liquido = saldo_liquido;
     }
 

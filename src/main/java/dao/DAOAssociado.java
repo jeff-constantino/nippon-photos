@@ -583,8 +583,8 @@ public class DAOAssociado {
     private ModelAssociado inserirFinanceiro(ModelAssociado fin, Long userLogado) throws Exception {
         String sql = "INSERT INTO financeiroassociado (mes_referencia, ano_referencia, total_fotos, total_sobras, "
                 + "total_encartes, fotos_extras, encartes_extras, custo_fotos_sobras, custo_encartes, fgts, inss, "
-                + "parcela_inss, inss_desc, total_bruto, custos_fotos, restituir, saldo_liquido, usuario_cad_id) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "parcela_inss, inss_desc, total_bruto, total_vendas, valor_extras, custos_fotos, restituir, saldo_liquido, usuario_cad_id) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             connection.setAutoCommit(false);
@@ -596,17 +596,19 @@ public class DAOAssociado {
             ps.setObject(5, fin.getTotal_encartes());
             ps.setObject(6, fin.getFotos_extras());
             ps.setObject(7, fin.getEncartes_extras());
-            ps.setString(8, fin.getCusto_fotos_sobras());
-            ps.setString(9, fin.getCusto_encartes());
-            ps.setString(10, fin.getFgts());
-            ps.setString(11, fin.getInss());
-            ps.setString(12, fin.getParcela_inss());
-            ps.setString(13, fin.getInss_desc());
-            ps.setString(14, fin.getTotal_bruto());
-            ps.setString(15, fin.getCustos_fotos());
-            ps.setString(16, fin.getRestituir());
-            ps.setString(17, fin.getSaldo_liquido());
-            ps.setLong(18, userLogado);
+            ps.setBigDecimal(8, fin.getCusto_fotos_sobras());
+            ps.setBigDecimal(9, fin.getCusto_encartes());
+            ps.setBigDecimal(10, fin.getFgts());
+            ps.setBigDecimal(11, fin.getInss());
+            ps.setBigDecimal(12, fin.getParcela_inss());
+            ps.setBigDecimal(13, fin.getInss_desc());
+            ps.setBigDecimal(14, fin.getTotal_bruto());
+            ps.setBigDecimal(15, fin.getTotal_vendas());  // NOVO!
+            ps.setBigDecimal(16, fin.getValor_extras());  // NOVO!
+            ps.setBigDecimal(17, fin.getCustos_fotos());
+            ps.setBigDecimal(18, fin.getRestituir());
+            ps.setBigDecimal(19, fin.getSaldo_liquido());
+            ps.setLong(20, userLogado);
 
             ps.executeUpdate();
 
@@ -626,8 +628,9 @@ public class DAOAssociado {
     private ModelAssociado atualizarFinanceiro(ModelAssociado fin) throws Exception {
         String sql = "UPDATE financeiroassociado SET total_fotos = ?, total_sobras = ?, total_encartes = ?, "
                 + "fotos_extras = ?, encartes_extras = ?, custo_fotos_sobras = ?, custo_encartes = ?, fgts = ?, "
-                + "inss = ?, parcela_inss = ?, inss_desc = ?, total_bruto = ?, custos_fotos = ?, restituir = ?, "
-                + "saldo_liquido = ?, data_atualizacao = CURRENT_TIMESTAMP WHERE id_financeiro = ?";
+                + "inss = ?, parcela_inss = ?, inss_desc = ?, total_bruto = ?, total_vendas = ?, valor_extras = ?, "
+                + "custos_fotos = ?, restituir = ?, saldo_liquido = ?, data_atualizacao = CURRENT_TIMESTAMP "
+                + "WHERE id_financeiro = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);
@@ -637,17 +640,19 @@ public class DAOAssociado {
             ps.setObject(3, fin.getTotal_encartes());
             ps.setObject(4, fin.getFotos_extras());
             ps.setObject(5, fin.getEncartes_extras());
-            ps.setString(6, fin.getCusto_fotos_sobras());
-            ps.setString(7, fin.getCusto_encartes());
-            ps.setString(8, fin.getFgts());
-            ps.setString(9, fin.getInss());
-            ps.setString(10, fin.getParcela_inss());
-            ps.setString(11, fin.getInss_desc());
-            ps.setString(12, fin.getTotal_bruto());
-            ps.setString(13, fin.getCustos_fotos());
-            ps.setString(14, fin.getRestituir());
-            ps.setString(15, fin.getSaldo_liquido());
-            ps.setLong(16, fin.getId_financeiro());
+            ps.setBigDecimal(6, fin.getCusto_fotos_sobras());
+            ps.setBigDecimal(7, fin.getCusto_encartes());
+            ps.setBigDecimal(8, fin.getFgts());
+            ps.setBigDecimal(9, fin.getInss());
+            ps.setBigDecimal(10, fin.getParcela_inss());
+            ps.setBigDecimal(11, fin.getInss_desc());
+            ps.setBigDecimal(12, fin.getTotal_bruto());
+            ps.setBigDecimal(13, fin.getTotal_vendas());  // NOVO!
+            ps.setBigDecimal(14, fin.getValor_extras());  // NOVO!
+            ps.setBigDecimal(15, fin.getCustos_fotos());
+            ps.setBigDecimal(16, fin.getRestituir());
+            ps.setBigDecimal(17, fin.getSaldo_liquido());
+            ps.setLong(18, fin.getId_financeiro());
 
             ps.executeUpdate();
             connection.commit();
@@ -876,17 +881,19 @@ public class DAOAssociado {
         model.setFotos_extras(rs.getInt("fotos_extras"));
         model.setEncartes_extras(rs.getInt("encartes_extras"));
 
-        model.setCusto_fotos_sobras(rs.getString("custo_fotos_sobras"));
-        model.setCusto_encartes(rs.getString("custo_encartes"));
-        model.setFgts(rs.getString("fgts"));
-        model.setInss(rs.getString("inss"));
-        model.setParcela_inss(rs.getString("parcela_inss"));
-        model.setInss_desc(rs.getString("inss_desc"));
+        model.setCusto_fotos_sobras(rs.getBigDecimal("custo_fotos_sobras"));
+        model.setCusto_encartes(rs.getBigDecimal("custo_encartes"));
+        model.setFgts(rs.getBigDecimal("fgts"));
+        model.setInss(rs.getBigDecimal("inss"));
+        model.setParcela_inss(rs.getBigDecimal("parcela_inss"));
+        model.setInss_desc(rs.getBigDecimal("inss_desc"));
 
-        model.setTotal_bruto(rs.getString("total_bruto"));
-        model.setCustos_fotos(rs.getString("custos_fotos"));
-        model.setRestituir(rs.getString("restituir"));
-        model.setSaldo_liquido(rs.getString("saldo_liquido"));
+        model.setTotal_bruto(rs.getBigDecimal("total_bruto"));
+        model.setTotal_vendas(rs.getBigDecimal("total_vendas"));  // NOVO!
+        model.setValor_extras(rs.getBigDecimal("valor_extras"));  // NOVO!
+        model.setCustos_fotos(rs.getBigDecimal("custos_fotos"));
+        model.setRestituir(rs.getBigDecimal("restituir"));
+        model.setSaldo_liquido(rs.getBigDecimal("saldo_liquido"));
 
         return model;
     }
@@ -939,5 +946,29 @@ public class DAOAssociado {
         }
 
         return resultado;
+    }
+
+    /**
+     * Busca total de fotos vendidas no mês por um vendedor
+     */
+    public int buscarTotalFotosVendidasMes(Long vendedorId, int mes, int ano) throws Exception {
+        String sql = "SELECT SUM(prod1_din + prod1_deb + prod1_cred + prod1_pix) as total_fotos "
+                + "FROM vendasassociado "
+                + "WHERE vendedor_id = ? "
+                + "AND EXTRACT(MONTH FROM data_venda) = ? "
+                + "AND EXTRACT(YEAR FROM data_venda) = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, vendedorId);
+            ps.setInt(2, mes);
+            ps.setInt(3, ano);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total_fotos");
+            }
+        }
+
+        return 0;
     }
 }

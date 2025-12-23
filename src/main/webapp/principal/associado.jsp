@@ -308,11 +308,7 @@
                                                                     <input type="text" class="form-control" id="inss_valor"
                                                                            name="inss_valor">
                                                                 </div>
-                                                                <div class="col-2">
-                                                                    <label for="parcela_inss">Parcela INSS (R$)</label>
-                                                                    <input type="text" class="form-control" id="parcela_inss"
-                                                                           name="parcela_inss">
-                                                                </div>
+
                                                             </div>
 
                                                             <!-- FINANCEIRO -->
@@ -324,6 +320,11 @@
                                                                     <label for="total_bruto">Total Bruto (R$)</label>
                                                                     <input type="text" class="form-control" id="total_bruto"
                                                                            name="total_bruto" readonly style="background-color: black;">
+                                                                </div>
+                                                                <div class="col-3">
+                                                                    <label for="total_bruto">Total Vendas (R$)</label>
+                                                                    <input type="text" class="form-control" id="total_vendas"
+                                                                           name="total_vendas" readonly style="background-color: black;">
                                                                 </div>
                                                                 <div class="col-3">
                                                                     <label for="valor_extras">Valor Extras (R$)</label>
@@ -338,7 +339,7 @@
                                                                 <div class="col-3">
                                                                     <label for="restituir">Restituir (R$)</label>
                                                                     <input type="text" class="form-control" id="restituir"
-                                                                           name="restituir" readonly style="background-color: black;">
+                                                                           name="restituir" readonly style="background-color: #AF2018; color: black; font-weight: bold; font-size: 1.2rem;">
                                                                 </div>
                                                                 <div class="col-3">
                                                                     <label for="saldo_liquido">Saldo Líquido (R$)</label>
@@ -990,8 +991,7 @@
                                                                                         <label>SOBRAS</label>
                                                                                         <input type="number"
                                                                                                class="form-control"
-                                                                                               id="sobras" name="sobras"
-                                                                                               placeholder=""
+                                                                                               id="sobras_input"
                                                                                                value="${modelAssociado.sobras}" required
                                                                                                oninput="calcularAproveitamento()">
                                                                                     </div>
@@ -2163,24 +2163,24 @@
             xhr.send();
         });
 
+        // Atualizar outras funções que usam getElementById('sobras')
         function calcularDiferenca() {
-            const ribbonAtual = parseFloat(document.getElementById("ribbon_atual").value) || 0;
-            const ribbonInf = parseFloat(document.getElementById("ribbon_inf").value) || 0;
-            const ribbonSobras = parseFloat(document.getElementById("sobras").value) || 0;
-            const ribbonTotal = parseFloat(document.getElementById("total").value) || 0;
-            const ribbonDif = document.getElementById("ribbon_dif");
+            var ribbonAtual = parseFloat(document.getElementById("ribbon_atual").value) || 0;
+            var ribbonInf = parseFloat(document.getElementById("ribbon_inf").value) || 0;
+            var ribbonSobras = parseFloat(document.getElementById("sobras_input").value) || 0;  // ← MUDOU
+            var ribbonTotal = parseFloat(document.getElementById("total").value) || 0;
+            var ribbonDif = document.getElementById("ribbon_dif");
 
             ribbonDif.value = (ribbonInf + ribbonSobras + ribbonTotal) - ribbonAtual;
         }
 
-
         function calcularAproveitamento() {
-            const vendas = parseFloat(document.getElementById('total').value) || 0;
-            const sobras = parseFloat(document.getElementById('sobras').value) || 0;
-            const producao = vendas + sobras;
+            var vendas = parseFloat(document.getElementById('total').value) || 0;
+            var sobras = parseFloat(document.getElementById('sobras_input').value) || 0;  // ← MUDOU
+            var producao = vendas + sobras;
 
-            const aproveitamento = producao > 0 ? (vendas / producao) * 100 : 0;
-            document.getElementById('aproveitamento').value = aproveitamento.toFixed(2) + " %"; // mostra com 2 casas decimais
+            var aproveitamento = producao > 0 ? (vendas / producao) * 100 : 0;
+            document.getElementById('aproveitamento').value = aproveitamento.toFixed(2) + " %";
         }
         function atualizarConferencia() {
 
@@ -2334,8 +2334,176 @@
         });
 
 
-        // ========== CÁLCULOS FINANCEIROS (COM DEBUG) ==========
+        // ========== CHECKBOX SOBRAS EXTRAS (CORRIGIDO) ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            var checkbox = document.getElementById('sobras_sem_custo');
+            if (checkbox) {
+                checkbox.addEventListener('change', function() {
+                    var sobrasInput = document.getElementById('sobras_input');
+                    var valorSobras = parseInt(sobrasInput.value) || 0;
 
+                    console.log('📦 Checkbox mudou! Checked:', this.checked, 'Valor:', valorSobras);
+
+                    // Remove campos hidden anteriores se existirem
+                    var hiddenAntigos = document.querySelectorAll('input[name="sobras"], input[name="sobras_extras"]');
+                    hiddenAntigos.forEach(function(campo) {
+                        if (campo.type === 'hidden') {
+                            campo.remove();
+                        }
+                    });
+
+                    // Cria novos campos hidden
+                    var formVenda = document.getElementById('formBuscarVenda');
+
+                    var sobrasHidden = document.createElement('input');
+                    sobrasHidden.type = 'hidden';
+                    sobrasHidden.name = 'sobras';
+
+                    var sobrasExtrasHidden = document.createElement('input');
+                    sobrasExtrasHidden.type = 'hidden';
+                    sobrasExtrasHidden.name = 'sobras_extras';
+
+                    if (this.checked) {
+                        // Marcado = SOBRAS EXTRAS (sem custo)
+                        sobrasHidden.value = 0;
+                        sobrasExtrasHidden.value = valorSobras;
+                        console.log('✅ Sobras EXTRAS:', valorSobras);
+                    } else {
+                        // Desmarcado = SOBRAS NORMAIS (com custo)
+                        sobrasHidden.value = valorSobras;
+                        sobrasExtrasHidden.value = 0;
+                        console.log('✅ Sobras NORMAIS:', valorSobras);
+                    }
+
+                    formVenda.appendChild(sobrasHidden);
+                    formVenda.appendChild(sobrasExtrasHidden);
+
+                    console.log('📤 Campos criados - sobras:', sobrasHidden.value, 'sobras_extras:', sobrasExtrasHidden.value);
+                });
+            }
+        });
+
+        // ========== BUSCAR TOTAL VENDIDO NO MÊS (SEM ALERT DUPLICADO) ==========
+
+        // Variável para controlar se já mostrou o alert
+        var alertJaMostrado = false;
+
+        function buscarTotalVendidoMes(vendedorId, mostrarAlert) {
+            console.log('🔍 buscarTotalVendidoMes chamado com vendedorId:', vendedorId);
+
+            if (!vendedorId || vendedorId === '' || vendedorId === 'undefined') {
+                console.log('❌ vendedor_id vazio ou inválido:', vendedorId);
+                return;
+            }
+
+            // Converte para string
+            vendedorId = String(vendedorId);
+
+            // Usa mês/ano atual SEMPRE (já que vendas são só do mês atual)
+            var hoje = new Date();
+            var mes = String(hoje.getMonth() + 1);
+            if (mes.length === 1) mes = '0' + mes;
+            var ano = String(hoje.getFullYear());
+            console.log('📅 Usando mês atual:', mes, '/', ano);
+
+            // Usa concatenação ao invés de template literals
+            var url = 'ServletAssociado?acao=buscarTotalVendidoMes&vendedor_id=' + vendedorId + '&mes=' + mes + '&ano=' + ano;
+            console.log('🔍 URL montada:', url);
+
+            fetch(url)
+                .then(function(response) {
+                    console.log('📥 Resposta status:', response.status);
+                    return response.text();
+                })
+                .then(function(text) {
+                    console.log('📄 Resposta TEXTO:', text);
+
+                    try {
+                        var data = JSON.parse(text);
+                        console.log('✅ JSON parseado:', data);
+
+                        if (data.error) {
+                            console.error('❌ Erro do servidor:', data.error);
+                            document.getElementById('total_vendido').value = 'ERRO';
+                            return;
+                        }
+
+                        var totalVendido = data.total_fotos || 0;
+                        document.getElementById('total_vendido').value = totalVendido;
+                        console.log('✅ Total vendido atualizado:', totalVendido);
+
+                        // Se já passou do limite E deve mostrar alert E ainda não mostrou
+                        var limite = 240;
+                        if (totalVendido >= limite) {
+                            document.getElementById('total_vendido').style.color = '#ff0000';
+
+                            // Só mostra alert se for solicitado E não mostrou ainda
+                            if (mostrarAlert && !alertJaMostrado) {
+                                alertJaMostrado = true;
+                                alert('⚠️ Atenção! ' + totalVendido + ' fotos já vendidas no mês.\nLimite de ' + limite + ' atingido!\n\nMarque "SOBRAS EXTRAS" para sobras sem custo.');
+                            }
+                        } else {
+                            document.getElementById('total_vendido').style.color = '#DAA520';
+                        }
+                    } catch (parseError) {
+                        console.error('❌ Erro ao fazer parse do JSON:', parseError);
+                        console.error('❌ Texto recebido:', text);
+                        document.getElementById('total_vendido').value = 'ERRO JSON';
+                    }
+                })
+                .catch(function(error) {
+                    console.error('❌ Erro ao buscar total vendido:', error);
+                    document.getElementById('total_vendido').value = 'ERRO REDE';
+                });
+        }
+
+        // ========== FUNÇÃO verEditar ==========
+        function verEditar(id, nome) {
+            console.log('👤 verEditar chamado - ID:', id, 'Nome:', nome);
+
+            // Reseta o controle de alert
+            alertJaMostrado = false;
+
+            // Converte para string
+            id = String(id);
+
+            // Primeiro preenche os campos
+            document.getElementById('vendedor_id').value = id;
+            document.getElementById('vendedor').value = nome;
+
+            // IMPORTANTE: Espera um pouco para o campo ser preenchido
+            setTimeout(function() {
+                console.log('⏱️ Verificando campo vendedor_id:', document.getElementById('vendedor_id').value);
+                // Passa true para MOSTRAR alert
+                buscarTotalVendidoMes(id, true);
+            }, 100);
+
+            var modal = $('#modalLancaVenda');
+            var campoData = $('#outer_dataVenda');
+
+            modal.animate({
+                scrollTop: campoData.offset().top - modal.offset().top + modal.scrollTop()
+            }, 700);
+        }
+
+        // Atualizar total vendido quando mudar a data (SEM ALERT)
+        document.addEventListener('DOMContentLoaded', function() {
+            var campoData = document.getElementById('outer_dataVenda');
+            if (campoData) {
+                campoData.addEventListener('change', function() {
+                    var vendedorId = document.getElementById('vendedor_id').value;
+                    console.log('📅 Data mudou, vendedor_id do campo:', vendedorId);
+                    if (vendedorId && vendedorId !== '' && vendedorId !== 'undefined') {
+                        // Passa false para NÃO mostrar alert
+                        buscarTotalVendidoMes(vendedorId, false);
+                    } else {
+                        console.log('❌ Campo vendedor_id está vazio!');
+                    }
+                });
+            }
+        });
+
+        // ========== CÁLCULO FINANCEIRO (VERSÃO FINAL COM TOTAL VENDAS) ==========
         function calcularFinanceiro() {
             const dataInicial = document.getElementById('data_inicial_fin').value;
             const dataFinal = document.getElementById('data_final_fin').value;
@@ -2345,23 +2513,11 @@
                 return;
             }
 
-            // Busca os dados do período
             fetch('ServletAssociado?acao=consultarFinanceiro&data_inicial=' + dataInicial + '&data_final=' + dataFinal)
                 .then(response => response.json())
                 .then(data => {
                     console.log('===== DADOS RECEBIDOS DO SERVIDOR =====');
                     console.log('Dados completos:', data);
-                    console.log('ft_total:', data.ft_total);
-                    console.log('sobras:', data.sobras);
-                    console.log('enc_total:', data.enc_total);
-                    console.log('dig_total:', data.dig_total);
-                    console.log('limite:', data.limite);
-                    console.log('mat1_custo:', data.mat1_custo);
-                    console.log('mat2_custo:', data.mat2_custo);
-                    console.log('conf1_valor:', data.conf1_valor);
-                    console.log('conf2_valor:', data.conf2_valor);
-                    console.log('conf3_valor:', data.conf3_valor);
-                    console.log('percentual_extras:', data.percentual_extras);
 
                     // Preenche os totais
                     document.getElementById('total_fotos').value = data.ft_total || 0;
@@ -2373,42 +2529,49 @@
                     const limite = data.limite || 0;
                     const ft_total = data.ft_total || 0;
                     const enc_total = data.enc_total || 0;
+                    const dig_total = data.dig_total || 0;
+                    const sobras = data.sobras || 0;
 
                     const total_extras = Math.max(0, ft_total - limite);
                     const total_enc_extras = Math.max(0, enc_total - limite);
 
                     console.log('===== CÁLCULO DE EXTRAS =====');
-                    console.log('total_extras:', total_extras);
-                    console.log('total_enc_extras:', total_enc_extras);
+                    console.log('total_extras (fotos):', total_extras);
+                    console.log('total_enc_extras (encartes):', total_enc_extras);
 
                     document.getElementById('total_extras').value = total_extras;
                     document.getElementById('total_enc_extras').value = total_enc_extras;
 
                     // Calcula custos
-                    const sobras = data.sobras || 0;
                     const mat1_custo = parseFloat(data.mat1_custo) || 0;
                     const mat2_custo = parseFloat(data.mat2_custo) || 0;
 
                     console.log('===== CÁLCULO DE CUSTOS =====');
-                    console.log('mat1_custo parseado:', mat1_custo);
-                    console.log('mat2_custo parseado:', mat2_custo);
+                    console.log('mat1_custo:', mat1_custo);
+                    console.log('mat2_custo:', mat2_custo);
+                    console.log('ft_total:', ft_total);
+                    console.log('sobras:', sobras);
+                    console.log('limite:', limite);
 
-                    // Custo Fotos+Sobras: ATÉ o limite (não acima)
-                    // Se vendeu 40 e limite 240 → custo de 40
-                    // Se vendeu 300 e limite 240 → custo de 240 (só até o limite)
-                    const qtd_fotos_sobras_custo = Math.min((ft_total + sobras), limite);
-                    const custo_fotos_sobras = qtd_fotos_sobras_custo * mat1_custo;
+                    // Custo Fotos: ATÉ o limite
+                    const qtd_fotos_custo = Math.min(ft_total, limite);
+                    console.log('Quantidade FOTOS com custo (até limite):', qtd_fotos_custo);
 
-                    console.log('Quantidade fotos+sobras COM CUSTO (até limite):', qtd_fotos_sobras_custo);
+                    // Custo Sobras: SEMPRE todas (sem limite!)
+                    const qtd_sobras_custo = sobras;
+                    console.log('Quantidade SOBRAS com custo (TODAS):', qtd_sobras_custo);
+
+                    const custo_fotos_sobras = (qtd_fotos_custo + qtd_sobras_custo) * mat1_custo;
+                    console.log('Total fotos+sobras com custo:', qtd_fotos_custo + qtd_sobras_custo);
                     console.log('Custo fotos+sobras:', custo_fotos_sobras);
 
                     document.getElementById('custo_fotos_sobras').value = formatarMoedaValor(custo_fotos_sobras);
 
-                    // Custo Encartes: ATÉ o limite (não acima)
+                    // Custo Encartes: ATÉ o limite
                     const qtd_encartes_custo = Math.min(enc_total, limite);
                     const custo_encartes = qtd_encartes_custo * mat2_custo;
 
-                    console.log('Quantidade encartes COM CUSTO (até limite):', qtd_encartes_custo);
+                    console.log('Quantidade encartes com custo:', qtd_encartes_custo);
                     console.log('Custo encartes:', custo_encartes);
 
                     document.getElementById('custo_encartes').value = formatarMoedaValor(custo_encartes);
@@ -2417,29 +2580,66 @@
                     const conf1_valor = parseFloat(data.conf1_valor) || 0;
                     const conf2_valor = parseFloat(data.conf2_valor) || 0;
                     const conf3_valor = parseFloat(data.conf3_valor) || 0;
-                    const dig_total = data.dig_total || 0;
                     const percentual_extras = parseFloat(data.percentual_extras) || 0;
 
                     console.log('===== CÁLCULO FINANCEIRO =====');
                     console.log('conf1_valor:', conf1_valor);
                     console.log('conf2_valor:', conf2_valor);
                     console.log('conf3_valor:', conf3_valor);
+                    console.log('percentual_extras (original):', percentual_extras);
 
-                    // Total Bruto: ((ft_total - total_extras) * conf1_valor) + ((enc_total - total_enc_extras) * conf2_valor) + (dig_total * conf3_valor)
-                    const total_bruto = ((ft_total - total_extras) * conf1_valor) +
-                        ((enc_total - total_enc_extras) * conf2_valor) +
+                    // ========== TOTAL BRUTO = TUDO QUE VENDEU (SÓ VISUALIZAÇÃO) ==========
+                    const total_bruto = (ft_total * conf1_valor) +
+                        (enc_total * conf2_valor) +
                         (dig_total * conf3_valor);
 
-                    console.log('Total bruto:', total_bruto);
+                    console.log('Cálculo Total Bruto (visualização):');
+                    console.log('  Fotos:', ft_total, '×', conf1_valor, '=', ft_total * conf1_valor);
+                    console.log('  Encartes:', enc_total, '×', conf2_valor, '=', enc_total * conf2_valor);
+                    console.log('  Digitais:', dig_total, '×', conf3_valor, '=', dig_total * conf3_valor);
+                    console.log('  = Total bruto:', total_bruto);
+
                     document.getElementById('total_bruto').value = formatarMoedaValor(total_bruto);
 
-                    // Valor Extras: (((total_extras) * conf1_valor) + ((total_enc_extras) * conf2_valor)) * (percentual_extras / 100)
-                    const valor_extras = ((total_extras * conf1_valor) + (total_enc_extras * conf2_valor)) * (percentual_extras / 100);
+                    // ========== TOTAL VENDAS (RECEBIDO) = SÓ ATÉ O LIMITE ==========
+                    const fotos_ate_limite = Math.min(ft_total, limite);
+                    const enc_ate_limite = Math.min(enc_total, limite);
+                    const dig_ate_limite = Math.min(dig_total, limite);
 
-                    console.log('Valor extras:', valor_extras);
+                    const total_vendas = (fotos_ate_limite * conf1_valor) +
+                        (enc_ate_limite * conf2_valor) +
+                        (dig_ate_limite * conf3_valor);
+
+                    console.log('Cálculo Total Vendas (recebido):');
+                    console.log('  Fotos até limite:', fotos_ate_limite, '×', conf1_valor, '=', fotos_ate_limite * conf1_valor);
+                    console.log('  Encartes até limite:', enc_ate_limite, '×', conf2_valor, '=', enc_ate_limite * conf2_valor);
+                    console.log('  Digitais até limite:', dig_ate_limite, '×', conf3_valor, '=', dig_ate_limite * conf3_valor);
+                    console.log('  = Total vendas:', total_vendas);
+
+                    document.getElementById('total_vendas').value = formatarMoedaValor(total_vendas);
+
+                    // ========== VALOR EXTRAS (COMISSÃO) = SÓ FOTOS E ENCARTES EXTRAS ==========
+                    let percentual_divisor = percentual_extras;
+                    if (percentual_extras < 1) {
+                        percentual_divisor = percentual_extras;
+                        console.log('Percentual já em decimal:', percentual_divisor);
+                    } else {
+                        percentual_divisor = percentual_extras / 100;
+                        console.log('Percentual convertido para decimal:', percentual_divisor);
+                    }
+
+                    const valor_extras = ((total_extras * conf1_valor) +
+                        (total_enc_extras * conf2_valor)) * percentual_divisor;
+
+                    console.log('Cálculo Valor Extras (Comissão):');
+                    console.log('  Fotos extras:', total_extras, '×', conf1_valor, '=', total_extras * conf1_valor);
+                    console.log('  Encartes extras:', total_enc_extras, '×', conf2_valor, '=', total_enc_extras * conf2_valor);
+                    console.log('  Soma extras:', (total_extras * conf1_valor) + (total_enc_extras * conf2_valor));
+                    console.log('  × percentual:', percentual_divisor);
+                    console.log('  = Valor extras (Comissão):', valor_extras);
+
                     document.getElementById('valor_extras').value = formatarMoedaValor(valor_extras);
 
-                    // Atualizar custos totais e restituir quando FGTS/INSS forem preenchidos
                     atualizarFinanceiro();
 
                     console.log('===== CÁLCULO FINALIZADO =====');
@@ -2449,7 +2649,7 @@
                     alert('Erro ao consultar dados financeiros!');
                 });
         }
-
+        // ========== ATUALIZAR FINANCEIRO (COM TOTAL VENDAS) ==========
         function atualizarFinanceiro() {
             console.log('===== ATUALIZANDO FINANCEIRO =====');
 
@@ -2468,11 +2668,11 @@
 
             const fgts = parseFloat(removerFormatacaoMoeda(document.getElementById('fgts_valor').value)) || 0;
             const inss = parseFloat(removerFormatacaoMoeda(document.getElementById('inss_valor').value)) || 0;
-            const parcela_inss = parseFloat(removerFormatacaoMoeda(document.getElementById('parcela_inss').value)) || 0;
+
 
             console.log('FGTS:', fgts);
             console.log('INSS:', inss);
-            console.log('Parcela INSS:', parcela_inss);
+
 
             // Custos de Fotos: simplesmente somar os custos (já calculados em R$)
             const custos_totais = custo_fotos_sobras_qtd + custo_encartes_qtd;
@@ -2486,26 +2686,30 @@
             console.log('Restituir:', restituir);
             document.getElementById('restituir').value = formatarMoedaValor(restituir);
 
-            // Saldo Líquido: total_bruto + valor_extras - restituir
-            const total_bruto = parseFloat(removerFormatacaoMoeda(document.getElementById('total_bruto').value)) || 0;
+            // ========== SALDO LÍQUIDO: TOTAL VENDAS + COMISSÃO - CUSTOS - INSS - FGTS ==========
+            const total_vendas = parseFloat(removerFormatacaoMoeda(document.getElementById('total_vendas').value)) || 0;
             const valor_extras = parseFloat(removerFormatacaoMoeda(document.getElementById('valor_extras').value)) || 0;
 
-            const saldo_liquido = total_bruto + valor_extras - restituir;
+            const saldo_liquido = total_vendas + valor_extras - restituir;
 
-            console.log('Total bruto:', total_bruto);
-            console.log('Valor extras:', valor_extras);
+            console.log('Total vendas:', total_vendas);
+            console.log('Valor extras (Comissão):', valor_extras);
+            console.log('Restituir:', restituir);
             console.log('Saldo líquido:', saldo_liquido);
 
             document.getElementById('saldo_liquido').value = formatarMoedaValor(saldo_liquido);
         }
+        // ========== FUNÇÕES AUXILIARES FINANCEIRAS ==========
 
         function formatarMoedaValor(valor) {
             return 'R$ ' + valor.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
         }
 
+
+
         // Adicionar eventos para atualizar cálculos quando FGTS/INSS mudarem
         document.addEventListener('DOMContentLoaded', function() {
-            ['fgts_valor', 'inss_valor', 'parcela_inss'].forEach(id => {
+            ['fgts_valor', 'inss_valor'].forEach(id => {
                 const campo = document.getElementById(id);
                 if (campo) {
                     campo.addEventListener('input', atualizarFinanceiro);
@@ -2517,24 +2721,45 @@
                 }
             });
         });
-        document.getElementById('sobras_sem_custo').addEventListener('change', function() {
-            const sobrasInput = document.getElementById('sobras_input');
-            const valorSobras = parseInt(sobrasInput.value) || 0;
+        // Adicionar antes do submit
+        document.getElementById('formBuscarVenda').addEventListener('submit', function(e) {
+            // Se não tiver checkbox marcado, criar campos com valores padrão
+            var checkbox = document.getElementById('sobras_sem_custo');
+            var sobrasInput = document.getElementById('sobras_input');
+            var valorSobras = parseInt(sobrasInput.value) || 0;
 
-            if (this.checked) {
-                // Marcar como sobras extras (sem custo)
-                document.querySelector('input[name="sobras"]').value = 0;
-                document.querySelector('input[name="sobras_extras"]').value = valorSobras;
+            // Remove campos hidden anteriores
+            var hiddenAntigos = this.querySelectorAll('input[name="sobras"], input[name="sobras_extras"]');
+            hiddenAntigos.forEach(function(campo) {
+                if (campo.type === 'hidden') {
+                    campo.remove();
+                }
+            });
+
+            // Cria novos campos
+            var sobrasHidden = document.createElement('input');
+            sobrasHidden.type = 'hidden';
+            sobrasHidden.name = 'sobras';
+
+            var sobrasExtrasHidden = document.createElement('input');
+            sobrasExtrasHidden.type = 'hidden';
+            sobrasExtrasHidden.name = 'sobras_extras';
+
+            if (checkbox && checkbox.checked) {
+                sobrasHidden.value = 0;
+                sobrasExtrasHidden.value = valorSobras;
             } else {
-                // Marcar como sobras normais (com custo)
-                document.querySelector('input[name="sobras"]').value = valorSobras;
-                document.querySelector('input[name="sobras_extras"]').value = 0;
+                sobrasHidden.value = valorSobras;
+                sobrasExtrasHidden.value = 0;
             }
-        });
 
+            this.appendChild(sobrasHidden);
+            this.appendChild(sobrasExtrasHidden);
+
+            console.log('📤 SUBMIT - sobras:', sobrasHidden.value, 'sobras_extras:', sobrasExtrasHidden.value);
+        });
     </SCRIPT>
 
 
-</div>
 </body>
 </html>

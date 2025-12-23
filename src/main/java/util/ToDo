@@ -6,11 +6,3 @@ ADCIONAR FOTO DO FUNCIONÁRIO NO CADASTRO
 adcionar historico disciplinar para exibir as medidas de cada funcionario
 
 CRIAR SANGRIA e buscar no fechames
-
-
-
-
-case 'ultimo_mes':
-                mesInicial = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-                mesFinal   = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
-                break;

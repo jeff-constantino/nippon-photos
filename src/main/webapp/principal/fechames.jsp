@@ -675,94 +675,151 @@
                                 <div class="card-body">
                                     <h4 class="card-title" style="text-align: center">RESUMO FINANCEIRO</h4>
                                     <div class="table-responsive">
-                                        <table class="table table-bordered" id="tabelafinanceiromes">
-                                            <div class="row">
-                                                <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="receitas" style="font-size: 1.2rem">RECEITA BRUTA</label>
-                                                    <input type="text" class="form-control money" id="receitas" name="receitas" style="font-size: 1.2rem"
+                                        <div class="row">
+                                            <!-- Receitas -->
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                                                <div style="text-align: center">
+                                                    <label for="receitas" style="font-size: 1.1rem; font-weight: bold;">RECEITA BRUTA</label>
+                                                    <input type="text" class="form-control money text-center"
+                                                           id="receitas" name="receitas"
+                                                           style="font-size: 1.1rem; font-weight: bold;"
                                                            value="${fechamentoExistente != null ? fechamentoExistente.receitas : (totalDinheiroReal + totalDebitoReal + totalCreditoReal + totalPixReal)}">
                                                 </div>
-                                                <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="receitadin" style="font-size: 1.2rem">RECEITA DINHEIRO</label>
-                                                    <input type="text" class="form-control money" id="receitadin" name="receitadin" style="font-size: 1.2rem"
+                                            </div>
+
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                                                <div style="text-align: center">
+                                                    <label for="receitadin" style="font-size: 1.1rem; font-weight: bold;">RECEITA DINHEIRO</label>
+                                                    <input type="text" class="form-control money text-center"
+                                                           id="receitadin" name="receitadin"
+                                                           style="font-size: 1.1rem"
                                                            value="${fechamentoExistente != null ? fechamentoExistente.receitadin : totalDinheiroReal}">
                                                 </div>
+                                            </div>
 
-                                                <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="receitacartoes" style="font-size: 1.2rem">RECEITA CARTÕES</label>
-                                                    <input type="text" class="form-control money" id="receitacartoes" name="receitacartoes" style="font-size: 1.2rem"
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                                                <div style="text-align: center">
+                                                    <label for="receitacartoes" style="font-size: 1.1rem; font-weight: bold;">RECEITA CARTÕES</label>
+                                                    <input type="text" class="form-control money text-center"
+                                                           id="receitacartoes" name="receitacartoes"
+                                                           style="font-size: 1.1rem"
                                                            value="${totalDebitoReal + totalCreditoReal}">
                                                 </div>
+                                            </div>
 
-                                                <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="receitapix" style="font-size: 1.2rem">RECEITA PIX</label>
-                                                    <input type="text" class="form-control money" id="receitapix" name="receitapix" style="font-size: 1.2rem"
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                                                <div style="text-align: center">
+                                                    <label for="receitapix" style="font-size: 1.1rem; font-weight: bold;">RECEITA PIX</label>
+                                                    <input type="text" class="form-control money text-center"
+                                                           id="receitapix" name="receitapix"
+                                                           style="font-size: 1.1rem"
                                                            value="${totalPixReal}">
                                                 </div>
+                                            </div>
 
-                                                <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="despesas" style="font-size: 1.2rem">DESPESA TOTAL</label>
-                                                    <input type="text" class="form-control money" id="despesas" name="despesas" style="font-size: 1.2rem"
+                                            <!-- Despesas -->
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                                                <div style="text-align: center">
+                                                    <label for="despesas" style="font-size: 1.1rem; font-weight: bold;">DESPESA TOTAL</label>
+                                                    <input type="text" class="form-control money text-center"
+                                                           id="despesas" name="despesas"
+                                                           style="font-size: 1.1rem"
                                                            value="${valorTotalDespesas}">
                                                 </div>
-                                                <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="despesasdin" style="font-size: 1.2rem">DESPESAS EM DINHEIRO</label>
-                                                    <input type="text" class="form-control money" id="despesasdin" name="despesasdin" style="font-size: 1.2rem"
+                                            </div>
+
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                                                <div style="text-align: center">
+                                                    <label for="despesasdin" style="font-size: 1.1rem; font-weight: bold;">DESPESAS EM DINHEIRO</label>
+                                                    <input type="text" class="form-control money text-center"
+                                                           id="despesasdin" name="despesasdin"
+                                                           style="font-size: 1.1rem"
                                                            value="${fechamentoExistente != null ? fechamentoExistente.despesasdin : valorDespesasDin}">
                                                 </div>
+                                            </div>
 
-                                                <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="contas" style="font-size: 1.2rem">CONTAS PAGAS</label>
-                                                    <input type="text" class="form-control money" id="contas" name="contas" style="font-size: 1.2rem"
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                                                <div style="text-align: center">
+                                                    <label for="contas" style="font-size: 1.1rem; font-weight: bold;">CONTAS PAGAS</label>
+                                                    <input type="text" class="form-control money text-center"
+                                                           id="contas" name="contas"
+                                                           style="font-size: 1.1rem"
                                                            value="${valorTotalContas}">
                                                 </div>
-                                                <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="salarios" style="font-size: 1.2rem">SALÁRIOS LIQUÍDOS</label>
-                                                    <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 1.2rem"
+                                            </div>
+
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                                                <div style="text-align: center">
+                                                    <label for="salarios" style="font-size: 1.1rem; font-weight: bold;">SALÁRIOS LÍQUIDOS</label>
+                                                    <input type="text" class="form-control money text-center"
+                                                           id="salarios" name="salarios"
+                                                           style="font-size: 1.1rem"
                                                            value="${fechamentoExistente != null ? fechamentoExistente.salarios : valorTotalSalarios}">
                                                 </div>
-                                                <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="vales" style="font-size: 1.2rem">VALES</label>
-                                                    <input type="text" class="form-control money" id="vales" name="vales" style="font-size: 1.2rem"
+                                            </div>
+
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                                                <div style="text-align: center">
+                                                    <label for="vales" style="font-size: 1.1rem; font-weight: bold;">VALES</label>
+                                                    <input type="text" class="form-control money text-center"
+                                                           id="vales" name="vales"
+                                                           style="font-size: 1.1rem"
                                                            value="${(empty vendasMesList[0].valor_vale_total ? 0 : vendasMesList[0].valor_vale_total)}">
                                                 </div>
+                                            </div>
 
-                                                <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="descontos" style="font-size: 1.2rem">DESCONTOS</label>
-                                                    <input type="text" class="form-control money" id="descontos" name="descontos" style="font-size: 1.2rem"
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                                                <div style="text-align: center">
+                                                    <label for="descontos" style="font-size: 1.1rem; font-weight: bold;">DESCONTOS</label>
+                                                    <input type="text" class="form-control money text-center"
+                                                           id="descontos" name="descontos"
+                                                           style="font-size: 1.1rem"
                                                            value="${(empty vendasMesList[0].desconto_mes ? 0 : vendasMesList[0].desconto_mes)}">
                                                 </div>
+                                            </div>
 
-                                                <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="sangria" style="font-size: 1.2rem">SANGRIA DE CAIXA</label>
-                                                    <input type="text" class="form-control money" id="sangria" name="sangria" style="font-size: 1.2rem"
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                                                <div style="text-align: center">
+                                                    <label for="sangria" style="font-size: 1.1rem; font-weight: bold;">SANGRIA DE CAIXA</label>
+                                                    <input type="text" class="form-control money text-center"
+                                                           id="sangria" name="sangria"
+                                                           style="font-size: 1.1rem"
                                                            value="${fechamentoExistente != null ? fechamentoExistente.sangria : 0}">
                                                 </div>
+                                            </div>
 
-                                                <div class="col-3 mb-3" style="text-align: center">
-                                                    <label for="saldo" style="font-size: 1.2rem; color: #DAA520">SALDO EM CAIXA</label>
-                                                    <input type="text" class="form-control money" id="saldo" name="saldo" style="font-size: 1.2rem;color: #DAA520"
+                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                                                <div style="text-align: center">
+                                                    <label for="saldo" style="font-size: 1.1rem; font-weight: bold; color: #DAA520">SALDO EM CAIXA</label>
+                                                    <input type="text" class="form-control money text-center"
+                                                           id="saldo" name="saldo"
+                                                           style="font-size: 1.1rem; color: #DAA520; font-weight: bold;"
                                                            value="${fechamentoExistente != null ? fechamentoExistente.saldo : ''}">
                                                 </div>
                                             </div>
-                                        </table>
+                                        </div>
                                     </div>
-                                    <div style="text-align: center; margin-top: 20px;">
-                                        <button type="submit" class="btn btn-outline-success" style="font-size: large; margin-right: 15px;">
-                                            ${fechamentoExistente != null ? 'Atualizar' : 'Gravar'} Fechamento do Mês
-                                        </button>
 
-                                        <button type="button" class="btn btn-outline-primary" style="font-size: large"
-                                                onclick="exportarParaExcelFechaMes()">
-                                            <i class="fas fa-file-excel"></i> Exportar para Excel
-                                        </button>
+                                    <!-- Botões -->
+                                    <div class="row mt-4">
+                                        <div class="col-12 col-md-6 mb-2">
+                                            <button type="submit" class="btn btn-outline-success w-100"
+                                                    style="font-size: 1.1rem; padding: 10px;">
+                                                ${fechamentoExistente != null ? 'Atualizar' : 'Gravar'} Fechamento do Mês
+                                            </button>
+                                        </div>
+
+                                        <div class="col-12 col-md-6 mb-2">
+                                            <button type="button" class="btn btn-outline-primary w-100"
+                                                    style="font-size: 1.1rem; padding: 10px;"
+                                                    onclick="exportarParaExcelFechaMes()">
+                                                <i class="fas fa-file-excel"></i> Exportar para Excel
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
-
                     </div>
                 </form>
 

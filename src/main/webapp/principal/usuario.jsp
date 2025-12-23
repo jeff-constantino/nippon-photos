@@ -47,17 +47,15 @@
                                             <!-- Modal -->
 
                                             <div class="modal fade" id="modalCad" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-xl mt-5">
+                                                <div class="modal-dialog modal-xl modal-fullscreen-lg-down mt-lg-5">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="staticBackdropLabel">Cadastro de Funcionário     </h5>
-
+                                                            <h5 class="modal-title" id="staticBackdropLabel">Cadastro de Funcionário</h5>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
 
                                                         <div class="container-fluid">
                                                             <div class="page-body">
-
                                                                 <div class="row">
                                                                     <div class="col-auto">
                                                                         <span style="color:#1ad76b; text-align: center">${msg}</span>
@@ -70,131 +68,141 @@
                                                             <div class="container-fluid">
                                                                 <div class="row">
                                                                     <div class="page-body">
-
                                                                         <div class="col-sm-12">
                                                                             <!-- Basic Form Inputs card start -->
                                                                             <div class="card">
                                                                                 <div class="card-block">
 
-
-                                                                                    <form class="form-material" enctype="multipart/form-data" action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formUser" >
-
+                                                                                    <form class="form-material" enctype="multipart/form-data"
+                                                                                          action="<%= request.getContextPath() %>/ServletUsuarioController"
+                                                                                          method="post" id="formUser">
 
                                                                                         <div class="row">
-
-                                                                                            <div class="col-sm-1">
-                                                                                                <label class="float-label" >ID:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control" id="id2" name="id" placeholder="" readonly value="${modelLogin.id}">
+                                                                                            <!-- ID e Foto -->
+                                                                                            <div class="col-6 col-sm-3 col-md-2 col-lg-1 mb-3">
+                                                                                                <label class="float-label">ID:</label>
+                                                                                                <input type="text" class="form-control" id="id2" name="id"
+                                                                                                       placeholder="" readonly value="${modelLogin.id}">
                                                                                             </div>
-                                                                                            <div class="col-3 input-group mb-4">
-                                                                                                <div class="input-group-prepend">
-                                                                                                    <img src="" id="fotoembase64" width="200px">
 
+                                                                                            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                                                                                                <label class="d-block mb-2">Foto:</label>
+                                                                                                <div class="input-group">
+                                                                                                    <div class="input-group-prepend me-2">
+                                                                                                        <img src="" id="fotoembase64"
+                                                                                                             class="img-thumbnail"
+                                                                                                             style="max-width: 150px; height: auto;">
+                                                                                                    </div>
+                                                                                                    <input type="file" id="filefoto" name="filefoto"
+                                                                                                           onchange="visualizarImg('fotoembase64','filefoto')"
+                                                                                                           class="form-control">
                                                                                                 </div>
-                                                                                                <input type="file"  id="filefoto" name="filefoto" onchange="visualizarImg('fotoembase64','filefoto')" class="form-control-file">
-
                                                                                             </div>
 
-                                                                                            <div class="col-3">
+                                                                                            <!-- Dados Pessoais -->
+                                                                                            <div class="col-12 col-sm-6 col-lg-4 mb-3">
                                                                                                 <label class="float-label">NOME:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control" id="nome2" name="nome" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.nome}" autofocus>
-
+                                                                                                <input type="text" class="form-control" id="nome2" name="nome"
+                                                                                                       placeholder="" style="background-color: black"
+                                                                                                       REQUIRED value="${modelLogin.nome}" autofocus>
                                                                                             </div>
-<%--                              NOVOS CAMPOS--%>
-                                                                                            <div class="col-3">
+
+                                                                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                                                                                                 <label class="float-label">RG:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control" id="rg2" name="rg" maxlength="12" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.rg}">
-
+                                                                                                <input type="text" class="form-control" id="rg2" name="rg"
+                                                                                                       maxlength="12" placeholder=""
+                                                                                                       style="background-color: black"
+                                                                                                       REQUIRED value="${modelLogin.rg}">
                                                                                             </div>
-                                                                                            <div class="col-3">
+
+                                                                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                                                                                                 <label class="float-label">CPF:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control" id="cpf2" name="cpf" maxlength="14" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.cpf}">
-
+                                                                                                <input type="text" class="form-control" id="cpf2" name="cpf"
+                                                                                                       maxlength="14" placeholder=""
+                                                                                                       style="background-color: black"
+                                                                                                       REQUIRED value="${modelLogin.cpf}">
                                                                                             </div>
-                                                                                            <div class="col-3">
+
+                                                                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                                                                                                 <label class="float-label">PIS:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control" id="pis2" name="pis" maxlength="14" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.pis}">
-
+                                                                                                <input type="text" class="form-control" id="pis2" name="pis"
+                                                                                                       maxlength="14" placeholder=""
+                                                                                                       style="background-color: black"
+                                                                                                       REQUIRED value="${modelLogin.pis}">
                                                                                             </div>
-                                                                                            <div class="col-3">
+
+                                                                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                                                                                                 <label class="float-label">TELEFONE:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control" id="telefone2" name="telefone" maxlength="15" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.telefone}">
-
+                                                                                                <input type="text" class="form-control" id="telefone2"
+                                                                                                       name="telefone" maxlength="15" placeholder=""
+                                                                                                       style="background-color: black"
+                                                                                                       REQUIRED value="${modelLogin.telefone}">
                                                                                             </div>
 
-                                                                                            <div class="col-12">
+                                                                                            <div class="col-12 mb-3">
                                                                                                 <label class="float-label">ENDEREÇO:</label>
-                                                                                                <span class="form-bar"></span>
-                                                                                                <input type="text" class="form-control" id="endereco2" name="endereco" placeholder=""  style="background-color: black" REQUIRED value="${modelLogin.endereco}">
-
+                                                                                                <input type="text" class="form-control" id="endereco2"
+                                                                                                       name="endereco" placeholder=""
+                                                                                                       style="background-color: black"
+                                                                                                       REQUIRED value="${modelLogin.endereco}">
                                                                                             </div>
-                                                                                            <br>
-                                                                                            <br>
-<%--                       FIM NOVOS CAMPOS--%>
 
-
-                                                                                            <div class="col-3 form-group" style="margin-top: 15px">
-
+                                                                                            <!-- Status e Comissão -->
+                                                                                            <div class="col-12 col-sm-6 col-md-4 mb-3">
                                                                                                 <label>STATUS</label>
                                                                                                 <select class="form-select" id="status1" name="status" required>
                                                                                                     <option disabled="disabled">Selecione o Status</option>
-                                                                                                    <option style="color: #00d25b" value="Ativo"  <%
-                                                                                                        ModelLogin modelLogin =(ModelLogin)request.getAttribute("modelLogin");
+                                                                                                    <option style="color: #00d25b" value="Ativo" <%
+                                                                                                        ModelLogin modelLogin = (ModelLogin)request.getAttribute("modelLogin");
                                                                                                         if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Ativo")){
-                                                                                                            out.print(" ");
                                                                                                             out.print("selected=\"selected\"");
-                                                                                                            out.print(" ");
-                                                                                                        }%>>Ativo</option>
-
+                                                                                                        }%>>Ativo
+                                                                                                    </option>
                                                                                                     <option style="color: #bf3322" value="Inativo" <%
-                                                                                                        modelLogin =(ModelLogin) request.getAttribute("modelLogin");
+                                                                                                        modelLogin = (ModelLogin) request.getAttribute("modelLogin");
                                                                                                         if (modelLogin != null && modelLogin.getStatus().equalsIgnoreCase("Inativo")){
-                                                                                                            out.print(" ");
                                                                                                             out.print("selected=\"selected\"");
-                                                                                                            out.print(" ");
-                                                                                                        }%>>Inativo</option>
-
+                                                                                                        }%>>Inativo
+                                                                                                    </option>
                                                                                                 </select>
                                                                                             </div>
-                                                                                            <div class="col-3 form-group" style="margin-top: 15px">
-                                                                                                <label>COMISSÃO</label>
 
+                                                                                            <div class="col-12 col-sm-6 col-md-4 mb-3">
+                                                                                                <label>COMISSÃO</label>
                                                                                                 <select class="form-select" id="comissao" name="comissao" required>
                                                                                                     <option disabled="disabled">Selecione a Comissão</option>
-
-                                                                                                    <option value="Comissão 1"
-                                                                                                            <%
-                                                                                                                if (modelLogin != null && "Comissão 1".equalsIgnoreCase(modelLogin.getComissao())) {
-                                                                                                                    out.print("selected=\"selected\"");
-                                                                                                                }
-                                                                                                            %>>
-                                                                                                        Comissão 1
+                                                                                                    <option value="Comissão 1" <%
+                                                                                                        if (modelLogin != null && "Comissão 1".equalsIgnoreCase(modelLogin.getComissao())) {
+                                                                                                            out.print("selected=\"selected\"");
+                                                                                                        }
+                                                                                                    %>>Comissão 1
                                                                                                     </option>
-
-                                                                                                    <option value="Comissão 2"
-                                                                                                            <%
-                                                                                                                if (modelLogin != null && "Comissão 2".equalsIgnoreCase(modelLogin.getComissao())) {
-                                                                                                                    out.print("selected=\"selected\"");
-                                                                                                                }
-                                                                                                            %>>
-                                                                                                        Comissão 2
+                                                                                                    <option value="Comissão 2" <%
+                                                                                                        if (modelLogin != null && "Comissão 2".equalsIgnoreCase(modelLogin.getComissao())) {
+                                                                                                            out.print("selected=\"selected\"");
+                                                                                                        }
+                                                                                                    %>>Comissão 2
                                                                                                     </option>
                                                                                                 </select>
-
                                                                                             </div>
 
-                                                                                            <div>
-                                                                                                <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="limparForm();" >Novo</button>
-                                                                                                <button  class="btn btn-outline-success waves-effect waves-light" >Cadastrar</button>
-                                                                                                <%--  BOTOES MODAL--%>
+                                                                                            <!-- Botões -->
+                                                                                            <div class="col-12">
+                                                                                                <div class="row">
+                                                                                                    <div class="col-6 col-sm-4 col-md-3 mb-2">
+                                                                                                        <button type="button"
+                                                                                                                class="btn btn-outline-primary waves-effect waves-light w-100"
+                                                                                                                onclick="limparForm();">
+                                                                                                            Novo
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                    <div class="col-6 col-sm-4 col-md-3 mb-2">
+                                                                                                        <button class="btn btn-outline-success waves-effect waves-light w-100">
+                                                                                                            Cadastrar
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                </div>
                                                                                             </div>
-
                                                                                         </div>
                                                                                     </form>
 
@@ -202,14 +210,12 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-
                                                                 </div>
                                                             </div>
-
                                                         </div>
+
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
-
                                                         </div>
                                                     </div>
                                                 </div>

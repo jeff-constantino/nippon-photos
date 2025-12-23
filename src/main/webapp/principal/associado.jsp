@@ -2459,7 +2459,7 @@
                 var sobrasInput = document.getElementById('sobras_input');
                 var valorSobras = parseInt(sobrasInput.value) || 0;
 
-
+                console.log('📦 Checkbox mudou! Checked:', this.checked, 'Valor:', valorSobras);
 
                 // Remove campos hidden anteriores se existirem
                 var hiddenAntigos = document.querySelectorAll('input[name="sobras"], input[name="sobras_extras"]');
@@ -2484,18 +2484,18 @@
                     // Marcado = SOBRAS EXTRAS (sem custo)
                     sobrasHidden.value = 0;
                     sobrasExtrasHidden.value = valorSobras;
-
+                    console.log('✅ Sobras EXTRAS:', valorSobras);
                 } else {
                     // Desmarcado = SOBRAS NORMAIS (com custo)
                     sobrasHidden.value = valorSobras;
                     sobrasExtrasHidden.value = 0;
-
+                    console.log('✅ Sobras NORMAIS:', valorSobras);
                 }
 
                 formVenda.appendChild(sobrasHidden);
                 formVenda.appendChild(sobrasExtrasHidden);
 
-
+                console.log('📤 Campos criados - sobras:', sobrasHidden.value, 'sobras_extras:', sobrasExtrasHidden.value);
             });
         }
     });
@@ -2506,7 +2506,7 @@
     var alertJaMostrado = false;
 
     function buscarTotalVendidoMes(vendedorId, mostrarAlert) {
-
+        console.log('🔍 buscarTotalVendidoMes chamado com vendedorId:', vendedorId);
 
         if (!vendedorId || vendedorId === '' || vendedorId === 'undefined') {
             console.log('❌ vendedor_id vazio ou inválido:', vendedorId);
@@ -2521,15 +2521,15 @@
         var mes = String(hoje.getMonth() + 1);
         if (mes.length === 1) mes = '0' + mes;
         var ano = String(hoje.getFullYear());
-
+        console.log('📅 Usando mês atual:', mes, '/', ano);
 
         // Usa concatenação ao invés de template literals
         var url = 'ServletAssociado?acao=buscarTotalVendidoMes&vendedor_id=' + vendedorId + '&mes=' + mes + '&ano=' + ano;
-
+        console.log('🔍 URL montada:', url);
 
         fetch(url)
             .then(function(response) {
-
+                console.log('📥 Resposta status:', response.status);
                 return response.text();
             })
             .then(function(text) {
@@ -2547,7 +2547,7 @@
 
                     var totalVendido = data.total_fotos || 0;
                     document.getElementById('total_vendido').value = totalVendido;
-
+                    console.log('✅ Total vendido atualizado:', totalVendido);
 
                     // Se já passou do limite E deve mostrar alert E ainda não mostrou
                     var limite = 240;
@@ -2576,7 +2576,7 @@
 
     // ========== FUNÇÃO verEditar ==========
     function verEditar(id, nome) {
-
+        console.log('👤 verEditar chamado - ID:', id, 'Nome:', nome);
 
         // Reseta o controle de alert
         alertJaMostrado = false;
@@ -2609,7 +2609,7 @@
         if (campoData) {
             campoData.addEventListener('change', function() {
                 var vendedorId = document.getElementById('vendedor_id').value;
-
+                console.log('📅 Data mudou, vendedor_id do campo:', vendedorId);
                 if (vendedorId && vendedorId !== '' && vendedorId !== 'undefined') {
                     // Passa false para NÃO mostrar alert
                     buscarTotalVendidoMes(vendedorId, false);
@@ -2633,7 +2633,8 @@
         fetch('ServletAssociado?acao=consultarFinanceiro&data_inicial=' + dataInicial + '&data_final=' + dataFinal)
             .then(response => response.json())
             .then(data => {
-
+                console.log('===== DADOS RECEBIDOS DO SERVIDOR =====');
+                console.log('Dados completos:', data);
 
                 // Preenche os totais
                 document.getElementById('total_fotos').value = data.ft_total || 0;
@@ -2651,7 +2652,9 @@
                 const total_extras = Math.max(0, ft_total - limite);
                 const total_enc_extras = Math.max(0, enc_total - limite);
 
-
+                console.log('===== CÁLCULO DE EXTRAS =====');
+                console.log('total_extras (fotos):', total_extras);
+                console.log('total_enc_extras (encartes):', total_enc_extras);
 
                 document.getElementById('total_extras').value = total_extras;
                 document.getElementById('total_enc_extras').value = total_enc_extras;
@@ -2660,17 +2663,24 @@
                 const mat1_custo = parseFloat(data.mat1_custo) || 0;
                 const mat2_custo = parseFloat(data.mat2_custo) || 0;
 
-
+                console.log('===== CÁLCULO DE CUSTOS =====');
+                console.log('mat1_custo:', mat1_custo);
+                console.log('mat2_custo:', mat2_custo);
+                console.log('ft_total:', ft_total);
+                console.log('sobras:', sobras);
+                console.log('limite:', limite);
 
                 // Custo Fotos: ATÉ o limite
                 const qtd_fotos_custo = Math.min(ft_total, limite);
-
+                console.log('Quantidade FOTOS com custo (até limite):', qtd_fotos_custo);
 
                 // Custo Sobras: SEMPRE todas (sem limite!)
                 const qtd_sobras_custo = sobras;
-
+                console.log('Quantidade SOBRAS com custo (TODAS):', qtd_sobras_custo);
 
                 const custo_fotos_sobras = (qtd_fotos_custo + qtd_sobras_custo) * mat1_custo;
+                console.log('Total fotos+sobras com custo:', qtd_fotos_custo + qtd_sobras_custo);
+                console.log('Custo fotos+sobras:', custo_fotos_sobras);
 
                 document.getElementById('custo_fotos_sobras').value = formatarMoedaValor(custo_fotos_sobras);
 
@@ -2678,7 +2688,8 @@
                 const qtd_encartes_custo = Math.min(enc_total, limite);
                 const custo_encartes = qtd_encartes_custo * mat2_custo;
 
-
+                console.log('Quantidade encartes com custo:', qtd_encartes_custo);
+                console.log('Custo encartes:', custo_encartes);
 
                 document.getElementById('custo_encartes').value = formatarMoedaValor(custo_encartes);
 
@@ -2688,14 +2699,22 @@
                 const conf3_valor = parseFloat(data.conf3_valor) || 0;
                 const percentual_extras = parseFloat(data.percentual_extras) || 0;
 
-
+                console.log('===== CÁLCULO FINANCEIRO =====');
+                console.log('conf1_valor:', conf1_valor);
+                console.log('conf2_valor:', conf2_valor);
+                console.log('conf3_valor:', conf3_valor);
+                console.log('percentual_extras (original):', percentual_extras);
 
                 // ========== TOTAL BRUTO = TUDO QUE VENDEU (SÓ VISUALIZAÇÃO) ==========
                 const total_bruto = (ft_total * conf1_valor) +
                     (enc_total * conf2_valor) +
                     (dig_total * conf3_valor);
 
-
+                console.log('Cálculo Total Bruto (visualização):');
+                console.log('  Fotos:', ft_total, '×', conf1_valor, '=', ft_total * conf1_valor);
+                console.log('  Encartes:', enc_total, '×', conf2_valor, '=', enc_total * conf2_valor);
+                console.log('  Digitais:', dig_total, '×', conf3_valor, '=', dig_total * conf3_valor);
+                console.log('  = Total bruto:', total_bruto);
 
                 document.getElementById('total_bruto').value = formatarMoedaValor(total_bruto);
 
@@ -2708,7 +2727,11 @@
                     (enc_ate_limite * conf2_valor) +
                     (dig_ate_limite * conf3_valor);
 
-
+                console.log('Cálculo Total Vendas (recebido):');
+                console.log('  Fotos até limite:', fotos_ate_limite, '×', conf1_valor, '=', fotos_ate_limite * conf1_valor);
+                console.log('  Encartes até limite:', enc_ate_limite, '×', conf2_valor, '=', enc_ate_limite * conf2_valor);
+                console.log('  Digitais até limite:', dig_ate_limite, '×', conf3_valor, '=', dig_ate_limite * conf3_valor);
+                console.log('  = Total vendas:', total_vendas);
 
                 document.getElementById('total_vendas').value = formatarMoedaValor(total_vendas);
 
@@ -2725,13 +2748,18 @@
                 const valor_extras = ((total_extras * conf1_valor) +
                     (total_enc_extras * conf2_valor)) * percentual_divisor;
 
-
+                console.log('Cálculo Valor Extras (Comissão):');
+                console.log('  Fotos extras:', total_extras, '×', conf1_valor, '=', total_extras * conf1_valor);
+                console.log('  Encartes extras:', total_enc_extras, '×', conf2_valor, '=', total_enc_extras * conf2_valor);
+                console.log('  Soma extras:', (total_extras * conf1_valor) + (total_enc_extras * conf2_valor));
+                console.log('  × percentual:', percentual_divisor);
+                console.log('  = Valor extras (Comissão):', valor_extras);
 
                 document.getElementById('valor_extras').value = formatarMoedaValor(valor_extras);
 
                 atualizarFinanceiro();
 
-
+                console.log('===== CÁLCULO FINALIZADO =====');
             })
             .catch(error => {
                 console.error('Erro ao buscar dados financeiros:', error);
@@ -2741,28 +2769,39 @@
 
     // ========== ATUALIZAR FINANCEIRO (COM TOTAL VENDAS) ==========
     function atualizarFinanceiro() {
+        console.log('===== ATUALIZANDO FINANCEIRO =====');
 
         // Pega valores dos inputs
         const custo_fotos_sobras_str = document.getElementById('custo_fotos_sobras').value;
         const custo_encartes_str = document.getElementById('custo_encartes').value;
 
+        console.log('custo_fotos_sobras string:', custo_fotos_sobras_str);
+        console.log('custo_encartes string:', custo_encartes_str);
+
         const custo_fotos_sobras_qtd = parseFloat(removerFormatacaoMoeda(custo_fotos_sobras_str)) || 0;
         const custo_encartes_qtd = parseFloat(removerFormatacaoMoeda(custo_encartes_str)) || 0;
+
+        console.log('custo_fotos_sobras parseado:', custo_fotos_sobras_qtd);
+        console.log('custo_encartes parseado:', custo_encartes_qtd);
 
         const fgts = parseFloat(removerFormatacaoMoeda(document.getElementById('fgts_valor').value)) || 0;
         const inss = parseFloat(removerFormatacaoMoeda(document.getElementById('inss_valor').value)) || 0;
 
 
+        console.log('FGTS:', fgts);
+        console.log('INSS:', inss);
 
 
         // Custos de Fotos: simplesmente somar os custos (já calculados em R$)
         const custos_totais = custo_fotos_sobras_qtd + custo_encartes_qtd;
 
+        console.log('Custos totais:', custos_totais);
         document.getElementById('custos_totais').value = formatarMoedaValor(custos_totais);
 
         // Restituir: custos_totais + inss + fgts
         const restituir = custos_totais + inss + fgts;
 
+        console.log('Restituir:', restituir);
         document.getElementById('restituir').value = formatarMoedaValor(restituir);
 
         // ========== SALDO LÍQUIDO: TOTAL VENDAS + COMISSÃO - CUSTOS - INSS - FGTS ==========
@@ -2771,6 +2810,10 @@
 
         const saldo_liquido = total_vendas + valor_extras - restituir;
 
+        console.log('Total vendas:', total_vendas);
+        console.log('Valor extras (Comissão):', valor_extras);
+        console.log('Restituir:', restituir);
+        console.log('Saldo líquido:', saldo_liquido);
 
         document.getElementById('saldo_liquido').value = formatarMoedaValor(saldo_liquido);
     }
@@ -2833,6 +2876,7 @@
         this.appendChild(sobrasHidden);
         this.appendChild(sobrasExtrasHidden);
 
+        console.log('📤 SUBMIT - sobras:', sobrasHidden.value, 'sobras_extras:', sobrasExtrasHidden.value);
     });
 
 
@@ -2846,26 +2890,33 @@
 
         switch(periodo) {
             case 'ultimo_mes':
-                mesInicial = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
-                mesFinal   = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                mesInicial = new Date(hoje.getFullYear(), hoje.getMonth() - 1, 1);
+                mesFinal = new Date(hoje.getFullYear(), hoje.getMonth(), 0);
                 break;
 
             case 'ultimos_3':
-                mesInicial = new Date(hoje.getFullYear(), hoje.getMonth() - 2, 1);
-                mesFinal   = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                mesInicial = new Date(hoje.getFullYear(), hoje.getMonth() - 3, 1);
+                mesFinal = new Date(hoje.getFullYear(), hoje.getMonth(), 0);
                 break;
 
             case 'ultimos_6':
-                mesInicial = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1);
-                mesFinal   = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                mesInicial = new Date(hoje.getFullYear(), hoje.getMonth() - 6, 1);
+                mesFinal = new Date(hoje.getFullYear(), hoje.getMonth(), 0);
                 break;
 
             case 'ano_atual':
                 mesInicial = new Date(hoje.getFullYear(), 0, 1);
-                mesFinal   = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                mesFinal = new Date(hoje.getFullYear(), hoje.getMonth(), 0);
                 break;
-        }
 
+            case 'personalizado':
+                document.getElementById('rel_mes_inicial').value = '';
+                document.getElementById('rel_mes_final').value = '';
+                return;
+
+            default:
+                return;
+        }
 
         const formatarMes = (data) => {
             const ano = data.getFullYear();
@@ -2890,12 +2941,12 @@
         const dataInicial = mesInicial + '-01';
         const dataFinal = mesFinal + '-01';
 
-
+        console.log('🔍 Buscando relatório:', dataInicial, 'até', dataFinal);
 
         fetch('ServletAssociado?acao=buscarRelatorio&data_inicial=' + dataInicial + '&data_final=' + dataFinal)
             .then(response => response.json())
             .then(data => {
-
+                console.log('📊 Dados recebidos:', data);
 
                 if (!data || data.length === 0) {
                     mostrarSemDados();
@@ -2998,9 +3049,6 @@
         const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
         return meses[mes - 1] + '/' + ano;
     }
-
-
-
 </SCRIPT>
 
 

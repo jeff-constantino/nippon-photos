@@ -731,66 +731,74 @@
                                         </div>
 
 
-                                    <div class="row ">
-                                        <div class="col-12 grid-margin">
-                                            <div class="card">
+                                        <div class="row">
+                                            <div class="col-12 grid-margin">
+                                                <div class="card">
+                                                    <div class="card-body">
 
-                                                <div class="card-body">
+                                                        <!-- Botões de Ação -->
+                                                        <div class="row mb-3">
+                                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+                                                                <button type="button" class="btn btn-outline-warning w-100"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#modalLancaVenda">
+                                                                    <h5 class="mb-0">Lançamentos</h5>
+                                                                </button>
+                                                            </div>
+                                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+                                                                <button type="button" class="btn btn-outline-danger w-100"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#modalBuscaVenda">
+                                                                    <h5 class="mb-0">Buscar Venda</h5>
+                                                                </button>
+                                                            </div>
+                                                        </div>
 
-
-                                                    <button type="button" class="btn btn-outline-warning"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#modalLancaVenda">
-                                                        <h4>Lançamentos</h4>
-                                                    </button>
-                                                    <button type="button" class="btn btn-outline-danger"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#modalBuscaVenda">
-                                                        <h4>Buscar Venda</h4>
-                                                    </button>
-                                                    <div class="table-responsive" style="overflow-x: hidden">
-                                                        <table class="table">
-                                                            <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
+                                                        <div class="table-responsive" style="overflow-x: hidden">
+                                                            <!-- FORMULÁRIO DE EDIÇÃO DE VENDA -->
                                                             <form action="<%= request.getContextPath() %>/ServletVendas"
                                                                   method="post"
                                                                   id="formVendido" name="formBuscarVenda">
                                                                 <input type="hidden" name="acao" value="">
-                                                                <div class="col-sm-1">
-                                                                    <label class="float-label">VENDA ID:</label>
-                                                                    <span class="form-bar"></span>
-                                                                    <input type="text" class="form-control"
-                                                                           id="outer_venda_id"
-                                                                           name="venda_id" placeholder=""
-                                                                           style="background-color: black" readonly
-                                                                           value="${modelVendasConsulta.venda_id}">
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <div class="col-auto">
-                                                                        <span style="color:#1ad76b; text-align: center">${msg}</span>
+
+                                                                <div class="row mb-3">
+                                                                    <div class="col-6 col-sm-3 col-md-2 mb-2">
+                                                                        <label class="float-label">VENDA ID:</label>
+                                                                        <input type="text" class="form-control"
+                                                                               id="outer_venda_id"
+                                                                               name="venda_id" placeholder=""
+                                                                               style="background-color: black" readonly
+                                                                               value="${modelVendasConsulta.venda_id}">
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="row">
-                                                                    <div class="col-3">
-                                                                        <label for="outer_dataVenda">Data da
-                                                                            Venda:</label>
+                                                                    <div class="col-12">
+                                                                        <div class="col-auto mb-2">
+                                                                            <span style="color:#1ad76b; text-align: center">${msg}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row mb-3">
+                                                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-2">
+                                                                        <label for="dataVenda">Data da Venda:</label>
                                                                         <input type="date" class="form-control"
                                                                                id="dataVenda" name="dataVenda" required
                                                                                value="${formattedDataVenda != null ? formattedDataVenda : ''}">
                                                                     </div>
 
-
-                                                                    <div class="col-sm-1">
+                                                                    <div class="col-6 col-sm-3 col-md-2 mb-2">
                                                                         <label class="float-label">ID:</label>
-                                                                        <span class="form-bar"></span>
                                                                         <input type="text" class="form-control"
                                                                                id="outer_vendedor_id"
                                                                                name="vendedor_id" placeholder=""
                                                                                style="background-color: black" readonly
                                                                                value="${modelVendasConsulta.vendedor_id}">
                                                                     </div>
-                                                                    <div class="col-6">
+
+                                                                    <div class="col-12 col-sm-9 col-md-6 col-lg-4 mb-2">
                                                                         <label class="float-label">FUNCIONÁRIO:</label>
-                                                                        <span class="form-bar"></span>
                                                                         <input type="text" class="form-control"
                                                                                id="outer_vendedor"
                                                                                name="nome" placeholder=""
@@ -798,10 +806,8 @@
                                                                                value="${modelVendasConsulta.nome}">
                                                                     </div>
 
-                                                                    <div class="col-2">
-                                                                        <label class="float-label">TOTAL DE
-                                                                            FOTOS:</label>
-                                                                        <span class="form-bar"></span>
+                                                                    <div class="col-6 col-sm-3 col-md-4 col-lg-2 mb-2">
+                                                                        <label class="float-label">TOTAL DE FOTOS:</label>
                                                                         <input type="text" class="form-control"
                                                                                id="outer_total"
                                                                                name="outer_total" placeholder=""
@@ -810,23 +816,23 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <!-- Seções para FOTOS, ENCARTE e DIGITAIS em linha -->
-                                                                <div class="row mt-3">
-                                                                    <div class="col-4 text-center">
+                                                                <!-- Seções para FOTOS, ENCARTE e DIGITAIS -->
+                                                                <div class="row mt-3 mb-2">
+                                                                    <div class="col-12 col-lg-4 text-center mb-2">
                                                                         <h5 style="color: #f2a654">FOTOS</h5>
                                                                     </div>
-                                                                    <div class="col-4 text-center">
+                                                                    <div class="col-12 col-lg-4 text-center mb-2">
                                                                         <h5 STYLE="color: #00d25b">ENCARTES</h5>
                                                                     </div>
-                                                                    <div class="col-4 text-center">
+                                                                    <div class="col-12 col-lg-4 text-center mb-2">
                                                                         <h5 style="color: fuchsia">DIGITAIS</h5>
                                                                     </div>
                                                                 </div>
 
                                                                 <div class="row">
                                                                     <!-- Inputs para FOTOS -->
-                                                                    <div class="col-4">
-                                                                        <div class="row">
+                                                                    <div class="col-12 col-lg-4 mb-3">
+                                                                        <div class="row g-2">
                                                                             <div class="col-6">
                                                                                 <label style="color: #f2a654">DINHEIRO</label>
                                                                                 <input type="number"
@@ -915,8 +921,8 @@
                                                                     </div>
 
                                                                     <!-- Inputs para ENCARTE -->
-                                                                    <div class="col-4">
-                                                                        <div class="row">
+                                                                    <div class="col-12 col-lg-4 mb-3">
+                                                                        <div class="row g-2">
                                                                             <div class="col-6">
                                                                                 <label STYLE="color: #00d25b">DINHEIRO</label>
                                                                                 <input type="number"
@@ -1005,8 +1011,8 @@
                                                                     </div>
 
                                                                     <!-- Inputs para DIGITAIS -->
-                                                                    <div class="col-4">
-                                                                        <div class="row">
+                                                                    <div class="col-12 col-lg-4 mb-3">
+                                                                        <div class="row g-2">
                                                                             <div class="col-6">
                                                                                 <label style="color: fuchsia">DINHEIRO</label>
                                                                                 <input type="number"
@@ -1092,183 +1098,154 @@
                                                                                        name="prod3_pix_valor">
                                                                             </div>
                                                                         </div>
-
-                                                                    </div>
-                                                                    <div class="col-4">
-                                                                        <div class="row">
-                                                                            <div class="col-6">
-                                                                                <label style="color: #777777">SOBRAS</label>
-                                                                                <input type="number"
-                                                                                       class="form-control"
-                                                                                       placeholder=""
-                                                                                       style="background-color: #777777; color: black; font-weight: bold"
-                                                                                       id="outer_sobras" name="sobras"
-                                                                                       required
-                                                                                       value="${modelVendasConsulta.sobras}">
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <label>RIBBON</label>
-                                                                                <select class="form-select" id="ribbon2"
-                                                                                        name="ribbon"
-                                                                                        required
-                                                                                        value="${modelVendas.ribbon}">
-                                                                                    <option disabled>Tamanho do Papel
-                                                                                    </option>
-                                                                                    <option style="color: #00d25b"
-                                                                                            value="AUTORIZADO"
-                                                                                            <%
-                                                                                                modelVendas = (ModelVendas) request.getAttribute("modelVendas");
-                                                                                                if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("AUTORIZADO")) {
-                                                                                                    out.print("selected=\"selected\"");
-                                                                                                }
-                                                                                            %>>AUTORIZADO
-                                                                                    </option>
-                                                                                    <option style="color: #bf3322"
-                                                                                            value="DESCONTAR"
-                                                                                            <%
-                                                                                                modelVendas = (ModelVendas) request.getAttribute("modelVendas");
-                                                                                                if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("DESCONTAR")) {
-                                                                                                    out.print("selected=\"selected\"");
-                                                                                                }
-                                                                                            %>>DESCONTAR
-                                                                                    </option>
-
-                                                                                </select>
-                                                                            </div>
-
-
-                                                                        </div>
-
-
                                                                     </div>
                                                                 </div>
 
+                                                                <!-- Sobras e Ribbon -->
+                                                                <div class="row mb-3">
+                                                                    <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-2">
+                                                                        <label style="color: #777777">SOBRAS</label>
+                                                                        <input type="number"
+                                                                               class="form-control"
+                                                                               placeholder=""
+                                                                               style="background-color: #777777; color: black; font-weight: bold"
+                                                                               id="outer_sobras" name="sobras"
+                                                                               required
+                                                                               value="${modelVendasConsulta.sobras}">
+                                                                    </div>
+                                                                    <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-2">
+                                                                        <label>RIBBON</label>
+                                                                        <select class="form-select" id="ribbon2"
+                                                                                name="ribbon"
+                                                                                required
+                                                                                value="${modelVendas.ribbon}">
+                                                                            <option disabled>Tamanho do Papel</option>
+                                                                            <option style="color: #00d25b"
+                                                                                    value="AUTORIZADO"
+                                                                                    <%
+                                                                                        ModelVendas modelVendas = (ModelVendas) request.getAttribute("modelVendas");
+                                                                                        if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("AUTORIZADO")) {
+                                                                                            out.print("selected=\"selected\"");
+                                                                                        }
+                                                                                    %>>AUTORIZADO
+                                                                            </option>
+                                                                            <option style="color: #bf3322"
+                                                                                    value="DESCONTAR"
+                                                                                    <%
+                                                                                        modelVendas = (ModelVendas) request.getAttribute("modelVendas");
+                                                                                        if (modelVendas != null && modelVendas.getRibbon().equalsIgnoreCase("DESCONTAR")) {
+                                                                                            out.print("selected=\"selected\"");
+                                                                                        }
+                                                                                    %>>DESCONTAR
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
 
-                                                                <div>
-
-                                                                    <div>
-                                                                        <button class="btn btn-outline-success waves-effect waves-light">
+                                                                <!-- Botões de Ação -->
+                                                                <div class="row mb-3">
+                                                                    <div class="col-12 col-sm-4 col-md-3 mb-2">
+                                                                        <button class="btn btn-outline-success waves-effect waves-light w-100">
                                                                             Atualizar
                                                                         </button>
+                                                                    </div>
 
+                                                                    <div class="col-12 col-sm-4 col-md-3 mb-2">
                                                                         <button type="button"
-                                                                                class="btn btn-outline-warning waves-effect waves-light"
-                                                                                onclick="limparFormVendido();">Limpar
+                                                                                class="btn btn-outline-warning waves-effect waves-light w-100"
+                                                                                onclick="limparFormVendido();">
+                                                                            Limpar
                                                                         </button>
+                                                                    </div>
 
-                                                                        <button class="btn btn-outline-danger waves-effect waves-light" name="acao" value="deletar">
+                                                                    <div class="col-12 col-sm-4 col-md-3 mb-2">
+                                                                        <button class="btn btn-outline-danger waves-effect waves-light w-100"
+                                                                                name="acao" value="deletar">
                                                                             Excluir Venda
                                                                         </button>
-
                                                                     </div>
                                                                 </div>
                                                             </form>
 
+                                                            <!-- Tabela de Últimos Lançamentos -->
+                                                            <h5 class="mt-4 mb-3">Último Lançamento:</h5>
 
-                                                        </table>
-                                                        <h5>Último Lançamento:</h5>
+                                                            <div style="overflow-x: auto;">
+                                                                <div style="max-height: 400px; overflow-y: auto;">
+                                                                    <table class="table table-striped table-hover" id="tabelaVendaDia">
+                                                                        <thead class="table-dark sticky-top">
+                                                                        <tr>
+                                                                            <th scope="col">Opções</th>
+                                                                            <th scope="col">Nome</th>
+                                                                            <th scope="col">Ft Din</th>
+                                                                            <th scope="col">Ft Deb</th>
+                                                                            <th scope="col">Ft Cred</th>
+                                                                            <th scope="col">Ft Pix</th>
+                                                                            <th scope="col">Enc Din</th>
+                                                                            <th scope="col">Enc Deb</th>
+                                                                            <th scope="col">Enc Cred</th>
+                                                                            <th scope="col">Enc Pix</th>
+                                                                            <th scope="col">Dig Din</th>
+                                                                            <th scope="col">Dig Deb</th>
+                                                                            <th scope="col">Dig Cred</th>
+                                                                            <th scope="col">Dig Pix</th>
+                                                                            <th scope="col">Sobras</th>
+                                                                            <th scope="col">Ribbon</th>
+                                                                            <th scope="col">ID Vendedor</th>
+                                                                            <th scope="col">Data</th>
+                                                                            <th scope="col">ID Venda</th>
+                                                                        </tr>
+                                                                        </thead>
 
-
-                                                        <div style="overflow-x: hidden">
-                                                            <div style="height: 300px; overflow-y: auto;">
-
-
-                                                                <table class="table" id="tabelaVendaDia">
-                                                                    <thead>
-                                                                    <tr>
-                                                                        <th scope="col">Opções</th>
-                                                                        <th scope="col">Nome</th>
-                                                                        <th scope="col">Ft Din</th>
-                                                                        <th scope="col">Ft Deb</th>
-                                                                        <th scope="col">Ft Cred</th>
-                                                                        <th scope="col">Ft Pix</th>
-                                                                        <th scope="col">Enc Din</th>
-                                                                        <th scope="col">Enc Deb</th>
-                                                                        <th scope="col">Enc Cred</th>
-                                                                        <th scope="col">Enc Pix</th>
-                                                                        <th scope="col">Dig Din</th>
-                                                                        <th scope="col">Dig Deb</th>
-                                                                        <th scope="col">Dig Cred</th>
-                                                                        <th scope="col">Dig Pix</th>
-                                                                        <th scope="col">Sobras</th>
-                                                                        <th scope="col">Ribbon</th>
-                                                                        <th scope="col">ID Vendedor</th>
-                                                                        <th scope="col">Data</th>
-                                                                        <th scope="col">ID Venda</th>
-
-                                                                    </tr>
-                                                                    </thead>
-
-                                                                    <tbody>
-                                                                    <c:choose>
-                                                                        <c:when test="${not empty listaVendasDoDia}">
-                                                                            <c:forEach var="vd"
-                                                                                       items="${listaVendasDoDia}">
+                                                                        <tbody>
+                                                                        <c:choose>
+                                                                            <c:when test="${not empty listaVendasDoDia}">
+                                                                                <c:forEach var="vd" items="${listaVendasDoDia}">
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <a class="btn btn-sm btn-outline-success waves-effect waves-light"
+                                                                                               href="<%= request.getContextPath() %>/ServletVendas?acao=gerenciarVenda&venda_id=${vd.venda_id}">
+                                                                                                Gerenciar
+                                                                                            </a>
+                                                                                        </td>
+                                                                                        <td><c:out value="${vd.nome}"/></td>
+                                                                                        <td><c:out value="${vd.prod1_din}"/></td>
+                                                                                        <td><c:out value="${vd.prod1_deb}"/></td>
+                                                                                        <td><c:out value="${vd.prod1_cred}"/></td>
+                                                                                        <td><c:out value="${vd.prod1_pix}"/></td>
+                                                                                        <td><c:out value="${vd.prod2_din}"/></td>
+                                                                                        <td><c:out value="${vd.prod2_deb}"/></td>
+                                                                                        <td><c:out value="${vd.prod2_cred}"/></td>
+                                                                                        <td><c:out value="${vd.prod2_pix}"/></td>
+                                                                                        <td><c:out value="${vd.prod3_din}"/></td>
+                                                                                        <td><c:out value="${vd.prod3_deb}"/></td>
+                                                                                        <td><c:out value="${vd.prod3_cred}"/></td>
+                                                                                        <td><c:out value="${vd.prod3_pix}"/></td>
+                                                                                        <td><c:out value="${vd.sobras}"/></td>
+                                                                                        <td><c:out value="${vd.ribbon}"/></td>
+                                                                                        <td><c:out value="${vd.vendedor_id}"/></td>
+                                                                                        <td><fmt:formatDate value="${vd.data_venda}" pattern="dd/MM/yyyy"/></td>
+                                                                                        <td><c:out value="${vd.venda_id}"/></td>
+                                                                                    </tr>
+                                                                                </c:forEach>
+                                                                            </c:when>
+                                                                            <c:otherwise>
                                                                                 <tr>
-                                                                                    <td>
-                                                                                        <a class="btn btn-outline-success waves-effect waves-light"
-                                                                                           href="<%= request.getContextPath() %>/ServletVendas?acao=gerenciarVenda&venda_id=${vd.venda_id}">Gerenciar</a>
+                                                                                    <td colspan="19" class="text-center">
+                                                                                        Nenhuma venda encontrada para o dia.
                                                                                     </td>
-                                                                                    <td><c:out value="${vd.nome}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.prod1_din}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.prod1_deb}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.prod1_cred}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.prod1_pix}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.prod2_din}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.prod2_deb}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.prod2_cred}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.prod2_pix}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.prod3_din}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.prod3_deb}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.prod3_cred}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.prod3_pix}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.sobras}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.ribbon}"/></td>
-                                                                                    <td><c:out
-                                                                                            value="${vd.vendedor_id}"/></td>
-                                                                                    <td><fmt:formatDate value="${vd.data_venda}" pattern="dd/MM/yyyy"/></td>
-
-
-                                                                                    <td><c:out
-                                                                                            value="${vd.venda_id}"/></td>
-
-
                                                                                 </tr>
-                                                                            </c:forEach>
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                            <tr>
-                                                                                <td colspan="15">Nenhuma venda
-                                                                                    encontrada para o dia.
-                                                                                </td>
-                                                                            </tr>
-                                                                        </c:otherwise>
-                                                                    </c:choose>
-                                                                    </tbody>
-
-                                                                </table>
-                                                                </form>
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

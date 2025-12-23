@@ -582,9 +582,9 @@ public class DAOAssociado {
 
     private ModelAssociado inserirFinanceiro(ModelAssociado fin, Long userLogado) throws Exception {
         String sql = "INSERT INTO financeiroassociado (mes_referencia, ano_referencia, total_fotos, total_sobras, "
-                + "total_encartes, fotos_extras, encartes_extras, custo_fotos_sobras, custo_encartes, fgts, inss, "
-                + "parcela_inss, inss_desc, total_bruto, total_vendas, valor_extras, custos_fotos, restituir, saldo_liquido, usuario_cad_id) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "total_encartes, dig_total, fotos_extras, encartes_extras, custo_fotos_sobras, custo_encartes, fgts, inss, "
+                + "total_bruto, total_vendas, valor_extras, custos_fotos, restituir, saldo_liquido, usuario_cad_id) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             connection.setAutoCommit(false);
@@ -594,21 +594,20 @@ public class DAOAssociado {
             ps.setObject(3, fin.getTotal_fotos());
             ps.setObject(4, fin.getTotal_sobras());
             ps.setObject(5, fin.getTotal_encartes());
-            ps.setObject(6, fin.getFotos_extras());
-            ps.setObject(7, fin.getEncartes_extras());
-            ps.setBigDecimal(8, fin.getCusto_fotos_sobras());
-            ps.setBigDecimal(9, fin.getCusto_encartes());
-            ps.setBigDecimal(10, fin.getFgts());
-            ps.setBigDecimal(11, fin.getInss());
-            ps.setBigDecimal(12, fin.getParcela_inss());
-            ps.setBigDecimal(13, fin.getInss_desc());
-            ps.setBigDecimal(14, fin.getTotal_bruto());
-            ps.setBigDecimal(15, fin.getTotal_vendas());  // NOVO!
-            ps.setBigDecimal(16, fin.getValor_extras());  // NOVO!
-            ps.setBigDecimal(17, fin.getCustos_fotos());
-            ps.setBigDecimal(18, fin.getRestituir());
-            ps.setBigDecimal(19, fin.getSaldo_liquido());
-            ps.setLong(20, userLogado);
+            ps.setObject(6, fin.getDig_total());
+            ps.setObject(7, fin.getFotos_extras());
+            ps.setObject(8, fin.getEncartes_extras());
+            ps.setBigDecimal(9, fin.getCusto_fotos_sobras());
+            ps.setBigDecimal(10, fin.getCusto_encartes());
+            ps.setBigDecimal(11, fin.getFgts());
+            ps.setBigDecimal(12, fin.getInss());
+            ps.setBigDecimal(13, fin.getTotal_bruto());
+            ps.setBigDecimal(14, fin.getTotal_vendas());
+            ps.setBigDecimal(15, fin.getValor_extras());
+            ps.setBigDecimal(16, fin.getCustos_fotos());
+            ps.setBigDecimal(17, fin.getRestituir());
+            ps.setBigDecimal(18, fin.getSaldo_liquido());
+            ps.setLong(19, userLogado);
 
             ps.executeUpdate();
 
@@ -627,8 +626,8 @@ public class DAOAssociado {
 
     private ModelAssociado atualizarFinanceiro(ModelAssociado fin) throws Exception {
         String sql = "UPDATE financeiroassociado SET total_fotos = ?, total_sobras = ?, total_encartes = ?, "
-                + "fotos_extras = ?, encartes_extras = ?, custo_fotos_sobras = ?, custo_encartes = ?, fgts = ?, "
-                + "inss = ?, parcela_inss = ?, inss_desc = ?, total_bruto = ?, total_vendas = ?, valor_extras = ?, "
+                + "dig_total = ?, fotos_extras = ?, encartes_extras = ?, custo_fotos_sobras = ?, custo_encartes = ?, fgts = ?, "
+                + "inss = ?, total_bruto = ?, total_vendas = ?, valor_extras = ?, "
                 + "custos_fotos = ?, restituir = ?, saldo_liquido = ?, data_atualizacao = CURRENT_TIMESTAMP "
                 + "WHERE id_financeiro = ?";
 
@@ -638,21 +637,20 @@ public class DAOAssociado {
             ps.setObject(1, fin.getTotal_fotos());
             ps.setObject(2, fin.getTotal_sobras());
             ps.setObject(3, fin.getTotal_encartes());
-            ps.setObject(4, fin.getFotos_extras());
-            ps.setObject(5, fin.getEncartes_extras());
-            ps.setBigDecimal(6, fin.getCusto_fotos_sobras());
-            ps.setBigDecimal(7, fin.getCusto_encartes());
-            ps.setBigDecimal(8, fin.getFgts());
-            ps.setBigDecimal(9, fin.getInss());
-            ps.setBigDecimal(10, fin.getParcela_inss());
-            ps.setBigDecimal(11, fin.getInss_desc());
-            ps.setBigDecimal(12, fin.getTotal_bruto());
-            ps.setBigDecimal(13, fin.getTotal_vendas());  // NOVO!
-            ps.setBigDecimal(14, fin.getValor_extras());  // NOVO!
-            ps.setBigDecimal(15, fin.getCustos_fotos());
-            ps.setBigDecimal(16, fin.getRestituir());
-            ps.setBigDecimal(17, fin.getSaldo_liquido());
-            ps.setLong(18, fin.getId_financeiro());
+            ps.setObject(4, fin.getDig_total());
+            ps.setObject(5, fin.getFotos_extras());
+            ps.setObject(6, fin.getEncartes_extras());
+            ps.setBigDecimal(7, fin.getCusto_fotos_sobras());
+            ps.setBigDecimal(8, fin.getCusto_encartes());
+            ps.setBigDecimal(9, fin.getFgts());
+            ps.setBigDecimal(10, fin.getInss());
+            ps.setBigDecimal(11, fin.getTotal_bruto());
+            ps.setBigDecimal(12, fin.getTotal_vendas());
+            ps.setBigDecimal(13, fin.getValor_extras());
+            ps.setBigDecimal(14, fin.getCustos_fotos());
+            ps.setBigDecimal(15, fin.getRestituir());
+            ps.setBigDecimal(16, fin.getSaldo_liquido());
+            ps.setLong(17, fin.getId_financeiro());
 
             ps.executeUpdate();
             connection.commit();
@@ -691,6 +689,44 @@ public class DAOAssociado {
 
         try (PreparedStatement ps = connection.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(preencherModelFinanceiro(rs));
+            }
+        }
+
+        return lista;
+    }
+
+    /**
+     * Busca dados para relatório por período
+     */
+    public List<ModelAssociado> buscarDadosRelatorio(String dataInicial, String dataFinal) throws Exception {
+        List<ModelAssociado> lista = new ArrayList<>();
+
+        // Extrai mês e ano das datas
+        String[] partesInicial = dataInicial.split("-");
+        String[] partesFinal = dataFinal.split("-");
+
+        int anoInicial = Integer.parseInt(partesInicial[0]);
+        int mesInicial = Integer.parseInt(partesInicial[1]);
+        int anoFinal = Integer.parseInt(partesFinal[0]);
+        int mesFinal = Integer.parseInt(partesFinal[1]);
+
+        String sql = "SELECT * FROM financeiroassociado " +
+                "WHERE (ano_referencia > ? OR (ano_referencia = ? AND mes_referencia >= ?)) " +
+                "AND (ano_referencia < ? OR (ano_referencia = ? AND mes_referencia <= ?)) " +
+                "ORDER BY ano_referencia, mes_referencia";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, anoInicial);
+            ps.setInt(2, anoInicial);
+            ps.setInt(3, mesInicial);
+            ps.setInt(4, anoFinal);
+            ps.setInt(5, anoFinal);
+            ps.setInt(6, mesFinal);
+
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 lista.add(preencherModelFinanceiro(rs));
@@ -801,6 +837,80 @@ public class DAOAssociado {
         return ribbonValues;
     }
 
+    /**
+     * Consulta dados financeiros por período
+     */
+    public Map<String, Object> consultarDadosFinanceiros(String dataInicial, String dataFinal) throws Exception {
+        Map<String, Object> resultado = new HashMap<>();
+
+        // 1. Buscar totais de vendas do período
+        String sqlVendas = "SELECT "
+                + "SUM(prod1_din + prod1_deb + prod1_cred + prod1_pix) as ft_total, "
+                + "SUM(sobras) as sobras, "
+                + "SUM(prod2_din + prod2_deb + prod2_cred + prod2_pix) as enc_total, "
+                + "SUM(prod3_din + prod3_deb + prod3_cred + prod3_pix) as dig_total "
+                + "FROM vendasassociado "
+                + "WHERE data_venda BETWEEN ? AND ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sqlVendas)) {
+            ps.setDate(1, java.sql.Date.valueOf(dataInicial));
+            ps.setDate(2, java.sql.Date.valueOf(dataFinal));
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                resultado.put("ft_total", rs.getInt("ft_total"));
+                resultado.put("sobras", rs.getInt("sobras"));
+                resultado.put("enc_total", rs.getInt("enc_total"));
+                resultado.put("dig_total", rs.getInt("dig_total"));
+            }
+        }
+
+        // 2. Buscar configurações (limite, percentual, custos, valores)
+        String sqlConfig = "SELECT limite, percentual_extras, "
+                + "conf1_valor, conf2_valor, conf3_valor, "
+                + "mat1_custo, mat2_custo "
+                + "FROM configassociado WHERE idconf = 1";
+
+        try (PreparedStatement ps = connection.prepareStatement(sqlConfig)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                resultado.put("limite", rs.getInt("limite"));
+                resultado.put("percentual_extras", rs.getString("percentual_extras"));
+                resultado.put("conf1_valor", rs.getString("conf1_valor"));
+                resultado.put("conf2_valor", rs.getString("conf2_valor"));
+                resultado.put("conf3_valor", rs.getString("conf3_valor"));
+                resultado.put("mat1_custo", rs.getString("mat1_custo"));
+                resultado.put("mat2_custo", rs.getString("mat2_custo"));
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Busca total de fotos vendidas no mês por um vendedor
+     */
+    public int buscarTotalFotosVendidasMes(Long vendedorId, int mes, int ano) throws Exception {
+        String sql = "SELECT SUM(prod1_din + prod1_deb + prod1_cred + prod1_pix) as total_fotos "
+                + "FROM vendasassociado "
+                + "WHERE vendedor_id = ? "
+                + "AND EXTRACT(MONTH FROM data_venda) = ? "
+                + "AND EXTRACT(YEAR FROM data_venda) = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setLong(1, vendedorId);
+            ps.setInt(2, mes);
+            ps.setInt(3, ano);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total_fotos");
+            }
+        }
+
+        return 0;
+    }
+
     // ========== MÉTODOS PRIVADOS DE PREENCHIMENTO ==========
 
     private void preencherModelVenda(ModelAssociado model, ResultSet rs) throws SQLException {
@@ -878,97 +988,23 @@ public class DAOAssociado {
         model.setTotal_fotos(rs.getInt("total_fotos"));
         model.setTotal_sobras(rs.getInt("total_sobras"));
         model.setTotal_encartes(rs.getInt("total_encartes"));
+        model.setDig_total(rs.getInt("dig_total"));
         model.setFotos_extras(rs.getInt("fotos_extras"));
         model.setEncartes_extras(rs.getInt("encartes_extras"));
+
 
         model.setCusto_fotos_sobras(rs.getBigDecimal("custo_fotos_sobras"));
         model.setCusto_encartes(rs.getBigDecimal("custo_encartes"));
         model.setFgts(rs.getBigDecimal("fgts"));
         model.setInss(rs.getBigDecimal("inss"));
-        model.setParcela_inss(rs.getBigDecimal("parcela_inss"));
-        model.setInss_desc(rs.getBigDecimal("inss_desc"));
 
         model.setTotal_bruto(rs.getBigDecimal("total_bruto"));
-        model.setTotal_vendas(rs.getBigDecimal("total_vendas"));  // NOVO!
-        model.setValor_extras(rs.getBigDecimal("valor_extras"));  // NOVO!
+        model.setTotal_vendas(rs.getBigDecimal("total_vendas"));
+        model.setValor_extras(rs.getBigDecimal("valor_extras"));
         model.setCustos_fotos(rs.getBigDecimal("custos_fotos"));
         model.setRestituir(rs.getBigDecimal("restituir"));
         model.setSaldo_liquido(rs.getBigDecimal("saldo_liquido"));
 
         return model;
-    }
-
-    /**
-     * Consulta dados financeiros por período
-     */
-    public Map<String, Object> consultarDadosFinanceiros(String dataInicial, String dataFinal) throws Exception {
-        Map<String, Object> resultado = new HashMap<>();
-
-        // 1. Buscar totais de vendas do período
-        String sqlVendas = "SELECT "
-                + "SUM(prod1_din + prod1_deb + prod1_cred + prod1_pix) as ft_total, "
-                + "SUM(sobras) as sobras, "
-                + "SUM(prod2_din + prod2_deb + prod2_cred + prod2_pix) as enc_total, "
-                + "SUM(prod3_din + prod3_deb + prod3_cred + prod3_pix) as dig_total "
-                + "FROM vendasassociado "
-                + "WHERE data_venda BETWEEN ? AND ?";
-
-        try (PreparedStatement ps = connection.prepareStatement(sqlVendas)) {
-            ps.setDate(1, java.sql.Date.valueOf(dataInicial));
-            ps.setDate(2, java.sql.Date.valueOf(dataFinal));
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                resultado.put("ft_total", rs.getInt("ft_total"));
-                resultado.put("sobras", rs.getInt("sobras"));
-                resultado.put("enc_total", rs.getInt("enc_total"));
-                resultado.put("dig_total", rs.getInt("dig_total"));
-            }
-        }
-
-        // 2. Buscar configurações (limite, percentual, custos, valores)
-        String sqlConfig = "SELECT limite, percentual_extras, "
-                + "conf1_valor, conf2_valor, conf3_valor, "
-                + "mat1_custo, mat2_custo "
-                + "FROM configassociado WHERE idconf = 1";
-
-        try (PreparedStatement ps = connection.prepareStatement(sqlConfig)) {
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                resultado.put("limite", rs.getInt("limite"));
-                resultado.put("percentual_extras", rs.getString("percentual_extras"));
-                resultado.put("conf1_valor", rs.getString("conf1_valor"));
-                resultado.put("conf2_valor", rs.getString("conf2_valor"));
-                resultado.put("conf3_valor", rs.getString("conf3_valor"));
-                resultado.put("mat1_custo", rs.getString("mat1_custo"));
-                resultado.put("mat2_custo", rs.getString("mat2_custo"));
-            }
-        }
-
-        return resultado;
-    }
-
-    /**
-     * Busca total de fotos vendidas no mês por um vendedor
-     */
-    public int buscarTotalFotosVendidasMes(Long vendedorId, int mes, int ano) throws Exception {
-        String sql = "SELECT SUM(prod1_din + prod1_deb + prod1_cred + prod1_pix) as total_fotos "
-                + "FROM vendasassociado "
-                + "WHERE vendedor_id = ? "
-                + "AND EXTRACT(MONTH FROM data_venda) = ? "
-                + "AND EXTRACT(YEAR FROM data_venda) = ?";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setLong(1, vendedorId);
-            ps.setInt(2, mes);
-            ps.setInt(3, ano);
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("total_fotos");
-            }
-        }
-
-        return 0;
     }
 }

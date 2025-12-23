@@ -41,6 +41,25 @@ public class ServletAssociado extends ServletGenericUtil {
             if (acao == null || acao.isEmpty()) {
                 acao = "vendaDoDia";
             }
+            // ========== AÇÃO: BUSCAR RELATÓRIO ==========
+            if ("buscarRelatorio".equals(acao)) {
+                String dataInicial = request.getParameter("data_inicial");
+                String dataFinal = request.getParameter("data_final");
+
+                try {
+                    List<ModelAssociado> dadosRelatorio = daoAssociado.buscarDadosRelatorio(dataInicial, dataFinal);
+
+                    String jsonResponse = new Gson().toJson(dadosRelatorio);
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write(jsonResponse);
+                } catch (Exception e) {
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("{\"error\":\"" + e.getMessage() + "\"}");
+                }
+                return;
+            }
 
             // ========== CARREGAR CONFIGURAÇÕES (SEMPRE) ==========
             try {

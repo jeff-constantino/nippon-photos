@@ -171,32 +171,157 @@
                                             </div>
                                         </div>
                                                     </div>
-                                       <div class="modal fade" id="modalRelatorio" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                            <div class="modal-dialog modal-xl mt-5">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="staticRanking">Relatórios Gerenciais</h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div class="container-fluid">
-                                                                            <div class="row">
-                                                                                <form id="formRelatorio" method="post" action="<%= request.getContextPath() %>/ServletAssociado">
-                                                                                    <input type="hidden" name="tipo_config" value="materiais">
+                                <!-- Modal Relatório -->
+                                <div class="modal fade" id="modalRelatorio" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+                                    <div class="modal-dialog modal-xl mt-5">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">📊 Relatórios Gerenciais</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="container-fluid">
+
+                                                    <!-- FILTROS -->
+                                                    <div class="row mb-4">
+                                                        <div class="col-12">
+                                                            <h6 class="text-warning">FILTROS</h6>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label for="rel_periodo">Período Rápido:</label>
+                                                            <select class="form-select" id="rel_periodo" onchange="aplicarPeriodoRapido()">
+                                                                <option value="">Selecione...</option>
+                                                                <option value="ultimo_mes">Último Mês</option>
+                                                                <option value="ultimos_3">Últimos 3 Meses</option>
+                                                                <option value="ultimos_6">Últimos 6 Meses</option>
+                                                                <option value="ano_atual">Ano Atual</option>
+                                                                <option value="personalizado">Personalizado</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label for="rel_mes_inicial">Mês Inicial:</label>
+                                                            <input type="month" class="form-control" id="rel_mes_inicial">
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <label for="rel_mes_final">Mês Final:</label>
+                                                            <input type="month" class="form-control" id="rel_mes_final">
+                                                        </div>
+                                                        <div class="col-3 d-flex align-items-end">
+                                                            <button type="button" class="btn btn-primary w-100" onclick="gerarRelatorio()">
+                                                                📊 Gerar Relatório
+                                                            </button>
+                                                        </div>
+                                                    </div>
 
 
-
-                                                                                    <button type="submit" class="btn btn-outline-success">Salvar Materiais</button>
-                                                                                </form>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
-                                                                    </div>
+                                                    <!-- CARDS DE RESUMO -->
+                                                    <div class="row mb-4" id="cardsResumo" style="display: none;">
+                                                        <div class="col-2">
+                                                            <div class="card text-white bg-success">
+                                                                <div class="card-body text-center p-2">
+                                                                    <h6 class="card-title mb-1">Total Vendas</h6>
+                                                                    <h4 id="card_total_vendas" class="mb-0">R$ 0,00</h4>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-2">
+                                                            <div class="card text-white bg-info">
+                                                                <div class="card-body text-center p-2">
+                                                                    <h6 class="card-title mb-1">Saldo Líquido</h6>
+                                                                    <h4 id="card_saldo_liquido" class="mb-0">R$ 0,00</h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <div class="card text-white bg-danger">
+                                                                <div class="card-body text-center p-2">
+                                                                    <h6 class="card-title mb-1">Restituir</h6>
+                                                                    <h4 id="card_restituir" class="mb-0">R$ 0,00</h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <div class="card text-white bg-warning">
+                                                                <div class="card-body text-center p-2">
+                                                                    <h6 class="card-title mb-1">Valor Extras</h6>
+                                                                    <h4 id="card_valor_extras" class="mb-0">R$ 0,00</h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <div class="card text-white bg-primary">
+                                                                <div class="card-body text-center p-2">
+                                                                    <h6 class="card-title mb-1">Total Bruto</h6>
+                                                                    <h4 id="card_total_bruto" class="mb-0">R$ 0,00</h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <div class="card bg-secondary">
+                                                                <div class="card-body text-center p-2">
+                                                                    <h6 class="card-title mb-1 text-dark">Média Mensal</h6>
+                                                                    <h4 id="card_media_mensal" class="mb-0 text-dark">R$ 0,00</h4>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+
+
+                                                    <!-- TABELA DETALHADA -->
+                                                    <div class="row" id="tabelaArea" style="display: none;">
+                                                        <div class="col-12">
+                                                            <h6 class="text-warning">📋 DETALHAMENTO POR MÊS</h6>
+                                                            <div style="max-height: 400px; overflow-y: auto; overflow-x: auto;">
+                                                                <table class="table table-striped table-hover" style="min-width: 1800px;">
+                                                                    <thead class="table-dark sticky-top">
+                                                                    <tr>
+                                                                        <th>Mês/Ano</th>
+                                                                        <th>Total Fotos</th>
+                                                                        <th>Total Sobras</th>
+                                                                        <th>Total Encartes</th>
+                                                                        <th>Total Digitais</th>
+                                                                        <th>Fotos Extras</th>
+                                                                        <th>Encartes Extras</th>
+                                                                        <th>Custo Fotos+Sobras</th>
+                                                                        <th>Custo Encartes</th>
+                                                                        <th>FGTS</th>
+                                                                        <th>INSS</th>
+                                                                        <th>Total Bruto</th>
+                                                                        <th>Total Vendas</th>
+                                                                        <th>Valor Extras</th>
+                                                                        <th>Custos Fotos</th>
+                                                                        <th>Restituir</th>
+                                                                        <th>Saldo Líquido</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody id="tabelaRelatorioBody">
+                                                                    <!-- Dados serão inseridos aqui via JavaScript -->
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- MENSAGEM QUANDO NÃO HÁ DADOS -->
+                                                    <div class="row" id="semDadosMsg" style="display: none;">
+                                                        <div class="col-12 text-center">
+                                                            <div class="alert alert-info">
+                                                                <h5>📭 Nenhum dado encontrado para o período selecionado</h5>
+                                                                <p>Selecione outro período ou verifique se há dados financeiros cadastrados.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">FECHAR</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                         <!-- Modal -->
                                 <div class="modal fade" id="modalFinanceiro" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
                                     <div class="modal-dialog modal-xl mt-5">
@@ -1811,954 +1936,1072 @@
     </div>
 
 
-    <SCRIPT type="text/javascript">
+<SCRIPT type="text/javascript">
 
-        $(document).ready(function () {
-            var msg = "${msg}";
-            if (msg) {
-                $('#msgModal').modal('show'); // Exibe o modal com a mensagem
+    $(document).ready(function () {
+        var msg = "${msg}";
+        if (msg) {
+            $('#msgModal').modal('show'); // Exibe o modal com a mensagem
 
-                // Remove a mensagem da sessão após exibi-la
-                $.post("${pageContext.request.contextPath}/ServletAssociado", { acao: "limparMsg" });
+            // Remove a mensagem da sessão após exibi-la
+            $.post("${pageContext.request.contextPath}/ServletAssociado", { acao: "limparMsg" });
+        }
+    });
+
+
+    // Função para navegar entre elementos focáveis com as setas
+    function navigateFocusableElements(event) {
+        const focusableElements = Array.from(
+            document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
+        ).filter(element => !element.disabled && element.tabIndex !== -1);
+
+        if (focusableElements.length === 0) return;
+
+        const currentElement = document.activeElement;
+        if (!focusableElements.includes(currentElement)) return;
+
+        let currentIndex = focusableElements.indexOf(currentElement);
+
+        switch (event.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+                currentIndex = (currentIndex + 1) % focusableElements.length;
+                break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+                currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
+                break;
+            default:
+                return;
+        }
+
+        focusableElements[currentIndex].focus();
+    }
+
+    // Bloqueia a alteração de valor com as setas nos inputs do tipo number
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                event.preventDefault(); // Impede a alteração do valor
             }
         });
+    });
+
+    // Adiciona o evento keydown ao documento
+    document.addEventListener('keydown', navigateFocusableElements);
+    // Fim de navegação por setas
 
 
-        // Função para navegar entre elementos focáveis com as setas
-        function navigateFocusableElements(event) {
-            const focusableElements = Array.from(
-                document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
-            ).filter(element => !element.disabled && element.tabIndex !== -1);
+    // Adiciona o evento de teclado ao carregar a página
+    window.onload = function() {
+        document.addEventListener('keydown', navigateFocusableElements);
+    };
 
-            if (focusableElements.length === 0) return;
+    function deletaVenda() {
+        const vendaId = document.getElementById('venda_id').value; // Obtém o ID da venda
+        if (confirm("Tem certeza que deseja excluir esta venda?")) {
+            $.ajax({
+                method: 'POST',
+                url: '<%= request.getContextPath() %>/ServletAssociado',
+                data: {acao: 'deletar', venda_id: vendaId},
+                success: function (response) {
+                    alert("Venda excluída com sucesso!");
+                    location.reload(); // Atualiza a página
+                },
+                error: function (xhr, status, errorThrown) {
+                    alert('Erro ao excluir a venda: ' + xhr.responseText);
+                }
+            });
+        }
+    }
 
-            const currentElement = document.activeElement;
-            if (!focusableElements.includes(currentElement)) return;
 
-            let currentIndex = focusableElements.indexOf(currentElement);
 
-            switch (event.key) {
-                case 'ArrowRight':
-                case 'ArrowDown':
-                    currentIndex = (currentIndex + 1) % focusableElements.length;
+    function limparFormVendas() {
+        document.getElementById('formBuscarVenda').reset(); // Limpa o formulário
+
+    }
+
+    function buscarFunc() {
+        var nomeBusca = document.getElementById('nomeBusca').value;
+
+        var urlAction = document.getElementById('formBuscaFuncionario').action;
+
+        $.ajax({
+            method: 'GET',
+            url: urlAction,
+            data: "nome=" + encodeURIComponent(nomeBusca) + '&acao=buscaruserajax',
+            dataType: 'json',
+            success: function (json) {
+                $('#tabelabuscafuncionario > tbody > tr').remove();
+                for (var p = 0; p < json.length; p++) {
+                    $('#tabelabuscafuncionario > tbody').append(
+                        '<tr> <td>' + json[p].id + '</td> <td>' + json[p].nome +
+                        '</td> <td> <button type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditar(' + json[p].id + ', \'' + json[p].nome + '\')">Selecionar</button></td></tr>'
+                    );
+                }
+
+                if (nomeBusca.trim() === '') {
+                    document.getElementById('totalResultados').textContent = 'Todos os associados: ' + json.length;
+                } else {
+                    document.getElementById('totalResultados').textContent = 'Resultados: ' + json.length;
+                }
+            },
+            error: function (xhr, status, errorThrown) {
+                alert('Erro ao Pesquisar o Funcionário: ' + xhr.responseText);
+            }
+        });
+    }
+
+
+    function verEditar(id, nome) {
+        document.getElementById('vendedor_id').value = id;
+        document.getElementById('vendedor').value = nome;
+
+        var modal = $('#modalLancaVenda');
+        var campoData = $('#outer_dataVenda'); // elemento alvo
+
+        modal.animate({
+            scrollTop: campoData.offset().top - modal.offset().top + modal.scrollTop()
+        }, 700); // 700ms = rolagem suave
+    }
+
+    function limparFormVendas() {
+        // Limpa os campos do formulário
+        $('#formBuscarVenda')[0].reset();
+    }
+
+    function limparFormVendido() {
+        // Limpa os campos do formulário
+        $('#formVendido')[0].reset();
+    }
+
+
+    let produtos = []; // Array para armazenar os valores dos produtos
+
+    function buscarValor(produtoId) {
+        const quantidade = document.getElementById(produtoId).value;
+
+        // Verifica se o array de produtos está vazio
+        if (produtos.length === 0) {
+            // Chama o servidor para buscar os valores
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `ServletAssociado?acao=buscarValoresProdutos`, true);
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Preenche o array de produtos com os valores retornados
+                    produtos = JSON.parse(xhr.responseText);
+                    calcularValor(quantidade, produtoId); // Calcular valor após receber os produtos
+                } else {
+                }
+            };
+            xhr.send();
+        } else {
+            calcularValor(quantidade, produtoId); // Se os produtos já foram carregados, calcular o valor imediatamente
+        }
+    }
+
+    function calcularValor(quantidade, produtoId) {
+
+        const prod = produtos[0]; // Considerando que você só tem um produto na lista
+
+        if (prod) {
+            let valorProduto;
+
+            switch (produtoId) {
+                case 'outer_prod1_din':
+                case 'outer_prod1_deb':
+                case 'outer_prod1_cred':
+                case 'outer_prod1_pix':
+                    valorProduto = parseFloat(prod.conf1_valor);
                     break;
-                case 'ArrowLeft':
-                case 'ArrowUp':
-                    currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
+                case 'outer_prod2_din':
+                case 'outer_prod2_deb':
+                case 'outer_prod2_cred':
+                case 'outer_prod2_pix':
+                    valorProduto = parseFloat(prod.conf2_valor);
+                    break;
+                case 'outer_prod3_din':
+                case 'outer_prod3_deb':
+                case 'outer_prod3_cred':
+                case 'outer_prod3_pix':
+                    valorProduto = parseFloat(prod.conf3_valor);
                     break;
                 default:
+
                     return;
             }
 
-            focusableElements[currentIndex].focus();
-        }
+            const valorTotal = quantidade * valorProduto; // Calcula o valor total
+            document.getElementById(produtoId + '_valor').value = valorTotal.toFixed(2); // Mostrando duas casas decimais
 
-        // Bloqueia a alteração de valor com as setas nos inputs do tipo number
-        document.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener('keydown', function(event) {
-                if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-                    event.preventDefault(); // Impede a alteração do valor
-                }
-            });
+            atualizarTotal(); // Atualiza o total geral
+        } else {
+        }
+    }
+
+    function atualizarTotal() {
+        let total = 0;
+        // Soma as quantidades digitadas apenas dos campos do prod1
+        ['outer_prod1_din', 'outer_prod1_deb', 'outer_prod1_cred', 'outer_prod1_pix'].forEach(id => {
+            const quantidade = parseFloat(document.getElementById(id).value) || 0; // Pega o valor ou 0 se estiver vazio
+            total += quantidade;
         });
+        document.getElementById('outer_total').value = total; // Atualiza o valor total no campo
+    }
 
-        // Adiciona o evento keydown ao documento
-        document.addEventListener('keydown', navigateFocusableElements);
-        // Fim de navegação por setas
+    // Funções para o modal
+    function buscarValorModal(produtoId) {
+        const quantidade = document.getElementById(produtoId).value;
 
-
-        // Adiciona o evento de teclado ao carregar a página
-        window.onload = function() {
-            document.addEventListener('keydown', navigateFocusableElements);
-        };
-
-        function deletaVenda() {
-            const vendaId = document.getElementById('venda_id').value; // Obtém o ID da venda
-            if (confirm("Tem certeza que deseja excluir esta venda?")) {
-                $.ajax({
-                    method: 'POST',
-                    url: '<%= request.getContextPath() %>/ServletAssociado',
-                    data: {acao: 'deletar', venda_id: vendaId},
-                    success: function (response) {
-                        alert("Venda excluída com sucesso!");
-                        location.reload(); // Atualiza a página
-                    },
-                    error: function (xhr, status, errorThrown) {
-                        alert('Erro ao excluir a venda: ' + xhr.responseText);
-                    }
-                });
-            }
-        }
-
-
-
-        function limparFormVendas() {
-            document.getElementById('formBuscarVenda').reset(); // Limpa o formulário
-
-        }
-
-        function buscarFunc() {
-            var nomeBusca = document.getElementById('nomeBusca').value;
-
-            var urlAction = document.getElementById('formBuscaFuncionario').action;
-
-            $.ajax({
-                method: 'GET',
-                url: urlAction,
-                data: "nome=" + encodeURIComponent(nomeBusca) + '&acao=buscaruserajax',
-                dataType: 'json',
-                success: function (json) {
-                    $('#tabelabuscafuncionario > tbody > tr').remove();
-                    for (var p = 0; p < json.length; p++) {
-                        $('#tabelabuscafuncionario > tbody').append(
-                            '<tr> <td>' + json[p].id + '</td> <td>' + json[p].nome +
-                            '</td> <td> <button type="button" class="btn btn-outline-success waves-effect waves-light" onclick="verEditar(' + json[p].id + ', \'' + json[p].nome + '\')">Selecionar</button></td></tr>'
-                        );
-                    }
-
-                    if (nomeBusca.trim() === '') {
-                        document.getElementById('totalResultados').textContent = 'Todos os associados: ' + json.length;
-                    } else {
-                        document.getElementById('totalResultados').textContent = 'Resultados: ' + json.length;
-                    }
-                },
-                error: function (xhr, status, errorThrown) {
-                    alert('Erro ao Pesquisar o Funcionário: ' + xhr.responseText);
-                }
-            });
-        }
-
-
-        // function verEditar(id, nome) {
-        //     document.getElementById('vendedor_id').value = id;
-        //     document.getElementById('vendedor').value = nome;
-        //
-        //     // Rola até o fim do modal
-        //     var modal = $('#modalLancaVenda'); // Substitua pelo ID do seu modal
-        //     modal.animate({scrollTop: modal[0].scrollHeight}, 1000); // Rola suavemente para o fim em 1 segundo
-        // }
-        function verEditar(id, nome) {
-            document.getElementById('vendedor_id').value = id;
-            document.getElementById('vendedor').value = nome;
-
-            var modal = $('#modalLancaVenda');
-            var campoData = $('#outer_dataVenda'); // elemento alvo
-
-            modal.animate({
-                scrollTop: campoData.offset().top - modal.offset().top + modal.scrollTop()
-            }, 700); // 700ms = rolagem suave
-        }
-
-        function limparFormVendas() {
-            // Limpa os campos do formulário
-            $('#formBuscarVenda')[0].reset();
-        }
-
-        function limparFormVendido() {
-            // Limpa os campos do formulário
-            $('#formVendido')[0].reset();
-        }
-
-
-        let produtos = []; // Array para armazenar os valores dos produtos
-
-        function buscarValor(produtoId) {
-            const quantidade = document.getElementById(produtoId).value;
-
-            // Verifica se o array de produtos está vazio
-            if (produtos.length === 0) {
-                // Chama o servidor para buscar os valores
-                const xhr = new XMLHttpRequest();
-                xhr.open('GET', `ServletAssociado?acao=buscarValoresProdutos`, true);
-
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        // Preenche o array de produtos com os valores retornados
-                        produtos = JSON.parse(xhr.responseText);
-                        calcularValor(quantidade, produtoId); // Calcular valor após receber os produtos
-                    } else {
-                    }
-                };
-                xhr.send();
-            } else {
-                calcularValor(quantidade, produtoId); // Se os produtos já foram carregados, calcular o valor imediatamente
-            }
-        }
-
-        function calcularValor(quantidade, produtoId) {
-
-            const prod = produtos[0]; // Considerando que você só tem um produto na lista
-
-            if (prod) {
-                let valorProduto;
-
-                switch (produtoId) {
-                    case 'outer_prod1_din':
-                    case 'outer_prod1_deb':
-                    case 'outer_prod1_cred':
-                    case 'outer_prod1_pix':
-                        valorProduto = parseFloat(prod.conf1_valor);
-                        break;
-                    case 'outer_prod2_din':
-                    case 'outer_prod2_deb':
-                    case 'outer_prod2_cred':
-                    case 'outer_prod2_pix':
-                        valorProduto = parseFloat(prod.conf2_valor);
-                        break;
-                    case 'outer_prod3_din':
-                    case 'outer_prod3_deb':
-                    case 'outer_prod3_cred':
-                    case 'outer_prod3_pix':
-                        valorProduto = parseFloat(prod.conf3_valor);
-                        break;
-                    default:
-
-                        return;
-                }
-
-                const valorTotal = quantidade * valorProduto; // Calcula o valor total
-                document.getElementById(produtoId + '_valor').value = valorTotal.toFixed(2); // Mostrando duas casas decimais
-
-                atualizarTotal(); // Atualiza o total geral
-            } else {
-            }
-        }
-
-        function atualizarTotal() {
-            let total = 0;
-            // Soma as quantidades digitadas apenas dos campos do prod1
-            ['outer_prod1_din', 'outer_prod1_deb', 'outer_prod1_cred', 'outer_prod1_pix'].forEach(id => {
-                const quantidade = parseFloat(document.getElementById(id).value) || 0; // Pega o valor ou 0 se estiver vazio
-                total += quantidade;
-            });
-            document.getElementById('outer_total').value = total; // Atualiza o valor total no campo
-        }
-
-        // Funções para o modal
-        function buscarValorModal(produtoId) {
-            const quantidade = document.getElementById(produtoId).value;
-
-            if (produtos.length === 0) {
-                const xhr = new XMLHttpRequest();
-                xhr.open('GET', `ServletAssociado?acao=buscarValoresProdutos`, true);
-
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        produtos = JSON.parse(xhr.responseText);
-                        calcularValorModal(quantidade, produtoId);
-                    } else {
-                    }
-                };
-                xhr.send();
-            } else {
-                calcularValorModal(quantidade, produtoId);
-            }
-        }
-
-        function calcularValorModal(quantidade, produtoId) {
-
-            // Acessando o array 'configs' dentro de produtos
-            const prod = produtos.configs[0]; // Acessando o primeiro produto da lista
-
-            if (prod) {
-                let valorProduto;
-
-                switch (produtoId) {
-                    case 'prod1_din':
-                    case 'prod1_deb':
-                    case 'prod1_cred':
-                    case 'prod1_pix':
-                        valorProduto = parseFloat(prod.conf1_valor);
-                        break;
-                    case 'prod2_din':
-                    case 'prod2_deb':
-                    case 'prod2_cred':
-                    case 'prod2_pix':
-                        valorProduto = parseFloat(prod.conf2_valor);
-                        break;
-                    case 'prod3_din':
-                    case 'prod3_deb':
-                    case 'prod3_cred':
-                    case 'prod3_pix':
-                        valorProduto = parseFloat(prod.conf3_valor);
-                        break;
-                    default:
-
-                        return;
-                }
-
-                const valorTotal = quantidade * valorProduto;
-                document.getElementById(produtoId + '_valor').value = valorTotal.toFixed(2);
-
-                atualizarTotalModal();     // mantém seu total geral
-                atualizarConferencia();    // agora atualiza seus totais INF
-
-            } else {
-
-            }
-        }
-
-
-        function atualizarTotalModal() {
-            let total = 0;
-            // Soma as quantidades digitadas apenas dos campos do prod1
-            ['prod1_din', 'prod1_deb', 'prod1_cred', 'prod1_pix'].forEach(id => {
-                const quantidade = parseFloat(document.getElementById(id).value) || 0;
-                total += quantidade;
-            });
-            document.getElementById('total').value = total;
-        }
-
-
-
-
-
-
-
-
-
-
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inicializando a variável controles
-            let controles = [];
-
-            // Fazendo a requisição ao servlet usando XMLHttpRequest
+        if (produtos.length === 0) {
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'ServletAssociado?acao=buscarValoresProdutos', true);
+            xhr.open('GET', `ServletAssociado?acao=buscarValoresProdutos`, true);
 
-            xhr.onload = function() {
+            xhr.onload = function () {
                 if (xhr.status === 200) {
-                    const data = JSON.parse(xhr.responseText);
-
-                    controles = data.controles || []; // Preenche a variável controles com os dados recebidos
-
-
-                    // Adiciona o event listener para o select após carregar os valores
-                    document.getElementById('ribbon_selecionado').addEventListener('change', function() {
-                        const ribbonSelecionado = this.value;
-                        const ribbonIndex = parseInt(ribbonSelecionado.replace("ribbon", "")) - 1;
-
-
-
-                        if (controles.length > 0 && ribbonIndex >= 0 && ribbonIndex < 6) {
-                            const valorRibbon = controles[ribbonIndex];
-                            const valorTroca = controles[ribbonIndex + 6] || 0; // Garantir que valorTroca tenha um default
-                            const valorFim = controles[ribbonIndex + 12] || 0; // Garantir que valorFim tenha um default
-                            const valorTotal = valorRibbon + valorTroca - valorFim;
-
-                            document.getElementById('ribbon_atual').value = valorTotal; // Atualiza o campo "ribbon_atual" com o valor retornado
-
-
-                            calcularDiferenca(); // Calcula a diferença imediatamente após atualizar o valor atual
-                        } else {
-                            console.error('Dados invalidos ou faltando para o controle.');
-                        }
-                    });
+                    produtos = JSON.parse(xhr.responseText);
+                    calcularValorModal(quantidade, produtoId);
                 } else {
-                    console.error('Erro ao buscar os valores:', xhr.statusText);
                 }
             };
-
             xhr.send();
+        } else {
+            calcularValorModal(quantidade, produtoId);
+        }
+    }
+
+    function calcularValorModal(quantidade, produtoId) {
+
+        // Acessando o array 'configs' dentro de produtos
+        const prod = produtos.configs[0]; // Acessando o primeiro produto da lista
+
+        if (prod) {
+            let valorProduto;
+
+            switch (produtoId) {
+                case 'prod1_din':
+                case 'prod1_deb':
+                case 'prod1_cred':
+                case 'prod1_pix':
+                    valorProduto = parseFloat(prod.conf1_valor);
+                    break;
+                case 'prod2_din':
+                case 'prod2_deb':
+                case 'prod2_cred':
+                case 'prod2_pix':
+                    valorProduto = parseFloat(prod.conf2_valor);
+                    break;
+                case 'prod3_din':
+                case 'prod3_deb':
+                case 'prod3_cred':
+                case 'prod3_pix':
+                    valorProduto = parseFloat(prod.conf3_valor);
+                    break;
+                default:
+
+                    return;
+            }
+
+            const valorTotal = quantidade * valorProduto;
+            document.getElementById(produtoId + '_valor').value = valorTotal.toFixed(2);
+
+            atualizarTotalModal();     // mantém seu total geral
+            atualizarConferencia();    // agora atualiza seus totais INF
+
+        } else {
+
+        }
+    }
+
+
+    function atualizarTotalModal() {
+        let total = 0;
+        // Soma as quantidades digitadas apenas dos campos do prod1
+        ['prod1_din', 'prod1_deb', 'prod1_cred', 'prod1_pix'].forEach(id => {
+            const quantidade = parseFloat(document.getElementById(id).value) || 0;
+            total += quantidade;
         });
-
-        // Atualizar outras funções que usam getElementById('sobras')
-        function calcularDiferenca() {
-            var ribbonAtual = parseFloat(document.getElementById("ribbon_atual").value) || 0;
-            var ribbonInf = parseFloat(document.getElementById("ribbon_inf").value) || 0;
-            var ribbonSobras = parseFloat(document.getElementById("sobras_input").value) || 0;  // ← MUDOU
-            var ribbonTotal = parseFloat(document.getElementById("total").value) || 0;
-            var ribbonDif = document.getElementById("ribbon_dif");
-
-            ribbonDif.value = (ribbonInf + ribbonSobras + ribbonTotal) - ribbonAtual;
-        }
-
-        function calcularAproveitamento() {
-            var vendas = parseFloat(document.getElementById('total').value) || 0;
-            var sobras = parseFloat(document.getElementById('sobras_input').value) || 0;  // ← MUDOU
-            var producao = vendas + sobras;
-
-            var aproveitamento = producao > 0 ? (vendas / producao) * 100 : 0;
-            document.getElementById('aproveitamento').value = aproveitamento.toFixed(2) + " %";
-        }
-        function atualizarConferencia() {
-
-            function n(id) {
-                return parseFloat(document.getElementById(id).value) || 0;
-            }
-
-            // DINHEIRO
-            const totalDin =
-                n('prod1_din_valor') +
-                n('prod2_din_valor') +
-                n('prod3_din_valor');
-
-            // DÉBITO
-            const totalDeb =
-                n('prod1_deb_valor') +
-                n('prod2_deb_valor') +
-                n('prod3_deb_valor');
-
-            // CRÉDITO
-            const totalCred =
-                n('prod1_cred_valor') +
-                n('prod2_cred_valor') +
-                n('prod3_cred_valor');
-
-            // PIX
-            const totalPix =
-                n('prod1_pix_valor') +
-                n('prod2_pix_valor') +
-                n('prod3_pix_valor');
-
-            // Atualiza os campos
-            document.getElementById("conf_din_inf").value = totalDin.toFixed(2);
-            document.getElementById("conf_debito_inf").value = totalDeb.toFixed(2);
-            document.getElementById("conf_credito_inf").value = totalCred.toFixed(2);
-            document.getElementById("conf_pix_inf").value = totalPix.toFixed(2);
-        }
-
-        // ========== FUNÇÕES DE MÁSCARA ==========
-
-        /**
-         * Formata valor monetário: R$ 1.000,00
-         */
-        function formatarMoeda(input) {
-            let valor = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
-
-            if (valor === '') {
-                input.value = '';
-                return;
-            }
-
-            // Converte para centavos
-            valor = (parseInt(valor) / 100).toFixed(2);
-
-            // Formata com separadores
-            valor = valor.replace('.', ',');
-            valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-
-            input.value = 'R$ ' + valor;
-        }
-
-        /**
-         * Remove formatação de moeda para enviar ao servidor
-         */
-        function removerFormatacaoMoeda(valor) {
-            if (!valor) return '';
-            return valor.replace(/[^\d,]/g, '').replace(',', '.');
-        }
-
-        /**
-         * Formata quantidade: 1.000
-         */
-        function formatarQuantidade(input) {
-            let valor = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
-
-            if (valor === '') {
-                input.value = '';
-                return;
-            }
-
-            // Adiciona separadores de milhares
-            valor = parseInt(valor).toString();
-            valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-
-            input.value = valor;
-        }
-
-        /**
-         * Remove formatação de quantidade para enviar ao servidor
-         */
-        function removerFormatacaoQuantidade(valor) {
-            if (!valor) return '';
-            return valor.replace(/\./g, '');
-        }
-
-        // ========== APLICAR MÁSCARAS NOS CAMPOS ==========
-
-        document.addEventListener('DOMContentLoaded', function() {
-
-            // CAMPOS DE VALORES MONETÁRIOS (Produtos)
-            const camposMoeda = [
-                'conf1_valor', 'conf2_valor', 'conf3_valor', // Modal Produtos
-                'conf1_valor_mat', 'conf2_valor_mat', 'conf3_valor_mat', // Modal Materiais - Valores
-                'conf1_custo_mat', 'conf2_custo_mat', 'conf3_custo_mat'  // Modal Materiais - Custos
-            ];
-
-            camposMoeda.forEach(id => {
-                const campo = document.getElementById(id);
-                if (campo) {
-                    // Formata ao carregar (se já tiver valor)
-                    if (campo.value) {
-                        campo.value = 'R$ ' + parseFloat(campo.value).toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-                    }
-
-                    // Formata ao digitar
-                    campo.addEventListener('blur', function() {
-                        formatarMoeda(this);
-                    });
-
-                    // Remove formatação antes de enviar
-                    campo.closest('form').addEventListener('submit', function() {
-                        campo.value = removerFormatacaoMoeda(campo.value);
-                    });
-                }
-            });
-
-            // CAMPOS DE QUANTIDADE (Materiais)
-            const camposQuantidade = [
-                'conf1_qtd_mat', 'conf2_qtd_mat', 'conf3_qtd_mat'
-            ];
-
-            camposQuantidade.forEach(id => {
-                const campo = document.getElementById(id);
-                if (campo) {
-                    // Formata ao carregar (se já tiver valor)
-                    if (campo.value && campo.value !== '0') {
-                        campo.value = parseInt(campo.value).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-                    }
-
-                    // Formata ao digitar
-                    campo.addEventListener('blur', function() {
-                        formatarQuantidade(this);
-                    });
-
-                    // Remove formatação antes de enviar
-                    campo.closest('form').addEventListener('submit', function() {
-                        campo.value = removerFormatacaoQuantidade(campo.value);
-                    });
-                }
-            });
-        });
+        document.getElementById('total').value = total;
+    }
 
 
-        // ========== CHECKBOX SOBRAS EXTRAS (CORRIGIDO) ==========
-        document.addEventListener('DOMContentLoaded', function() {
-            var checkbox = document.getElementById('sobras_sem_custo');
-            if (checkbox) {
-                checkbox.addEventListener('change', function() {
-                    var sobrasInput = document.getElementById('sobras_input');
-                    var valorSobras = parseInt(sobrasInput.value) || 0;
 
-                    console.log('📦 Checkbox mudou! Checked:', this.checked, 'Valor:', valorSobras);
 
-                    // Remove campos hidden anteriores se existirem
-                    var hiddenAntigos = document.querySelectorAll('input[name="sobras"], input[name="sobras_extras"]');
-                    hiddenAntigos.forEach(function(campo) {
-                        if (campo.type === 'hidden') {
-                            campo.remove();
-                        }
-                    });
 
-                    // Cria novos campos hidden
-                    var formVenda = document.getElementById('formBuscarVenda');
 
-                    var sobrasHidden = document.createElement('input');
-                    sobrasHidden.type = 'hidden';
-                    sobrasHidden.name = 'sobras';
 
-                    var sobrasExtrasHidden = document.createElement('input');
-                    sobrasExtrasHidden.type = 'hidden';
-                    sobrasExtrasHidden.name = 'sobras_extras';
 
-                    if (this.checked) {
-                        // Marcado = SOBRAS EXTRAS (sem custo)
-                        sobrasHidden.value = 0;
-                        sobrasExtrasHidden.value = valorSobras;
-                        console.log('✅ Sobras EXTRAS:', valorSobras);
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializando a variável controles
+        let controles = [];
+
+        // Fazendo a requisição ao servlet usando XMLHttpRequest
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'ServletAssociado?acao=buscarValoresProdutos', true);
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                const data = JSON.parse(xhr.responseText);
+
+                controles = data.controles || []; // Preenche a variável controles com os dados recebidos
+
+
+                // Adiciona o event listener para o select após carregar os valores
+                document.getElementById('ribbon_selecionado').addEventListener('change', function() {
+                    const ribbonSelecionado = this.value;
+                    const ribbonIndex = parseInt(ribbonSelecionado.replace("ribbon", "")) - 1;
+
+
+
+                    if (controles.length > 0 && ribbonIndex >= 0 && ribbonIndex < 6) {
+                        const valorRibbon = controles[ribbonIndex];
+                        const valorTroca = controles[ribbonIndex + 6] || 0; // Garantir que valorTroca tenha um default
+                        const valorFim = controles[ribbonIndex + 12] || 0; // Garantir que valorFim tenha um default
+                        const valorTotal = valorRibbon + valorTroca - valorFim;
+
+                        document.getElementById('ribbon_atual').value = valorTotal; // Atualiza o campo "ribbon_atual" com o valor retornado
+
+
+                        calcularDiferenca(); // Calcula a diferença imediatamente após atualizar o valor atual
                     } else {
-                        // Desmarcado = SOBRAS NORMAIS (com custo)
-                        sobrasHidden.value = valorSobras;
-                        sobrasExtrasHidden.value = 0;
-                        console.log('✅ Sobras NORMAIS:', valorSobras);
-                    }
-
-                    formVenda.appendChild(sobrasHidden);
-                    formVenda.appendChild(sobrasExtrasHidden);
-
-                    console.log('📤 Campos criados - sobras:', sobrasHidden.value, 'sobras_extras:', sobrasExtrasHidden.value);
-                });
-            }
-        });
-
-        // ========== BUSCAR TOTAL VENDIDO NO MÊS (SEM ALERT DUPLICADO) ==========
-
-        // Variável para controlar se já mostrou o alert
-        var alertJaMostrado = false;
-
-        function buscarTotalVendidoMes(vendedorId, mostrarAlert) {
-            console.log('🔍 buscarTotalVendidoMes chamado com vendedorId:', vendedorId);
-
-            if (!vendedorId || vendedorId === '' || vendedorId === 'undefined') {
-                console.log('❌ vendedor_id vazio ou inválido:', vendedorId);
-                return;
-            }
-
-            // Converte para string
-            vendedorId = String(vendedorId);
-
-            // Usa mês/ano atual SEMPRE (já que vendas são só do mês atual)
-            var hoje = new Date();
-            var mes = String(hoje.getMonth() + 1);
-            if (mes.length === 1) mes = '0' + mes;
-            var ano = String(hoje.getFullYear());
-            console.log('📅 Usando mês atual:', mes, '/', ano);
-
-            // Usa concatenação ao invés de template literals
-            var url = 'ServletAssociado?acao=buscarTotalVendidoMes&vendedor_id=' + vendedorId + '&mes=' + mes + '&ano=' + ano;
-            console.log('🔍 URL montada:', url);
-
-            fetch(url)
-                .then(function(response) {
-                    console.log('📥 Resposta status:', response.status);
-                    return response.text();
-                })
-                .then(function(text) {
-                    console.log('📄 Resposta TEXTO:', text);
-
-                    try {
-                        var data = JSON.parse(text);
-                        console.log('✅ JSON parseado:', data);
-
-                        if (data.error) {
-                            console.error('❌ Erro do servidor:', data.error);
-                            document.getElementById('total_vendido').value = 'ERRO';
-                            return;
-                        }
-
-                        var totalVendido = data.total_fotos || 0;
-                        document.getElementById('total_vendido').value = totalVendido;
-                        console.log('✅ Total vendido atualizado:', totalVendido);
-
-                        // Se já passou do limite E deve mostrar alert E ainda não mostrou
-                        var limite = 240;
-                        if (totalVendido >= limite) {
-                            document.getElementById('total_vendido').style.color = '#ff0000';
-
-                            // Só mostra alert se for solicitado E não mostrou ainda
-                            if (mostrarAlert && !alertJaMostrado) {
-                                alertJaMostrado = true;
-                                alert('⚠️ Atenção! ' + totalVendido + ' fotos já vendidas no mês.\nLimite de ' + limite + ' atingido!\n\nMarque "SOBRAS EXTRAS" para sobras sem custo.');
-                            }
-                        } else {
-                            document.getElementById('total_vendido').style.color = '#DAA520';
-                        }
-                    } catch (parseError) {
-                        console.error('❌ Erro ao fazer parse do JSON:', parseError);
-                        console.error('❌ Texto recebido:', text);
-                        document.getElementById('total_vendido').value = 'ERRO JSON';
-                    }
-                })
-                .catch(function(error) {
-                    console.error('❌ Erro ao buscar total vendido:', error);
-                    document.getElementById('total_vendido').value = 'ERRO REDE';
-                });
-        }
-
-        // ========== FUNÇÃO verEditar ==========
-        function verEditar(id, nome) {
-            console.log('👤 verEditar chamado - ID:', id, 'Nome:', nome);
-
-            // Reseta o controle de alert
-            alertJaMostrado = false;
-
-            // Converte para string
-            id = String(id);
-
-            // Primeiro preenche os campos
-            document.getElementById('vendedor_id').value = id;
-            document.getElementById('vendedor').value = nome;
-
-            // IMPORTANTE: Espera um pouco para o campo ser preenchido
-            setTimeout(function() {
-                console.log('⏱️ Verificando campo vendedor_id:', document.getElementById('vendedor_id').value);
-                // Passa true para MOSTRAR alert
-                buscarTotalVendidoMes(id, true);
-            }, 100);
-
-            var modal = $('#modalLancaVenda');
-            var campoData = $('#outer_dataVenda');
-
-            modal.animate({
-                scrollTop: campoData.offset().top - modal.offset().top + modal.scrollTop()
-            }, 700);
-        }
-
-        // Atualizar total vendido quando mudar a data (SEM ALERT)
-        document.addEventListener('DOMContentLoaded', function() {
-            var campoData = document.getElementById('outer_dataVenda');
-            if (campoData) {
-                campoData.addEventListener('change', function() {
-                    var vendedorId = document.getElementById('vendedor_id').value;
-                    console.log('📅 Data mudou, vendedor_id do campo:', vendedorId);
-                    if (vendedorId && vendedorId !== '' && vendedorId !== 'undefined') {
-                        // Passa false para NÃO mostrar alert
-                        buscarTotalVendidoMes(vendedorId, false);
-                    } else {
-                        console.log('❌ Campo vendedor_id está vazio!');
+                        console.error('Dados invalidos ou faltando para o controle.');
                     }
                 });
-            }
-        });
-
-        // ========== CÁLCULO FINANCEIRO (VERSÃO FINAL COM TOTAL VENDAS) ==========
-        function calcularFinanceiro() {
-            const dataInicial = document.getElementById('data_inicial_fin').value;
-            const dataFinal = document.getElementById('data_final_fin').value;
-
-            if (!dataInicial || !dataFinal) {
-                alert('Por favor, informe as datas inicial e final!');
-                return;
-            }
-
-            fetch('ServletAssociado?acao=consultarFinanceiro&data_inicial=' + dataInicial + '&data_final=' + dataFinal)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('===== DADOS RECEBIDOS DO SERVIDOR =====');
-                    console.log('Dados completos:', data);
-
-                    // Preenche os totais
-                    document.getElementById('total_fotos').value = data.ft_total || 0;
-                    document.getElementById('total_sobras').value = data.sobras || 0;
-                    document.getElementById('total_encartes').value = data.enc_total || 0;
-                    document.getElementById('dig_total').value = data.dig_total || 0;
-
-                    // Calcula extras
-                    const limite = data.limite || 0;
-                    const ft_total = data.ft_total || 0;
-                    const enc_total = data.enc_total || 0;
-                    const dig_total = data.dig_total || 0;
-                    const sobras = data.sobras || 0;
-
-                    const total_extras = Math.max(0, ft_total - limite);
-                    const total_enc_extras = Math.max(0, enc_total - limite);
-
-                    console.log('===== CÁLCULO DE EXTRAS =====');
-                    console.log('total_extras (fotos):', total_extras);
-                    console.log('total_enc_extras (encartes):', total_enc_extras);
-
-                    document.getElementById('total_extras').value = total_extras;
-                    document.getElementById('total_enc_extras').value = total_enc_extras;
-
-                    // Calcula custos
-                    const mat1_custo = parseFloat(data.mat1_custo) || 0;
-                    const mat2_custo = parseFloat(data.mat2_custo) || 0;
-
-                    console.log('===== CÁLCULO DE CUSTOS =====');
-                    console.log('mat1_custo:', mat1_custo);
-                    console.log('mat2_custo:', mat2_custo);
-                    console.log('ft_total:', ft_total);
-                    console.log('sobras:', sobras);
-                    console.log('limite:', limite);
-
-                    // Custo Fotos: ATÉ o limite
-                    const qtd_fotos_custo = Math.min(ft_total, limite);
-                    console.log('Quantidade FOTOS com custo (até limite):', qtd_fotos_custo);
-
-                    // Custo Sobras: SEMPRE todas (sem limite!)
-                    const qtd_sobras_custo = sobras;
-                    console.log('Quantidade SOBRAS com custo (TODAS):', qtd_sobras_custo);
-
-                    const custo_fotos_sobras = (qtd_fotos_custo + qtd_sobras_custo) * mat1_custo;
-                    console.log('Total fotos+sobras com custo:', qtd_fotos_custo + qtd_sobras_custo);
-                    console.log('Custo fotos+sobras:', custo_fotos_sobras);
-
-                    document.getElementById('custo_fotos_sobras').value = formatarMoedaValor(custo_fotos_sobras);
-
-                    // Custo Encartes: ATÉ o limite
-                    const qtd_encartes_custo = Math.min(enc_total, limite);
-                    const custo_encartes = qtd_encartes_custo * mat2_custo;
-
-                    console.log('Quantidade encartes com custo:', qtd_encartes_custo);
-                    console.log('Custo encartes:', custo_encartes);
-
-                    document.getElementById('custo_encartes').value = formatarMoedaValor(custo_encartes);
-
-                    // Calcula totais financeiros
-                    const conf1_valor = parseFloat(data.conf1_valor) || 0;
-                    const conf2_valor = parseFloat(data.conf2_valor) || 0;
-                    const conf3_valor = parseFloat(data.conf3_valor) || 0;
-                    const percentual_extras = parseFloat(data.percentual_extras) || 0;
-
-                    console.log('===== CÁLCULO FINANCEIRO =====');
-                    console.log('conf1_valor:', conf1_valor);
-                    console.log('conf2_valor:', conf2_valor);
-                    console.log('conf3_valor:', conf3_valor);
-                    console.log('percentual_extras (original):', percentual_extras);
-
-                    // ========== TOTAL BRUTO = TUDO QUE VENDEU (SÓ VISUALIZAÇÃO) ==========
-                    const total_bruto = (ft_total * conf1_valor) +
-                        (enc_total * conf2_valor) +
-                        (dig_total * conf3_valor);
-
-                    console.log('Cálculo Total Bruto (visualização):');
-                    console.log('  Fotos:', ft_total, '×', conf1_valor, '=', ft_total * conf1_valor);
-                    console.log('  Encartes:', enc_total, '×', conf2_valor, '=', enc_total * conf2_valor);
-                    console.log('  Digitais:', dig_total, '×', conf3_valor, '=', dig_total * conf3_valor);
-                    console.log('  = Total bruto:', total_bruto);
-
-                    document.getElementById('total_bruto').value = formatarMoedaValor(total_bruto);
-
-                    // ========== TOTAL VENDAS (RECEBIDO) = SÓ ATÉ O LIMITE ==========
-                    const fotos_ate_limite = Math.min(ft_total, limite);
-                    const enc_ate_limite = Math.min(enc_total, limite);
-                    const dig_ate_limite = Math.min(dig_total, limite);
-
-                    const total_vendas = (fotos_ate_limite * conf1_valor) +
-                        (enc_ate_limite * conf2_valor) +
-                        (dig_ate_limite * conf3_valor);
-
-                    console.log('Cálculo Total Vendas (recebido):');
-                    console.log('  Fotos até limite:', fotos_ate_limite, '×', conf1_valor, '=', fotos_ate_limite * conf1_valor);
-                    console.log('  Encartes até limite:', enc_ate_limite, '×', conf2_valor, '=', enc_ate_limite * conf2_valor);
-                    console.log('  Digitais até limite:', dig_ate_limite, '×', conf3_valor, '=', dig_ate_limite * conf3_valor);
-                    console.log('  = Total vendas:', total_vendas);
-
-                    document.getElementById('total_vendas').value = formatarMoedaValor(total_vendas);
-
-                    // ========== VALOR EXTRAS (COMISSÃO) = SÓ FOTOS E ENCARTES EXTRAS ==========
-                    let percentual_divisor = percentual_extras;
-                    if (percentual_extras < 1) {
-                        percentual_divisor = percentual_extras;
-                        console.log('Percentual já em decimal:', percentual_divisor);
-                    } else {
-                        percentual_divisor = percentual_extras / 100;
-                        console.log('Percentual convertido para decimal:', percentual_divisor);
-                    }
-
-                    const valor_extras = ((total_extras * conf1_valor) +
-                        (total_enc_extras * conf2_valor)) * percentual_divisor;
-
-                    console.log('Cálculo Valor Extras (Comissão):');
-                    console.log('  Fotos extras:', total_extras, '×', conf1_valor, '=', total_extras * conf1_valor);
-                    console.log('  Encartes extras:', total_enc_extras, '×', conf2_valor, '=', total_enc_extras * conf2_valor);
-                    console.log('  Soma extras:', (total_extras * conf1_valor) + (total_enc_extras * conf2_valor));
-                    console.log('  × percentual:', percentual_divisor);
-                    console.log('  = Valor extras (Comissão):', valor_extras);
-
-                    document.getElementById('valor_extras').value = formatarMoedaValor(valor_extras);
-
-                    atualizarFinanceiro();
-
-                    console.log('===== CÁLCULO FINALIZADO =====');
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar dados financeiros:', error);
-                    alert('Erro ao consultar dados financeiros!');
-                });
-        }
-        // ========== ATUALIZAR FINANCEIRO (COM TOTAL VENDAS) ==========
-        function atualizarFinanceiro() {
-            console.log('===== ATUALIZANDO FINANCEIRO =====');
-
-            // Pega valores dos inputs
-            const custo_fotos_sobras_str = document.getElementById('custo_fotos_sobras').value;
-            const custo_encartes_str = document.getElementById('custo_encartes').value;
-
-            console.log('custo_fotos_sobras string:', custo_fotos_sobras_str);
-            console.log('custo_encartes string:', custo_encartes_str);
-
-            const custo_fotos_sobras_qtd = parseFloat(removerFormatacaoMoeda(custo_fotos_sobras_str)) || 0;
-            const custo_encartes_qtd = parseFloat(removerFormatacaoMoeda(custo_encartes_str)) || 0;
-
-            console.log('custo_fotos_sobras parseado:', custo_fotos_sobras_qtd);
-            console.log('custo_encartes parseado:', custo_encartes_qtd);
-
-            const fgts = parseFloat(removerFormatacaoMoeda(document.getElementById('fgts_valor').value)) || 0;
-            const inss = parseFloat(removerFormatacaoMoeda(document.getElementById('inss_valor').value)) || 0;
-
-
-            console.log('FGTS:', fgts);
-            console.log('INSS:', inss);
-
-
-            // Custos de Fotos: simplesmente somar os custos (já calculados em R$)
-            const custos_totais = custo_fotos_sobras_qtd + custo_encartes_qtd;
-
-            console.log('Custos totais:', custos_totais);
-            document.getElementById('custos_totais').value = formatarMoedaValor(custos_totais);
-
-            // Restituir: custos_totais + inss + fgts
-            const restituir = custos_totais + inss + fgts;
-
-            console.log('Restituir:', restituir);
-            document.getElementById('restituir').value = formatarMoedaValor(restituir);
-
-            // ========== SALDO LÍQUIDO: TOTAL VENDAS + COMISSÃO - CUSTOS - INSS - FGTS ==========
-            const total_vendas = parseFloat(removerFormatacaoMoeda(document.getElementById('total_vendas').value)) || 0;
-            const valor_extras = parseFloat(removerFormatacaoMoeda(document.getElementById('valor_extras').value)) || 0;
-
-            const saldo_liquido = total_vendas + valor_extras - restituir;
-
-            console.log('Total vendas:', total_vendas);
-            console.log('Valor extras (Comissão):', valor_extras);
-            console.log('Restituir:', restituir);
-            console.log('Saldo líquido:', saldo_liquido);
-
-            document.getElementById('saldo_liquido').value = formatarMoedaValor(saldo_liquido);
-        }
-        // ========== FUNÇÕES AUXILIARES FINANCEIRAS ==========
-
-        function formatarMoedaValor(valor) {
-            return 'R$ ' + valor.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-        }
-
-
-
-        // Adicionar eventos para atualizar cálculos quando FGTS/INSS mudarem
-        document.addEventListener('DOMContentLoaded', function() {
-            ['fgts_valor', 'inss_valor'].forEach(id => {
-                const campo = document.getElementById(id);
-                if (campo) {
-                    campo.addEventListener('input', atualizarFinanceiro);
-                    campo.addEventListener('blur', function() {
-                        if (this.value) {
-                            this.value = formatarMoedaValor(parseFloat(removerFormatacaoMoeda(this.value)) || 0);
-                        }
-                    });
-                }
-            });
-        });
-        // Adicionar antes do submit
-        document.getElementById('formBuscarVenda').addEventListener('submit', function(e) {
-            // Se não tiver checkbox marcado, criar campos com valores padrão
-            var checkbox = document.getElementById('sobras_sem_custo');
-            var sobrasInput = document.getElementById('sobras_input');
-            var valorSobras = parseInt(sobrasInput.value) || 0;
-
-            // Remove campos hidden anteriores
-            var hiddenAntigos = this.querySelectorAll('input[name="sobras"], input[name="sobras_extras"]');
-            hiddenAntigos.forEach(function(campo) {
-                if (campo.type === 'hidden') {
-                    campo.remove();
-                }
-            });
-
-            // Cria novos campos
-            var sobrasHidden = document.createElement('input');
-            sobrasHidden.type = 'hidden';
-            sobrasHidden.name = 'sobras';
-
-            var sobrasExtrasHidden = document.createElement('input');
-            sobrasExtrasHidden.type = 'hidden';
-            sobrasExtrasHidden.name = 'sobras_extras';
-
-            if (checkbox && checkbox.checked) {
-                sobrasHidden.value = 0;
-                sobrasExtrasHidden.value = valorSobras;
             } else {
-                sobrasHidden.value = valorSobras;
-                sobrasExtrasHidden.value = 0;
+                console.error('Erro ao buscar os valores:', xhr.statusText);
             }
+        };
 
-            this.appendChild(sobrasHidden);
-            this.appendChild(sobrasExtrasHidden);
+        xhr.send();
+    });
 
-            console.log('📤 SUBMIT - sobras:', sobrasHidden.value, 'sobras_extras:', sobrasExtrasHidden.value);
+    // Atualizar outras funções que usam getElementById('sobras')
+    function calcularDiferenca() {
+        var ribbonAtual = parseFloat(document.getElementById("ribbon_atual").value) || 0;
+        var ribbonInf = parseFloat(document.getElementById("ribbon_inf").value) || 0;
+        var ribbonSobras = parseFloat(document.getElementById("sobras_input").value) || 0;  // ← MUDOU
+        var ribbonTotal = parseFloat(document.getElementById("total").value) || 0;
+        var ribbonDif = document.getElementById("ribbon_dif");
+
+        ribbonDif.value = (ribbonInf + ribbonSobras + ribbonTotal) - ribbonAtual;
+    }
+
+    function calcularAproveitamento() {
+        var vendas = parseFloat(document.getElementById('total').value) || 0;
+        var sobras = parseFloat(document.getElementById('sobras_input').value) || 0;  // ← MUDOU
+        var producao = vendas + sobras;
+
+        var aproveitamento = producao > 0 ? (vendas / producao) * 100 : 0;
+        document.getElementById('aproveitamento').value = aproveitamento.toFixed(2) + " %";
+    }
+    function atualizarConferencia() {
+
+        function n(id) {
+            return parseFloat(document.getElementById(id).value) || 0;
+        }
+
+        // DINHEIRO
+        const totalDin =
+            n('prod1_din_valor') +
+            n('prod2_din_valor') +
+            n('prod3_din_valor');
+
+        // DÉBITO
+        const totalDeb =
+            n('prod1_deb_valor') +
+            n('prod2_deb_valor') +
+            n('prod3_deb_valor');
+
+        // CRÉDITO
+        const totalCred =
+            n('prod1_cred_valor') +
+            n('prod2_cred_valor') +
+            n('prod3_cred_valor');
+
+        // PIX
+        const totalPix =
+            n('prod1_pix_valor') +
+            n('prod2_pix_valor') +
+            n('prod3_pix_valor');
+
+        // Atualiza os campos
+        document.getElementById("conf_din_inf").value = totalDin.toFixed(2);
+        document.getElementById("conf_debito_inf").value = totalDeb.toFixed(2);
+        document.getElementById("conf_credito_inf").value = totalCred.toFixed(2);
+        document.getElementById("conf_pix_inf").value = totalPix.toFixed(2);
+    }
+
+    // ========== FUNÇÕES DE MÁSCARA PARA INPUTS ==========
+
+    /**
+     * Formata valor monetário em INPUT: R$ 1.000,00
+     */
+    function formatarMoedaInput(input) {
+        let valor = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+
+        if (valor === '') {
+            input.value = '';
+            return;
+        }
+
+        // Converte para centavos
+        valor = (parseInt(valor) / 100).toFixed(2);
+
+        // Formata com separadores
+        valor = valor.replace('.', ',');
+        valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+
+        input.value = 'R$ ' + valor;
+    }
+
+    /**
+     * Remove formatação de moeda para enviar ao servidor
+     */
+    function removerFormatacaoMoeda(valor) {
+        if (!valor) return '';
+        return valor.replace(/[^\d,]/g, '').replace(',', '.');
+    }
+
+    /**
+     * Formata quantidade: 1.000
+     */
+    function formatarQuantidade(input) {
+        let valor = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+
+        if (valor === '') {
+            input.value = '';
+            return;
+        }
+
+        // Adiciona separadores de milhares
+        valor = parseInt(valor).toString();
+        valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+
+        input.value = valor;
+    }
+
+    /**
+     * Remove formatação de quantidade para enviar ao servidor
+     */
+    function removerFormatacaoQuantidade(valor) {
+        if (!valor) return '';
+        return valor.replace(/\./g, '');
+    }
+
+    // ========== APLICAR MÁSCARAS NOS CAMPOS ==========
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // CAMPOS DE VALORES MONETÁRIOS (Produtos)
+        const camposMoeda = [
+            'conf1_valor', 'conf2_valor', 'conf3_valor', // Modal Produtos
+            'conf1_valor_mat', 'conf2_valor_mat', 'conf3_valor_mat', // Modal Materiais - Valores
+            'conf1_custo_mat', 'conf2_custo_mat', 'conf3_custo_mat'  // Modal Materiais - Custos
+        ];
+
+        camposMoeda.forEach(id => {
+            const campo = document.getElementById(id);
+            if (campo) {
+                // Formata ao carregar (se já tiver valor)
+                if (campo.value) {
+                    campo.value = 'R$ ' + parseFloat(campo.value).toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                }
+
+                // Formata ao digitar (USANDO formatarMoedaInput)
+                campo.addEventListener('blur', function() {
+                    formatarMoedaInput(this);
+                });
+
+                // Remove formatação antes de enviar
+                campo.closest('form').addEventListener('submit', function() {
+                    campo.value = removerFormatacaoMoeda(campo.value);
+                });
+            }
         });
-    </SCRIPT>
+
+        // CAMPOS DE QUANTIDADE (Materiais)
+        const camposQuantidade = [
+            'conf1_qtd_mat', 'conf2_qtd_mat', 'conf3_qtd_mat'
+        ];
+
+        camposQuantidade.forEach(id => {
+            const campo = document.getElementById(id);
+            if (campo) {
+                // Formata ao carregar (se já tiver valor)
+                if (campo.value && campo.value !== '0') {
+                    campo.value = parseInt(campo.value).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                }
+
+                // Formata ao digitar
+                campo.addEventListener('blur', function() {
+                    formatarQuantidade(this);
+                });
+
+                // Remove formatação antes de enviar
+                campo.closest('form').addEventListener('submit', function() {
+                    campo.value = removerFormatacaoQuantidade(campo.value);
+                });
+            }
+        });
+    });
+
+
+    // ========== CHECKBOX SOBRAS EXTRAS (CORRIGIDO) ==========
+    document.addEventListener('DOMContentLoaded', function() {
+        var checkbox = document.getElementById('sobras_sem_custo');
+        if (checkbox) {
+            checkbox.addEventListener('change', function() {
+                var sobrasInput = document.getElementById('sobras_input');
+                var valorSobras = parseInt(sobrasInput.value) || 0;
+
+
+
+                // Remove campos hidden anteriores se existirem
+                var hiddenAntigos = document.querySelectorAll('input[name="sobras"], input[name="sobras_extras"]');
+                hiddenAntigos.forEach(function(campo) {
+                    if (campo.type === 'hidden') {
+                        campo.remove();
+                    }
+                });
+
+                // Cria novos campos hidden
+                var formVenda = document.getElementById('formBuscarVenda');
+
+                var sobrasHidden = document.createElement('input');
+                sobrasHidden.type = 'hidden';
+                sobrasHidden.name = 'sobras';
+
+                var sobrasExtrasHidden = document.createElement('input');
+                sobrasExtrasHidden.type = 'hidden';
+                sobrasExtrasHidden.name = 'sobras_extras';
+
+                if (this.checked) {
+                    // Marcado = SOBRAS EXTRAS (sem custo)
+                    sobrasHidden.value = 0;
+                    sobrasExtrasHidden.value = valorSobras;
+
+                } else {
+                    // Desmarcado = SOBRAS NORMAIS (com custo)
+                    sobrasHidden.value = valorSobras;
+                    sobrasExtrasHidden.value = 0;
+
+                }
+
+                formVenda.appendChild(sobrasHidden);
+                formVenda.appendChild(sobrasExtrasHidden);
+
+
+            });
+        }
+    });
+
+    // ========== BUSCAR TOTAL VENDIDO NO MÊS (SEM ALERT DUPLICADO) ==========
+
+    // Variável para controlar se já mostrou o alert
+    var alertJaMostrado = false;
+
+    function buscarTotalVendidoMes(vendedorId, mostrarAlert) {
+
+
+        if (!vendedorId || vendedorId === '' || vendedorId === 'undefined') {
+            console.log('❌ vendedor_id vazio ou inválido:', vendedorId);
+            return;
+        }
+
+        // Converte para string
+        vendedorId = String(vendedorId);
+
+        // Usa mês/ano atual SEMPRE (já que vendas são só do mês atual)
+        var hoje = new Date();
+        var mes = String(hoje.getMonth() + 1);
+        if (mes.length === 1) mes = '0' + mes;
+        var ano = String(hoje.getFullYear());
+
+
+        // Usa concatenação ao invés de template literals
+        var url = 'ServletAssociado?acao=buscarTotalVendidoMes&vendedor_id=' + vendedorId + '&mes=' + mes + '&ano=' + ano;
+
+
+        fetch(url)
+            .then(function(response) {
+
+                return response.text();
+            })
+            .then(function(text) {
+                console.log('📄 Resposta TEXTO:', text);
+
+                try {
+                    var data = JSON.parse(text);
+                    console.log('✅ JSON parseado:', data);
+
+                    if (data.error) {
+                        console.error('❌ Erro do servidor:', data.error);
+                        document.getElementById('total_vendido').value = 'ERRO';
+                        return;
+                    }
+
+                    var totalVendido = data.total_fotos || 0;
+                    document.getElementById('total_vendido').value = totalVendido;
+
+
+                    // Se já passou do limite E deve mostrar alert E ainda não mostrou
+                    var limite = 240;
+                    if (totalVendido >= limite) {
+                        document.getElementById('total_vendido').style.color = '#ff0000';
+
+                        // Só mostra alert se for solicitado E não mostrou ainda
+                        if (mostrarAlert && !alertJaMostrado) {
+                            alertJaMostrado = true;
+                            alert('⚠️ Atenção! ' + totalVendido + ' fotos já vendidas no mês.\nLimite de ' + limite + ' atingido!\n\nMarque "SOBRAS EXTRAS" para sobras sem custo.');
+                        }
+                    } else {
+                        document.getElementById('total_vendido').style.color = '#DAA520';
+                    }
+                } catch (parseError) {
+                    console.error('❌ Erro ao fazer parse do JSON:', parseError);
+                    console.error('❌ Texto recebido:', text);
+                    document.getElementById('total_vendido').value = 'ERRO JSON';
+                }
+            })
+            .catch(function(error) {
+                console.error('❌ Erro ao buscar total vendido:', error);
+                document.getElementById('total_vendido').value = 'ERRO REDE';
+            });
+    }
+
+    // ========== FUNÇÃO verEditar ==========
+    function verEditar(id, nome) {
+
+
+        // Reseta o controle de alert
+        alertJaMostrado = false;
+
+        // Converte para string
+        id = String(id);
+
+        // Primeiro preenche os campos
+        document.getElementById('vendedor_id').value = id;
+        document.getElementById('vendedor').value = nome;
+
+        // IMPORTANTE: Espera um pouco para o campo ser preenchido
+        setTimeout(function() {
+            console.log('⏱️ Verificando campo vendedor_id:', document.getElementById('vendedor_id').value);
+            // Passa true para MOSTRAR alert
+            buscarTotalVendidoMes(id, true);
+        }, 100);
+
+        var modal = $('#modalLancaVenda');
+        var campoData = $('#outer_dataVenda');
+
+        modal.animate({
+            scrollTop: campoData.offset().top - modal.offset().top + modal.scrollTop()
+        }, 700);
+    }
+
+    // Atualizar total vendido quando mudar a data (SEM ALERT)
+    document.addEventListener('DOMContentLoaded', function() {
+        var campoData = document.getElementById('outer_dataVenda');
+        if (campoData) {
+            campoData.addEventListener('change', function() {
+                var vendedorId = document.getElementById('vendedor_id').value;
+
+                if (vendedorId && vendedorId !== '' && vendedorId !== 'undefined') {
+                    // Passa false para NÃO mostrar alert
+                    buscarTotalVendidoMes(vendedorId, false);
+                } else {
+                    console.log('❌ Campo vendedor_id está vazio!');
+                }
+            });
+        }
+    });
+
+    // ========== CÁLCULO FINANCEIRO (VERSÃO FINAL COM TOTAL VENDAS) ==========
+    function calcularFinanceiro() {
+        const dataInicial = document.getElementById('data_inicial_fin').value;
+        const dataFinal = document.getElementById('data_final_fin').value;
+
+        if (!dataInicial || !dataFinal) {
+            alert('Por favor, informe as datas inicial e final!');
+            return;
+        }
+
+        fetch('ServletAssociado?acao=consultarFinanceiro&data_inicial=' + dataInicial + '&data_final=' + dataFinal)
+            .then(response => response.json())
+            .then(data => {
+
+
+                // Preenche os totais
+                document.getElementById('total_fotos').value = data.ft_total || 0;
+                document.getElementById('total_sobras').value = data.sobras || 0;
+                document.getElementById('total_encartes').value = data.enc_total || 0;
+                document.getElementById('dig_total').value = data.dig_total || 0;
+
+                // Calcula extras
+                const limite = data.limite || 0;
+                const ft_total = data.ft_total || 0;
+                const enc_total = data.enc_total || 0;
+                const dig_total = data.dig_total || 0;
+                const sobras = data.sobras || 0;
+
+                const total_extras = Math.max(0, ft_total - limite);
+                const total_enc_extras = Math.max(0, enc_total - limite);
+
+
+
+                document.getElementById('total_extras').value = total_extras;
+                document.getElementById('total_enc_extras').value = total_enc_extras;
+
+                // Calcula custos
+                const mat1_custo = parseFloat(data.mat1_custo) || 0;
+                const mat2_custo = parseFloat(data.mat2_custo) || 0;
+
+
+
+                // Custo Fotos: ATÉ o limite
+                const qtd_fotos_custo = Math.min(ft_total, limite);
+
+
+                // Custo Sobras: SEMPRE todas (sem limite!)
+                const qtd_sobras_custo = sobras;
+
+
+                const custo_fotos_sobras = (qtd_fotos_custo + qtd_sobras_custo) * mat1_custo;
+
+                document.getElementById('custo_fotos_sobras').value = formatarMoedaValor(custo_fotos_sobras);
+
+                // Custo Encartes: ATÉ o limite
+                const qtd_encartes_custo = Math.min(enc_total, limite);
+                const custo_encartes = qtd_encartes_custo * mat2_custo;
+
+
+
+                document.getElementById('custo_encartes').value = formatarMoedaValor(custo_encartes);
+
+                // Calcula totais financeiros
+                const conf1_valor = parseFloat(data.conf1_valor) || 0;
+                const conf2_valor = parseFloat(data.conf2_valor) || 0;
+                const conf3_valor = parseFloat(data.conf3_valor) || 0;
+                const percentual_extras = parseFloat(data.percentual_extras) || 0;
+
+
+
+                // ========== TOTAL BRUTO = TUDO QUE VENDEU (SÓ VISUALIZAÇÃO) ==========
+                const total_bruto = (ft_total * conf1_valor) +
+                    (enc_total * conf2_valor) +
+                    (dig_total * conf3_valor);
+
+
+
+                document.getElementById('total_bruto').value = formatarMoedaValor(total_bruto);
+
+                // ========== TOTAL VENDAS (RECEBIDO) = SÓ ATÉ O LIMITE ==========
+                const fotos_ate_limite = Math.min(ft_total, limite);
+                const enc_ate_limite = Math.min(enc_total, limite);
+                const dig_ate_limite = Math.min(dig_total, limite);
+
+                const total_vendas = (fotos_ate_limite * conf1_valor) +
+                    (enc_ate_limite * conf2_valor) +
+                    (dig_ate_limite * conf3_valor);
+
+
+
+                document.getElementById('total_vendas').value = formatarMoedaValor(total_vendas);
+
+                // ========== VALOR EXTRAS (COMISSÃO) = SÓ FOTOS E ENCARTES EXTRAS ==========
+                let percentual_divisor = percentual_extras;
+                if (percentual_extras < 1) {
+                    percentual_divisor = percentual_extras;
+                    console.log('Percentual já em decimal:', percentual_divisor);
+                } else {
+                    percentual_divisor = percentual_extras / 100;
+                    console.log('Percentual convertido para decimal:', percentual_divisor);
+                }
+
+                const valor_extras = ((total_extras * conf1_valor) +
+                    (total_enc_extras * conf2_valor)) * percentual_divisor;
+
+
+
+                document.getElementById('valor_extras').value = formatarMoedaValor(valor_extras);
+
+                atualizarFinanceiro();
+
+
+            })
+            .catch(error => {
+                console.error('Erro ao buscar dados financeiros:', error);
+                alert('Erro ao consultar dados financeiros!');
+            });
+    }
+
+    // ========== ATUALIZAR FINANCEIRO (COM TOTAL VENDAS) ==========
+    function atualizarFinanceiro() {
+
+        // Pega valores dos inputs
+        const custo_fotos_sobras_str = document.getElementById('custo_fotos_sobras').value;
+        const custo_encartes_str = document.getElementById('custo_encartes').value;
+
+        const custo_fotos_sobras_qtd = parseFloat(removerFormatacaoMoeda(custo_fotos_sobras_str)) || 0;
+        const custo_encartes_qtd = parseFloat(removerFormatacaoMoeda(custo_encartes_str)) || 0;
+
+        const fgts = parseFloat(removerFormatacaoMoeda(document.getElementById('fgts_valor').value)) || 0;
+        const inss = parseFloat(removerFormatacaoMoeda(document.getElementById('inss_valor').value)) || 0;
+
+
+
+
+        // Custos de Fotos: simplesmente somar os custos (já calculados em R$)
+        const custos_totais = custo_fotos_sobras_qtd + custo_encartes_qtd;
+
+        document.getElementById('custos_totais').value = formatarMoedaValor(custos_totais);
+
+        // Restituir: custos_totais + inss + fgts
+        const restituir = custos_totais + inss + fgts;
+
+        document.getElementById('restituir').value = formatarMoedaValor(restituir);
+
+        // ========== SALDO LÍQUIDO: TOTAL VENDAS + COMISSÃO - CUSTOS - INSS - FGTS ==========
+        const total_vendas = parseFloat(removerFormatacaoMoeda(document.getElementById('total_vendas').value)) || 0;
+        const valor_extras = parseFloat(removerFormatacaoMoeda(document.getElementById('valor_extras').value)) || 0;
+
+        const saldo_liquido = total_vendas + valor_extras - restituir;
+
+
+        document.getElementById('saldo_liquido').value = formatarMoedaValor(saldo_liquido);
+    }
+
+    // ========== FUNÇÕES AUXILIARES FINANCEIRAS ==========
+
+    function formatarMoedaValor(valor) {
+        return 'R$ ' + valor.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    }
+
+
+
+    // Adicionar eventos para atualizar cálculos quando FGTS/INSS mudarem
+    document.addEventListener('DOMContentLoaded', function() {
+        ['fgts_valor', 'inss_valor'].forEach(id => {
+            const campo = document.getElementById(id);
+            if (campo) {
+                campo.addEventListener('input', atualizarFinanceiro);
+                campo.addEventListener('blur', function() {
+                    if (this.value) {
+                        this.value = formatarMoedaValor(parseFloat(removerFormatacaoMoeda(this.value)) || 0);
+                    }
+                });
+            }
+        });
+    });
+
+    // Adicionar antes do submit
+    document.getElementById('formBuscarVenda').addEventListener('submit', function(e) {
+        // Se não tiver checkbox marcado, criar campos com valores padrão
+        var checkbox = document.getElementById('sobras_sem_custo');
+        var sobrasInput = document.getElementById('sobras_input');
+        var valorSobras = parseInt(sobrasInput.value) || 0;
+
+        // Remove campos hidden anteriores
+        var hiddenAntigos = this.querySelectorAll('input[name="sobras"], input[name="sobras_extras"]');
+        hiddenAntigos.forEach(function(campo) {
+            if (campo.type === 'hidden') {
+                campo.remove();
+            }
+        });
+
+        // Cria novos campos
+        var sobrasHidden = document.createElement('input');
+        sobrasHidden.type = 'hidden';
+        sobrasHidden.name = 'sobras';
+
+        var sobrasExtrasHidden = document.createElement('input');
+        sobrasExtrasHidden.type = 'hidden';
+        sobrasExtrasHidden.name = 'sobras_extras';
+
+        if (checkbox && checkbox.checked) {
+            sobrasHidden.value = 0;
+            sobrasExtrasHidden.value = valorSobras;
+        } else {
+            sobrasHidden.value = valorSobras;
+            sobrasExtrasHidden.value = 0;
+        }
+
+        this.appendChild(sobrasHidden);
+        this.appendChild(sobrasExtrasHidden);
+
+    });
+
+
+
+    // ========== FUNÇÃO: APLICAR PERÍODO RÁPIDO ==========
+    function aplicarPeriodoRapido() {
+        const periodo = document.getElementById('rel_periodo').value;
+        const hoje = new Date();
+
+        let mesInicial, mesFinal;
+
+        switch(periodo) {
+            case 'ultimo_mes':
+                mesInicial = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+                mesFinal   = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                break;
+
+            case 'ultimos_3':
+                mesInicial = new Date(hoje.getFullYear(), hoje.getMonth() - 2, 1);
+                mesFinal   = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                break;
+
+            case 'ultimos_6':
+                mesInicial = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1);
+                mesFinal   = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                break;
+
+            case 'ano_atual':
+                mesInicial = new Date(hoje.getFullYear(), 0, 1);
+                mesFinal   = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+                break;
+        }
+
+
+        const formatarMes = (data) => {
+            const ano = data.getFullYear();
+            const mes = String(data.getMonth() + 1).padStart(2, '0');
+            return ano + '-' + mes;
+        };
+
+        document.getElementById('rel_mes_inicial').value = formatarMes(mesInicial);
+        document.getElementById('rel_mes_final').value = formatarMes(mesFinal);
+    }
+
+    // ========== FUNÇÃO: GERAR RELATÓRIO ==========
+    function gerarRelatorio() {
+        const mesInicial = document.getElementById('rel_mes_inicial').value;
+        const mesFinal = document.getElementById('rel_mes_final').value;
+
+        if (!mesInicial || !mesFinal) {
+            alert('Por favor, selecione o período inicial e final!');
+            return;
+        }
+
+        const dataInicial = mesInicial + '-01';
+        const dataFinal = mesFinal + '-01';
+
+
+
+        fetch('ServletAssociado?acao=buscarRelatorio&data_inicial=' + dataInicial + '&data_final=' + dataFinal)
+            .then(response => response.json())
+            .then(data => {
+
+
+                if (!data || data.length === 0) {
+                    mostrarSemDados();
+                    return;
+                }
+
+                exibirRelatorio(data);
+            })
+            .catch(error => {
+                console.error('❌ Erro ao buscar relatório:', error);
+                alert('Erro ao gerar relatório!');
+            });
+    }
+
+    // ========== FUNÇÃO: MOSTRAR MENSAGEM SEM DADOS ==========
+    function mostrarSemDados() {
+        document.getElementById('cardsResumo').style.display = 'none';
+
+        document.getElementById('tabelaArea').style.display = 'none';
+        document.getElementById('semDadosMsg').style.display = 'block';
+    }
+
+    // ========== FUNÇÃO: EXIBIR RELATÓRIO ==========
+    function exibirRelatorio(dados) {
+        document.getElementById('semDadosMsg').style.display = 'none';
+
+        document.getElementById('cardsResumo').style.display = 'flex';
+        document.getElementById('tabelaArea').style.display = 'block';
+
+        let totalVendas = 0;
+        let totalSaldoLiquido = 0;
+        let totalRestituir = 0;
+        let totalValorExtras = 0;
+        let totalBruto = 0;
+
+        dados.forEach(item => {
+            totalVendas += parseFloat(item.total_vendas || 0);
+            totalSaldoLiquido += parseFloat(item.saldo_liquido || 0);
+            totalRestituir += parseFloat(item.restituir || 0);
+            totalValorExtras += parseFloat(item.valor_extras || 0);
+            totalBruto += parseFloat(item.total_bruto || 0);
+        });
+
+        const mediaMensal = dados.length > 0 ? totalSaldoLiquido / dados.length : 0;
+
+        document.getElementById('card_total_vendas').textContent = formatarMoeda(totalVendas);
+        document.getElementById('card_saldo_liquido').textContent = formatarMoeda(totalSaldoLiquido);
+        document.getElementById('card_restituir').textContent = formatarMoeda(totalRestituir);
+        document.getElementById('card_valor_extras').textContent = formatarMoeda(totalValorExtras);
+        document.getElementById('card_total_bruto').textContent = formatarMoeda(totalBruto);
+        document.getElementById('card_media_mensal').textContent = formatarMoeda(mediaMensal);
+
+        preencherTabela(dados);
+    }
+
+    // ========== FUNÇÃO: PREENCHER TABELA ==========
+    function preencherTabela(dados) {
+        const tbody = document.getElementById('tabelaRelatorioBody');
+        tbody.innerHTML = '';
+
+        dados.forEach(item => {
+            const tr = document.createElement('tr');
+            const mesAno = formatarMesAno(item.mes_referencia, item.ano_referencia);
+
+            tr.innerHTML =
+                '<td><strong>' + mesAno + '</strong></td>' +
+                // QUANTIDADES
+                '<td>' + (item.total_fotos || 0) + '</td>' +
+                '<td>' + (item.total_sobras || 0) + '</td>' +
+                '<td>' + (item.total_encartes || 0) + '</td>' +
+                '<td>' + (item.dig_total || 0) + '</td>' +
+                '<td>' + (item.fotos_extras || 0) + '</td>' +
+                '<td>' + (item.encartes_extras || 0) + '</td>' +
+                // CUSTOS
+                '<td>' + formatarMoeda(item.custo_fotos_sobras) + '</td>' +
+                '<td>' + formatarMoeda(item.custo_encartes) + '</td>' +
+                '<td>' + formatarMoeda(item.fgts) + '</td>' +
+                '<td>' + formatarMoeda(item.inss) + '</td>' +
+                // FINANCEIRO
+                '<td>' + formatarMoeda(item.total_bruto) + '</td>' +
+                '<td>' + formatarMoeda(item.total_vendas) + '</td>' +
+                '<td>' + formatarMoeda(item.valor_extras) + '</td>' +
+                '<td>' + formatarMoeda(item.custos_fotos) + '</td>' +
+                '<td style="color: #ff6b6b; font-weight: bold;">' + formatarMoeda(item.restituir) + '</td>' +
+                '<td style="color: #51cf66; font-weight: bold;">' + formatarMoeda(item.saldo_liquido) + '</td>';
+
+            tbody.appendChild(tr);
+        });
+    }
+
+
+
+    // ========== FUNÇÕES AUXILIARES RELATÓRIOS ==========
+    function formatarMoeda(valor) {
+        if (!valor || isNaN(valor)) return 'R$ 0,00';
+        return 'R$ ' + parseFloat(valor).toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    }
+
+    function formatarMesAno(mes, ano) {
+        const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        return meses[mes - 1] + '/' + ano;
+    }
+
+
+
+</SCRIPT>
 
 
 </body>

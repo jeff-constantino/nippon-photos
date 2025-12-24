@@ -1,0 +1,366 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="model.Ponto, dao.PontoDAO, java.sql.*, java.util.*, java.text.*, java.time.*" %>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Controle de Ponto</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f2a654; padding: 20px; }
+        .container { max-width: 1600px; margin: 0 auto; }
+        .header {
+            background: #1a1a1a; color: white; padding: 20px 30px; border-radius: 15px;
+            margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        h1 { color: #f2a654; font-size: 28px; font-weight: 700; }
+        .card {
+            background: #1a1a1a; border-radius: 15px; padding: 25px; margin-bottom: 20px;
+            color: white; box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .card h2 {
+            color: #f2a654; margin-bottom: 20px; border-bottom: 2px solid #f2a654;
+            padding-bottom: 12px; font-size: 22px; font-weight: 600;
+        }
+        .btn {
+            padding: 12px 24px; border: none; border-radius: 10px; font-size: 15px;
+            font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 5px;
+        }
+        .btn-primary { background: #f2a654; color: #1a1a1a; }
+        .btn-primary:hover { background: #e09543; transform: translateY(-1px); }
+        .btn-secondary { background: #333; color: white; }
+        .btn-secondary:hover { background: #444; }
+        .btn-danger { background: #d32f2f; color: white; }
+        .btn-success { background: #2e7d32; color: white; }
+        .btn-sm { padding: 7px 14px; font-size: 13px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        table th { background: #2a2a2a; padding: 14px 12px; text-align: left; color: #f2a654; font-weight: 600; font-size: 14px; }
+        table td { padding: 12px; border-bottom: 1px solid #333; font-size: 14px; }
+        table tr:hover { background: #2a2a2a; }
+
+        input, select, textarea {
+            padding: 11px; border: 2px solid #333; border-radius: 8px;
+            background: #2a2a2a; color: white; font-size: 14px; width: 100%; margin: 8px 0;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #f2a654; }
+        label { color: #f2a654; font-weight: 600; display: block; margin-top: 12px; font-size: 14px; }
+
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.75); overflow-y: auto;
+        }
+        .modal-content {
+            background: #1a1a1a; margin: 50px auto; padding: 30px; border-radius: 15px;
+            width: 90%; max-width: 700px; color: white; max-height: 85vh; overflow-y: auto;
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 25px; border-bottom: 2px solid #f2a654; padding-bottom: 12px;
+        }
+        .modal-header h3 { color: #f2a654; font-size: 22px; }
+        .close { color: #aaa; font-size: 32px; font-weight: bold; cursor: pointer; line-height: 1; }
+        .close:hover { color: white; }
+
+        .msg { padding: 14px; border-radius: 10px; margin-bottom: 18px; text-align: center; font-weight: 500; }
+        .msg-sucesso { background: #2e7d32; }
+        .msg-erro { background: #d32f2f; }
+
+        .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .badge-success { background: #2e7d32; }
+        .badge-danger { background: #d32f2f; }
+        .badge-warning { background: #f57c00; }
+        .badge-info { background: #0288d1; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .relatorio-item { background: #2a2a2a; padding: 15px; border-radius: 10px; margin: 12px 0; border-left: 4px solid #f2a654; }
+        .relatorio-item.alerta { border-left-color: #d32f2f; background: rgba(211, 47, 47, 0.1); }
+        .relatorio-item.falta { border-left-color: #f57c00; background: rgba(245, 124, 0, 0.1); }
+
+        .resumo-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .resumo-card { background: #2a2a2a; padding: 20px; border-radius: 10px; text-align: center; }
+        .resumo-valor { font-size: 32px; font-weight: bold; color: #f2a654; margin: 10px 0; }
+        .resumo-label { color: #ccc; font-size: 14px; }
+
+        @media (max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+<%
+    String admin = (String) session.getAttribute("pontoAdmin");
+    if (admin == null) {
+        response.sendRedirect(request.getContextPath() + "/ponto/index.jsp");
+        return;
+    }
+
+    String erro = (String) request.getAttribute("erro");
+    String sucesso = (String) request.getAttribute("sucesso");
+
+    PontoDAO dao = new PontoDAO();
+    List<Ponto> funcionarios = dao.listarFuncionarios();
+    List<Ponto> relatorioDetalhado = (List<Ponto>) request.getAttribute("relatorioDetalhado");
+    Ponto resumoMensal = (Ponto) request.getAttribute("resumoMensal");
+    Ponto funcSelecionado = (Ponto) request.getAttribute("funcSelecionado");
+%>
+
+<div class="container">
+    <div class="header">
+        <h1>⚙️ Painel Admin - SaaS</h1>
+        <form action="<%= request.getContextPath() %>/ponto" method="post" style="margin: 0;">
+            <input type="hidden" name="acao" value="logout">
+            <button type="submit" class="btn btn-secondary">Sair</button>
+        </form>
+    </div>
+
+    <% if (erro != null) { %><div class="msg msg-erro"><%= erro %></div><% } %>
+    <% if (sucesso != null) { %><div class="msg msg-sucesso"><%= sucesso %></div><% } %>
+
+    <div class="card">
+        <h2>🎯 Ações Rápidas</h2>
+        <button onclick="abrirModal('modalFunc')" class="btn btn-primary">➕ Novo Funcionário</button>
+        <button onclick="abrirModal('modalHorario')" class="btn btn-primary">⏰ Configurar Horário</button>
+        <button onclick="abrirModal('modalRelatorio')" class="btn btn-primary">📊 Relatório Detalhado</button>
+
+    </div>
+
+    <div class="card">
+        <h2>👥 Funcionários</h2>
+        <table>
+            <thead>
+            <tr><th>Nome</th><th>CPF</th><th>Telefone</th><th>Status</th><th>Ações</th></tr>
+            </thead>
+            <tbody>
+            <% for (Ponto f : funcionarios) { %>
+            <tr>
+                <td><strong><%= f.getFuncNome() %></strong></td>
+                <td><%= f.getFuncCpf() %></td>
+                <td><%= f.getFuncTelefone() != null ? f.getFuncTelefone() : "-" %></td>
+                <td><span class="badge <%= f.getFuncAtivo() ? "badge-success" : "badge-danger" %>"><%= f.getFuncAtivo() ? "Ativo" : "Inativo" %></span></td>
+                <td>
+                    <form action="<%= request.getContextPath() %>/ponto" method="post" style="display: inline;">
+                        <input type="hidden" name="acao" value="listar-horarios">
+                        <input type="hidden" name="funcId" value="<%= f.getFuncId() %>">
+                        <button type="submit" class="btn btn-secondary btn-sm">Horários</button>
+                    </form>
+                </td>
+            </tr>
+            <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <% if (relatorioDetalhado != null && !relatorioDetalhado.isEmpty()) { %>
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0;">📊 Relatório Detalhado - <%= funcSelecionado.getFuncNome() %></h2>
+            <form action="<%= request.getContextPath() %>/ponto-export" method="post" style="margin: 0;">
+                <input type="hidden" name="funcId" value="<%= funcSelecionado.getFuncId() %>">
+                <input type="hidden" name="dataInicio" value="<%= new SimpleDateFormat("yyyy-MM-dd").format(request.getAttribute("periodoInicio")) %>">
+                <input type="hidden" name="dataFim" value="<%= new SimpleDateFormat("yyyy-MM-dd").format(request.getAttribute("periodoFim")) %>">
+                <button type="submit" class="btn btn-success">📥 Exportar Excel</button>
+            </form>
+        </div>
+        <p style="color: #ccc; margin-bottom: 20px;">
+            Período: <%= new SimpleDateFormat("dd/MM/yyyy").format(request.getAttribute("periodoInicio")) %> até <%= new SimpleDateFormat("dd/MM/yyyy").format(request.getAttribute("periodoFim")) %>
+        </p>
+
+        <%
+            int totalDias = 0, totalAtrasos = 0, totalFaltas = 0, totalMinutos = 0, totalNoturno = 0;
+            for (Ponto reg : relatorioDetalhado) {
+                boolean isFalta = "Falta".equals(reg.getStatusDia());
+                boolean isJustificado = "Justificado".equals(reg.getStatusDia()) || (reg.getStatusDia() != null && reg.getStatusDia().contains("Abonado"));
+                boolean temAtraso = reg.getTemAtraso() != null && reg.getTemAtraso();
+
+                if (!isFalta && !isJustificado) totalDias++;
+                if (temAtraso) totalAtrasos++;
+                if (isFalta && !isJustificado) totalFaltas++;
+                if (reg.getRegMinutosTrabalhados() != null) totalMinutos += reg.getRegMinutosTrabalhados();
+                if (reg.getRegMinutosNoturno() != null) totalNoturno += reg.getRegMinutosNoturno();
+        %>
+        <div class="relatorio-item <%= temAtraso ? "alerta" : (isFalta ? "falta" : "") %>">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <strong style="font-size: 16px;"><%= new SimpleDateFormat("dd/MM/yyyy").format(reg.getRegData()) %> - <%= reg.getDiaSemanaTexto() %></strong>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span class="badge <%= isFalta ? "badge-warning" : (isJustificado ? "badge-info" : (temAtraso ? "badge-danger" : "badge-success")) %>"><%= reg.getStatusDia() %></span>
+
+                    <% if (!isFalta) { %>
+                    <button onclick="editarRegistro(<%= reg.getRegId() %>, '<%= new SimpleDateFormat("yyyy-MM-dd").format(reg.getRegData()) %>')" class="btn btn-secondary btn-sm" title="Editar">✏️</button>
+                    <% } %>
+
+                    <% if (isFalta && !isJustificado) { %>
+                    <button onclick="abonarFalta(<%= reg.getFuncId() %>, '<%= new SimpleDateFormat("yyyy-MM-dd").format(reg.getRegData()) %>')" class="btn btn-success btn-sm">✅ Abonar</button>
+                    <% } else if (isJustificado) { %>
+                    <button onclick="removerJustificativa(<%= reg.getFuncId() %>, '<%= new SimpleDateFormat("yyyy-MM-dd").format(reg.getRegData()) %>')" class="btn btn-danger btn-sm">❌</button>
+                    <% } %>
+                </div>
+            </div>
+
+            <% if (!isFalta && !isJustificado) { %>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 14px;">
+                <div><span style="color: #999;">Entrada:</span> <strong><%= reg.getRegEntrada() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegEntrada()) : "-" %></strong></div>
+                <div><span style="color: #999;">Saída Intervalo:</span> <strong><%= reg.getRegSaidaIntervalo() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegSaidaIntervalo()) : "-" %></strong></div>
+                <div><span style="color: #999;">Retorno Intervalo:</span> <strong><%= reg.getRegRetornoIntervalo() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegRetornoIntervalo()) : "-" %></strong></div>
+                <div><span style="color: #999;">Saída:</span> <strong><%= reg.getRegSaida() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegSaida()) : "-" %></strong></div>
+            </div>
+            <% } %>
+        </div>
+        <% } %>
+    </div>
+    <% } %>
+
+    <% if (resumoMensal != null) { %>
+    <div class="card">
+        <h2>📈 Resumo Mensal - <%= funcSelecionado.getFuncNome() %></h2>
+        <div class="resumo-box">
+            <div class="resumo-card"><div class="resumo-label">Dias Trabalhados</div><div class="resumo-valor"><%= resumoMensal.getResumoTotalDiasTrabalhados() %></div></div>
+            <div class="resumo-card"><div class="resumo-label">Total Horas</div><div class="resumo-valor"><%= String.format("%02d:%02d", resumoMensal.getResumoTotalMinutosTrabalhados()/60, resumoMensal.getResumoTotalMinutosTrabalhados()%60) %></div></div>
+            <div class="resumo-card"><div class="resumo-label">Atrasos</div><div class="resumo-valor" style="color: #ff6b6b;"><%= resumoMensal.getResumoTotalAtrasos() %></div></div>
+            <div class="resumo-card"><div class="resumo-label">Direito ao Vale</div><div class="resumo-valor" style="color: <%= resumoMensal.getResumoTemDireitoVale() ? "#4ade80" : "#ff6b6b" %>;"><%= resumoMensal.getResumoTemDireitoVale() ? "SIM" : "NÃO" %></div></div>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<div id="modalFunc" class="modal"><div class="modal-content">
+    <div class="modal-header"><h3>➕ Novo Funcionário</h3><span class="close" onclick="fecharModal('modalFunc')">&times;</span></div>
+    <form action="<%= request.getContextPath() %>/ponto" method="post"><input type="hidden" name="acao" value="salvar-funcionario">
+        <label>Nome Completo *</label><input type="text" name="nome" required>
+        <label>CPF *</label><input type="text" name="cpf" id="cpfModal" maxlength="14" required>
+        <label>Senha *</label><input type="password" name="senha" required minlength="4">
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Salvar</button>
+    </form>
+</div></div>
+
+<div id="modalRelatorio" class="modal"><div class="modal-content">
+    <div class="modal-header"><h3>📊 Gerar Relatório</h3><span class="close" onclick="fecharModal('modalRelatorio')">&times;</span></div>
+    <form action="<%= request.getContextPath() %>/ponto" method="post"><input type="hidden" name="acao" value="relatorio-detalhado">
+        <label>Funcionário *</label><select name="funcId" required><option value="">Selecione...</option><% for (Ponto f : funcionarios) { %><option value="<%= f.getFuncId() %>"><%= f.getFuncNome() %></option><% } %></select>
+        <div class="form-row"><div><label>Início</label><input type="date" name="dataInicio" id="dataInicioRel" required></div><div><label>Fim</label><input type="date" name="dataFim" id="dataFimRel" required></div></div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Gerar</button>
+    </form>
+</div></div>
+
+
+<div id="modalAbonar" class="modal"><div class="modal-content">
+    <div class="modal-header"><h3>✅ Abonar Falta</h3><span class="close" onclick="fecharModal('modalAbonar')">&times;</span></div>
+    <form action="<%= request.getContextPath() %>/ponto" method="post">
+        <input type="hidden" name="acao" value="abonar-falta"><input type="hidden" name="funcId" id="abonarFuncId"><input type="hidden" name="data" id="abonarData">
+        <input type="hidden" name="dataInicio" id="abonarDataInicio"><input type="hidden" name="dataFim" id="abonarDataFim">
+        <label>Tipo de Justificativa *</label>
+        <select name="tipo" required>
+            <option value="feriado">Feriado</option><option value="folga">Folga</option><option value="atestado">Atestado Médico</option>
+        </select>
+        <label>Observação</label><textarea name="descricao" rows="3"></textarea>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Confirmar Abono</button>
+    </form>
+</div></div>
+
+<div id="modalEditarReg" class="modal"><div class="modal-content">
+    <div class="modal-header"><h3>✏️ Editar Registro</h3><span class="close" onclick="fecharModal('modalEditarReg')">&times;</span></div>
+    <form action="<%= request.getContextPath() %>/ponto" method="post">
+        <input type="hidden" name="acao" value="editar-registro"><input type="hidden" name="regId" id="editRegId">
+        <label>Data</label><input type="date" id="editData" readonly style="background: #3a3a3a;">
+        <div class="form-row">
+            <div><label>Entrada</label><input type="time" name="entrada" id="editEntrada"></div>
+            <div><label>Saída Int.</label><input type="time" name="saidaInt" id="editSaidaInt"></div>
+        </div>
+        <div class="form-row">
+            <div><label>Retorno Int.</label><input type="time" name="retornoInt" id="editRetornoInt"></div>
+            <div><label>Saída</label><input type="time" name="saida" id="editSaida"></div>
+        </div>
+        <label>Observação</label><textarea name="obs" id="editObs" rows="2"></textarea>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Salvar Alterações</button>
+    </form>
+</div></div>
+<div id="modalResumo" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📈 Resumo Mensal</h3>
+            <span class="close" onclick="fecharModal('modalResumo')">&times;</span>
+        </div>
+        <form action="../ponto" method="post">
+            <input type="hidden" name="acao" value="resumo-mensal">
+            <label>Funcionário *</label>
+            <select name="funcId" required>
+                <option value="">Selecione...</option>
+                <% for (Ponto f : funcionarios) { %>
+                <option value="<%= f.getFuncId() %>"><%= f.getFuncNome() %></option>
+                <% } %>
+            </select>
+            <div class="form-row">
+                <div>
+                    <label>Mês *</label>
+                    <select name="mes" id="mesResumo" required>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Ano *</label>
+                    <input type="number" name="ano" id="anoResumo" value="2025" min="2020" max="2030" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Gerar Resumo</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function abrirModal(id) { document.getElementById(id).style.display = 'block'; }
+    function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
+    window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
+
+    function abonarFalta(funcId, data) {
+        document.getElementById('abonarFuncId').value = funcId;
+        document.getElementById('abonarData').value = data;
+        document.getElementById('abonarDataInicio').value = document.getElementById('dataInicioRel').value;
+        document.getElementById('abonarDataFim').value = document.getElementById('dataFimRel').value;
+        abrirModal('modalAbonar');
+    }
+
+    function removerJustificativa(funcId, data) {
+        if (confirm('Deseja realmente remover esta justificativa?')) {
+            const form = document.createElement('form');
+            form.method = 'POST'; form.action = '<%= request.getContextPath() %>/ponto';
+            const campos = { 'acao': 'excluir-justificativa', 'funcId': funcId, 'data': data, 'dataInicio': document.getElementById('dataInicioRel').value, 'dataFim': document.getElementById('dataFimRel').value };
+            for (let key in campos) {
+                const input = document.createElement('input'); input.type = 'hidden'; input.name = key; input.value = campos[key];
+                form.appendChild(input);
+            }
+            document.body.appendChild(form); form.submit();
+        }
+    }
+
+    function editarRegistro(regId, data) {
+        document.getElementById('editRegId').value = regId;
+        document.getElementById('editData').value = data;
+        abrirModal('modalEditarReg');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoje.getDate()).padStart(2, '0');
+        if(document.getElementById('dataInicioRel')) document.getElementById('dataInicioRel').value = ano + '-' + mes + '-01';
+        if(document.getElementById('dataFimRel')) document.getElementById('dataFimRel').value = ano + '-' + mes + '-' + dia;
+    });
+</script>
+</body>
+</html>

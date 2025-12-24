@@ -5,8 +5,16 @@ import model.Ponto;
 import java.security.MessageDigest;
 import java.sql.*;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
+/**
+ * DAO completo para todas as operações do sistema de ponto
+ * Inclui cálculos de atrasos, horas noturnas e relatórios
+ */
 public class PontoDAO {
 
     private Connection conn;
@@ -15,7 +23,10 @@ public class PontoDAO {
         conn = SingleConnectionBanco.getConnection();
     }
 
-    // ===== HASH SENHA =====
+    // =============================================
+    // AUTENTICAÇÃO E SEGURANÇA
+    // =============================================
+
     private String hashSenha(String senha) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -30,7 +41,6 @@ public class PontoDAO {
         }
     }
 
-    // ===== AUTENTICAÇÃO =====
     public Ponto autenticarFuncionario(String cpf, String senha) throws Exception {
         String sql = "SELECT * FROM ponto_funcionarios WHERE cpf = ? AND ativo = true";
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -44,6 +54,7 @@ public class PontoDAO {
                 p.setFuncNome(rs.getString("nome"));
                 p.setFuncCpf(rs.getString("cpf"));
                 p.setFuncTelefone(rs.getString("telefone"));
+                p.setFuncAtivo(rs.getBoolean("ativo"));
                 return p;
             }
         }
@@ -62,46 +73,164 @@ public class PontoDAO {
         return false;
     }
 
-    // ===== REGISTRAR PONTO =====
-    public void registrarPonto(int funcId, Date data) throws Exception {
-        // Buscar registro do dia
-        String sql = "SELECT * FROM ponto_registros WHERE funcionario_id = ? AND data = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, funcId);
-        ps.setDate(2, data);
-        ResultSet rs = ps.executeQuery();
+    // =============================================
+    // REGISTRO DE PONTO
+    // =============================================
 
+    public void registrarPonto(int funcId, Date data) throws Exception {
+        Ponto registro = buscarRegistroDia(funcId, data);
         Timestamp agora = new Timestamp(System.currentTimeMillis());
 
-        if (rs.next()) {
-            // Já existe - atualizar próximo campo
-            if (rs.getTimestamp("entrada") != null && rs.getTimestamp("saida_intervalo") == null) {
-                sql = "UPDATE ponto_registros SET saida_intervalo = ? WHERE funcionario_id = ? AND data = ?";
-            } else if (rs.getTimestamp("saida_intervalo") != null && rs.getTimestamp("retorno_intervalo") == null) {
-                sql = "UPDATE ponto_registros SET retorno_intervalo = ? WHERE funcionario_id = ? AND data = ?";
-            } else if (rs.getTimestamp("retorno_intervalo") != null && rs.getTimestamp("saida") == null) {
-                sql = "UPDATE ponto_registros SET saida = ? WHERE funcionario_id = ? AND data = ?";
-            } else {
-                return; // Já completou o dia
-            }
-            ps = conn.prepareStatement(sql);
-            ps.setTimestamp(1, agora);
-            ps.setInt(2, funcId);
-            ps.setDate(3, data);
-        } else {
-            // Primeiro registro - entrada
-            sql = "INSERT INTO ponto_registros (funcionario_id, data, entrada) VALUES (?, ?, ?)";
-            ps = conn.prepareStatement(sql);
+        if (registro == null) {
+            // Primeiro registro - ENTRADA
+            String sql = "INSERT INTO ponto_registros (funcionario_id, data, entrada) VALUES (?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, funcId);
             ps.setDate(2, data);
             ps.setTimestamp(3, agora);
+            ps.executeUpdate();
+        } else {
+            // Atualizar próximo campo
+            String sql = null;
+            if (registro.getRegEntrada() != null && registro.getRegSaidaIntervalo() == null) {
+                sql = "UPDATE ponto_registros SET saida_intervalo = ? WHERE id = ?";
+            } else if (registro.getRegSaidaIntervalo() != null && registro.getRegRetornoIntervalo() == null) {
+                sql = "UPDATE ponto_registros SET retorno_intervalo = ? WHERE id = ?";
+            } else if (registro.getRegRetornoIntervalo() != null && registro.getRegSaida() == null) {
+                sql = "UPDATE ponto_registros SET saida = ? WHERE id = ?";
+            }
+
+            if (sql != null) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setTimestamp(1, agora);
+                ps.setInt(2, registro.getRegId());
+                ps.executeUpdate();
+            }
         }
 
+        conn.commit();
+
+        // Calcular atraso se for entrada
+        if (registro == null) {
+            calcularAtrasoRegistro(funcId, data);
+        }
+
+        // Calcular horas trabalhadas e noturnas quando completar o dia
+        if (registro != null && registro.getRegRetornoIntervalo() != null) {
+            calcularHorasTrabalhadasENoturnas(funcId, data);
+        }
+    }
+
+    /**
+     * Calcula e atualiza o atraso de um registro
+     */
+    private void calcularAtrasoRegistro(int funcId, Date data) throws Exception {
+        Ponto registro = buscarRegistroDia(funcId, data);
+        if (registro == null || registro.getRegEntrada() == null) return;
+
+        // Buscar horário esperado
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(data);
+        String[] dias = {"domingo", "segunda", "terca", "quarta", "quinta", "sexta", "sabado"};
+        String diaSemana = dias[cal.get(Calendar.DAY_OF_WEEK) - 1];
+
+        Ponto horario = buscarHorarioDia(funcId, diaSemana);
+        if (horario == null) return;
+
+        // Calcular atraso
+        LocalTime horaEntradaEsperada = horario.getHorEntrada().toLocalTime();
+        LocalTime horaEntradaReal = registro.getRegEntrada().toLocalDateTime().toLocalTime();
+
+        // Adicionar tolerância
+        LocalTime horaLimite = horaEntradaEsperada.plusMinutes(horario.getHorTolerancia());
+
+        int minutosAtraso = 0;
+        if (horaEntradaReal.isAfter(horaLimite)) {
+            // Passou da tolerância = conta TODO o atraso desde a hora esperada
+            minutosAtraso = (int) ChronoUnit.MINUTES.between(horaEntradaEsperada, horaEntradaReal);
+        }
+
+        // Atualizar no banco
+        String sql = "UPDATE ponto_registros SET minutos_atraso = ? WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, minutosAtraso);
+        ps.setInt(2, registro.getRegId());
         ps.executeUpdate();
         conn.commit();
     }
 
-    // ===== BUSCAR REGISTRO DO DIA =====
+    /**
+     * Calcula horas trabalhadas e noturnas (chamado quando o registro está completo)
+     */
+    private void calcularHorasTrabalhadasENoturnas(int funcId, Date data) throws Exception {
+        Ponto registro = buscarRegistroDia(funcId, data);
+        if (registro == null) return;
+
+        int minutosTrabalhados = 0;
+        int minutosNoturno = 0;
+
+        // Calcular minutos trabalhados
+        if (registro.getRegEntrada() != null && registro.getRegSaida() != null) {
+            long diffMillis = registro.getRegSaida().getTime() - registro.getRegEntrada().getTime();
+            minutosTrabalhados = (int) (diffMillis / (1000 * 60));
+
+            // Subtrair intervalo
+            if (registro.getRegSaidaIntervalo() != null && registro.getRegRetornoIntervalo() != null) {
+                long intervaloMillis = registro.getRegRetornoIntervalo().getTime() - registro.getRegSaidaIntervalo().getTime();
+                minutosTrabalhados -= (int) (intervaloMillis / (1000 * 60));
+            }
+        }
+
+        // Calcular minutos noturnos (após 22h)
+        LocalTime horaNoturna = LocalTime.of(22, 0);
+
+        // Período 1: entrada até saída intervalo (ou saída se não tiver intervalo)
+        if (registro.getRegEntrada() != null) {
+            Timestamp fimPeriodo1 = registro.getRegSaidaIntervalo() != null ?
+                    registro.getRegSaidaIntervalo() : registro.getRegSaida();
+            if (fimPeriodo1 != null) {
+                minutosNoturno += calcularMinutosNoturnosPeriodo(registro.getRegEntrada(), fimPeriodo1, horaNoturna);
+            }
+        }
+
+        // Período 2: retorno intervalo até saída
+        if (registro.getRegRetornoIntervalo() != null && registro.getRegSaida() != null) {
+            minutosNoturno += calcularMinutosNoturnosPeriodo(registro.getRegRetornoIntervalo(), registro.getRegSaida(), horaNoturna);
+        }
+
+        // Atualizar no banco
+        String sql = "UPDATE ponto_registros SET minutos_trabalhados = ?, minutos_noturno = ? WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, minutosTrabalhados);
+        ps.setInt(2, minutosNoturno);
+        ps.setInt(3, registro.getRegId());
+        ps.executeUpdate();
+        conn.commit();
+    }
+
+    private int calcularMinutosNoturnosPeriodo(Timestamp inicio, Timestamp fim, LocalTime horaNoturna) {
+        // Converter Timestamp para LocalDateTime logo no início
+        java.time.LocalDateTime dtInicio = inicio.toLocalDateTime();
+        java.time.LocalDateTime dtFim = fim.toLocalDateTime();
+
+        LocalTime horaInicio = dtInicio.toLocalTime();
+        LocalTime horaFim = dtFim.toLocalTime();
+
+        // Se começou depois das 22h, conta tudo
+        if (horaInicio.isAfter(horaNoturna) || horaInicio.equals(horaNoturna)) {
+            return (int) ChronoUnit.MINUTES.between(dtInicio, dtFim);
+        }
+
+        // Se terminou antes das 22h, não conta nada
+        if (horaFim.isBefore(horaNoturna)) {
+            return 0;
+        }
+
+        // Começou antes e terminou depois das 22h: conta só o período após 22h
+        java.time.LocalDateTime inicioNoturno = dtInicio.toLocalDate().atTime(horaNoturna);
+        return (int) ChronoUnit.MINUTES.between(inicioNoturno, dtFim);
+    }
+
     public Ponto buscarRegistroDia(int funcId, Date data) throws Exception {
         String sql = "SELECT * FROM ponto_registros WHERE funcionario_id = ? AND data = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -110,20 +239,50 @@ public class PontoDAO {
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            Ponto p = new Ponto();
-            p.setRegId(rs.getInt("id"));
-            p.setRegData(rs.getDate("data"));
-            p.setRegEntrada(rs.getTimestamp("entrada"));
-            p.setRegSaidaIntervalo(rs.getTimestamp("saida_intervalo"));
-            p.setRegRetornoIntervalo(rs.getTimestamp("retorno_intervalo"));
-            p.setRegSaida(rs.getTimestamp("saida"));
-            p.setRegEditado(rs.getBoolean("editado"));
-            return p;
+            return mapearRegistro(rs);
         }
         return null;
     }
 
-    // ===== BUSCAR HORÁRIO DO DIA =====
+    private Ponto mapearRegistro(ResultSet rs) throws SQLException {
+        Ponto p = new Ponto();
+        p.setRegId(rs.getInt("id"));
+        p.setFuncId(rs.getInt("funcionario_id"));
+        p.setRegData(rs.getDate("data"));
+        p.setRegEntrada(rs.getTimestamp("entrada"));
+        p.setRegSaidaIntervalo(rs.getTimestamp("saida_intervalo"));
+        p.setRegRetornoIntervalo(rs.getTimestamp("retorno_intervalo"));
+        p.setRegSaida(rs.getTimestamp("saida"));
+        p.setRegObservacao(rs.getString("observacao"));
+        p.setRegEditado(rs.getBoolean("editado"));
+        p.setRegEditadoPor(rs.getString("editado_por"));
+        p.setRegEditadoEm(rs.getTimestamp("editado_em"));
+
+        Object minTrab = rs.getObject("minutos_trabalhados");
+        p.setRegMinutosTrabalhados(minTrab != null ? (Integer)minTrab : 0);
+
+        Object minAtraso = rs.getObject("minutos_atraso");
+        p.setRegMinutosAtraso(minAtraso != null ? (Integer)minAtraso : 0);
+
+        Object minNot = rs.getObject("minutos_noturno");
+        p.setRegMinutosNoturno(minNot != null ? (Integer)minNot : 0);
+
+        // Definir status
+        if (p.getRegEntrada() != null && p.getRegSaida() != null) {
+            p.setStatusDia("Completo");
+        } else if (p.getRegEntrada() != null) {
+            p.setStatusDia("Incompleto");
+        }
+
+        p.setTemAtraso(p.getRegMinutosAtraso() != null && p.getRegMinutosAtraso() > 0);
+
+        return p;
+    }
+
+    // =============================================
+    // HORÁRIOS
+    // =============================================
+
     public Ponto buscarHorarioDia(int funcId, String diaSemana) throws Exception {
         String sql = "SELECT * FROM ponto_horarios WHERE funcionario_id = ? AND dia_semana = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -136,124 +295,37 @@ public class PontoDAO {
             p.setHorId(rs.getInt("id"));
             p.setHorDiaSemana(rs.getString("dia_semana"));
             p.setHorEntrada(rs.getTime("hora_entrada"));
+            p.setHorSaida(rs.getTime("hora_saida"));
             p.setHorTolerancia(rs.getInt("tolerancia_minutos"));
+
+            Object carga = rs.getObject("carga_horaria_minutos");
+            p.setHorCargaHoraria(carga != null ? (Integer)carga : null);
             return p;
         }
         return null;
     }
 
-    // ===== ADMIN - LISTAR FUNCIONÁRIOS =====
-    public List<Ponto> listarFuncionarios() throws Exception {
-        List<Ponto> lista = new ArrayList<>();
-        String sql = "SELECT * FROM ponto_funcionarios ORDER BY nome";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            Ponto p = new Ponto();
-            p.setFuncId(rs.getInt("id"));
-            p.setFuncNome(rs.getString("nome"));
-            p.setFuncCpf(rs.getString("cpf"));
-            p.setFuncTelefone(rs.getString("telefone"));
-            p.setFuncAtivo(rs.getBoolean("ativo"));
-            lista.add(p);
-        }
-        return lista;
-    }
-
-    // ===== ADMIN - SALVAR FUNCIONÁRIO =====
-    public void salvarFuncionario(Ponto p) throws Exception {
-        String sql = "INSERT INTO ponto_funcionarios (nome, cpf, telefone, senha, ativo) VALUES (?, ?, ?, ?, true)";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, p.getFuncNome());
-        ps.setString(2, p.getFuncCpf().replaceAll("[^0-9]", ""));
-        ps.setString(3, p.getFuncTelefone());
-        ps.setString(4, hashSenha(p.getFuncSenha()));
-        ps.executeUpdate();
-        conn.commit();
-    }
-
-    // ===== ADMIN - ALTERNAR STATUS =====
-    public void alternarStatus(int funcId) throws Exception {
-        String sql = "UPDATE ponto_funcionarios SET ativo = NOT ativo WHERE id = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, funcId);
-        ps.executeUpdate();
-        conn.commit();
-    }
-
-    // ===== ADMIN - SALVAR HORÁRIO =====
-    public void salvarHorario(int funcId, String diaSemana, Time horaEntrada, int tolerancia) throws Exception {
-        String sql = "INSERT INTO ponto_horarios (funcionario_id, dia_semana, hora_entrada, tolerancia_minutos) " +
-                "VALUES (?, ?, ?, ?) " +
+    public void salvarHorario(int funcId, String diaSemana, Time horaEntrada, Time horaSaida,
+                              int tolerancia, Integer cargaHoraria) throws Exception {
+        String sql = "INSERT INTO ponto_horarios (funcionario_id, dia_semana, hora_entrada, hora_saida, " +
+                "tolerancia_minutos, carga_horaria_minutos) VALUES (?, ?, ?, ?, ?, ?) " +
                 "ON CONFLICT (funcionario_id, dia_semana) " +
-                "DO UPDATE SET hora_entrada = ?, tolerancia_minutos = ?";
+                "DO UPDATE SET hora_entrada = ?, hora_saida = ?, tolerancia_minutos = ?, carga_horaria_minutos = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, funcId);
         ps.setString(2, diaSemana);
         ps.setTime(3, horaEntrada);
-        ps.setInt(4, tolerancia);
-        ps.setTime(5, horaEntrada);
-        ps.setInt(6, tolerancia);
+        ps.setTime(4, horaSaida);
+        ps.setInt(5, tolerancia);
+        ps.setObject(6, cargaHoraria);
+        ps.setTime(7, horaEntrada);
+        ps.setTime(8, horaSaida);
+        ps.setInt(9, tolerancia);
+        ps.setObject(10, cargaHoraria);
         ps.executeUpdate();
         conn.commit();
     }
 
-    // ===== ADMIN - LISTAR REGISTROS =====
-    public List<Ponto> listarRegistros(Integer funcId, Date dataInicio, Date dataFim) throws Exception {
-        List<Ponto> lista = new ArrayList<>();
-        StringBuilder sql = new StringBuilder(
-                "SELECT r.*, f.nome, f.cpf FROM ponto_registros r " +
-                        "JOIN ponto_funcionarios f ON r.funcionario_id = f.id WHERE 1=1"
-        );
-
-        if (funcId != null) sql.append(" AND r.funcionario_id = ?");
-        if (dataInicio != null) sql.append(" AND r.data >= ?");
-        if (dataFim != null) sql.append(" AND r.data <= ?");
-        sql.append(" ORDER BY r.data DESC, f.nome");
-
-        PreparedStatement ps = conn.prepareStatement(sql.toString());
-        int idx = 1;
-        if (funcId != null) ps.setInt(idx++, funcId);
-        if (dataInicio != null) ps.setDate(idx++, dataInicio);
-        if (dataFim != null) ps.setDate(idx++, dataFim);
-
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Ponto p = new Ponto();
-            p.setRegId(rs.getInt("id"));
-            p.setFuncId(rs.getInt("funcionario_id"));
-            p.setFuncNome(rs.getString("nome"));
-            p.setFuncCpf(rs.getString("cpf"));
-            p.setRegData(rs.getDate("data"));
-            p.setRegEntrada(rs.getTimestamp("entrada"));
-            p.setRegSaidaIntervalo(rs.getTimestamp("saida_intervalo"));
-            p.setRegRetornoIntervalo(rs.getTimestamp("retorno_intervalo"));
-            p.setRegSaida(rs.getTimestamp("saida"));
-            p.setRegEditado(rs.getBoolean("editado"));
-            lista.add(p);
-        }
-        return lista;
-    }
-
-    // ===== ADMIN - EDITAR REGISTRO =====
-    public void editarRegistro(int regId, Timestamp entrada, Timestamp saidaInt, Timestamp retornoInt,
-                               Timestamp saida, String obs, String editadoPor) throws Exception {
-        String sql = "UPDATE ponto_registros SET entrada = ?, saida_intervalo = ?, retorno_intervalo = ?, " +
-                "saida = ?, observacao = ?, editado = true, editado_por = ?, editado_em = now() WHERE id = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setTimestamp(1, entrada);
-        ps.setTimestamp(2, saidaInt);
-        ps.setTimestamp(3, retornoInt);
-        ps.setTimestamp(4, saida);
-        ps.setString(5, obs);
-        ps.setString(6, editadoPor);
-        ps.setInt(7, regId);
-        ps.executeUpdate();
-        conn.commit();
-    }
-
-    // ===== ADMIN - LISTAR HORÁRIOS DE FUNCIONÁRIO =====
     public List<Ponto> listarHorariosFuncionario(int funcId) throws Exception {
         List<Ponto> lista = new ArrayList<>();
         String sql = "SELECT * FROM ponto_horarios WHERE funcionario_id = ? ORDER BY " +
@@ -270,14 +342,418 @@ public class PontoDAO {
             p.setHorId(rs.getInt("id"));
             p.setHorDiaSemana(rs.getString("dia_semana"));
             p.setHorEntrada(rs.getTime("hora_entrada"));
+            p.setHorSaida(rs.getTime("hora_saida"));
             p.setHorTolerancia(rs.getInt("tolerancia_minutos"));
+
+            Object carga = rs.getObject("carga_horaria_minutos");
+            p.setHorCargaHoraria(carga != null ? (Integer)carga : null);
             lista.add(p);
         }
         return lista;
     }
-    public void notificarAtraso(int funcId) {
-        // Implemente aqui usando API de sua preferência
-        // Evolution API, Twilio, Baileys, etc
+
+    // =============================================
+    // FUNCIONÁRIOS
+    // =============================================
+
+    public List<Ponto> listarFuncionarios() throws Exception {
+        List<Ponto> lista = new ArrayList<>();
+        String sql = "SELECT * FROM ponto_funcionarios ORDER BY nome";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Ponto p = new Ponto();
+            p.setFuncId(rs.getInt("id"));
+            p.setFuncNome(rs.getString("nome"));
+            p.setFuncCpf(rs.getString("cpf"));
+            p.setFuncTelefone(rs.getString("telefone"));
+            p.setFuncAtivo(rs.getBoolean("ativo"));
+            p.setFuncCriadoEm(rs.getTimestamp("criado_em"));
+            lista.add(p);
+        }
+        return lista;
     }
 
+    public void salvarFuncionario(Ponto p) throws Exception {
+        String sql = "INSERT INTO ponto_funcionarios (nome, cpf, telefone, senha, ativo) VALUES (?, ?, ?, ?, true)";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, p.getFuncNome());
+        ps.setString(2, p.getFuncCpf().replaceAll("[^0-9]", ""));
+        ps.setString(3, p.getFuncTelefone());
+        ps.setString(4, hashSenha(p.getFuncSenha()));
+        ps.executeUpdate();
+        conn.commit();
+    }
+
+    public void alternarStatus(int funcId) throws Exception {
+        String sql = "UPDATE ponto_funcionarios SET ativo = NOT ativo WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.executeUpdate();
+        conn.commit();
+    }
+
+    public void alterarSenhaFuncionario(int funcId, String novaSenha) throws Exception {
+        String sql = "UPDATE ponto_funcionarios SET senha = ? WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, hashSenha(novaSenha));
+        ps.setInt(2, funcId);
+        ps.executeUpdate();
+        conn.commit();
+    }
+
+    // =============================================
+    // RELATÓRIOS E CONSULTAS
+    // =============================================
+
+    public List<Ponto> buscarRegistrosPeriodo(int funcId, Date dataInicio, Date dataFim) throws Exception {
+        List<Ponto> lista = new ArrayList<>();
+
+        String sql = "SELECT r.*, f.nome, f.cpf FROM ponto_registros r " +
+                "JOIN ponto_funcionarios f ON r.funcionario_id = f.id " +
+                "WHERE r.funcionario_id = ? AND r.data BETWEEN ? AND ? " +
+                "ORDER BY r.data";
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.setDate(2, dataInicio);
+        ps.setDate(3, dataFim);
+        ResultSet rs = ps.executeQuery();
+
+        Map<Date, Ponto> registrosMap = new HashMap<>();
+        while (rs.next()) {
+            Ponto p = mapearRegistro(rs);
+            p.setFuncNome(rs.getString("nome"));
+            p.setFuncCpf(rs.getString("cpf"));
+            registrosMap.put(p.getRegData(), p);
+        }
+
+        LocalDate inicio = dataInicio.toLocalDate();
+        LocalDate fim = dataFim.toLocalDate();
+
+        String[] diasSemana = {"Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira",
+                "Quinta-feira", "Sexta-feira", "Sábado"};
+
+        for (LocalDate data = inicio; !data.isAfter(fim); data = data.plusDays(1)) {
+            Date sqlDate = Date.valueOf(data);
+            Ponto p = registrosMap.get(sqlDate);
+
+            if (p == null) {
+                p = new Ponto();
+                p.setFuncId(funcId);
+                p.setRegData(sqlDate);
+                p.setStatusDia("Falta");
+                p.setTemFalta(true);
+
+                String sqlNome = "SELECT nome, cpf FROM ponto_funcionarios WHERE id = ?";
+                PreparedStatement psNome = conn.prepareStatement(sqlNome);
+                psNome.setInt(1, funcId);
+                ResultSet rsNome = psNome.executeQuery();
+                if (rsNome.next()) {
+                    p.setFuncNome(rsNome.getString("nome"));
+                    p.setFuncCpf(rsNome.getString("cpf"));
+                }
+            }
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(sqlDate);
+            p.setDiaSemanaTexto(diasSemana[cal.get(Calendar.DAY_OF_WEEK) - 1]);
+
+            if (p.getStatusDia() != null && p.getStatusDia().equals("Falta")) {
+                if (temJustificativa(funcId, sqlDate)) {
+                    p.setStatusDia("Justificado");
+                    p.setTemFalta(false);
+                }
+            }
+
+            lista.add(p);
+        }
+
+        return lista;
+    }
+
+    private boolean temJustificativa(int funcId, Date data) throws Exception {
+        String sql = "SELECT COUNT(*) FROM ponto_justificativas WHERE funcionario_id = ? AND data = ? AND aprovado = true";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.setDate(2, data);
+        ResultSet rs = ps.executeQuery();
+        return rs.next() && rs.getInt(1) > 0;
+    }
+
+    public Ponto calcularResumoMensal(int funcId, int mes, int ano) throws Exception {
+        Ponto resumo = buscarResumoMensal(funcId, mes, ano);
+        if (resumo == null) {
+            resumo = new Ponto();
+            resumo.setFuncId(funcId);
+            resumo.setResumoMes(mes);
+            resumo.setResumoAno(ano);
+        }
+
+        LocalDate dataInicio = LocalDate.of(ano, mes, 1);
+        LocalDate dataFim = dataInicio.withDayOfMonth(dataInicio.lengthOfMonth());
+
+        String sql = "SELECT " +
+                "COUNT(*) as dias_trabalhados, " +
+                "COALESCE(SUM(minutos_trabalhados), 0) as total_minutos, " +
+                "COALESCE(SUM(CASE WHEN minutos_atraso > 0 THEN 1 ELSE 0 END), 0) as total_atrasos, " +
+                "COALESCE(SUM(minutos_atraso), 0) as total_minutos_atraso, " +
+                "COALESCE(SUM(minutos_noturno), 0) as total_minutos_noturno " +
+                "FROM ponto_registros " +
+                "WHERE funcionario_id = ? AND data BETWEEN ? AND ? AND entrada IS NOT NULL";
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.setDate(2, Date.valueOf(dataInicio));
+        ps.setDate(3, Date.valueOf(dataFim));
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            resumo.setResumoTotalDiasTrabalhados(rs.getInt("dias_trabalhados"));
+            resumo.setResumoTotalMinutosTrabalhados(rs.getInt("total_minutos"));
+            resumo.setResumoTotalAtrasos(rs.getInt("total_atrasos"));
+            resumo.setResumoTotalMinutosAtraso(rs.getInt("total_minutos_atraso"));
+            resumo.setResumoTotalMinutosNoturno(rs.getInt("total_minutos_noturno"));
+        }
+
+        int totalDiasMes = dataInicio.lengthOfMonth();
+        int diasTrabalhados = resumo.getResumoTotalDiasTrabalhados();
+        int faltasNaoJustificadas = totalDiasMes - diasTrabalhados;
+
+        sql = "SELECT COUNT(*) FROM ponto_justificativas WHERE funcionario_id = ? AND " +
+                "EXTRACT(MONTH FROM data) = ? AND EXTRACT(YEAR FROM data) = ? AND aprovado = true";
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.setInt(2, mes);
+        ps.setInt(3, ano);
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            faltasNaoJustificadas -= rs.getInt(1);
+        }
+
+        resumo.setResumoTotalFaltas(Math.max(0, faltasNaoJustificadas));
+
+        int maxAtrasos = getConfigInt("max_atrasos_mes", 3);
+        int maxFaltas = getConfigInt("max_faltas_mes", 1);
+
+        boolean temDireito = resumo.getResumoTotalAtrasos() <= maxAtrasos &&
+                resumo.getResumoTotalFaltas() <= maxFaltas;
+        resumo.setResumoTemDireitoVale(temDireito);
+
+        salvarResumoMensal(resumo);
+
+        return resumo;
+    }
+
+    private Ponto buscarResumoMensal(int funcId, int mes, int ano) throws Exception {
+        String sql = "SELECT * FROM ponto_resumo_mensal WHERE funcionario_id = ? AND mes = ? AND ano = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.setInt(2, mes);
+        ps.setInt(3, ano);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            Ponto p = new Ponto();
+            p.setResumoId(rs.getInt("id"));
+            p.setFuncId(rs.getInt("funcionario_id"));
+            p.setResumoMes(rs.getInt("mes"));
+            p.setResumoAno(rs.getInt("ano"));
+            p.setResumoTotalDiasTrabalhados(rs.getInt("total_dias_trabalhados"));
+            p.setResumoTotalMinutosTrabalhados(rs.getInt("total_minutos_trabalhados"));
+            p.setResumoTotalAtrasos(rs.getInt("total_atrasos"));
+            p.setResumoTotalMinutosAtraso(rs.getInt("total_minutos_atraso"));
+            p.setResumoTotalMinutosNoturno(rs.getInt("total_minutos_noturno"));
+            p.setResumoTotalFaltas(rs.getInt("total_faltas"));
+            p.setResumoTemDireitoVale(rs.getBoolean("tem_direito_vale"));
+            p.setResumoObservacoes(rs.getString("observacoes"));
+            return p;
+        }
+        return null;
+    }
+
+    private void salvarResumoMensal(Ponto resumo) throws Exception {
+        String sql = "INSERT INTO ponto_resumo_mensal (funcionario_id, mes, ano, total_dias_trabalhados, " +
+                "total_minutos_trabalhados, total_atrasos, total_minutos_atraso, total_minutos_noturno, " +
+                "total_faltas, tem_direito_vale, atualizado_em) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now()) " +
+                "ON CONFLICT (funcionario_id, mes, ano) " +
+                "DO UPDATE SET total_dias_trabalhados = ?, total_minutos_trabalhados = ?, " +
+                "total_atrasos = ?, total_minutos_atraso = ?, total_minutos_noturno = ?, " +
+                "total_faltas = ?, tem_direito_vale = ?, atualizado_em = now()";
+
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, resumo.getFuncId());
+        ps.setInt(2, resumo.getResumoMes());
+        ps.setInt(3, resumo.getResumoAno());
+        ps.setInt(4, resumo.getResumoTotalDiasTrabalhados());
+        ps.setInt(5, resumo.getResumoTotalMinutosTrabalhados());
+        ps.setInt(6, resumo.getResumoTotalAtrasos());
+        ps.setInt(7, resumo.getResumoTotalMinutosAtraso());
+        ps.setInt(8, resumo.getResumoTotalMinutosNoturno());
+        ps.setInt(9, resumo.getResumoTotalFaltas());
+        ps.setBoolean(10, resumo.getResumoTemDireitoVale());
+        ps.setInt(11, resumo.getResumoTotalDiasTrabalhados());
+        ps.setInt(12, resumo.getResumoTotalMinutosTrabalhados());
+        ps.setInt(13, resumo.getResumoTotalAtrasos());
+        ps.setInt(14, resumo.getResumoTotalMinutosAtraso());
+        ps.setInt(15, resumo.getResumoTotalMinutosNoturno());
+        ps.setInt(16, resumo.getResumoTotalFaltas());
+        ps.setBoolean(17, resumo.getResumoTemDireitoVale());
+
+        ps.executeUpdate();
+        conn.commit();
+    }
+
+    // =============================================
+    // EDIÇÃO DE REGISTROS
+    // =============================================
+
+    public void editarRegistro(int regId, Timestamp entrada, Timestamp saidaInt, Timestamp retornoInt,
+                               Timestamp saida, String obs, String editadoPor) throws Exception {
+        String sql = "UPDATE ponto_registros SET entrada = ?, saida_intervalo = ?, retorno_intervalo = ?, " +
+                "saida = ?, observacao = ?, editado = true, editado_por = ?, editado_em = now() WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setTimestamp(1, entrada);
+        ps.setTimestamp(2, saidaInt);
+        ps.setTimestamp(3, retornoInt);
+        ps.setTimestamp(4, saida);
+        ps.setString(5, obs);
+        ps.setString(6, editadoPor);
+        ps.setInt(7, regId);
+        ps.executeUpdate();
+        conn.commit();
+
+        sql = "SELECT funcionario_id, data FROM ponto_registros WHERE id = ?";
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, regId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            calcularAtrasoRegistro(rs.getInt("funcionario_id"), rs.getDate("data"));
+            calcularHorasTrabalhadasENoturnas(rs.getInt("funcionario_id"), rs.getDate("data"));
+        }
+    }
+
+    // =============================================
+    // JUSTIFICATIVAS
+    // =============================================
+
+    public void salvarJustificativa(int funcId, Date data, String tipo, String descricao) throws Exception {
+        String sql = "INSERT INTO ponto_justificativas (funcionario_id, data, tipo, descricao, aprovado) " +
+                "VALUES (?, ?, ?, ?, false)";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.setDate(2, data);
+        ps.setString(3, tipo);
+        ps.setString(4, descricao);
+        ps.executeUpdate();
+        conn.commit();
+    }
+
+    public void aprovarJustificativa(int justId) throws Exception {
+        String sql = "UPDATE ponto_justificativas SET aprovado = true WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, justId);
+        ps.executeUpdate();
+        conn.commit();
+    }
+
+    // =============================================
+    // UTILITÁRIOS
+    // =============================================
+
+    private int getConfigInt(String chave, int valorPadrao) {
+        try {
+            String sql = "SELECT valor FROM ponto_config WHERE chave = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, chave);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return Integer.parseInt(rs.getString("valor"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return valorPadrao;
+    }
+
+
+    /**
+     * Buscar justificativas de um funcionário
+     */
+    public List<Ponto> listarJustificativas(int funcId) throws Exception {
+        List<Ponto> lista = new ArrayList<>();
+        String sql = "SELECT j.*, f.nome FROM ponto_justificativas j " +
+                "JOIN ponto_funcionarios f ON j.funcionario_id = f.id " +
+                "WHERE j.funcionario_id = ? ORDER BY j.data DESC";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Ponto p = new Ponto();
+            p.setJustId(rs.getInt("id"));
+            p.setFuncId(rs.getInt("funcionario_id"));
+            p.setFuncNome(rs.getString("nome"));
+            p.setRegData(rs.getDate("data"));
+            p.setJustTipo(rs.getString("tipo"));
+            p.setJustDescricao(rs.getString("descricao"));
+            p.setJustAprovado(rs.getBoolean("aprovado"));
+            lista.add(p);
+        }
+        return lista;
+    }
+
+    /**
+     * Buscar registro específico por ID
+     */
+    public Ponto buscarRegistroPorId(int regId) throws Exception {
+        String sql = "SELECT r.*, f.nome FROM ponto_registros r " +
+                "JOIN ponto_funcionarios f ON r.funcionario_id = f.id " +
+                "WHERE r.id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, regId);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            Ponto p = mapearRegistro(rs);
+            p.setFuncNome(rs.getString("nome"));
+            return p;
+        }
+        return null;
+    }
+
+    /**
+     * Salvar justificativa para uma data específica
+     */
+    public void salvarJustificativaAdmin(int funcId, Date data, String tipo, String descricao, boolean aprovado) throws Exception {
+        String sql = "INSERT INTO ponto_justificativas (funcionario_id, data, tipo, descricao, aprovado) " +
+                "VALUES (?, ?, ?, ?, ?) " +
+                "ON CONFLICT (funcionario_id, data) DO UPDATE " +
+                "SET tipo = ?, descricao = ?, aprovado = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.setDate(2, data);
+        ps.setString(3, tipo);
+        ps.setString(4, descricao);
+        ps.setBoolean(5, aprovado);
+        ps.setString(6, tipo);
+        ps.setString(7, descricao);
+        ps.setBoolean(8, aprovado);
+        ps.executeUpdate();
+        conn.commit();
+    }
+
+    /**
+     * Excluir justificativa
+     */
+    public void excluirJustificativa(int funcId, Date data) throws Exception {
+        String sql = "DELETE FROM ponto_justificativas WHERE funcionario_id = ? AND data = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.setDate(2, data);
+        ps.executeUpdate();
+        conn.commit();
+    }
 }

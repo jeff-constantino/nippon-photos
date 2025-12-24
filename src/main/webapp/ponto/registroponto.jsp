@@ -11,7 +11,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: #daa520;
+            background: linear-gradient(135deg, #daa520 0%, #e09543 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -20,64 +20,71 @@
         }
         .card {
             background: #1a1a1a;
-            border-radius: 15px;
-            padding: 30px;
+            border-radius: 20px;
+            padding: 35px;
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        h1 { color: #daa520; text-align: center; margin-bottom: 20px; font-size: 28px; }
-        .nome { text-align: center; color: #daa520; font-size: 20px; margin-bottom: 20px; }
+        h1 { color: #daa520; text-align: center; margin-bottom: 15px; font-size: 30px; font-weight: 700; }
+        .nome { text-align: center; color: #daa520; font-size: 22px; margin-bottom: 25px; font-weight: 600; }
         .relogio {
             text-align: center;
-            font-size: 48px;
+            font-size: 56px;
             font-weight: bold;
             color: #daa520;
             font-family: 'Courier New', monospace;
-            margin: 20px 0;
+            margin: 25px 0;
+            text-shadow: 0 0 20px rgba(242, 166, 84, 0.3);
         }
-        .data { text-align: center; color: #ccc; margin-bottom: 30px; font-size: 16px; }
+        .data { text-align: center; color: #ccc; margin-bottom: 35px; font-size: 17px; }
         .btn {
             width: 100%;
-            padding: 18px;
+            padding: 20px;
             font-size: 20px;
             font-weight: bold;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            margin: 10px 0;
+            margin: 12px 0;
             transition: all 0.3s;
         }
         .btn-primary { background: #daa520; color: #1a1a1a; }
-        .btn-primary:hover { background: #e09543; transform: translateY(-2px); }
+        .btn-primary:hover { background: #e09543; transform: translateY(-2px); box-shadow: 0 5px 20px rgba(242, 166, 84, 0.4); }
         .btn-secondary { background: #333; color: white; }
         .btn-secondary:hover { background: #444; }
         .registro {
             display: flex;
             justify-content: space-between;
-            padding: 12px;
+            padding: 14px 16px;
             background: #2a2a2a;
-            border-radius: 8px;
-            margin: 8px 0;
+            border-radius: 10px;
+            margin: 10px 0;
+            transition: all 0.3s;
         }
+        .registro:hover { background: #333; }
         .registro.alerta {
             background: #d32f2f !important;
             animation: pulse 2s infinite;
         }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
         .msg {
-            padding: 12px;
-            border-radius: 8px;
-            margin: 15px 0;
+            padding: 14px;
+            border-radius: 10px;
+            margin: 18px 0;
             text-align: center;
+            font-weight: 500;
         }
         .msg-sucesso { background: #2e7d32; }
         .msg-erro { background: #d32f2f; }
-        h3 { color: #daa520; margin: 20px 0 10px; }
+        h3 { color: #daa520; margin: 25px 0 12px; font-size: 20px; }
+        .registro-label { color: #ccc; font-size: 15px; }
+        .registro-hora { font-weight: bold; color: white; font-size: 16px; }
         @media (max-width: 600px) {
-            .card { padding: 20px; }
-            .relogio { font-size: 36px; }
+            .card { padding: 25px 20px; }
+            .relogio { font-size: 44px; }
+            h1 { font-size: 26px; }
         }
     </style>
 </head>
@@ -89,7 +96,6 @@
         String sucesso = (String) request.getAttribute("sucesso");
 
         if (func == null) {
-            // Redireciona para index se não estiver logado
             response.sendRedirect("../index.jsp");
             return;
         }
@@ -100,26 +106,13 @@
         Ponto reg = dao.buscarRegistroDia(func.getFuncId(), hoje);
 
         // Verificar atraso
-        Calendar cal = Calendar.getInstance();
-        String[] dias = {"domingo", "segunda", "terca", "quarta", "quinta", "sexta", "sabado"};
-        String diaHoje = dias[cal.get(Calendar.DAY_OF_WEEK) - 1];
-
-        Ponto horario = dao.buscarHorarioDia(func.getFuncId(), diaHoje);
         boolean temAtraso = false;
-
-        if (reg != null && reg.getRegEntrada() != null && horario != null) {
-            Calendar calHor = Calendar.getInstance();
-            calHor.setTime(horario.getHorEntrada());
-            calHor.add(Calendar.MINUTE, horario.getHorTolerancia());
-
-            Calendar calEnt = Calendar.getInstance();
-            calEnt.setTime(reg.getRegEntrada());
-
-            if (calEnt.after(calHor)) temAtraso = true;
+        if (reg != null && reg.getTemAtraso() != null) {
+            temAtraso = reg.getTemAtraso();
         }
     %>
 
-    <h1>🕐 Controle de Ponto #SaaS</h1>
+    <h1>🕐 Controle de Ponto</h1>
     <div class="nome"><%= func.getFuncNome() %></div>
 
     <% if (sucesso != null) { %><div class="msg msg-sucesso"><%= sucesso %></div><% } %>
@@ -128,11 +121,13 @@
     <div class="relogio" id="relogio"></div>
     <div class="data" id="data"></div>
 
-    <form action="<%= request.getContextPath() %>/ponto-registrar" method="post">
+    <form action="<%= request.getContextPath() %>/ponto" method="post">
+        <input type="hidden" name="acao" value="registrar-ponto">
         <button type="submit" class="btn btn-primary">📍 Registrar Ponto</button>
     </form>
 
-    <form action="<%= request.getContextPath() %>/ponto-logout" method="post">
+    <form action="<%= request.getContextPath() %>/ponto"method="post">
+        <input type="hidden" name="acao" value="logout">
         <button type="submit" class="btn btn-secondary">Sair</button>
     </form>
 
@@ -142,36 +137,43 @@
     <% if (temAtraso) { %>
     <div class="registro alerta">
         <div style="width: 100%; text-align: center; font-weight: bold;">
-            ⚠️ ATRASO DETECTADO - Entrada fora do horário!
+            ⚠️ ATRASO DETECTADO
         </div>
     </div>
     <% } %>
 
     <% if (reg.getRegEntrada() != null) { %>
     <div class="registro <%= temAtraso ? "alerta" : "" %>">
-        <span>Entrada:</span>
-        <strong><%= new SimpleDateFormat("HH:mm:ss").format(reg.getRegEntrada()) %></strong>
+        <span class="registro-label">Entrada:</span>
+        <strong class="registro-hora"><%= new SimpleDateFormat("HH:mm:ss").format(reg.getRegEntrada()) %></strong>
     </div>
     <% } %>
 
     <% if (reg.getRegSaidaIntervalo() != null) { %>
     <div class="registro">
-        <span>Saída Intervalo:</span>
-        <strong><%= new SimpleDateFormat("HH:mm:ss").format(reg.getRegSaidaIntervalo()) %></strong>
+        <span class="registro-label">Saída Intervalo:</span>
+        <strong class="registro-hora"><%= new SimpleDateFormat("HH:mm:ss").format(reg.getRegSaidaIntervalo()) %></strong>
     </div>
     <% } %>
 
     <% if (reg.getRegRetornoIntervalo() != null) { %>
     <div class="registro">
-        <span>Retorno Intervalo:</span>
-        <strong><%= new SimpleDateFormat("HH:mm:ss").format(reg.getRegRetornoIntervalo()) %></strong>
+        <span class="registro-label">Retorno Intervalo:</span>
+        <strong class="registro-hora"><%= new SimpleDateFormat("HH:mm:ss").format(reg.getRegRetornoIntervalo()) %></strong>
     </div>
     <% } %>
 
     <% if (reg.getRegSaida() != null) { %>
     <div class="registro">
-        <span>Saída:</span>
-        <strong><%= new SimpleDateFormat("HH:mm:ss").format(reg.getRegSaida()) %></strong>
+        <span class="registro-label">Saída:</span>
+        <strong class="registro-hora"><%= new SimpleDateFormat("HH:mm:ss").format(reg.getRegSaida()) %></strong>
+    </div>
+    <% } %>
+
+    <% if (reg.getRegMinutosTrabalhados() != null && reg.getRegMinutosTrabalhados() > 0) { %>
+    <div class="registro" style="background: #1a4d2e; margin-top: 15px;">
+        <span class="registro-label">Total Trabalhado:</span>
+        <strong class="registro-hora" style="color: #4ade80;"><%= reg.getHorasTrabalhadasFormatado() %></strong>
     </div>
     <% } %>
     <% } %>

@@ -9,7 +9,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: #daa520;
+            background: linear-gradient(135deg, #daa520 0%, #e09543 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -18,24 +18,52 @@
         }
         .card {
             background: #1a1a1a;
-            border-radius: 15px;
+            border-radius: 20px;
             padding: 40px;
             width: 100%;
             max-width: 450px;
             color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         h1 {
             color: #daa520;
             text-align: center;
             margin-bottom: 10px;
             font-size: 32px;
+            font-weight: 700;
         }
         .subtitle {
             text-align: center;
             color: #ccc;
+            margin-bottom: 35px;
+            font-size: 15px;
+        }
+        .tipo-login {
+            display: flex;
+            gap: 12px;
             margin-bottom: 30px;
-            font-size: 14px;
+        }
+        .tipo-btn {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background: #2a2a2a;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .tipo-btn:hover {
+            border-color: #daa520;
+            transform: translateY(-2px);
+        }
+        .tipo-btn.active {
+            background: #daa520;
+            color: #1a1a1a;
+            border-color: #daa520;
         }
         label {
             color: #daa520;
@@ -43,15 +71,17 @@
             display: block;
             margin-top: 20px;
             margin-bottom: 8px;
+            font-size: 14px;
         }
         input {
             width: 100%;
             padding: 14px;
             border: 2px solid #333;
-            border-radius: 8px;
+            border-radius: 10px;
             background: #2a2a2a;
             color: white;
             font-size: 16px;
+            transition: border-color 0.3s;
         }
         input:focus {
             outline: none;
@@ -73,62 +103,20 @@
         .btn:hover {
             background: #e09543;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(242, 166, 84, 0.4);
+            box-shadow: 0 5px 20px rgba(242, 166, 84, 0.4);
         }
         .msg {
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 10px;
             margin-bottom: 20px;
             text-align: center;
+            font-weight: 500;
         }
         .msg-erro {
             background: #d32f2f;
+            color: white;
         }
-        .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 25px 0;
-            color: #666;
-        }
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #333;
-        }
-        .divider span {
-            padding: 0 15px;
-            font-size: 13px;
-        }
-        .tipo-login {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .tipo-btn {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #333;
-            border-radius: 8px;
-            background: #2a2a2a;
-            color: #ccc;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-            font-weight: 600;
-        }
-        .tipo-btn:hover {
-            border-color: #daa520;
-        }
-        .tipo-btn.active {
-            background: #daa520;
-            color: #1a1a1a;
-            border-color: #daa520;
-        }
-        #adminFields {
-            display: none;
-        }
+        #adminFields { display: none; }
         small {
             color: #999;
             font-size: 13px;
@@ -144,7 +132,7 @@
 <body>
 <div class="card">
     <h1>🕐 Controle de Ponto</h1>
-    <p class="subtitle">Sistema de Registro e Gestão</p>
+    <p class="subtitle">#SaaS</p>
 
     <%
         String erro = (String) request.getAttribute("erro");
@@ -162,14 +150,15 @@
         </div>
     </div>
 
-    <form action="<%= request.getContextPath() %>/ponto-login-unificado" method="post" id="formLogin">
+    <form action="<%= request.getContextPath() %>/ponto" method="post" id="formLogin">
+        <input type="hidden" name="acao" value="login">
         <input type="hidden" name="tipoLogin" id="tipoLogin" value="funcionario">
 
         <!-- CAMPOS FUNCIONÁRIO -->
         <div id="funcFields">
             <label>CPF</label>
             <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" maxlength="14">
-            <small>Digite seu CPF (apenas números ou com pontuação)</small>
+            <small>Digite seu CPF</small>
         </div>
 
         <!-- CAMPOS ADMIN -->

@@ -139,7 +139,7 @@
 <!-- PAINEL ADMIN -->
 <div class="container">
     <div class="header">
-        <h1>⚙️ Painel Admin - Controle de Ponto</h1>
+        <h1>⚙️ Painel Admin - #SaaS</h1>
         <form action="<%= request.getContextPath() %>/ponto-logout" method="post" style="margin: 0;">
             <button type="submit" class="btn btn-secondary">Sair</button>
         </form>

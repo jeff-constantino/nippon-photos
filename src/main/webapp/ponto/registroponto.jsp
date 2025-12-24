@@ -119,7 +119,7 @@
         }
     %>
 
-    <h1>🕐 Controle de Ponto</h1>
+    <h1>🕐 Controle de Ponto #SaaS</h1>
     <div class="nome"><%= func.getFuncNome() %></div>
 
     <% if (sucesso != null) { %><div class="msg msg-sucesso"><%= sucesso %></div><% } %>

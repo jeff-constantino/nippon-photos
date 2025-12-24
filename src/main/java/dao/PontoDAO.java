@@ -162,59 +162,56 @@ public class PontoDAO {
     /**
      * Calcula horas trabalhadas e noturnas (chamado quando o registro está completo)
      */
-    private void calcularHorasTrabalhadasENoturnas(int funcId, Date data) throws Exception {
+    private void calcularHorasTrabalhadasENoturnas(int funcId, java.sql.Date data) throws Exception {
         Ponto registro = buscarRegistroDia(funcId, data);
-        if (registro == null) return;
+        if (registro == null || registro.getRegEntrada() == null || registro.getRegSaida() == null) {
+            return;
+        }
 
-        long totalSegundosTrabalhados = 0;
+        // Usaremos segundos para manter a precisão máxima antes de converter para minutos
+        long segundosTrabalhados = 0;
+
+        // Período 1: Da Entrada até a Saída para o Intervalo
+        // Se não houver intervalo, calcula direto até a saída final
+        Timestamp fimP1 = (registro.getRegSaidaIntervalo() != null) ?
+                registro.getRegSaidaIntervalo() : registro.getRegSaida();
+
+        segundosTrabalhados += java.time.Duration.between(
+                registro.getRegEntrada().toInstant(),
+                fimP1.toInstant()
+        ).getSeconds();
+
+        // Período 2: Do Retorno do Intervalo até a Saída Final (se houver intervalo)
+        if (registro.getRegRetornoIntervalo() != null && registro.getRegSaida() != null) {
+            segundosTrabalhados += java.time.Duration.between(
+                    registro.getRegRetornoIntervalo().toInstant(),
+                    registro.getRegSaida().toInstant()
+            ).getSeconds();
+        }
+
+        // Conversão Final: Arredonda para o minuto mais próximo
+        // (Ex: 1min e 31seg vira 2min | 1min e 29seg vira 1min)
+        int minutosTrabalhadosFinal = Math.round(segundosTrabalhados / 60.0f);
+
+        // --- CÁLCULO NOTURNO ---
+        LocalTime horaNoturnaCorte = LocalTime.of(22, 0);
         int minutosNoturno = 0;
 
-        // 1. CALCULAR TEMPO TRABALHADO (Soma dos períodos)
-
-        // Período 1: Entrada até Saída Intervalo (ou Saída final se não houver intervalo)
-        if (registro.getRegEntrada() != null) {
-            Timestamp fimP1 = (registro.getRegSaidaIntervalo() != null) ?
-                    registro.getRegSaidaIntervalo() : registro.getRegSaida();
-
-            if (fimP1 != null) {
-                long diffP1 = fimP1.getTime() - registro.getRegEntrada().getTime();
-                totalSegundosTrabalhados += diffP1 / 1000;
-            }
-        }
-
-        // Período 2: Retorno Intervalo até Saída Final
-        if (registro.getRegRetornoIntervalo() != null && registro.getRegSaida() != null) {
-            long diffP2 = registro.getRegSaida().getTime() - registro.getRegRetornoIntervalo().getTime();
-            totalSegundosTrabalhados += diffP2 / 1000;
-        }
-
-        // Converte segundos para minutos arredondando (ex: 1m55s vira 2m)
-        // Se preferir truncar (1m55s vira 1m), use apenas (int) (totalSegundosTrabalhados / 60)
-        int minutosTrabalhadosFinal = Math.round(totalSegundosTrabalhados / 60.0f);
-
-
-        // 2. CALCULAR MINUTOS NOTURNOS
-        LocalTime horaNoturna = LocalTime.of(22, 0);
-
-        if (registro.getRegEntrada() != null) {
-            Timestamp fimP1 = registro.getRegSaidaIntervalo() != null ?
-                    registro.getRegSaidaIntervalo() : registro.getRegSaida();
-            if (fimP1 != null) {
-                minutosNoturno += calcularMinutosNoturnosPeriodo(registro.getRegEntrada(), fimP1, horaNoturna);
-            }
-        }
+        // Aplica a mesma lógica de períodos para o cálculo noturno
+        minutosNoturno += calcularMinutosNoturnosPeriodo(registro.getRegEntrada(), fimP1, horaNoturnaCorte);
 
         if (registro.getRegRetornoIntervalo() != null && registro.getRegSaida() != null) {
-            minutosNoturno += calcularMinutosNoturnosPeriodo(registro.getRegRetornoIntervalo(), registro.getRegSaida(), horaNoturna);
+            minutosNoturno += calcularMinutosNoturnosPeriodo(registro.getRegRetornoIntervalo(), registro.getRegSaida(), horaNoturnaCorte);
         }
 
-        // 3. ATUALIZAR BANCO
+        // --- ATUALIZAÇÃO NO BANCO ---
         String sql = "UPDATE ponto_registros SET minutos_trabalhados = ?, minutos_noturno = ? WHERE id = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, minutosTrabalhadosFinal);
-        ps.setInt(2, minutosNoturno);
-        ps.setInt(3, registro.getRegId());
-        ps.executeUpdate();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, minutosTrabalhadosFinal);
+            ps.setInt(2, minutosNoturno);
+            ps.setInt(3, registro.getRegId());
+            ps.executeUpdate();
+        }
         conn.commit();
     }
 
@@ -224,27 +221,47 @@ public class PontoDAO {
         java.time.LocalDateTime dtInicio = inicio.toLocalDateTime();
         java.time.LocalDateTime dtFim = fim.toLocalDateTime();
 
-        // Definimos o ponto de corte (22:00) do dia do INÍCIO
-        java.time.LocalDateTime corteNoturno = dtInicio.toLocalDate().atTime(horaNoturna);
+        // Se o início for antes das 05:00 da manhã, ele JÁ está em horário noturno desde o começo
+        // (Considerando o padrão da CLT para jornada noturna 22h-05h)
 
-        // Caso 1: O período inteiro terminou antes das 22h do dia de início
-        if (dtFim.isBefore(corteNoturno)) {
+        // Ponto de corte 22h do dia atual
+        java.time.LocalDateTime corte22hDesteDia = dtInicio.toLocalDate().atTime(horaNoturna);
+        // Ponto de corte 22h do dia anterior (caso ele tenha entrado de madrugada)
+        java.time.LocalDateTime corte22hDiaAnterior = corte22hDesteDia.minusDays(1);
+
+        java.time.LocalDateTime inicioCalculo;
+
+        // LÓGICA DE INÍCIO EFETIVO:
+        if (dtInicio.isAfter(corte22hDesteDia) || dtInicio.equals(corte22hDesteDia)) {
+            // Entrou após as 22h: conta do início real
+            inicioCalculo = dtInicio;
+        } else if (dtInicio.getHour() < 5) {
+            // Entrou de madrugada (antes das 5h): conta do início real
+            inicioCalculo = dtInicio;
+        } else {
+            // Entrou durante o dia: conta a partir das 22h
+            inicioCalculo = corte22hDesteDia;
+        }
+
+        // Se o fim for antes do início do cálculo (ex: entrou 10h e saiu 18h), não há horas noturnas
+        if (dtFim.isBefore(inicioCalculo)) {
             return 0;
         }
 
-        // Caso 2: O período começou antes das 22h, mas terminou depois
-        // Ajustamos o início da contagem para as 22h
-        java.time.LocalDateTime inicioEfetivoNoturno = dtInicio.isBefore(corteNoturno)
-                ? corteNoturno
-                : dtInicio;
+        // Calcula a duração total em segundos
+        long segundosNoturnos = java.time.Duration.between(inicioCalculo, dtFim).getSeconds();
 
-        // Calculamos a diferença em segundos entre o início efetivo e o fim real
-        // Isso funciona mesmo que o dtFim seja no dia seguinte (ex: 02h da manhã)
-        long segundosNoturnos = java.time.Duration.between(inicioEfetivoNoturno, dtFim).getSeconds();
+        // Importante: O adicional noturno costuma encerrar às 05:00.
+        // Se o seu sistema deve parar de contar às 05:00:
+        java.time.LocalDateTime corte05h = dtInicio.toLocalDate().atTime(5, 0);
+        if (dtInicio.getHour() >= 5) corte05h = corte05h.plusDays(1); // 5h da manhã do dia seguinte
+
+        if (dtFim.isAfter(corte05h)) {
+            segundosNoturnos = java.time.Duration.between(inicioCalculo, corte05h).getSeconds();
+        }
 
         if (segundosNoturnos < 0) return 0;
 
-        // Convertemos para minutos arredondando para cima se passar de 30 segundos
         return Math.round(segundosNoturnos / 60.0f);
     }
 

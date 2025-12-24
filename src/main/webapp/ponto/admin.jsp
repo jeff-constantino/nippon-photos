@@ -8,27 +8,27 @@
     <title>Admin - Controle de Ponto</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f2a654; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #daa520; padding: 20px; }
         .container { max-width: 1600px; margin: 0 auto; }
         .header {
             background: #1a1a1a; color: white; padding: 20px 30px; border-radius: 15px;
             margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
-        h1 { color: #f2a654; font-size: 28px; font-weight: 700; }
+        h1 { color: #daa520; font-size: 28px; font-weight: 700; }
         .card {
             background: #1a1a1a; border-radius: 15px; padding: 25px; margin-bottom: 20px;
             color: white; box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
         .card h2 {
-            color: #f2a654; margin-bottom: 20px; border-bottom: 2px solid #f2a654;
+            color: #daa520; margin-bottom: 20px; border-bottom: 2px solid #daa520;
             padding-bottom: 12px; font-size: 22px; font-weight: 600;
         }
         .btn {
             padding: 12px 24px; border: none; border-radius: 10px; font-size: 15px;
             font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 5px;
         }
-        .btn-primary { background: #f2a654; color: #1a1a1a; }
+        .btn-primary { background: #daa520; color: #1a1a1a; }
         .btn-primary:hover { background: #e09543; transform: translateY(-1px); }
         .btn-secondary { background: #333; color: white; }
         .btn-secondary:hover { background: #444; }
@@ -37,7 +37,7 @@
         .btn-sm { padding: 7px 14px; font-size: 13px; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        table th { background: #2a2a2a; padding: 14px 12px; text-align: left; color: #f2a654; font-weight: 600; font-size: 14px; }
+        table th { background: #2a2a2a; padding: 14px 12px; text-align: left; color: #daa520; font-weight: 600; font-size: 14px; }
         table td { padding: 12px; border-bottom: 1px solid #333; font-size: 14px; }
         table tr:hover { background: #2a2a2a; }
 
@@ -45,8 +45,8 @@
             padding: 11px; border: 2px solid #333; border-radius: 8px;
             background: #2a2a2a; color: white; font-size: 14px; width: 100%; margin: 8px 0;
         }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #f2a654; }
-        label { color: #f2a654; font-weight: 600; display: block; margin-top: 12px; font-size: 14px; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #daa520; }
+        label { color: #daa520; font-weight: 600; display: block; margin-top: 12px; font-size: 14px; }
 
         .modal {
             display: none; position: fixed; z-index: 1000; left: 0; top: 0;
@@ -58,9 +58,9 @@
         }
         .modal-header {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 25px; border-bottom: 2px solid #f2a654; padding-bottom: 12px;
+            margin-bottom: 25px; border-bottom: 2px solid #daa520; padding-bottom: 12px;
         }
-        .modal-header h3 { color: #f2a654; font-size: 22px; }
+        .modal-header h3 { color: #daa520; font-size: 22px; }
         .close { color: #aaa; font-size: 32px; font-weight: bold; cursor: pointer; line-height: 1; }
         .close:hover { color: white; }
 
@@ -76,13 +76,13 @@
 
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
-        .relatorio-item { background: #2a2a2a; padding: 15px; border-radius: 10px; margin: 12px 0; border-left: 4px solid #f2a654; }
+        .relatorio-item { background: #2a2a2a; padding: 15px; border-radius: 10px; margin: 12px 0; border-left: 4px solid #daa520; }
         .relatorio-item.alerta { border-left-color: #d32f2f; background: rgba(211, 47, 47, 0.1); }
         .relatorio-item.falta { border-left-color: #f57c00; background: rgba(245, 124, 0, 0.1); }
 
         .resumo-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
         .resumo-card { background: #2a2a2a; padding: 20px; border-radius: 10px; text-align: center; }
-        .resumo-valor { font-size: 32px; font-weight: bold; color: #f2a654; margin: 10px 0; }
+        .resumo-valor { font-size: 32px; font-weight: bold; color: #daa520; margin: 10px 0; }
         .resumo-label { color: #ccc; font-size: 14px; }
 
         @media (max-width: 768px) {

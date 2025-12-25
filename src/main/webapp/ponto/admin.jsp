@@ -210,7 +210,7 @@
                     <% } %>
 
                     <% if (!isFalta && !isJustificado) { %>
-                    <button onclick="editarRegistro(<%= reg.getRegId() %>, '<%= new SimpleDateFormat("yyyy-MM-dd").format(reg.getRegData()) %>')" class="btn btn-secondary btn-sm" title="Editar">✏️</button>
+                    <button onclick="editarRegistro(<%= reg.getRegId() %>, '<%= new SimpleDateFormat("yyyy-MM-dd").format(reg.getRegData()) %>', '<%= reg.getRegEntrada() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegEntrada()) : "" %>', '<%= reg.getRegSaidaIntervalo() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegSaidaIntervalo()) : "" %>', '<%= reg.getRegRetornoIntervalo() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegRetornoIntervalo()) : "" %>', '<%= reg.getRegSaida() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegSaida()) : "" %>', '<%= reg.getRegObservacao() != null ? reg.getRegObservacao().replace("'", "\\'").replace("\n", " ") : "" %>')" class="btn btn-secondary btn-sm" title="Editar">✏️</button>
 
                     <!-- Botão Marcar Atraso - aparece em TODOS os registros -->
                     <% if (reg.getRegEntrada() != null) { %>
@@ -345,8 +345,20 @@
 </div></div>
 
 <script>
-    function abrirModal(id) { document.getElementById(id).style.display = 'block'; }
-    function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
+    function abrirModal(id) {
+        document.getElementById(id).style.display = 'block';
+    }
+    function fecharModal(id) {
+        document.getElementById(id).style.display = 'none';
+        // Limpar campos quando fechar
+        if (id === 'modalEditarReg') {
+            document.getElementById('editEntrada').value = '';
+            document.getElementById('editSaidaInt').value = '';
+            document.getElementById('editRetornoInt').value = '';
+            document.getElementById('editSaida').value = '';
+            document.getElementById('editObs').value = '';
+        }
+    }
     window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
 
     function abonarFalta(funcId, data) {
@@ -370,9 +382,19 @@
         }
     }
 
-    function editarRegistro(regId, data) {
+    function editarRegistro(regId, data, entrada, saidaInt, retornoInt, saida, obs) {
+        console.log('Editando registro:', {regId, data, entrada, saidaInt, retornoInt, saida, obs});
+
         document.getElementById('editRegId').value = regId;
         document.getElementById('editData').value = data;
+
+        // Preencher horários (formato HH:mm)
+        document.getElementById('editEntrada').value = entrada || '';
+        document.getElementById('editSaidaInt').value = saidaInt || '';
+        document.getElementById('editRetornoInt').value = retornoInt || '';
+        document.getElementById('editSaida').value = saida || '';
+        document.getElementById('editObs').value = obs || '';
+
         abrirModal('modalEditarReg');
     }
 

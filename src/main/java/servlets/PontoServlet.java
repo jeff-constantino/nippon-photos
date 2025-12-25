@@ -307,20 +307,53 @@ public class PontoServlet extends HttpServlet {
     private void editarRegistro(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         int regId = Integer.parseInt(req.getParameter("regId"));
 
-        Timestamp entrada = parseTimestamp(req.getParameter("entrada"));
-        Timestamp saidaInt = parseTimestamp(req.getParameter("saidaInt"));
-        Timestamp retornoInt = parseTimestamp(req.getParameter("retornoInt"));
-        Timestamp saida = parseTimestamp(req.getParameter("saida"));
+        // Buscar o registro atual primeiro
+        PontoDAO dao = new PontoDAO();
+        Ponto registroAtual = dao.buscarRegistroPorId(regId);
+        String dataRegistro = new java.text.SimpleDateFormat("yyyy-MM-dd").format(registroAtual.getRegData());
+
+        // Parse dos horários - se vier vazio, mantém o valor atual
+        String entradaParam = req.getParameter("entrada");
+        String saidaIntParam = req.getParameter("saidaInt");
+        String retornoIntParam = req.getParameter("retornoInt");
+        String saidaParam = req.getParameter("saida");
+
+        Timestamp entrada = (entradaParam != null && !entradaParam.trim().isEmpty())
+                ? parseTimestampComData(entradaParam, dataRegistro)
+                : registroAtual.getRegEntrada();
+
+        Timestamp saidaInt = (saidaIntParam != null && !saidaIntParam.trim().isEmpty())
+                ? parseTimestampComData(saidaIntParam, dataRegistro)
+                : registroAtual.getRegSaidaIntervalo();
+
+        Timestamp retornoInt = (retornoIntParam != null && !retornoIntParam.trim().isEmpty())
+                ? parseTimestampComData(retornoIntParam, dataRegistro)
+                : registroAtual.getRegRetornoIntervalo();
+
+        Timestamp saida = (saidaParam != null && !saidaParam.trim().isEmpty())
+                ? parseTimestampComData(saidaParam, dataRegistro)
+                : registroAtual.getRegSaida();
+
         String obs = req.getParameter("obs");
 
         HttpSession session = req.getSession();
         String editadoPor = (String) session.getAttribute("pontoAdmin");
 
-        PontoDAO dao = new PontoDAO();
         dao.editarRegistro(regId, entrada, saidaInt, retornoInt, saida, obs, editadoPor);
 
-        req.setAttribute("sucesso", "Registro editado!");
+        req.setAttribute("sucesso", "Registro editado com sucesso!");
         req.getRequestDispatcher("/ponto/admin.jsp").forward(req, resp);
+    }
+
+    private Timestamp parseTimestampComData(String hora, String data) {
+        if (hora == null || hora.trim().isEmpty()) return null;
+        try {
+            // Formato esperado da hora: "08:30"
+            // Formato esperado da data: "2025-01-15"
+            return Timestamp.valueOf(data + " " + hora + ":00");
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private Timestamp parseTimestamp(String str) {

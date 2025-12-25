@@ -153,7 +153,13 @@
                 <td><%= f.getFuncTelefone() != null ? f.getFuncTelefone() : "-" %></td>
                 <td><span class="badge <%= f.getFuncAtivo() ? "badge-success" : "badge-danger" %>"><%= f.getFuncAtivo() ? "Ativo" : "Inativo" %></span></td>
                 <td>
-                    <button class="btn btn-secondary btn-sm">📋 Detalhes</button>
+                    <button onclick="editarFuncionario(<%= f.getFuncId() %>, '<%= f.getFuncNome().replace("'", "\\'") %>', '<%= f.getFuncCpf() %>', '<%= f.getFuncTelefone() != null ? f.getFuncTelefone() : "" %>')" class="btn btn-secondary btn-sm" title="Editar">✏️</button>
+
+                    <button onclick="alternarStatusFunc(<%= f.getFuncId() %>)" class="btn <%= f.getFuncAtivo() ? "btn-warning" : "btn-success" %> btn-sm" title="<%= f.getFuncAtivo() ? "Inativar" : "Ativar" %>">
+                        <%= f.getFuncAtivo() ? "🔒 Inativar" : "🔓 Ativar" %>
+                    </button>
+
+                    <button onclick="excluirFuncionario(<%= f.getFuncId() %>, '<%= f.getFuncNome().replace("'", "\\'") %>')" class="btn btn-danger btn-sm" title="Excluir">🗑️</button>
                 </td>
             </tr>
             <% } %>
@@ -267,8 +273,33 @@
     <form action="<%= request.getContextPath() %>/ponto" method="post"><input type="hidden" name="acao" value="salvar-funcionario">
         <label>Nome Completo *</label><input type="text" name="nome" required>
         <label>CPF *</label><input type="text" name="cpf" id="cpfModal" maxlength="14" required>
+        <label>Telefone</label><input type="text" name="telefone" id="telefoneModal" maxlength="15">
         <label>Senha *</label><input type="password" name="senha" required minlength="4">
         <button type="submit" class="btn btn-primary" style="width: 100%;">Salvar</button>
+    </form>
+</div></div>
+
+<div id="modalEditarFunc" class="modal"><div class="modal-content">
+    <div class="modal-header"><h3>✏️ Editar Funcionário</h3><span class="close" onclick="fecharModal('modalEditarFunc')">&times;</span></div>
+    <form action="<%= request.getContextPath() %>/ponto" method="post">
+        <input type="hidden" name="acao" value="editar-funcionario">
+        <input type="hidden" name="funcId" id="editFuncId">
+
+        <label>Nome Completo *</label>
+        <input type="text" name="nome" id="editFuncNome" required>
+
+        <label>CPF *</label>
+        <input type="text" name="cpf" id="editFuncCpf" maxlength="14" required readonly style="background: #3a3a3a;">
+        <small style="color: #999;">CPF não pode ser alterado</small>
+
+        <label>Telefone</label>
+        <input type="text" name="telefone" id="editFuncTelefone" maxlength="15">
+
+        <label>Nova Senha (deixe em branco para não alterar)</label>
+        <input type="password" name="novaSenha" id="editFuncSenha" minlength="4">
+        <small style="color: #999;">Preencha apenas se quiser alterar a senha</small>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Salvar Alterações</button>
     </form>
 </div></div>
 
@@ -408,6 +439,63 @@
         abrirModal('modalMarcarAtraso');
     }
 
+    // ===== FUNÇÕES DE GERENCIAMENTO DE FUNCIONÁRIOS =====
+
+    function editarFuncionario(funcId, nome, cpf, telefone) {
+        document.getElementById('editFuncId').value = funcId;
+        document.getElementById('editFuncNome').value = nome;
+        document.getElementById('editFuncCpf').value = cpf;
+        document.getElementById('editFuncTelefone').value = telefone;
+        document.getElementById('editFuncSenha').value = '';
+        abrirModal('modalEditarFunc');
+    }
+
+    function alternarStatusFunc(funcId) {
+        if (confirm('Deseja realmente alterar o status deste funcionário?')) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '<%= request.getContextPath() %>/ponto';
+
+            const acaoInput = document.createElement('input');
+            acaoInput.type = 'hidden';
+            acaoInput.name = 'acao';
+            acaoInput.value = 'alternar-status';
+            form.appendChild(acaoInput);
+
+            const funcIdInput = document.createElement('input');
+            funcIdInput.type = 'hidden';
+            funcIdInput.name = 'funcId';
+            funcIdInput.value = funcId;
+            form.appendChild(funcIdInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+
+    function excluirFuncionario(funcId, nome) {
+        if (confirm('⚠️ ATENÇÃO! Deseja realmente EXCLUIR o funcionário "' + nome + '"?\n\nTodos os registros de ponto deste funcionário também serão excluídos!\n\nEsta ação NÃO pode ser desfeita!')) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '<%= request.getContextPath() %>/ponto';
+
+            const acaoInput = document.createElement('input');
+            acaoInput.type = 'hidden';
+            acaoInput.name = 'acao';
+            acaoInput.value = 'excluir-funcionario';
+            form.appendChild(acaoInput);
+
+            const funcIdInput = document.createElement('input');
+            funcIdInput.type = 'hidden';
+            funcIdInput.name = 'funcId';
+            funcIdInput.value = funcId;
+            form.appendChild(funcIdInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+
     function autorizarAtraso(regId, autorizar) {
         const form = document.createElement('form');
         form.method = 'POST';
@@ -461,6 +549,38 @@
         const dia = String(hoje.getDate()).padStart(2, '0');
         if(document.getElementById('dataInicioRel')) document.getElementById('dataInicioRel').value = ano + '-' + mes + '-01';
         if(document.getElementById('dataFimRel')) document.getElementById('dataFimRel').value = ano + '-' + mes + '-' + dia;
+
+        // Máscara CPF
+        const cpfInputs = ['cpfModal', 'editFuncCpf'];
+        cpfInputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', function(e) {
+                    let v = e.target.value.replace(/\D/g, '');
+                    if (v.length > 11) v = v.substring(0, 11);
+                    if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+                    else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+                    else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+                    e.target.value = v;
+                });
+            }
+        });
+
+        // Máscara Telefone
+        const telInputs = ['telefoneModal', 'editFuncTelefone'];
+        telInputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', function(e) {
+                    let v = e.target.value.replace(/\D/g, '');
+                    if (v.length > 11) v = v.substring(0, 11);
+                    if (v.length > 10) v = v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                    else if (v.length > 6) v = v.replace(/(\d{2})(\d{4})(\d{1,4})/, '($1) $2-$3');
+                    else if (v.length > 2) v = v.replace(/(\d{2})(\d{1,5})/, '($1) $2');
+                    e.target.value = v;
+                });
+            }
+        });
     });
 </script>
 </body>

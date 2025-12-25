@@ -47,8 +47,14 @@ public class PontoServlet extends HttpServlet {
                 case "salvar-funcionario":
                     salvarFuncionario(req, resp);
                     break;
+                case "editar-funcionario":
+                    editarFuncionario(req, resp);
+                    break;
                 case "alternar-status":
                     alternarStatus(req, resp);
+                    break;
+                case "excluir-funcionario":
+                    excluirFuncionario(req, resp);
                     break;
                 case "alterar-senha":
                     alterarSenha(req, resp);
@@ -192,6 +198,19 @@ public class PontoServlet extends HttpServlet {
         req.getRequestDispatcher("/ponto/admin.jsp").forward(req, resp);
     }
 
+    private void editarFuncionario(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        int funcId = Integer.parseInt(req.getParameter("funcId"));
+        String nome = req.getParameter("nome");
+        String telefone = req.getParameter("telefone");
+        String novaSenha = req.getParameter("novaSenha");
+
+        PontoDAO dao = new PontoDAO();
+        dao.editarFuncionario(funcId, nome, telefone, novaSenha);
+
+        req.setAttribute("sucesso", "Funcionário atualizado com sucesso!");
+        req.getRequestDispatcher("/ponto/admin.jsp").forward(req, resp);
+    }
+
     private void alternarStatus(HttpServletRequest req, HttpServletResponse resp) throws Exception {
         int funcId = Integer.parseInt(req.getParameter("funcId"));
 
@@ -199,6 +218,16 @@ public class PontoServlet extends HttpServlet {
         dao.alternarStatus(funcId);
 
         req.setAttribute("sucesso", "Status alterado!");
+        req.getRequestDispatcher("/ponto/admin.jsp").forward(req, resp);
+    }
+
+    private void excluirFuncionario(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        int funcId = Integer.parseInt(req.getParameter("funcId"));
+
+        PontoDAO dao = new PontoDAO();
+        dao.excluirFuncionario(funcId);
+
+        req.setAttribute("sucesso", "Funcionário excluído com sucesso!");
         req.getRequestDispatcher("/ponto/admin.jsp").forward(req, resp);
     }
 

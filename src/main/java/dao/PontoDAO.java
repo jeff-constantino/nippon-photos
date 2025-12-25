@@ -379,11 +379,72 @@ public class PontoDAO {
         conn.commit();
     }
 
+    public void editarFuncionario(int funcId, String nome, String telefone, String novaSenha) throws Exception {
+        String sql;
+        PreparedStatement ps;
+
+        if (novaSenha != null && !novaSenha.trim().isEmpty()) {
+            // Atualizar com nova senha
+            sql = "UPDATE ponto_funcionarios SET nome = ?, telefone = ?, senha = ? WHERE id = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, nome);
+            ps.setString(2, telefone);
+            ps.setString(3, hashSenha(novaSenha));
+            ps.setInt(4, funcId);
+        } else {
+            // Atualizar sem alterar senha
+            sql = "UPDATE ponto_funcionarios SET nome = ?, telefone = ? WHERE id = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, nome);
+            ps.setString(2, telefone);
+            ps.setInt(3, funcId);
+        }
+
+        ps.executeUpdate();
+        conn.commit();
+    }
+
     public void alternarStatus(int funcId) throws Exception {
         String sql = "UPDATE ponto_funcionarios SET ativo = NOT ativo WHERE id = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, funcId);
         ps.executeUpdate();
+        conn.commit();
+    }
+
+    public void excluirFuncionario(int funcId) throws Exception {
+        // Excluir em cascata: primeiro justificativas, depois registros, por fim o funcionário
+
+        // 1. Excluir justificativas
+        String sql = "DELETE FROM ponto_justificativas WHERE funcionario_id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.executeUpdate();
+
+        // 2. Excluir registros de ponto
+        sql = "DELETE FROM ponto_registros WHERE funcionario_id = ?";
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.executeUpdate();
+
+        // 3. Excluir resumos mensais
+        sql = "DELETE FROM ponto_resumo_mensal WHERE funcionario_id = ?";
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.executeUpdate();
+
+        // 4. Excluir horários
+        sql = "DELETE FROM ponto_horarios WHERE funcionario_id = ?";
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.executeUpdate();
+
+        // 5. Excluir funcionário
+        sql = "DELETE FROM ponto_funcionarios WHERE id = ?";
+        ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.executeUpdate();
+
         conn.commit();
     }
 
@@ -633,6 +694,16 @@ public class PontoDAO {
 
     public void editarRegistro(int regId, Timestamp entrada, Timestamp saidaInt, Timestamp retornoInt,
                                Timestamp saida, String obs, String editadoPor) throws Exception {
+        // Buscar registro atual para manter valores não alterados
+        Ponto registroAtual = buscarRegistroPorId(regId);
+
+        // Usar valores atuais se não foram enviados novos
+        if (entrada == null) entrada = registroAtual.getRegEntrada();
+        if (saidaInt == null) saidaInt = registroAtual.getRegSaidaIntervalo();
+        if (retornoInt == null) retornoInt = registroAtual.getRegRetornoIntervalo();
+        if (saida == null) saida = registroAtual.getRegSaida();
+        if (obs == null || obs.trim().isEmpty()) obs = registroAtual.getRegObservacao();
+
         String sql = "UPDATE ponto_registros SET entrada = ?, saida_intervalo = ?, retorno_intervalo = ?, " +
                 "saida = ?, observacao = ?, editado = true, editado_por = ?, editado_em = now() WHERE id = ?";
         PreparedStatement ps = conn.prepareStatement(sql);

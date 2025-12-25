@@ -5,15 +5,12 @@ import model.Ponto;
 import java.security.MessageDigest;
 import java.sql.*;
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 
 /**
  * DAO completo para todas as operações do sistema de ponto
- * Inclui cálculos de atrasos, horas noturnas e relatórios
+ * SIMPLIFICADO - Sem cálculo automático de atrasos baseado em horários
  */
 public class PontoDAO {
 
@@ -78,17 +75,28 @@ public class PontoDAO {
     // =============================================
 
     public void registrarPonto(int funcId, Date data) throws Exception {
-        Ponto registro = buscarRegistroDia(funcId, data);
         Timestamp agora = new Timestamp(System.currentTimeMillis());
+        java.time.LocalDateTime agoraLDT = agora.toLocalDateTime();
+
+        // CORREÇÃO: Se for antes das 6h da manhã, considerar como parte do dia anterior
+        // Isso resolve o problema de jornadas noturnas (ex: entra 22h, sai 2h)
+        Date dataRegistro = data;
+        if (agoraLDT.getHour() < 6) {
+            // Antes das 6h = pertence ao dia anterior
+            dataRegistro = Date.valueOf(data.toLocalDate().minusDays(1));
+        }
+
+        Ponto registro = buscarRegistroDia(funcId, dataRegistro);
 
         if (registro == null) {
             // Primeiro registro - ENTRADA
             String sql = "INSERT INTO ponto_registros (funcionario_id, data, entrada) VALUES (?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, funcId);
-            ps.setDate(2, data);
+            ps.setDate(2, dataRegistro);
             ps.setTimestamp(3, agora);
             ps.executeUpdate();
+            conn.commit();
         } else {
             // Atualizar próximo campo
             String sql = null;
@@ -105,62 +113,19 @@ public class PontoDAO {
                 ps.setTimestamp(1, agora);
                 ps.setInt(2, registro.getRegId());
                 ps.executeUpdate();
+                conn.commit();
+
+                // Calcular horas trabalhadas quando completar o dia (tem saída)
+                if (registro.getRegRetornoIntervalo() != null && sql.contains("saida =")) {
+                    calcularHorasTrabalhadasENoturnas(funcId, dataRegistro);
+                }
             }
         }
-
-        conn.commit();
-
-        // Calcular atraso se for entrada
-        if (registro == null) {
-            calcularAtrasoRegistro(funcId, data);
-        }
-
-        // Calcular horas trabalhadas e noturnas quando completar o dia
-        if (registro != null && registro.getRegRetornoIntervalo() != null) {
-            calcularHorasTrabalhadasENoturnas(funcId, data);
-        }
     }
 
     /**
-     * Calcula e atualiza o atraso de um registro
-     */
-    private void calcularAtrasoRegistro(int funcId, Date data) throws Exception {
-        Ponto registro = buscarRegistroDia(funcId, data);
-        if (registro == null || registro.getRegEntrada() == null) return;
-
-        // Buscar horário esperado
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(data);
-        String[] dias = {"domingo", "segunda", "terca", "quarta", "quinta", "sexta", "sabado"};
-        String diaSemana = dias[cal.get(Calendar.DAY_OF_WEEK) - 1];
-
-        Ponto horario = buscarHorarioDia(funcId, diaSemana);
-        if (horario == null) return;
-
-        // Calcular atraso
-        LocalTime horaEntradaEsperada = horario.getHorEntrada().toLocalTime();
-        LocalTime horaEntradaReal = registro.getRegEntrada().toLocalDateTime().toLocalTime();
-
-        // Adicionar tolerância
-        LocalTime horaLimite = horaEntradaEsperada.plusMinutes(horario.getHorTolerancia());
-
-        int minutosAtraso = 0;
-        if (horaEntradaReal.isAfter(horaLimite)) {
-            // Passou da tolerância = conta TODO o atraso desde a hora esperada
-            minutosAtraso = (int) ChronoUnit.MINUTES.between(horaEntradaEsperada, horaEntradaReal);
-        }
-
-        // Atualizar no banco
-        String sql = "UPDATE ponto_registros SET minutos_atraso = ? WHERE id = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, minutosAtraso);
-        ps.setInt(2, registro.getRegId());
-        ps.executeUpdate();
-        conn.commit();
-    }
-
-    /**
-     * Calcula horas trabalhadas e noturnas (chamado quando o registro está completo)
+     * Calcula horas trabalhadas e noturnas (CORRIGIDO)
+     * Considera corretamente o intervalo para almoço
      */
     private void calcularHorasTrabalhadasENoturnas(int funcId, java.sql.Date data) throws Exception {
         Ponto registro = buscarRegistroDia(funcId, data);
@@ -168,20 +133,18 @@ public class PontoDAO {
             return;
         }
 
-        // Usaremos segundos para manter a precisão máxima antes de converter para minutos
         long segundosTrabalhados = 0;
 
-        // Período 1: Da Entrada até a Saída para o Intervalo
-        // Se não houver intervalo, calcula direto até a saída final
-        Timestamp fimP1 = (registro.getRegSaidaIntervalo() != null) ?
+        // Período 1: Entrada até Saída Intervalo (ou Saída final se não tiver intervalo)
+        Timestamp fimPeriodo1 = (registro.getRegSaidaIntervalo() != null) ?
                 registro.getRegSaidaIntervalo() : registro.getRegSaida();
 
         segundosTrabalhados += java.time.Duration.between(
                 registro.getRegEntrada().toInstant(),
-                fimP1.toInstant()
+                fimPeriodo1.toInstant()
         ).getSeconds();
 
-        // Período 2: Do Retorno do Intervalo até a Saída Final (se houver intervalo)
+        // Período 2: Retorno Intervalo até Saída (apenas se houver intervalo)
         if (registro.getRegRetornoIntervalo() != null && registro.getRegSaida() != null) {
             segundosTrabalhados += java.time.Duration.between(
                     registro.getRegRetornoIntervalo().toInstant(),
@@ -189,19 +152,30 @@ public class PontoDAO {
             ).getSeconds();
         }
 
-        // Conversão Final: Arredonda para o minuto mais próximo
-        // (Ex: 1min e 31seg vira 2min | 1min e 29seg vira 1min)
+        // Conversão: Arredonda para o minuto mais próximo
         int minutosTrabalhadosFinal = Math.round(segundosTrabalhados / 60.0f);
 
-        // --- CÁLCULO NOTURNO ---
-        LocalTime horaNoturnaCorte = LocalTime.of(22, 0);
+        // --- CÁLCULO NOTURNO (22h às 05h) ---
+        java.time.LocalTime horaNoturnaInicio = java.time.LocalTime.of(22, 0);
+        java.time.LocalTime horaNoturnaFim = java.time.LocalTime.of(5, 0);
         int minutosNoturno = 0;
 
-        // Aplica a mesma lógica de períodos para o cálculo noturno
-        minutosNoturno += calcularMinutosNoturnosPeriodo(registro.getRegEntrada(), fimP1, horaNoturnaCorte);
+        // Período 1 - horas noturnas
+        minutosNoturno += calcularMinutosNoturnosPeriodo(
+                registro.getRegEntrada(),
+                fimPeriodo1,
+                horaNoturnaInicio,
+                horaNoturnaFim
+        );
 
+        // Período 2 - horas noturnas (se houver intervalo)
         if (registro.getRegRetornoIntervalo() != null && registro.getRegSaida() != null) {
-            minutosNoturno += calcularMinutosNoturnosPeriodo(registro.getRegRetornoIntervalo(), registro.getRegSaida(), horaNoturnaCorte);
+            minutosNoturno += calcularMinutosNoturnosPeriodo(
+                    registro.getRegRetornoIntervalo(),
+                    registro.getRegSaida(),
+                    horaNoturnaInicio,
+                    horaNoturnaFim
+            );
         }
 
         // --- ATUALIZAÇÃO NO BANCO ---
@@ -215,54 +189,31 @@ public class PontoDAO {
         conn.commit();
     }
 
-    private int calcularMinutosNoturnosPeriodo(Timestamp inicio, Timestamp fim, LocalTime horaNoturna) {
+    private int calcularMinutosNoturnosPeriodo(Timestamp inicio, Timestamp fim,
+                                               java.time.LocalTime horaInicio,
+                                               java.time.LocalTime horaFim) {
         if (inicio == null || fim == null) return 0;
 
         java.time.LocalDateTime dtInicio = inicio.toLocalDateTime();
         java.time.LocalDateTime dtFim = fim.toLocalDateTime();
 
-        // Se o início for antes das 05:00 da manhã, ele JÁ está em horário noturno desde o começo
-        // (Considerando o padrão da CLT para jornada noturna 22h-05h)
+        int minutosNoturno = 0;
+        java.time.LocalDateTime atual = dtInicio;
 
-        // Ponto de corte 22h do dia atual
-        java.time.LocalDateTime corte22hDesteDia = dtInicio.toLocalDate().atTime(horaNoturna);
-        // Ponto de corte 22h do dia anterior (caso ele tenha entrado de madrugada)
-        java.time.LocalDateTime corte22hDiaAnterior = corte22hDesteDia.minusDays(1);
+        // Percorre minuto a minuto para verificar se está no período noturno
+        while (atual.isBefore(dtFim)) {
+            java.time.LocalTime hora = atual.toLocalTime();
 
-        java.time.LocalDateTime inicioCalculo;
+            // Verifica se está entre 22:00 e 23:59 OU entre 00:00 e 04:59
+            if ((hora.isAfter(horaInicio) || hora.equals(horaInicio)) ||
+                    (hora.isBefore(horaFim))) {
+                minutosNoturno++;
+            }
 
-        // LÓGICA DE INÍCIO EFETIVO:
-        if (dtInicio.isAfter(corte22hDesteDia) || dtInicio.equals(corte22hDesteDia)) {
-            // Entrou após as 22h: conta do início real
-            inicioCalculo = dtInicio;
-        } else if (dtInicio.getHour() < 5) {
-            // Entrou de madrugada (antes das 5h): conta do início real
-            inicioCalculo = dtInicio;
-        } else {
-            // Entrou durante o dia: conta a partir das 22h
-            inicioCalculo = corte22hDesteDia;
+            atual = atual.plusMinutes(1);
         }
 
-        // Se o fim for antes do início do cálculo (ex: entrou 10h e saiu 18h), não há horas noturnas
-        if (dtFim.isBefore(inicioCalculo)) {
-            return 0;
-        }
-
-        // Calcula a duração total em segundos
-        long segundosNoturnos = java.time.Duration.between(inicioCalculo, dtFim).getSeconds();
-
-        // Importante: O adicional noturno costuma encerrar às 05:00.
-        // Se o seu sistema deve parar de contar às 05:00:
-        java.time.LocalDateTime corte05h = dtInicio.toLocalDate().atTime(5, 0);
-        if (dtInicio.getHour() >= 5) corte05h = corte05h.plusDays(1); // 5h da manhã do dia seguinte
-
-        if (dtFim.isAfter(corte05h)) {
-            segundosNoturnos = java.time.Duration.between(inicioCalculo, corte05h).getSeconds();
-        }
-
-        if (segundosNoturnos < 0) return 0;
-
-        return Math.round(segundosNoturnos / 60.0f);
+        return minutosNoturno;
     }
 
     public Ponto buscarRegistroDia(int funcId, Date data) throws Exception {
@@ -301,6 +252,9 @@ public class PontoDAO {
         Object minNot = rs.getObject("minutos_noturno");
         p.setRegMinutosNoturno(minNot != null ? (Integer)minNot : 0);
 
+        // Campo atraso autorizado
+        p.setAtrasoAutorizado(rs.getBoolean("atraso_autorizado"));
+
         // Definir status
         if (p.getRegEntrada() != null && p.getRegSaida() != null) {
             p.setStatusDia("Completo");
@@ -308,36 +262,41 @@ public class PontoDAO {
             p.setStatusDia("Incompleto");
         }
 
-        p.setTemAtraso(p.getRegMinutosAtraso() != null && p.getRegMinutosAtraso() > 0);
+        // Tem atraso apenas se houver atraso E não foi autorizado
+        p.setTemAtraso(p.getRegMinutosAtraso() != null && p.getRegMinutosAtraso() > 0 && !p.getAtrasoAutorizado());
 
         return p;
     }
 
     // =============================================
-    // HORÁRIOS
+    // AUTORIZAR ATRASO
     // =============================================
 
-    public Ponto buscarHorarioDia(int funcId, String diaSemana) throws Exception {
-        String sql = "SELECT * FROM ponto_horarios WHERE funcionario_id = ? AND dia_semana = ?";
+    public void autorizarAtraso(int regId, boolean autorizado) throws Exception {
+        String sql = "UPDATE ponto_registros SET atraso_autorizado = ? WHERE id = ?";
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, funcId);
-        ps.setString(2, diaSemana);
-        ResultSet rs = ps.executeQuery();
-
-        if (rs.next()) {
-            Ponto p = new Ponto();
-            p.setHorId(rs.getInt("id"));
-            p.setHorDiaSemana(rs.getString("dia_semana"));
-            p.setHorEntrada(rs.getTime("hora_entrada"));
-            p.setHorSaida(rs.getTime("hora_saida"));
-            p.setHorTolerancia(rs.getInt("tolerancia_minutos"));
-
-            Object carga = rs.getObject("carga_horaria_minutos");
-            p.setHorCargaHoraria(carga != null ? (Integer)carga : null);
-            return p;
-        }
-        return null;
+        ps.setBoolean(1, autorizado);
+        ps.setInt(2, regId);
+        ps.executeUpdate();
+        conn.commit();
     }
+
+    /**
+     * Marca atraso manualmente com minutos específicos
+     */
+    public void marcarAtraso(int regId, int minutosAtraso, boolean autorizado) throws Exception {
+        String sql = "UPDATE ponto_registros SET minutos_atraso = ?, atraso_autorizado = ? WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, minutosAtraso);
+        ps.setBoolean(2, autorizado);
+        ps.setInt(3, regId);
+        ps.executeUpdate();
+        conn.commit();
+    }
+
+    // =============================================
+    // HORÁRIOS
+    // =============================================
 
     public void salvarHorario(int funcId, String diaSemana, Time horaEntrada, Time horaSaida,
                               int tolerancia, Integer cargaHoraria) throws Exception {
@@ -444,8 +403,11 @@ public class PontoDAO {
     public List<Ponto> buscarRegistrosPeriodo(int funcId, Date dataInicio, Date dataFim) throws Exception {
         List<Ponto> lista = new ArrayList<>();
 
-        String sql = "SELECT r.*, f.nome, f.cpf FROM ponto_registros r " +
+        String sql = "SELECT r.*, f.nome, f.cpf, " +
+                "j.tipo as just_tipo, j.descricao as just_desc " +
+                "FROM ponto_registros r " +
                 "JOIN ponto_funcionarios f ON r.funcionario_id = f.id " +
+                "LEFT JOIN ponto_justificativas j ON j.funcionario_id = r.funcionario_id AND j.data = r.data AND j.aprovado = true " +
                 "WHERE r.funcionario_id = ? AND r.data BETWEEN ? AND ? " +
                 "ORDER BY r.data";
 
@@ -460,6 +422,15 @@ public class PontoDAO {
             Ponto p = mapearRegistro(rs);
             p.setFuncNome(rs.getString("nome"));
             p.setFuncCpf(rs.getString("cpf"));
+
+            // Capturar justificativa se existir
+            String justTipo = rs.getString("just_tipo");
+            String justDesc = rs.getString("just_desc");
+            if (justTipo != null) {
+                p.setJustTipo(justTipo);
+                p.setJustDescricao(justDesc);
+            }
+
             registrosMap.put(p.getRegData(), p);
         }
 
@@ -469,11 +440,13 @@ public class PontoDAO {
         String[] diasSemana = {"Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira",
                 "Quinta-feira", "Sexta-feira", "Sábado"};
 
+        // Preencher todos os dias do período
         for (LocalDate data = inicio; !data.isAfter(fim); data = data.plusDays(1)) {
             Date sqlDate = Date.valueOf(data);
             Ponto p = registrosMap.get(sqlDate);
 
             if (p == null) {
+                // Dia sem registro = Falta
                 p = new Ponto();
                 p.setFuncId(funcId);
                 p.setRegData(sqlDate);
@@ -488,17 +461,28 @@ public class PontoDAO {
                     p.setFuncNome(rsNome.getString("nome"));
                     p.setFuncCpf(rsNome.getString("cpf"));
                 }
+
+                // Verificar se tem justificativa
+                String sqlJust = "SELECT tipo, descricao FROM ponto_justificativas WHERE funcionario_id = ? AND data = ? AND aprovado = true";
+                PreparedStatement psJust = conn.prepareStatement(sqlJust);
+                psJust.setInt(1, funcId);
+                psJust.setDate(2, sqlDate);
+                ResultSet rsJust = psJust.executeQuery();
+                if (rsJust.next()) {
+                    p.setJustTipo(rsJust.getString("tipo"));
+                    p.setJustDescricao(rsJust.getString("descricao"));
+                }
             }
 
             Calendar cal = Calendar.getInstance();
             cal.setTime(sqlDate);
             p.setDiaSemanaTexto(diasSemana[cal.get(Calendar.DAY_OF_WEEK) - 1]);
 
-            if (p.getStatusDia() != null && p.getStatusDia().equals("Falta")) {
-                if (temJustificativa(funcId, sqlDate)) {
-                    p.setStatusDia("Justificado");
-                    p.setTemFalta(false);
-                }
+            // Atualizar status se tiver justificativa
+            if (p.getJustTipo() != null) {
+                String tipoFormatado = formatarTipoJustificativa(p.getJustTipo());
+                p.setStatusDia(tipoFormatado);
+                p.setTemFalta(false);
             }
 
             lista.add(p);
@@ -507,13 +491,16 @@ public class PontoDAO {
         return lista;
     }
 
-    private boolean temJustificativa(int funcId, Date data) throws Exception {
-        String sql = "SELECT COUNT(*) FROM ponto_justificativas WHERE funcionario_id = ? AND data = ? AND aprovado = true";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, funcId);
-        ps.setDate(2, data);
-        ResultSet rs = ps.executeQuery();
-        return rs.next() && rs.getInt(1) > 0;
+    private String formatarTipoJustificativa(String tipo) {
+        if (tipo == null) return "Justificado";
+
+        switch (tipo.toLowerCase()) {
+            case "feriado": return "Feriado";
+            case "folga": return "Folga";
+            case "atestado": return "Atestado";
+            case "autorizado": return "Autorizado";
+            default: return "Justificado";
+        }
     }
 
     public Ponto calcularResumoMensal(int funcId, int mes, int ano) throws Exception {
@@ -531,8 +518,8 @@ public class PontoDAO {
         String sql = "SELECT " +
                 "COUNT(*) as dias_trabalhados, " +
                 "COALESCE(SUM(minutos_trabalhados), 0) as total_minutos, " +
-                "COALESCE(SUM(CASE WHEN minutos_atraso > 0 THEN 1 ELSE 0 END), 0) as total_atrasos, " +
-                "COALESCE(SUM(minutos_atraso), 0) as total_minutos_atraso, " +
+                "COALESCE(SUM(CASE WHEN minutos_atraso > 0 AND atraso_autorizado = false THEN 1 ELSE 0 END), 0) as total_atrasos, " +
+                "COALESCE(SUM(CASE WHEN atraso_autorizado = false THEN minutos_atraso ELSE 0 END), 0) as total_minutos_atraso, " +
                 "COALESCE(SUM(minutos_noturno), 0) as total_minutos_noturno " +
                 "FROM ponto_registros " +
                 "WHERE funcionario_id = ? AND data BETWEEN ? AND ? AND entrada IS NOT NULL";
@@ -659,12 +646,12 @@ public class PontoDAO {
         ps.executeUpdate();
         conn.commit();
 
+        // Recalcular horas após edição
         sql = "SELECT funcionario_id, data FROM ponto_registros WHERE id = ?";
         ps = conn.prepareStatement(sql);
         ps.setInt(1, regId);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            calcularAtrasoRegistro(rs.getInt("funcionario_id"), rs.getDate("data"));
             calcularHorasTrabalhadasENoturnas(rs.getInt("funcionario_id"), rs.getDate("data"));
         }
     }
@@ -693,25 +680,38 @@ public class PontoDAO {
         conn.commit();
     }
 
-    // =============================================
-    // UTILITÁRIOS
-    // =============================================
-
-    private int getConfigInt(String chave, int valorPadrao) {
-        try {
-            String sql = "SELECT valor FROM ponto_config WHERE chave = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, chave);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return Integer.parseInt(rs.getString("valor"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return valorPadrao;
+    /**
+     * Salvar justificativa para uma data específica (admin)
+     */
+    public void salvarJustificativaAdmin(int funcId, Date data, String tipo, String descricao, boolean aprovado) throws Exception {
+        String sql = "INSERT INTO ponto_justificativas (funcionario_id, data, tipo, descricao, aprovado) " +
+                "VALUES (?, ?, ?, ?, ?) " +
+                "ON CONFLICT (funcionario_id, data) DO UPDATE " +
+                "SET tipo = ?, descricao = ?, aprovado = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.setDate(2, data);
+        ps.setString(3, tipo);
+        ps.setString(4, descricao);
+        ps.setBoolean(5, aprovado);
+        ps.setString(6, tipo);
+        ps.setString(7, descricao);
+        ps.setBoolean(8, aprovado);
+        ps.executeUpdate();
+        conn.commit();
     }
 
+    /**
+     * Excluir justificativa
+     */
+    public void excluirJustificativa(int funcId, Date data) throws Exception {
+        String sql = "DELETE FROM ponto_justificativas WHERE funcionario_id = ? AND data = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, funcId);
+        ps.setDate(2, data);
+        ps.executeUpdate();
+        conn.commit();
+    }
 
     /**
      * Buscar justificativas de um funcionário
@@ -758,36 +758,22 @@ public class PontoDAO {
         return null;
     }
 
-    /**
-     * Salvar justificativa para uma data específica
-     */
-    public void salvarJustificativaAdmin(int funcId, Date data, String tipo, String descricao, boolean aprovado) throws Exception {
-        String sql = "INSERT INTO ponto_justificativas (funcionario_id, data, tipo, descricao, aprovado) " +
-                "VALUES (?, ?, ?, ?, ?) " +
-                "ON CONFLICT (funcionario_id, data) DO UPDATE " +
-                "SET tipo = ?, descricao = ?, aprovado = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, funcId);
-        ps.setDate(2, data);
-        ps.setString(3, tipo);
-        ps.setString(4, descricao);
-        ps.setBoolean(5, aprovado);
-        ps.setString(6, tipo);
-        ps.setString(7, descricao);
-        ps.setBoolean(8, aprovado);
-        ps.executeUpdate();
-        conn.commit();
-    }
+    // =============================================
+    // UTILITÁRIOS
+    // =============================================
 
-    /**
-     * Excluir justificativa
-     */
-    public void excluirJustificativa(int funcId, Date data) throws Exception {
-        String sql = "DELETE FROM ponto_justificativas WHERE funcionario_id = ? AND data = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, funcId);
-        ps.setDate(2, data);
-        ps.executeUpdate();
-        conn.commit();
+    private int getConfigInt(String chave, int valorPadrao) {
+        try {
+            String sql = "SELECT valor FROM ponto_config WHERE chave = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, chave);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return Integer.parseInt(rs.getString("valor"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return valorPadrao;
     }
 }

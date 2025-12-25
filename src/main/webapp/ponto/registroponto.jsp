@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="model.Ponto, dao.PontoDAO, java.sql.*, java.util.*, java.text.*" %>
 <%@ page import="java.sql.Date" %>
+<%@ page import="java.time.LocalDateTime" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -81,6 +82,14 @@
         h3 { color: #daa520; margin: 25px 0 12px; font-size: 20px; }
         .registro-label { color: #ccc; font-size: 15px; }
         .registro-hora { font-weight: bold; color: white; font-size: 16px; }
+        .aviso-noturno {
+            background: #0288d1;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 14px;
+        }
         @media (max-width: 600px) {
             .card { padding: 25px 20px; }
             .relogio { font-size: 44px; }
@@ -100,10 +109,21 @@
             return;
         }
 
-        // Buscar registro de hoje
+        // CORREÇÃO: Buscar registro do dia correto considerando jornadas noturnas
         PontoDAO dao = new PontoDAO();
         Date hoje = new Date(System.currentTimeMillis());
-        Ponto reg = dao.buscarRegistroDia(func.getFuncId(), hoje);
+
+        // Se for antes das 6h da manhã, buscar registro do dia anterior
+        LocalDateTime agora = LocalDateTime.now();
+        Date dataRegistro = hoje;
+        boolean isJornadaNoturna = false;
+
+        if (agora.getHour() < 6) {
+            dataRegistro = Date.valueOf(hoje.toLocalDate().minusDays(1));
+            isJornadaNoturna = true;
+        }
+
+        Ponto reg = dao.buscarRegistroDia(func.getFuncId(), dataRegistro);
 
         // Verificar atraso
         boolean temAtraso = false;
@@ -117,6 +137,12 @@
 
     <% if (sucesso != null) { %><div class="msg msg-sucesso"><%= sucesso %></div><% } %>
     <% if (erro != null) { %><div class="msg msg-erro"><%= erro %></div><% } %>
+
+    <% if (isJornadaNoturna) { %>
+    <div class="aviso-noturno">
+        🌙 Jornada Noturna - Seus registros estão sendo salvos no dia <%= new SimpleDateFormat("dd/MM/yyyy").format(dataRegistro) %>
+    </div>
+    <% } %>
 
     <div class="relogio" id="relogio"></div>
     <div class="data" id="data"></div>
@@ -132,7 +158,7 @@
     </form>
 
     <% if (reg != null) { %>
-    <h3>Registros de Hoje</h3>
+    <h3>Registros de Hoje <% if (isJornadaNoturna) { %>(Dia <%= new SimpleDateFormat("dd/MM").format(dataRegistro) %>)<% } %></h3>
 
     <% if (temAtraso) { %>
     <div class="registro alerta">

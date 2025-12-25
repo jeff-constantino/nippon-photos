@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Servlet para exportar relatórios em Excel
+ * ATUALIZADO: Inclui motivo do abono e atraso autorizado
  */
 @WebServlet("/ponto-export")
 public class PontoExportServlet extends HttpServlet {
@@ -63,10 +64,14 @@ public class PontoExportServlet extends HttpServlet {
             alertaStyle.setFillForegroundColor(IndexedColors.RED.getIndex());
             alertaStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
+            CellStyle autorizadoStyle = workbook.createCellStyle();
+            autorizadoStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+            autorizadoStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
             // Cabeçalho
             Row headerRow = sheet.createRow(0);
             String[] colunas = {"Data", "Dia Semana", "Entrada", "Saída Intervalo", "Retorno Intervalo",
-                    "Saída", "Horas Trabalhadas", "Atraso", "Horas Noturnas", "Status"};
+                    "Saída", "Horas Trabalhadas", "Atraso", "Horas Noturnas", "Status", "Motivo/Observação"};
 
             for (int i = 0; i < colunas.length; i++) {
                 Cell cell = headerRow.createCell(i);
@@ -114,9 +119,18 @@ public class PontoExportServlet extends HttpServlet {
 
                 // Atraso
                 Cell atrasoCell = row.createCell(7);
-                if (reg.getRegMinutosAtraso() != null && reg.getRegMinutosAtraso() > 0) {
-                    atrasoCell.setCellValue(reg.getAtrasoFormatado());
-                    atrasoCell.setCellStyle(alertaStyle);
+                boolean temAtraso = reg.getRegMinutosAtraso() != null && reg.getRegMinutosAtraso() > 0;
+                boolean atrasoAutorizado = reg.getAtrasoAutorizado() != null && reg.getAtrasoAutorizado();
+
+                if (temAtraso) {
+                    String textoAtraso = reg.getAtrasoFormatado();
+                    if (atrasoAutorizado) {
+                        textoAtraso += " (Autorizado)";
+                        atrasoCell.setCellStyle(autorizadoStyle);
+                    } else {
+                        atrasoCell.setCellStyle(alertaStyle);
+                    }
+                    atrasoCell.setCellValue(textoAtraso);
                 } else {
                     atrasoCell.setCellValue("-");
                 }
@@ -126,6 +140,21 @@ public class PontoExportServlet extends HttpServlet {
 
                 // Status
                 row.createCell(9).setCellValue(reg.getStatusDia());
+
+                // Motivo/Observação
+                Cell motivoCell = row.createCell(10);
+                if (reg.getJustTipo() != null) {
+                    String motivo = reg.getJustTipo();
+                    if (reg.getJustDescricao() != null && !reg.getJustDescricao().trim().isEmpty()) {
+                        motivo += ": " + reg.getJustDescricao();
+                    }
+                    motivoCell.setCellValue(motivo);
+                    motivoCell.setCellStyle(autorizadoStyle);
+                } else if (reg.getRegObservacao() != null && !reg.getRegObservacao().trim().isEmpty()) {
+                    motivoCell.setCellValue(reg.getRegObservacao());
+                } else {
+                    motivoCell.setCellValue("-");
+                }
             }
 
             // Auto-size colunas

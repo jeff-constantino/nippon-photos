@@ -87,6 +87,16 @@ public class PontoServlet extends HttpServlet {
                     carregarRegistro(req, resp);
                     break;
 
+                // ===== NOVO: AUTORIZAR ATRASO =====
+                case "autorizar-atraso":
+                    autorizarAtraso(req, resp);
+                    break;
+
+                // ===== NOVO: MARCAR ATRASO =====
+                case "marcar-atraso":
+                    marcarAtraso(req, resp);
+                    break;
+
                 default:
                     resp.sendRedirect(req.getContextPath() + "/ponto/index.jsp");
                     break;
@@ -323,7 +333,8 @@ public class PontoServlet extends HttpServlet {
             return null;
         }
     }
-    /** ULTIMAS ALTERA~ÇOES
+
+    /**
      * Abonar falta (criar justificativa)
      */
     private void abonarFalta(HttpServletRequest req, HttpServletResponse resp) throws Exception {
@@ -407,6 +418,93 @@ public class PontoServlet extends HttpServlet {
         Ponto registro = dao.buscarRegistroPorId(regId);
 
         req.setAttribute("registroEditar", registro);
+        req.getRequestDispatcher("/ponto/admin.jsp").forward(req, resp);
+    }
+
+    // =============================================
+    // NOVO: AUTORIZAR ATRASO
+    // =============================================
+
+    /**
+     * Autoriza ou cancela autorização de atraso
+     */
+    private void autorizarAtraso(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        int regId = Integer.parseInt(req.getParameter("regId"));
+        boolean autorizar = Boolean.parseBoolean(req.getParameter("autorizar"));
+
+        PontoDAO dao = new PontoDAO();
+        dao.autorizarAtraso(regId, autorizar);
+
+        req.setAttribute("sucesso", autorizar ? "Atraso autorizado com sucesso!" : "Autorização de atraso cancelada!");
+
+        // Redirecionar de volta ao relatório se tiver os parâmetros
+        String funcIdRet = req.getParameter("funcIdRet");
+        String dataInicioRet = req.getParameter("dataInicioRet");
+        String dataFimRet = req.getParameter("dataFimRet");
+
+        if (funcIdRet != null && !funcIdRet.isEmpty() &&
+                dataInicioRet != null && !dataInicioRet.isEmpty() &&
+                dataFimRet != null && !dataFimRet.isEmpty()) {
+
+            // Reprocessar relatório para exibir as alterações
+            int funcId = Integer.parseInt(funcIdRet);
+            Date dataInicio = Date.valueOf(dataInicioRet);
+            Date dataFim = Date.valueOf(dataFimRet);
+
+            List<Ponto> relatorio = dao.buscarRegistrosPeriodo(funcId, dataInicio, dataFim);
+            Ponto funcSelecionado = dao.listarFuncionarios().stream()
+                    .filter(f -> f.getFuncId().equals(funcId))
+                    .findFirst()
+                    .orElse(null);
+
+            req.setAttribute("relatorioDetalhado", relatorio);
+            req.setAttribute("funcSelecionado", funcSelecionado);
+            req.setAttribute("periodoInicio", dataInicio);
+            req.setAttribute("periodoFim", dataFim);
+        }
+
+        req.getRequestDispatcher("/ponto/admin.jsp").forward(req, resp);
+    }
+
+    /**
+     * Marca atraso manualmente em um registro
+     */
+    private void marcarAtraso(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        int regId = Integer.parseInt(req.getParameter("regId"));
+        int minutosAtraso = Integer.parseInt(req.getParameter("minutosAtraso"));
+        String tipoAtraso = req.getParameter("tipoAtraso");
+        boolean autorizado = "autorizado".equals(tipoAtraso);
+
+        PontoDAO dao = new PontoDAO();
+        dao.marcarAtraso(regId, minutosAtraso, autorizado);
+
+        req.setAttribute("sucesso", "Atraso de " + minutosAtraso + " minutos registrado!");
+
+        // Redirecionar de volta ao relatório
+        String funcIdRet = req.getParameter("funcIdRet");
+        String dataInicioRet = req.getParameter("dataInicioRet");
+        String dataFimRet = req.getParameter("dataFimRet");
+
+        if (funcIdRet != null && !funcIdRet.isEmpty() &&
+                dataInicioRet != null && !dataInicioRet.isEmpty() &&
+                dataFimRet != null && !dataFimRet.isEmpty()) {
+
+            int funcId = Integer.parseInt(funcIdRet);
+            Date dataInicio = Date.valueOf(dataInicioRet);
+            Date dataFim = Date.valueOf(dataFimRet);
+
+            List<Ponto> relatorio = dao.buscarRegistrosPeriodo(funcId, dataInicio, dataFim);
+            Ponto funcSelecionado = dao.listarFuncionarios().stream()
+                    .filter(f -> f.getFuncId().equals(funcId))
+                    .findFirst()
+                    .orElse(null);
+
+            req.setAttribute("relatorioDetalhado", relatorio);
+            req.setAttribute("funcSelecionado", funcSelecionado);
+            req.setAttribute("periodoInicio", dataInicio);
+            req.setAttribute("periodoFim", dataFim);
+        }
+
         req.getRequestDispatcher("/ponto/admin.jsp").forward(req, resp);
     }
 }

@@ -35,6 +35,7 @@ public class Ponto {
     private Integer regMinutosTrabalhados;
     private Integer regMinutosAtraso;
     private Integer regMinutosNoturno;
+    private Boolean atrasoAutorizado; // NOVO CAMPO
 
     // ===== HORÁRIO CONFIGURADO =====
     private Integer horId;
@@ -136,6 +137,9 @@ public class Ponto {
 
     public Integer getRegMinutosNoturno() { return regMinutosNoturno; }
     public void setRegMinutosNoturno(Integer regMinutosNoturno) { this.regMinutosNoturno = regMinutosNoturno; }
+
+    public Boolean getAtrasoAutorizado() { return atrasoAutorizado; }
+    public void setAtrasoAutorizado(Boolean atrasoAutorizado) { this.atrasoAutorizado = atrasoAutorizado; }
 
     // Horário
     public Integer getHorId() { return horId; }

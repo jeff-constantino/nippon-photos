@@ -34,6 +34,7 @@
         .btn-secondary:hover { background: #444; }
         .btn-danger { background: #d32f2f; color: white; }
         .btn-success { background: #2e7d32; color: white; }
+        .btn-warning { background: #f57c00; color: white; }
         .btn-sm { padding: 7px 14px; font-size: 13px; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
@@ -79,11 +80,22 @@
         .relatorio-item { background: #2a2a2a; padding: 15px; border-radius: 10px; margin: 12px 0; border-left: 4px solid #daa520; }
         .relatorio-item.alerta { border-left-color: #d32f2f; background: rgba(211, 47, 47, 0.1); }
         .relatorio-item.falta { border-left-color: #f57c00; background: rgba(245, 124, 0, 0.1); }
+        .relatorio-item.autorizado { border-left-color: #0288d1; background: rgba(2, 136, 209, 0.1); }
 
         .resumo-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
         .resumo-card { background: #2a2a2a; padding: 20px; border-radius: 10px; text-align: center; }
         .resumo-valor { font-size: 32px; font-weight: bold; color: #daa520; margin: 10px 0; }
         .resumo-label { color: #ccc; font-size: 14px; }
+
+        .motivo-abono {
+            background: #0288d1;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 8px;
+            display: inline-block;
+        }
 
         @media (max-width: 768px) {
             .form-row { grid-template-columns: 1fr; }
@@ -124,9 +136,7 @@
     <div class="card">
         <h2>🎯 Ações Rápidas</h2>
         <button onclick="abrirModal('modalFunc')" class="btn btn-primary">➕ Novo Funcionário</button>
-        <button onclick="abrirModal('modalHorario')" class="btn btn-primary">⏰ Configurar Horário</button>
         <button onclick="abrirModal('modalRelatorio')" class="btn btn-primary">📊 Relatório Detalhado</button>
-
     </div>
 
     <div class="card">
@@ -143,11 +153,7 @@
                 <td><%= f.getFuncTelefone() != null ? f.getFuncTelefone() : "-" %></td>
                 <td><span class="badge <%= f.getFuncAtivo() ? "badge-success" : "badge-danger" %>"><%= f.getFuncAtivo() ? "Ativo" : "Inativo" %></span></td>
                 <td>
-                    <form action="<%= request.getContextPath() %>/ponto" method="post" style="display: inline;">
-                        <input type="hidden" name="acao" value="listar-horarios">
-                        <input type="hidden" name="funcId" value="<%= f.getFuncId() %>">
-                        <button type="submit" class="btn btn-secondary btn-sm">Horários</button>
-                    </form>
+                    <button class="btn btn-secondary btn-sm">📋 Detalhes</button>
                 </td>
             </tr>
             <% } %>
@@ -174,23 +180,46 @@
             int totalDias = 0, totalAtrasos = 0, totalFaltas = 0, totalMinutos = 0, totalNoturno = 0;
             for (Ponto reg : relatorioDetalhado) {
                 boolean isFalta = "Falta".equals(reg.getStatusDia());
-                boolean isJustificado = "Justificado".equals(reg.getStatusDia()) || (reg.getStatusDia() != null && reg.getStatusDia().contains("Abonado"));
+                boolean isJustificado = reg.getJustTipo() != null;
                 boolean temAtraso = reg.getTemAtraso() != null && reg.getTemAtraso();
+                boolean atrasoAutorizado = reg.getAtrasoAutorizado() != null && reg.getAtrasoAutorizado();
 
                 if (!isFalta && !isJustificado) totalDias++;
-                if (temAtraso) totalAtrasos++;
+                if (temAtraso && !atrasoAutorizado) totalAtrasos++;
                 if (isFalta && !isJustificado) totalFaltas++;
                 if (reg.getRegMinutosTrabalhados() != null) totalMinutos += reg.getRegMinutosTrabalhados();
                 if (reg.getRegMinutosNoturno() != null) totalNoturno += reg.getRegMinutosNoturno();
+
+                String cssClass = "";
+                if (temAtraso && !atrasoAutorizado) cssClass = "alerta";
+                else if (isFalta) cssClass = "falta";
+                else if (isJustificado) cssClass = "autorizado";
         %>
-        <div class="relatorio-item <%= temAtraso ? "alerta" : (isFalta ? "falta" : "") %>">
+        <div class="relatorio-item <%= cssClass %>">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                 <strong style="font-size: 16px;"><%= new SimpleDateFormat("dd/MM/yyyy").format(reg.getRegData()) %> - <%= reg.getDiaSemanaTexto() %></strong>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <span class="badge <%= isFalta ? "badge-warning" : (isJustificado ? "badge-info" : (temAtraso ? "badge-danger" : "badge-success")) %>"><%= reg.getStatusDia() %></span>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <span class="badge <%= isFalta ? "badge-warning" : (isJustificado ? "badge-info" : (temAtraso && !atrasoAutorizado ? "badge-danger" : "badge-success")) %>">
+                        <%= reg.getStatusDia() %>
+                    </span>
 
-                    <% if (!isFalta) { %>
+                    <% if (reg.getJustTipo() != null && reg.getJustDescricao() != null && !reg.getJustDescricao().trim().isEmpty()) { %>
+                    <span class="motivo-abono" title="<%= reg.getJustDescricao() %>">
+                            📝 <%= reg.getJustDescricao().length() > 20 ? reg.getJustDescricao().substring(0, 20) + "..." : reg.getJustDescricao() %>
+                        </span>
+                    <% } %>
+
+                    <% if (!isFalta && !isJustificado) { %>
                     <button onclick="editarRegistro(<%= reg.getRegId() %>, '<%= new SimpleDateFormat("yyyy-MM-dd").format(reg.getRegData()) %>')" class="btn btn-secondary btn-sm" title="Editar">✏️</button>
+
+                    <!-- Botão Marcar Atraso - aparece em TODOS os registros -->
+                    <% if (reg.getRegEntrada() != null) { %>
+                    <% if (!atrasoAutorizado) { %>
+                    <button onclick="marcarAtraso(<%= reg.getRegId() %>, <%= reg.getFuncId() %>, '<%= new SimpleDateFormat("yyyy-MM-dd").format(reg.getRegData()) %>')" class="btn btn-warning btn-sm" title="Marcar como Atraso">⏰ Atraso</button>
+                    <% } else { %>
+                    <button onclick="autorizarAtraso(<%= reg.getRegId() %>, false)" class="btn btn-success btn-sm" title="Remover Marcação de Atraso">✅ Sem Atraso</button>
+                    <% } %>
+                    <% } %>
                     <% } %>
 
                     <% if (isFalta && !isJustificado) { %>
@@ -207,6 +236,12 @@
                 <div><span style="color: #999;">Saída Intervalo:</span> <strong><%= reg.getRegSaidaIntervalo() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegSaidaIntervalo()) : "-" %></strong></div>
                 <div><span style="color: #999;">Retorno Intervalo:</span> <strong><%= reg.getRegRetornoIntervalo() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegRetornoIntervalo()) : "-" %></strong></div>
                 <div><span style="color: #999;">Saída:</span> <strong><%= reg.getRegSaida() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegSaida()) : "-" %></strong></div>
+                <% if (reg.getRegMinutosTrabalhados() != null && reg.getRegMinutosTrabalhados() > 0) { %>
+                <div><span style="color: #999;">Horas Trabalhadas:</span> <strong style="color: #4ade80;"><%= reg.getHorasTrabalhadasFormatado() %></strong></div>
+                <% } %>
+                <% if (temAtraso && reg.getRegMinutosAtraso() > 0) { %>
+                <div><span style="color: #999;">Atraso:</span> <strong style="color: <%= atrasoAutorizado ? "#0288d1" : "#ff6b6b" %>;"><%= reg.getAtrasoFormatado() %> <%= atrasoAutorizado ? "(Autorizado)" : "" %></strong></div>
+                <% } %>
             </div>
             <% } %>
         </div>
@@ -246,7 +281,6 @@
     </form>
 </div></div>
 
-
 <div id="modalAbonar" class="modal"><div class="modal-content">
     <div class="modal-header"><h3>✅ Abonar Falta</h3><span class="close" onclick="fecharModal('modalAbonar')">&times;</span></div>
     <form action="<%= request.getContextPath() %>/ponto" method="post">
@@ -254,9 +288,12 @@
         <input type="hidden" name="dataInicio" id="abonarDataInicio"><input type="hidden" name="dataFim" id="abonarDataFim">
         <label>Tipo de Justificativa *</label>
         <select name="tipo" required>
-            <option value="feriado">Feriado</option><option value="folga">Folga</option><option value="atestado">Atestado Médico</option>
+            <option value="feriado">Feriado</option>
+            <option value="folga">Folga</option>
+            <option value="atestado">Atestado Médico</option>
+            <option value="autorizado">Autorizado</option>
         </select>
-        <label>Observação</label><textarea name="descricao" rows="3"></textarea>
+        <label>Observação</label><textarea name="descricao" rows="3" placeholder="Ex: Feriado municipal, Atestado apresentado, etc."></textarea>
         <button type="submit" class="btn btn-primary" style="width: 100%;">Confirmar Abono</button>
     </form>
 </div></div>
@@ -278,48 +315,34 @@
         <button type="submit" class="btn btn-primary" style="width: 100%;">Salvar Alterações</button>
     </form>
 </div></div>
-<div id="modalResumo" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>📈 Resumo Mensal</h3>
-            <span class="close" onclick="fecharModal('modalResumo')">&times;</span>
+
+<div id="modalMarcarAtraso" class="modal"><div class="modal-content">
+    <div class="modal-header"><h3>⏰ Marcar Atraso</h3><span class="close" onclick="fecharModal('modalMarcarAtraso')">&times;</span></div>
+    <form action="<%= request.getContextPath() %>/ponto" method="post">
+        <input type="hidden" name="acao" value="marcar-atraso">
+        <input type="hidden" name="regId" id="atrasoRegId">
+        <input type="hidden" name="funcIdRet" id="atrasoFuncId">
+        <input type="hidden" name="dataRet" id="atrasoData">
+        <input type="hidden" name="dataInicioRet" id="atrasoDataInicio">
+        <input type="hidden" name="dataFimRet" id="atrasoDataFim">
+
+        <label>Minutos de Atraso *</label>
+        <input type="number" name="minutosAtraso" id="minutosAtraso" min="0" max="480" placeholder="Ex: 15" required>
+        <small style="color: #999;">Informe quantos minutos o funcionário se atrasou</small>
+
+        <label style="margin-top: 20px;">Este atraso será:</label>
+        <div style="display: flex; gap: 15px; margin: 10px 0;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="radio" name="tipoAtraso" value="nao-autorizado" checked> Não Autorizado (conta no relatório)
+            </label>
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="radio" name="tipoAtraso" value="autorizado"> Autorizado (não conta)
+            </label>
         </div>
-        <form action="../ponto" method="post">
-            <input type="hidden" name="acao" value="resumo-mensal">
-            <label>Funcionário *</label>
-            <select name="funcId" required>
-                <option value="">Selecione...</option>
-                <% for (Ponto f : funcionarios) { %>
-                <option value="<%= f.getFuncId() %>"><%= f.getFuncNome() %></option>
-                <% } %>
-            </select>
-            <div class="form-row">
-                <div>
-                    <label>Mês *</label>
-                    <select name="mes" id="mesResumo" required>
-                        <option value="1">Janeiro</option>
-                        <option value="2">Fevereiro</option>
-                        <option value="3">Março</option>
-                        <option value="4">Abril</option>
-                        <option value="5">Maio</option>
-                        <option value="6">Junho</option>
-                        <option value="7">Julho</option>
-                        <option value="8">Agosto</option>
-                        <option value="9">Setembro</option>
-                        <option value="10">Outubro</option>
-                        <option value="11">Novembro</option>
-                        <option value="12">Dezembro</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Ano *</label>
-                    <input type="number" name="ano" id="anoResumo" value="2025" min="2020" max="2030" required>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Gerar Resumo</button>
-        </form>
-    </div>
-</div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Confirmar Atraso</button>
+    </form>
+</div></div>
 
 <script>
     function abrirModal(id) { document.getElementById(id).style.display = 'block'; }
@@ -351,6 +374,62 @@
         document.getElementById('editRegId').value = regId;
         document.getElementById('editData').value = data;
         abrirModal('modalEditarReg');
+    }
+
+    function marcarAtraso(regId, funcId, data) {
+        document.getElementById('atrasoRegId').value = regId;
+        document.getElementById('atrasoFuncId').value = funcId;
+        document.getElementById('atrasoData').value = data;
+        document.getElementById('atrasoDataInicio').value = document.getElementById('dataInicioRel') ? document.getElementById('dataInicioRel').value : '';
+        document.getElementById('atrasoDataFim').value = document.getElementById('dataFimRel') ? document.getElementById('dataFimRel').value : '';
+        document.getElementById('minutosAtraso').value = '';
+        abrirModal('modalMarcarAtraso');
+    }
+
+    function autorizarAtraso(regId, autorizar) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '<%= request.getContextPath() %>/ponto';
+
+        const acaoInput = document.createElement('input');
+        acaoInput.type = 'hidden';
+        acaoInput.name = 'acao';
+        acaoInput.value = 'autorizar-atraso';
+        form.appendChild(acaoInput);
+
+        const regIdInput = document.createElement('input');
+        regIdInput.type = 'hidden';
+        regIdInput.name = 'regId';
+        regIdInput.value = regId;
+        form.appendChild(regIdInput);
+
+        const autorizarInput = document.createElement('input');
+        autorizarInput.type = 'hidden';
+        autorizarInput.name = 'autorizar';
+        autorizarInput.value = autorizar;
+        form.appendChild(autorizarInput);
+
+        // Campos para redirecionar de volta ao relatório
+        const funcIdInput = document.createElement('input');
+        funcIdInput.type = 'hidden';
+        funcIdInput.name = 'funcIdRet';
+        funcIdInput.value = '<%= funcSelecionado != null ? funcSelecionado.getFuncId() : "" %>';
+        form.appendChild(funcIdInput);
+
+        const dataInicioInput = document.createElement('input');
+        dataInicioInput.type = 'hidden';
+        dataInicioInput.name = 'dataInicioRet';
+        dataInicioInput.value = document.getElementById('dataInicioRel') ? document.getElementById('dataInicioRel').value : '';
+        form.appendChild(dataInicioInput);
+
+        const dataFimInput = document.createElement('input');
+        dataFimInput.type = 'hidden';
+        dataFimInput.name = 'dataFimRet';
+        dataFimInput.value = document.getElementById('dataFimRel') ? document.getElementById('dataFimRel').value : '';
+        form.appendChild(dataFimInput);
+
+        document.body.appendChild(form);
+        form.submit();
     }
 
     document.addEventListener('DOMContentLoaded', function() {

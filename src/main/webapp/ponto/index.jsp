@@ -17,7 +17,7 @@
             padding: 20px;
         }
         .card {
-            background: #1a1a1a;
+            background: #000000;
             border-radius: 20px;
             padding: 40px;
             width: 100%;
@@ -62,7 +62,7 @@
         }
         .tipo-btn.active {
             background: #daa520;
-            color: #1a1a1a;
+            color: #000000;
             border-color: #daa520;
         }
         label {
@@ -98,7 +98,7 @@
             margin-top: 25px;
             transition: all 0.3s;
             background: #daa520;
-            color: #1a1a1a;
+            color: #000000;
         }
         .btn:hover {
             background: #e09543;

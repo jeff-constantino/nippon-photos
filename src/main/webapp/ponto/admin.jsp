@@ -11,13 +11,13 @@
         body { font-family: 'Segoe UI', sans-serif; background: #daa520; padding: 20px; }
         .container { max-width: 1600px; margin: 0 auto; }
         .header {
-            background: #1a1a1a; color: white; padding: 20px 30px; border-radius: 15px;
+            background: #000000; color: white; padding: 20px 30px; border-radius: 15px;
             margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
         h1 { color: #daa520; font-size: 28px; font-weight: 700; }
         .card {
-            background: #1a1a1a; border-radius: 15px; padding: 25px; margin-bottom: 20px;
+            background: #000000; border-radius: 15px; padding: 25px; margin-bottom: 20px;
             color: white; box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
         .card h2 {
@@ -28,7 +28,7 @@
             padding: 12px 24px; border: none; border-radius: 10px; font-size: 15px;
             font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 5px;
         }
-        .btn-primary { background: #daa520; color: #1a1a1a; }
+        .btn-primary { background: #daa520; color: #000000; }
         .btn-primary:hover { background: #e09543; transform: translateY(-1px); }
         .btn-secondary { background: #333; color: white; }
         .btn-secondary:hover { background: #444; }
@@ -54,7 +54,7 @@
             width: 100%; height: 100%; background: rgba(0,0,0,0.75); overflow-y: auto;
         }
         .modal-content {
-            background: #1a1a1a; margin: 50px auto; padding: 30px; border-radius: 15px;
+            background: #000000; margin: 50px auto; padding: 30px; border-radius: 15px;
             width: 90%; max-width: 700px; color: white; max-height: 85vh; overflow-y: auto;
         }
         .modal-header {

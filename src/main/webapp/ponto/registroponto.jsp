@@ -20,7 +20,7 @@
             padding: 20px;
         }
         .card {
-            background: #1a1a1a;
+            background: #000000;
             border-radius: 20px;
             padding: 35px;
             width: 100%;
@@ -51,7 +51,7 @@
             margin: 12px 0;
             transition: all 0.3s;
         }
-        .btn-primary { background: #daa520; color: #1a1a1a; }
+        .btn-primary { background: #daa520; color: #000000; }
         .btn-primary:hover { background: #e09543; transform: translateY(-2px); box-shadow: 0 5px 20px rgba(242, 166, 84, 0.4); }
         .btn-secondary { background: #333; color: white; }
         .btn-secondary:hover { background: #444; }

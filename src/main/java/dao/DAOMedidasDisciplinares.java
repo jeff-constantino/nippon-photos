@@ -1,9 +1,7 @@
 package dao;
 
 import connection.SingleConnectionBanco;
-import model.ModelAdvertencia;
-import model.ModelFaltas;
-import model.ModelSuspensao;
+import model.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +9,9 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Date;
 import java.time.LocalDate;
-import model.ModelCondutaResumo;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("ALL")
 public class DAOMedidasDisciplinares {
@@ -126,6 +126,195 @@ public class DAOMedidasDisciplinares {
         }
 
         return resumo;
+    }
+// ADICIONE ESTES MÉTODOS À CLASSE DAOMedidasDisciplinares
+
+    /**
+     * Busca todas as medidas disciplinares de um funcionário em um período
+     * Retorna advertências, faltas e suspensões unificadas
+     */
+    public List<ModelMedidasDisciplinaresCompleto> buscarMedidasPorFuncionarioEPeriodo(
+            Long funcionarioId, LocalDate dataInicial, LocalDate dataFinal) throws SQLException {
+
+        List<ModelMedidasDisciplinaresCompleto> listaMedidas = new ArrayList<>();
+
+        // --- ADVERTÊNCIAS ---
+        String sqlAdv = "SELECT id_advertencia, funcionario_id, nome_funcionario, data_advertencia, motivo " +
+                "FROM advertencias " +
+                "WHERE funcionario_id = ? AND data_advertencia BETWEEN ? AND ? " +
+                "ORDER BY data_advertencia DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sqlAdv)) {
+            stmt.setLong(1, funcionarioId);
+            stmt.setDate(2, java.sql.Date.valueOf(dataInicial));
+            stmt.setDate(3, java.sql.Date.valueOf(dataFinal));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ModelMedidasDisciplinaresCompleto medida = new ModelMedidasDisciplinaresCompleto();
+                    medida.setId(rs.getLong("id_advertencia"));
+                    medida.setFuncionarioId(rs.getLong("funcionario_id"));
+                    medida.setNomeFuncionario(rs.getString("nome_funcionario"));
+                    medida.setTipoMedida("ADVERTÊNCIA");
+                    medida.setDataMedida(rs.getDate("data_advertencia"));
+                    medida.setMotivo(rs.getString("motivo"));
+                    listaMedidas.add(medida);
+                }
+            }
+        }
+
+        // --- FALTAS ---
+        String sqlFaltas = "SELECT id_falta, funcionario_id, nome_funcionario, data_falta, " +
+                "observacoes, dias_falta, dsr_falta " +
+                "FROM faltas " +
+                "WHERE funcionario_id = ? AND data_falta BETWEEN ? AND ? " +
+                "ORDER BY data_falta DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sqlFaltas)) {
+            stmt.setLong(1, funcionarioId);
+            stmt.setDate(2, java.sql.Date.valueOf(dataInicial));
+            stmt.setDate(3, java.sql.Date.valueOf(dataFinal));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ModelMedidasDisciplinaresCompleto medida = new ModelMedidasDisciplinaresCompleto();
+                    medida.setId(rs.getLong("id_falta"));
+                    medida.setFuncionarioId(rs.getLong("funcionario_id"));
+                    medida.setNomeFuncionario(rs.getString("nome_funcionario"));
+                    medida.setTipoMedida("FALTA");
+                    medida.setDataMedida(rs.getDate("data_falta"));
+                    medida.setMotivo(rs.getString("observacoes"));
+                    medida.setDias(rs.getInt("dias_falta"));
+                    medida.setDsr(rs.getInt("dsr_falta"));
+                    listaMedidas.add(medida);
+                }
+            }
+        }
+
+        // --- SUSPENSÕES ---
+        String sqlSusp = "SELECT id_suspensao, funcionario_id, nome_funcionario, data_suspensao, " +
+                "motivo, dias, dsr " +
+                "FROM suspensao " +
+                "WHERE funcionario_id = ? AND data_suspensao BETWEEN ? AND ? " +
+                "ORDER BY data_suspensao DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sqlSusp)) {
+            stmt.setLong(1, funcionarioId);
+            stmt.setDate(2, java.sql.Date.valueOf(dataInicial));
+            stmt.setDate(3, java.sql.Date.valueOf(dataFinal));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ModelMedidasDisciplinaresCompleto medida = new ModelMedidasDisciplinaresCompleto();
+                    medida.setId(rs.getLong("id_suspensao"));
+                    medida.setFuncionarioId(rs.getLong("funcionario_id"));
+                    medida.setNomeFuncionario(rs.getString("nome_funcionario"));
+                    medida.setTipoMedida("SUSPENSÃO");
+                    medida.setDataMedida(rs.getDate("data_suspensao"));
+                    medida.setMotivo(rs.getString("motivo"));
+                    medida.setDias(rs.getInt("dias"));
+                    medida.setDsr(rs.getInt("dsr"));
+                    listaMedidas.add(medida);
+                }
+            }
+        }
+
+        // Ordena por data decrescente
+        listaMedidas.sort((m1, m2) -> m2.getDataMedida().compareTo(m1.getDataMedida()));
+
+        return listaMedidas;
+    }
+
+    /**
+     * Busca todas as medidas disciplinares de todos os funcionários em um período
+     */
+    public List<ModelMedidasDisciplinaresCompleto> buscarTodasMedidasPorPeriodo(
+            LocalDate dataInicial, LocalDate dataFinal) throws SQLException {
+
+        List<ModelMedidasDisciplinaresCompleto> listaMedidas = new ArrayList<>();
+
+        // --- ADVERTÊNCIAS ---
+        String sqlAdv = "SELECT id_advertencia, funcionario_id, nome_funcionario, data_advertencia, motivo " +
+                "FROM advertencias " +
+                "WHERE data_advertencia BETWEEN ? AND ? " +
+                "ORDER BY data_advertencia DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sqlAdv)) {
+            stmt.setDate(1, java.sql.Date.valueOf(dataInicial));
+            stmt.setDate(2, java.sql.Date.valueOf(dataFinal));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ModelMedidasDisciplinaresCompleto medida = new ModelMedidasDisciplinaresCompleto();
+                    medida.setId(rs.getLong("id_advertencia"));
+                    medida.setFuncionarioId(rs.getLong("funcionario_id"));
+                    medida.setNomeFuncionario(rs.getString("nome_funcionario"));
+                    medida.setTipoMedida("ADVERTÊNCIA");
+                    medida.setDataMedida(rs.getDate("data_advertencia"));
+                    medida.setMotivo(rs.getString("motivo"));
+                    listaMedidas.add(medida);
+                }
+            }
+        }
+
+        // --- FALTAS ---
+        String sqlFaltas = "SELECT id_falta, funcionario_id, nome_funcionario, data_falta, " +
+                "observacoes, dias_falta, dsr_falta " +
+                "FROM faltas " +
+                "WHERE data_falta BETWEEN ? AND ? " +
+                "ORDER BY data_falta DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sqlFaltas)) {
+            stmt.setDate(1, java.sql.Date.valueOf(dataInicial));
+            stmt.setDate(2, java.sql.Date.valueOf(dataFinal));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ModelMedidasDisciplinaresCompleto medida = new ModelMedidasDisciplinaresCompleto();
+                    medida.setId(rs.getLong("id_falta"));
+                    medida.setFuncionarioId(rs.getLong("funcionario_id"));
+                    medida.setNomeFuncionario(rs.getString("nome_funcionario"));
+                    medida.setTipoMedida("FALTA");
+                    medida.setDataMedida(rs.getDate("data_falta"));
+                    medida.setMotivo(rs.getString("observacoes"));
+                    medida.setDias(rs.getInt("dias_falta"));
+                    medida.setDsr(rs.getInt("dsr_falta"));
+                    listaMedidas.add(medida);
+                }
+            }
+        }
+
+        // --- SUSPENSÕES ---
+        String sqlSusp = "SELECT id_suspensao, funcionario_id, nome_funcionario, data_suspensao, " +
+                "motivo, dias, dsr " +
+                "FROM suspensao " +
+                "WHERE data_suspensao BETWEEN ? AND ? " +
+                "ORDER BY data_suspensao DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sqlSusp)) {
+            stmt.setDate(1, java.sql.Date.valueOf(dataInicial));
+            stmt.setDate(2, java.sql.Date.valueOf(dataFinal));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ModelMedidasDisciplinaresCompleto medida = new ModelMedidasDisciplinaresCompleto();
+                    medida.setId(rs.getLong("id_suspensao"));
+                    medida.setFuncionarioId(rs.getLong("funcionario_id"));
+                    medida.setNomeFuncionario(rs.getString("nome_funcionario"));
+                    medida.setTipoMedida("SUSPENSÃO");
+                    medida.setDataMedida(rs.getDate("data_suspensao"));
+                    medida.setMotivo(rs.getString("motivo"));
+                    medida.setDias(rs.getInt("dias"));
+                    medida.setDsr(rs.getInt("dsr"));
+                    listaMedidas.add(medida);
+                }
+            }
+        }
+
+        // Ordena por data decrescente
+        listaMedidas.sort((m1, m2) -> m2.getDataMedida().compareTo(m1.getDataMedida()));
+
+        return listaMedidas;
     }
 
 

@@ -242,6 +242,89 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <!-- ADICIONE ESTE BLOCO NA PÁGINA salarios.jsp, LOGO APÓS A SEÇÃO DE HISTÓRICO DE CONDUTA -->
+
+                                                            <div class="row">
+                                                                <div class="col-12 grid-margin">
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <h4 class="card-title" style="text-align: center; color: #f2a654">
+                                                                                DETALHAMENTO DAS MEDIDAS DISCIPLINARES
+                                                                            </h4>
+
+                                                                            <c:choose>
+                                                                                <c:when test="${not empty listaMedidasDisciplinares}">
+                                                                                    <div class="table-responsive">
+                                                                                        <table class="table table-hover table-striped">
+                                                                                            <thead style="background-color: #2c2c2c;">
+                                                                                            <tr>
+                                                                                                <th style="color: #f2a654">DATA</th>
+                                                                                                <th style="color: #f2a654">TIPO</th>
+                                                                                                <th style="color: #f2a654">DIAS</th>
+                                                                                                <th style="color: #f2a654">DSR</th>
+                                                                                                <th style="color: #f2a654">MOTIVO/OBSERVAÇÃO</th>
+                                                                                            </tr>
+                                                                                            </thead>
+                                                                                            <tbody>
+                                                                                            <c:forEach var="medida" items="${listaMedidasDisciplinares}">
+                                                                                                <tr>
+                                                                                                    <td style="color: white; font-weight: bold;">
+                                                                                                        <fmt:formatDate value="${medida.dataMedida}" pattern="dd/MM/yyyy"/>
+                                                                                                    </td>
+                                                                                                    <td>
+                                                                                                        <c:choose>
+                                                                                                            <c:when test="${medida.tipoMedida == 'ADVERTÊNCIA'}">
+                                                                                                                <span class="badge badge-warning">${medida.tipoMedida}</span>
+                                                                                                            </c:when>
+                                                                                                            <c:when test="${medida.tipoMedida == 'FALTA'}">
+                                                                                                                <span class="badge badge-light">${medida.tipoMedida}</span>
+                                                                                                            </c:when>
+                                                                                                            <c:when test="${medida.tipoMedida == 'SUSPENSÃO'}">
+                                                                                                                <span class="badge badge-danger">${medida.tipoMedida}</span>
+                                                                                                            </c:when>
+                                                                                                        </c:choose>
+                                                                                                    </td>
+                                                                                                    <td style="color: white; text-align: center;">
+                                                                                                        <c:choose>
+                                                                                                            <c:when test="${medida.dias != null && medida.dias > 0}">
+                                                                                                                ${medida.dias}
+                                                                                                            </c:when>
+                                                                                                            <c:otherwise>
+                                                                                                                -
+                                                                                                            </c:otherwise>
+                                                                                                        </c:choose>
+                                                                                                    </td>
+                                                                                                    <td style="color: white; text-align: center;">
+                                                                                                        <c:choose>
+                                                                                                            <c:when test="${medida.dsr != null && medida.dsr > 0}">
+                                                                                                                ${medida.dsr}
+                                                                                                            </c:when>
+                                                                                                            <c:otherwise>
+                                                                                                                -
+                                                                                                            </c:otherwise>
+                                                                                                        </c:choose>
+                                                                                                    </td>
+                                                                                                    <td style="color: white;">
+                                                                                                            ${medida.motivo}
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </c:forEach>
+                                                                                            </tbody>
+                                                                                        </table>
+                                                                                    </div>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <div class="alert alert-info text-center" role="alert">
+                                                                                        <i class="mdi mdi-information"></i>
+                                                                                        Nenhuma medida disciplinar registrada no período selecionado.
+                                                                                    </div>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
 
                                                             <!-- DESCONTOS DISCIPLINARES -->
                                                             <div class="card mb-3">

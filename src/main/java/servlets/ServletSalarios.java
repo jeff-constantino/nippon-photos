@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
+import model.ModelMedidasDisciplinaresCompleto;
 
 @WebServlet("/ServletSalarios")
 public class ServletSalarios extends ServletGenericUtil { // Mantenha o nome da sua classe
@@ -113,6 +114,11 @@ public class ServletSalarios extends ServletGenericUtil { // Mantenha o nome da 
                 DAOMedidasDisciplinares daoCondutas = new DAOMedidasDisciplinares();
                 ModelCondutaResumo resumoConduta = daoCondutas.buscarResumoConduta(funcId, dataIni, dataFin);
                 request.setAttribute("resumoConduta", resumoConduta);
+                // Busca medidas disciplinares detalhadas
+                DAOMedidasDisciplinares daoMedidas = new DAOMedidasDisciplinares();
+                List<ModelMedidasDisciplinaresCompleto> listaMedidas =
+                        daoMedidas.buscarMedidasPorFuncionarioEPeriodo(funcId, dataIni, dataFin);
+                request.setAttribute("listaMedidasDisciplinares", listaMedidas);
 
                 int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
                 int resultadosPorPagina = 10;

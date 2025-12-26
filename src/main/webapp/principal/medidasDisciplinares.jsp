@@ -557,20 +557,172 @@
                         </div>
                     </div>
                 </div>
-                <div class="row ">
+                <!-- ADICIONE ESTE BLOCO NA PÁGINA medidasDisciplinares.jsp -->
+                <!-- PODE SER LOGO APÓS OS 3 CARDS DE ADVERTÊNCIA, FALTA E SUSPENSÃO -->
+
+                <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Histórico Disciplinar</h4>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <!-- INSERIR INFORMAÇÕES PAGINA INICIAL AQUI-->
-                                    </table>
+                                <!-- FORMULÁRIO DE BUSCA -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <h4 class="card-title" style="color: #f2a654">CONSULTAR MEDIDAS DISCIPLINARES</h4>
+                                    </div>
                                 </div>
+
+                                <form action="<%= request.getContextPath() %>/ServletMedidasDisciplinares" method="get" id="formBuscaMedidas">
+                                    <input type="hidden" name="acao" value="buscarMedidas">
+
+                                    <div class="row align-items-end">
+                                        <div class="col-auto">
+                                            <label for="dataInicialBusca">Data Inicial</label>
+                                            <input type="date" class="form-control" id="dataInicialBusca" name="dataInicial"
+                                                   value="${dataInicial}" required>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <label for="dataFinalBusca">Data Final</label>
+                                            <input type="date" class="form-control" id="dataFinalBusca" name="dataFinal"
+                                                   value="${dataFinal}" required>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <label for="funcionarioIdBusca">Funcionário (Opcional)</label>
+                                            <select class="form-control" id="funcionarioIdBusca" name="funcionarioId">
+                                                <option value="">TODOS</option>
+                                                <c:forEach var="funcionario" items="${funcionarios}">
+                                                    <c:if test="${funcionario.status == 'ATIVO'}">
+                                                        <option value="${funcionario.id}" class="text-success"
+                                                                <c:if test="${funcionario.id == funcionarioIdSelecionado}">selected</c:if>>
+                                                                ${funcionario.nome}
+                                                        </option>
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:forEach var="funcionario" items="${funcionarios}">
+                                                    <c:if test="${funcionario.status != 'ATIVO'}">
+                                                        <option value="${funcionario.id}" class="text-danger"
+                                                                <c:if test="${funcionario.id == funcionarioIdSelecionado}">selected</c:if>>
+                                                                ${funcionario.nome}
+                                                        </option>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="mdi mdi-magnify"></i> BUSCAR
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- TABELA DE RESULTADOS -->
+                <c:if test="${not empty listaMedidasDisciplinares}">
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title" style="text-align: center; color: #f2a654">
+                                        RESULTADOS DA BUSCA
+                                        <span class="badge badge-info" style="font-size: 0.9em; margin-left: 10px;">
+                            ${listaMedidasDisciplinares.size()} registro(s)
+                        </span>
+                                    </h4>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-striped">
+                                            <thead style="background-color: #2c2c2c;">
+                                            <tr>
+                                                <th style="color: #f2a654">FUNCIONÁRIO</th>
+                                                <th style="color: #f2a654">DATA</th>
+                                                <th style="color: #f2a654">TIPO</th>
+                                                <th style="color: #f2a654">DIAS</th>
+                                                <th style="color: #f2a654">DSR</th>
+                                                <th style="color: #f2a654">MOTIVO/OBSERVAÇÃO</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:forEach var="medida" items="${listaMedidasDisciplinares}">
+                                                <tr>
+                                                    <td style="color: white; font-weight: bold;">
+                                                            ${medida.nomeFuncionario}
+                                                    </td>
+                                                    <td style="color: white;">
+                                                        <fmt:formatDate value="${medida.dataMedida}" pattern="dd/MM/yyyy"/>
+                                                    </td>
+                                                    <td>
+                                                        <c:choose>
+                                                            <c:when test="${medida.tipoMedida == 'ADVERTÊNCIA'}">
+                                                                <span class="badge badge-warning">${medida.tipoMedida}</span>
+                                                            </c:when>
+                                                            <c:when test="${medida.tipoMedida == 'FALTA'}">
+                                                                <span class="badge badge-light">${medida.tipoMedida}</span>
+                                                            </c:when>
+                                                            <c:when test="${medida.tipoMedida == 'SUSPENSÃO'}">
+                                                                <span class="badge badge-danger">${medida.tipoMedida}</span>
+                                                            </c:when>
+                                                        </c:choose>
+                                                    </td>
+                                                    <td style="color: white; text-align: center;">
+                                                        <c:choose>
+                                                            <c:when test="${medida.dias != null && medida.dias > 0}">
+                                                                <strong>${medida.dias}</strong>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                -
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+                                                    <td style="color: white; text-align: center;">
+                                                        <c:choose>
+                                                            <c:when test="${medida.dsr != null && medida.dsr > 0}">
+                                                                <strong>${medida.dsr}</strong>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                -
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+                                                    <td style="color: white;">
+                                                            ${medida.motivo}
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </c:if>
+
+                <!-- SUBSTITUA O BLOCO ANTIGO "Histórico Disciplinar" POR ESTE -->
+                <!-- O BLOCO ORIGINAL TINHA UMA TABELA VAZIA, AGORA MOSTRARÁ OS RESULTADOS DA BUSCA -->
+
+                <script>
+                    // Inicializar datas com primeiro e último dia do mês atual
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const dataInicialInput = document.getElementById('dataInicialBusca');
+                        const dataFinalInput = document.getElementById('dataFinalBusca');
+
+                        if (!dataInicialInput.value) {
+                            const hoje = new Date();
+                            const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+                            const ultimoDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+
+                            dataInicialInput.value = primeiroDia.toISOString().split('T')[0];
+                            dataFinalInput.value = ultimoDia.toISOString().split('T')[0];
+                        }
+                    });
+                </script>
+
 
 
             </div>

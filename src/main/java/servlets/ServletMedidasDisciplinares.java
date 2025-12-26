@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.time.LocalDate;
+import model.ModelMedidasDisciplinaresCompleto;
 
 @SuppressWarnings("ALL")
 @WebServlet("/ServletMedidasDisciplinares")
@@ -29,15 +31,45 @@ public class ServletMedidasDisciplinares extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String acao = request.getParameter("acao");
+        String dataInicial = request.getParameter("dataInicial");
+        String dataFinal = request.getParameter("dataFinal");
+        String funcionarioId = request.getParameter("funcionarioId");
+
         try {
             DAOFuncionario daoFuncionario = new DAOFuncionario();
             List<ModelLogin> funcionarios = daoFuncionario.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);
 
+            // Se for uma ação de busca
+            if ("buscarMedidas".equals(acao) && dataInicial != null && dataFinal != null) {
+                DAOMedidasDisciplinares daoMedidas = new DAOMedidasDisciplinares();
+                LocalDate dataIni = LocalDate.parse(dataInicial);
+                LocalDate dataFin = LocalDate.parse(dataFinal);
+
+                List<ModelMedidasDisciplinaresCompleto> listaMedidas;
+
+                if (funcionarioId != null && !funcionarioId.isEmpty()) {
+                    // Busca por funcionário específico
+                    Long funcId = Long.parseLong(funcionarioId);
+                    listaMedidas = daoMedidas.buscarMedidasPorFuncionarioEPeriodo(funcId, dataIni, dataFin);
+                    request.setAttribute("funcionarioIdSelecionado", funcionarioId);
+                } else {
+                    // Busca todas as medidas do período
+                    listaMedidas = daoMedidas.buscarTodasMedidasPorPeriodo(dataIni, dataFin);
+                }
+
+                request.setAttribute("listaMedidasDisciplinares", listaMedidas);
+                request.setAttribute("dataInicial", dataInicial);
+                request.setAttribute("dataFinal", dataFinal);
+            }
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/medidasDisciplinares.jsp");
             dispatcher.forward(request, response);
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("msg", "Erro ao processar a solicitação: " + e.getMessage());

@@ -127,8 +127,6 @@ public class DAOMedidasDisciplinares {
 
         return resumo;
     }
-// ADICIONE ESTES MÉTODOS À CLASSE DAOMedidasDisciplinares
-
     /**
      * Busca todas as medidas disciplinares de um funcionário em um período
      * Retorna advertências, faltas e suspensões unificadas
@@ -139,7 +137,8 @@ public class DAOMedidasDisciplinares {
         List<ModelMedidasDisciplinaresCompleto> listaMedidas = new ArrayList<>();
 
         // --- ADVERTÊNCIAS ---
-        String sqlAdv = "SELECT id_advertencia, funcionario_id, nome_funcionario, data_advertencia, motivo " +
+        // CORRIGIDO: id_advertencia -> id
+        String sqlAdv = "SELECT id, funcionario_id, nome_funcionario, data_advertencia, motivo " +
                 "FROM advertencias " +
                 "WHERE funcionario_id = ? AND data_advertencia BETWEEN ? AND ? " +
                 "ORDER BY data_advertencia DESC";
@@ -152,7 +151,7 @@ public class DAOMedidasDisciplinares {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     ModelMedidasDisciplinaresCompleto medida = new ModelMedidasDisciplinaresCompleto();
-                    medida.setId(rs.getLong("id_advertencia"));
+                    medida.setId(rs.getLong("id"));  // CORRIGIDO
                     medida.setFuncionarioId(rs.getLong("funcionario_id"));
                     medida.setNomeFuncionario(rs.getString("nome_funcionario"));
                     medida.setTipoMedida("ADVERTÊNCIA");
@@ -164,7 +163,8 @@ public class DAOMedidasDisciplinares {
         }
 
         // --- FALTAS ---
-        String sqlFaltas = "SELECT id_falta, funcionario_id, nome_funcionario, data_falta, " +
+        // CORRIGIDO: id_falta -> id
+        String sqlFaltas = "SELECT id, funcionario_id, nome_funcionario, data_falta, " +
                 "observacoes, dias_falta, dsr_falta " +
                 "FROM faltas " +
                 "WHERE funcionario_id = ? AND data_falta BETWEEN ? AND ? " +
@@ -178,7 +178,7 @@ public class DAOMedidasDisciplinares {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     ModelMedidasDisciplinaresCompleto medida = new ModelMedidasDisciplinaresCompleto();
-                    medida.setId(rs.getLong("id_falta"));
+                    medida.setId(rs.getLong("id"));  // CORRIGIDO
                     medida.setFuncionarioId(rs.getLong("funcionario_id"));
                     medida.setNomeFuncionario(rs.getString("nome_funcionario"));
                     medida.setTipoMedida("FALTA");
@@ -192,7 +192,8 @@ public class DAOMedidasDisciplinares {
         }
 
         // --- SUSPENSÕES ---
-        String sqlSusp = "SELECT id_suspensao, funcionario_id, nome_funcionario, data_suspensao, " +
+        // CORRIGIDO: id_suspensao -> id
+        String sqlSusp = "SELECT id, funcionario_id, nome_funcionario, data_suspensao, " +
                 "motivo, dias, dsr " +
                 "FROM suspensao " +
                 "WHERE funcionario_id = ? AND data_suspensao BETWEEN ? AND ? " +
@@ -206,7 +207,7 @@ public class DAOMedidasDisciplinares {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     ModelMedidasDisciplinaresCompleto medida = new ModelMedidasDisciplinaresCompleto();
-                    medida.setId(rs.getLong("id_suspensao"));
+                    medida.setId(rs.getLong("id"));  // CORRIGIDO
                     medida.setFuncionarioId(rs.getLong("funcionario_id"));
                     medida.setNomeFuncionario(rs.getString("nome_funcionario"));
                     medida.setTipoMedida("SUSPENSÃO");
@@ -234,7 +235,8 @@ public class DAOMedidasDisciplinares {
         List<ModelMedidasDisciplinaresCompleto> listaMedidas = new ArrayList<>();
 
         // --- ADVERTÊNCIAS ---
-        String sqlAdv = "SELECT id_advertencia, funcionario_id, nome_funcionario, data_advertencia, motivo " +
+        // CORRIGIDO: id_advertencia -> id
+        String sqlAdv = "SELECT id, funcionario_id, nome_funcionario, data_advertencia, motivo " +
                 "FROM advertencias " +
                 "WHERE data_advertencia BETWEEN ? AND ? " +
                 "ORDER BY data_advertencia DESC";
@@ -246,7 +248,7 @@ public class DAOMedidasDisciplinares {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     ModelMedidasDisciplinaresCompleto medida = new ModelMedidasDisciplinaresCompleto();
-                    medida.setId(rs.getLong("id_advertencia"));
+                    medida.setId(rs.getLong("id"));  // CORRIGIDO
                     medida.setFuncionarioId(rs.getLong("funcionario_id"));
                     medida.setNomeFuncionario(rs.getString("nome_funcionario"));
                     medida.setTipoMedida("ADVERTÊNCIA");
@@ -258,7 +260,8 @@ public class DAOMedidasDisciplinares {
         }
 
         // --- FALTAS ---
-        String sqlFaltas = "SELECT id_falta, funcionario_id, nome_funcionario, data_falta, " +
+        // CORRIGIDO: id_falta -> id
+        String sqlFaltas = "SELECT id, funcionario_id, nome_funcionario, data_falta, " +
                 "observacoes, dias_falta, dsr_falta " +
                 "FROM faltas " +
                 "WHERE data_falta BETWEEN ? AND ? " +
@@ -271,7 +274,7 @@ public class DAOMedidasDisciplinares {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     ModelMedidasDisciplinaresCompleto medida = new ModelMedidasDisciplinaresCompleto();
-                    medida.setId(rs.getLong("id_falta"));
+                    medida.setId(rs.getLong("id"));  // CORRIGIDO
                     medida.setFuncionarioId(rs.getLong("funcionario_id"));
                     medida.setNomeFuncionario(rs.getString("nome_funcionario"));
                     medida.setTipoMedida("FALTA");
@@ -285,7 +288,8 @@ public class DAOMedidasDisciplinares {
         }
 
         // --- SUSPENSÕES ---
-        String sqlSusp = "SELECT id_suspensao, funcionario_id, nome_funcionario, data_suspensao, " +
+        // CORRIGIDO: id_suspensao -> id
+        String sqlSusp = "SELECT id, funcionario_id, nome_funcionario, data_suspensao, " +
                 "motivo, dias, dsr " +
                 "FROM suspensao " +
                 "WHERE data_suspensao BETWEEN ? AND ? " +
@@ -298,7 +302,7 @@ public class DAOMedidasDisciplinares {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     ModelMedidasDisciplinaresCompleto medida = new ModelMedidasDisciplinaresCompleto();
-                    medida.setId(rs.getLong("id_suspensao"));
+                    medida.setId(rs.getLong("id"));  // CORRIGIDO
                     medida.setFuncionarioId(rs.getLong("funcionario_id"));
                     medida.setNomeFuncionario(rs.getString("nome_funcionario"));
                     medida.setTipoMedida("SUSPENSÃO");
@@ -316,7 +320,6 @@ public class DAOMedidasDisciplinares {
 
         return listaMedidas;
     }
-
 
 
 }

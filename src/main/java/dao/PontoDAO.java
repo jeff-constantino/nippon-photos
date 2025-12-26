@@ -7,6 +7,7 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 import java.time.LocalDate;
+import java.math.BigDecimal;
 
 /**
  * DAO completo para todas as operações do sistema de ponto
@@ -228,7 +229,15 @@ public class PontoDAO {
         }
         return null;
     }
+// =============================================
+// SUBSTITUIR O MÉTODO mapearRegistro() EXISTENTE
+// Remova o método antigo (linha ~235) e o duplicado (linha ~1067)
+// Cole APENAS ESTE no lugar
+// =============================================
 
+    /**
+     * Mapeia ResultSet para objeto Ponto (com suporte a GPS)
+     */
     private Ponto mapearRegistro(ResultSet rs) throws SQLException {
         Ponto p = new Ponto();
         p.setRegId(rs.getInt("id"));
@@ -252,21 +261,38 @@ public class PontoDAO {
         Object minNot = rs.getObject("minutos_noturno");
         p.setRegMinutosNoturno(minNot != null ? (Integer)minNot : 0);
 
-        // Campo atraso autorizado
         p.setAtrasoAutorizado(rs.getBoolean("atraso_autorizado"));
 
-        // Definir status
+        // GPS (NOVO) - Tenta ler, mas não quebra se coluna não existir
+        try {
+            p.setGpsLatitude(rs.getBigDecimal("gps_latitude"));
+            p.setGpsLongitude(rs.getBigDecimal("gps_longitude"));
+
+            Object prec = rs.getObject("gps_precisao");
+            p.setGpsPrecisao(prec != null ? (Integer)prec : null);
+
+            p.setGpsDentroZona(rs.getBoolean("gps_dentro_zona"));
+
+            Object zonaId = rs.getObject("gps_zona_id");
+            p.setGpsZonaId(zonaId != null ? (Integer)zonaId : null);
+
+            p.setGpsTipoLocalizacao(rs.getString("gps_tipo_localizacao"));
+        } catch (SQLException e) {
+            // Colunas GPS ainda não existem no banco, ignora
+        }
+
+        // Status
         if (p.getRegEntrada() != null && p.getRegSaida() != null) {
             p.setStatusDia("Completo");
         } else if (p.getRegEntrada() != null) {
             p.setStatusDia("Incompleto");
         }
 
-        // Tem atraso apenas se houver atraso E não foi autorizado
         p.setTemAtraso(p.getRegMinutosAtraso() != null && p.getRegMinutosAtraso() > 0 && !p.getAtrasoAutorizado());
 
         return p;
     }
+
 
     // =============================================
     // AUTORIZAR ATRASO
@@ -465,10 +491,12 @@ public class PontoDAO {
         List<Ponto> lista = new ArrayList<>();
 
         String sql = "SELECT r.*, f.nome, f.cpf, " +
-                "j.tipo as just_tipo, j.descricao as just_desc " +
+                "j.tipo as just_tipo, j.descricao as just_desc, " +
+                "z.nome as zona_nome " +  // ✅ ADICIONE ESTA LINHA
                 "FROM ponto_registros r " +
                 "JOIN ponto_funcionarios f ON r.funcionario_id = f.id " +
                 "LEFT JOIN ponto_justificativas j ON j.funcionario_id = r.funcionario_id AND j.data = r.data AND j.aprovado = true " +
+                "LEFT JOIN ponto_zonas z ON z.id = r.gps_zona_id " +  // ✅ ADICIONE ESTA LINHA
                 "WHERE r.funcionario_id = ? AND r.data BETWEEN ? AND ? " +
                 "ORDER BY r.data";
 
@@ -490,6 +518,12 @@ public class PontoDAO {
             if (justTipo != null) {
                 p.setJustTipo(justTipo);
                 p.setJustDescricao(justDesc);
+            }
+
+            // ✅ ADICIONE ESTAS 3 LINHAS
+            String zonaNome = rs.getString("zona_nome");
+            if (zonaNome != null) {
+                p.setZonaNome(zonaNome);
             }
 
             registrosMap.put(p.getRegData(), p);
@@ -847,4 +881,240 @@ public class PontoDAO {
         }
         return valorPadrao;
     }
+
+    // =============================================
+// ZONAS AUTORIZADAS
+// =============================================
+
+    /**
+     * Lista todas as zonas ativas
+     */
+    public List<Ponto> listarZonasAtivas() throws Exception {
+        List<Ponto> lista = new ArrayList<>();
+        String sql = "SELECT * FROM ponto_zonas WHERE ativo = true ORDER BY nome";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Ponto p = new Ponto();
+            p.setZonaId(rs.getInt("id"));
+            p.setZonaNome(rs.getString("nome"));
+            p.setZonaDescricao(rs.getString("descricao"));
+            p.setZonaLatitude(rs.getBigDecimal("latitude"));
+            p.setZonaLongitude(rs.getBigDecimal("longitude"));
+            p.setZonaRaioMetros(rs.getInt("raio_metros"));
+            p.setZonaAtivo(rs.getBoolean("ativo"));
+            p.setZonaCor(rs.getString("cor"));
+            lista.add(p);
+        }
+        return lista;
+    }
+
+    /**
+     * Busca todas as zonas (ativas e inativas) - para admin
+     */
+    public List<Ponto> listarTodasZonas() throws Exception {
+        List<Ponto> lista = new ArrayList<>();
+        String sql = "SELECT * FROM ponto_zonas ORDER BY nome";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Ponto p = new Ponto();
+            p.setZonaId(rs.getInt("id"));
+            p.setZonaNome(rs.getString("nome"));
+            p.setZonaDescricao(rs.getString("descricao"));
+            p.setZonaLatitude(rs.getBigDecimal("latitude"));
+            p.setZonaLongitude(rs.getBigDecimal("longitude"));
+            p.setZonaRaioMetros(rs.getInt("raio_metros"));
+            p.setZonaAtivo(rs.getBoolean("ativo"));
+            p.setZonaCor(rs.getString("cor"));
+            lista.add(p);
+        }
+        return lista;
+    }
+
+    /**
+     * Salvar ou atualizar zona
+     */
+    public void salvarZona(Ponto zona) throws Exception {
+        String sql;
+        PreparedStatement ps;
+
+        if (zona.getZonaId() != null && zona.getZonaId() > 0) {
+            // Atualizar
+            sql = "UPDATE ponto_zonas SET nome = ?, descricao = ?, latitude = ?, longitude = ?, " +
+                    "raio_metros = ?, ativo = ?, cor = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, zona.getZonaNome());
+            ps.setString(2, zona.getZonaDescricao());
+            ps.setBigDecimal(3, zona.getZonaLatitude());
+            ps.setBigDecimal(4, zona.getZonaLongitude());
+            ps.setInt(5, zona.getZonaRaioMetros());
+            ps.setBoolean(6, zona.getZonaAtivo());
+            ps.setString(7, zona.getZonaCor());
+            ps.setInt(8, zona.getZonaId());
+        } else {
+            // Inserir
+            sql = "INSERT INTO ponto_zonas (nome, descricao, latitude, longitude, raio_metros, ativo, cor) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, zona.getZonaNome());
+            ps.setString(2, zona.getZonaDescricao());
+            ps.setBigDecimal(3, zona.getZonaLatitude());
+            ps.setBigDecimal(4, zona.getZonaLongitude());
+            ps.setInt(5, zona.getZonaRaioMetros());
+            ps.setBoolean(6, zona.getZonaAtivo() != null ? zona.getZonaAtivo() : true);
+            ps.setString(7, zona.getZonaCor() != null ? zona.getZonaCor() : "#daa520");
+        }
+
+        ps.executeUpdate();
+        conn.commit();
+    }
+
+    /**
+     * Alternar status de uma zona (ativar/desativar)
+     */
+    public void alternarStatusZona(int zonaId) throws Exception {
+        String sql = "UPDATE ponto_zonas SET ativo = NOT ativo, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, zonaId);
+        ps.executeUpdate();
+        conn.commit();
+    }
+
+// =============================================
+// VALIDAÇÃO DE LOCALIZAÇÃO
+// =============================================
+
+    /**
+     * Valida se uma coordenada está dentro de alguma zona autorizada
+     * Retorna o ID da zona se estiver dentro, ou null se estiver fora
+     */
+    public Integer validarLocalizacao(BigDecimal latitude, BigDecimal longitude) throws Exception {
+        List<Ponto> zonas = listarZonasAtivas();
+
+        for (Ponto zona : zonas) {
+            double distancia = calcularDistancia(
+                    latitude.doubleValue(),
+                    longitude.doubleValue(),
+                    zona.getZonaLatitude().doubleValue(),
+                    zona.getZonaLongitude().doubleValue()
+            );
+
+            // Se está dentro do raio
+            if (distancia <= zona.getZonaRaioMetros()) {
+                return zona.getZonaId();
+            }
+        }
+
+        return null; // Fora de todas as zonas
+    }
+
+    /**
+     * Calcula distância entre dois pontos GPS usando fórmula de Haversine
+     * Retorna distância em metros
+     */
+    private double calcularDistancia(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371000; // Raio da Terra em metros
+
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return R * c; // Distância em metros
+    }
+
+// =============================================
+// REGISTRO DE PONTO COM GEOLOCALIZAÇÃO
+// =============================================
+
+    /**
+     * Registrar ponto com geolocalização
+     * ATUALIZAÇÃO DO MÉTODO EXISTENTE
+     */
+    public void registrarPontoComGPS(int funcId, Date data, BigDecimal latitude, BigDecimal longitude,
+                                     Integer precisao, String tipoLocalizacao) throws Exception {
+        Timestamp agora = new Timestamp(System.currentTimeMillis());
+        java.time.LocalDateTime agoraLDT = agora.toLocalDateTime();
+
+        // Correção para jornadas noturnas
+        Date dataRegistro = data;
+        if (agoraLDT.getHour() < 6) {
+            dataRegistro = Date.valueOf(data.toLocalDate().minusDays(1));
+        }
+
+        // Validar localização
+        Integer zonaId = validarLocalizacao(latitude, longitude);
+        boolean dentroZona = (zonaId != null);
+
+        // Se estiver fora da zona, bloquear registro
+        if (!dentroZona) {
+            throw new Exception("Você está fora da zona autorizada para registro de ponto!");
+        }
+
+        Ponto registro = buscarRegistroDia(funcId, dataRegistro);
+
+        if (registro == null) {
+            // Primeiro registro - ENTRADA
+            String sql = "INSERT INTO ponto_registros (funcionario_id, data, entrada, " +
+                    "gps_latitude, gps_longitude, gps_precisao, gps_dentro_zona, gps_zona_id, gps_tipo_localizacao) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, funcId);
+            ps.setDate(2, dataRegistro);
+            ps.setTimestamp(3, agora);
+            ps.setBigDecimal(4, latitude);
+            ps.setBigDecimal(5, longitude);
+            ps.setObject(6, precisao);
+            ps.setBoolean(7, dentroZona);
+            ps.setObject(8, zonaId);
+            ps.setString(9, tipoLocalizacao);
+            ps.executeUpdate();
+            conn.commit();
+        } else {
+            // Atualizar próximo campo
+            String sql = null;
+            if (registro.getRegEntrada() != null && registro.getRegSaidaIntervalo() == null) {
+                sql = "UPDATE ponto_registros SET saida_intervalo = ?, " +
+                        "gps_latitude = ?, gps_longitude = ?, gps_precisao = ?, gps_dentro_zona = ?, gps_zona_id = ?, gps_tipo_localizacao = ? " +
+                        "WHERE id = ?";
+            } else if (registro.getRegSaidaIntervalo() != null && registro.getRegRetornoIntervalo() == null) {
+                sql = "UPDATE ponto_registros SET retorno_intervalo = ?, " +
+                        "gps_latitude = ?, gps_longitude = ?, gps_precisao = ?, gps_dentro_zona = ?, gps_zona_id = ?, gps_tipo_localizacao = ? " +
+                        "WHERE id = ?";
+            } else if (registro.getRegRetornoIntervalo() != null && registro.getRegSaida() == null) {
+                sql = "UPDATE ponto_registros SET saida = ?, " +
+                        "gps_latitude = ?, gps_longitude = ?, gps_precisao = ?, gps_dentro_zona = ?, gps_zona_id = ?, gps_tipo_localizacao = ? " +
+                        "WHERE id = ?";
+            }
+
+            if (sql != null) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setTimestamp(1, agora);
+                ps.setBigDecimal(2, latitude);
+                ps.setBigDecimal(3, longitude);
+                ps.setObject(4, precisao);
+                ps.setBoolean(5, dentroZona);
+                ps.setObject(6, zonaId);
+                ps.setString(7, tipoLocalizacao);
+                ps.setInt(8, registro.getRegId());
+                ps.executeUpdate();
+                conn.commit();
+
+                // Calcular horas trabalhadas quando completar o dia
+                if (registro.getRegRetornoIntervalo() != null && sql.contains("saida =")) {
+                    calcularHorasTrabalhadasENoturnas(funcId, dataRegistro);
+                }
+            }
+        }
+    }
+
+
+
 }

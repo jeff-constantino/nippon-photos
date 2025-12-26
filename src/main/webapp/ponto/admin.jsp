@@ -137,6 +137,7 @@
         <h2>🎯 Ações Rápidas</h2>
         <button onclick="abrirModal('modalFunc')" class="btn btn-primary">➕ Novo Funcionário</button>
         <button onclick="abrirModal('modalRelatorio')" class="btn btn-primary">📊 Relatório Detalhado</button>
+        <button onclick="window.location.href='<%= request.getContextPath() %>/ponto?acao=listar-zonas'" class="btn btn-primary">🗺️ Zonas Autorizadas</button>
     </div>
 
     <div class="card">
@@ -166,6 +167,12 @@
             </tbody>
         </table>
     </div>
+
+    <!-- =============================================
+     BLOCO COMPLETO E CORRETO DO RELATÓRIO
+     Substitua TODO o bloco do relatório (linha ~180 até ~290)
+     por este código
+     ============================================= -->
 
     <% if (relatorioDetalhado != null && !relatorioDetalhado.isEmpty()) { %>
     <div class="card">
@@ -211,14 +218,13 @@
 
                     <% if (reg.getJustTipo() != null && reg.getJustDescricao() != null && !reg.getJustDescricao().trim().isEmpty()) { %>
                     <span class="motivo-abono" title="<%= reg.getJustDescricao() %>">
-                            📝 <%= reg.getJustDescricao().length() > 20 ? reg.getJustDescricao().substring(0, 20) + "..." : reg.getJustDescricao() %>
-                        </span>
+                        📝 <%= reg.getJustDescricao().length() > 20 ? reg.getJustDescricao().substring(0, 20) + "..." : reg.getJustDescricao() %>
+                    </span>
                     <% } %>
 
                     <% if (!isFalta && !isJustificado) { %>
                     <button onclick="editarRegistro(<%= reg.getRegId() %>, '<%= new SimpleDateFormat("yyyy-MM-dd").format(reg.getRegData()) %>', '<%= reg.getRegEntrada() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegEntrada()) : "" %>', '<%= reg.getRegSaidaIntervalo() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegSaidaIntervalo()) : "" %>', '<%= reg.getRegRetornoIntervalo() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegRetornoIntervalo()) : "" %>', '<%= reg.getRegSaida() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegSaida()) : "" %>', '<%= reg.getRegObservacao() != null ? reg.getRegObservacao().replace("'", "\\'").replace("\n", " ") : "" %>')" class="btn btn-secondary btn-sm" title="Editar">✏️</button>
 
-                    <!-- Botão Marcar Atraso - aparece em TODOS os registros -->
                     <% if (reg.getRegEntrada() != null) { %>
                     <% if (!atrasoAutorizado) { %>
                     <button onclick="marcarAtraso(<%= reg.getRegId() %>, <%= reg.getFuncId() %>, '<%= new SimpleDateFormat("yyyy-MM-dd").format(reg.getRegData()) %>')" class="btn btn-warning btn-sm" title="Marcar como Atraso">⏰ Atraso</button>
@@ -250,10 +256,40 @@
                 <% } %>
             </div>
             <% } %>
+
+            <%-- ===== INFORMAÇÕES DE GPS ===== --%>
+            <% if (reg.getGpsLatitude() != null) { %>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 13px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #444;">
+                <div>
+                    <span style="color: #999;">Localização:</span>
+                    <strong>
+                        <%= reg.getGpsIcone() %> <%= reg.getGpsTextoStatus() %>
+                        <% if (reg.getGpsTipoLocalizacao() != null) { %>
+                        (<%= "gps".equals(reg.getGpsTipoLocalizacao()) ? "GPS" : "IP" %>)
+                        <% } %>
+                    </strong>
+                </div>
+                <% if (reg.getGpsPrecisao() != null) { %>
+                <div>
+                    <span style="color: #999;">Precisão:</span>
+                    <strong style="color: <%= reg.getGpsPrecisao() < 50 ? "#4ade80" : (reg.getGpsPrecisao() < 100 ? "#f59e0b" : "#ef4444") %>;">
+                        <%= reg.getGpsPrecisao() %>m
+                    </strong>
+                </div>
+                <% } %>
+                <div style="grid-column: span 2;">
+                    <a href="<%= reg.getGoogleMapsLink() %>" target="_blank" class="btn btn-secondary btn-sm" style="font-size: 12px; padding: 5px 10px;">
+                        🗺️ Ver no Mapa
+                    </a>
+                </div>
+            </div>
+            <% } %>
+            <%-- ===== FIM GPS ===== --%>
         </div>
         <% } %>
     </div>
     <% } %>
+
 
     <% if (resumoMensal != null) { %>
     <div class="card">
@@ -311,6 +347,7 @@
         <button type="submit" class="btn btn-primary" style="width: 100%;">Gerar</button>
     </form>
 </div></div>
+
 
 <div id="modalAbonar" class="modal"><div class="modal-content">
     <div class="modal-header"><h3>✅ Abonar Falta</h3><span class="close" onclick="fecharModal('modalAbonar')">&times;</span></div>

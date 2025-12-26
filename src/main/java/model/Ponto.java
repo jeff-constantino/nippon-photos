@@ -3,10 +3,11 @@ package model;
 import java.sql.Timestamp;
 import java.sql.Date;
 import java.sql.Time;
+import java.math.BigDecimal;
 
 /**
  * Model unificado para todo o sistema de ponto
- * Contém atributos para funcionário, registro, horário, justificativa e resumo mensal
+ * ATUALIZADO: Inclui geolocalização
  */
 public class Ponto {
 
@@ -35,7 +36,25 @@ public class Ponto {
     private Integer regMinutosTrabalhados;
     private Integer regMinutosAtraso;
     private Integer regMinutosNoturno;
-    private Boolean atrasoAutorizado; // NOVO CAMPO
+    private Boolean atrasoAutorizado;
+
+    // ===== GEOLOCALIZAÇÃO (NOVO) =====
+    private BigDecimal gpsLatitude;
+    private BigDecimal gpsLongitude;
+    private Integer gpsPrecisao; // em metros
+    private Boolean gpsDentroZona;
+    private Integer gpsZonaId;
+    private String gpsTipoLocalizacao; // "gps" ou "ip"
+
+    // ===== ZONA AUTORIZADA (NOVO) =====
+    private Integer zonaId;
+    private String zonaNome;
+    private String zonaDescricao;
+    private BigDecimal zonaLatitude;
+    private BigDecimal zonaLongitude;
+    private Integer zonaRaioMetros;
+    private Boolean zonaAtivo;
+    private String zonaCor;
 
     // ===== HORÁRIO CONFIGURADO =====
     private Integer horId;
@@ -43,7 +62,7 @@ public class Ponto {
     private Time horEntrada;
     private Time horSaida;
     private Integer horTolerancia;
-    private Integer horCargaHoraria; // em minutos
+    private Integer horCargaHoraria;
 
     // ===== JUSTIFICATIVA =====
     private Integer justId;
@@ -64,11 +83,11 @@ public class Ponto {
     private Boolean resumoTemDireitoVale;
     private String resumoObservacoes;
 
-    // ===== CAMPOS AUXILIARES (para relatórios) =====
-    private String diaSemanaTexto; // ex: "Segunda-feira"
+    // ===== CAMPOS AUXILIARES =====
+    private String diaSemanaTexto;
     private Boolean temAtraso;
     private Boolean temFalta;
-    private String statusDia; // "Completo", "Incompleto", "Falta", "Justificado"
+    private String statusDia;
 
     // Construtores
     public Ponto() {}
@@ -140,6 +159,50 @@ public class Ponto {
 
     public Boolean getAtrasoAutorizado() { return atrasoAutorizado; }
     public void setAtrasoAutorizado(Boolean atrasoAutorizado) { this.atrasoAutorizado = atrasoAutorizado; }
+
+    // Geolocalização (NOVO)
+    public BigDecimal getGpsLatitude() { return gpsLatitude; }
+    public void setGpsLatitude(BigDecimal gpsLatitude) { this.gpsLatitude = gpsLatitude; }
+
+    public BigDecimal getGpsLongitude() { return gpsLongitude; }
+    public void setGpsLongitude(BigDecimal gpsLongitude) { this.gpsLongitude = gpsLongitude; }
+
+    public Integer getGpsPrecisao() { return gpsPrecisao; }
+    public void setGpsPrecisao(Integer gpsPrecisao) { this.gpsPrecisao = gpsPrecisao; }
+
+    public Boolean getGpsDentroZona() { return gpsDentroZona; }
+    public void setGpsDentroZona(Boolean gpsDentroZona) { this.gpsDentroZona = gpsDentroZona; }
+
+    public Integer getGpsZonaId() { return gpsZonaId; }
+    public void setGpsZonaId(Integer gpsZonaId) { this.gpsZonaId = gpsZonaId; }
+
+    public String getGpsTipoLocalizacao() { return gpsTipoLocalizacao; }
+    public void setGpsTipoLocalizacao(String gpsTipoLocalizacao) { this.gpsTipoLocalizacao = gpsTipoLocalizacao; }
+
+    // Zona (NOVO)
+    public Integer getZonaId() { return zonaId; }
+    public void setZonaId(Integer zonaId) { this.zonaId = zonaId; }
+
+    public String getZonaNome() { return zonaNome; }
+    public void setZonaNome(String zonaNome) { this.zonaNome = zonaNome; }
+
+    public String getZonaDescricao() { return zonaDescricao; }
+    public void setZonaDescricao(String zonaDescricao) { this.zonaDescricao = zonaDescricao; }
+
+    public BigDecimal getZonaLatitude() { return zonaLatitude; }
+    public void setZonaLatitude(BigDecimal zonaLatitude) { this.zonaLatitude = zonaLatitude; }
+
+    public BigDecimal getZonaLongitude() { return zonaLongitude; }
+    public void setZonaLongitude(BigDecimal zonaLongitude) { this.zonaLongitude = zonaLongitude; }
+
+    public Integer getZonaRaioMetros() { return zonaRaioMetros; }
+    public void setZonaRaioMetros(Integer zonaRaioMetros) { this.zonaRaioMetros = zonaRaioMetros; }
+
+    public Boolean getZonaAtivo() { return zonaAtivo; }
+    public void setZonaAtivo(Boolean zonaAtivo) { this.zonaAtivo = zonaAtivo; }
+
+    public String getZonaCor() { return zonaCor; }
+    public void setZonaCor(String zonaCor) { this.zonaCor = zonaCor; }
 
     // Horário
     public Integer getHorId() { return horId; }
@@ -222,9 +285,6 @@ public class Ponto {
 
     // ===== MÉTODOS AUXILIARES =====
 
-    /**
-     * Converte minutos em formato HH:mm
-     */
     public String formatarMinutosEmHoras(Integer minutos) {
         if (minutos == null || minutos == 0) return "00:00";
         int horas = minutos / 60;
@@ -232,24 +292,41 @@ public class Ponto {
         return String.format("%02d:%02d", horas, mins);
     }
 
-    /**
-     * Retorna total de horas trabalhadas formatado
-     */
     public String getHorasTrabalhadasFormatado() {
         return formatarMinutosEmHoras(regMinutosTrabalhados);
     }
 
-    /**
-     * Retorna total de horas noturnas formatado
-     */
     public String getHorasNoturnoFormatado() {
         return formatarMinutosEmHoras(regMinutosNoturno);
     }
 
-    /**
-     * Retorna total de atraso formatado
-     */
     public String getAtrasoFormatado() {
         return formatarMinutosEmHoras(regMinutosAtraso);
+    }
+
+    /**
+     * Retorna link do Google Maps com a localização
+     */
+    public String getGoogleMapsLink() {
+        if (gpsLatitude == null || gpsLongitude == null) return null;
+        return "https://www.google.com/maps?q=" + gpsLatitude + "," + gpsLongitude;
+    }
+
+    /**
+     * Retorna ícone baseado no status da localização
+     */
+    public String getGpsIcone() {
+        if (gpsLatitude == null) return "📍"; // Sem GPS
+        if (gpsDentroZona == null || gpsDentroZona) return "✅"; // Dentro da zona
+        return "🚨"; // Fora da zona
+    }
+
+    /**
+     * Retorna texto descritivo da localização
+     */
+    public String getGpsTextoStatus() {
+        if (gpsLatitude == null) return "Sem localização";
+        if (gpsDentroZona == null || gpsDentroZona) return "Dentro da zona autorizada";
+        return "FORA da zona autorizada";
     }
 }

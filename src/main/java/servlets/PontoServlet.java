@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -102,6 +103,18 @@ public class PontoServlet extends HttpServlet {
                 case "marcar-atraso":
                     marcarAtraso(req, resp);
                     break;
+                case "listar-zonas":
+                    listarZonas(req, resp);
+                    break;
+
+                case "editar-zona":
+                    editarZona(req, resp);
+                    break;
+
+                case "alternar-status-zona":
+                    alternarStatusZona(req, resp);
+                    break;
+
 
                 default:
                     resp.sendRedirect(req.getContextPath() + "/ponto/index.jsp");
@@ -172,11 +185,35 @@ public class PontoServlet extends HttpServlet {
             return;
         }
 
+        // Capturar dados de localização
+        String latitudeStr = req.getParameter("latitude");
+        String longitudeStr = req.getParameter("longitude");
+        String precisaoStr = req.getParameter("precisao");
+        String tipoLocalizacao = req.getParameter("tipoLocalizacao");
+
         PontoDAO dao = new PontoDAO();
         Date hoje = Date.valueOf(LocalDate.now());
-        dao.registrarPonto(func.getFuncId(), hoje);
 
-        req.setAttribute("sucesso", "Ponto registrado com sucesso!");
+        try {
+            if (latitudeStr != null && longitudeStr != null) {
+                // Registro com geolocalização
+                BigDecimal latitude = new BigDecimal(latitudeStr);
+                BigDecimal longitude = new BigDecimal(longitudeStr);
+                Integer precisao = precisaoStr != null ? Integer.parseInt(precisaoStr) : null;
+
+                dao.registrarPontoComGPS(func.getFuncId(), hoje, latitude, longitude, precisao, tipoLocalizacao);
+
+                req.setAttribute("sucesso", "✅ Ponto registrado com sucesso!");
+            } else {
+                // Fallback sem geolocalização (caso JavaScript falhe)
+                dao.registrarPonto(func.getFuncId(), hoje);
+                req.setAttribute("sucesso", "⚠️ Ponto registrado sem localização. Ative o GPS.");
+            }
+        } catch (Exception e) {
+            // Se der erro de localização fora da zona
+            req.setAttribute("erro", e.getMessage());
+        }
+
         req.getRequestDispatcher("/ponto/registroponto.jsp").forward(req, resp);
     }
 
@@ -568,5 +605,42 @@ public class PontoServlet extends HttpServlet {
         }
 
         req.getRequestDispatcher("/ponto/admin.jsp").forward(req, resp);
+    }
+    private void listarZonas(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        req.getRequestDispatcher("/ponto/admin_zonas.jsp").forward(req, resp);
+    }
+
+    private void editarZona(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        int zonaId = Integer.parseInt(req.getParameter("zonaId"));
+        String nome = req.getParameter("nome");
+        String descricao = req.getParameter("descricao");
+        BigDecimal latitude = new BigDecimal(req.getParameter("latitude"));
+        BigDecimal longitude = new BigDecimal(req.getParameter("longitude"));
+        int raioMetros = Integer.parseInt(req.getParameter("raioMetros"));
+
+        Ponto zona = new Ponto();
+        zona.setZonaId(zonaId);
+        zona.setZonaNome(nome);
+        zona.setZonaDescricao(descricao);
+        zona.setZonaLatitude(latitude);
+        zona.setZonaLongitude(longitude);
+        zona.setZonaRaioMetros(raioMetros);
+        zona.setZonaAtivo(true);
+
+        PontoDAO dao = new PontoDAO();
+        dao.salvarZona(zona);
+
+        req.setAttribute("sucesso", "Zona atualizada com sucesso!");
+        req.getRequestDispatcher("/ponto/admin_zonas.jsp").forward(req, resp);
+    }
+
+    private void alternarStatusZona(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+        int zonaId = Integer.parseInt(req.getParameter("zonaId"));
+
+        PontoDAO dao = new PontoDAO();
+        dao.alternarStatusZona(zonaId);
+
+        req.setAttribute("sucesso", "Status alterado!");
+        req.getRequestDispatcher("/ponto/admin_zonas.jsp").forward(req, resp);
     }
 }

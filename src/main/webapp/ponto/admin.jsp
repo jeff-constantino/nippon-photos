@@ -8,26 +8,68 @@
     <title>Admin - Controle de Ponto</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #daa520; padding: 20px; }
-        .container { max-width: 1600px; margin: 0 auto; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #daa520;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
         .header {
-            background: #000000; color: white; padding: 20px 30px; border-radius: 15px;
-            margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;
+            background: #000000;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
-        h1 { color: #daa520; font-size: 28px; font-weight: 700; }
+
+        h1 {
+            color: #daa520;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
         .card {
-            background: #000000; border-radius: 15px; padding: 25px; margin-bottom: 20px;
-            color: white; box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            background: #000000;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            color: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
+
         .card h2 {
-            color: #daa520; margin-bottom: 20px; border-bottom: 2px solid #daa520;
-            padding-bottom: 12px; font-size: 22px; font-weight: 600;
+            color: #daa520;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #daa520;
+            padding-bottom: 12px;
+            font-size: 22px;
+            font-weight: 600;
         }
+
         .btn {
-            padding: 12px 24px; border: none; border-radius: 10px; font-size: 15px;
-            font-weight: bold; cursor: pointer; transition: all 0.3s; margin: 5px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
         }
+
         .btn-primary { background: #daa520; color: #000000; }
         .btn-primary:hover { background: #e09543; transform: translateY(-1px); }
         .btn-secondary { background: #333; color: white; }
@@ -37,55 +79,205 @@
         .btn-warning { background: #f57c00; color: white; }
         .btn-sm { padding: 7px 14px; font-size: 13px; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        table th { background: #2a2a2a; padding: 14px 12px; text-align: left; color: #daa520; font-weight: 600; font-size: 14px; }
-        table td { padding: 12px; border-bottom: 1px solid #333; font-size: 14px; }
+        /* Tabela Responsiva */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            min-width: 600px;
+        }
+
+        table th {
+            background: #2a2a2a;
+            padding: 14px 12px;
+            text-align: left;
+            color: #daa520;
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #333;
+            font-size: 14px;
+        }
+
         table tr:hover { background: #2a2a2a; }
 
         input, select, textarea {
-            padding: 11px; border: 2px solid #333; border-radius: 8px;
-            background: #2a2a2a; color: white; font-size: 14px; width: 100%; margin: 8px 0;
+            padding: 11px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background: #2a2a2a;
+            color: white;
+            font-size: 14px;
+            width: 100%;
+            margin: 8px 0;
         }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: #daa520; }
-        label { color: #daa520; font-weight: 600; display: block; margin-top: 12px; font-size: 14px; }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #daa520;
+        }
+
+        label {
+            color: #daa520;
+            font-weight: 600;
+            display: block;
+            margin-top: 12px;
+            font-size: 14px;
+        }
 
         .modal {
-            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.75); overflow-y: auto;
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.75);
+            overflow-y: auto;
+            padding: 20px;
         }
+
         .modal-content {
-            background: #000000; margin: 50px auto; padding: 30px; border-radius: 15px;
-            width: 90%; max-width: 700px; color: white; max-height: 85vh; overflow-y: auto;
+            background: #000000;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 700px;
+            color: white;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
         }
+
         .modal-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 25px; border-bottom: 2px solid #daa520; padding-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #daa520;
+            padding-bottom: 12px;
         }
-        .modal-header h3 { color: #daa520; font-size: 22px; }
-        .close { color: #aaa; font-size: 32px; font-weight: bold; cursor: pointer; line-height: 1; }
+
+        .modal-header h3 {
+            color: #daa520;
+            font-size: 22px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
         .close:hover { color: white; }
 
-        .msg { padding: 14px; border-radius: 10px; margin-bottom: 18px; text-align: center; font-weight: 500; }
+        .msg {
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            text-align: center;
+            font-weight: 500;
+        }
+
         .msg-sucesso { background: #2e7d32; }
         .msg-erro { background: #d32f2f; }
 
-        .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
         .badge-success { background: #2e7d32; }
         .badge-danger { background: #d32f2f; }
         .badge-warning { background: #f57c00; }
         .badge-info { background: #0288d1; }
 
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
 
-        .relatorio-item { background: #2a2a2a; padding: 15px; border-radius: 10px; margin: 12px 0; border-left: 4px solid #daa520; }
-        .relatorio-item.alerta { border-left-color: #d32f2f; background: rgba(211, 47, 47, 0.1); }
-        .relatorio-item.falta { border-left-color: #f57c00; background: rgba(245, 124, 0, 0.1); }
-        .relatorio-item.autorizado { border-left-color: #0288d1; background: rgba(2, 136, 209, 0.1); }
+        .relatorio-item {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 12px 0;
+            border-left: 4px solid #daa520;
+        }
 
-        .resumo-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
-        .resumo-card { background: #2a2a2a; padding: 20px; border-radius: 10px; text-align: center; }
-        .resumo-valor { font-size: 32px; font-weight: bold; color: #daa520; margin: 10px 0; }
-        .resumo-label { color: #ccc; font-size: 14px; }
+        .relatorio-item.alerta {
+            border-left-color: #d32f2f;
+            background: rgba(211, 47, 47, 0.1);
+        }
+
+        .relatorio-item.falta {
+            border-left-color: #f57c00;
+            background: rgba(245, 124, 0, 0.1);
+        }
+
+        .relatorio-item.autorizado {
+            border-left-color: #0288d1;
+            background: rgba(2, 136, 209, 0.1);
+        }
+
+        .relatorio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .relatorio-acoes {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .resumo-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .resumo-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .resumo-valor {
+            font-size: 32px;
+            font-weight: bold;
+            color: #daa520;
+            margin: 10px 0;
+        }
+
+        .resumo-label {
+            color: #ccc;
+            font-size: 14px;
+        }
 
         .motivo-abono {
             background: #0288d1;
@@ -97,9 +289,74 @@
             display: inline-block;
         }
 
+        .horarios-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .gps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            font-size: 13px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #444;
+        }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 1024px) {
+            .container { max-width: 100%; }
+            h1 { font-size: 24px; }
+            .card h2 { font-size: 20px; }
+            .resumo-box { grid-template-columns: repeat(2, 1fr); }
+        }
+
         @media (max-width: 768px) {
+            body { padding: 10px; }
+            .header { flex-direction: column; gap: 15px; padding: 15px 20px; }
+            h1 { font-size: 22px; text-align: center; }
+            .card { padding: 15px; }
+            .card h2 { font-size: 18px; }
+            .btn { width: 100%; margin: 5px 0; }
+            .btn-sm { width: auto; padding: 6px 10px; font-size: 12px; }
             .form-row { grid-template-columns: 1fr; }
-            .header { flex-direction: column; gap: 15px; }
+            table { font-size: 13px; }
+            table th, table td { padding: 8px 6px; }
+            .relatorio-header { flex-direction: column; align-items: flex-start; }
+            .relatorio-acoes { width: 100%; justify-content: flex-start; }
+            .horarios-grid, .gps-grid { grid-template-columns: 1fr; gap: 8px; }
+            .resumo-box { grid-template-columns: 1fr; }
+            .resumo-valor { font-size: 28px; }
+            .modal { padding: 10px; }
+            .modal-content { padding: 20px; margin: 10px auto; width: 95%; }
+            .modal-header h3 { font-size: 18px; }
+            .close { font-size: 28px; }
+            .badge { font-size: 11px; padding: 4px 8px; }
+            .motivo-abono { font-size: 12px; padding: 6px 10px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 5px; }
+            h1 { font-size: 20px; }
+            .card { padding: 12px; margin-bottom: 15px; border-radius: 10px; }
+            .card h2 { font-size: 16px; margin-bottom: 15px; }
+            .btn { font-size: 14px; padding: 10px 20px; }
+            .btn-sm { font-size: 11px; padding: 5px 8px; }
+            table { font-size: 12px; }
+            .relatorio-item { padding: 12px; font-size: 13px; }
+            .resumo-valor { font-size: 24px; }
+            .resumo-label { font-size: 12px; }
+            input, select, textarea { font-size: 16px; padding: 10px; }
+            .modal-content { padding: 15px; width: 98%; }
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .header form, .btn, .modal { display: none !important; }
+            .card { box-shadow: none; page-break-inside: avoid; }
         }
     </style>
 </head>
@@ -142,41 +399,35 @@
 
     <div class="card">
         <h2>👥 Funcionários</h2>
-        <table>
-            <thead>
-            <tr><th>Nome</th><th>CPF</th><th>Telefone</th><th>Status</th><th>Ações</th></tr>
-            </thead>
-            <tbody>
-            <% for (Ponto f : funcionarios) { %>
-            <tr>
-                <td><strong><%= f.getFuncNome() %></strong></td>
-                <td><%= f.getFuncCpf() %></td>
-                <td><%= f.getFuncTelefone() != null ? f.getFuncTelefone() : "-" %></td>
-                <td><span class="badge <%= f.getFuncAtivo() ? "badge-success" : "badge-danger" %>"><%= f.getFuncAtivo() ? "Ativo" : "Inativo" %></span></td>
-                <td>
-                    <button onclick="editarFuncionario(<%= f.getFuncId() %>, '<%= f.getFuncNome().replace("'", "\\'") %>', '<%= f.getFuncCpf() %>', '<%= f.getFuncTelefone() != null ? f.getFuncTelefone() : "" %>')" class="btn btn-secondary btn-sm" title="Editar">✏️</button>
-
-                    <button onclick="alternarStatusFunc(<%= f.getFuncId() %>)" class="btn <%= f.getFuncAtivo() ? "btn-warning" : "btn-success" %> btn-sm" title="<%= f.getFuncAtivo() ? "Inativar" : "Ativar" %>">
-                        <%= f.getFuncAtivo() ? "🔒 Inativar" : "🔓 Ativar" %>
-                    </button>
-
-                    <button onclick="excluirFuncionario(<%= f.getFuncId() %>, '<%= f.getFuncNome().replace("'", "\\'") %>')" class="btn btn-danger btn-sm" title="Excluir">🗑️</button>
-                </td>
-            </tr>
-            <% } %>
-            </tbody>
-        </table>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr><th>Nome</th><th>CPF</th><th>Telefone</th><th>Status</th><th>Ações</th></tr>
+                </thead>
+                <tbody>
+                <% for (Ponto f : funcionarios) { %>
+                <tr>
+                    <td><strong><%= f.getFuncNome() %></strong></td>
+                    <td><%= f.getFuncCpf() %></td>
+                    <td><%= f.getFuncTelefone() != null ? f.getFuncTelefone() : "-" %></td>
+                    <td><span class="badge <%= f.getFuncAtivo() ? "badge-success" : "badge-danger" %>"><%= f.getFuncAtivo() ? "Ativo" : "Inativo" %></span></td>
+                    <td>
+                        <button onclick="editarFuncionario(<%= f.getFuncId() %>, '<%= f.getFuncNome().replace("'", "\\'") %>', '<%= f.getFuncCpf() %>', '<%= f.getFuncTelefone() != null ? f.getFuncTelefone() : "" %>')" class="btn btn-secondary btn-sm" title="Editar">✏️</button>
+                        <button onclick="alternarStatusFunc(<%= f.getFuncId() %>)" class="btn <%= f.getFuncAtivo() ? "btn-warning" : "btn-success" %> btn-sm" title="<%= f.getFuncAtivo() ? "Inativar" : "Ativar" %>">
+                            <%= f.getFuncAtivo() ? "🔒 Inativar" : "🔓 Ativar" %>
+                        </button>
+                        <button onclick="excluirFuncionario(<%= f.getFuncId() %>, '<%= f.getFuncNome().replace("'", "\\'") %>')" class="btn btn-danger btn-sm" title="Excluir">🗑️</button>
+                    </td>
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <!-- =============================================
-     BLOCO COMPLETO E CORRETO DO RELATÓRIO
-     Substitua TODO o bloco do relatório (linha ~180 até ~290)
-     por este código
-     ============================================= -->
 
     <% if (relatorioDetalhado != null && !relatorioDetalhado.isEmpty()) { %>
     <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div class="relatorio-header" style="margin-bottom: 20px;">
             <h2 style="margin: 0;">📊 Relatório Detalhado - <%= funcSelecionado.getFuncNome() %></h2>
             <form action="<%= request.getContextPath() %>/ponto-export" method="post" style="margin: 0;">
                 <input type="hidden" name="funcId" value="<%= funcSelecionado.getFuncId() %>">
@@ -209,9 +460,9 @@
                 else if (isJustificado) cssClass = "autorizado";
         %>
         <div class="relatorio-item <%= cssClass %>">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div class="relatorio-header">
                 <strong style="font-size: 16px;"><%= new SimpleDateFormat("dd/MM/yyyy").format(reg.getRegData()) %> - <%= reg.getDiaSemanaTexto() %></strong>
-                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <div class="relatorio-acoes">
                     <span class="badge <%= isFalta ? "badge-warning" : (isJustificado ? "badge-info" : (temAtraso && !atrasoAutorizado ? "badge-danger" : "badge-success")) %>">
                         <%= reg.getStatusDia() %>
                     </span>
@@ -243,7 +494,7 @@
             </div>
 
             <% if (!isFalta && !isJustificado) { %>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 14px;">
+            <div class="horarios-grid">
                 <div><span style="color: #999;">Entrada:</span> <strong><%= reg.getRegEntrada() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegEntrada()) : "-" %></strong></div>
                 <div><span style="color: #999;">Saída Intervalo:</span> <strong><%= reg.getRegSaidaIntervalo() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegSaidaIntervalo()) : "-" %></strong></div>
                 <div><span style="color: #999;">Retorno Intervalo:</span> <strong><%= reg.getRegRetornoIntervalo() != null ? new SimpleDateFormat("HH:mm").format(reg.getRegRetornoIntervalo()) : "-" %></strong></div>
@@ -257,9 +508,8 @@
             </div>
             <% } %>
 
-            <%-- ===== INFORMAÇÕES DE GPS ===== --%>
             <% if (reg.getGpsLatitude() != null) { %>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 13px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #444;">
+            <div class="gps-grid">
                 <div>
                     <span style="color: #999;">Localização:</span>
                     <strong>
@@ -284,12 +534,10 @@
                 </div>
             </div>
             <% } %>
-            <%-- ===== FIM GPS ===== --%>
         </div>
         <% } %>
     </div>
     <% } %>
-
 
     <% if (resumoMensal != null) { %>
     <div class="card">
@@ -320,21 +568,16 @@
     <form action="<%= request.getContextPath() %>/ponto" method="post">
         <input type="hidden" name="acao" value="editar-funcionario">
         <input type="hidden" name="funcId" id="editFuncId">
-
         <label>Nome Completo *</label>
         <input type="text" name="nome" id="editFuncNome" required>
-
         <label>CPF *</label>
         <input type="text" name="cpf" id="editFuncCpf" maxlength="14" required readonly style="background: #3a3a3a;">
         <small style="color: #999;">CPF não pode ser alterado</small>
-
         <label>Telefone</label>
         <input type="text" name="telefone" id="editFuncTelefone" maxlength="15">
-
         <label>Nova Senha (deixe em branco para não alterar)</label>
         <input type="password" name="novaSenha" id="editFuncSenha" minlength="4">
         <small style="color: #999;">Preencha apenas se quiser alterar a senha</small>
-
         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Salvar Alterações</button>
     </form>
 </div></div>
@@ -347,7 +590,6 @@
         <button type="submit" class="btn btn-primary" style="width: 100%;">Gerar</button>
     </form>
 </div></div>
-
 
 <div id="modalAbonar" class="modal"><div class="modal-content">
     <div class="modal-header"><h3>✅ Abonar Falta</h3><span class="close" onclick="fecharModal('modalAbonar')">&times;</span></div>
@@ -393,11 +635,9 @@
         <input type="hidden" name="dataRet" id="atrasoData">
         <input type="hidden" name="dataInicioRet" id="atrasoDataInicio">
         <input type="hidden" name="dataFimRet" id="atrasoDataFim">
-
         <label>Minutos de Atraso *</label>
         <input type="number" name="minutosAtraso" id="minutosAtraso" min="0" max="480" placeholder="Ex: 15" required>
         <small style="color: #999;">Informe quantos minutos o funcionário se atrasou</small>
-
         <label style="margin-top: 20px;">Este atraso será:</label>
         <div style="display: flex; gap: 15px; margin: 10px 0;">
             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
@@ -407,18 +647,14 @@
                 <input type="radio" name="tipoAtraso" value="autorizado"> Autorizado (não conta)
             </label>
         </div>
-
         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">Confirmar Atraso</button>
     </form>
 </div></div>
 
 <script>
-    function abrirModal(id) {
-        document.getElementById(id).style.display = 'block';
-    }
+    function abrirModal(id) { document.getElementById(id).style.display = 'block'; }
     function fecharModal(id) {
         document.getElementById(id).style.display = 'none';
-        // Limpar campos quando fechar
         if (id === 'modalEditarReg') {
             document.getElementById('editEntrada').value = '';
             document.getElementById('editSaidaInt').value = '';
@@ -451,18 +687,13 @@
     }
 
     function editarRegistro(regId, data, entrada, saidaInt, retornoInt, saida, obs) {
-        console.log('Editando registro:', {regId, data, entrada, saidaInt, retornoInt, saida, obs});
-
         document.getElementById('editRegId').value = regId;
         document.getElementById('editData').value = data;
-
-        // Preencher horários (formato HH:mm)
         document.getElementById('editEntrada').value = entrada || '';
         document.getElementById('editSaidaInt').value = saidaInt || '';
         document.getElementById('editRetornoInt').value = retornoInt || '';
         document.getElementById('editSaida').value = saida || '';
         document.getElementById('editObs').value = obs || '';
-
         abrirModal('modalEditarReg');
     }
 
@@ -476,8 +707,6 @@
         abrirModal('modalMarcarAtraso');
     }
 
-    // ===== FUNÇÕES DE GERENCIAMENTO DE FUNCIONÁRIOS =====
-
     function editarFuncionario(funcId, nome, cpf, telefone) {
         document.getElementById('editFuncId').value = funcId;
         document.getElementById('editFuncNome').value = nome;
@@ -490,93 +719,43 @@
     function alternarStatusFunc(funcId) {
         if (confirm('Deseja realmente alterar o status deste funcionário?')) {
             const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '<%= request.getContextPath() %>/ponto';
-
-            const acaoInput = document.createElement('input');
-            acaoInput.type = 'hidden';
-            acaoInput.name = 'acao';
-            acaoInput.value = 'alternar-status';
+            form.method = 'POST'; form.action = '<%= request.getContextPath() %>/ponto';
+            const acaoInput = document.createElement('input'); acaoInput.type = 'hidden'; acaoInput.name = 'acao'; acaoInput.value = 'alternar-status';
             form.appendChild(acaoInput);
-
-            const funcIdInput = document.createElement('input');
-            funcIdInput.type = 'hidden';
-            funcIdInput.name = 'funcId';
-            funcIdInput.value = funcId;
+            const funcIdInput = document.createElement('input'); funcIdInput.type = 'hidden'; funcIdInput.name = 'funcId'; funcIdInput.value = funcId;
             form.appendChild(funcIdInput);
-
-            document.body.appendChild(form);
-            form.submit();
+            document.body.appendChild(form); form.submit();
         }
     }
 
     function excluirFuncionario(funcId, nome) {
         if (confirm('⚠️ ATENÇÃO! Deseja realmente EXCLUIR o funcionário "' + nome + '"?\n\nTodos os registros de ponto deste funcionário também serão excluídos!\n\nEsta ação NÃO pode ser desfeita!')) {
             const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '<%= request.getContextPath() %>/ponto';
-
-            const acaoInput = document.createElement('input');
-            acaoInput.type = 'hidden';
-            acaoInput.name = 'acao';
-            acaoInput.value = 'excluir-funcionario';
+            form.method = 'POST'; form.action = '<%= request.getContextPath() %>/ponto';
+            const acaoInput = document.createElement('input'); acaoInput.type = 'hidden'; acaoInput.name = 'acao'; acaoInput.value = 'excluir-funcionario';
             form.appendChild(acaoInput);
-
-            const funcIdInput = document.createElement('input');
-            funcIdInput.type = 'hidden';
-            funcIdInput.name = 'funcId';
-            funcIdInput.value = funcId;
+            const funcIdInput = document.createElement('input'); funcIdInput.type = 'hidden'; funcIdInput.name = 'funcId'; funcIdInput.value = funcId;
             form.appendChild(funcIdInput);
-
-            document.body.appendChild(form);
-            form.submit();
+            document.body.appendChild(form); form.submit();
         }
     }
 
     function autorizarAtraso(regId, autorizar) {
         const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '<%= request.getContextPath() %>/ponto';
-
-        const acaoInput = document.createElement('input');
-        acaoInput.type = 'hidden';
-        acaoInput.name = 'acao';
-        acaoInput.value = 'autorizar-atraso';
+        form.method = 'POST'; form.action = '<%= request.getContextPath() %>/ponto';
+        const acaoInput = document.createElement('input'); acaoInput.type = 'hidden'; acaoInput.name = 'acao'; acaoInput.value = 'autorizar-atraso';
         form.appendChild(acaoInput);
-
-        const regIdInput = document.createElement('input');
-        regIdInput.type = 'hidden';
-        regIdInput.name = 'regId';
-        regIdInput.value = regId;
+        const regIdInput = document.createElement('input'); regIdInput.type = 'hidden'; regIdInput.name = 'regId'; regIdInput.value = regId;
         form.appendChild(regIdInput);
-
-        const autorizarInput = document.createElement('input');
-        autorizarInput.type = 'hidden';
-        autorizarInput.name = 'autorizar';
-        autorizarInput.value = autorizar;
+        const autorizarInput = document.createElement('input'); autorizarInput.type = 'hidden'; autorizarInput.name = 'autorizar'; autorizarInput.value = autorizar;
         form.appendChild(autorizarInput);
-
-        // Campos para redirecionar de volta ao relatório
-        const funcIdInput = document.createElement('input');
-        funcIdInput.type = 'hidden';
-        funcIdInput.name = 'funcIdRet';
-        funcIdInput.value = '<%= funcSelecionado != null ? funcSelecionado.getFuncId() : "" %>';
+        const funcIdInput = document.createElement('input'); funcIdInput.type = 'hidden'; funcIdInput.name = 'funcIdRet'; funcIdInput.value = '<%= funcSelecionado != null ? funcSelecionado.getFuncId() : "" %>';
         form.appendChild(funcIdInput);
-
-        const dataInicioInput = document.createElement('input');
-        dataInicioInput.type = 'hidden';
-        dataInicioInput.name = 'dataInicioRet';
-        dataInicioInput.value = document.getElementById('dataInicioRel') ? document.getElementById('dataInicioRel').value : '';
+        const dataInicioInput = document.createElement('input'); dataInicioInput.type = 'hidden'; dataInicioInput.name = 'dataInicioRet'; dataInicioInput.value = document.getElementById('dataInicioRel') ? document.getElementById('dataInicioRel').value : '';
         form.appendChild(dataInicioInput);
-
-        const dataFimInput = document.createElement('input');
-        dataFimInput.type = 'hidden';
-        dataFimInput.name = 'dataFimRet';
-        dataFimInput.value = document.getElementById('dataFimRel') ? document.getElementById('dataFimRel').value : '';
+        const dataFimInput = document.createElement('input'); dataFimInput.type = 'hidden'; dataFimInput.name = 'dataFimRet'; dataFimInput.value = document.getElementById('dataFimRel') ? document.getElementById('dataFimRel').value : '';
         form.appendChild(dataFimInput);
-
-        document.body.appendChild(form);
-        form.submit();
+        document.body.appendChild(form); form.submit();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -587,7 +766,6 @@
         if(document.getElementById('dataInicioRel')) document.getElementById('dataInicioRel').value = ano + '-' + mes + '-01';
         if(document.getElementById('dataFimRel')) document.getElementById('dataFimRel').value = ano + '-' + mes + '-' + dia;
 
-        // Máscara CPF
         const cpfInputs = ['cpfModal', 'editFuncCpf'];
         cpfInputs.forEach(id => {
             const el = document.getElementById(id);
@@ -603,7 +781,6 @@
             }
         });
 
-        // Máscara Telefone
         const telInputs = ['telefoneModal', 'editFuncTelefone'];
         telInputs.forEach(id => {
             const el = document.getElementById(id);

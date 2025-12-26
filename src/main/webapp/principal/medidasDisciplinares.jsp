@@ -459,7 +459,7 @@
                                                                 <span class="badge badge-warning">${medida.tipoMedida}</span>
                                                             </c:when>
                                                             <c:when test="${medida.tipoMedida == 'FALTA'}">
-                                                                <span class="badge badge-light">${medida.tipoMedida}</span>
+                                                                <span class="badge badge-light" STYLE="color: #AF2018">${medida.tipoMedida}</span>
                                                             </c:when>
                                                             <c:when test="${medida.tipoMedida == 'SUSPENSÃO'}">
                                                                 <span class="badge badge-danger">${medida.tipoMedida}</span>

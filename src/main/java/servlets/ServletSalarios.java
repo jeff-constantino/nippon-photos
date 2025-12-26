@@ -114,11 +114,22 @@ public class ServletSalarios extends ServletGenericUtil { // Mantenha o nome da 
                 DAOMedidasDisciplinares daoCondutas = new DAOMedidasDisciplinares();
                 ModelCondutaResumo resumoConduta = daoCondutas.buscarResumoConduta(funcId, dataIni, dataFin);
                 request.setAttribute("resumoConduta", resumoConduta);
-                // Busca medidas disciplinares detalhadas
-                DAOMedidasDisciplinares daoMedidas = new DAOMedidasDisciplinares();
+
+// ✅ Busca medidas disciplinares detalhadas (usa a mesma instância daoCondutas)
                 List<ModelMedidasDisciplinaresCompleto> listaMedidas =
-                        daoMedidas.buscarMedidasPorFuncionarioEPeriodo(funcId, dataIni, dataFin);
+                        daoCondutas.buscarMedidasPorFuncionarioEPeriodo(funcId, dataIni, dataFin);
                 request.setAttribute("listaMedidasDisciplinares", listaMedidas);
+
+// Debug (opcional - pode remover depois que funcionar)
+                System.out.println("=== MEDIDAS DISCIPLINARES CARREGADAS ===");
+                System.out.println("Funcionário ID: " + funcId);
+                System.out.println("Período: " + dataIni + " a " + dataFin);
+                System.out.println("Total de medidas encontradas: " + (listaMedidas != null ? listaMedidas.size() : 0));
+                if (listaMedidas != null && !listaMedidas.isEmpty()) {
+                    for (ModelMedidasDisciplinaresCompleto m : listaMedidas) {
+                        System.out.println("  - " + m.getTipoMedida() + " em " + m.getDataMedida() + ": " + m.getMotivo());
+                    }
+                }
 
                 int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
                 int resultadosPorPagina = 10;

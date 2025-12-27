@@ -4,6 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#daa520">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SaaS Ponto">
+    <link rel="manifest" href="<%= request.getContextPath() %>/ponto/manifest.json">
+    <link rel="apple-touch-icon" href="<%= request.getContextPath() %>/ponto/icon-192.png">
+    
     <title>Controle de Ponto - Login</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -123,6 +132,28 @@
             display: block;
             margin-top: 5px;
         }
+        
+        /* Banner de instalação do PWA */
+        .install-banner {
+            display: none;
+            background: #0288d1;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .install-banner button {
+            background: white;
+            color: #0288d1;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
         @media (max-width: 600px) {
             .card { padding: 30px 25px; }
             h1 { font-size: 28px; }
@@ -131,6 +162,14 @@
 </head>
 <body>
 <div class="card">
+    <!-- Banner de instalação -->
+    <div id="installBanner" class="install-banner">
+        <strong>📱 Instalar App</strong>
+        <p style="margin: 8px 0; font-size: 14px;">Adicione à tela inicial para acesso rápido!</p>
+        <button onclick="instalarApp()">Instalar Agora</button>
+        <button onclick="document.getElementById('installBanner').style.display='none'" style="background: transparent; color: white; text-decoration: underline;">Agora não</button>
+    </div>
+
     <h1>🕐 Controle de Ponto</h1>
     <p class="subtitle">#SaaS</p>
 
@@ -205,6 +244,55 @@
             else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
             else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
             e.target.value = v;
+        });
+    }
+
+    // ===== PWA - INSTALAÇÃO =====
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Previne o prompt automático
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Mostra o banner de instalação
+        document.getElementById('installBanner').style.display = 'block';
+    });
+
+    function instalarApp() {
+        if (!deferredPrompt) {
+            alert('App já está instalado ou navegador não suporta instalação');
+            return;
+        }
+
+        // Mostra o prompt de instalação
+        deferredPrompt.prompt();
+
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('✅ App instalado!');
+                document.getElementById('installBanner').style.display = 'none';
+            }
+            deferredPrompt = null;
+        });
+    }
+
+    // Detecta quando app é instalado
+    window.addEventListener('appinstalled', () => {
+        console.log('✅ PWA instalado com sucesso!');
+        document.getElementById('installBanner').style.display = 'none';
+    });
+
+    // ===== REGISTRAR SERVICE WORKER =====
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('<%= request.getContextPath() %>/ponto/service-worker.js')
+                .then(registration => {
+                    console.log('✅ Service Worker registrado:', registration.scope);
+                })
+                .catch(error => {
+                    console.log('❌ Erro ao registrar Service Worker:', error);
+                });
         });
     }
 </script>

@@ -1,0 +1,41 @@
+{
+  "name": "SaaS Ponto - Controle de Ponto",
+  "short_name": "SaaS Ponto",
+  "description": "Sistema de controle de ponto eletrônico",
+  "start_url": "/ponto/index.jsp",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#daa520",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/ponto/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/ponto/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Registrar Ponto",
+      "short_name": "Bater Ponto",
+      "description": "Ir direto para registro de ponto",
+      "url": "/ponto/registroponto.jsp",
+      "icons": [{ "src": "/ponto/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Admin",
+      "short_name": "Admin",
+      "description": "Acessar painel administrativo",
+      "url": "/ponto/admin.jsp",
+      "icons": [{ "src": "/ponto/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

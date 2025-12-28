@@ -173,14 +173,14 @@
             <td class="total-highlight subtotal">R$ 0,00</td>
         </tr>
         <tr>
-            <td style="color: var(--accent); font-weight: bold;">Débito</td>
+            <td style="color: var(--accent); font-weight: bold;">Crédito</td>
             <td><input type="number" class="nav-input inp-fotos"></td>
             <td><input type="number" class="nav-input inp-enc"></td>
             <td><input type="number" class="nav-input inp-arq"></td>
             <td class="total-highlight subtotal">R$ 0,00</td>
         </tr>
         <tr>
-            <td style="color: var(--accent); font-weight: bold;">Crédito</td>
+            <td style="color: var(--accent); font-weight: bold;">Débito</td>
             <td><input type="number" class="nav-input inp-fotos"></td>
             <td><input type="number" class="nav-input inp-enc"></td>
             <td><input type="number" class="nav-input inp-arq"></td>

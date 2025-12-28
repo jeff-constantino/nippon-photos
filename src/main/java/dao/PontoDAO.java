@@ -1055,7 +1055,7 @@ public class PontoDAO {
 
         // Se estiver fora da zona, bloquear registro
         if (!dentroZona) {
-            throw new Exception("Você está fora da zona autorizada para registro de ponto!");
+            throw new Exception("Você só pode bater o ponto dentro dos limites da empresa!");
         }
 
         Ponto registro = buscarRegistroDia(funcId, dataRegistro);

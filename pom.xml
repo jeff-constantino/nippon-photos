@@ -5,9 +5,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>SaaS</groupId>
-  <artifactId>nippon</artifactId>
+  <artifactId>portifolio</artifactId>
   <version>1.0.0</version>
-  <name>nippon-photos</name>
+  <name>portifolio</name>
   <packaging>war</packaging>
 
   <properties>

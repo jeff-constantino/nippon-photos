@@ -324,7 +324,7 @@
                                                 <span class="form-bar"></span>
                                                 <input type="text" class="form-control"
                                                        id="valor_din" name="valor_din"
-                                                       placeholder="" value="${conf_diario.valor_din - conf_diario.valor_despesa_din}"
+                                                       placeholder="" value="${conf_diario.valor_din}"
 
                                                        style="text-align: center; background-color: #f2a654; color: black; font-weight: bold"
                                                        >

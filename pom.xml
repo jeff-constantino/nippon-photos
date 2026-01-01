@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>SaaS</groupId>
-  <artifactId>portifolio</artifactId>
+  <artifactId>nippon</artifactId>
   <version>1.0.0</version>
   <name>portifolio</name>
   <packaging>war</packaging>

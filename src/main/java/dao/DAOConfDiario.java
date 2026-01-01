@@ -298,6 +298,9 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
     public ModelConfDiario buscarConferenciaPorData(Date dataFechamento) throws SQLException {
         // Criando um objeto para armazenar os dados
         ModelConfDiario conf = null;
+        // LOG: veja o que está sendo buscado
+        System.out.println("Buscando data: " + dataFechamento);
+        System.out.println("SQL Date: " + new java.sql.Date(dataFechamento.getTime()));
 
         String sqlConfDia = "SELECT * FROM conf_dia WHERE data_fechamento = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sqlConfDia)) {
@@ -305,68 +308,72 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
 
             // Usando try-with-resources para o ResultSet
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    conf = new ModelConfDiario();
+                while (rs.next()) {  // Mudei para WHILE para ver se há mais registros
+                    System.out.println("Registro encontrado - ID: " + rs.getLong("id") +
+                            ", valor_din: " + rs.getBigDecimal("valor_din"));
 
-                    // Preenchendo os dados da tabela conf_dia
-                    conf.setId(rs.getLong("id"));
-                    conf.setValor_din(rs.getBigDecimal("valor_din"));
-                    conf.setValor_din_real(rs.getBigDecimal("valor_din_real"));
-                    conf.setValor_din_dif(rs.getBigDecimal("valor_din_dif"));
-                    conf.setValor_deb(rs.getBigDecimal("valor_deb"));
-                    conf.setValor_deb_real(rs.getBigDecimal("valor_deb_real"));
-                    conf.setValor_deb_dif(rs.getBigDecimal("valor_deb_dif"));
-                    conf.setValor_cred(rs.getBigDecimal("valor_cred"));
-                    conf.setValor_cred_real(rs.getBigDecimal("valor_cred_real"));
-                    conf.setValor_cred_dif(rs.getBigDecimal("valor_cred_dif"));
-                    conf.setValor_pix(rs.getBigDecimal("valor_pix"));
-                    conf.setValor_pix_real(rs.getBigDecimal("valor_pix_real"));
-                    conf.setValor_pix_dif(rs.getBigDecimal("valor_pix_dif"));
-                    conf.setValor_despesa_total(rs.getBigDecimal("valor_despesa_total"));
+                    if (conf == null) {  // Pega só o primeiro
+                        conf = new ModelConfDiario();
+
+                        // Preenchendo os dados da tabela conf_dia
+                        conf.setId(rs.getLong("id"));
+                        conf.setValor_din(rs.getBigDecimal("valor_din"));
+                        conf.setValor_din_real(rs.getBigDecimal("valor_din_real"));
+                        conf.setValor_din_dif(rs.getBigDecimal("valor_din_dif"));
+                        conf.setValor_deb(rs.getBigDecimal("valor_deb"));
+                        conf.setValor_deb_real(rs.getBigDecimal("valor_deb_real"));
+                        conf.setValor_deb_dif(rs.getBigDecimal("valor_deb_dif"));
+                        conf.setValor_cred(rs.getBigDecimal("valor_cred"));
+                        conf.setValor_cred_real(rs.getBigDecimal("valor_cred_real"));
+                        conf.setValor_cred_dif(rs.getBigDecimal("valor_cred_dif"));
+                        conf.setValor_pix(rs.getBigDecimal("valor_pix"));
+                        conf.setValor_pix_real(rs.getBigDecimal("valor_pix_real"));
+                        conf.setValor_pix_dif(rs.getBigDecimal("valor_pix_dif"));
+                        conf.setValor_despesa_total(rs.getBigDecimal("valor_despesa_total"));
 //                    conf.setValor_despesa_din(rs.getBigDecimal("valor_despesa_din"));
-                    conf.setValor_vale_total(rs.getBigDecimal("valor_vale_total"));
-                    conf.setDesconto(rs.getBigDecimal("desconto"));
-                    conf.setVenda_total_dia(rs.getBigDecimal("venda_total_dia"));
-                    conf.setObservacao(rs.getString("observacao"));
-                    conf.setData_fechamento(rs.getDate("data_fechamento").toLocalDate());
-                    conf.setTotal_revelado(rs.getInt("total_revelado"));
-                    conf.setTotal_informado(rs.getInt("total_informado"));
+                        conf.setValor_vale_total(rs.getBigDecimal("valor_vale_total"));
+                        conf.setDesconto(rs.getBigDecimal("desconto"));
+                        conf.setVenda_total_dia(rs.getBigDecimal("venda_total_dia"));
+                        conf.setObservacao(rs.getString("observacao"));
+                        conf.setData_fechamento(rs.getDate("data_fechamento").toLocalDate());
+                        conf.setTotal_revelado(rs.getInt("total_revelado"));
+                        conf.setTotal_informado(rs.getInt("total_informado"));
 
-                    conf.setRibbon_1_atual(rs.getInt("ribbon_1_atual"));
-                    conf.setRibbon_2_atual(rs.getInt("ribbon_2_atual"));
-                    conf.setRibbon_3_atual(rs.getInt("ribbon_3_atual"));
-                    conf.setRibbon_4_atual(rs.getInt("ribbon_4_atual"));
-                    conf.setRibbon_5_atual(rs.getInt("ribbon_5_atual"));
-                    conf.setRibbon_6_atual(rs.getInt("ribbon_6_atual"));
-                    conf.setSobras(rs.getInt("sobras"));
-                    conf.setDif_ribbon_1(rs.getInt("dif_ribbon_1"));
-                    conf.setDif_ribbon_2(rs.getInt("dif_ribbon_2"));
-                    conf.setDif_ribbon_3(rs.getInt("dif_ribbon_3"));
-                    conf.setDif_ribbon_4(rs.getInt("dif_ribbon_4"));
-                    conf.setDif_ribbon_5(rs.getInt("dif_ribbon_5"));
-                    conf.setDif_ribbon_6(rs.getInt("dif_ribbon_6"));
-                    conf.setOld_ribbon_1(rs.getInt("old_ribbon_1"));
-                    conf.setOld_ribbon_2(rs.getInt("old_ribbon_2"));
-                    conf.setOld_ribbon_3(rs.getInt("old_ribbon_3"));
-                    conf.setOld_ribbon_4(rs.getInt("old_ribbon_4"));
-                    conf.setOld_ribbon_5(rs.getInt("old_ribbon_5"));
-                    conf.setOld_ribbon_6(rs.getInt("old_ribbon_6"));
-                    conf.setRev_ribbon_1(rs.getInt("rev_ribbon_1"));
-                    conf.setRev_ribbon_2(rs.getInt("rev_ribbon_2"));
-                    conf.setRev_ribbon_3(rs.getInt("rev_ribbon_3"));
-                    conf.setRev_ribbon_4(rs.getInt("rev_ribbon_4"));
-                    conf.setRev_ribbon_5(rs.getInt("rev_ribbon_5"));
-                    conf.setRev_ribbon_6(rs.getInt("rev_ribbon_6"));
-                    conf.setTotal_dif(rs.getInt("total_dif"));
-                    conf.setObservacao_ribbon(rs.getString("observacao_ribbon"));
-                    conf.setValor_despesa_total(rs.getBigDecimal("valor_despesa_total"));
+                        conf.setRibbon_1_atual(rs.getInt("ribbon_1_atual"));
+                        conf.setRibbon_2_atual(rs.getInt("ribbon_2_atual"));
+                        conf.setRibbon_3_atual(rs.getInt("ribbon_3_atual"));
+                        conf.setRibbon_4_atual(rs.getInt("ribbon_4_atual"));
+                        conf.setRibbon_5_atual(rs.getInt("ribbon_5_atual"));
+                        conf.setRibbon_6_atual(rs.getInt("ribbon_6_atual"));
+                        conf.setSobras(rs.getInt("sobras"));
+                        conf.setDif_ribbon_1(rs.getInt("dif_ribbon_1"));
+                        conf.setDif_ribbon_2(rs.getInt("dif_ribbon_2"));
+                        conf.setDif_ribbon_3(rs.getInt("dif_ribbon_3"));
+                        conf.setDif_ribbon_4(rs.getInt("dif_ribbon_4"));
+                        conf.setDif_ribbon_5(rs.getInt("dif_ribbon_5"));
+                        conf.setDif_ribbon_6(rs.getInt("dif_ribbon_6"));
+                        conf.setOld_ribbon_1(rs.getInt("old_ribbon_1"));
+                        conf.setOld_ribbon_2(rs.getInt("old_ribbon_2"));
+                        conf.setOld_ribbon_3(rs.getInt("old_ribbon_3"));
+                        conf.setOld_ribbon_4(rs.getInt("old_ribbon_4"));
+                        conf.setOld_ribbon_5(rs.getInt("old_ribbon_5"));
+                        conf.setOld_ribbon_6(rs.getInt("old_ribbon_6"));
+                        conf.setRev_ribbon_1(rs.getInt("rev_ribbon_1"));
+                        conf.setRev_ribbon_2(rs.getInt("rev_ribbon_2"));
+                        conf.setRev_ribbon_3(rs.getInt("rev_ribbon_3"));
+                        conf.setRev_ribbon_4(rs.getInt("rev_ribbon_4"));
+                        conf.setRev_ribbon_5(rs.getInt("rev_ribbon_5"));
+                        conf.setRev_ribbon_6(rs.getInt("rev_ribbon_6"));
+                        conf.setTotal_dif(rs.getInt("total_dif"));
+                        conf.setObservacao_ribbon(rs.getString("observacao_ribbon"));
+                        conf.setValor_despesa_total(rs.getBigDecimal("valor_despesa_total"));
 
+                    }
                 }
             }
+
+            return conf; // Retorna o objeto preenchido ou null caso não tenha encontrado dados
         }
 
-        return conf; // Retorna o objeto preenchido ou null caso não tenha encontrado dados
     }
-
-
 }

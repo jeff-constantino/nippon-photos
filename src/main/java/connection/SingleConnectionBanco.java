@@ -4,12 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class SingleConnectionBanco {
-    private static final String banco = "jdbc:postgresql://localhost:5432/portifolio?autoReconnect=true";
-    private static final String user = "postgres";
-    private static final String senha = "admin";
-//    private static final String banco = "jdbc:postgresql://localhost:5432/portifolio?sslmode=disable&tcpKeepAlive=true&socketTimeout=30";
-//    private static final String user = "jeffe6510_admin";
-//    private static final String senha = "Aplic@tiv0";
+//    private static final String banco = "jdbc:postgresql://localhost:5432/portifolio?autoReconnect=true";
+//    private static final String user = "postgres";
+//    private static final String senha = "admin";
+    private static final String banco = "jdbc:postgresql://localhost:5432/jeff6510_nippon?sslmode=disable&tcpKeepAlive=true&socketTimeout=30";
+    private static final String user = "jeffe6510_admin";
+    private static final String senha = "Aplic@tiv0";
 
     private static Connection connection = null;
 

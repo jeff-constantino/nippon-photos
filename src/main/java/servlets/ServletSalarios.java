@@ -53,16 +53,6 @@ public class ServletSalarios extends ServletGenericUtil { // Mantenha o nome da 
             List<ModelConfig> listaConfigs = daoConfig.consultarTodasConfigs();
             request.setAttribute("listaConfigs", listaConfigs);
 
-            System.out.println("=== DEBUG CONFIGS ===");
-            if (listaConfigs != null && !listaConfigs.isEmpty()) {
-                System.out.println("Qtd configs: " + listaConfigs.size());
-                ModelConfig config = listaConfigs.get(0);
-                System.out.println("conf1_valor: " + config.getConf1_valor());
-                System.out.println("conf2_valor: " + config.getConf2_valor());
-                System.out.println("conf3_valor: " + config.getConf3_valor());
-            } else {
-                System.out.println("listaConfigs está VAZIA ou NULL!");
-            }
 
             // Carrega as configurações de salário que contém o FGTS
             List<ModelConfiguracao> configsSalarios = daoConfiguracao.consultarSalarios();
@@ -85,6 +75,22 @@ public class ServletSalarios extends ServletGenericUtil { // Mantenha o nome da 
                 LocalDate dataFin = LocalDate.parse(dataFinal);
                 Long funcId = Long.parseLong(funcionarioId);
 
+                // Calcula mês e ano para verificação
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = sdf.parse(dataInicial);
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                int mesVerificacao = cal.get(Calendar.MONTH) + 1;
+                int anoVerificacao = cal.get(Calendar.YEAR);
+
+                // ✅ VERIFICA SE JÁ EXISTE SALÁRIO REGISTRADO
+                boolean salarioJaExiste = relatorio.verificarSalarioExistente(mesVerificacao, anoVerificacao, funcId);
+                request.setAttribute("salarioJaExiste", salarioJaExiste);
+
+                if (salarioJaExiste) {
+                    request.setAttribute("msg", "Atenção: Já existe um salário registrado para este funcionário no período selecionado.");
+                }
+
                 // NOVO: Busca qual comissão o funcionário usa
                 String tipoComissao = relatorio.buscarComissaoFuncionario(funcId);
 
@@ -101,9 +107,7 @@ public class ServletSalarios extends ServletGenericUtil { // Mantenha o nome da 
                 request.setAttribute("tipoComissao", tipoComissao);
                 request.setAttribute("valorComissaoAtiva", valorComissao);
 
-                System.out.println("=== COMISSÃO DO FUNCIONÁRIO ===");
-                System.out.println("Tipo de comissão: " + tipoComissao);
-                System.out.println("Valor da comissão: " + valorComissao);
+
 
                 // Busca e soma dos vales
                 DAOVales daoVales = new DAOVales();
@@ -120,16 +124,7 @@ public class ServletSalarios extends ServletGenericUtil { // Mantenha o nome da 
                         daoCondutas.buscarMedidasPorFuncionarioEPeriodo(funcId, dataIni, dataFin);
                 request.setAttribute("listaMedidasDisciplinares", listaMedidas);
 
-// Debug (opcional - pode remover depois que funcionar)
-                System.out.println("=== MEDIDAS DISCIPLINARES CARREGADAS ===");
-                System.out.println("Funcionário ID: " + funcId);
-                System.out.println("Período: " + dataIni + " a " + dataFin);
-                System.out.println("Total de medidas encontradas: " + (listaMedidas != null ? listaMedidas.size() : 0));
-                if (listaMedidas != null && !listaMedidas.isEmpty()) {
-                    for (ModelMedidasDisciplinaresCompleto m : listaMedidas) {
-                        System.out.println("  - " + m.getTipoMedida() + " em " + m.getDataMedida() + ": " + m.getMotivo());
-                    }
-                }
+
 
                 int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
                 int resultadosPorPagina = 10;

@@ -410,7 +410,7 @@ public class DAOSalarios {
         }
         return funcionarios;
     }
-    // Adicione este método no DAOSalarios
+
     public String buscarComissaoFuncionario(Long funcionarioId) throws Exception {
         String sql = "SELECT comissao FROM model_login WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -423,5 +423,22 @@ public class DAOSalarios {
             throw new Exception("Erro ao buscar comissão do funcionário: " + e.getMessage(), e);
         }
         return null;
+    }
+
+
+    public boolean verificarSalarioExistente(int mes, int ano, long funcionarioId) throws Exception {
+        String sql = "SELECT COUNT(*) FROM salarios WHERE mes = ? AND ano = ? AND funcionario_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, mes);
+            stmt.setInt(2, ano);
+            stmt.setLong(3, funcionarioId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao verificar salário existente: " + e.getMessage(), e);
+        }
+        return false;
     }
 }

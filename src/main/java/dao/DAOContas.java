@@ -174,6 +174,7 @@ public class DAOContas {
                 conta.setNumero_pedido(rs.getLong("numero_pedido"));
                 conta.setEmpresa(rs.getString("empresa"));
                 conta.setItens(rs.getString("itens"));
+                conta.setCodigo(rs.getString("codigo"));
                 conta.setValor(rs.getDouble("valor"));
                 conta.setData_de_pedido(rs.getDate("data_de_pedido"));
                 conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));

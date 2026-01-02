@@ -639,7 +639,7 @@
                                                 <div class="card-body">
 
                                                     <div class="table-responsive ">
-                                                        <h2 style="text-align: center">CONTAS PAGAS NOS ÚLTIMOS 60 DIAS</h2>
+                                                        <h2 style="text-align: center">CONTAS DOS ÚLTIMOS 60 DIAS</h2>
                                                         <table class="table table-striped table-bordered minha-tabela">
                                                             <thead>
                                                             <tr>
@@ -651,8 +651,9 @@
                                                                 <th>Valor</th>
                                                                 <th>Pedido</th>
                                                                 <th>Pagamento</th>
-                                                                <th>Pagamento</th>
+                                                                <th>Forma</th>
                                                                 <th>ID</th>
+                                                                <th>Codigo</th>
 
 
                                                             </tr>
@@ -668,7 +669,7 @@
                                                                                 </c:set>
 
                                                                                 <button class="btn btn-outline-primary"
-                                                                                        onclick="editarConta(this, '${contas.data_de_pedido}', '${contas.data_de_pagamento}', '${contas.numero_pedido}', '${contas.conta_id}', '${contas.empresa}', '${contas.itens}', '${valorFormatado}', '${contas.status}', '${contas.pagamento}')">
+                                                                                        onclick="editarConta(this, '${contas.data_de_pedido}', '${contas.data_de_pagamento}', '${contas.numero_pedido}', '${contas.conta_id}', '${contas.empresa}', '${contas.itens}', '${contas.codigo}', '${valorFormatado}', '${contas.status}', '${contas.pagamento}')">
                                                                                     Editar
                                                                                 </button>
                                                                             </td>

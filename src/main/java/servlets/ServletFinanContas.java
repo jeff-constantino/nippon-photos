@@ -37,6 +37,7 @@ public class ServletFinanContas extends ServletGenericUtil {
             String empresa = request.getParameter("empresa");
             String empresa2 = request.getParameter("empresa2");
             String itens = request.getParameter("itens");
+            String codigo = request.getParameter("codigo");
             String valor1 = request.getParameter("conf1_valor"); // valor1 já vem sem máscara
             String valor2 = request.getParameter("conf1_valor2"); // valor2 já vem sem máscara
             String data_pedido = request.getParameter("data_de_pedido");
@@ -57,6 +58,7 @@ public class ServletFinanContas extends ServletGenericUtil {
             modelContas.setNumero_pedido(numero_pedido != null && !numero_pedido.isEmpty() ? Long.parseLong(numero_pedido) : 0L);
             modelContas.setEmpresa(empresa);
             modelContas.setItens(itens);
+            modelContas.setCodigo(codigo);
 
             // Converte os valores para double
             double valor1Convertido = valor1 != null && !valor1.isEmpty() ? Double.parseDouble(valor1) : 0.0;

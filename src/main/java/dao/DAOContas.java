@@ -20,7 +20,7 @@ public class DAOContas {
     }
 
     public void gravarConta(ModelContas conta) throws Exception {
-        String sql = "INSERT INTO contas (numero_pedido, empresa, itens, valor, data_de_pedido, data_de_pagamento, status,pagamento) VALUES (?, UPPER(?), UPPER(?), ?, ?, ?, UPPER(?), UPPER(?))";
+        String sql = "INSERT INTO contas (numero_pedido, empresa, itens, valor, data_de_pedido, data_de_pagamento, status,pagamento,codigo) VALUES (?, UPPER(?), UPPER(?), ?, ?, ?, UPPER(?), UPPER(?),?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, conta.getNumero_pedido());
@@ -44,6 +44,7 @@ public class DAOContas {
 
             stmt.setString(7, conta.getStatus());
             stmt.setString(8, conta.getPagamento());
+            stmt.setString(9, conta.getCodigo());
 
 
             stmt.executeUpdate();
@@ -66,7 +67,7 @@ public class DAOContas {
         }
 
         String sql = "UPDATE contas SET empresa = UPPER(?), itens = UPPER(?), valor = ?, " +
-                "data_de_pedido = ?, data_de_pagamento = ?, status = UPPER(?), pagamento = UPPER(?) " +
+                "data_de_pedido = ?, data_de_pagamento = ?, status = UPPER(?), pagamento = UPPER(?), codigo = ? " +
                 "WHERE conta_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -88,7 +89,8 @@ public class DAOContas {
 
             stmt.setString(6, conta.getStatus());
             stmt.setString(7, conta.getPagamento());
-            stmt.setLong(8, conta.getConta_id());
+            stmt.setString(8, conta.getCodigo());
+            stmt.setLong(9, conta.getConta_id());
 
             // ✅ executa o comando SQL
             int linhasAfetadas = stmt.executeUpdate();
@@ -146,6 +148,7 @@ public class DAOContas {
                 conta.setNumero_pedido(rs.getLong("numero_pedido"));
                 conta.setEmpresa(rs.getString("empresa"));
                 conta.setItens(rs.getString("itens"));
+                conta.setCodigo(rs.getString("codigo"));
                 conta.setValor(rs.getDouble("valor"));
                 conta.setData_de_pedido(rs.getDate("data_de_pedido"));
                 conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
@@ -204,6 +207,7 @@ public class DAOContas {
                 conta.setNumero_pedido(rs.getLong("numero_pedido"));
                 conta.setEmpresa(rs.getString("empresa"));
                 conta.setItens(rs.getString("itens"));
+                conta.setCodigo(rs.getString("codigo"));
                 conta.setValor(rs.getDouble("valor"));
                 conta.setData_de_pedido(rs.getDate("data_de_pedido"));
                 conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
@@ -236,6 +240,7 @@ public class DAOContas {
                 conta.setNumero_pedido(rs.getLong("numero_pedido"));
                 conta.setEmpresa(rs.getString("empresa"));
                 conta.setItens(rs.getString("itens"));
+                conta.setCodigo(rs.getString("codigo"));
                 conta.setValor(rs.getDouble("valor"));
                 conta.setData_de_pedido(rs.getDate("data_de_pedido"));
                 conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
@@ -265,6 +270,7 @@ public class DAOContas {
                 conta.setNumero_pedido(rs.getLong("numero_pedido"));
                 conta.setEmpresa(rs.getString("empresa"));
                 conta.setItens(rs.getString("itens"));
+                conta.setCodigo(rs.getString("codigo"));
                 conta.setValor(rs.getDouble("valor"));
                 conta.setData_de_pedido(rs.getDate("data_de_pedido"));
                 conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
@@ -291,6 +297,7 @@ public class DAOContas {
                 conta.setNumero_pedido(rs.getLong("numero_pedido"));
                 conta.setEmpresa(rs.getString("empresa"));
                 conta.setItens(rs.getString("itens"));
+                conta.setCodigo(rs.getString("codigo"));
                 conta.setValor(rs.getDouble("valor"));
                 conta.setData_de_pedido(rs.getDate("data_de_pedido"));
                 conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
@@ -322,6 +329,7 @@ public class DAOContas {
                 conta.setNumero_pedido(rs.getLong("numero_pedido"));
                 conta.setEmpresa(rs.getString("empresa"));
                 conta.setItens(rs.getString("itens"));
+                conta.setCodigo(rs.getString("codigo"));
                 conta.setValor(rs.getDouble("valor"));
                 conta.setData_de_pedido(rs.getDate("data_de_pedido"));
                 conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));

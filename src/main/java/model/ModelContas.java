@@ -17,6 +17,15 @@ public class ModelContas implements Serializable {
     private String dataDePedidoFormatada; // Adicionando o campo para data formatada
     private String dataDePagamentoFormatada; // Adicionando o campo para data formatada
     private String pagamento;
+    private String codigo;
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
     public String getPagamento() {
         return pagamento;

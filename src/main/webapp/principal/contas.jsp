@@ -197,6 +197,16 @@
                                                                                                         required></textarea>
 
                                                                                             </div>
+                                                                                            <div class="mb-3">
+                                                                                                <label style="color: #f2a654">CÓDIGO DE BARRAS</label>
+                                                                                                <textarea
+                                                                                                        class="form-control"
+                                                                                                        style="background-color: #f2a654; color: black; font-weight: bold;  text-transform: uppercase;"
+                                                                                                        id="codigo"
+                                                                                                        name="codigo" value="${contas.codigo}"
+                                                                                                        required></textarea>
+
+                                                                                            </div>
                                                                                             <div class="row">
                                                                                                 <div class="col-3">
                                                                                                     <label style="color: #f2a654">VALOR</label>
@@ -531,6 +541,16 @@
                                                                       id="itens2" name="itens"
                                                                       required>${modelContas.itens}</textarea>
                                                         </div>
+                                                        <div class="mb-3">
+                                                            <label style="color: #f2a654">CÓDIGO DE BARRAS</label>
+                                                            <textarea
+                                                                    class="form-control"
+                                                                    style="background-color: #f2a654; color: black; font-weight: bold;  text-transform: uppercase;"
+                                                                    id="codigo2"
+                                                                    name="codigo" value="${contas.codigo}"
+                                                                    required></textarea>
+
+                                                        </div>
                                                         <div class="row">
                                                             <div class="col-3">
                                                                 <label>VALOR</label>
@@ -857,7 +877,7 @@
             return data;
         }
 
-       function editarConta(button, dataPedido, dataPagamento, numeroPedido, conta_id, empresa, itens, valor, status, pagamento) {
+       function editarConta(button, dataPedido, dataPagamento, numeroPedido, conta_id, empresa, itens, codigo, valor, status, pagamento) {
 
            document.getElementById('data_de_pedido2').value = formatarData(dataPedido);
            document.getElementById('data_de_pagamento2').value = formatarData(dataPagamento);
@@ -865,6 +885,7 @@
            document.getElementById('idPedido').value = conta_id;
            document.getElementById('empresa2').value = empresa;
            document.getElementById('itens2').value = itens;
+           document.getElementById('codigo2').value =codigo;
 
            // Limpa o campo antes
            $("#conf1_valor2").val('');

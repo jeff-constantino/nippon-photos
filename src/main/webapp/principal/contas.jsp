@@ -653,7 +653,7 @@
                                                                 <th>Pagamento</th>
                                                                 <th>Forma</th>
                                                                 <th>ID</th>
-                                                                <th>Codigo</th>
+                                                                
 
 
                                                             </tr>

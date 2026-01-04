@@ -101,10 +101,10 @@ public class DAOFuncionario {
         List<ModelVendas> rankingList = new ArrayList<>();
 
         StringBuilder sql = new StringBuilder(
-                "SELECT l.id AS vendedor_id, l.nome, " +
+                "SELECT l.id AS vendedor_id, l.nome, l.apelido, " +  // ← ADICIONADO l.apelido
                         "   SUM(v.prod1_din + v.prod1_deb + v.prod1_cred + v.prod1_pix) AS total_vendas, " +
                         "   SUM(v.prod1_din + v.prod1_deb + v.prod1_cred + v.prod1_pix + v.sobras) AS total_producao, " +
-                        "   COUNT(DISTINCT v.data_venda) AS dias_trabalhados " +     // 👈 NOVO CAMPO
+                        "   COUNT(DISTINCT v.data_venda) AS dias_trabalhados " +
                         "FROM vendas v " +
                         "INNER JOIN model_login l ON v.vendedor_id = l.id " +
                         "WHERE 1=1 ");
@@ -113,7 +113,7 @@ public class DAOFuncionario {
             sql.append(" AND v.data_venda BETWEEN TO_DATE(?, 'YYYY-MM-DD') AND TO_DATE(?, 'YYYY-MM-DD') ");
         }
 
-        sql.append(" GROUP BY l.id, l.nome ");
+        sql.append(" GROUP BY l.id, l.nome, l.apelido ");  // ← ADICIONADO l.apelido no GROUP BY
         sql.append(" ORDER BY total_vendas DESC LIMIT ? OFFSET ?");
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql.toString())) {
@@ -133,9 +133,10 @@ public class DAOFuncionario {
                 ModelVendas modelVenda = new ModelVendas();
                 modelVenda.setVendedor_id(resultado.getString("vendedor_id"));
                 modelVenda.setNome(resultado.getString("nome"));
+                modelVenda.setApelido(resultado.getString("apelido"));  // ← ADICIONADO
                 modelVenda.setTotalFotosVendidas(resultado.getInt("total_vendas"));
                 modelVenda.setTotalProducao(resultado.getInt("total_producao"));
-                modelVenda.setDiasTrabalhados(resultado.getInt("dias_trabalhados"));  // 👈 novo campo
+                modelVenda.setDiasTrabalhados(resultado.getInt("dias_trabalhados"));
 
                 rankingList.add(modelVenda);
             }

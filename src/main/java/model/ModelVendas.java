@@ -51,7 +51,15 @@ public class ModelVendas implements Serializable {
     public int getDiasTrabalhados() { return diasTrabalhados; }
     public void setDiasTrabalhados(int diasTrabalhados) { this.diasTrabalhados = diasTrabalhados; }
 
+    private String apelido;
 
+    public String getApelido() {
+        return apelido;
+    }
+
+    public void setApelido(String apelido) {
+        this.apelido = apelido;
+    }
 
     public ModelVendas() {
         // Construtor padrão

@@ -378,26 +378,30 @@ public class PontoServlet extends HttpServlet {
         Ponto registroAtual = dao.buscarRegistroPorId(regId);
         String dataRegistro = new java.text.SimpleDateFormat("yyyy-MM-dd").format(registroAtual.getRegData());
 
-        // Parse dos horários - se vier vazio, mantém o valor atual
+        // Parse dos horários com detecção inteligente de dia seguinte
         String entradaParam = req.getParameter("entrada");
         String saidaIntParam = req.getParameter("saidaInt");
         String retornoIntParam = req.getParameter("retornoInt");
         String saidaParam = req.getParameter("saida");
 
+        // Entrada (sem referência, usa data normal)
         Timestamp entrada = (entradaParam != null && !entradaParam.trim().isEmpty())
-                ? parseTimestampComData(entradaParam, dataRegistro)
+                ? parseTimestampComData(entradaParam, dataRegistro, null)
                 : registroAtual.getRegEntrada();
 
+        // Saída Intervalo (referência: entrada)
         Timestamp saidaInt = (saidaIntParam != null && !saidaIntParam.trim().isEmpty())
-                ? parseTimestampComData(saidaIntParam, dataRegistro)
+                ? parseTimestampComData(saidaIntParam, dataRegistro, entrada)
                 : registroAtual.getRegSaidaIntervalo();
 
+        // Retorno Intervalo (referência: saída intervalo)
         Timestamp retornoInt = (retornoIntParam != null && !retornoIntParam.trim().isEmpty())
-                ? parseTimestampComData(retornoIntParam, dataRegistro)
+                ? parseTimestampComData(retornoIntParam, dataRegistro, saidaInt)
                 : registroAtual.getRegRetornoIntervalo();
 
+        // Saída Final (referência: retorno intervalo)
         Timestamp saida = (saidaParam != null && !saidaParam.trim().isEmpty())
-                ? parseTimestampComData(saidaParam, dataRegistro)
+                ? parseTimestampComData(saidaParam, dataRegistro, retornoInt)
                 : registroAtual.getRegSaida();
 
         String obs = req.getParameter("obs");
@@ -411,12 +415,31 @@ public class PontoServlet extends HttpServlet {
         req.getRequestDispatcher("/ponto/admin.jsp").forward(req, resp);
     }
 
-    private Timestamp parseTimestampComData(String hora, String data) {
+
+    private Timestamp parseTimestampComData(String hora, String data, Timestamp referenciaAnterior) {
         if (hora == null || hora.trim().isEmpty()) return null;
         try {
-            // Formato esperado da hora: "08:30"
-            // Formato esperado da data: "2025-01-15"
-            return Timestamp.valueOf(data + " " + hora + ":00");
+            // Criar timestamp inicial com a data fornecida
+            Timestamp ts = Timestamp.valueOf(data + " " + hora + ":00");
+
+            // Se tiver uma referência anterior (entrada ou retorno) e o horário atual for MENOR que 06:00
+            // E a referência for MAIOR que 18:00, então é do dia seguinte
+            if (referenciaAnterior != null) {
+                java.time.LocalTime horaAtual = ts.toLocalDateTime().toLocalTime();
+                java.time.LocalTime horaReferencia = referenciaAnterior.toLocalDateTime().toLocalTime();
+
+                // Se a hora atual é antes das 06:00 E a referência é depois das 18:00
+                // Então é do dia seguinte
+                if (horaAtual.isBefore(java.time.LocalTime.of(6, 0)) &&
+                        horaReferencia.isAfter(java.time.LocalTime.of(18, 0))) {
+
+                    // Adiciona 1 dia
+                    java.time.LocalDate dataAjustada = ts.toLocalDateTime().toLocalDate().plusDays(1);
+                    ts = Timestamp.valueOf(dataAjustada.atTime(horaAtual));
+                }
+            }
+
+            return ts;
         } catch (Exception e) {
             return null;
         }

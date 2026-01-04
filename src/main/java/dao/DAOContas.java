@@ -98,7 +98,7 @@ public class DAOContas {
             // Só faz commit se realmente atualizou algo
             if (linhasAfetadas > 0) {
                 connection.commit();
-                System.out.println("Conta atualizada com sucesso. ID: " + conta.getConta_id());
+
             } else {
                 System.out.println("Nenhuma conta atualizada. Verifique o ID informado: " + conta.getConta_id());
             }

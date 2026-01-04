@@ -783,7 +783,7 @@
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
                         });
-                        console.log(`✅ Campo ${id} preenchido com: ${input.value}`);
+
                     }
                 }
             }

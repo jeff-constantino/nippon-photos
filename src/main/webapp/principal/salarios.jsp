@@ -1058,11 +1058,7 @@
     const tipoComissao = '${tipoComissao}';
     const fgtsAliquota = parseFloat('${configSalario.fgts}');
 
-    console.log('=== COMISSÃO ATIVA ===');
-    console.log('Tipo:', tipoComissao);
-    console.log('Valor:', comissaoAtiva);
-    console.log('Comissão 1:', comissao1Valor);
-    console.log('Comissão 2:', comissao2Valor);
+
 
     const faixasInss = [
         {

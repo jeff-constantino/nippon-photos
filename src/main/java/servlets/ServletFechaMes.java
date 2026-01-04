@@ -274,13 +274,11 @@ import model.ModelDespesas;
             @SuppressWarnings("unchecked")
             List<ModelDespesas> despesasMes = (List<ModelDespesas>) session.getAttribute("despesasMes");
 
-            System.out.println("DEBUG EXCEL: Tentativa de exportar mês/ano: " + mes + "/" + ano);
-            System.out.println("DEBUG EXCEL: Contas na Sessão (Tamanho): " + (contasMes != null ? contasMes.size() : "NULL"));
-            System.out.println("DEBUG EXCEL: Despesas na Sessão (Tamanho): " + (despesasMes != null ? despesasMes.size() : "NULL"));
+
 
             // Se as listas não estiverem na sessão, busca do banco
             if (contasMes == null || despesasMes == null) {
-                System.out.println("DEBUG EXCEL: LISTAS VAZIAS NA SESSÃO. Tentando recarregar do banco de dados...");
+
 
                 // Determinar as datas inicial e final do mês
                 Calendar cal = Calendar.getInstance();
@@ -303,7 +301,7 @@ import model.ModelDespesas;
                     session.setAttribute("contasMes", contasMes);
                     session.setAttribute("despesasMes", despesasMes);
 
-                    System.out.println("DEBUG EXCEL: Listas recarregadas - Contas: " + contasMes.size() + ", Despesas: " + despesasMes.size());
+
 
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -318,8 +316,7 @@ import model.ModelDespesas;
             if (contasMes == null) contasMes = new ArrayList<>();
             if (despesasMes == null) despesasMes = new ArrayList<>();
 
-            System.out.println("DEBUG EXCEL: Recebido da URL: jurosCreditoVm=" + request.getParameter("jurosCreditoVm") +
-                    ", contas=" + request.getParameter("contas"));
+
 
             // Recupera todos os valores da URL
             BigDecimal debitoVm = parseBigDecimal(request.getParameter("debitoVm"));
@@ -394,8 +391,7 @@ import model.ModelDespesas;
             try {
                 ExcelDREGenerator generator = new ExcelDREGenerator();
 
-                System.out.println("DEBUG EXCEL: Enviando para o Excel - Contas: " + contasMes.size() +
-                        ", Despesas: " + despesasMes.size());
+
 
                 // Gera Excel com as listas detalhadas
                 byte[] excelBytes = generator.gerarRelatorioFechaMes(

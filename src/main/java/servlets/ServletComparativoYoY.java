@@ -46,10 +46,7 @@ public class ServletComparativoYoY extends ServletGenericUtil {
         String anoParam = request.getParameter("ano");
         String periodoParam = request.getParameter("periodo");
 
-        System.out.println("=== INICIANDO BUSCA DE DADOS ===");
-        System.out.println("Mês: " + mesParam);
-        System.out.println("Ano: " + anoParam);
-        System.out.println("Período: " + periodoParam);
+
 
         // Valida os parâmetros
         if (mesParam == null || anoParam == null || periodoParam == null) {
@@ -63,57 +60,53 @@ public class ServletComparativoYoY extends ServletGenericUtil {
             int ano = Integer.parseInt(anoParam);
             int periodo = Integer.parseInt(periodoParam);
 
-            System.out.println("Convertido: mes=" + mes + ", ano=" + ano + ", periodo=" + periodo);
+
 
             // Busca os dados no banco
-            System.out.println("Chamando DAO...");
-            ModelFechaMes dados = dao.buscarDadosMesAno(mes, ano);
-            System.out.println("DAO retornou dados: " + (dados != null));
 
+            ModelFechaMes dados = dao.buscarDadosMesAno(mes, ano);
 
             // Monta o JSON de resposta
             Map<String, Object> resultado = new HashMap<>();
 
-            System.out.println("Montando resposta...");
 
-            // Calcula valor total (soma de todas as formas de pagamento reais)
+                        // Calcula valor total (soma de todas as formas de pagamento reais)
             BigDecimal valorTotal = BigDecimal.ZERO;
             if (dados.getValor_din_mes_real() != null) {
                 valorTotal = valorTotal.add(dados.getValor_din_mes_real());
-                System.out.println("Dinheiro: " + dados.getValor_din_mes_real());
+
             }
             if (dados.getValor_deb_mes_real() != null) {
                 valorTotal = valorTotal.add(dados.getValor_deb_mes_real());
-                System.out.println("Débito: " + dados.getValor_deb_mes_real());
+
             }
             if (dados.getValor_cred_mes_real() != null) {
                 valorTotal = valorTotal.add(dados.getValor_cred_mes_real());
-                System.out.println("Crédito: " + dados.getValor_cred_mes_real());
+
             }
             if (dados.getValor_pix_mes_real() != null) {
                 valorTotal = valorTotal.add(dados.getValor_pix_mes_real());
-                System.out.println("Pix: " + dados.getValor_pix_mes_real());
+
             }
 
-            System.out.println("Valor Total: " + valorTotal);
 
             resultado.put("valorTotal", formatarValor(valorTotal));
 
             // Total de fotos vendidas (ft + enc + dig)
             int fotosVendidas = dados.getTotal_ft();
-            System.out.println("Fotos vendidas: " + fotosVendidas);
+
             resultado.put("fotosVendidas", fotosVendidas);
 
-            System.out.println("Sobras: " + dados.getTotal_sobras());
+
             resultado.put("sobras", dados.getTotal_sobras());
 
             // Ribbons calculado no DAO (BigDecimal)
-            System.out.println("Tentando buscar ribbons do model...");
+
             BigDecimal ribbons = BigDecimal.ZERO;
             try {
                 ribbons = dados.getTotal_ribbons_decimal() != null ?
                         dados.getTotal_ribbons_decimal() : BigDecimal.ZERO;
-                System.out.println("Ribbons recuperado: " + ribbons);
+
             } catch (Exception e) {
                 System.err.println("ERRO ao buscar ribbons: " + e.getMessage());
                 System.err.println("Verifique se o método getTotal_ribbons_decimal() existe no ModelFechaMes");
@@ -122,10 +115,10 @@ public class ServletComparativoYoY extends ServletGenericUtil {
             resultado.put("ribbons", formatarValor(ribbons));
 
             // Vendas diárias
-            System.out.println("Montando vendas diárias...");
+
             resultado.put("vendasDiarias", montarVendasDiarias(dados));
 
-            System.out.println("Enviando JSON de sucesso");
+
             // Envia resposta JSON
             enviarJSON(response, resultado);
 

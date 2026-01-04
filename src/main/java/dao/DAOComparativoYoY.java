@@ -27,14 +27,14 @@ public class DAOComparativoYoY {
      * @return ModelFechaMes com os dados consolidados do mês
      */
     public ModelFechaMes buscarDadosMesAno(int mes, int ano) throws SQLException {
-        System.out.println("=== DAO: Buscando dados de " + mes + "/" + ano + " ===");
+
 
         // Calcula primeiro e último dia do mês
         YearMonth yearMonth = YearMonth.of(ano, mes);
         LocalDate dataInicio = yearMonth.atDay(1);
         LocalDate dataFim = yearMonth.atEndOfMonth();
 
-        System.out.println("Período: " + dataInicio + " até " + dataFim);
+
 
         ModelFechaMes resumo = new ModelFechaMes();
 
@@ -66,21 +66,21 @@ public class DAOComparativoYoY {
         try {
             // Busca a quantidade de ribbon
             int qtdRibbon = 0;
-            System.out.println("Buscando qtd_ribbon da tabela conf_materiais...");
+
             try (PreparedStatement pst = connection.prepareStatement(sqlQtdRibbon)) {
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         qtdRibbon = rs.getInt("qtd_ribbon");
-                        System.out.println("qtd_ribbon encontrado: " + qtdRibbon);
+
                     } else {
                         System.out.println("ATENÇÃO: qtd_ribbon não encontrado na tabela conf_materiais");
                     }
                 }
             }
 
-            // Continua com as outras queries...
+
             // Busca totais de fotos
-            System.out.println("Executando query de fechamento...");
+
             try (PreparedStatement pst = connection.prepareStatement(sqlFechamento)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
@@ -90,10 +90,7 @@ public class DAOComparativoYoY {
                         resumo.setTotal_enc(rs.getInt("total_enc"));
                         resumo.setTotal_dig(rs.getInt("total_dig"));
                         resumo.setTotal_sobras(rs.getInt("total_sobras"));
-                        System.out.println("Total FT: " + resumo.getTotal_ft());
-                        System.out.println("Total ENC: " + resumo.getTotal_enc());
-                        System.out.println("Total DIG: " + resumo.getTotal_dig());
-                        System.out.println("Total Sobras: " + resumo.getTotal_sobras());
+
                     } else {
                         System.out.println("Nenhum registro encontrado em fecha_dia");
                     }
@@ -101,7 +98,7 @@ public class DAOComparativoYoY {
             }
 
             // Busca valores monetários
-            System.out.println("Executando query de configurações...");
+
             try (PreparedStatement pst = connection.prepareStatement(sqlConfiguracoes)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
@@ -116,7 +113,7 @@ public class DAOComparativoYoY {
                         resumo.setValor_cred_mes_real(rs.getBigDecimal("valor_cred_real") != null ? rs.getBigDecimal("valor_cred_real") : BigDecimal.ZERO);
                         resumo.setValor_pix_mes(rs.getBigDecimal("valor_pix") != null ? rs.getBigDecimal("valor_pix") : BigDecimal.ZERO);
                         resumo.setValor_pix_mes_real(rs.getBigDecimal("valor_pix_real") != null ? rs.getBigDecimal("valor_pix_real") : BigDecimal.ZERO);
-                        System.out.println("Valores carregados com sucesso");
+
                     } else {
                         System.out.println("Nenhum registro encontrado em conf_dia");
                         // Inicializa com zeros para evitar NullPointerException
@@ -147,7 +144,7 @@ public class DAOComparativoYoY {
             */
 
             // Busca vendas diárias
-            System.out.println("Executando query de vendas diárias...");
+
             String sqlRelatorioDia = "SELECT " +
                     "EXTRACT(DAY FROM data_fechamento) AS dia, " +
                     "EXTRACT(DOW FROM data_fechamento) AS dow, " +
@@ -182,7 +179,7 @@ public class DAOComparativoYoY {
                         relatorioDiario.add(dia);
                         count++;
                     }
-                    System.out.println("Total de dias encontrados: " + count);
+
                 }
             }
             resumo.setRelatorioDiario(relatorioDiario);
@@ -194,7 +191,7 @@ public class DAOComparativoYoY {
                 BigDecimal totalFt = BigDecimal.valueOf(resumo.getTotal_ft());
                 BigDecimal totalSobras = BigDecimal.valueOf(resumo.getTotal_sobras());
                 totalRibbons = totalFt.add(totalSobras).divide(qtdRibbonBD, 2, java.math.RoundingMode.HALF_UP);
-                System.out.println("Ribbons calculado: (" + resumo.getTotal_ft() + " + " + resumo.getTotal_sobras() + ") / " + qtdRibbon + " = " + totalRibbons);
+
             } else {
                 System.out.println("qtd_ribbon é 0, ribbons definido como 0");
             }
@@ -204,7 +201,7 @@ public class DAOComparativoYoY {
             // Armazena qtd_ribbon para referência
             resumo.setQtd_ribbon(qtdRibbon);
 
-            System.out.println("DAO: Busca concluída com sucesso!");
+
 
         } catch (SQLException e) {
             System.err.println("ERRO SQL NO DAO: " + e.getMessage());

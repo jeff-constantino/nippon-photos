@@ -324,7 +324,7 @@ import java.util.Map;
                 } else {
 
                     request.setAttribute("msg", "Selecione a Data da venda.");
-//                    System.out.println("Data da venda está nula.");
+
                 }
 
                 request.setAttribute("msg", msg);

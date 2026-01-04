@@ -1157,17 +1157,7 @@
             paramsMap[id] = valorBruto;
         });
 
-        // 2. Adiciona Parâmetros de Data de Referência
-        // (Pegamos o mês/ano do fechamento que foi buscado, se aplicável, ou tentamos obter do servidor)
-        // Para simplificar, vou confiar que o Servlet pode buscar esses dados via Session/Attribute
-        // ou usaremos a data que o usuário buscou.
 
-        // Se a página foi carregada com dados de um mês específico (fechamentoExistente)
-        // você precisará que a Servlet mande esses dados para o JS ou para o JSP via hidden input.
-        // Vamos assumir que a Servlet pode buscar o mês/ano de referência da Sessão (como no DRE).
-
-        // Debug
-        console.log("URL de Exportação (FechaMes): " + '<%= request.getContextPath() %>/ServletFechaMes?' + new URLSearchParams(paramsMap).toString());
 
         window.location.href =
             '<%= request.getContextPath() %>/ServletFechaMes?' + new URLSearchParams(paramsMap).toString();

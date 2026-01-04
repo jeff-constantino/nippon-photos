@@ -185,17 +185,13 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
         // Criando um objeto para armazenar os dados
         ModelConfDiario conf = null;
 
-        // LOG: Veja o que está sendo buscado
-        System.out.println("====== DEBUG BUSCA CONFERENCIA ======");
-        System.out.println("Data recebida: " + dataFechamento);
-        System.out.println("SQL Date convertida: " + new java.sql.Date(dataFechamento.getTime()));
 
         // 1ª Consulta: Buscar dados da tabela conf_dia
         String sqlConfDia = "SELECT * FROM conf_dia WHERE data_fechamento = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sqlConfDia)) {
             stmt.setDate(1, new java.sql.Date(dataFechamento.getTime())); // Conversão para SQL Date
 
-            System.out.println("Query preparada: " + stmt.toString());
+
             ResultSet rs = stmt.executeQuery();
 
             int contador = 0;
@@ -205,10 +201,7 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
                 BigDecimal valorDin = rs.getBigDecimal("valor_din");
                 Date dataResult = rs.getDate("data_fechamento");
 
-                System.out.println("Registro " + contador + " encontrado:");
-                System.out.println("  - ID: " + id);
-                System.out.println("  - valor_din: " + valorDin);
-                System.out.println("  - data_fechamento: " + dataResult);
+
 
                 if (conf == null) {  // Pega só o PRIMEIRO registro
                     conf = new ModelConfDiario();
@@ -234,10 +227,10 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
                     conf.setTotal_revelado(rs.getInt("total_revelado"));
                     conf.setTotal_informado(rs.getInt("total_informado"));
 
-                    System.out.println("  >>> ESTE REGISTRO FOI SELECIONADO <<<");
+
                 }
             }
-            System.out.println("Total de registros encontrados na conf_dia: " + contador);
+
         }
 
         // 2ª Consulta: Buscar dados da tabela controle_ribbon
@@ -313,7 +306,7 @@ public boolean existeConferenciaParaData(Date dataFechamento) {
             }
         }
 
-        System.out.println("====== FIM DEBUG ======");
+
         return conf; // Retorna o objeto preenchido ou null caso não tenha encontrado dados
     }
 

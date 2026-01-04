@@ -148,13 +148,13 @@ public class ServletFechaDia extends ServletGenericUtil {
         // Se a ação for buscaData
         if ("buscaData".equals(acao)) {
             String dataFechamento = request.getParameter("data_fechamento");
-            System.out.println("Parâmetro 'data_fechamento': " + dataFechamento);
+
 
             if (dataFechamento != null && !dataFechamento.isEmpty()) {
                 try {
                     // Converte a string da data para o tipo java.sql.Date
                     java.sql.Date data = java.sql.Date.valueOf(dataFechamento);
-                    System.out.println("Data convertida: " + data);
+
 
                     // Verifica se há vendas registradas para a data informada
                     if (!daoFechaDia.existeVendaParaData(data)) {
@@ -170,7 +170,7 @@ public class ServletFechaDia extends ServletGenericUtil {
                             // Verifica se o fechamento foi encontrado
                             if (fechamento != null) {
                                 request.setAttribute("fechamento", fechamento);
-                                System.out.println(fechamento);
+
                             } else {
                                 request.setAttribute("msg", "Nenhum fechamento encontrado para a data informada.");
                             }

@@ -822,7 +822,7 @@
 
            // Pega o valor do campo
            var valorAtual = $("#conf1_valor2").val();
-           console.log("Valor antes de limpar:", valorAtual); // Debug
+
 
            // Limpa completamente
            var valorLimpo = valorAtual.toString()
@@ -831,7 +831,7 @@
                .replace(/\./g, '')
                .replace(',', '.');
 
-           console.log("Valor depois de limpar:", valorLimpo); // Debug
+
 
            // Atualiza o campo
            $("#conf1_valor2").val(valorLimpo);

@@ -327,7 +327,7 @@ public class ServletDre extends ServletGenericUtil {
             String cleanedValue = value.trim();
 
             // Log para debug
-            System.out.println("Parsing value: [" + value + "] -> cleaned: [" + cleanedValue + "]");
+
 
             // Remove R$ e espaços
             cleanedValue = cleanedValue.replace("R$", "").trim();
@@ -336,7 +336,7 @@ public class ServletDre extends ServletGenericUtil {
             // Ex: "0.01", "1000.50"
             if (cleanedValue.matches("^\\d+(\\.\\d+)?$")) {
                 BigDecimal result = new BigDecimal(cleanedValue);
-                System.out.println("Parsed successfully (American format): " + result);
+
                 return result;
             }
 
@@ -344,7 +344,7 @@ public class ServletDre extends ServletGenericUtil {
             // Remove pontos de milhar e troca vírgula por ponto
             cleanedValue = cleanedValue.replace(".", "").replace(",", ".");
             BigDecimal result = new BigDecimal(cleanedValue);
-            System.out.println("Parsed successfully (Brazilian format): " + result);
+
             return result;
 
         } catch (NumberFormatException e) {

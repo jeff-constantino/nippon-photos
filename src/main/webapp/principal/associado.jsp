@@ -2480,13 +2480,13 @@
         const formConfig = document.getElementById('configForm');
         if (formConfig) {
             formConfig.addEventListener('submit', function(e) {
-                console.log('📤 Submit formConfig');
+
                 ['conf1_valor', 'conf2_valor', 'conf3_valor'].forEach(id => {
                     const campo = document.getElementById(id);
                     if (campo && campo.value) {
-                        console.log('Antes:', campo.value);
+
                         campo.value = removerFormatacaoMoeda(campo.value);
-                        console.log('Depois:', campo.value);
+
                     }
                 });
             });
@@ -2496,15 +2496,15 @@
         const formCustos = document.getElementById('formCustos');
         if (formCustos) {
             formCustos.addEventListener('submit', function(e) {
-                console.log('📤 Submit formCustos');
+
                 // Remove formatação dos valores
                 ['conf1_valor_mat', 'conf2_valor_mat', 'conf3_valor_mat',
                     'conf1_custo_mat', 'conf2_custo_mat', 'conf3_custo_mat'].forEach(id => {
                     const campo = document.getElementById(id);
                     if (campo && campo.value) {
-                        console.log(id + ' Antes:', campo.value);
+
                         campo.value = removerFormatacaoMoeda(campo.value);
-                        console.log(id + ' Depois:', campo.value);
+
                     }
                 });
 
@@ -2512,9 +2512,9 @@
                 ['conf1_qtd_mat', 'conf2_qtd_mat', 'conf3_qtd_mat'].forEach(id => {
                     const campo = document.getElementById(id);
                     if (campo && campo.value) {
-                        console.log(id + ' Antes:', campo.value);
+
                         campo.value = removerFormatacaoQuantidade(campo.value);
-                        console.log(id + ' Depois:', campo.value);
+
                     }
                 });
             });
@@ -2524,11 +2524,11 @@
         const formFinanceiro = document.getElementById('formFinanceiro');
         if (formFinanceiro) {
             formFinanceiro.addEventListener('submit', function(e) {
-                console.log('📤 Submit formFinanceiro');
+
                 ['fgts_valor', 'inss_valor'].forEach(id => {
                     const campo = document.getElementById(id);
                     if (campo && campo.value) {
-                        console.log(id + ' Antes:', campo.value);
+
                         campo.value = removerFormatacaoMoeda(campo.value);
                         console.log(id + ' Depois:', campo.value);
                     }
@@ -2545,7 +2545,7 @@
                 var sobrasInput = document.getElementById('sobras_input');
                 var valorSobras = parseInt(sobrasInput.value) || 0;
 
-                console.log('📦 Checkbox mudou! Checked:', this.checked, 'Valor:', valorSobras);
+
 
                 // Remove campos hidden anteriores se existirem
                 var hiddenAntigos = document.querySelectorAll('input[name="sobras"], input[name="sobras_extras"]');
@@ -2570,18 +2570,18 @@
                     // Marcado = SOBRAS EXTRAS (sem custo)
                     sobrasHidden.value = 0;
                     sobrasExtrasHidden.value = valorSobras;
-                    console.log('✅ Sobras EXTRAS:', valorSobras);
+
                 } else {
                     // Desmarcado = SOBRAS NORMAIS (com custo)
                     sobrasHidden.value = valorSobras;
                     sobrasExtrasHidden.value = 0;
-                    console.log('✅ Sobras NORMAIS:', valorSobras);
+
                 }
 
                 formVenda.appendChild(sobrasHidden);
                 formVenda.appendChild(sobrasExtrasHidden);
 
-                console.log('📤 Campos criados - sobras:', sobrasHidden.value, 'sobras_extras:', sobrasExtrasHidden.value);
+
             });
         }
     });
@@ -2592,10 +2592,10 @@
     var alertJaMostrado = false;
 
     function buscarTotalVendidoMes(vendedorId, mostrarAlert) {
-        console.log('🔍 buscarTotalVendidoMes chamado com vendedorId:', vendedorId);
+
 
         if (!vendedorId || vendedorId === '' || vendedorId === 'undefined') {
-            console.log('❌ vendedor_id vazio ou inválido:', vendedorId);
+
             return;
         }
 
@@ -2607,23 +2607,23 @@
         var mes = String(hoje.getMonth() + 1);
         if (mes.length === 1) mes = '0' + mes;
         var ano = String(hoje.getFullYear());
-        console.log('📅 Usando mês atual:', mes, '/', ano);
+
 
         // Usa concatenação ao invés de template literals
         var url = 'ServletAssociado?acao=buscarTotalVendidoMes&vendedor_id=' + vendedorId + '&mes=' + mes + '&ano=' + ano;
-        console.log('🔍 URL montada:', url);
+
 
         fetch(url)
             .then(function(response) {
-                console.log('📥 Resposta status:', response.status);
+
                 return response.text();
             })
             .then(function(text) {
-                console.log('📄 Resposta TEXTO:', text);
+
 
                 try {
                     var data = JSON.parse(text);
-                    console.log('✅ JSON parseado:', data);
+
 
                     if (data.error) {
                         console.error('❌ Erro do servidor:', data.error);
@@ -2633,7 +2633,7 @@
 
                     var totalVendido = data.total_fotos || 0;
                     document.getElementById('total_vendido').value = totalVendido;
-                    console.log('✅ Total vendido atualizado:', totalVendido);
+
 
                     // Se já passou do limite E deve mostrar alert E ainda não mostrou
                     var limite = 240;
@@ -2662,7 +2662,7 @@
 
     // ========== FUNÇÃO verEditar ==========
     function verEditar(id, nome) {
-        console.log('👤 verEditar chamado - ID:', id, 'Nome:', nome);
+
 
         // Reseta o controle de alert
         alertJaMostrado = false;
@@ -2676,7 +2676,7 @@
 
         // IMPORTANTE: Espera um pouco para o campo ser preenchido
         setTimeout(function() {
-            console.log('⏱️ Verificando campo vendedor_id:', document.getElementById('vendedor_id').value);
+
             // Passa true para MOSTRAR alert
             buscarTotalVendidoMes(id, true);
         }, 100);
@@ -2695,7 +2695,7 @@
         if (campoData) {
             campoData.addEventListener('change', function() {
                 var vendedorId = document.getElementById('vendedor_id').value;
-                console.log('📅 Data mudou, vendedor_id do campo:', vendedorId);
+
                 if (vendedorId && vendedorId !== '' && vendedorId !== 'undefined') {
                     // Passa false para NÃO mostrar alert
                     buscarTotalVendidoMes(vendedorId, false);
@@ -2719,8 +2719,7 @@
         fetch('ServletAssociado?acao=consultarFinanceiro&data_inicial=' + dataInicial + '&data_final=' + dataFinal)
             .then(response => response.json())
             .then(data => {
-                console.log('===== DADOS RECEBIDOS DO SERVIDOR =====');
-                console.log('Dados completos:', data);
+
 
                 // Preenche os totais
                 document.getElementById('total_fotos').value = data.ft_total || 0;
@@ -2738,9 +2737,7 @@
                 const total_extras = Math.max(0, ft_total - limite);
                 const total_enc_extras = Math.max(0, enc_total - limite);
 
-                console.log('===== CÁLCULO DE EXTRAS =====');
-                console.log('total_extras (fotos):', total_extras);
-                console.log('total_enc_extras (encartes):', total_enc_extras);
+
 
                 document.getElementById('total_extras').value = total_extras;
                 document.getElementById('total_enc_extras').value = total_enc_extras;
@@ -2749,24 +2746,18 @@
                 const mat1_custo = parseFloat(data.mat1_custo) || 0;
                 const mat2_custo = parseFloat(data.mat2_custo) || 0;
 
-                console.log('===== CÁLCULO DE CUSTOS =====');
-                console.log('mat1_custo:', mat1_custo);
-                console.log('mat2_custo:', mat2_custo);
-                console.log('ft_total:', ft_total);
-                console.log('sobras:', sobras);
-                console.log('limite:', limite);
+
 
                 // Custo Fotos: ATÉ o limite
                 const qtd_fotos_custo = Math.min(ft_total, limite);
-                console.log('Quantidade FOTOS com custo (até limite):', qtd_fotos_custo);
+
 
                 // Custo Sobras: SEMPRE todas (sem limite!)
                 const qtd_sobras_custo = sobras;
-                console.log('Quantidade SOBRAS com custo (TODAS):', qtd_sobras_custo);
+
 
                 const custo_fotos_sobras = (qtd_fotos_custo + qtd_sobras_custo) * mat1_custo;
-                console.log('Total fotos+sobras com custo:', qtd_fotos_custo + qtd_sobras_custo);
-                console.log('Custo fotos+sobras:', custo_fotos_sobras);
+
 
                 document.getElementById('custo_fotos_sobras').value = formatarMoedaValor(custo_fotos_sobras);
 
@@ -2774,8 +2765,7 @@
                 const qtd_encartes_custo = Math.min(enc_total, limite);
                 const custo_encartes = qtd_encartes_custo * mat2_custo;
 
-                console.log('Quantidade encartes com custo:', qtd_encartes_custo);
-                console.log('Custo encartes:', custo_encartes);
+
 
                 document.getElementById('custo_encartes').value = formatarMoedaValor(custo_encartes);
 
@@ -2785,22 +2775,14 @@
                 const conf3_valor = parseFloat(data.conf3_valor) || 0;
                 const percentual_extras = parseFloat(data.percentual_extras) || 0;
 
-                console.log('===== CÁLCULO FINANCEIRO =====');
-                console.log('conf1_valor:', conf1_valor);
-                console.log('conf2_valor:', conf2_valor);
-                console.log('conf3_valor:', conf3_valor);
-                console.log('percentual_extras (original):', percentual_extras);
+
 
                 // ========== TOTAL BRUTO = TUDO QUE VENDEU (SÓ VISUALIZAÇÃO) ==========
                 const total_bruto = (ft_total * conf1_valor) +
                     (enc_total * conf2_valor) +
                     (dig_total * conf3_valor);
 
-                console.log('Cálculo Total Bruto (visualização):');
-                console.log('  Fotos:', ft_total, '×', conf1_valor, '=', ft_total * conf1_valor);
-                console.log('  Encartes:', enc_total, '×', conf2_valor, '=', enc_total * conf2_valor);
-                console.log('  Digitais:', dig_total, '×', conf3_valor, '=', dig_total * conf3_valor);
-                console.log('  = Total bruto:', total_bruto);
+
 
                 document.getElementById('total_bruto').value = formatarMoedaValor(total_bruto);
 
@@ -2813,11 +2795,7 @@
                     (enc_ate_limite * conf2_valor) +
                     (dig_ate_limite * conf3_valor);
 
-                console.log('Cálculo Total Vendas (recebido):');
-                console.log('  Fotos até limite:', fotos_ate_limite, '×', conf1_valor, '=', fotos_ate_limite * conf1_valor);
-                console.log('  Encartes até limite:', enc_ate_limite, '×', conf2_valor, '=', enc_ate_limite * conf2_valor);
-                console.log('  Digitais até limite:', dig_ate_limite, '×', conf3_valor, '=', dig_ate_limite * conf3_valor);
-                console.log('  = Total vendas:', total_vendas);
+
 
                 document.getElementById('total_vendas').value = formatarMoedaValor(total_vendas);
 

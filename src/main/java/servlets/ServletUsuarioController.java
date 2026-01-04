@@ -145,14 +145,13 @@ public class ServletUsuarioController extends ServletGenericUtil{
 
             // 1. Verifique se o conteúdo é multipart (opcional, mas seguro)
             String contentType = request.getContentType();
-            System.out.println("DEBUG SERVLET - ContentType: " + contentType);
+
 
             if (contentType != null && contentType.startsWith("multipart/form-data")) {
 
                 // 2. Pegue a parte do arquivo diretamente do request (Nativo do Jakarta)
                 Part part = request.getPart("filefoto");
-                System.out.println("DEBUG SERVLET - Part: " + part);
-                System.out.println("DEBUG SERVLET - Part Size: " + (part != null ? part.getSize() : "null"));
+
 
                 if (part != null && part.getSize() > 0) {
                     // 3. Converta para byte array (usando IOUtils que você já tem)
@@ -163,8 +162,7 @@ public class ServletUsuarioController extends ServletGenericUtil{
                     modelLogin.setFotouser(imagemBase64);
                     modelLogin.setExtensaofotouser(part.getContentType().split("\\/")[1]);
 
-                    System.out.println("DEBUG SERVLET - Foto setada: SIM");
-                    System.out.println("DEBUG SERVLET - Extensão: " + modelLogin.getExtensaofotouser());
+
 
                 } else {
                     System.out.println("DEBUG SERVLET - Entrou no ELSE (sem foto nova)");
@@ -179,7 +177,7 @@ public class ServletUsuarioController extends ServletGenericUtil{
                 System.out.println("DEBUG SERVLET - NÃO é multipart!");
             }
 
-            System.out.println("DEBUG SERVLET - Antes de gravar - Foto: " + (modelLogin.getFotouser() != null ? "SIM" : "NULL"));
+
 
             if (daoUsuarioRepository.validarLogin(modelLogin.getNome()) && modelLogin.getId() == null)
             {

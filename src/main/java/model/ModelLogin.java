@@ -24,6 +24,15 @@ public class ModelLogin implements Serializable{
     private String endereco;
     private String fotouser;
     private String extensaofotouser;
+    private String apelido;
+
+    public String getApelido() {
+        return apelido;
+    }
+
+    public void setApelido(String apelido) {
+        this.apelido = apelido;
+    }
 
     public String getFotouser() {
         return fotouser;

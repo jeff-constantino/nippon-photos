@@ -25,7 +25,7 @@ public class DAOUsuarioRepository {
 
         if (objeto.isNovo()) {
 
-            String sql = "INSERT INTO model_login (nome, status, comissao, usuario_id, rg, cpf, pis, telefone, endereco, fotouser, extensaofotouser) VALUES (UPPER(?), UPPER(?), UPPER(?), ?, ?, ?, ?, ?, UPPER(?), ?, ?)";
+            String sql = "INSERT INTO model_login (nome, status, comissao, usuario_id, rg, cpf, pis, telefone, endereco, fotouser, extensaofotouser) VALUES (UPPER(?), UPPER(?), UPPER(?), ?, ?, ?, ?, ?, UPPER(?), ?, ?, UPPER(?)";
             PreparedStatement preparedSql = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             preparedSql.setString(1, objeto.getNome());
@@ -39,6 +39,7 @@ public class DAOUsuarioRepository {
             preparedSql.setString(9, objeto.getEndereco());
             preparedSql.setString(10, objeto.getFotouser());
             preparedSql.setString(11, objeto.getExtensaofotouser());
+            preparedSql.setString(12,objeto.getApelido());
 
             preparedSql.execute();
 
@@ -52,16 +53,13 @@ public class DAOUsuarioRepository {
 
         } else {
 
-            // DEBUG: Verifica se a foto está vindo
-            System.out.println("DEBUG UPDATE - ID: " + objeto.getId());
-            System.out.println("DEBUG UPDATE - Foto: " + (objeto.getFotouser() != null ? "SIM" : "NULL"));
-            System.out.println("DEBUG UPDATE - Extensão: " + objeto.getExtensaofotouser());
+
             if (objeto.getFotouser() != null) {
                 System.out.println("DEBUG UPDATE - Tamanho da foto: " + objeto.getFotouser().length());
                 System.out.println("DEBUG UPDATE - Primeiros 50 chars: " + objeto.getFotouser().substring(0, Math.min(50, objeto.getFotouser().length())));
             }
 
-            String sql = "UPDATE model_login SET nome = UPPER(?), status = UPPER(?), comissao = UPPER(?), rg = UPPER(?), cpf = UPPER(?), pis = UPPER(?), telefone = UPPER(?), endereco = UPPER(?), fotouser = ?, extensaofotouser = ? WHERE id = " + objeto.getId();
+            String sql = "UPDATE model_login SET nome = UPPER(?), status = UPPER(?), comissao = UPPER(?), rg = UPPER(?), cpf = UPPER(?), pis = UPPER(?), telefone = UPPER(?), endereco = UPPER(?), fotouser = ?, extensaofotouser = ?, apelido = UPPER(?) WHERE id = " + objeto.getId();
             PreparedStatement preparedSql = connection.prepareStatement(sql);
 
             preparedSql.setString(1, objeto.getNome());
@@ -74,6 +72,7 @@ public class DAOUsuarioRepository {
             preparedSql.setString(8, objeto.getEndereco());
             preparedSql.setString(9, objeto.getFotouser());
             preparedSql.setString(10, objeto.getExtensaofotouser());
+            preparedSql.setString(11, objeto.getApelido());
 
             int linhasAfetadas = preparedSql.executeUpdate();
             System.out.println("DEBUG UPDATE - Linhas atualizadas: " + linhasAfetadas);
@@ -106,6 +105,7 @@ public class DAOUsuarioRepository {
             modelLogin.setPis(resultSet.getString("pis"));
             modelLogin.setTelefone(resultSet.getString("telefone"));
             modelLogin.setEndereco(resultSet.getString("endereco"));
+            modelLogin.setApelido(resultSet.getString("apelido"));
 
             retorno.add(modelLogin);
         }
@@ -132,6 +132,7 @@ public class DAOUsuarioRepository {
             modelLogin.setPis(resultSet.getString("pis"));
             modelLogin.setTelefone(resultSet.getString("telefone"));
             modelLogin.setEndereco(resultSet.getString("endereco"));
+            modelLogin.setApelido(resultSet.getString("apelido"));
             retorno.add(modelLogin);
         }
         return retorno;
@@ -172,6 +173,7 @@ public class DAOUsuarioRepository {
             ModelLogin modelLogin = new ModelLogin();
             modelLogin.setId(resultSet.getLong("id"));
             modelLogin.setNome(resultSet.getString("nome"));
+            modelLogin.setApelido(resultSet.getString("apelido"));
             retorno.add(modelLogin);
 
         }
@@ -198,6 +200,7 @@ public class DAOUsuarioRepository {
             modelLogin.setTelefone(resultado.getString("telefone"));
             modelLogin.setEndereco(resultado.getString("endereco"));
             modelLogin.setFotouser(resultado.getString("fotouser"));
+            modelLogin.setApelido(resultado.getString("apelido"));
 
 
 
@@ -227,6 +230,7 @@ public class DAOUsuarioRepository {
             modelLogin.setTelefone(resultado.getString("telefone"));
             modelLogin.setEndereco(resultado.getString("endereco"));
             modelLogin.setFotouser(resultado.getString("fotouser"));
+            modelLogin.setApelido(resultado.getString("apelido"));
 
 
 
@@ -258,6 +262,7 @@ public class DAOUsuarioRepository {
             modelLogin.setTelefone(resultado.getString("telefone"));
             modelLogin.setEndereco(resultado.getString("endereco"));
             modelLogin.setFotouser(resultado.getString("fotouser"));
+            modelLogin.setApelido(resultado.getString("apelido"));
 
 
 
@@ -288,6 +293,7 @@ public class DAOUsuarioRepository {
             modelLogin.setTelefone(resultado.getString("telefone"));
             modelLogin.setEndereco(resultado.getString("endereco"));
             modelLogin.setFotouser(resultado.getString("fotouser"));
+            modelLogin.setApelido(resultado.getString("apelido"));
 
 
 
@@ -315,6 +321,7 @@ public class DAOUsuarioRepository {
             modelLogin.setTelefone(resultado.getString("telefone"));
             modelLogin.setEndereco(resultado.getString("endereco"));
             modelLogin.setFotouser(resultado.getString("fotouser"));
+            modelLogin.setApelido(resultado.getString("apelido"));
 
 
 
@@ -346,6 +353,7 @@ public class DAOUsuarioRepository {
             modelLogin.setEndereco(resultado.getString("endereco"));
             modelLogin.setComissao(resultado.getString("comissao"));
             modelLogin.setFotouser(resultado.getString("fotouser"));
+            modelLogin.setApelido(resultado.getString("apelido"));
 
 
 

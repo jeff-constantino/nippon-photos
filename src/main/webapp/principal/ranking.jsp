@@ -135,7 +135,7 @@
 
                                     <c:forEach var="venda" items="${vendasList}">
                                     nomesVendasMini.push([
-                                        "${venda.nome}",
+                                        "${venda.apelido}",
                                         "${venda.totalFotosVendidas} fotos",
                                         "Média: " + (
                                             Number(${venda.diasTrabalhados}) > 0
@@ -260,7 +260,7 @@
                                     // Preenchendo os dados do gráfico
                                     <c:forEach var="venda" items="${vendasList}">
                                     var producao = ${venda.totalProducao}; // Total de produção
-                                    nomesProducao.push("${venda.nome}"); // Nome do funcionário
+                                    nomesProducao.push("${venda.apelido}"); // Nome do funcionário
                                     totalProducao.push(producao); // Produção total
                                     </c:forEach>
 
@@ -392,7 +392,7 @@
                                     var aproveitamentoCalc = (vendas / producao) * 100; // Calculando o aproveitamento
 
                                     // Adicionando o nome e o valor de aproveitamento ao array
-                                    nomes.push("${venda.nome}");
+                                    nomes.push("${venda.apelido}");
                                     aproveitamento.push(aproveitamentoCalc.toFixed(2));
                                     </c:forEach>
 

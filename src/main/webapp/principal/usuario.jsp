@@ -106,6 +106,12 @@
                                                                                                        placeholder="" style="background-color: black"
                                                                                                        REQUIRED value="${modelLogin.nome}" autofocus>
                                                                                             </div>
+                                                                                            <div class="col-12 col-sm-6 col-lg-4 mb-3">
+                                                                                                <label class="float-label">APELIDO:</label>
+                                                                                                <input type="text" class="form-control" id="apelido2" name="apelido"
+                                                                                                       placeholder="" style="background-color: black"
+                                                                                                       REQUIRED value="${modelLogin.apelido}" autofocus>
+                                                                                            </div>
 
                                                                                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
                                                                                                 <label class="float-label">RG:</label>
@@ -295,6 +301,7 @@
 
                                                                                             </div>
 
+
                                                                                             <div>
                                                                                                 <button type="button" class="btn btn-outline-primary waves-effect waves-light" onclick="limparbuscaForm();" >Novo</button>
                                                                                                 <button  type="button" class="btn btn-outline-success waves-effect waves-light" onclick="buscarUsuario();">Pesquisar</button>
@@ -382,6 +389,12 @@
                                                 <input type="text" class="form-control" id="nome" name="nome"
                                                        style="background-color: black" required
                                                        value="${modelLogin.nome}">
+                                            </div>
+                                            <div class="col-12 col-sm-6 col-lg-4 mb-3">
+                                                <label class="float-label">APELIDO:</label>
+                                                <input type="text" class="form-control" id="apelido" name="apelido"
+                                                       placeholder="" style="background-color: black"
+                                                       REQUIRED value="${modelLogin.apelido}" autofocus>
                                             </div>
                                             <div class="col-3 input-group mb-4">
                                                 <div class="input-group-prepend">

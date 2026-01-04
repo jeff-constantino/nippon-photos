@@ -126,6 +126,7 @@ public class ServletUsuarioController extends ServletGenericUtil{
             String pis = request.getParameter("pis");
             String telefone = request.getParameter("telefone");
             String endereco = request.getParameter("endereco");
+            String apelido = request.getParameter("apelido");
 
 
             ModelLogin modelLogin = new ModelLogin();
@@ -141,6 +142,7 @@ public class ServletUsuarioController extends ServletGenericUtil{
             modelLogin.setPis(pis);
             modelLogin.setTelefone(telefone);
             modelLogin.setEndereco(endereco);
+            modelLogin.setApelido(apelido);
 
 
             // 1. Verifique se o conteúdo é multipart (opcional, mas seguro)
@@ -228,6 +230,7 @@ public class ServletUsuarioController extends ServletGenericUtil{
                 String pis = request.getParameter("pis");
                 String telefone = request.getParameter("telefone");
                 String endereco = request.getParameter("endereco");
+                String apelido = request.getParameter("apelido");
 
                 ModelLogin modelLogin = new ModelLogin();
 

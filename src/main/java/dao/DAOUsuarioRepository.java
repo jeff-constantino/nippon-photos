@@ -25,7 +25,7 @@ public class DAOUsuarioRepository {
 
         if (objeto.isNovo()) {
 
-            String sql = "INSERT INTO model_login (nome, status, comissao, usuario_id, rg, cpf, pis, telefone, endereco, fotouser, extensaofotouser) VALUES (UPPER(?), UPPER(?), UPPER(?), ?, ?, ?, ?, ?, UPPER(?), ?, ?, UPPER(?)";
+            String sql = "INSERT INTO model_login (nome, status, comissao, usuario_id, rg, cpf, pis, telefone, endereco, fotouser, extensaofotouser, apelido) VALUES (UPPER(?), UPPER(?), UPPER(?), ?, ?, ?, ?, ?, UPPER(?), ?, ?, UPPER(?))";
             PreparedStatement preparedSql = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 
             preparedSql.setString(1, objeto.getNome());

@@ -13,9 +13,41 @@ import java.sql.SQLException;
 public class SingleConnectionBanco implements ServletContextListener {
 
     private static HikariDataSource dataSource;
+    private static final Object LOCK = new Object();
 
-    // 🔥 Os DAOs continuam chamando isso sem mudanças!
+    // 🔥 Inicializa o pool (lazy)
+    private static void inicializarPool() {
+        synchronized (LOCK) {
+            if (dataSource == null || dataSource.isClosed()) {
+                HikariConfig config = new HikariConfig();
+
+                config.setJdbcUrl("jdbc:postgresql://localhost:5432/jeffe6510_nippon?sslmode=disable&tcpKeepAlive=true&socketTimeout=30");
+                config.setUsername("jeffe6510_admin");
+                config.setPassword("Aplic@tiv0");
+
+                config.setMaximumPoolSize(10);
+                config.setMinimumIdle(2);
+                config.setConnectionTimeout(30000);
+                config.setIdleTimeout(600000);
+                config.setMaxLifetime(1800000);
+                config.setAutoCommit(false);
+
+                config.addDataSourceProperty("cachePrepStmts", "true");
+                config.addDataSourceProperty("prepStmtCacheSize", "250");
+                config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+
+                dataSource = new HikariDataSource(config);
+                System.out.println("✅ HikariCP Connection Pool inicializado");
+            }
+        }
+    }
+
+    // 🔥 Seus DAOs chamam isso (nada muda neles)
     public static Connection getConnection() {
+        if (dataSource == null || dataSource.isClosed()) {
+            inicializarPool();
+        }
+
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
@@ -25,35 +57,14 @@ public class SingleConnectionBanco implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        HikariConfig config = new HikariConfig();
-
-        // Configurações do banco
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/jeffe6510_nippon?sslmode=disable&tcpKeepAlive=true&socketTimeout=30");
-        config.setUsername("jeffe6510_admin");
-        config.setPassword("Aplic@tiv0");
-
-        // Configurações do pool
-        config.setMaximumPoolSize(10);           // máximo de conexões
-        config.setMinimumIdle(2);                // mínimo de conexões ociosas
-        config.setConnectionTimeout(30000);      // 30 segundos timeout
-        config.setIdleTimeout(600000);           // 10 minutos idle
-        config.setMaxLifetime(1800000);          // 30 minutos vida máxima
-        config.setAutoCommit(false);             // 🔥 IMPORTANTE: false para controle manual
-
-        // Configurações extras
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-
-        dataSource = new HikariDataSource(config);
-        System.out.println("✅ HikariCP Connection Pool iniciado");
+        inicializarPool();
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         if (dataSource != null && !dataSource.isClosed()) {
             dataSource.close();
-            System.out.println("✅ HikariCP Connection Pool fechado");
+            System.out.println("✅ HikariCP fechado");
         }
     }
 }

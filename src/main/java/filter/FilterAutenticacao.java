@@ -19,26 +19,14 @@ import jakarta.servlet.http.HttpSession;
 @WebFilter(urlPatterns = {"/principal/*"})
 public class FilterAutenticacao implements Filter {
 
-    private static Connection connection;
-
-    @Override
-    public void init(FilterConfig fConfig) throws ServletException {
-        connection = SingleConnectionBanco.getConnection();
-        try {
-            connection.setAutoCommit(false);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
+        Connection connection = null;
+
         try {
             HttpServletRequest req = (HttpServletRequest) request;
-
-            // 🔧 AJUSTE CRÍTICO 1: não cria sessão automaticamente
             HttpSession session = req.getSession(false);
 
             String usuarioLogado = (session != null)
@@ -46,45 +34,53 @@ public class FilterAutenticacao implements Filter {
                     : null;
 
             String urlParaAutenticar = req.getServletPath();
-
-
             boolean urlPublica = urlParaAutenticar.equals("/principal/ServletLogin");
 
             if (usuarioLogado == null && !urlPublica) {
-
                 RequestDispatcher redireciona =
                         request.getRequestDispatcher("/index.jsp?url=" + urlParaAutenticar);
-
                 request.setAttribute("msg", "Por favor realize o login!");
                 redireciona.forward(request, response);
-                return; // 🔧 AJUSTE CRÍTICO 3: garante parada do fluxo
+                return;
             }
 
-            connection.setAutoCommit(false);
+            connection = SingleConnectionBanco.getConnection();
+            request.setAttribute("connection", connection);
+
             chain.doFilter(request, response);
-            connection.commit();
+
+            // ❌ REMOVIDO: connection.commit();
+            // Os DAOs já fazem commit()
 
         } catch (Exception e) {
-
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
+            // Rollback em caso de erro
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
             }
 
             e.printStackTrace();
             RequestDispatcher redireciona = request.getRequestDispatcher("erro.jsp");
             request.setAttribute("msg", e.getMessage());
             redireciona.forward(request, response);
+
+        } finally {
+            // 🔥 CRÍTICO: Devolve conexão ao pool
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     @Override
     public void destroy() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        // Não precisa fazer nada
     }
 }

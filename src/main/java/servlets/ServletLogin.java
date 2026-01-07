@@ -17,16 +17,12 @@ import java.util.List;
 @WebServlet(name = "ServletLogin", value = "/ServletLogin")
 public class ServletLogin extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
-    // ❌ REMOVIDO - Não instanciar no campo da classe
-    // private final DAOLoginRepository daoLoginRepository = new DAOLoginRepository();
-    // private final DAOContas daoContas = new DAOContas();
+    private final DAOLoginRepository daoLoginRepository = new DAOLoginRepository();
+    private final DAOContas daoContas = new DAOContas();
 
     public ServletLogin() {
-        // Construtor vazio
     }
 
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -46,7 +42,6 @@ public class ServletLogin extends HttpServlet {
         doPost(request, response);
     }
 
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -58,9 +53,6 @@ public class ServletLogin extends HttpServlet {
             if (login != null && !login.trim().isEmpty() &&
                     senha != null && !senha.trim().isEmpty()) {
 
-                // ✅ Cria os DAOs aqui, quando necessário
-                DAOLoginRepository daoLoginRepository = new DAOLoginRepository();
-
                 ModelLogin modelLogin = new ModelLogin();
                 modelLogin.setLogin(login);
                 modelLogin.setSenha(senha);
@@ -68,8 +60,6 @@ public class ServletLogin extends HttpServlet {
                 if (daoLoginRepository.validarAutenticacao(modelLogin)) {
                     request.getSession().setAttribute("usuario", modelLogin.getLogin());
 
-                    // ✅ Cria o DAOContas aqui
-                    DAOContas daoContas = new DAOContas();
                     List<ModelContas> contasVencendo = daoContas.buscarContasVencendoEm7Dias();
                     request.setAttribute("contasVencendo", contasVencendo);
 

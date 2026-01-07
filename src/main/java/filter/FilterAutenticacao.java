@@ -19,11 +19,21 @@ import jakarta.servlet.http.HttpSession;
 @WebFilter(urlPatterns = {"/principal/*"})
 public class FilterAutenticacao implements Filter {
 
+    private static Connection connection;
+
+    @Override
+    public void init(FilterConfig fConfig) throws ServletException {
+        connection = SingleConnectionBanco.getConnection();
+        try {
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-
-        Connection connection = null;
 
         try {
             HttpServletRequest req = (HttpServletRequest) request;
@@ -44,43 +54,30 @@ public class FilterAutenticacao implements Filter {
                 return;
             }
 
-            connection = SingleConnectionBanco.getConnection();
-            request.setAttribute("connection", connection);
-
+            connection.setAutoCommit(false);
             chain.doFilter(request, response);
-
-            // ❌ REMOVIDO: connection.commit();
-            // Os DAOs já fazem commit()
+            connection.commit();
 
         } catch (Exception e) {
-            // Rollback em caso de erro
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
-                }
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
             }
 
             e.printStackTrace();
             RequestDispatcher redireciona = request.getRequestDispatcher("erro.jsp");
             request.setAttribute("msg", e.getMessage());
             redireciona.forward(request, response);
-
-        } finally {
-            // 🔥 CRÍTICO: Devolve conexão ao pool
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 
     @Override
     public void destroy() {
-        // Não precisa fazer nada
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

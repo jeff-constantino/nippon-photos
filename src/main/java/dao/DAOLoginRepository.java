@@ -1,63 +1,76 @@
 package dao;
 
+import connection.HikariCPUtil; // Importe a classe que você corrigiu a URL
+import model.ModelLogin;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import connection.SingleConnectionBanco;
-import model.ModelContas;
-import model.ModelLogin;
 
 public class DAOLoginRepository {
     private final Connection connection;
+    private final boolean gerenciarTransacao;
 
+    /**
+     * Construtor RECOMENDADO - Recebe a conexão do Filter
+     */
+    public DAOLoginRepository(Connection connection) {
+        this.connection = connection;
+        this.gerenciarTransacao = false;
+    }
 
+    /**
+     * Construtor de SEGURANÇA - Caso a Servlet não passe a conexão,
+     * ele busca na classe HikariCPUtil (ajustada para o banco oficial)
+     */
     public DAOLoginRepository() {
-
-        connection = SingleConnectionBanco.getConnection();
-
-
+        try {
+            this.connection = HikariCPUtil.getConnection();
+            this.gerenciarTransacao = true;
+        } catch (SQLException e) {
+            System.err.println("❌ Erro fatal: DAO não conseguiu conexão com o banco oficial.");
+            throw new RuntimeException("Erro ao obter conexão do pool", e);
+        }
     }
 
-    public boolean validarAutenticacao(ModelLogin modelLogin) throws Exception{
+    public boolean validarAutenticacao(ModelLogin modelLogin) throws Exception {
+        // Log para conferir no servidor oficial se os dados estão chegando
+        System.out.println("🔍 Verificando login para: " + modelLogin.getLogin());
 
-        String sql = "select * from model_login where upper (login) = upper (?) and upper (senha) = upper (?) ";
+        // IMPORTANTE: Verifique se no banco oficial o nome da tabela é exatamente model_login
+        String sql = "SELECT * FROM model_login WHERE UPPER(login) = UPPER(?) AND senha = ?";
 
-        PreparedStatement statement = connection.prepareStatement(sql);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, modelLogin.getLogin());
+            ps.setString(2, modelLogin.getSenha());
 
-        statement.setString(1, modelLogin.getLogin());
-        statement.setString(2, modelLogin.getSenha());
-
-        ResultSet resultSet = statement.executeQuery();
-
-        return resultSet.next();/*autenticado*//*n�o autenticado*/
-
-    }
-
-
-    public List<ModelContas> listarContasVencendoEm7Dias() throws SQLException {
-        List<ModelContas> contas = new ArrayList<>();
-        String sql = "SELECT * FROM contas WHERE data_de_pagamento BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '7 days'";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                ModelContas conta = new ModelContas();
-                conta.setNumero_pedido(rs.getLong("numero_pedido"));
-                conta.setEmpresa(rs.getString("empresa"));
-                conta.setItens(rs.getString("itens"));
-                conta.setValor(rs.getDouble("valor"));
-                conta.setData_de_pedido(rs.getDate("data_de_pedido"));
-                conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
-                contas.add(conta);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println("✅ Usuário " + modelLogin.getLogin() + " autenticado com sucesso!");
+                    return true;
+                } else {
+                    System.out.println("⚠️ Login ou senha incorretos para: " + modelLogin.getLogin());
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("❌ Erro de SQL no banco oficial: " + e.getMessage());
+            throw new Exception("Erro ao validar autenticação: " + e.getMessage(), e);
+        } finally {
+            // Se o DAO abriu a conexão sozinho, ele fecha. Se veio do Filter, o Filter fecha.
+            if (gerenciarTransacao && connection != null) {
+                fecharConexao();
             }
         }
-        return contas;
     }
 
-
-
+    private void fecharConexao() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.err.println("Erro ao devolver conexão para o pool: " + e.getMessage());
+            }
+        }
+    }
 }

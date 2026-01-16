@@ -13,6 +13,7 @@ import model.ModelVales;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,23 +22,22 @@ import java.util.logging.Logger;
 @WebServlet("/ServletVales")
 public class ServletVales extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
     private static final Logger logger = Logger.getLogger(ServletVales.class.getName());
-
+    // ✅ Não tinha campos DAO
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conn = (Connection) request.getAttribute("connection");
+
         try {
             String acao = request.getParameter("acao");
 
             if ("excluirVale".equals(acao)) {
-                // Obtém o idVale da URL
                 String idValeStr = request.getParameter("idVale");
                 if (idValeStr != null && !idValeStr.isEmpty()) {
                     long idVale = Long.parseLong(idValeStr);
 
-                    // Chama o método excluirVale do DAO
-                    DAOVales daoVales = new DAOVales();
+                    DAOVales daoVales = new DAOVales(conn);
                     boolean excluiu = daoVales.excluirVale(idVale);
 
                     if (excluiu) {
@@ -62,7 +62,7 @@ public class ServletVales extends HttpServlet {
                         LocalDate dataFinal = LocalDate.parse(dataFinalStr);
                         Long funcionarioId = Long.parseLong(funcionarioIdStr);
 
-                        DAOVales daoVales = new DAOVales();
+                        DAOVales daoVales = new DAOVales(conn);
                         List<ModelVales> valesFiltrados = daoVales.buscarValesPorDataEFuncionario(dataInicial, dataFinal, funcionarioId);
                         request.setAttribute("valesFiltrados", valesFiltrados);
                         request.setAttribute("modalDataAbrir", true);
@@ -74,17 +74,14 @@ public class ServletVales extends HttpServlet {
                 }
             }
 
-            // Sempre carrega os funcionários
-            DAOFuncionario relatorio = new DAOFuncionario();
+            DAOFuncionario relatorio = new DAOFuncionario(conn);
             List<ModelLogin> funcionarios = relatorio.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);
 
-            // Sempre carrega os vales dos últimos 30 dias
-            DAOVales daoVales = new DAOVales();
+            DAOVales daoVales = new DAOVales(conn);
             List<ModelVales> valesList = daoVales.buscarValesUltimos30Dias();
             request.setAttribute("vales", valesList);
 
-            // Encaminha para o JSP
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/vales.jsp");
             dispatcher.forward(request, response);
 
@@ -97,30 +94,24 @@ public class ServletVales extends HttpServlet {
         }
     }
 
-
-
-
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conn = (Connection) request.getAttribute("connection");
+
         String acao = request.getParameter("acao");
         String msg = "";
 
         try {
             if ("inserirVale".equals(acao)) {
-                // Captura os parâmetros do formulário
                 String idFuncionarioStr = request.getParameter("funcionarioId");
-
                 String nomeFuncionario = request.getParameter("nome_funcionario");
                 String data = request.getParameter("data");
                 String observacao = request.getParameter("observacao");
                 String valor = request.getParameter("valor");
                 String formaPagamento = request.getParameter("forma_pagamento");
 
-                // Cria um objeto ModelVales e configura os valores
                 ModelVales vale = new ModelVales();
 
-                // Verifica se o ID do funcionário foi enviado e atribui ao modelo
                 if (idFuncionarioStr != null && !idFuncionarioStr.isEmpty()) {
                     vale.setId_funcionario(Long.parseLong(idFuncionarioStr));
                 }
@@ -131,11 +122,9 @@ public class ServletVales extends HttpServlet {
                 vale.setValor(new BigDecimal(valor));
                 vale.setForma_pagamento(formaPagamento);
 
-                // Chama o método para inserir o vale
-                DAOVales daoVales = new DAOVales();
+                DAOVales daoVales = new DAOVales(conn);
                 boolean sucesso = daoVales.inserirVale(vale);
 
-                // Atribui a mensagem de sucesso ou erro
                 if (sucesso) {
                     msg = "Vale inserido com sucesso!";
                 } else {
@@ -146,10 +135,7 @@ public class ServletVales extends HttpServlet {
             msg = "Erro ao processar o vale: " + e.getMessage();
         }
 
-        // Configura a mensagem no request e redireciona de volta para a página de vales
         request.getSession().setAttribute("msg", msg);
         response.sendRedirect(request.getContextPath() + "/ServletVales");
     }
-
-
 }

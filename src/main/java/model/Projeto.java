@@ -1,139 +1,118 @@
 package model;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
-public class Projeto implements Serializable {
-    private static final long serialVersionUID = 1L;
-    
+public class Projeto {
     private Long id;
     private String nome;
-    private String descricaoCurta;
-    private String descricaoCompleta;
+    private String descricao_curta;
+    private String descricao_completa;
+    private String tecnologias;
     private String icone;
-    private String tecnologias; // String separada por vírgulas
-    private String urlAcesso;
-    private String urlGithub;
-    private String imagemUrl;
+    private String url_acesso;
+    private String status;
+    private String funcionalidades;
     private Integer ordem;
-    private Boolean ativo;
-    private Boolean destaque;
+    private boolean ativo;
     private Timestamp dataCadastro;
-    private List<String> funcionalidades; // Lista de funcionalidades
-    
-    public Projeto() {}
-    
-    // Getters e Setters
+
+    public Projeto() {
+        this.ativo = true;
+    }
+
     public Long getId() {
         return id;
     }
-    
+
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public String getNome() {
         return nome;
     }
-    
+
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
-    public String getDescricaoCurta() {
-        return descricaoCurta;
+
+    public String getDescricao_curta() {
+        return descricao_curta;
     }
-    
-    public void setDescricaoCurta(String descricaoCurta) {
-        this.descricaoCurta = descricaoCurta;
+
+    public void setDescricao_curta(String descricao_curta) {
+        this.descricao_curta = descricao_curta;
     }
-    
-    public String getDescricaoCompleta() {
-        return descricaoCompleta;
+
+    public String getDescricao_completa() {
+        return descricao_completa;
     }
-    
-    public void setDescricaoCompleta(String descricaoCompleta) {
-        this.descricaoCompleta = descricaoCompleta;
+
+    public void setDescricao_completa(String descricao_completa) {
+        this.descricao_completa = descricao_completa;
     }
-    
-    public String getIcone() {
-        return icone;
-    }
-    
-    public void setIcone(String icone) {
-        this.icone = icone;
-    }
-    
+
     public String getTecnologias() {
         return tecnologias;
     }
-    
+
     public void setTecnologias(String tecnologias) {
         this.tecnologias = tecnologias;
     }
-    
-    public String getUrlAcesso() {
-        return urlAcesso;
+
+    public String getIcone() {
+        return icone;
     }
-    
-    public void setUrlAcesso(String urlAcesso) {
-        this.urlAcesso = urlAcesso;
+
+    public void setIcone(String icone) {
+        this.icone = icone;
     }
-    
-    public String getUrlGithub() {
-        return urlGithub;
+
+    public String getUrl_acesso() {
+        return url_acesso;
     }
-    
-    public void setUrlGithub(String urlGithub) {
-        this.urlGithub = urlGithub;
+
+    public void setUrl_acesso(String url_acesso) {
+        this.url_acesso = url_acesso;
     }
-    
-    public String getImagemUrl() {
-        return imagemUrl;
+
+    public String getStatus() {
+        return status;
     }
-    
-    public void setImagemUrl(String imagemUrl) {
-        this.imagemUrl = imagemUrl;
+
+    public void setStatus(String status) {
+        this.status = status;
     }
-    
+
+    public String getFuncionalidades() {
+        return funcionalidades;
+    }
+
+    public void setFuncionalidades(String funcionalidades) {
+        this.funcionalidades = funcionalidades;
+    }
+
     public Integer getOrdem() {
         return ordem;
     }
-    
+
     public void setOrdem(Integer ordem) {
         this.ordem = ordem;
     }
-    
-    public Boolean getAtivo() {
+
+    public boolean getAtivo() {
         return ativo;
     }
-    
-    public void setAtivo(Boolean ativo) {
+
+    public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
-    
-    public Boolean getDestaque() {
-        return destaque;
-    }
-    
-    public void setDestaque(Boolean destaque) {
-        this.destaque = destaque;
-    }
-    
+
     public Timestamp getDataCadastro() {
         return dataCadastro;
     }
-    
+
     public void setDataCadastro(Timestamp dataCadastro) {
         this.dataCadastro = dataCadastro;
-    }
-    
-    public List<String> getFuncionalidades() {
-        return funcionalidades;
-    }
-    
-    public void setFuncionalidades(List<String> funcionalidades) {
-        this.funcionalidades = funcionalidades;
     }
 }

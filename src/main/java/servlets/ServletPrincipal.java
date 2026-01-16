@@ -1,31 +1,28 @@
 package servlets;
 
 import dao.DAOContas;
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletException;
+import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import model.ModelContas;
-
 import java.io.IOException;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 @WebServlet(name = "ServletPrincipal", value = "/ServletPrincipal")
 public class ServletPrincipal extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private final DAOContas daoContas = new DAOContas(); // Instância do DAOContas
+    // ✅ REMOVIDO: private final DAOContas daoContas
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Verifica se o usuário está logado
+        Connection conn = (Connection) request.getAttribute("connection");
+        DAOContas daoContas = new DAOContas(conn);
+
         if (request.getSession().getAttribute("usuario") == null) {
             response.sendRedirect(request.getContextPath() + "/ServletLogin");
             return;
         }
 
-        // Buscar contas vencendo em 7 dias
         List<ModelContas> contasVencendo = null;
         try {
             contasVencendo = daoContas.buscarContasVencendoEm7Dias();
@@ -34,7 +31,6 @@ public class ServletPrincipal extends HttpServlet {
         }
         request.setAttribute("contasVencendo", contasVencendo);
 
-// Buscar contas vencidas
         List<ModelContas> contasVencidas = null;
         try {
             contasVencidas = daoContas.buscarContasVencidas();
@@ -43,8 +39,6 @@ public class ServletPrincipal extends HttpServlet {
         }
         request.setAttribute("contasVencidas", contasVencidas);
 
-
-        // Redireciona para a página principal
         RequestDispatcher dispatcher = request.getRequestDispatcher("principal/principal.jsp");
         dispatcher.forward(request, response);
     }

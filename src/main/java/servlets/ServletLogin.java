@@ -1,5 +1,6 @@
 package servlets;
 
+import dao.DAOContas;
 import dao.DAOLoginRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -9,9 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelContas;
 import model.ModelLogin;
-import dao.DAOContas;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.List;
 
 @WebServlet(name = "ServletLogin", value = "/ServletLogin")
@@ -49,6 +50,9 @@ public class ServletLogin extends HttpServlet {
         String senha = request.getParameter("senha");
         String url = request.getParameter("url");
 
+        // ⭐ Pega a conexão do Filter
+        Connection connection = (Connection) request.getAttribute("connection");
+
         try {
             if (login != null && !login.trim().isEmpty() &&
                     senha != null && !senha.trim().isEmpty()) {
@@ -57,7 +61,11 @@ public class ServletLogin extends HttpServlet {
                 modelLogin.setLogin(login);
                 modelLogin.setSenha(senha);
 
-                if (daoLoginRepository.validarAutenticacao(modelLogin)) {
+                // Usa novo construtor passando conexão
+                DAOLoginRepository daoLogin = new DAOLoginRepository(connection);
+                DAOContas daoContas = new DAOContas(connection);
+
+                if (daoLogin.validarAutenticacao(modelLogin)) {
                     request.getSession().setAttribute("usuario", modelLogin.getLogin());
 
                     List<ModelContas> contasVencendo = daoContas.buscarContasVencendoEm7Dias();

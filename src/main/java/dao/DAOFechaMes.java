@@ -1,62 +1,45 @@
 package dao;
 
-import connection.SingleConnectionBanco;
+import connection.ConnectionPool;
 import model.ModelFechaMes;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DAOFechaMes {
-
     private final Connection connection;
+    private final boolean gerenciarTransacao;
+
+    public DAOFechaMes(Connection connection) {
+        this.connection = connection;
+        this.gerenciarTransacao = false;
+    }
 
     public DAOFechaMes() {
-        this.connection = SingleConnectionBanco.getConnection();
+        try {
+            this.connection = ConnectionPool.getConnection();
+            this.gerenciarTransacao = true;
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao obter conexão", e);
+        }
     }
 
     public List<ModelFechaMes> buscarFechamentoMensal(String dataInicial, String dataFinal) throws SQLException {
         List<ModelFechaMes> resumoMensal = new ArrayList<>();
-
         LocalDate dataInicio = LocalDate.parse(dataInicial);
         LocalDate dataFim = LocalDate.parse(dataFinal);
-
-        String sqlFechamento = "SELECT " +
-                "SUM(total_ft_din + total_ft_deb + total_ft_cred + total_ft_pix) AS total_ft, " +
-                "SUM(total_enc_din + total_enc_deb + total_enc_cred + total_enc_pix) AS total_enc, " +
-                "SUM(total_dig_din + total_dig_deb + total_dig_cred + total_dig_pix) AS total_dig, " +
-                "SUM(sobras) AS total_sobras " +
-                "FROM fecha_dia " +
-                "WHERE data_fechamento >= ? AND data_fechamento <= ?";
-
-        String sqlConfiguracoes = "SELECT " +
-                "SUM(valor_din) AS valor_din, " +
-                "SUM(valor_din_real) AS valor_din_real, " +
-                "SUM(valor_deb) AS valor_deb, " +
-                "SUM(valor_deb_real) AS valor_deb_real, " +
-                "SUM(valor_cred) AS valor_cred, " +
-                "SUM(valor_cred_real) AS valor_cred_real, " +
-                "SUM(valor_pix) AS valor_pix, " +
-                "SUM(valor_pix_real) AS valor_pix_real, " +
-                "SUM(valor_despesa_total) AS valor_despesa_total, " +
-                "SUM(desconto) AS desconto " +
-                "FROM conf_dia " +
-                "WHERE data_fechamento >= ? AND data_fechamento <= ?";
-
+        String sqlFechamento = "SELECT SUM(total_ft_din + total_ft_deb + total_ft_cred + total_ft_pix) AS total_ft, SUM(total_enc_din + total_enc_deb + total_enc_cred + total_enc_pix) AS total_enc, SUM(total_dig_din + total_dig_deb + total_dig_cred + total_dig_pix) AS total_dig, SUM(sobras) AS total_sobras FROM fecha_dia WHERE data_fechamento >= ? AND data_fechamento <= ?";
+        String sqlConfiguracoes = "SELECT SUM(valor_din) AS valor_din, SUM(valor_din_real) AS valor_din_real, SUM(valor_deb) AS valor_deb, SUM(valor_deb_real) AS valor_deb_real, SUM(valor_cred) AS valor_cred, SUM(valor_cred_real) AS valor_cred_real, SUM(valor_pix) AS valor_pix, SUM(valor_pix_real) AS valor_pix_real, SUM(valor_despesa_total) AS valor_despesa_total, SUM(desconto) AS desconto FROM conf_dia WHERE data_fechamento >= ? AND data_fechamento <= ?";
         String sqlVales = "SELECT SUM(valor) AS total_vales FROM vales WHERE data >= ? AND data <= ?";
         String sqlConfiguracao = "SELECT * FROM configuracao WHERE idconf = 1";
         String sqlMateriais = "SELECT qtd AS qtd_ribbon FROM conf_materiais WHERE id_conf = 1";
-        String sqlSalarios = "SELECT SUM(salario_liquido1) AS total_salarios FROM salarios " +
-                "WHERE mes >= ? AND mes <= ? AND ano >= ? AND ano <= ?";
-
+        String sqlSalarios = "SELECT SUM(salario_liquido1) AS total_salarios FROM salarios WHERE mes >= ? AND mes <= ? AND ano >= ? AND ano <= ?";
         try {
             try (PreparedStatement pst = connection.prepareStatement(sqlFechamento)) {
-                pst.setDate(1, java.sql.Date.valueOf(dataInicio));
-                pst.setDate(2, java.sql.Date.valueOf(dataFim));
+                pst.setDate(1, Date.valueOf(dataInicio));
+                pst.setDate(2, Date.valueOf(dataFim));
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         ModelFechaMes resumo = new ModelFechaMes();
@@ -68,10 +51,9 @@ public class DAOFechaMes {
                     }
                 }
             }
-
             try (PreparedStatement pst = connection.prepareStatement(sqlConfiguracoes)) {
-                pst.setDate(1, java.sql.Date.valueOf(dataInicio));
-                pst.setDate(2, java.sql.Date.valueOf(dataFim));
+                pst.setDate(1, Date.valueOf(dataInicio));
+                pst.setDate(2, Date.valueOf(dataFim));
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next() && !resumoMensal.isEmpty()) {
                         ModelFechaMes resumo = resumoMensal.get(0);
@@ -88,10 +70,9 @@ public class DAOFechaMes {
                     }
                 }
             }
-
             try (PreparedStatement pst = connection.prepareStatement(sqlVales)) {
-                pst.setDate(1, java.sql.Date.valueOf(dataInicio));
-                pst.setDate(2, java.sql.Date.valueOf(dataFim));
+                pst.setDate(1, Date.valueOf(dataInicio));
+                pst.setDate(2, Date.valueOf(dataFim));
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next() && !resumoMensal.isEmpty()) {
                         ModelFechaMes resumo = resumoMensal.get(0);
@@ -99,7 +80,6 @@ public class DAOFechaMes {
                     }
                 }
             }
-
             try (PreparedStatement pst = connection.prepareStatement(sqlConfiguracao)) {
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
@@ -123,14 +103,10 @@ public class DAOFechaMes {
                         resumo.setConf2_qtd(rs.getInt("conf2_qtd"));
                         resumo.setConf3_qtd(rs.getInt("conf3_qtd"));
                         resumo.setConf4_qtd(rs.getInt("conf4_qtd"));
-
-                        if (resumoMensal.isEmpty()) {
-                            resumoMensal.add(resumo);
-                        }
+                        if (resumoMensal.isEmpty()) resumoMensal.add(resumo);
                     }
                 }
             }
-
             try (PreparedStatement pst = connection.prepareStatement(sqlMateriais);
                  ResultSet rs = pst.executeQuery()) {
                 if (rs.next() && !resumoMensal.isEmpty()) {
@@ -138,13 +114,11 @@ public class DAOFechaMes {
                     resumo.setQtd_ribbon(rs.getInt("qtd_ribbon"));
                 }
             }
-
             try (PreparedStatement pst = connection.prepareStatement(sqlSalarios)) {
                 pst.setInt(1, dataInicio.getMonthValue());
                 pst.setInt(2, dataFim.getMonthValue());
                 pst.setInt(3, dataInicio.getYear());
                 pst.setInt(4, dataFim.getYear());
-
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next() && !resumoMensal.isEmpty()) {
                         ModelFechaMes resumo = resumoMensal.get(0);
@@ -152,35 +126,33 @@ public class DAOFechaMes {
                     }
                 }
             }
-
         } catch (SQLException e) {
             System.err.println("Erro ao executar as consultas: " + e.getMessage());
             throw e;
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
-
         return resumoMensal;
     }
 
     public boolean verificarExistente(int mes, int ano) throws SQLException {
         String sql = "SELECT COUNT(*) FROM fecha_mes WHERE mes = ? AND ano = ?";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, mes);
-        ps.setInt(2, ano);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return rs.getInt(1) > 0;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, mes);
+            ps.setInt(2, ano);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1) > 0;
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
         return false;
     }
 
-
     public ModelFechaMes buscarFechamentoPorMesAno(int mes, int ano) throws SQLException {
         String sql = "SELECT * FROM fecha_mes WHERE mes = ? AND ano = ?";
-
         try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, mes);
             pst.setInt(2, ano);
-
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     ModelFechaMes fechamento = new ModelFechaMes();
@@ -216,28 +188,20 @@ public class DAOFechaMes {
                     fechamento.setJuroscredvm(rs.getBigDecimal("juroscredvm"));
                     fechamento.setJurosdeboutros(rs.getBigDecimal("jurosdeboutros"));
                     fechamento.setJuroscredoutros(rs.getBigDecimal("juroscredoutros"));
-
                     return fechamento;
                 }
             }
         } catch (SQLException e) {
             System.err.println("Erro ao buscar fechamento por mês/ano: " + e.getMessage());
             throw e;
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
-
         return null;
     }
 
     public void gravarFechamentoMes(ModelFechaMes fechamento) throws SQLException {
-        String sql = "INSERT INTO fecha_mes (" +
-                "mes, ano, total_ft, total_enc, total_dig, total_sobras, total_ribbons, " +
-                "valor_din_mes_real, valor_deb_mes_real, valor_cred_mes_real, valor_pix_mes_real, " +
-                "total_geral, juros_cartoes, valor_total_despesas, valor_total_contas, " +
-                "valor_vale_total, desconto_mes, debito_vm, credito_vm, debito_outros, credito_outros, " +
-                "receitas, salarios, despesasdin, sangria, saldo, receitadin, " +
-                "jurosdebvm, juroscredvm, jurosdeboutros, juroscredoutros" +
-                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+        String sql = "INSERT INTO fecha_mes (mes, ano, total_ft, total_enc, total_dig, total_sobras, total_ribbons, valor_din_mes_real, valor_deb_mes_real, valor_cred_mes_real, valor_pix_mes_real, total_geral, juros_cartoes, valor_total_despesas, valor_total_contas, valor_vale_total, desconto_mes, debito_vm, credito_vm, debito_outros, credito_outros, receitas, salarios, despesasdin, sangria, saldo, receitadin, jurosdebvm, juroscredvm, jurosdeboutros, juroscredoutros) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, fechamento.getMes());
             pst.setInt(2, fechamento.getAno());
@@ -270,26 +234,19 @@ public class DAOFechaMes {
             pst.setBigDecimal(29, fechamento.getJuroscredvm());
             pst.setBigDecimal(30, fechamento.getJurosdeboutros());
             pst.setBigDecimal(31, fechamento.getJuroscredoutros());
-
             pst.executeUpdate();
-            connection.commit();
+            if (gerenciarTransacao) connection.commit();
         } catch (SQLException e) {
-            connection.rollback();
+            if (gerenciarTransacao) connection.rollback();
             System.err.println("Erro ao gravar fechamento do mês: " + e.getMessage());
             throw e;
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
     }
 
     public void atualizarFechamentoMes(ModelFechaMes fechamento) throws SQLException {
-        String sql = "UPDATE fecha_mes SET " +
-                "total_ft = ?, total_enc = ?, total_dig = ?, total_sobras = ?, total_ribbons = ?, " +
-                "valor_din_mes_real = ?, valor_deb_mes_real = ?, valor_cred_mes_real = ?, valor_pix_mes_real = ?, " +
-                "total_geral = ?, juros_cartoes = ?, valor_total_despesas = ?, valor_total_contas = ?, " +
-                "valor_vale_total = ?, desconto_mes = ?, debito_vm = ?, credito_vm = ?, debito_outros = ?, " +
-                "credito_outros = ?, receitas = ?, salarios = ?, despesasdin = ?, sangria = ?, saldo = ?, " +
-                "receitadin = ?, jurosdebvm = ?, juroscredvm = ?, jurosdeboutros = ?, juroscredoutros = ? " +
-                "WHERE mes = ? AND ano = ?";
-
+        String sql = "UPDATE fecha_mes SET total_ft = ?, total_enc = ?, total_dig = ?, total_sobras = ?, total_ribbons = ?, valor_din_mes_real = ?, valor_deb_mes_real = ?, valor_cred_mes_real = ?, valor_pix_mes_real = ?, total_geral = ?, juros_cartoes = ?, valor_total_despesas = ?, valor_total_contas = ?, valor_vale_total = ?, desconto_mes = ?, debito_vm = ?, credito_vm = ?, debito_outros = ?, credito_outros = ?, receitas = ?, salarios = ?, despesasdin = ?, sangria = ?, saldo = ?, receitadin = ?, jurosdebvm = ?, juroscredvm = ?, jurosdeboutros = ?, juroscredoutros = ? WHERE mes = ? AND ano = ?";
         try (PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, fechamento.getTotal_ft());
             pst.setInt(2, fechamento.getTotal_enc());
@@ -322,13 +279,24 @@ public class DAOFechaMes {
             pst.setBigDecimal(29, fechamento.getJuroscredoutros());
             pst.setInt(30, fechamento.getMes());
             pst.setInt(31, fechamento.getAno());
-
             pst.executeUpdate();
-            connection.commit();
+            if (gerenciarTransacao) connection.commit();
         } catch (SQLException e) {
-            connection.rollback();
+            if (gerenciarTransacao) connection.rollback();
             System.err.println("Erro ao atualizar fechamento do mês: " + e.getMessage());
             throw e;
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
+        }
+    }
+
+    private void fecharConexao() {
+        if (connection != null && gerenciarTransacao) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar conexão: " + e.getMessage());
+            }
         }
     }
 }

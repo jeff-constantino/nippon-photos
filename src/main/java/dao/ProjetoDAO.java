@@ -1,175 +1,169 @@
 package dao;
 
-import connection.SingleConnectionBanco;
+import connection.ConnectionPool;
 import model.Projeto;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProjetoDAO {
-    private Connection connection;
-    
-    public ProjetoDAO() {
-        connection = SingleConnectionBanco.getConnection();
+    private final Connection connection;
+    private final boolean gerenciarTransacao;
+
+    public ProjetoDAO(Connection connection) {
+        this.connection = connection;
+        this.gerenciarTransacao = false;
     }
-    
+
+    public ProjetoDAO() {
+        try {
+            this.connection = ConnectionPool.getConnection();
+            this.gerenciarTransacao = true;
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao obter conexão", e);
+        }
+    }
+
     public List<Projeto> listar() throws Exception {
         List<Projeto> lista = new ArrayList<>();
-        String sql = "SELECT * FROM projetos WHERE ativo = true ORDER BY ordem";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        ResultSet rs = statement.executeQuery();
-        
-        while (rs.next()) {
-            Projeto projeto = mapResultSetToProjeto(rs);
-            // Carregar funcionalidades
-            projeto.setFuncionalidades(listarFuncionalidades(projeto.getId()));
-            lista.add(projeto);
+        String sql = "SELECT * FROM projetos WHERE ativo = true ORDER BY ordem, id";
+        try (PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()) {
+            while (rs.next()) {
+                Projeto projeto = new Projeto();
+                projeto.setId(rs.getLong("id"));
+                projeto.setNome(rs.getString("nome"));
+                projeto.setDescricao_curta(rs.getString("descricao_curta"));
+                projeto.setDescricao_completa(rs.getString("descricao_completa"));
+                projeto.setTecnologias(rs.getString("tecnologias"));
+                projeto.setIcone(rs.getString("icone"));
+                projeto.setUrl_acesso(rs.getString("url_acesso"));
+                projeto.setStatus(rs.getString("status"));
+                projeto.setFuncionalidades(rs.getString("funcionalidades"));
+                projeto.setOrdem(rs.getInt("ordem"));
+                projeto.setAtivo(rs.getBoolean("ativo"));
+                projeto.setDataCadastro(rs.getTimestamp("data_cadastro"));
+                lista.add(projeto);
+            }
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
         return lista;
     }
-    
+
     public Projeto buscarPorId(Long id) throws Exception {
         String sql = "SELECT * FROM projetos WHERE id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setLong(1, id);
-        ResultSet rs = statement.executeQuery();
-        
-        if (rs.next()) {
-            Projeto projeto = mapResultSetToProjeto(rs);
-            projeto.setFuncionalidades(listarFuncionalidades(id));
-            return projeto;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, id);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                Projeto projeto = new Projeto();
+                projeto.setId(rs.getLong("id"));
+                projeto.setNome(rs.getString("nome"));
+                projeto.setDescricao_curta(rs.getString("descricao_curta"));
+                projeto.setDescricao_completa(rs.getString("descricao_completa"));
+                projeto.setTecnologias(rs.getString("tecnologias"));
+                projeto.setIcone(rs.getString("icone"));
+                projeto.setUrl_acesso(rs.getString("url_acesso"));
+                projeto.setStatus(rs.getString("status"));
+                projeto.setFuncionalidades(rs.getString("funcionalidades"));
+                projeto.setOrdem(rs.getInt("ordem"));
+                projeto.setAtivo(rs.getBoolean("ativo"));
+                projeto.setDataCadastro(rs.getTimestamp("data_cadastro"));
+                return projeto;
+            }
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
         return null;
     }
-    
+
     public void inserir(Projeto projeto) throws Exception {
-        String sql = "INSERT INTO projetos (nome, descricao_curta, descricao_completa, " +
-                    "icone, tecnologias, url_acesso, url_github, imagem_url, ordem, " +
-                    "ativo, destaque) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
-        PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        statement.setString(1, projeto.getNome());
-        statement.setString(2, projeto.getDescricaoCurta());
-        statement.setString(3, projeto.getDescricaoCompleta());
-        statement.setString(4, projeto.getIcone());
-        statement.setString(5, projeto.getTecnologias());
-        statement.setString(6, projeto.getUrlAcesso());
-        statement.setString(7, projeto.getUrlGithub());
-        statement.setString(8, projeto.getImagemUrl());
-        statement.setInt(9, projeto.getOrdem());
-        statement.setBoolean(10, projeto.getAtivo());
-        statement.setBoolean(11, projeto.getDestaque());
-        statement.executeUpdate();
-        
-        // Pegar ID gerado
-        ResultSet rs = statement.getGeneratedKeys();
-        if (rs.next()) {
-            Long projetoId = rs.getLong(1);
-            // Inserir funcionalidades
-            if (projeto.getFuncionalidades() != null) {
-                inserirFuncionalidades(projetoId, projeto.getFuncionalidades());
-            }
+        String sql = "INSERT INTO projetos (nome, descricao_curta, descricao_completa, tecnologias, icone, url_acesso, status, funcionalidades, ordem, ativo) VALUES (?, ?, ?, ?, ?, ?, ?, ?::jsonb, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, projeto.getNome());
+            statement.setString(2, projeto.getDescricao_curta());
+            statement.setString(3, projeto.getDescricao_completa());
+            statement.setString(4, projeto.getTecnologias());
+            statement.setString(5, projeto.getIcone());
+            statement.setString(6, projeto.getUrl_acesso());
+            statement.setString(7, projeto.getStatus() != null ? projeto.getStatus() : "ativo");
+            statement.setString(8, projeto.getFuncionalidades());
+            statement.setInt(9, projeto.getOrdem() != null ? projeto.getOrdem() : 0);
+            statement.setBoolean(10, projeto.getAtivo());
+            statement.executeUpdate();
+            if (gerenciarTransacao) connection.commit();
+        } catch (Exception e) {
+            if (gerenciarTransacao) connection.rollback();
+            throw e;
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
-        connection.commit();
     }
-    
+
     public void atualizar(Projeto projeto) throws Exception {
-        String sql = "UPDATE projetos SET nome=?, descricao_curta=?, descricao_completa=?, " +
-                    "icone=?, tecnologias=?, url_acesso=?, url_github=?, imagem_url=?, " +
-                    "ordem=?, ativo=?, destaque=? WHERE id=?";
-        
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, projeto.getNome());
-        statement.setString(2, projeto.getDescricaoCurta());
-        statement.setString(3, projeto.getDescricaoCompleta());
-        statement.setString(4, projeto.getIcone());
-        statement.setString(5, projeto.getTecnologias());
-        statement.setString(6, projeto.getUrlAcesso());
-        statement.setString(7, projeto.getUrlGithub());
-        statement.setString(8, projeto.getImagemUrl());
-        statement.setInt(9, projeto.getOrdem());
-        statement.setBoolean(10, projeto.getAtivo());
-        statement.setBoolean(11, projeto.getDestaque());
-        statement.setLong(12, projeto.getId());
-        statement.executeUpdate();
-        
-        // Atualizar funcionalidades
-        deletarFuncionalidades(projeto.getId());
-        if (projeto.getFuncionalidades() != null) {
-            inserirFuncionalidades(projeto.getId(), projeto.getFuncionalidades());
+        String sql = "UPDATE projetos SET nome=?, descricao_curta=?, descricao_completa=?, tecnologias=?, icone=?, url_acesso=?, status=?, funcionalidades=?::jsonb, ordem=?, ativo=? WHERE id=?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, projeto.getNome());
+            statement.setString(2, projeto.getDescricao_curta());
+            statement.setString(3, projeto.getDescricao_completa());
+            statement.setString(4, projeto.getTecnologias());
+            statement.setString(5, projeto.getIcone());
+            statement.setString(6, projeto.getUrl_acesso());
+            statement.setString(7, projeto.getStatus() != null ? projeto.getStatus() : "ativo");
+            statement.setString(8, projeto.getFuncionalidades());
+            statement.setInt(9, projeto.getOrdem() != null ? projeto.getOrdem() : 0);
+            statement.setBoolean(10, projeto.getAtivo());
+            statement.setLong(11, projeto.getId());
+            statement.executeUpdate();
+            if (gerenciarTransacao) connection.commit();
+        } catch (Exception e) {
+            if (gerenciarTransacao) connection.rollback();
+            throw e;
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
-        connection.commit();
     }
-    
+
     public void deletar(Long id) throws Exception {
-        // As funcionalidades serão deletadas automaticamente por CASCADE
         String sql = "DELETE FROM projetos WHERE id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setLong(1, id);
-        statement.executeUpdate();
-        connection.commit();
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, id);
+            statement.executeUpdate();
+            if (gerenciarTransacao) connection.commit();
+        } catch (Exception e) {
+            if (gerenciarTransacao) connection.rollback();
+            throw e;
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
+        }
     }
-    
+
     public void desativar(Long id) throws Exception {
         String sql = "UPDATE projetos SET ativo = false WHERE id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setLong(1, id);
-        statement.executeUpdate();
-        connection.commit();
-    }
-    
-    // Métodos auxiliares para funcionalidades
-    private List<String> listarFuncionalidades(Long projetoId) throws Exception {
-        List<String> funcionalidades = new ArrayList<>();
-        String sql = "SELECT funcionalidade FROM projeto_funcionalidades " +
-                    "WHERE projeto_id = ? ORDER BY ordem";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setLong(1, projetoId);
-        ResultSet rs = statement.executeQuery();
-        
-        while (rs.next()) {
-            funcionalidades.add(rs.getString("funcionalidade"));
-        }
-        return funcionalidades;
-    }
-    
-    private void inserirFuncionalidades(Long projetoId, List<String> funcionalidades) throws Exception {
-        String sql = "INSERT INTO projeto_funcionalidades (projeto_id, funcionalidade, ordem) " +
-                    "VALUES (?, ?, ?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        
-        int ordem = 1;
-        for (String funcionalidade : funcionalidades) {
-            statement.setLong(1, projetoId);
-            statement.setString(2, funcionalidade);
-            statement.setInt(3, ordem++);
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, id);
             statement.executeUpdate();
+            if (gerenciarTransacao) connection.commit();
+        } catch (Exception e) {
+            if (gerenciarTransacao) connection.rollback();
+            throw e;
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
     }
-    
-    private void deletarFuncionalidades(Long projetoId) throws Exception {
-        String sql = "DELETE FROM projeto_funcionalidades WHERE projeto_id = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setLong(1, projetoId);
-        statement.executeUpdate();
-    }
-    
-    private Projeto mapResultSetToProjeto(ResultSet rs) throws SQLException {
-        Projeto projeto = new Projeto();
-        projeto.setId(rs.getLong("id"));
-        projeto.setNome(rs.getString("nome"));
-        projeto.setDescricaoCurta(rs.getString("descricao_curta"));
-        projeto.setDescricaoCompleta(rs.getString("descricao_completa"));
-        projeto.setIcone(rs.getString("icone"));
-        projeto.setTecnologias(rs.getString("tecnologias"));
-        projeto.setUrlAcesso(rs.getString("url_acesso"));
-        projeto.setUrlGithub(rs.getString("url_github"));
-        projeto.setImagemUrl(rs.getString("imagem_url"));
-        projeto.setOrdem(rs.getInt("ordem"));
-        projeto.setAtivo(rs.getBoolean("ativo"));
-        projeto.setDestaque(rs.getBoolean("destaque"));
-        projeto.setDataCadastro(rs.getTimestamp("data_cadastro"));
-        return projeto;
+
+    private void fecharConexao() {
+        if (connection != null && gerenciarTransacao) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar conexão: " + e.getMessage());
+            }
+        }
     }
 }

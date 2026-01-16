@@ -38,7 +38,7 @@
             </a>
             <div class="collapse" id="financeiro">
                 <ul class="nav flex-column sub-menu">
-
+                    <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletVendas">PDV</a></li>
                     <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletFechaDia">Fechamento Diário</a></li>
                     <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletConfDiario">Conferência Diária</a></li>
                     <li class="nav-item"> <a class="nav-link" data-parent-menu="financeiro" href="<%= request.getContextPath() %>/ServletFechaMes">Fechamento do Mês</a></li>

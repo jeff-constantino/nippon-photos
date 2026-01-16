@@ -2,7 +2,6 @@ package servlets;
 
 import dao.DAOConfig;
 import dao.DAOConfiguracao;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,25 +11,22 @@ import model.ModelConfiguracao;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.sql.Connection;
 import java.util.List;
 
 @WebServlet("/ServletConfiguracao")
 public class ServletConfiguracao extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
-    private DAOConfiguracao daoConfiguracao;
-    private DAOConfig daoConfig;
-
-
-    @Override
-    public void init() throws ServletException {
-        daoConfig = new DAOConfig();
-        daoConfiguracao = new DAOConfiguracao();
-    }
-
+    // ✅ REMOVIDO: private DAOConfiguracao daoConfiguracao;
+    // ✅ REMOVIDO: private DAOConfig daoConfig;
+    // ✅ REMOVIDO: init()
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conn = (Connection) request.getAttribute("connection");
+        DAOConfiguracao daoConfiguracao = new DAOConfiguracao(conn);
+        DAOConfig daoConfig = new DAOConfig(conn);
+
         String acao = request.getParameter("acao");
         String msg = "Operação realizada com sucesso!";
 
@@ -41,8 +37,7 @@ public class ServletConfiguracao extends ServletGenericUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ModelConfig configExistente = (configsExistentes != null && !configsExistentes.isEmpty())
-                ? configsExistentes.get(0) : null;
+        ModelConfig configExistente = (configsExistentes != null && !configsExistentes.isEmpty()) ? configsExistentes.get(0) : null;
 
         try {
             if ("salario".equals(acao)) {
@@ -65,19 +60,16 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 modelConfiguracao.setParcela_irrf_1(parseToBigDecimal(request.getParameter("parcela_irrf_1")));
                 modelConfiguracao.setMin_irrf_1(parseToBigDecimal(request.getParameter("min_irrf_1")));
                 modelConfiguracao.setMax_irrf_1(parseToBigDecimal(request.getParameter("max_irrf_1")));
-
                 modelConfiguracao.setId_irrf_2(parseToLong(request.getParameter("id_irrf_2")));
                 modelConfiguracao.setIrrf_2(parseToBigDecimal(request.getParameter("irrf_2")));
                 modelConfiguracao.setParcela_irrf_2(parseToBigDecimal(request.getParameter("parcela_irrf_2")));
                 modelConfiguracao.setMin_irrf_2(parseToBigDecimal(request.getParameter("min_irrf_2")));
                 modelConfiguracao.setMax_irrf_2(parseToBigDecimal(request.getParameter("max_irrf_2")));
-
                 modelConfiguracao.setId_irrf_3(parseToLong(request.getParameter("id_irrf_3")));
                 modelConfiguracao.setIrrf_3(parseToBigDecimal(request.getParameter("irrf_3")));
                 modelConfiguracao.setParcela_irrf_3(parseToBigDecimal(request.getParameter("parcela_irrf_3")));
                 modelConfiguracao.setMin_irrf_3(parseToBigDecimal(request.getParameter("min_irrf_3")));
                 modelConfiguracao.setMax_irrf_3(parseToBigDecimal(request.getParameter("max_irrf_3")));
-
                 modelConfiguracao.setId_irrf_4(parseToLong(request.getParameter("id_irrf_4")));
                 modelConfiguracao.setIrrf_4(parseToBigDecimal(request.getParameter("irrf_4")));
                 modelConfiguracao.setParcela_irrf_4(parseToBigDecimal(request.getParameter("parcela_irrf_4")));
@@ -86,7 +78,6 @@ public class ServletConfiguracao extends ServletGenericUtil {
 
                 daoConfiguracao.gravarConfig(modelConfiguracao);
                 daoConfiguracao.gravarIrrf(modelConfiguracao);
-
                 msg = "Configurações de Salários e IRRF salvas com sucesso!";
 
             } else if ("cartao".equals(acao)) {
@@ -114,7 +105,6 @@ public class ServletConfiguracao extends ServletGenericUtil {
                     BigDecimal min = new BigDecimal(request.getParameter("min_inss_" + i));
                     BigDecimal max = new BigDecimal(request.getParameter("max_inss_" + i));
                     BigDecimal parcela = new BigDecimal(request.getParameter("parcela_" + i));
-
                     daoConfiguracao.salvarOuAtualizarFaixaInss(id, inss, min, max, parcela);
                 }
                 msg = "Faixas INSS atualizadas com sucesso!";
@@ -132,7 +122,6 @@ public class ServletConfiguracao extends ServletGenericUtil {
         request.getRequestDispatcher("/ServletConfig").forward(request, response);
     }
 
-    // Métodos auxiliares renomeados para evitar ambiguidade
     private Long parseToLong(String s) {
         try {
             if (s != null && !s.isEmpty()) {
@@ -155,18 +144,9 @@ public class ServletConfiguracao extends ServletGenericUtil {
         }
     }
 
-
-
-
-
-
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendRedirect(request.getContextPath() + "/ServletConfig");
     }
-
-
-
 
     private BigDecimal parseBigDecimal(String value) {
         try {

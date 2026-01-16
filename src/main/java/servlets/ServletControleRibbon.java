@@ -6,59 +6,47 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelControleRibbon;
-import model.ModelVendas;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
 
 @WebServlet("/ServletControleRibbon")
 public class ServletControleRibbon extends ServletGenericUtil {
-
-    private final DAOControleRibbon daoControleRibbon = new DAOControleRibbon();
+    // ✅ REMOVIDO: private final DAOControleRibbon daoControleRibbon
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conn = (Connection) request.getAttribute("connection");
+        DAOControleRibbon daoControleRibbon = new DAOControleRibbon(conn);
+
         String acao = request.getParameter("acao");
-        String paginaParam = request.getParameter("pagina");
-        int pagina = 1; // Página padrão
-        int tamanho = 10; // Tamanho padrão para a paginação
         String dataInicial = request.getParameter("dataInicial");
         String dataFinal = request.getParameter("dataFinal");
+
         try {
-            DAOControleRibbon daoControleRibbon = new DAOControleRibbon();
-            // Buscar o último controle registrado
             ModelControleRibbon ultimoControle = daoControleRibbon.buscarUltimoControle();
             request.setAttribute("ultimoControle", ultimoControle);
 
-
-            // Verificar se há uma mensagem na sessão
             String msg = (String) request.getSession().getAttribute("msg");
             if (msg != null) {
                 request.setAttribute("msg", msg);
-                // Limpar a mensagem da sessão após ser lida
                 request.getSession().removeAttribute("msg");
             }
-            List<ModelControleRibbon> controleList = new ArrayList<>();
+
             if ("imprimirRelatorioControle".equals(acao)) {
                 int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
                 int registrosPorPagina = 10;
                 int offset = (paginaAtual - 1) * registrosPorPagina;
 
                 try {
-                    controleList = daoControleRibbon.listarControles(dataInicial, dataFinal, offset, registrosPorPagina);
+                    java.util.List<ModelControleRibbon> controleList = daoControleRibbon.listarControles(dataInicial, dataFinal, offset, registrosPorPagina);
 
-                    // Gerar HTML dos resultados diretamente
                     StringBuilder html = new StringBuilder();
                     for (ModelControleRibbon ctr : controleList) {
-                        // Formatar a data para evitar problemas com aspas no JavaScript
-                        String dataFormatted = ctr.getData_ribbon() != null ?
-                                new SimpleDateFormat("yyyy-MM-dd").format(ctr.getData_ribbon()).replace("'", "\\'") : "";
+                        String dataFormatted = ctr.getData_ribbon() != null ? new SimpleDateFormat("yyyy-MM-dd").format(ctr.getData_ribbon()).replace("'", "\\'") : "";
 
-                        // Corrigir a geração do JavaScript para incluir as aspas na string "INICIO MES"
                         html.append("<tr>")
                                 .append("<td>")
                                 .append("<button type='button' class='btn btn-primary' onclick='preencherFormularioRibbon(")
@@ -114,7 +102,6 @@ public class ServletControleRibbon extends ServletGenericUtil {
                                 .append("</tr>");
                     }
 
-                    // Retorna o HTML gerado para o AJAX
                     response.setContentType("text/html");
                     response.getWriter().write(html.toString());
 
@@ -122,12 +109,9 @@ public class ServletControleRibbon extends ServletGenericUtil {
                     e.printStackTrace();
                     response.getWriter().write("Erro ao buscar controle.");
                 }
-
                 return;
             }
 
-
-            // Exibir página JSP
             request.getRequestDispatcher("principal/controleRibbon.jsp").forward(request, response);
 
         } catch (Exception e) {
@@ -135,17 +119,16 @@ public class ServletControleRibbon extends ServletGenericUtil {
         }
     }
 
-
-
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conn = (Connection) request.getAttribute("connection");
+        DAOControleRibbon daoControleRibbon = new DAOControleRibbon(conn);
+
         try {
             String acao = request.getParameter("acao");
 
             if ("atualizarcontrole".equals(acao)) {
-                atualizarControle(request, response);
+                atualizarControle(request, response, daoControleRibbon);
             } else {
-                // Manter a lógica existente para outras ações
                 String ribbonSelecionado = request.getParameter("ribbon_selecionado");
 
                 if (ribbonSelecionado == null || ribbonSelecionado.isEmpty()) {
@@ -155,51 +138,26 @@ public class ServletControleRibbon extends ServletGenericUtil {
                 }
 
                 ModelControleRibbon controle = new ModelControleRibbon();
-
-                // Buscar o último ID antes de gravar
                 long ultimoId = daoControleRibbon.buscarUltimoIdControle();
                 controle.setIdControle(ultimoId);
 
-                // Mapeia os campos com base no ribbon selecionado
                 int fimRibbon = Integer.parseInt(request.getParameter("fim_ribbon"));
                 int trocaRibbon = Integer.parseInt(request.getParameter("troca_ribbon"));
 
                 switch (ribbonSelecionado) {
-                    case "ribbon1":
-                        controle.setFim_ribbon_1(fimRibbon);
-                        controle.setTroca_ribbon_1(trocaRibbon);
-                        break;
-                    case "ribbon2":
-                        controle.setFim_ribbon_2(fimRibbon);
-                        controle.setTroca_ribbon_2(trocaRibbon);
-                        break;
-                    case "ribbon3":
-                        controle.setFim_ribbon_3(fimRibbon);
-                        controle.setTroca_ribbon_3(trocaRibbon);
-                        break;
-                    case "ribbon4":
-                        controle.setFim_ribbon_4(fimRibbon);
-                        controle.setTroca_ribbon_4(trocaRibbon);
-                        break;
-                    case "ribbon5":
-                        controle.setFim_ribbon_5(fimRibbon);
-                        controle.setTroca_ribbon_5(trocaRibbon);
-                        break;
-                    case "ribbon6":
-                        controle.setFim_ribbon_6(fimRibbon);
-                        controle.setTroca_ribbon_6(trocaRibbon);
-                        break;
+                    case "ribbon1": controle.setFim_ribbon_1(fimRibbon); controle.setTroca_ribbon_1(trocaRibbon); break;
+                    case "ribbon2": controle.setFim_ribbon_2(fimRibbon); controle.setTroca_ribbon_2(trocaRibbon); break;
+                    case "ribbon3": controle.setFim_ribbon_3(fimRibbon); controle.setTroca_ribbon_3(trocaRibbon); break;
+                    case "ribbon4": controle.setFim_ribbon_4(fimRibbon); controle.setTroca_ribbon_4(trocaRibbon); break;
+                    case "ribbon5": controle.setFim_ribbon_5(fimRibbon); controle.setTroca_ribbon_5(trocaRibbon); break;
+                    case "ribbon6": controle.setFim_ribbon_6(fimRibbon); controle.setTroca_ribbon_6(trocaRibbon); break;
                     default:
-                        // Armazenar a mensagem na sessão
                         request.getSession().setAttribute("msg", "Ribbon inválido selecionado.");
                         response.sendRedirect(request.getContextPath() + "/ServletControleRibbon");
                         return;
                 }
 
-                // Grava no banco
                 daoControleRibbon.gravarTrocaRibbon(controle);
-
-                // Armazenar a mensagem de sucesso na sessão
                 request.getSession().setAttribute("msg", "Troca de ribbon registrada com sucesso!");
                 response.sendRedirect(request.getContextPath() + "/ServletControleRibbon");
             }
@@ -210,12 +168,9 @@ public class ServletControleRibbon extends ServletGenericUtil {
         }
     }
 
-
-    private void atualizarControle(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void atualizarControle(HttpServletRequest request, HttpServletResponse response, DAOControleRibbon daoControleRibbon) throws ServletException, IOException {
         try {
             ModelControleRibbon controle = new ModelControleRibbon();
-
-            // Verificando e mapeando parâmetros do formulário para o modelo
             String idControleStr = request.getParameter("idControle");
             if (idControleStr != null && !idControleStr.isEmpty()) {
                 controle.setIdControle(Long.parseLong(idControleStr));
@@ -227,7 +182,6 @@ public class ServletControleRibbon extends ServletGenericUtil {
 
             controle.setData_ribbon(Date.valueOf(request.getParameter("data_ribbon")));
 
-            // Verificar os parâmetros antes de fazer o parse
             try {
                 controle.setRibbon_1_atual(Integer.parseInt(request.getParameter("ribbon_1_atual")));
                 controle.setRibbon_2_atual(Integer.parseInt(request.getParameter("ribbon_2_atual")));
@@ -273,9 +227,7 @@ public class ServletControleRibbon extends ServletGenericUtil {
                 return;
             }
 
-            // Atualiza no banco
             daoControleRibbon.atualizarControle(controle);
-
             request.getSession().setAttribute("msg", "Controle atualizado com sucesso!");
             response.sendRedirect(request.getContextPath() + "/ServletControleRibbon");
         } catch (Exception e) {
@@ -284,8 +236,4 @@ public class ServletControleRibbon extends ServletGenericUtil {
             response.sendRedirect(request.getContextPath() + "/ServletControleRibbon");
         }
     }
-
-
-
-
 }

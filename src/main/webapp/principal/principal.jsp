@@ -40,57 +40,56 @@
                                         <div class="d-flex d-sm-block d-md-flex align-items-center">
                                             <!--INSERIR BOTÃO 1 AQUI--><!-- Button trigger modal -->
 
-                                                <a class="nav-link" href="<%= request.getContextPath() %>/ServletVendas" style="font-size: large;color: #f5c102; font-weight: bold"> Vendas </a>
-                                            </button>
+                                            <a class="nav-link" href="<%= request.getContextPath() %>/ServletVendas" style="font-size: large;color: #f5c102; font-weight: bold"> Vendas </a>
 
                                             <!-- Modal -->
 
 
+                                        </div>
+
+                                    </div>
+                                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                                        <a class="icon-lg mdi mdi-hexagon-multiple text-warning ml-auto"
+                                           href="<%= request.getContextPath() %>/ServletVendas"></a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <div class="row">
+                                    <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                        <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                            <!--INSERIR BOTÃO 2 AQUI-->
+                                            <!-- Button trigger modal -->
+                                            <a class="nav-link" href="<%= request.getContextPath() %>/ServletFechaDia" style="font-size: large;color: red; font-weight: bold"> Finalizar Dia </a>
+
+                                            <!-- Modal -->
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                                        <a class="icon-lg mdi mdi-power text-danger ml-auto"
+                                           href="<%= request.getContextPath() %>/ServletFechaDia"></a>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
-                        <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                            <a class="icon-lg mdi mdi-hexagon-multiple text-warning ml-auto"
-                               href="<%= request.getContextPath() %>/principal/vendas.jsp"></a>
-
-                        </div>
                     </div>
+
                 </div>
-            </div>
-        </div>
-        <div class="col-sm-4 grid-margin">
-            <div class="card">
-                <div class="card-body">
-
-                    <div class="row">
-                        <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                            <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                <!--INSERIR BOTÃO 2 AQUI-->
-                                <!-- Button trigger modal -->
-                                <a class="nav-link" href="<%= request.getContextPath() %>/ServletFechaDia" style="font-size: large;color: red; font-weight: bold"> Finalizar Dia </a>
-
-                                <!-- Modal -->
-
-                            </div>
-
-                        </div>
-                        <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                            <a class="icon-lg mdi mdi-power text-danger ml-auto"
-                               href="<%= request.getContextPath() %>/ServletFechaDia"></a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
                 <div class="row ">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                 <div class="table-responsive">
-                                     <h2 class="text-center">CONTAS A PAGAR NOS PRÓXIMOS 7 DIAS</h2>
+                                <div class="table-responsive">
+                                    <h2 class="text-center">CONTAS A PAGAR NOS PRÓXIMOS 7 DIAS</h2>
                                     <table class="table table-bordered">
                                         <thead class="thead-light">
                                         <tr>
@@ -183,14 +182,14 @@
 
 
             </div>
-<!-- content-wrapper ends -->
-<!-- partial:partials/_footer.html -->
-<jsp:include page="footer.jsp"></jsp:include>
-<!-- partial -->
-</div>
-<!-- main-panel ends -->
-</div>
-<!-- page-body-wrapper ends -->
+            <!-- content-wrapper ends -->
+            <!-- partial:partials/_footer.html -->
+            <jsp:include page="footer.jsp"></jsp:include>
+            <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
 </div>
 
 
@@ -220,7 +219,7 @@
 <script type="text/javascript">
 
 
-   $(document).ready(function () {
+    $(document).ready(function () {
         var msg = "${msg}";
         if (msg) {
             $('#msgModal').modal('show'); // Exibe o modal com a mensagem
@@ -229,7 +228,7 @@
             $.post("${pageContext.request.contextPath}/ServletVendas", { acao: "limparMsg" });
         }
     });
-       $(function () {
+    $(function () {
 
         $("#dataVenda").datepicker({
             dateFormat: 'dd/mm/yy',

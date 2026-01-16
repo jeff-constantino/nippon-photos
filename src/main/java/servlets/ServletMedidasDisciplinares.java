@@ -2,37 +2,31 @@ package servlets;
 
 import dao.DAOFuncionario;
 import dao.DAOMedidasDisciplinares;
-import dao.DAOVendasRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.ModelAdvertencia;
-import model.ModelFaltas;
-import model.ModelLogin;
-import model.ModelSuspensao;
+import model.*;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-import java.time.LocalDate;
-import model.ModelMedidasDisciplinaresCompleto;
 
 @SuppressWarnings("ALL")
 @WebServlet("/ServletMedidasDisciplinares")
 public class ServletMedidasDisciplinares extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
     private static final Logger logger = Logger.getLogger(ServletMedidasDisciplinares.class.getName());
-    private final DAOVendasRepository daoVendasFunc = new DAOVendasRepository();
-
+    // ✅ REMOVIDO: private final DAOVendasRepository daoVendasFunc
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conn = (Connection) request.getAttribute("connection");
 
         String acao = request.getParameter("acao");
         String dataInicial = request.getParameter("dataInicial");
@@ -40,25 +34,22 @@ public class ServletMedidasDisciplinares extends HttpServlet {
         String funcionarioId = request.getParameter("funcionarioId");
 
         try {
-            DAOFuncionario daoFuncionario = new DAOFuncionario();
+            DAOFuncionario daoFuncionario = new DAOFuncionario(conn);
             List<ModelLogin> funcionarios = daoFuncionario.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);
 
-            // Se for uma ação de busca
             if ("buscarMedidas".equals(acao) && dataInicial != null && dataFinal != null) {
-                DAOMedidasDisciplinares daoMedidas = new DAOMedidasDisciplinares();
+                DAOMedidasDisciplinares daoMedidas = new DAOMedidasDisciplinares(conn);
                 LocalDate dataIni = LocalDate.parse(dataInicial);
                 LocalDate dataFin = LocalDate.parse(dataFinal);
 
                 List<ModelMedidasDisciplinaresCompleto> listaMedidas;
 
                 if (funcionarioId != null && !funcionarioId.isEmpty()) {
-                    // Busca por funcionário específico
                     Long funcId = Long.parseLong(funcionarioId);
                     listaMedidas = daoMedidas.buscarMedidasPorFuncionarioEPeriodo(funcId, dataIni, dataFin);
                     request.setAttribute("funcionarioIdSelecionado", funcionarioId);
                 } else {
-                    // Busca todas as medidas do período
                     listaMedidas = daoMedidas.buscarTodasMedidasPorPeriodo(dataIni, dataFin);
                 }
 
@@ -81,6 +72,8 @@ public class ServletMedidasDisciplinares extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conn = (Connection) request.getAttribute("connection");
+
         String msg = null;
         try {
             String acao = request.getParameter("acao");
@@ -90,7 +83,7 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                 return;
             }
 
-            DAOFuncionario daoFuncionario = new DAOFuncionario();
+            DAOFuncionario daoFuncionario = new DAOFuncionario(conn);
             List<ModelLogin> funcionarios = daoFuncionario.buscaFuncionarios();
             request.setAttribute("funcionarios", funcionarios);
 
@@ -100,8 +93,6 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                 String motivo = request.getParameter("adv_motivo");
                 String nomeFuncionario = request.getParameter("nomeFuncionario");
 
-
-
                 if (funcionarioId == null || funcionarioId.isEmpty()) {
                     msg = "Funcionário não selecionado.";
                 } else if (dataAdvertencia == null || dataAdvertencia.isEmpty()) {
@@ -109,13 +100,12 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                 } else if (motivo == null || motivo.trim().isEmpty()) {
                     msg = "Motivo da advertência é obrigatório.";
                 } else {
-                    DAOMedidasDisciplinares dao = new DAOMedidasDisciplinares();
+                    DAOMedidasDisciplinares dao = new DAOMedidasDisciplinares(conn);
                     ModelAdvertencia advertencia = new ModelAdvertencia();
                     advertencia.setFuncionarioId(Long.parseLong(funcionarioId));
                     advertencia.setDataAdvertencia(java.sql.Date.valueOf(dataAdvertencia));
                     advertencia.setMotivo(motivo);
                     advertencia.setNomeFuncionario(nomeFuncionario);
-
 
                     dao.gravarAdvertencia(advertencia);
                     msg = "Advertência registrada com sucesso!";
@@ -126,7 +116,7 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                 String dataFalta = request.getParameter("data_falta");
                 String observacoes = request.getParameter("falta_obs");
                 String nomeFuncionario = request.getParameter("nomeFuncionario");
-                String dias_falta  = request.getParameter("dias_falta");
+                String dias_falta = request.getParameter("dias_falta");
                 String dsr_falta = request.getParameter("dsr_falta");
 
                 if (funcionarioId == null || funcionarioId.isEmpty()) {
@@ -136,7 +126,7 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                 } else if (observacoes == null || observacoes.trim().isEmpty()) {
                     msg = "Observações da falta são obrigatórias.";
                 } else {
-                    DAOMedidasDisciplinares dao = new DAOMedidasDisciplinares();
+                    DAOMedidasDisciplinares dao = new DAOMedidasDisciplinares(conn);
                     ModelFaltas falta = new ModelFaltas();
                     falta.setFuncionarioId(Long.parseLong(funcionarioId));
                     falta.setDataFalta(java.sql.Date.valueOf(dataFalta));
@@ -144,7 +134,6 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                     falta.setNomeFuncionario(nomeFuncionario);
                     falta.setDias_falta(Integer.parseInt(dias_falta));
                     falta.setDsr_falta(Integer.parseInt(dsr_falta));
-
 
                     dao.gravarFalta(falta);
                     msg = "Falta registrada com sucesso!";
@@ -154,7 +143,7 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                 String dataSuspensao = request.getParameter("data_suspensao");
                 String motivo = request.getParameter("motivo");
                 String nomeFuncionario = request.getParameter("nomeFuncionario");
-                String dias  = request.getParameter("dias");
+                String dias = request.getParameter("dias");
                 String dsr = request.getParameter("dsr");
 
                 if (funcionarioId == null || funcionarioId.isEmpty()) {
@@ -164,7 +153,7 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                 } else if (motivo == null || motivo.trim().isEmpty()) {
                     msg = "O motivo da Suspenão é obrigatório.";
                 } else {
-                    DAOMedidasDisciplinares dao = new DAOMedidasDisciplinares();
+                    DAOMedidasDisciplinares dao = new DAOMedidasDisciplinares(conn);
                     ModelSuspensao suspensao = new ModelSuspensao();
                     suspensao.setFuncionarioId(Long.parseLong(funcionarioId));
                     suspensao.setDataSuspensao(java.sql.Date.valueOf(dataSuspensao));
@@ -176,8 +165,7 @@ public class ServletMedidasDisciplinares extends HttpServlet {
                     dao.gravarSuspensao(suspensao);
                     msg = "Suspensão registrada com sucesso!";
                 }
-            }
-            else {
+            } else {
                 msg = "Ação inválida.";
             }
         } catch (Exception e) {
@@ -188,6 +176,4 @@ public class ServletMedidasDisciplinares extends HttpServlet {
         request.getSession().setAttribute("msg", msg);
         response.sendRedirect(request.getContextPath() + "/ServletMedidasDisciplinares");
     }
-
-
 }

@@ -1,6 +1,6 @@
 package dao;
 
-import connection.SingleConnectionBanco;
+import connection.ConnectionPool;
 import model.ModelFechaMes;
 
 import java.math.BigDecimal;
@@ -15,9 +15,28 @@ import java.util.List;
 
 public class DAOComparativoYoY {
     private final Connection connection;
+    private final boolean gerenciarTransacao;
 
+    /**
+     * Construtor NOVO - recebe conexão gerenciada pelo Filter
+     * USO RECOMENDADO
+     */
+    public DAOComparativoYoY(Connection connection) {
+        this.connection = connection;
+        this.gerenciarTransacao = false; // Filter gerencia
+    }
+
+    /**
+     * Construtor LEGADO - busca própria conexão
+     * Mantido para compatibilidade temporária
+     */
     public DAOComparativoYoY() {
-        this.connection = SingleConnectionBanco.getConnection();
+        try {
+            this.connection = ConnectionPool.getConnection();
+            this.gerenciarTransacao = true; // DAO gerencia
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao obter conexão do pool", e);
+        }
     }
 
     /**
@@ -28,13 +47,10 @@ public class DAOComparativoYoY {
      */
     public ModelFechaMes buscarDadosMesAno(int mes, int ano) throws SQLException {
 
-
         // Calcula primeiro e último dia do mês
         YearMonth yearMonth = YearMonth.of(ano, mes);
         LocalDate dataInicio = yearMonth.atDay(1);
         LocalDate dataFim = yearMonth.atEndOfMonth();
-
-
 
         ModelFechaMes resumo = new ModelFechaMes();
 
@@ -67,30 +83,27 @@ public class DAOComparativoYoY {
             // Busca a quantidade de ribbon
             int qtdRibbon = 0;
 
-            try (PreparedStatement pst = connection.prepareStatement(sqlQtdRibbon)) {
-                try (ResultSet rs = pst.executeQuery()) {
-                    if (rs.next()) {
-                        qtdRibbon = rs.getInt("qtd_ribbon");
+            try (PreparedStatement pst = connection.prepareStatement(sqlQtdRibbon);
+                 ResultSet rs = pst.executeQuery()) {
 
-                    } else {
-                        System.out.println("ATENÇÃO: qtd_ribbon não encontrado na tabela conf_materiais");
-                    }
+                if (rs.next()) {
+                    qtdRibbon = rs.getInt("qtd_ribbon");
+                } else {
+                    System.out.println("ATENÇÃO: qtd_ribbon não encontrado na tabela conf_materiais");
                 }
             }
 
-
             // Busca totais de fotos
-
             try (PreparedStatement pst = connection.prepareStatement(sqlFechamento)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
+
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         resumo.setTotal_ft(rs.getInt("total_ft"));
                         resumo.setTotal_enc(rs.getInt("total_enc"));
                         resumo.setTotal_dig(rs.getInt("total_dig"));
                         resumo.setTotal_sobras(rs.getInt("total_sobras"));
-
                     } else {
                         System.out.println("Nenhum registro encontrado em fecha_dia");
                     }
@@ -98,10 +111,10 @@ public class DAOComparativoYoY {
             }
 
             // Busca valores monetários
-
             try (PreparedStatement pst = connection.prepareStatement(sqlConfiguracoes)) {
                 pst.setDate(1, java.sql.Date.valueOf(dataInicio));
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
+
                 try (ResultSet rs = pst.executeQuery()) {
                     if (rs.next()) {
                         // Usa BigDecimal.ZERO como padrão se for null
@@ -113,7 +126,6 @@ public class DAOComparativoYoY {
                         resumo.setValor_cred_mes_real(rs.getBigDecimal("valor_cred_real") != null ? rs.getBigDecimal("valor_cred_real") : BigDecimal.ZERO);
                         resumo.setValor_pix_mes(rs.getBigDecimal("valor_pix") != null ? rs.getBigDecimal("valor_pix") : BigDecimal.ZERO);
                         resumo.setValor_pix_mes_real(rs.getBigDecimal("valor_pix_real") != null ? rs.getBigDecimal("valor_pix_real") : BigDecimal.ZERO);
-
                     } else {
                         System.out.println("Nenhum registro encontrado em conf_dia");
                         // Inicializa com zeros para evitar NullPointerException
@@ -129,22 +141,7 @@ public class DAOComparativoYoY {
                 }
             }
 
-            // Busca ribbons (ajuste conforme necessário)
-            // Se não tiver ribbons no banco, comente esta parte
-            /*
-            try (PreparedStatement pst = connection.prepareStatement(sqlRibbons)) {
-                pst.setDate(1, java.sql.Date.valueOf(dataInicio));
-                pst.setDate(2, java.sql.Date.valueOf(dataFim));
-                try (ResultSet rs = pst.executeQuery()) {
-                    if (rs.next()) {
-                        resumo.setTotal_ribbons(rs.getInt("total_ribbons"));
-                    }
-                }
-            }
-            */
-
             // Busca vendas diárias
-
             String sqlRelatorioDia = "SELECT " +
                     "EXTRACT(DAY FROM data_fechamento) AS dia, " +
                     "EXTRACT(DOW FROM data_fechamento) AS dow, " +
@@ -161,7 +158,6 @@ public class DAOComparativoYoY {
                 pst.setDate(2, java.sql.Date.valueOf(dataFim));
 
                 try (ResultSet rs = pst.executeQuery()) {
-                    int count = 0;
                     while (rs.next()) {
                         ModelFechaMes dia = new ModelFechaMes();
                         dia.setDia(rs.getInt("dia"));
@@ -177,11 +173,10 @@ public class DAOComparativoYoY {
                         BigDecimal vendaDia = rs.getBigDecimal("venda_total_dia");
                         dia.setVenda_total_dia(vendaDia != null ? vendaDia : BigDecimal.ZERO);
                         relatorioDiario.add(dia);
-                        count++;
                     }
-
                 }
             }
+
             resumo.setRelatorioDiario(relatorioDiario);
 
             // Calcula ribbons: (total_ft + total_sobras) / qtd_ribbon usando BigDecimal
@@ -191,7 +186,6 @@ public class DAOComparativoYoY {
                 BigDecimal totalFt = BigDecimal.valueOf(resumo.getTotal_ft());
                 BigDecimal totalSobras = BigDecimal.valueOf(resumo.getTotal_sobras());
                 totalRibbons = totalFt.add(totalSobras).divide(qtdRibbonBD, 2, java.math.RoundingMode.HALF_UP);
-
             } else {
                 System.out.println("qtd_ribbon é 0, ribbons definido como 0");
             }
@@ -201,14 +195,29 @@ public class DAOComparativoYoY {
             // Armazena qtd_ribbon para referência
             resumo.setQtd_ribbon(qtdRibbon);
 
-
-
         } catch (SQLException e) {
             System.err.println("ERRO SQL NO DAO: " + e.getMessage());
             e.printStackTrace();
             throw e;
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
+            }
         }
 
         return resumo;
+    }
+
+    /**
+     * Fecha a conexão (apenas quando DAO gerencia)
+     */
+    private void fecharConexao() {
+        if (connection != null && gerenciarTransacao) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar conexão: " + e.getMessage());
+            }
+        }
     }
 }

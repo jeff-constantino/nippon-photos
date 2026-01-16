@@ -1,7 +1,6 @@
 package servlets;
 
 import dao.DAOConfDiario;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -21,17 +21,14 @@ import java.util.List;
 @WebServlet("/ServletConfDiario")
 public class ServletConfDiario extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private final DAOConfDiario daoConfDiario;
 
-    public ServletConfDiario() {
-        super();
-        daoConfDiario = new DAOConfDiario();
-    }
-    private void carregarConfNaoFechadas(HttpServletRequest request) {
+    // ✅ REMOVIDO: private final DAOConfDiario daoConfDiario;
+    // ✅ REMOVIDO: constructor
+
+    private void carregarConfNaoFechadas(HttpServletRequest request, Connection conn) {
         try {
-
-            List<Date> confNaoFechadas = daoConfDiario.buscarConfNaoFechadas();
-
+            DAOConfDiario dao = new DAOConfDiario(conn);
+            List<Date> confNaoFechadas = dao.buscarConfNaoFechadas();
             request.setAttribute("confNaoFechadas", confNaoFechadas);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -39,123 +36,81 @@ public class ServletConfDiario extends HttpServlet {
         }
     }
 
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conn = (Connection) request.getAttribute("connection");
+        DAOConfDiario dao = new DAOConfDiario(conn);
         String acao = request.getParameter("acao");
-        carregarConfNaoFechadas(request);
-
+        carregarConfNaoFechadas(request, conn);
 
         try {
             if ("buscaFechamentoDiario".equals(acao)) {
-                buscarFechamentoPorData(request, response);
+                buscarFechamentoPorData(request, response, dao);
             } else if ("buscaConfDiario".equals(acao)) {
-                buscarConferenciaPorData(request, response);
+                buscarConferenciaPorData(request, response, dao);
             } else {
-
-                // Usa o forward ao invés de sendRedirect
                 request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // Caso ocorra um erro, a mensagem é configurada e passada para o JSP
             request.setAttribute("msg", "Erro: " + e.getMessage());
-            // Usa o forward ao invés de sendRedirect
             request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);
         }
     }
 
-    private void buscarFechamentoPorData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void buscarFechamentoPorData(HttpServletRequest request, HttpServletResponse response, DAOConfDiario dao) throws Exception {
         String dataFechamento = request.getParameter("data_fechamento");
         Date dataFechamentoDate = Date.valueOf(dataFechamento);
 
-        // DAO para buscar a conferência pela data
-        DAOConfDiario dao = new DAOConfDiario();
-
-        // Verifica se a conferência já foi realizada para a data informada
         if (dao.existeConferenciaParaData(dataFechamentoDate)) {
             request.setAttribute("msg", "Conferência já realizada para essa data");
             request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);
         } else {
-            // Se não houver conferência para a data, busca a conferência
             ModelConfDiario conf = dao.buscarPorData(dataFechamentoDate);
-
             if (conf != null) {
-                // Armazena o objeto conf no request para ser acessado no JSP
                 request.setAttribute("conf_diario", conf);
-
-
-
-                // Use forward em vez de sendRedirect
                 request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);
             } else {
-                // Caso não encontre a conferência, define uma mensagem de erro
                 request.setAttribute("msg", "Nenhum fechamento encontrado para a data informada.");
-
-                // Redireciona de volta para o JSP com a mensagem de erro
                 request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);
             }
         }
     }
 
-    private void buscarConferenciaPorData(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void buscarConferenciaPorData(HttpServletRequest request, HttpServletResponse response, DAOConfDiario dao) throws Exception {
         String dataFechamento = request.getParameter("data_conferencia");
-
-        // DAO para buscar a conferência pela data
-        DAOConfDiario dao = new DAOConfDiario();
         ModelConfDiario conf = dao.buscarConferenciaPorData(Date.valueOf(dataFechamento));
 
         if (conf != null) {
-            // Armazena o objeto conf no request para ser acessado no JSP
             request.setAttribute("conf_diario", conf);
-
-
-
-            // Use forward em vez de sendRedirect
             request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);
         } else {
-            // Caso não encontre a conferência, define uma mensagem de erro
             request.setAttribute("msg", "Nenhuma conferência encontrada para a data informada.");
-
-            // Redireciona de volta para o JSP com a mensagem de erro
             request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);
         }
     }
 
-
-
-
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        carregarConfNaoFechadas(request);
+        Connection conn = (Connection) request.getAttribute("connection");
+        DAOConfDiario dao = new DAOConfDiario(conn);
+        carregarConfNaoFechadas(request, conn);
+
         try {
-
-            // Chamando o método para atualizar a conferência
-            atualizarConferencia(request, response);
-
-            // Mensagem de sucesso enviada no redirecionamento
+            atualizarConferencia(request, response, dao);
             request.setAttribute("msg", "Conferência do dia Confirmada com sucesso!");
             request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);
         } catch (Exception e) {
-            // Em caso de erro, exibe a mensagem de erro
             e.printStackTrace();
-
-            // Mensagem de erro enviada no redirecionamento
             request.setAttribute("msg", "Erro: " + URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8));
             request.getRequestDispatcher("/principal/confDiario.jsp").forward(request, response);
         }
     }
 
-
-    private void atualizarConferencia(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void atualizarConferencia(HttpServletRequest request, HttpServletResponse response, DAOConfDiario dao) throws ServletException, IOException {
         try {
             ModelConfDiario confDiario = new ModelConfDiario();
-
-            // Preenchendo os dados do ModelConfDiario
-            confDiario.setId(Long.parseLong(request.getParameter("id"))); // Recuperando o ID para atualização
-
-            // Atribuindo os valores aos campos
+            confDiario.setId(Long.parseLong(request.getParameter("id")));
             confDiario.setValor_din(new BigDecimal(request.getParameter("valor_din")));
             confDiario.setValor_din_real(new BigDecimal(request.getParameter("valor_din_real")));
             confDiario.setValor_din_dif(new BigDecimal(request.getParameter("valor_din_dif")));
@@ -174,18 +129,12 @@ public class ServletConfDiario extends HttpServlet {
             confDiario.setVenda_total_dia(new BigDecimal(request.getParameter("venda_total_dia")));
             confDiario.setObservacao(request.getParameter("observacao"));
 
-
-            // Converte a String para LocalDate para 'data_fechamento'
             String dataString = request.getParameter("data_fechamento");
             LocalDate localDate = LocalDate.parse(dataString);
             confDiario.setData_fechamento(localDate);
 
-            // Atribui valores numéricos inteiros
             confDiario.setTotal_revelado(Integer.parseInt(request.getParameter("total_revelado")));
             confDiario.setTotal_informado(Integer.parseInt(request.getParameter("total_informado")));
-
-
-            // Campos adicionais de ribbon e sobras
             confDiario.setRibbon_1_atual(Integer.parseInt(request.getParameter("ribbon_1_atual")));
             confDiario.setRibbon_2_atual(Integer.parseInt(request.getParameter("ribbon_2_atual")));
             confDiario.setRibbon_3_atual(Integer.parseInt(request.getParameter("ribbon_3_atual")));
@@ -193,24 +142,18 @@ public class ServletConfDiario extends HttpServlet {
             confDiario.setRibbon_5_atual(Integer.parseInt(request.getParameter("ribbon_5_atual")));
             confDiario.setRibbon_6_atual(Integer.parseInt(request.getParameter("ribbon_6_atual")));
             confDiario.setSobras(Integer.parseInt(request.getParameter("sobras")));
-
-            // Diferenças de ribbon
             confDiario.setDif_ribbon_1(Integer.parseInt(request.getParameter("dif_ribbon_1")));
             confDiario.setDif_ribbon_2(Integer.parseInt(request.getParameter("dif_ribbon_2")));
             confDiario.setDif_ribbon_3(Integer.parseInt(request.getParameter("dif_ribbon_3")));
             confDiario.setDif_ribbon_4(Integer.parseInt(request.getParameter("dif_ribbon_4")));
             confDiario.setDif_ribbon_5(Integer.parseInt(request.getParameter("dif_ribbon_5")));
             confDiario.setDif_ribbon_6(Integer.parseInt(request.getParameter("dif_ribbon_6")));
-
-            //ribbon revelado
             confDiario.setRev_ribbon_1(Integer.parseInt(request.getParameter("rev_ribbon_1")));
             confDiario.setRev_ribbon_2(Integer.parseInt(request.getParameter("rev_ribbon_2")));
             confDiario.setRev_ribbon_3(Integer.parseInt(request.getParameter("rev_ribbon_3")));
             confDiario.setRev_ribbon_4(Integer.parseInt(request.getParameter("rev_ribbon_4")));
             confDiario.setRev_ribbon_5(Integer.parseInt(request.getParameter("rev_ribbon_5")));
             confDiario.setRev_ribbon_6(Integer.parseInt(request.getParameter("rev_ribbon_6")));
-
-            // ribbon antigo
             confDiario.setOld_ribbon_1(Integer.parseInt(request.getParameter("old_ribbon_1")));
             confDiario.setOld_ribbon_2(Integer.parseInt(request.getParameter("old_ribbon_2")));
             confDiario.setOld_ribbon_3(Integer.parseInt(request.getParameter("old_ribbon_3")));
@@ -219,19 +162,11 @@ public class ServletConfDiario extends HttpServlet {
             confDiario.setOld_ribbon_6(Integer.parseInt(request.getParameter("old_ribbon_6")));
             confDiario.setObservacao_ribbon(request.getParameter("observacao_ribbon"));
 
-            // Chama o método de atualização do DAO
-            daoConfDiario.atualizarConfiguracao(confDiario);
-
-            // Passando a mensagem de sucesso para ser exibida após o redirecionamento
+            dao.atualizarConfiguracao(confDiario);
             request.setAttribute("msg", "Conferência atualizada com sucesso!");
-
-            // Não faça nada aqui, apenas retorne para o método doPost
         } catch (Exception e) {
             e.printStackTrace();
-            // Se ocorrer um erro, define a mensagem de erro
             request.setAttribute("msg", "Erro inesperado: " + e.getMessage());
         }
     }
-
-
 }

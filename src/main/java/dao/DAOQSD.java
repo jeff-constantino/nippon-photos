@@ -1,6 +1,6 @@
 package dao;
 
-import connection.SingleConnectionBanco;
+import connection.ConnectionPool;
 import model.ModelCrediarioQSD;
 
 import java.sql.Connection;
@@ -12,18 +12,24 @@ import java.util.Date;
 import java.util.List;
 
 public class DAOQSD {
-
     private final Connection connection;
+    private final boolean gerenciarTransacao;
 
-    public DAOQSD() {
-        connection = SingleConnectionBanco.getConnection();
+    public DAOQSD(Connection connection) {
+        this.connection = connection;
+        this.gerenciarTransacao = false;
     }
 
-    /* =====================================================
-       INSERT OU UPDATE
-       ===================================================== */
-    public ModelCrediarioQSD gravarQSD(ModelCrediarioQSD model) throws Exception {
+    public DAOQSD() {
+        try {
+            this.connection = ConnectionPool.getConnection();
+            this.gerenciarTransacao = true;
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao obter conexão", e);
+        }
+    }
 
+    public ModelCrediarioQSD gravarQSD(ModelCrediarioQSD model) throws Exception {
         if (model.getId() != null && model.getId() > 0 && existe(model.getId())) {
             return atualizar(model);
         } else {
@@ -31,271 +37,162 @@ public class DAOQSD {
         }
     }
 
-    /* =====================================================
-       VERIFICA SE EXISTE
-       ===================================================== */
     private boolean existe(Long id) throws SQLException {
-
         String sql = "SELECT 1 FROM public.qsd WHERE id = ?";
-
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
-
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
         }
     }
 
-    /* =====================================================
-       INSERT
-       ===================================================== */
     private ModelCrediarioQSD inserir(ModelCrediarioQSD model) throws Exception {
-
-        String sql =
-                "INSERT INTO public.qsd " +
-                        "(cliente, empresa, produtos, valor, datavenda, desconto, status) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement stmt =
-                     connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
+        String sql = "INSERT INTO public.qsd (cliente, empresa, produtos, valor, datavenda, desconto, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, model.getCliente());
             stmt.setString(2, model.getEmpresa());
             stmt.setString(3, model.getProdutos());
             stmt.setBigDecimal(4, model.getValor());
             stmt.setDate(5, new java.sql.Date(model.getDatavenda().getTime()));
-            stmt.setBigDecimal(6,
-                    model.getDesconto() != null ? model.getDesconto() : java.math.BigDecimal.ZERO);
+            stmt.setBigDecimal(6, model.getDesconto() != null ? model.getDesconto() : java.math.BigDecimal.ZERO);
             stmt.setString(7, "A Receber");
-
             stmt.executeUpdate();
-            connection.commit();
-
+            if (gerenciarTransacao) connection.commit();
             try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    model.setId(rs.getLong(1));
-                }
+                if (rs.next()) model.setId(rs.getLong(1));
             }
-
         } catch (Exception e) {
-            connection.rollback();
-            e.printStackTrace(); // IMPORTANTE PARA DEBUG
+            if (gerenciarTransacao) connection.rollback();
+            e.printStackTrace();
             throw e;
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
-
         return model;
     }
 
-    /* =====================================================
-       UPDATE
-       ===================================================== */
     private ModelCrediarioQSD atualizar(ModelCrediarioQSD model) throws Exception {
-
-        String sql =
-                "UPDATE public.qsd SET " +
-                        "cliente = ?, " +
-                        "empresa = ?, " +
-                        "produtos = ?, " +
-                        "valor = ?, " +
-                        "datavenda = ?, " +
-                        "datapagamento = ?, " +
-                        "forma = ?, " +
-                        "desconto = ?, " +
-                        "valorpago = ?, " +
-                        "status = ? " +
-                        "WHERE id = ?";
-
+        String sql = "UPDATE public.qsd SET cliente = ?, empresa = ?, produtos = ?, valor = ?, datavenda = ?, datapagamento = ?, forma = ?, desconto = ?, valorpago = ?, status = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-
             stmt.setString(1, model.getCliente());
             stmt.setString(2, model.getEmpresa());
             stmt.setString(3, model.getProdutos());
             stmt.setBigDecimal(4, model.getValor());
             stmt.setDate(5, new java.sql.Date(model.getDatavenda().getTime()));
-
             if (model.getDatapagamento() != null) {
                 stmt.setDate(6, new java.sql.Date(model.getDatapagamento().getTime()));
             } else {
                 stmt.setDate(6, null);
             }
-
             stmt.setString(7, model.getForma());
-            stmt.setBigDecimal(8,
-                    model.getDesconto() != null ? model.getDesconto() : java.math.BigDecimal.ZERO);
+            stmt.setBigDecimal(8, model.getDesconto() != null ? model.getDesconto() : java.math.BigDecimal.ZERO);
             stmt.setBigDecimal(9, model.getValorpago());
             stmt.setString(10, model.getStatus());
             stmt.setLong(11, model.getId());
-
             stmt.executeUpdate();
-            connection.commit();
-
+            if (gerenciarTransacao) connection.commit();
         } catch (Exception e) {
-            connection.rollback();
-            e.printStackTrace(); // IMPORTANTE PARA DEBUG
+            if (gerenciarTransacao) connection.rollback();
+            e.printStackTrace();
             throw e;
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
-
         return model;
     }
 
-    /* =====================================================
-       BUSCAR POR CLIENTE
-       ===================================================== */
     public List<ModelCrediarioQSD> buscarPorCliente(String cliente, String empresa) throws SQLException {
-
         List<ModelCrediarioQSD> lista = new ArrayList<>();
-
-        String sql =
-                "SELECT * FROM public.qsd " +
-                        "WHERE LOWER(cliente) = LOWER(?) " +
-                        "AND LOWER(empresa) = LOWER(?) " +
-                        "ORDER BY datavenda DESC";
-
+        String sql = "SELECT * FROM public.qsd WHERE LOWER(cliente) = LOWER(?) AND LOWER(empresa) = LOWER(?) ORDER BY datavenda DESC";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cliente);
             stmt.setString(2, empresa);
-
             try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    lista.add(mapearResultSet(rs));
-                }
+                while (rs.next()) lista.add(mapearResultSet(rs));
             }
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
-
         return lista;
     }
 
-    /* =====================================================
-       BUSCAR POR PERÍODO
-       ===================================================== */
     public List<ModelCrediarioQSD> buscarPorPeriodo(Date dataInicio, Date dataFim) throws SQLException {
-
         List<ModelCrediarioQSD> lista = new ArrayList<>();
-
-        String sql =
-                "SELECT * FROM public.qsd " +
-                        "WHERE datavenda BETWEEN ? AND ? " +
-                        "ORDER BY datavenda DESC";
-
+        String sql = "SELECT * FROM public.qsd WHERE datavenda BETWEEN ? AND ? ORDER BY datavenda DESC";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setDate(1, new java.sql.Date(dataInicio.getTime()));
             stmt.setDate(2, new java.sql.Date(dataFim.getTime()));
-
             try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    lista.add(mapearResultSet(rs));
-                }
+                while (rs.next()) lista.add(mapearResultSet(rs));
             }
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
-
         return lista;
     }
 
-    /* =====================================================
-       BUSCAR POR CLIENTE E PERÍODO
-       ===================================================== */
-    public List<ModelCrediarioQSD> buscarPorClienteEPeriodo(
-            String cliente, String empresa, Date dataInicio, Date dataFim) throws SQLException {
-
+    public List<ModelCrediarioQSD> buscarPorClienteEPeriodo(String cliente, String empresa, Date dataInicio, Date dataFim) throws SQLException {
         List<ModelCrediarioQSD> lista = new ArrayList<>();
-
-        String sql =
-                "SELECT * FROM public.qsd " +
-                        "WHERE LOWER(cliente) = LOWER(?) " +
-                        "AND LOWER(empresa) = LOWER(?) " +
-                        "AND datavenda BETWEEN ? AND ? " +
-                        "ORDER BY datavenda DESC";
-
+        String sql = "SELECT * FROM public.qsd WHERE LOWER(cliente) = LOWER(?) AND LOWER(empresa) = LOWER(?) AND datavenda BETWEEN ? AND ? ORDER BY datavenda DESC";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, cliente);
             stmt.setString(2, empresa);
             stmt.setDate(3, new java.sql.Date(dataInicio.getTime()));
             stmt.setDate(4, new java.sql.Date(dataFim.getTime()));
-
             try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    lista.add(mapearResultSet(rs));
-                }
+                while (rs.next()) lista.add(mapearResultSet(rs));
             }
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
-
         return lista;
     }
 
-    /* =====================================================
-       BUSCAR TODOS
-       ===================================================== */
     public List<ModelCrediarioQSD> buscarTodos() throws SQLException {
-
         List<ModelCrediarioQSD> lista = new ArrayList<>();
-
         String sql = "SELECT * FROM public.qsd ORDER BY datavenda DESC";
-
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                lista.add(mapearResultSet(rs));
-            }
+            while (rs.next()) lista.add(mapearResultSet(rs));
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
-
         return lista;
     }
 
-    /* =====================================================
-       BUSCAR POR ID
-       ===================================================== */
     public ModelCrediarioQSD buscarPorId(Long id) throws SQLException {
-
         String sql = "SELECT * FROM public.qsd WHERE id = ?";
-
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setLong(1, id);
-
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapearResultSet(rs);
-                }
+                if (rs.next()) return mapearResultSet(rs);
             }
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
-
         return null;
     }
 
-    /* =====================================================
-       LISTA CLIENTES ÚNICOS
-       ===================================================== */
     public List<ModelCrediarioQSD> getClientesUnicos() throws SQLException {
-
         List<ModelCrediarioQSD> lista = new ArrayList<>();
-
-        String sql =
-                "SELECT DISTINCT cliente, empresa " +
-                        "FROM public.qsd " +
-                        "ORDER BY cliente";
-
+        String sql = "SELECT DISTINCT cliente, empresa FROM public.qsd ORDER BY cliente";
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-
             while (rs.next()) {
                 ModelCrediarioQSD m = new ModelCrediarioQSD();
                 m.setCliente(rs.getString("cliente"));
                 m.setEmpresa(rs.getString("empresa"));
                 lista.add(m);
             }
+        } finally {
+            if (gerenciarTransacao) fecharConexao();
         }
-
         return lista;
     }
 
-    /* =====================================================
-       MAPEAR RESULTSET PARA MODEL
-       ===================================================== */
     private ModelCrediarioQSD mapearResultSet(ResultSet rs) throws SQLException {
-
         ModelCrediarioQSD model = new ModelCrediarioQSD();
-
         model.setId(rs.getLong("id"));
         model.setCliente(rs.getString("cliente"));
         model.setEmpresa(rs.getString("empresa"));
@@ -307,7 +204,16 @@ public class DAOQSD {
         model.setDesconto(rs.getBigDecimal("desconto"));
         model.setValorpago(rs.getBigDecimal("valorpago"));
         model.setStatus(rs.getString("status"));
-
         return model;
+    }
+
+    private void fecharConexao() {
+        if (connection != null && gerenciarTransacao) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar conexão: " + e.getMessage());
+            }
+        }
     }
 }

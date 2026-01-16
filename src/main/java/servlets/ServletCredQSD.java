@@ -10,28 +10,29 @@ import model.ModelCrediarioQSD;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.ParseException;
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@WebServlet ("/ServletCredQSD")
+@WebServlet("/ServletCredQSD")
 public class ServletCredQSD extends HttpServlet {
-    private final DAOQSD dao = new DAOQSD();
+    // ✅ REMOVIDO: private final DAOQSD dao = new DAOQSD();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conn = (Connection) request.getAttribute("connection");
+        DAOQSD dao = new DAOQSD(conn);
 
         String acao = request.getParameter("acao");
 
         try {
             if ("buscar".equals(acao)) {
-                buscar(request, response);
+                buscar(request, response, dao);
             } else if ("relatorio".equals(acao)) {
-                relatorio(request, response);
+                relatorio(request, response, dao);
             } else if ("carregar".equals(acao)) {
-                carregar(request, response);
+                carregar(request, response, dao);
             } else {
                 request.setAttribute("listaClientes", dao.getClientesUnicos());
                 request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
@@ -40,7 +41,6 @@ public class ServletCredQSD extends HttpServlet {
             try {
                 request.setAttribute("listaClientes", dao.getClientesUnicos());
             } catch (Exception ex) {
-                // Ignorar erro ao carregar lista de clientes em caso de falha
             }
             request.setAttribute("msg", "Erro: " + e.getMessage());
             request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
@@ -48,34 +48,32 @@ public class ServletCredQSD extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conn = (Connection) request.getAttribute("connection");
+        DAOQSD dao = new DAOQSD(conn);
 
         String acao = request.getParameter("acao");
 
         try {
             if ("salvar".equals(acao)) {
-                salvar(request, response);
+                salvar(request, response, dao);
             } else if ("receber".equals(acao)) {
-                receber(request, response);
+                receber(request, response, dao);
             }
         } catch (Exception e) {
             try {
                 request.setAttribute("listaClientes", dao.getClientesUnicos());
             } catch (Exception ex) {
-                // Ignorar erro ao carregar lista de clientes em caso de falha
             }
             request.setAttribute("msg", "Erro: " + e.getMessage());
             request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
         }
     }
 
-    private void salvar(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+    private void salvar(HttpServletRequest request, HttpServletResponse response, DAOQSD dao) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         ModelCrediarioQSD model = new ModelCrediarioQSD();
-
         model.setCliente(request.getParameter("cliente"));
         model.setEmpresa(request.getParameter("empresa"));
         model.setProdutos(request.getParameter("produtos"));
@@ -90,13 +88,11 @@ public class ServletCredQSD extends HttpServlet {
         try {
             request.setAttribute("listaClientes", dao.getClientesUnicos());
         } catch (Exception ex) {
-            // Ignorar erro ao carregar lista de clientes
         }
         request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
     }
 
-    private void receber(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+    private void receber(HttpServletRequest request, HttpServletResponse response, DAOQSD dao) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         Long id = Long.parseLong(request.getParameter("id"));
@@ -124,13 +120,11 @@ public class ServletCredQSD extends HttpServlet {
         try {
             request.setAttribute("listaClientes", dao.getClientesUnicos());
         } catch (Exception ex) {
-            // Ignorar erro ao carregar lista de clientes
         }
         request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
     }
 
-    private void buscar(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+    private void buscar(HttpServletRequest request, HttpServletResponse response, DAOQSD dao) throws Exception {
         String clienteBusca = request.getParameter("clienteBusca");
         List<ModelCrediarioQSD> lista;
         String nomeBusca = null;
@@ -151,13 +145,11 @@ public class ServletCredQSD extends HttpServlet {
         try {
             request.setAttribute("listaClientes", dao.getClientesUnicos());
         } catch (Exception ex) {
-            // Ignorar erro ao carregar lista de clientes
         }
         request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
     }
 
-    private void relatorio(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+    private void relatorio(HttpServletRequest request, HttpServletResponse response, DAOQSD dao) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         String clienteRelatorio = request.getParameter("clienteRelatorio");
@@ -198,8 +190,7 @@ public class ServletCredQSD extends HttpServlet {
 
         for (ModelCrediarioQSD item : lista) {
             if ("Pago".equals(item.getStatus())) {
-                totalRecebido = totalRecebido.add(item.getValorpago() != null ?
-                        item.getValorpago() : BigDecimal.ZERO);
+                totalRecebido = totalRecebido.add(item.getValorpago() != null ? item.getValorpago() : BigDecimal.ZERO);
             } else {
                 totalAReceber = totalAReceber.add(item.getValor());
             }
@@ -212,13 +203,11 @@ public class ServletCredQSD extends HttpServlet {
         try {
             request.setAttribute("listaClientes", dao.getClientesUnicos());
         } catch (Exception ex) {
-            // Ignorar erro ao carregar lista de clientes
         }
         request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
     }
 
-    private void carregar(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+    private void carregar(HttpServletRequest request, HttpServletResponse response, DAOQSD dao) throws Exception {
         Long id = Long.parseLong(request.getParameter("id"));
         ModelCrediarioQSD model = dao.buscarPorId(id);
 
@@ -226,7 +215,6 @@ public class ServletCredQSD extends HttpServlet {
         try {
             request.setAttribute("listaClientes", dao.getClientesUnicos());
         } catch (Exception ex) {
-            // Ignorar erro ao carregar lista de clientes
         }
         request.getRequestDispatcher("/qsd/crediario.jsp").forward(request, response);
     }

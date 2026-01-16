@@ -12,13 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.ModelConfig;
-import model.ModelControleRibbon;
 import model.ModelLogin;
 import model.ModelVendas;
 import util.DateUtil;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,27 +26,27 @@ import java.util.List;
 import java.util.Map;
 
 @WebServlet("/ServletVendas")
-    public class    ServletVendas extends ServletGenericUtil {
+public class ServletVendas extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
-    private final DAOVendasRepository daoVendas = new DAOVendasRepository();
-    private final DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
 
-    private DAOConfig daoConfig;
-    private DAOControleRibbon daoControleRibbon;
+
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        daoConfig = new DAOConfig(); // Instanciar o DAOConfig aqui
-        daoControleRibbon = new DAOControleRibbon();
-    }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // ✅ NOVO: Pega a conexão do request
+        Connection connection = (Connection) request.getAttribute("connection");
+
+        // ✅ NOVO: Cria DAOs localmente com a conexão
+        DAOVendasRepository daoVendas = new DAOVendasRepository(connection);
+        DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository(connection);
+        DAOConfig daoConfig = new DAOConfig(connection);
+        DAOControleRibbon daoControleRibbon = new DAOControleRibbon(connection);
+
         try {
             String acao = request.getParameter("acao");
-            String idVenda = request.getParameter("venda_id"); // Pega o ID da venda para gerenciar
-
+            String idVenda = request.getParameter("venda_id");
 
             // Se a ação não for especificada, chama a ação vendaDoDia automaticamente
             if (acao == null || acao.isEmpty()) {
@@ -54,30 +54,19 @@ import java.util.Map;
             }
 
             if ("buscarValoresProdutos".equals(acao)) {
-                // Supondo que você tenha uma instância do DAOConfig
                 List<ModelConfig> configs = daoConfig.consultarTodasConfigs();
                 List<BigDecimal> controles = daoControleRibbon.buscarRibbonAtual();
 
-
-
-
-
-                // Cria um mapa para adicionar as configurações e os valores dos ribbons
                 Map<String, Object> responseData = new HashMap<>();
                 responseData.put("configs", configs);
                 responseData.put("controles", controles);
 
-                // Converte o mapa em JSON
-                String jsonResponse = new Gson().toJson(responseData); // Usando a biblioteca Gson
+                String jsonResponse = new Gson().toJson(responseData);
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(jsonResponse);
                 return;
             }
-
-
-
-
 
             if ("gerenciarVenda".equals(acao) && idVenda != null && !idVenda.isEmpty()) {
                 try {
@@ -85,7 +74,6 @@ import java.util.Map;
                     ModelVendas modelVendasConsulta = daoVendas.buscarVendaPorId(id);
 
                     if (modelVendasConsulta != null) {
-                        // Após recuperar a data da venda
                         if (modelVendasConsulta.getData_venda() != null) {
                             String formattedDataVenda = DateUtil.formatDate(modelVendasConsulta.getData_venda());
                             request.setAttribute("formattedDataVenda", formattedDataVenda);
@@ -106,17 +94,12 @@ import java.util.Map;
                 }
             }
 
-
             if (acao != null && !acao.isEmpty()) {
-                // Ação para listar vendas do dia
                 if (acao.equals("vendaDoDia")) {
-                    List<ModelVendas> listaVendasDoDia = daoVendas.vendaDia(); // Chama o método que busca vendas do dia
-                    request.setAttribute("listaVendasDoDia", listaVendasDoDia); // Define a lista como atributo
-                    request.getRequestDispatcher("principal/vendas.jsp").forward(request, response); // Redireciona para o JSP
-                    // Sai do método
+                    List<ModelVendas> listaVendasDoDia = daoVendas.vendaDia();
+                    request.setAttribute("listaVendasDoDia", listaVendasDoDia);
+                    request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
                 }
-
-                // Ação de buscar usuários via AJAX
                 else if (acao.equalsIgnoreCase("buscaruserajax")) {
                     String nome = request.getParameter("nome");
 
@@ -125,22 +108,16 @@ import java.util.Map;
                         dadosJsonUser = daoVendas.consultaFuncionarioList(nome);
                     } catch (Exception e) {
                         System.err.println("Erro na busca: " + e.getMessage());
-                        // Responde com erro em formato JSON
                         response.setContentType("application/json");
                         response.getWriter().write("{\"error\":\"Erro ao buscar funcionários: " + e.getMessage() + "\"}");
                         return;
                     }
 
-                    // Convertendo a lista para JSON
                     ObjectMapper mapper = new ObjectMapper();
                     String json = mapper.writeValueAsString(dadosJsonUser);
-
-                    // Enviando a resposta JSON
-                    response.setContentType("application/json"); // Define o tipo de conteúdo
+                    response.setContentType("application/json");
                     response.getWriter().write(json);
                 }
-
-                // Ação de buscar para editar
                 else if (acao.equalsIgnoreCase("buscarEditar")) {
                     String id = request.getParameter("id");
                     ModelLogin modelLogin = daoUsuarioRepository.consultarUsuarioID(id, super.getUserLogado(request));
@@ -149,25 +126,14 @@ import java.util.Map;
                     request.setAttribute("modelLogins", modelLogins);
 
                     request.setAttribute("msg", "EDITAR O FUNCIONÁRIO");
-                    request.setAttribute("modelLogin", modelLogin); // para manter os dados na tela
+                    request.setAttribute("modelLogin", modelLogin);
                     request.setAttribute("totalPagina", daoUsuarioRepository.totalPagina(this.getUserLogado(request)));
                     request.getRequestDispatcher("/principal/vendas.jsp").forward(request, response);
                 }
-                // Ação de deletar via Ajax
-//                else if (acao.equals("deletarajax")) {
-//                    String venda_id = request.getParameter("venda_id");
-//                    if (venda_id != null && !venda_id.isEmpty()) {
-//                        daoVendas.deleteVenda(Long.parseLong(venda_id));
-//                        response.getWriter().write("Venda Excluída!");
-//                    }
-//
-//                }
-                // Ação de buscar para editar venda
                 else if (acao.equalsIgnoreCase("CadVenda")) {
                     String vendaIdStr = request.getParameter("venda_id");
                     idVenda = null;
 
-                    // Verifica e tenta converter venda_id para Long
                     if (vendaIdStr != null && !vendaIdStr.isEmpty()) {
                         try {
                             idVenda = (vendaIdStr);
@@ -176,50 +142,52 @@ import java.util.Map;
                         }
                     }
 
-                    // Se o idVenda não for nulo, prossegue com a busca para edição
                     if (idVenda != null) {
                         ModelVendas modelVendas = daoVendas.consultaVenda(Long.valueOf(idVenda), super.getUserLogado(request));
                         List<ModelVendas> modelVendasList = daoVendas.listaVendas(super.getUserLogado(request));
 
-                        // Define os atributos e redireciona para a página de edição
                         request.setAttribute("modelVendas", modelVendas);
                         request.setAttribute("msg", "EDITAR A VENDA");
                         request.setAttribute("totalPagina", daoVendas.totalPagina(this.getUserLogado(request)));
-
                         request.getRequestDispatcher("/principal/vendas.jsp").forward(request, response);
                     } else {
-                        // Caso o ID seja inválido ou nulo
                         request.setAttribute("msg", "ID de venda inválido.");
                         request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
                     }
                 }
-                // Caso a ação não seja reconhecida
                 else {
                     request.setAttribute("msg", "Ação não reconhecida.");
                     request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
                 }
             } else {
-                // Ação ou ID de venda não especificados
                 request.setAttribute("msg", "Ação não especificada.");
                 request.getRequestDispatcher("principal/vendas.jsp").forward(request, response);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp"); // redireciona
+            RequestDispatcher redirecionar = request.getRequestDispatcher("erro.jsp");
             request.setAttribute("msg", e.getMessage());
             redirecionar.forward(request, response);
         }
+        // ✅ NÃO precisa fechar conexão - Filter faz automaticamente
     }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // ✅ NOVO: Pega a conexão do request
+        Connection connection = (Connection) request.getAttribute("connection");
+
+        // ✅ NOVO: Cria DAOs localmente com a conexão
+        DAOVendasRepository daoVendas = new DAOVendasRepository(connection);
+        DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository(connection);
+
         try {
-            String acao = request.getParameter("acao"); // Obtém a ação atual da requisição
+            String acao = request.getParameter("acao");
             String msg = "Venda Gravada com Sucesso!";
 
             if (acao != null && acao.equals("deletar")) {
-
                 String venda_id = request.getParameter("venda_id");
 
                 if (venda_id != null && !venda_id.isEmpty()) {
@@ -232,7 +200,6 @@ import java.util.Map;
             } else if (acao != null && acao.equals("limparMsg")) {
                 request.getSession().removeAttribute("msg");
             } else {
-                // Todo o código existente para gravação e atualização das vendas...
                 String venda_id = request.getParameter("venda_id");
                 String nome = request.getParameter("nome");
 
@@ -252,11 +219,8 @@ import java.util.Map;
                 String prod3_pix_str = request.getParameter("prod3_pix");
 
                 String dataVenda = request.getParameter("dataVenda");
-
                 String sobras_str = request.getParameter("sobras");
-
                 String ribbon = request.getParameter("ribbon");
-
                 String ribbon_dif_str = request.getParameter("ribbon_dif");
 
                 ModelVendas modelVendas = new ModelVendas();
@@ -322,9 +286,7 @@ import java.util.Map;
                     String formattedDataVenda = DateUtil.formatDate(modelVendasConsulta1.getData_venda());
                     request.setAttribute("formattedDataVenda", formattedDataVenda);
                 } else {
-
                     request.setAttribute("msg", "Selecione a Data da venda.");
-
                 }
 
                 request.setAttribute("msg", msg);
@@ -340,12 +302,7 @@ import java.util.Map;
             request.setAttribute("msg", e.getMessage());
             redirecionar.forward(request, response);
         }
+        // ✅ NÃO precisa fazer commit/rollback - Filter gerencia automaticamente
+        // ✅ NÃO precisa fechar conexão - Filter faz automaticamente
     }
-
-
-
-
-
-
-
 }

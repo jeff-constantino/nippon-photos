@@ -1,7 +1,5 @@
-
 package servlets;
 
-import dao.DAOConfig;
 import dao.DAOFechaDia;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -13,6 +11,7 @@ import model.ModelFechaDia;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -20,36 +19,30 @@ import java.util.List;
 
 @WebServlet("/ServletFechaDia")
 public class ServletFechaDia extends ServletGenericUtil {
-    private DAOFechaDia daoFechaDia;
-    private DAOConfig daoConfig;
+    // ✅ REMOVIDO: private DAOFechaDia daoFechaDia;
+    // ✅ REMOVIDO: private DAOConfig daoConfig;
+    // ✅ REMOVIDO: init()
 
-
-    @Override
-    public void init() throws ServletException {
-        // Inicializa a instância do DAO
-        daoFechaDia = new DAOFechaDia();
-    }
-
-    // Método para converter String para int com valor padrão
     private int parseOrDefault(String value, int defaultValue) {
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            return defaultValue; // Retorna o valor padrão em caso de erro
+            return defaultValue;
         }
     }
 
-    // Método para converter String para BigDecimal com valor padrão
     private BigDecimal parseOrDefault(String value, BigDecimal defaultValue) {
         try {
             return new BigDecimal(value);
         } catch (NumberFormatException e) {
-            return defaultValue; // Retorna o valor padrão em caso de erro
+            return defaultValue;
         }
     }
-    private void carregarDatasNaoFechadas(HttpServletRequest request) {
+
+    private void carregarDatasNaoFechadas(HttpServletRequest request, Connection conn) {
         try {
-            List<Date> datasNaoFechadas = daoFechaDia.buscarDatasNaoFechadas();
+            DAOFechaDia dao = new DAOFechaDia(conn);
+            List<Date> datasNaoFechadas = dao.buscarDatasNaoFechadas();
             request.setAttribute("datasNaoFechadas", datasNaoFechadas);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,18 +50,16 @@ public class ServletFechaDia extends ServletGenericUtil {
         }
     }
 
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String acao = request.getParameter("acao");
-        // Carrega as datas não fechadas em todas as ações
-        carregarDatasNaoFechadas(request);
+        Connection conn = (Connection) request.getAttribute("connection");
+        DAOFechaDia daoFechaDia = new DAOFechaDia(conn);
 
-        // Inicializa o DAO
-        DAOFechaDia daoFechaDia = new DAOFechaDia();
+        String acao = request.getParameter("acao");
+        carregarDatasNaoFechadas(request, conn);
 
         if (acao == null || acao.isEmpty()) {
-            carregarDatasNaoFechadas(request);
+            carregarDatasNaoFechadas(request, conn);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/fechadia.jsp");
             dispatcher.forward(request, response);
             return;
@@ -82,34 +73,21 @@ public class ServletFechaDia extends ServletGenericUtil {
                 e.printStackTrace();
                 request.setAttribute("msg", "Erro ao apagar fechamento: " + e.getMessage());
             }
-
             RequestDispatcher dispatcher = request.getRequestDispatcher("/principal/fechadia.jsp");
             dispatcher.forward(request, response);
             return;
         }
 
-
-
-        // Lógica para "buscarfechamento"
         if ("buscarfechamento".equals(acao)) {
             try {
-                // Obtém a data da requisição (formato a ser ajustado conforme necessário)
                 String dataParam = request.getParameter("data_fechamento");
-                Date dataFechamento = Date.valueOf(dataParam); // Certifique-se de que o formato está correto
-
-                // Chama o DAO para buscar os dados de fechamento
-                ModelFechaDia fechamento = daoFechaDia.buscarFechamento(dataFechamento); // Passando a data como argumento
-
-                // Adiciona o fechamento na requisição
+                Date dataFechamento = Date.valueOf(dataParam);
+                ModelFechaDia fechamento = daoFechaDia.buscarFechamento(dataFechamento);
                 request.setAttribute("fechamento", fechamento);
 
-
-                // Agora, também executa a busca dos valores dos produtos
                 try {
                     List<ModelConfig> configs = daoFechaDia.consultarValor();
-                    ModelConfig config = configs.isEmpty() ? null : configs.get(0);  // Pega a primeira configuração
-
-                    // Passa os valores de configuração para o JSP
+                    ModelConfig config = configs.isEmpty() ? null : configs.get(0);
                     if (config != null) {
                         request.setAttribute("conf1_valor", config.getConf1_valor());
                         request.setAttribute("conf2_valor", config.getConf2_valor());
@@ -117,70 +95,44 @@ public class ServletFechaDia extends ServletGenericUtil {
                     } else {
                         request.setAttribute("produtosErro", "Nenhuma configuração encontrada.");
                     }
-
                 } catch (Exception e) {
-                    // Loga a exceção para análise posterior
                     e.printStackTrace();
-                    // Envia uma resposta de erro ao cliente
                     request.setAttribute("produtosErro", "Erro ao buscar valores dos produtos.");
                 }
-
             } catch (IllegalArgumentException e) {
-                // Tratamento de erro de data inválida
                 request.setAttribute("msgErro", "Data inválida: " + e.getMessage());
             } catch (SQLException e) {
-                // Tratamento de erro SQL (exemplo: log e mensagem de erro)
-                e.printStackTrace(); // Log do erro para análise
+                e.printStackTrace();
                 request.setAttribute("msgErro", "Erro ao buscar fechamento: " + e.getMessage());
             } catch (Exception e) {
-                // Tratamento de erro genérico (caso surja alguma outra exceção inesperada)
-                e.printStackTrace(); // Log do erro para análise
+                e.printStackTrace();
                 request.setAttribute("msgErro", "Erro inesperado: " + e.getMessage());
             }
-
-            // Encaminha a requisição para a página JSP após tentar buscar o fechamento
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/fechadia.jsp");
             dispatcher.forward(request, response);
-            return; // Interrompe a execução após o forward
+            return;
         }
 
-
-        // Se a ação for buscaData
         if ("buscaData".equals(acao)) {
             String dataFechamento = request.getParameter("data_fechamento");
-
-
             if (dataFechamento != null && !dataFechamento.isEmpty()) {
                 try {
-                    // Converte a string da data para o tipo java.sql.Date
-                    java.sql.Date data = java.sql.Date.valueOf(dataFechamento);
-
-
-                    // Verifica se há vendas registradas para a data informada
+                    Date data = Date.valueOf(dataFechamento);
                     if (!daoFechaDia.existeVendaParaData(data)) {
                         request.setAttribute("msg", "Nenhuma venda registrada para essa data");
                     } else {
-                        // Verifica se já existe um fechamento para a data informada
                         if (daoFechaDia.verificarExistenciaFechamento(data.toLocalDate())) {
                             request.setAttribute("msg", "Já existe um fechamento para a data informada.");
                         } else {
-                            // Chama o DAO para consultar o fechamento por data
                             ModelFechaDia fechamento = daoFechaDia.consultarFechamentoPorData(data);
-
-                            // Verifica se o fechamento foi encontrado
                             if (fechamento != null) {
                                 request.setAttribute("fechamento", fechamento);
-
                             } else {
                                 request.setAttribute("msg", "Nenhum fechamento encontrado para a data informada.");
                             }
-
-                            // Agora, também executa a busca dos valores dos produtos
                             try {
                                 List<ModelConfig> configs = daoFechaDia.consultarValor();
-                                ModelConfig config = configs.isEmpty() ? null : configs.get(0);  // Pega a primeira configuração
-
-                                // Passa os valores de configuração para o JSP
+                                ModelConfig config = configs.isEmpty() ? null : configs.get(0);
                                 if (config != null) {
                                     request.setAttribute("conf1_valor", config.getConf1_valor());
                                     request.setAttribute("conf2_valor", config.getConf2_valor());
@@ -204,19 +156,19 @@ public class ServletFechaDia extends ServletGenericUtil {
             request.setAttribute("msg", "Ação não reconhecida.");
         }
 
-        // Encaminha a requisição para a página JSP
         RequestDispatcher dispatcher = request.getRequestDispatcher("principal/fechadia.jsp");
         dispatcher.forward(request, response);
     }
 
-
-        @Override
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conn = (Connection) request.getAttribute("connection");
+        DAOFechaDia daoFechaDia = new DAOFechaDia(conn);
+
         ModelFechaDia fechamento = new ModelFechaDia();
-// Carrega as datas não fechadas em todas as ações
-            carregarDatasNaoFechadas(request);
+        carregarDatasNaoFechadas(request, conn);
+
         try {
-            // Recuperar valores dos inputs com checagem
             fechamento.setData_fechamento(Date.valueOf(request.getParameter("data_fechamento")));
             fechamento.setTotal_ft_din(parseOrDefault(request.getParameter("total_ft_din"), 0));
             fechamento.setTotal_ft_deb(parseOrDefault(request.getParameter("total_ft_deb"), 0));
@@ -231,43 +183,30 @@ public class ServletFechaDia extends ServletGenericUtil {
             fechamento.setTotal_dig_cred(parseOrDefault(request.getParameter("total_dig_cred"), 0));
             fechamento.setTotal_dig_pix(parseOrDefault(request.getParameter("total_dig_pix"), 0));
             fechamento.setSobras(Integer.parseInt(request.getParameter("sobras")));
-
-            // Definindo os valores do ribbon
             fechamento.setRibbon_1_atual(parseOrDefault(request.getParameter("ribbon_1_atual"), 0));
             fechamento.setRibbon_2_atual(parseOrDefault(request.getParameter("ribbon_2_atual"), 0));
             fechamento.setRibbon_3_atual(parseOrDefault(request.getParameter("ribbon_3_atual"), 0));
             fechamento.setRibbon_4_atual(parseOrDefault(request.getParameter("ribbon_4_atual"), 0));
             fechamento.setRibbon_5_atual(parseOrDefault(request.getParameter("ribbon_5_atual"), 0));
             fechamento.setRibbon_6_atual(parseOrDefault(request.getParameter("ribbon_6_atual"), 0));
-
-            // Definindo as diferenças do ribbon
             fechamento.setDif_ribbon_1(parseOrDefault(request.getParameter("dif_ribbon_1"), 0));
             fechamento.setDif_ribbon_2(parseOrDefault(request.getParameter("dif_ribbon_2"), 0));
             fechamento.setDif_ribbon_3(parseOrDefault(request.getParameter("dif_ribbon_3"), 0));
             fechamento.setDif_ribbon_4(parseOrDefault(request.getParameter("dif_ribbon_4"), 0));
             fechamento.setDif_ribbon_5(parseOrDefault(request.getParameter("dif_ribbon_5"), 0));
             fechamento.setDif_ribbon_6(parseOrDefault(request.getParameter("dif_ribbon_6"), 0));
-
-            // Recuperar total_revelado e total_informado
             fechamento.setTotal_revelado(parseOrDefault(request.getParameter("total_rev"), 0));
             fechamento.setTotal_informado(parseOrDefault(request.getParameter("total_inf"), 0));
-
-            // Adicionando os campos old_ribbon
             fechamento.setOld_ribbon_1(parseOrDefault(request.getParameter("old_ribbon_1"), 0));
             fechamento.setOld_ribbon_2(parseOrDefault(request.getParameter("old_ribbon_2"), 0));
             fechamento.setOld_ribbon_3(parseOrDefault(request.getParameter("old_ribbon_3"), 0));
             fechamento.setOld_ribbon_4(parseOrDefault(request.getParameter("old_ribbon_4"), 0));
             fechamento.setOld_ribbon_5(parseOrDefault(request.getParameter("old_ribbon_5"), 0));
             fechamento.setOld_ribbon_6(parseOrDefault(request.getParameter("old_ribbon_6"), 0));
-
-            // Recuperar valores dos novos campos
             fechamento.setValor_din(parseOrDefault(request.getParameter("valor_din"), BigDecimal.ZERO));
             fechamento.setValor_deb(parseOrDefault(request.getParameter("valor_deb"), BigDecimal.ZERO));
             fechamento.setValor_cred(parseOrDefault(request.getParameter("valor_cred"), BigDecimal.ZERO));
             fechamento.setValor_pix(parseOrDefault(request.getParameter("valor_pix"), BigDecimal.ZERO));
-
-
-            // Recuperando os campos rev_ribbon
             fechamento.setRev_ribbon_1(parseOrDefault(request.getParameter("rev_ribbon_1"), 0));
             fechamento.setRev_ribbon_2(parseOrDefault(request.getParameter("rev_ribbon_2"), 0));
             fechamento.setRev_ribbon_3(parseOrDefault(request.getParameter("rev_ribbon_3"), 0));
@@ -275,60 +214,49 @@ public class ServletFechaDia extends ServletGenericUtil {
             fechamento.setRev_ribbon_5(parseOrDefault(request.getParameter("rev_ribbon_5"), 0));
             fechamento.setRev_ribbon_6(parseOrDefault(request.getParameter("rev_ribbon_6"), 0));
 
-            // Outros campos
             String descontoString = request.getParameter("desconto");
-            BigDecimal desconto = BigDecimal.ZERO; // Valor padrão
-
+            BigDecimal desconto = BigDecimal.ZERO;
             if (descontoString != null && !descontoString.isEmpty()) {
                 try {
                     desconto = new BigDecimal(descontoString);
                 } catch (NumberFormatException e) {
-                    // Log ou trate a exceção, se necessário
                 }
             }
-
             fechamento.setDesconto(desconto);
             fechamento.setObservacao(request.getParameter("observacao"));
 
-            // Verifica a ação do botão
             String acao = request.getParameter("acao");
 
             if ("atualizarFechamento".equals(acao)) {
-                // Chama o método para atualizar o fechamento
                 try {
                     daoFechaDia.atualizarFechamento(fechamento);
-                    request.setAttribute("msg", "Fechamento atualizado com sucesso!"); // Mensagem de sucesso
+                    request.setAttribute("msg", "Fechamento atualizado com sucesso!");
                 } catch (Exception e) {
-                    request.setAttribute("msg", "Erro ao atualizar o fechamento: " + e.getMessage()); // Mensagem de erro
+                    request.setAttribute("msg", "Erro ao atualizar o fechamento: " + e.getMessage());
                 }
             } else {
-                // Verifica se já existe um fechamento com a mesma data
                 if (daoFechaDia.verificarExistenciaFechamento(fechamento.getData_fechamento().toLocalDate())) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); // Formato desejado
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                     String dataFormatada = sdf.format(fechamento.getData_fechamento());
                     request.setAttribute("msg", "Já existe um fechamento com a data " + dataFormatada);
-                    request.setAttribute("atualizacaoNecessaria", true); // Indica que uma atualização é necessária
+                    request.setAttribute("atualizacaoNecessaria", true);
                 } else {
-                    // Gravar no banco de dados
                     try {
                         daoFechaDia.gravarFechamento(fechamento);
-                        request.setAttribute("msg", "Fechamento gravado com sucesso!"); // Mensagem de sucesso
+                        request.setAttribute("msg", "Fechamento gravado com sucesso!");
                     } catch (Exception e) {
-                        request.setAttribute("msg", "Erro ao gravar o fechamento: " + e.getMessage()); // Mensagem de erro
+                        request.setAttribute("msg", "Erro ao gravar o fechamento: " + e.getMessage());
                     }
                 }
             }
 
-            // Encaminhar para a página apropriada
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/fechadia.jsp");
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
-            // Tratar exceção global
             request.setAttribute("msg", "Erro ao processar a requisição: " + e.getMessage());
             RequestDispatcher dispatcher = request.getRequestDispatcher("principal/fechadia.jsp");
             dispatcher.forward(request, response);
         }
-
     }
 }

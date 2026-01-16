@@ -1,6 +1,6 @@
 package dao;
 
-import connection.SingleConnectionBanco;
+import connection.ConnectionPool;
 import model.ModelAssociado;
 import model.ModelLogin;
 
@@ -12,9 +12,28 @@ import java.util.Map;
 
 public class DAOAssociado {
     private final Connection connection;
+    private final boolean gerenciarTransacao;
 
+    /**
+     * Construtor NOVO - recebe conexão gerenciada pelo Filter
+     * USO RECOMENDADO
+     */
+    public DAOAssociado(Connection connection) {
+        this.connection = connection;
+        this.gerenciarTransacao = false; // Filter gerencia
+    }
+
+    /**
+     * Construtor LEGADO - busca própria conexão
+     * Mantido para compatibilidade temporária
+     */
     public DAOAssociado() {
-        connection = SingleConnectionBanco.getConnection();
+        try {
+            this.connection = ConnectionPool.getConnection();
+            this.gerenciarTransacao = true; // DAO gerencia
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao obter conexão do pool", e);
+        }
     }
 
     // ========== MÉTODOS DE VENDA ==========
@@ -29,7 +48,6 @@ public class DAOAssociado {
                 + "VALUES (?, UPPER(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            connection.setAutoCommit(false);
 
             // Define os parâmetros
             preparedSql.setLong(1, modelAssociado.getVendedor_id());
@@ -66,7 +84,7 @@ public class DAOAssociado {
             if (modelAssociado.getData_venda() == null) {
                 throw new IllegalArgumentException("O parâmetro 'data_venda' não pode ser nulo.");
             }
-            preparedSql.setDate(20, new java.sql.Date(modelAssociado.getData_venda().getTime()));
+            preparedSql.setDate(20, new Date(modelAssociado.getData_venda().getTime()));
 
             preparedSql.setString(21, modelAssociado.getRibbon());
             preparedSql.setInt(22, modelAssociado.getRibbon_dif());
@@ -83,11 +101,25 @@ public class DAOAssociado {
                 throw new SQLException("Falha ao obter o ID gerado.");
             }
 
-            connection.commit();
+            if (gerenciarTransacao) {
+                connection.commit();
+            }
+
             return this.consultaVenda(modelAssociado.getVenda_id(), userLogado);
+
         } catch (Exception e) {
-            connection.rollback();
-            throw e;
+            if (gerenciarTransacao) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            throw new Exception("Erro ao gravar venda: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
+            }
         }
     }
 
@@ -102,7 +134,6 @@ public class DAOAssociado {
                 + "data_atualizacao = CURRENT_TIMESTAMP WHERE venda_id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            connection.setAutoCommit(false);
 
             statement.setString(1, modelAssociado.getNome());
             statement.setLong(2, modelAssociado.getVendedor_id());
@@ -136,7 +167,7 @@ public class DAOAssociado {
             if (modelAssociado.getData_venda() == null) {
                 throw new IllegalArgumentException("O parâmetro 'data_venda' não pode ser nulo.");
             }
-            statement.setDate(18, new java.sql.Date(modelAssociado.getData_venda().getTime()));
+            statement.setDate(18, new Date(modelAssociado.getData_venda().getTime()));
 
             statement.setInt(19, modelAssociado.getSobras());
             statement.setInt(20, modelAssociado.getSobras_extras());
@@ -145,13 +176,27 @@ public class DAOAssociado {
             statement.setLong(23, venda_id);
 
             statement.executeUpdate();
-            connection.commit();
-        } catch (Exception e) {
-            connection.rollback();
-            throw e;
-        }
 
-        return this.consultaVenda(venda_id, userLogado);
+            if (gerenciarTransacao) {
+                connection.commit();
+            }
+
+            return this.consultaVenda(venda_id, userLogado);
+
+        } catch (Exception e) {
+            if (gerenciarTransacao) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            throw new Exception("Erro ao atualizar venda: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
+            }
+        }
     }
 
     /**
@@ -167,37 +212,44 @@ public class DAOAssociado {
 
         try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
             preparedSql.setLong(1, venda_id);
-            ResultSet resultado = preparedSql.executeQuery();
 
-            if (resultado.next()) {
-                modelAssociado = new ModelAssociado();
-                modelAssociado.setVenda_id(resultado.getLong("venda_id"));
-                modelAssociado.setVendedor_id(resultado.getLong("vendedor_id"));
-                modelAssociado.setNome(resultado.getString("nome"));
+            try (ResultSet resultado = preparedSql.executeQuery()) {
+                if (resultado.next()) {
+                    modelAssociado = new ModelAssociado();
+                    modelAssociado.setVenda_id(resultado.getLong("venda_id"));
+                    modelAssociado.setVendedor_id(resultado.getLong("vendedor_id"));
+                    modelAssociado.setNome(resultado.getString("nome"));
 
-                modelAssociado.setProd1_din(resultado.getInt("prod1_din"));
-                modelAssociado.setProd1_deb(resultado.getInt("prod1_deb"));
-                modelAssociado.setProd1_cred(resultado.getInt("prod1_cred"));
-                modelAssociado.setProd1_pix(resultado.getInt("prod1_pix"));
+                    modelAssociado.setProd1_din(resultado.getInt("prod1_din"));
+                    modelAssociado.setProd1_deb(resultado.getInt("prod1_deb"));
+                    modelAssociado.setProd1_cred(resultado.getInt("prod1_cred"));
+                    modelAssociado.setProd1_pix(resultado.getInt("prod1_pix"));
 
-                modelAssociado.setProd2_din(resultado.getInt("prod2_din"));
-                modelAssociado.setProd2_deb(resultado.getInt("prod2_deb"));
-                modelAssociado.setProd2_cred(resultado.getInt("prod2_cred"));
-                modelAssociado.setProd2_pix(resultado.getInt("prod2_pix"));
+                    modelAssociado.setProd2_din(resultado.getInt("prod2_din"));
+                    modelAssociado.setProd2_deb(resultado.getInt("prod2_deb"));
+                    modelAssociado.setProd2_cred(resultado.getInt("prod2_cred"));
+                    modelAssociado.setProd2_pix(resultado.getInt("prod2_pix"));
 
-                modelAssociado.setProd3_din(resultado.getInt("prod3_din"));
-                modelAssociado.setProd3_deb(resultado.getInt("prod3_deb"));
-                modelAssociado.setProd3_cred(resultado.getInt("prod3_cred"));
-                modelAssociado.setProd3_pix(resultado.getInt("prod3_pix"));
+                    modelAssociado.setProd3_din(resultado.getInt("prod3_din"));
+                    modelAssociado.setProd3_deb(resultado.getInt("prod3_deb"));
+                    modelAssociado.setProd3_cred(resultado.getInt("prod3_cred"));
+                    modelAssociado.setProd3_pix(resultado.getInt("prod3_pix"));
 
-                modelAssociado.setFt_total(resultado.getInt("ft_total"));
-                modelAssociado.setEnc_total(resultado.getInt("enc_total"));
+                    modelAssociado.setFt_total(resultado.getInt("ft_total"));
+                    modelAssociado.setEnc_total(resultado.getInt("enc_total"));
 
-                modelAssociado.setSobras(resultado.getInt("sobras"));
-                modelAssociado.setSobras_extras(resultado.getInt("sobras_extras"));
-                modelAssociado.setRibbon(resultado.getString("ribbon"));
-                modelAssociado.setRibbon_dif(resultado.getInt("ribbon_dif"));
-                modelAssociado.setData_venda(resultado.getDate("data_venda"));
+                    modelAssociado.setSobras(resultado.getInt("sobras"));
+                    modelAssociado.setSobras_extras(resultado.getInt("sobras_extras"));
+                    modelAssociado.setRibbon(resultado.getString("ribbon"));
+                    modelAssociado.setRibbon_dif(resultado.getInt("ribbon_dif"));
+                    modelAssociado.setData_venda(resultado.getDate("data_venda"));
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao consultar venda: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
             }
         }
 
@@ -228,15 +280,22 @@ public class DAOAssociado {
                     String sql = "SELECT * FROM vendasassociado WHERE data_venda = ? ORDER BY venda_id DESC";
                     try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
                         preparedSql.setDate(1, ultimaData);
-                        ResultSet resultado = preparedSql.executeQuery();
 
-                        while (resultado.next()) {
-                            ModelAssociado model = new ModelAssociado();
-                            preencherModelVenda(model, resultado);
-                            lista.add(model);
+                        try (ResultSet resultado = preparedSql.executeQuery()) {
+                            while (resultado.next()) {
+                                ModelAssociado model = new ModelAssociado();
+                                preencherModelVenda(model, resultado);
+                                lista.add(model);
+                            }
                         }
                     }
                 }
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao buscar vendas do dia: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
             }
         }
 
@@ -274,11 +333,18 @@ public class DAOAssociado {
                 preparedSql.setString(index++, dataFinal);
             }
 
-            ResultSet resultado = preparedSql.executeQuery();
-            while (resultado.next()) {
-                ModelAssociado model = new ModelAssociado();
-                preencherModelVenda(model, resultado);
-                lista.add(model);
+            try (ResultSet resultado = preparedSql.executeQuery()) {
+                while (resultado.next()) {
+                    ModelAssociado model = new ModelAssociado();
+                    preencherModelVenda(model, resultado);
+                    lista.add(model);
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao consultar vendas: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
             }
         }
 
@@ -290,14 +356,27 @@ public class DAOAssociado {
      */
     public void deleteVenda(long id) throws Exception {
         String sql = "DELETE FROM vendasassociado WHERE venda_id = ?";
+
         try (PreparedStatement preparedSql = connection.prepareStatement(sql)) {
-            connection.setAutoCommit(false);
             preparedSql.setLong(1, id);
             preparedSql.executeUpdate();
-            connection.commit();
+
+            if (gerenciarTransacao) {
+                connection.commit();
+            }
         } catch (Exception e) {
-            connection.rollback();
-            throw e;
+            if (gerenciarTransacao) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            throw new Exception("Erro ao deletar venda: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
+            }
         }
     }
 
@@ -317,7 +396,14 @@ public class DAOAssociado {
                     return preencherModelConfig(rs);
                 }
             }
+        } catch (Exception e) {
+            throw new Exception("Erro ao buscar configuração: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
+            }
         }
+
         return null;
     }
 
@@ -346,7 +432,6 @@ public class DAOAssociado {
                 + "VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            connection.setAutoCommit(false);
 
             // Produtos (obrigatórios)
             ps.setString(1, config.getConf1_nome());
@@ -389,13 +474,13 @@ public class DAOAssociado {
             if (config.getMat2_valor() != null && !config.getMat2_valor().isEmpty()) {
                 ps.setBigDecimal(12, new java.math.BigDecimal(config.getMat2_valor()));
             } else {
-                ps.setNull(12, java.sql.Types.NUMERIC);
+                ps.setNull(12, Types.NUMERIC);
             }
             ps.setInt(13, config.getMat2_qtd() != null ? config.getMat2_qtd() : 0);
             if (config.getMat2_custo() != null && !config.getMat2_custo().isEmpty()) {
                 ps.setBigDecimal(14, new java.math.BigDecimal(config.getMat2_custo()));
             } else {
-                ps.setNull(14, java.sql.Types.NUMERIC);
+                ps.setNull(14, Types.NUMERIC);
             }
 
             // Material 3 (opcional)
@@ -403,13 +488,13 @@ public class DAOAssociado {
             if (config.getMat3_valor() != null && !config.getMat3_valor().isEmpty()) {
                 ps.setBigDecimal(16, new java.math.BigDecimal(config.getMat3_valor()));
             } else {
-                ps.setNull(16, java.sql.Types.NUMERIC);
+                ps.setNull(16, Types.NUMERIC);
             }
             ps.setInt(17, config.getMat3_qtd() != null ? config.getMat3_qtd() : 0);
             if (config.getMat3_custo() != null && !config.getMat3_custo().isEmpty()) {
                 ps.setBigDecimal(18, new java.math.BigDecimal(config.getMat3_custo()));
             } else {
-                ps.setNull(18, java.sql.Types.NUMERIC);
+                ps.setNull(18, Types.NUMERIC);
             }
 
             // Configurações Financeiras
@@ -423,11 +508,25 @@ public class DAOAssociado {
             ps.executeUpdate();
             config.setIdconf(1L);
 
-            connection.commit();
+            if (gerenciarTransacao) {
+                connection.commit();
+            }
+
             return config;
+
         } catch (Exception e) {
-            connection.rollback();
-            throw e;
+            if (gerenciarTransacao) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            throw new Exception("Erro ao inserir configuração: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
+            }
         }
     }
 
@@ -439,7 +538,6 @@ public class DAOAssociado {
                 + "data_atualizacao = CURRENT_TIMESTAMP WHERE idconf = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            connection.setAutoCommit(false);
 
             // Produtos (obrigatórios)
             ps.setString(1, config.getConf1_nome());
@@ -482,13 +580,13 @@ public class DAOAssociado {
             if (config.getMat2_valor() != null && !config.getMat2_valor().isEmpty()) {
                 ps.setBigDecimal(12, new java.math.BigDecimal(config.getMat2_valor()));
             } else {
-                ps.setNull(12, java.sql.Types.NUMERIC);
+                ps.setNull(12, Types.NUMERIC);
             }
             ps.setInt(13, config.getMat2_qtd() != null ? config.getMat2_qtd() : 0);
             if (config.getMat2_custo() != null && !config.getMat2_custo().isEmpty()) {
                 ps.setBigDecimal(14, new java.math.BigDecimal(config.getMat2_custo()));
             } else {
-                ps.setNull(14, java.sql.Types.NUMERIC);
+                ps.setNull(14, Types.NUMERIC);
             }
 
             // Material 3 (opcional)
@@ -496,13 +594,13 @@ public class DAOAssociado {
             if (config.getMat3_valor() != null && !config.getMat3_valor().isEmpty()) {
                 ps.setBigDecimal(16, new java.math.BigDecimal(config.getMat3_valor()));
             } else {
-                ps.setNull(16, java.sql.Types.NUMERIC);
+                ps.setNull(16, Types.NUMERIC);
             }
             ps.setInt(17, config.getMat3_qtd() != null ? config.getMat3_qtd() : 0);
             if (config.getMat3_custo() != null && !config.getMat3_custo().isEmpty()) {
                 ps.setBigDecimal(18, new java.math.BigDecimal(config.getMat3_custo()));
             } else {
-                ps.setNull(18, java.sql.Types.NUMERIC);
+                ps.setNull(18, Types.NUMERIC);
             }
 
             // Configurações Financeiras
@@ -516,11 +614,26 @@ public class DAOAssociado {
             ps.setLong(21, config.getIdconf());
 
             ps.executeUpdate();
-            connection.commit();
+
+            if (gerenciarTransacao) {
+                connection.commit();
+            }
+
             return config;
+
         } catch (Exception e) {
-            connection.rollback();
-            throw e;
+            if (gerenciarTransacao) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            throw new Exception("Erro ao atualizar configuração: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
+            }
         }
     }
 
@@ -528,18 +641,7 @@ public class DAOAssociado {
      * Busca configuração por ID
      */
     public ModelAssociado buscarConfiguracao(Long idconf) throws Exception {
-        String sql = "SELECT * FROM configassociado WHERE idconf = ?";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setLong(1, idconf);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                return preencherModelConfig(rs);
-            }
-        }
-
-        return null;
+        return buscarConfiguracaoPorId(idconf);
     }
 
     /**
@@ -554,6 +656,12 @@ public class DAOAssociado {
 
             while (rs.next()) {
                 lista.add(preencherModelConfig(rs));
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao listar configurações: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
             }
         }
 
@@ -587,7 +695,6 @@ public class DAOAssociado {
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            connection.setAutoCommit(false);
 
             ps.setInt(1, fin.getMes_referencia());
             ps.setInt(2, fin.getAno_referencia());
@@ -616,11 +723,25 @@ public class DAOAssociado {
                 fin.setId_financeiro(rs.getLong(1));
             }
 
-            connection.commit();
+            if (gerenciarTransacao) {
+                connection.commit();
+            }
+
             return fin;
+
         } catch (Exception e) {
-            connection.rollback();
-            throw e;
+            if (gerenciarTransacao) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            throw new Exception("Erro ao inserir financeiro: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
+            }
         }
     }
 
@@ -632,7 +753,6 @@ public class DAOAssociado {
                 + "WHERE id_financeiro = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            connection.setAutoCommit(false);
 
             ps.setObject(1, fin.getTotal_fotos());
             ps.setObject(2, fin.getTotal_sobras());
@@ -653,11 +773,26 @@ public class DAOAssociado {
             ps.setLong(17, fin.getId_financeiro());
 
             ps.executeUpdate();
-            connection.commit();
+
+            if (gerenciarTransacao) {
+                connection.commit();
+            }
+
             return fin;
+
         } catch (Exception e) {
-            connection.rollback();
-            throw e;
+            if (gerenciarTransacao) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+            }
+            throw new Exception("Erro ao atualizar financeiro: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
+            }
         }
     }
 
@@ -670,10 +805,17 @@ public class DAOAssociado {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, mes);
             ps.setInt(2, ano);
-            ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
-                return preencherModelFinanceiro(rs);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return preencherModelFinanceiro(rs);
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao buscar financeiro por período: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
             }
         }
 
@@ -692,6 +834,12 @@ public class DAOAssociado {
 
             while (rs.next()) {
                 lista.add(preencherModelFinanceiro(rs));
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao listar financeiros: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
             }
         }
 
@@ -726,10 +874,16 @@ public class DAOAssociado {
             ps.setInt(5, anoFinal);
             ps.setInt(6, mesFinal);
 
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                lista.add(preencherModelFinanceiro(rs));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(preencherModelFinanceiro(rs));
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao buscar dados do relatório: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
             }
         }
 
@@ -753,6 +907,12 @@ public class DAOAssociado {
                 funcionario.setId(rs.getLong("id"));
                 funcionario.setNome(rs.getString("nome"));
                 lista.add(funcionario);
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao buscar funcionários ativos: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
             }
         }
 
@@ -780,13 +940,19 @@ public class DAOAssociado {
                 ps.setString(1, "%" + nome + "%");
             }
 
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                ModelLogin modelLogin = new ModelLogin();
-                modelLogin.setId(rs.getLong("id"));
-                modelLogin.setNome(rs.getString("nome"));
-                retorno.add(modelLogin);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ModelLogin modelLogin = new ModelLogin();
+                    modelLogin.setId(rs.getLong("id"));
+                    modelLogin.setNome(rs.getString("nome"));
+                    retorno.add(modelLogin);
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao consultar funcionários: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
             }
         }
 
@@ -832,6 +998,12 @@ public class DAOAssociado {
                 ribbonValues.add(java.math.BigDecimal.valueOf(rs.getDouble("fim_ribbon_5")));
                 ribbonValues.add(java.math.BigDecimal.valueOf(rs.getDouble("fim_ribbon_6")));
             }
+        } catch (Exception e) {
+            throw new Exception("Erro ao buscar ribbon atual: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
+            }
         }
 
         return ribbonValues;
@@ -853,8 +1025,8 @@ public class DAOAssociado {
                 + "WHERE data_venda BETWEEN ? AND ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sqlVendas)) {
-            ps.setDate(1, java.sql.Date.valueOf(dataInicial));
-            ps.setDate(2, java.sql.Date.valueOf(dataFinal));
+            ps.setDate(1, Date.valueOf(dataInicial));
+            ps.setDate(2, Date.valueOf(dataFinal));
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -882,6 +1054,12 @@ public class DAOAssociado {
                 resultado.put("mat1_custo", rs.getString("mat1_custo"));
                 resultado.put("mat2_custo", rs.getString("mat2_custo"));
             }
+        } catch (Exception e) {
+            throw new Exception("Erro ao consultar dados financeiros: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
+            }
         }
 
         return resultado;
@@ -902,9 +1080,16 @@ public class DAOAssociado {
             ps.setInt(2, mes);
             ps.setInt(3, ano);
 
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("total_fotos");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total_fotos");
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Erro ao buscar total de fotos vendidas: " + e.getMessage(), e);
+        } finally {
+            if (gerenciarTransacao) {
+                fecharConexao();
             }
         }
 
@@ -992,7 +1177,6 @@ public class DAOAssociado {
         model.setFotos_extras(rs.getInt("fotos_extras"));
         model.setEncartes_extras(rs.getInt("encartes_extras"));
 
-
         model.setCusto_fotos_sobras(rs.getBigDecimal("custo_fotos_sobras"));
         model.setCusto_encartes(rs.getBigDecimal("custo_encartes"));
         model.setFgts(rs.getBigDecimal("fgts"));
@@ -1006,5 +1190,18 @@ public class DAOAssociado {
         model.setSaldo_liquido(rs.getBigDecimal("saldo_liquido"));
 
         return model;
+    }
+
+    /**
+     * Fecha a conexão (apenas quando DAO gerencia)
+     */
+    private void fecharConexao() {
+        if (connection != null && gerenciarTransacao) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar conexão: " + e.getMessage());
+            }
+        }
     }
 }

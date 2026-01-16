@@ -1,15 +1,17 @@
 package servlets;
 
-import com.google.gson.Gson;
-import dao.*;
+import dao.DAOContas;
+import dao.DAODespesas;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.*;
+import model.ModelContas;
+import model.ModelDespesas;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,8 +21,10 @@ import java.util.Locale;
 @WebServlet("/ServletContasDespesasRel")
 public class ServletContasDespesasRel extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
+    // ✅ REMOVIDO: campos de DAO
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Connection conn = (Connection) request.getAttribute("connection");
         String acao = request.getParameter("acao");
 
         if (acao == null || acao.isEmpty()) {
@@ -29,16 +33,16 @@ public class ServletContasDespesasRel extends ServletGenericUtil {
         }
 
         if (acao.equals("gerarRelatorioMensal")) {
-            gerarRelatorioMensal(request, response);
+            gerarRelatorioMensal(request, response, conn);
         }
     }
 
-    private void gerarRelatorioMensal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void gerarRelatorioMensal(HttpServletRequest request, HttpServletResponse response, Connection conn) throws ServletException, IOException {
         String dataInicial = request.getParameter("dataInicial");
         String dataFinal = request.getParameter("dataFinal");
 
-        DAODespesas daoDespesas = new DAODespesas();
-        DAOContas daoContas = new DAOContas();
+        DAODespesas daoDespesas = new DAODespesas(conn);
+        DAOContas daoContas = new DAOContas(conn);
 
         try {
             List<ModelContas> contasMes = daoContas.buscarContasMes(dataInicial, dataFinal);
@@ -65,10 +69,8 @@ public class ServletContasDespesasRel extends ServletGenericUtil {
             if (dataInicial != null && !dataInicial.isEmpty()) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = sdf.parse(dataInicial);
-
                 SimpleDateFormat sdfMesAno = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR"));
                 String mesAnoFormatado = sdfMesAno.format(date);
-
                 request.setAttribute("mesAno", mesAnoFormatado);
             }
 
@@ -85,4 +87,3 @@ public class ServletContasDespesasRel extends ServletGenericUtil {
         }
     }
 }
-

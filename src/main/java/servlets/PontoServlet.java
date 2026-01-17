@@ -20,7 +20,6 @@ import java.util.List;
 
 @WebServlet("/ponto")
 public class PontoServlet extends HttpServlet {
-    // ✅ REMOVIDO: campos de DAO
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -126,15 +125,17 @@ public class PontoServlet extends HttpServlet {
                 BigDecimal longitude = new BigDecimal(longitudeStr);
                 Integer precisao = precisaoStr != null ? Integer.parseInt(precisaoStr) : null;
                 dao.registrarPontoComGPS(func.getFuncId(), hoje, latitude, longitude, precisao, tipoLocalizacao);
-                req.setAttribute("sucesso", "✅ Ponto registrado com sucesso!");
+                session.setAttribute("msgSucesso", "✅ Ponto registrado com sucesso!");
             } else {
                 dao.registrarPonto(func.getFuncId(), hoje);
-                req.setAttribute("sucesso", "⚠️ Ponto registrado sem localização. Ative o GPS.");
+                session.setAttribute("msgSucesso", "⚠️ Ponto registrado sem localização. Ative o GPS.");
             }
         } catch (Exception e) {
-            req.setAttribute("erro", e.getMessage());
+            session.setAttribute("msgErro", e.getMessage());
         }
-        req.getRequestDispatcher("/ponto/registroponto.jsp").forward(req, resp);
+
+        // ✅ CORREÇÃO: Usar redirect em vez de forward para forçar novo GET e buscar dados atualizados
+        resp.sendRedirect(req.getContextPath() + "/ponto/registroponto.jsp");
     }
 
     private void salvarFuncionario(HttpServletRequest req, HttpServletResponse resp, Connection conn) throws Exception {

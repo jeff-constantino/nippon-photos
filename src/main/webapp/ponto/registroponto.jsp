@@ -27,6 +27,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            padding-bottom: 80px; /* Espaço para o rodapé */
         }
         .card {
             background: #000000;
@@ -39,6 +40,42 @@
         }
         h1 { color: #daa520; text-align: center; margin-bottom: 15px; font-size: 30px; font-weight: 700; }
         .nome { text-align: center; color: #daa520; font-size: 22px; margin-bottom: 25px; font-weight: 600; }
+
+        /* Contador de Logout */
+        .contador-logout {
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .contador-logout.aviso {
+            border-color: #f57c00;
+            background: #2a1a0a;
+            animation: pulse-warning 1s infinite;
+        }
+        .contador-logout.critico {
+            border-color: #d32f2f;
+            background: #2a0a0a;
+            animation: pulse-critical 0.5s infinite;
+        }
+        @keyframes pulse-warning {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        @keyframes pulse-critical {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .tempo-restante {
+            font-size: 20px;
+            font-weight: bold;
+            color: #daa520;
+            margin: 5px 0;
+        }
+
         .relogio {
             text-align: center;
             font-size: 56px;
@@ -120,6 +157,35 @@
             .card { padding: 25px 20px; }
             .relogio { font-size: 44px; }
             h1 { font-size: 26px; }
+            body { padding-bottom: 70px; }
+            .footer { font-size: 12px; padding: 12px; }
+        }
+
+        /* Rodapé - VERSÃO MAIS VISÍVEL */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.85);      /* Preto 85% - MUITO MAIS VISÍVEL */
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #daa520;        /* Borda dourada sutil */
+            color: #fff;                          /* Texto branco */
+            font-size: 13px;
+            z-index: 100;
+        }
+        .footer a {
+            color: #ffd700;                       /* Dourado vibrante */
+            text-decoration: none;
+            font-weight: 700;                     /* Negrito */
+            transition: all 0.3s;
+        }
+        .footer a:hover {
+            color: #fff;                          /* Branco ao passar mouse */
+            text-shadow: 0 0 10px #daa520;        /* Brilho dourado */
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -127,15 +193,21 @@
 <div class="card">
     <%
         Ponto func = (Ponto) session.getAttribute("pontoFunc");
-        String erro = (String) request.getAttribute("erro");
-        String sucesso = (String) request.getAttribute("sucesso");
+
+        // ✅ CORREÇÃO: Buscar mensagens da session (que vêm do redirect)
+        String sucesso = (String) session.getAttribute("msgSucesso");
+        String erro = (String) session.getAttribute("msgErro");
+
+        // Limpar mensagens da session após exibir
+        if (sucesso != null) session.removeAttribute("msgSucesso");
+        if (erro != null) session.removeAttribute("msgErro");
 
         if (func == null) {
             response.sendRedirect("../index.jsp");
             return;
         }
 
-        // CORREÇÃO: Buscar registro do dia correto considerando jornadas noturnas
+        // Buscar registro do dia correto considerando jornadas noturnas
         PontoDAO dao = new PontoDAO();
         Date hoje = new Date(System.currentTimeMillis());
 
@@ -161,6 +233,11 @@
     <h1>🕐 Controle de Ponto</h1>
     <div class="nome"><%= func.getFuncNome() %></div>
 
+    <!-- ✅ NOVO: Contador regressivo de logout -->
+    <div id="contadorLogout" class="contador-logout">
+        ⏱️ Logout automático em: <div class="tempo-restante" id="tempoRestante">1:00</div>
+    </div>
+
     <% if (sucesso != null) { %><div class="msg msg-sucesso"><%= sucesso %></div><% } %>
     <% if (erro != null) { %><div class="msg msg-erro"><%= erro %></div><% } %>
 
@@ -183,7 +260,7 @@
         ⏳ Aguardando GPS...
     </button>
 
-    <form action="<%= request.getContextPath() %>/ponto" method="post">
+    <form action="<%= request.getContextPath() %>/ponto" method="post" id="formLogout">
         <input type="hidden" name="acao" value="logout">
         <button type="submit" class="btn btn-secondary">Sair</button>
     </form>
@@ -236,7 +313,56 @@
     <% } %>
 </div>
 
+<!-- Rodapé -->
+<div class="footer">
+    Desenvolvido por <a href="https://jeffconstantino.dev" target="_blank" rel="noopener">Jeff Constantino</a>
+</div>
+
 <script>
+    // ===== CONTADOR REGRESSIVO DE LOGOUT =====
+    let segundosRestantes = 60; // 1 minuto
+    let intervalContador = null;
+
+    function iniciarContador() {
+        intervalContador = setInterval(() => {
+            segundosRestantes--;
+            atualizarDisplayContador();
+
+            if (segundosRestantes <= 0) {
+                clearInterval(intervalContador);
+                fazerLogoutAutomatico();
+            }
+        }, 1000);
+    }
+
+    function atualizarDisplayContador() {
+        const minutos = Math.floor(segundosRestantes / 60);
+        const segundos = segundosRestantes % 60;
+        const display = minutos + ':' + String(segundos).padStart(2, '0');
+
+        document.getElementById('tempoRestante').textContent = display;
+
+        const contador = document.getElementById('contadorLogout');
+        if (segundosRestantes <= 10) {
+            contador.className = 'contador-logout critico';
+        } else if (segundosRestantes <= 30) {
+            contador.className = 'contador-logout aviso';
+        } else {
+            contador.className = 'contador-logout';
+        }
+    }
+
+    function fazerLogoutAutomatico() {
+        console.log('⏱️ Tempo esgotado - Fazendo logout automático');
+        document.getElementById('formLogout').submit();
+    }
+
+    // Iniciar contador ao carregar a página
+    window.addEventListener('load', () => {
+        iniciarContador();
+        console.log('✅ Contador de logout iniciado (1 minuto)');
+    });
+
     // ===== RELÓGIO =====
     function atualizarRelogio() {
         const agora = new Date();

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#daa520">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-title" content="SaaS Ponto">
     <link rel="manifest" href="<%= request.getContextPath() %>/ponto/manifest.json">
     <link rel="apple-touch-icon" href="<%= request.getContextPath() %>/ponto/icon-192.png">
-    
+
     <title>Controle de Ponto - Login</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -24,6 +24,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            padding-bottom: 80px; /* Espaço para o rodapé */
         }
         .card {
             background: #000000;
@@ -132,7 +133,7 @@
             display: block;
             margin-top: 5px;
         }
-        
+
         /* Banner de instalação do PWA */
         .install-banner {
             display: none;
@@ -153,10 +154,38 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        
+
+        /* Rodapé - VERSÃO MAIS VISÍVEL */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.85);      /* Preto 85% - MUITO MAIS VISÍVEL */
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #daa520;        /* Borda dourada sutil */
+            color: #fff;                          /* Texto branco */
+            font-size: 13px;
+        }
+        .footer a {
+            color: #ffd700;                       /* Dourado vibrante */
+            text-decoration: none;
+            font-weight: 700;                     /* Negrito */
+            transition: all 0.3s;
+        }
+        .footer a:hover {
+            color: #fff;                          /* Branco ao passar mouse */
+            text-shadow: 0 0 10px #daa520;        /* Brilho dourado */
+            text-decoration: underline;
+        }
+
         @media (max-width: 600px) {
             .card { padding: 30px 25px; }
             h1 { font-size: 28px; }
+            body { padding-bottom: 70px; }
+            .footer { font-size: 12px; padding: 12px; }
         }
     </style>
 </head>
@@ -213,6 +242,11 @@
     </form>
 </div>
 
+<!-- Rodapé -->
+<div class="footer">
+    Desenvolvido por <a href="https://jeffconstantino.dev" target="_blank" rel="noopener">Jeff Constantino</a>
+</div>
+
 <script>
     function mostrarFunc() {
         document.getElementById('btnFunc').classList.add('active');
@@ -254,7 +288,7 @@
         // Previne o prompt automático
         e.preventDefault();
         deferredPrompt = e;
-        
+
         // Mostra o banner de instalação
         document.getElementById('installBanner').style.display = 'block';
     });

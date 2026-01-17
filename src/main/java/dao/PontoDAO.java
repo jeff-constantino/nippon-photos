@@ -109,7 +109,9 @@ public class PontoDAO {
                     ps.setInt(2, registro.getRegId());
                     ps.executeUpdate();
                     if (gerenciarTransacao) conn.commit();
-                    if (registro.getRegRetornoIntervalo() != null && sql.contains("saida =")) {
+
+                    // ✅ CALCULAR HORAS quando registrar a saída final
+                    if (sql.contains("saida =")) {
                         calcularHorasTrabalhadasENoturnas(funcId, dataRegistro);
                     }
                 } catch (Exception e) {
@@ -959,7 +961,8 @@ public class PontoDAO {
                     ps.executeUpdate();
                     if (gerenciarTransacao) conn.commit();
 
-                    if (registro.getRegRetornoIntervalo() != null && sql.contains("saida =")) {
+                    // ✅ CALCULAR HORAS quando registrar a saída final
+                    if (sql.contains("saida =")) {
                         calcularHorasTrabalhadasENoturnas(funcId, dataRegistro);
                     }
                 } catch (Exception e) {

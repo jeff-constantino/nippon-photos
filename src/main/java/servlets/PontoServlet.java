@@ -16,6 +16,8 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @WebServlet("/ponto")
@@ -245,14 +247,29 @@ public class PontoServlet extends HttpServlet {
         PontoDAO dao = new PontoDAO(conn);
         Ponto registroAtual = dao.buscarRegistroPorId(regId);
         String dataRegistro = new java.text.SimpleDateFormat("yyyy-MM-dd").format(registroAtual.getRegData());
+
         String entradaParam = req.getParameter("entrada");
         String saidaIntParam = req.getParameter("saidaInt");
         String retornoIntParam = req.getParameter("retornoInt");
         String saidaParam = req.getParameter("saida");
-        Timestamp entrada = (entradaParam != null && !entradaParam.trim().isEmpty()) ? parseTimestampComData(entradaParam, dataRegistro) : registroAtual.getRegEntrada();
-        Timestamp saidaInt = (saidaIntParam != null && !saidaIntParam.trim().isEmpty()) ? parseTimestampComData(saidaIntParam, dataRegistro) : registroAtual.getRegSaidaIntervalo();
-        Timestamp retornoInt = (retornoIntParam != null && !retornoIntParam.trim().isEmpty()) ? parseTimestampComData(retornoIntParam, dataRegistro) : registroAtual.getRegRetornoIntervalo();
-        Timestamp saida = (saidaParam != null && !saidaParam.trim().isEmpty()) ? parseTimestampComData(saidaParam, dataRegistro) : registroAtual.getRegSaida();
+
+        // ✅ CORREÇÃO: Usar novo método que ajusta a data para horários após meia-noite
+        Timestamp entrada = (entradaParam != null && !entradaParam.trim().isEmpty())
+                ? parseTimestampComData(entradaParam, dataRegistro, registroAtual.getRegEntrada())
+                : registroAtual.getRegEntrada();
+
+        Timestamp saidaInt = (saidaIntParam != null && !saidaIntParam.trim().isEmpty())
+                ? parseTimestampComDataInteligente(saidaIntParam, dataRegistro, entrada)
+                : registroAtual.getRegSaidaIntervalo();
+
+        Timestamp retornoInt = (retornoIntParam != null && !retornoIntParam.trim().isEmpty())
+                ? parseTimestampComDataInteligente(retornoIntParam, dataRegistro, saidaInt != null ? saidaInt : entrada)
+                : registroAtual.getRegRetornoIntervalo();
+
+        Timestamp saida = (saidaParam != null && !saidaParam.trim().isEmpty())
+                ? parseTimestampComDataInteligente(saidaParam, dataRegistro, retornoInt != null ? retornoInt : entrada)
+                : registroAtual.getRegSaida();
+
         String obs = req.getParameter("obs");
         HttpSession session = req.getSession();
         String editadoPor = (String) session.getAttribute("pontoAdmin");
@@ -261,9 +278,48 @@ public class PontoServlet extends HttpServlet {
         req.getRequestDispatcher("/ponto/admin.jsp").forward(req, resp);
     }
 
-    private Timestamp parseTimestampComData(String hora, String data) {
+    /**
+     * ✅ NOVO MÉTODO: Converte hora para Timestamp ajustando a data quando necessário
+     * Se a hora for entre 00:00 e 05:59 E menor que a hora de referência, assume que é do dia seguinte
+     */
+    private Timestamp parseTimestampComDataInteligente(String hora, String data, Timestamp referencia) {
         if (hora == null || hora.trim().isEmpty()) return null;
-        try { return Timestamp.valueOf(data + " " + hora + ":00"); } catch (Exception e) { return null; }
+        try {
+            LocalDate dataBase = LocalDate.parse(data);
+            LocalTime horaTime = LocalTime.parse(hora);
+
+            // Se a hora está na madrugada (00:00 - 05:59)
+            if (horaTime.getHour() >= 0 && horaTime.getHour() < 6) {
+                // Se temos uma referência (entrada ou saída intervalo)
+                if (referencia != null) {
+                    LocalDateTime referenciaLDT = referencia.toLocalDateTime();
+                    LocalTime horaReferencia = referenciaLDT.toLocalTime();
+
+                    // Se a hora de madrugada é MENOR que a hora de referência,
+                    // assume que é do dia seguinte
+                    if (horaTime.isBefore(horaReferencia)) {
+                        dataBase = dataBase.plusDays(1);
+                    }
+                }
+            }
+
+            LocalDateTime dateTime = LocalDateTime.of(dataBase, horaTime);
+            return Timestamp.valueOf(dateTime);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Método original para entrada (não precisa de ajuste)
+     */
+    private Timestamp parseTimestampComData(String hora, String data, Timestamp original) {
+        if (hora == null || hora.trim().isEmpty()) return original;
+        try {
+            return Timestamp.valueOf(data + " " + hora + ":00");
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private void abonarFalta(HttpServletRequest req, HttpServletResponse resp, Connection conn) throws Exception {

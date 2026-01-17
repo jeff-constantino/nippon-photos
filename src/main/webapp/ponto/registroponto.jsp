@@ -235,7 +235,7 @@
 
     <!-- ✅ NOVO: Contador regressivo de logout -->
     <div id="contadorLogout" class="contador-logout">
-        ⏱️ Logout automático em: <div class="tempo-restante" id="tempoRestante">1:00</div>
+        ⏱️ Você será desconectado em: <div class="tempo-restante" id="tempoRestante">1:00</div>
     </div>
 
     <% if (sucesso != null) { %><div class="msg msg-sucesso"><%= sucesso %></div><% } %>

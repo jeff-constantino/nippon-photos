@@ -17,9 +17,6 @@ import java.util.List;
 @WebServlet("/ServletConfiguracao")
 public class ServletConfiguracao extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
-    // ✅ REMOVIDO: private DAOConfiguracao daoConfiguracao;
-    // ✅ REMOVIDO: private DAOConfig daoConfig;
-    // ✅ REMOVIDO: init()
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,17 +27,16 @@ public class ServletConfiguracao extends ServletGenericUtil {
         String acao = request.getParameter("acao");
         String msg = "Operação realizada com sucesso!";
 
-        ModelConfiguracao modelConfiguracao = new ModelConfiguracao();
-        List<ModelConfig> configsExistentes = null;
-        try {
-            configsExistentes = daoConfig.consultarTodasConfigs();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        ModelConfig configExistente = (configsExistentes != null && !configsExistentes.isEmpty()) ? configsExistentes.get(0) : null;
-
         try {
             if ("salario".equals(acao)) {
+                ModelConfiguracao modelConfiguracao = new ModelConfiguracao();
+
+                // Buscar o ID existente da tabela conf_salarios
+                List<ModelConfiguracao> configsSalarios = daoConfiguracao.consultarSalarios();
+                if (!configsSalarios.isEmpty()) {
+                    modelConfiguracao.setIdconf(configsSalarios.get(0).getIdconf());
+                }
+
                 BigDecimal salario = parseToBigDecimal(request.getParameter("salario"));
                 BigDecimal comissao = parseToBigDecimal(request.getParameter("comissao"));
                 BigDecimal fgts = parseToBigDecimal(request.getParameter("fgts"));
@@ -51,25 +47,25 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 modelConfiguracao.setFgts(fgts);
                 modelConfiguracao.setComissao2(comissao2);
 
-                if (configExistente != null) {
-                    modelConfiguracao.setIdconf(configExistente.getIdconf());
-                }
-
+                // Campos IRRF
                 modelConfiguracao.setId_irrf_1(parseToLong(request.getParameter("id_irrf_1")));
                 modelConfiguracao.setIrrf_1(parseToBigDecimal(request.getParameter("irrf_1")));
                 modelConfiguracao.setParcela_irrf_1(parseToBigDecimal(request.getParameter("parcela_irrf_1")));
                 modelConfiguracao.setMin_irrf_1(parseToBigDecimal(request.getParameter("min_irrf_1")));
                 modelConfiguracao.setMax_irrf_1(parseToBigDecimal(request.getParameter("max_irrf_1")));
+
                 modelConfiguracao.setId_irrf_2(parseToLong(request.getParameter("id_irrf_2")));
                 modelConfiguracao.setIrrf_2(parseToBigDecimal(request.getParameter("irrf_2")));
                 modelConfiguracao.setParcela_irrf_2(parseToBigDecimal(request.getParameter("parcela_irrf_2")));
                 modelConfiguracao.setMin_irrf_2(parseToBigDecimal(request.getParameter("min_irrf_2")));
                 modelConfiguracao.setMax_irrf_2(parseToBigDecimal(request.getParameter("max_irrf_2")));
+
                 modelConfiguracao.setId_irrf_3(parseToLong(request.getParameter("id_irrf_3")));
                 modelConfiguracao.setIrrf_3(parseToBigDecimal(request.getParameter("irrf_3")));
                 modelConfiguracao.setParcela_irrf_3(parseToBigDecimal(request.getParameter("parcela_irrf_3")));
                 modelConfiguracao.setMin_irrf_3(parseToBigDecimal(request.getParameter("min_irrf_3")));
                 modelConfiguracao.setMax_irrf_3(parseToBigDecimal(request.getParameter("max_irrf_3")));
+
                 modelConfiguracao.setId_irrf_4(parseToLong(request.getParameter("id_irrf_4")));
                 modelConfiguracao.setIrrf_4(parseToBigDecimal(request.getParameter("irrf_4")));
                 modelConfiguracao.setParcela_irrf_4(parseToBigDecimal(request.getParameter("parcela_irrf_4")));
@@ -81,6 +77,14 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 msg = "Configurações de Salários e IRRF salvas com sucesso!";
 
             } else if ("cartao".equals(acao)) {
+                ModelConfiguracao modelConfiguracao = new ModelConfiguracao();
+
+                // Buscar o ID existente da tabela conf_juros_cartao
+                List<ModelConfiguracao> configsJuros = daoConfiguracao.consultarJuros();
+                if (!configsJuros.isEmpty()) {
+                    modelConfiguracao.setIdconf(configsJuros.get(0).getIdconf());
+                }
+
                 BigDecimal debVisaMaster = parseToBigDecimal(request.getParameter("deb_visa_master"));
                 BigDecimal credVisaMaster = parseToBigDecimal(request.getParameter("cred_visa_master"));
                 BigDecimal debOutros = parseToBigDecimal(request.getParameter("deb_outros"));
@@ -91,9 +95,6 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 modelConfiguracao.setDeb_outros(debOutros);
                 modelConfiguracao.setCred_outros(credOutros);
 
-                if (configExistente != null) {
-                    modelConfiguracao.setIdconf(configExistente.getIdconf());
-                }
                 daoConfiguracao.gravarConfigCartao(modelConfiguracao);
                 msg = "Configurações de Cartão salvas com sucesso!";
 
@@ -113,13 +114,15 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 msg = "Ação inválida!";
             }
 
+            // IMPORTANTE: Usar redirect em vez de forward
+            request.getSession().setAttribute("msg", msg);
+            response.sendRedirect(request.getContextPath() + "/ServletConfig");
+
         } catch (Exception e) {
             e.printStackTrace();
-            msg = "Erro: " + e.getMessage();
+            request.getSession().setAttribute("msg", "Erro: " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/ServletConfig");
         }
-
-        request.setAttribute("msg", msg);
-        request.getRequestDispatcher("/ServletConfig").forward(request, response);
     }
 
     private Long parseToLong(String s) {
@@ -146,13 +149,5 @@ public class ServletConfiguracao extends ServletGenericUtil {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendRedirect(request.getContextPath() + "/ServletConfig");
-    }
-
-    private BigDecimal parseBigDecimal(String value) {
-        try {
-            return (value != null && !value.isEmpty()) ? new BigDecimal(value) : BigDecimal.ZERO;
-        } catch (NumberFormatException e) {
-            return BigDecimal.ZERO;
-        }
     }
 }

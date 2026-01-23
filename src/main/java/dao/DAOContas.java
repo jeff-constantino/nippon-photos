@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DAOContas {
     private final Connection connection;
-    private final boolean gerenciarTransacao; // Flag para saber se deve fazer commit/rollback
+    private final boolean gerenciarTransacao;
 
     /**
      * Construtor NOVO - recebe conexão gerenciada pelo Filter
@@ -22,7 +22,7 @@ public class DAOContas {
      */
     public DAOContas(Connection connection) {
         this.connection = connection;
-        this.gerenciarTransacao = false; // Filter gerencia
+        this.gerenciarTransacao = false;
     }
 
     /**
@@ -32,15 +32,15 @@ public class DAOContas {
     public DAOContas() {
         try {
             this.connection = ConnectionPool.getConnection();
-            this.gerenciarTransacao = true; // DAO gerencia
+            this.gerenciarTransacao = true;
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao obter conexão do pool", e);
         }
     }
 
     public void gravarConta(ModelContas conta) throws Exception {
-        String sql = "INSERT INTO contas (numero_pedido, empresa, itens, valor, data_de_pedido, data_de_pagamento, status, pagamento) " +
-                "VALUES (?, UPPER(?), UPPER(?), ?, ?, ?, UPPER(?), UPPER(?))";
+        String sql = "INSERT INTO contas (numero_pedido, empresa, itens, valor, data_de_pedido, data_de_pagamento, status, pagamento, codigo) " +
+                "VALUES (?, UPPER(?), UPPER(?), ?, ?, ?, UPPER(?), UPPER(?), ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, conta.getNumero_pedido());
@@ -63,6 +63,12 @@ public class DAOContas {
             stmt.setString(7, conta.getStatus());
             stmt.setString(8, conta.getPagamento());
 
+            if (conta.getCodigo() != null && !conta.getCodigo().isEmpty()) {
+                stmt.setString(9, conta.getCodigo());
+            } else {
+                stmt.setNull(9, java.sql.Types.VARCHAR);
+            }
+
             stmt.executeUpdate();
 
             ResultSet generatedKeys = stmt.getGeneratedKeys();
@@ -70,7 +76,6 @@ public class DAOContas {
                 conta.setConta_id(generatedKeys.getLong(1));
             }
 
-            // Só faz commit se o DAO está gerenciando a transação
             if (gerenciarTransacao) {
                 connection.commit();
             }
@@ -81,7 +86,6 @@ public class DAOContas {
             }
             throw new Exception("Erro ao gravar conta: " + e.getMessage(), e);
         } finally {
-            // Fecha conexão apenas se o DAO a criou
             if (gerenciarTransacao) {
                 fecharConexao();
             }
@@ -94,7 +98,7 @@ public class DAOContas {
         }
 
         String sql = "UPDATE contas SET empresa = UPPER(?), itens = UPPER(?), valor = ?, " +
-                "data_de_pedido = ?, data_de_pagamento = ?, status = UPPER(?), pagamento = UPPER(?) " +
+                "data_de_pedido = ?, data_de_pagamento = ?, status = UPPER(?), pagamento = UPPER(?), codigo = ? " +
                 "WHERE conta_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -116,7 +120,14 @@ public class DAOContas {
 
             stmt.setString(6, conta.getStatus());
             stmt.setString(7, conta.getPagamento());
-            stmt.setLong(8, conta.getConta_id());
+
+            if (conta.getCodigo() != null && !conta.getCodigo().isEmpty()) {
+                stmt.setString(8, conta.getCodigo());
+            } else {
+                stmt.setNull(8, java.sql.Types.VARCHAR);
+            }
+
+            stmt.setLong(9, conta.getConta_id());
 
             int linhasAfetadas = stmt.executeUpdate();
 
@@ -228,7 +239,7 @@ public class DAOContas {
     }
 
     public List<ModelContas> buscarContasRelMes(String dataInicio, String dataFim) throws SQLException {
-        return buscarContasMes(dataInicio, dataFim); // Mesmo método
+        return buscarContasMes(dataInicio, dataFim);
     }
 
     public List<ModelContas> buscarContasVencendoEm7Dias() throws SQLException {
@@ -389,9 +400,6 @@ public class DAOContas {
 
     // ===== MÉTODOS AUXILIARES =====
 
-    /**
-     * Extrai ModelContas do ResultSet (DRY - Don't Repeat Yourself)
-     */
     private ModelContas extrairContaDoResultSet(ResultSet rs) throws SQLException {
         ModelContas conta = new ModelContas();
         conta.setConta_id(rs.getLong("conta_id"));
@@ -403,6 +411,7 @@ public class DAOContas {
         conta.setData_de_pagamento(rs.getDate("data_de_pagamento"));
         conta.setStatus(rs.getString("status"));
         conta.setPagamento(rs.getString("pagamento"));
+        conta.setCodigo(rs.getString("codigo"));
         return conta;
     }
 

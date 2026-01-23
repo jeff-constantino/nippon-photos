@@ -17,8 +17,6 @@ import java.util.List;
 
 @WebServlet("/ServletFinanContas")
 public class ServletFinanContas extends ServletGenericUtil {
-    // ✅ REMOVIDO: private DAOContas daoContas;
-    // ✅ REMOVIDO: init()
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,6 +37,7 @@ public class ServletFinanContas extends ServletGenericUtil {
             String data_pagamento = request.getParameter("data_de_pagamento");
             String status = request.getParameter("status");
             String pagamento = request.getParameter("pagamento");
+            String codigo = request.getParameter("codigo"); // ⭐ NOVO
             String acao = request.getParameter("acao");
 
             ModelContas modelContas = new ModelContas();
@@ -48,8 +47,8 @@ public class ServletFinanContas extends ServletGenericUtil {
             }
 
             modelContas.setNumero_pedido(numero_pedido != null && !numero_pedido.isEmpty() ? Long.parseLong(numero_pedido) : 0L);
-            modelContas.setEmpresa(empresa);
             modelContas.setItens(itens);
+            modelContas.setCodigo(codigo); // ⭐ NOVO
 
             double valor1Convertido = valor1 != null && !valor1.isEmpty() ? Double.parseDouble(valor1) : 0.0;
             double valor2Convertido = valor2 != null && !valor2.isEmpty() ? Double.parseDouble(valor2) : 0.0;
@@ -164,6 +163,16 @@ public class ServletFinanContas extends ServletGenericUtil {
             html.append("<table class='table table-striped table-bordered' style='color: #f2a654;'>")
                     .append("<thead>")
                     .append("<tr>")
+                    .append("<th>ID</th>")
+                    .append("<th>Número Pedido</th>")
+                    .append("<th>Empresa</th>")
+                    .append("<th>Itens</th>")
+                    .append("<th>Valor</th>")
+                    .append("<th>Data Pedido</th>")
+                    .append("<th>Data Pagamento</th>")
+                    .append("<th>Status</th>")
+                    .append("<th>Pagamento</th>")
+                    .append("<th>Código</th>") // ⭐ NOVO
                     .append("</tr>")
                     .append("</thead>")
                     .append("<tbody>");
@@ -180,6 +189,7 @@ public class ServletFinanContas extends ServletGenericUtil {
                         .append("<td>").append(formatDate(conta.getData_de_pagamento())).append("</td>")
                         .append("<td>").append(conta.getStatus()).append("</td>")
                         .append("<td>").append(conta.getPagamento()).append("</td>")
+                        .append("<td>").append(conta.getCodigo() != null ? conta.getCodigo() : "").append("</td>") // ⭐ NOVO
                         .append("</tr>");
             }
 

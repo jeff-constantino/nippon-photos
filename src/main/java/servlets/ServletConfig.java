@@ -18,15 +18,19 @@ import java.util.List;
 @WebServlet("/ServletConfig")
 public class ServletConfig extends ServletGenericUtil {
     private static final long serialVersionUID = 1L;
-    // ✅ REMOVIDO: private DAOConfig daoConfig;
-    // ✅ REMOVIDO: private DAOConfiguracao daoConfiguracao;
-    // ✅ REMOVIDO: init()
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Connection conn = (Connection) request.getAttribute("connection");
         DAOConfig daoConfig = new DAOConfig(conn);
         DAOConfiguracao daoConfiguracao = new DAOConfiguracao(conn);
+
+        // ✅ NOVA LÓGICA: Pegar mensagem da sessão, se existir
+        String msg = (String) request.getSession().getAttribute("msg");
+        if (msg != null) {
+            request.setAttribute("msg", msg);
+            request.getSession().removeAttribute("msg");
+        }
 
         try {
             List<ModelConfig> configs = daoConfig.consultarTodasConfigs();

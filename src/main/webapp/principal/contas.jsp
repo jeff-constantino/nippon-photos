@@ -350,7 +350,7 @@
                                                                                     </div>
                                                                                     <div class="col-12 mb-3">
                                                                                         <label style="color: #f2a654">CÓDIGO DE BARRAS</label>
-                                                                                        <textarea class="form-control" style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase;" id="codigo" name="codigo" required>${contas.codigo}</textarea>
+                                                                                        <textarea class="form-control" style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase;" id="codigo" name="codigo" required>${modelContas.codigo}</textarea>
                                                                                     </div>
                                                                                 </div>
 
@@ -563,7 +563,7 @@
                                             </div>
                                             <div class="col-12 mb-3">
                                                 <label style="color: #f2a654">CÓDIGO DE BARRAS</label>
-                                                <textarea class="form-control" style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase;" id="codigo2" name="codigo" required>${contas.codigo}</textarea>
+                                                <textarea class="form-control" style="background-color: #f2a654; color: black; font-weight: bold; text-transform: uppercase;" id="codigo2" name="codigo" required>${modelContas.codigo}</textarea>
                                             </div>
                                         </div>
 

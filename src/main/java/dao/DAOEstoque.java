@@ -2,10 +2,7 @@ package dao;
 
 import connection.HikariCPUtil;
 import model.ModelEstoque;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +22,8 @@ public class DAOEstoque {
                     m.setPeso(rs.getString("peso"));
                     m.setCodBarra(rs.getString("cod_barra"));
                     m.setEstoqueAtual(rs.getInt("estoque_atual"));
+                    m.setValorCompra(rs.getBigDecimal("valor_compra"));
+                    m.setValorVenda(rs.getBigDecimal("valor_venda"));
                     return m;
                 }
             }
@@ -33,7 +32,7 @@ public class DAOEstoque {
     }
 
     public void salvarProduto(ModelEstoque p, Connection conn) throws Exception {
-        String sql = "INSERT INTO estoque_produto (cod_barra, nome, marca, peso, valor_compra, valor_venda) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO estoque_produto (cod_barra, nome, marca, peso, valor_compra, valor_venda, estoque_atual) VALUES (?,?,?,?,?,?,?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, p.getCodBarra());
             ps.setString(2, p.getNome());
@@ -41,7 +40,21 @@ public class DAOEstoque {
             ps.setString(4, p.getPeso());
             ps.setBigDecimal(5, p.getValorCompra());
             ps.setBigDecimal(6, p.getValorVenda());
+            ps.setInt(7, p.getEstoqueAtual());
             ps.execute();
+        }
+    }
+
+    public void atualizarProduto(ModelEstoque p, Connection conn) throws Exception {
+        String sql = "UPDATE estoque_produto SET cod_barra = ?, nome = ?, marca = ?, peso = ?, estoque_atual = ? WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, p.getCodBarra());
+            ps.setString(2, p.getNome());
+            ps.setString(3, p.getMarca());
+            ps.setString(4, p.getPeso());
+            ps.setInt(5, p.getEstoqueAtual());
+            ps.setLong(6, p.getProdutoId());
+            ps.executeUpdate();
         }
     }
 
@@ -94,7 +107,6 @@ public class DAOEstoque {
 
     public List<ModelEstoque> gerarRelatorioResumido(String inicio, String fim) throws Exception {
         List<ModelEstoque> lista = new ArrayList<>();
-        // A query abaixo tem 4 marcadores '?'
         String sql = "SELECT p.id, p.nome, p.marca, p.peso, p.estoque_atual, " +
                 "COALESCE((SELECT SUM(quantidade) FROM estoque_movimento WHERE produto_id = p.id AND (tipo_movimento = 'ENTRADA' OR motivo LIKE '%DEVOLUCAO%') AND data_movimento::date BETWEEN ?::date AND ?::date), 0) as entradas, " +
                 "COALESCE((SELECT SUM(quantidade) FROM estoque_movimento WHERE produto_id = p.id AND tipo_movimento = 'SAIDA' AND data_movimento::date BETWEEN ?::date AND ?::date), 0) as saidas " +
@@ -102,12 +114,8 @@ public class DAOEstoque {
 
         try (Connection conn = HikariCPUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            // Preenche os dois primeiros '?' (Subquery de Entradas)
             ps.setString(1, inicio);
             ps.setString(2, fim);
-
-            // Preenche os dois últimos '?' (Subquery de Saídas)
             ps.setString(3, inicio);
             ps.setString(4, fim);
 
@@ -120,9 +128,73 @@ public class DAOEstoque {
                 m.setEstoqueAtual(rs.getInt("estoque_atual"));
                 m.setEntradasNoPeriodo(rs.getInt("entradas"));
                 m.setSaidasNoPeriodo(rs.getInt("saidas"));
-
-                // Lógica: Inicial = Atual - Entradas + Saídas
                 m.setEstoqueInicialNoPeriodo(m.getEstoqueAtual() - m.getEntradasNoPeriodo() + m.getSaidasNoPeriodo());
+                lista.add(m);
+            }
+        }
+        return lista;
+    }
+
+    public List<String> listarMarcasDistintas() throws Exception {
+        List<String> marcas = new ArrayList<>();
+        String sql = "SELECT DISTINCT marca FROM estoque_produto WHERE marca IS NOT NULL AND marca != '' ORDER BY marca";
+        try (Connection conn = HikariCPUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                marcas.add(rs.getString("marca"));
+            }
+        }
+        return marcas;
+    }
+
+    public List<String> listarPesosDistintos() throws Exception {
+        List<String> pesos = new ArrayList<>();
+        String sql = "SELECT DISTINCT peso FROM estoque_produto WHERE peso IS NOT NULL AND peso != '' ORDER BY peso";
+        try (Connection conn = HikariCPUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                pesos.add(rs.getString("peso"));
+            }
+        }
+        return pesos;
+    }
+
+    public List<ModelEstoque> listarProdutosEstoqueBaixo() throws Exception {
+        List<ModelEstoque> lista = new ArrayList<>();
+        String sql = "SELECT * FROM estoque_produto WHERE estoque_atual <= 5 ORDER BY estoque_atual ASC, nome";
+        try (Connection conn = HikariCPUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                ModelEstoque m = new ModelEstoque();
+                m.setProdutoId(rs.getLong("id"));
+                m.setCodBarra(rs.getString("cod_barra"));
+                m.setNome(rs.getString("nome"));
+                m.setMarca(rs.getString("marca"));
+                m.setPeso(rs.getString("peso"));
+                m.setEstoqueAtual(rs.getInt("estoque_atual"));
+                lista.add(m);
+            }
+        }
+        return lista;
+    }
+
+    public List<ModelEstoque> listarTodosProdutos() throws Exception {
+        List<ModelEstoque> lista = new ArrayList<>();
+        String sql = "SELECT * FROM estoque_produto ORDER BY nome";
+        try (Connection conn = HikariCPUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                ModelEstoque m = new ModelEstoque();
+                m.setProdutoId(rs.getLong("id"));
+                m.setCodBarra(rs.getString("cod_barra"));
+                m.setNome(rs.getString("nome"));
+                m.setMarca(rs.getString("marca"));
+                m.setPeso(rs.getString("peso"));
+                m.setEstoqueAtual(rs.getInt("estoque_atual"));
                 lista.add(m);
             }
         }

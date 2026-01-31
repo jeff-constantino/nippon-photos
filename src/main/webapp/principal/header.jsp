@@ -99,4 +99,43 @@
     <!-- jquery.maskMoney plugin -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
 
+
+    <!-- Verificação automática de sessão -->
+    <script>
+        (function() {
+            var contextPath = '${pageContext.request.contextPath}';
+
+            // Verificar sessão a cada 5 minutos
+            setInterval(function() {
+                fetch(contextPath + '/api/verificar-sessao')
+                    .then(function(response) {
+                        if (!response.ok) {
+                            alert('Sua sessão expirou. Você será redirecionado para o login.');
+                            window.location.href = contextPath + '/index.jsp';
+                        }
+                    })
+                    .catch(function() {
+                        window.location.href = contextPath + '/index.jsp';
+                    });
+            }, 5 * 60 * 1000); // 5 minutos
+
+            // Verificar quando o tablet "acordar"
+            document.addEventListener('visibilitychange', function() {
+                if (document.visibilityState === 'visible') {
+                    fetch(contextPath + '/api/verificar-sessao')
+                        .then(function(response) {
+                            if (!response.ok) {
+                                alert('Sua sessão expirou. Você será redirecionado para o login.');
+                                window.location.href = contextPath + '/index.jsp';
+                            }
+                        })
+                        .catch(function() {
+                            window.location.href = contextPath + '/index.jsp';
+                        });
+                }
+            });
+        })();
+    </script>
+</head>
+
 </head>

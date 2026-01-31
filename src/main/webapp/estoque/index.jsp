@@ -3,7 +3,7 @@
 <%
     if (request.getParameter("logout") != null) { session.invalidate(); response.sendRedirect("index.jsp"); return; }
     if (request.getParameter("acaoLogin") != null) {
-        if ("adm".equals(request.getParameter("login")) && "123".equals(request.getParameter("senha"))) session.setAttribute("logado", true);
+        if ("jd".equals(request.getParameter("login")) && "Jos3di@s".equals(request.getParameter("senha"))) session.setAttribute("logado", true);
     }
     boolean estaLogado = session.getAttribute("logado") != null && (boolean) session.getAttribute("logado");
 %>

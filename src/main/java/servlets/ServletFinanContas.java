@@ -129,7 +129,10 @@ public class ServletFinanContas extends ServletGenericUtil {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // ✅ Obtém a conexão gerenciada pelo Filter
         Connection conn = (Connection) request.getAttribute("connection");
         DAOContas daoContas = new DAOContas(conn);
 
@@ -143,104 +146,118 @@ public class ServletFinanContas extends ServletGenericUtil {
         int tamanho = 10;
 
         if (paginaParam != null && !paginaParam.isEmpty()) {
-            pagina = Integer.parseInt(paginaParam);
+            try {
+                pagina = Integer.parseInt(paginaParam);
+            } catch (NumberFormatException e) {
+                pagina = 1; // valor padrão em caso de erro
+            }
         }
 
+        // ===== AÇÃO: IMPRIMIR RELATÓRIO DE CONTAS (AJAX) =====
         if ("imprimirRelatorioContas".equals(acao)) {
-            int paginaAtual = request.getParameter("pagina") != null ? Integer.parseInt(request.getParameter("pagina")) : 1;
+            int paginaAtual = 1;
             int registrosPorPagina = 10;
+
+            if (request.getParameter("pagina") != null) {
+                try {
+                    paginaAtual = Integer.parseInt(request.getParameter("pagina"));
+                } catch (NumberFormatException e) {
+                    paginaAtual = 1;
+                }
+            }
 
             List<ModelContas> contasList;
             try {
                 contasList = daoContas.listarContas(paginaAtual, registrosPorPagina);
             } catch (SQLException e) {
                 e.printStackTrace();
-                response.getWriter().write("Erro ao buscar contas.");
+                response.setContentType("text/html; charset=UTF-8");
+                response.getWriter().write("<tr><td colspan='10'>Erro ao buscar contas: " + e.getMessage() + "</td></tr>");
                 return;
             }
 
             StringBuilder html = new StringBuilder();
-            html.append("<table class='table table-striped table-bordered' style='color: #f2a654;'>")
-                    .append("<thead>")
-                    .append("<tr>")
-                    .append("<th>ID</th>")
-                    .append("<th>Número Pedido</th>")
-                    .append("<th>Empresa</th>")
-                    .append("<th>Itens</th>")
-                    .append("<th>Valor</th>")
-                    .append("<th>Data Pedido</th>")
-                    .append("<th>Data Pagamento</th>")
-                    .append("<th>Status</th>")
-                    .append("<th>Pagamento</th>")
-                    .append("<th>Código</th>") // ⭐ NOVO
-                    .append("</tr>")
-                    .append("</thead>")
-                    .append("<tbody>");
-
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
             for (ModelContas conta : contasList) {
                 html.append("<tr>")
                         .append("<td>").append(conta.getConta_id()).append("</td>")
                         .append("<td>").append(conta.getNumero_pedido()).append("</td>")
-                        .append("<td>").append(conta.getEmpresa()).append("</td>")
-                        .append("<td>").append(conta.getItens()).append("</td>")
-                        .append("<td>").append(conta.getValor()).append("</td>")
+                        .append("<td>").append(conta.getEmpresa() != null ? conta.getEmpresa() : "").append("</td>")
+                        .append("<td>").append(conta.getItens() != null ? conta.getItens() : "").append("</td>")
+                        .append("<td>R$ ").append(String.format("%.2f", conta.getValor())).append("</td>")
                         .append("<td>").append(formatDate(conta.getData_de_pedido())).append("</td>")
                         .append("<td>").append(formatDate(conta.getData_de_pagamento())).append("</td>")
-                        .append("<td>").append(conta.getStatus()).append("</td>")
-                        .append("<td>").append(conta.getPagamento()).append("</td>")
-                        .append("<td>").append(conta.getCodigo() != null ? conta.getCodigo() : "").append("</td>") // ⭐ NOVO
+                        .append("<td>").append(conta.getStatus() != null ? conta.getStatus() : "").append("</td>")
+                        .append("<td>").append(conta.getPagamento() != null ? conta.getPagamento() : "").append("</td>")
                         .append("</tr>");
             }
 
-            html.append("</tbody>")
-                    .append("</table>");
-
-            response.setContentType("text/html");
+            response.setContentType("text/html; charset=UTF-8");
             response.getWriter().write(html.toString());
             return;
         }
 
+        // ===== AÇÃO: DELETAR CONTA =====
+        if ("deletar".equals(acao)) {
+            if (contaId != null && !contaId.isEmpty()) {
+                try {
+                    long idParaExcluir = Long.parseLong(contaId);
+                    daoContas.deleteConta(idParaExcluir);
+                    request.setAttribute("msg", "Conta com ID " + idParaExcluir + " excluída com sucesso!");
+                } catch (NumberFormatException e) {
+                    request.setAttribute("msg", "ID da conta inválido: " + contaId);
+                } catch (Exception e) {
+                    request.setAttribute("msg", "Erro ao excluir conta: " + e.getMessage());
+                }
+            } else {
+                request.setAttribute("msg", "Erro: o ID da conta não foi encontrado.");
+            }
+
+            // Redireciona para evitar reenvio do formulário
+            response.sendRedirect(request.getContextPath() + "/ServletFinanContas");
+            return;
+        }
+
+        // ===== CARREGAMENTO PADRÃO DA PÁGINA =====
         try {
+            // 1. Busca contas vencendo em 7 dias
             contasVencendo = daoContas.buscarContasVencendoEm7Dias();
             request.setAttribute("contasVencendo", contasVencendo);
 
+            // 2. Busca todas as contas com paginação
             todasContas = daoContas.listarContas(pagina, tamanho);
             request.setAttribute("todasContas", todasContas);
 
+            // 3. Calcula paginação
             int totalContas = daoContas.contarTotalContas();
             int totalPaginas = (int) Math.ceil((double) totalContas / tamanho);
             request.setAttribute("totalPaginas", totalPaginas);
             request.setAttribute("paginaAtual", pagina);
 
+            // 4. Busca contas recentes (últimos 60 dias)
             contasRecentes = daoContas.buscarContasRecentes();
             request.setAttribute("contasRecentes", contasRecentes);
 
-            if (acao != null && acao.equals("deletar")) {
-                if (contaId != null && !contaId.isEmpty()) {
-                    long idParaExcluir = Long.parseLong(contaId);
-                    try {
-                        daoContas.deleteConta(idParaExcluir);
-                        request.setAttribute("msg", "Conta com ID " + idParaExcluir + " excluída com sucesso!");
-                    } catch (Exception e) {
-                        request.setAttribute("msg", "Erro ao excluir conta: " + e.getMessage());
-                    }
-                } else {
-                    request.setAttribute("msg", "Erro: o ID da conta não foi encontrado.");
-                }
-            }
-
         } catch (SQLException e) {
+            e.printStackTrace();
             request.setAttribute("msg", "Erro ao buscar contas: " + e.getMessage());
             request.getRequestDispatcher("erro.jsp").forward(request, response);
             return;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            request.setAttribute("msg", "Erro inesperado: " + e.getMessage());
+            request.getRequestDispatcher("erro.jsp").forward(request, response);
+            return;
         }
 
+        // Encaminha para a página JSP
         request.getRequestDispatcher("/principal/contas.jsp").forward(request, response);
     }
 
+    /**
+     * Método auxiliar para formatar datas
+     */
     private String formatDate(Date date) {
         if (date != null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");

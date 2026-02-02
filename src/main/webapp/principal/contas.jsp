@@ -9,19 +9,7 @@
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<%@ page import="dao.DAOContas" %>
-<%@ page import="model.ModelVendas" %>
-<%@ page import="model.ModelContas" %>
-<%@ page import="java.util.List" %>
-<%
-    DAOContas daoContas = new DAOContas(); // Certifique-se de que a conexão esteja configurada corretamente
-    String action = request.getParameter("action");
 
-    if ("buscarContasVencendoEm7Dias".equals(action)) {
-        List<ModelContas> contasVencendo = daoContas.buscarContasVencendoEm7Dias();
-        request.setAttribute("contasVencendo", contasVencendo);
-    }
-%>
 <!DOCTYPE html>
 <html lang="pt-br">
 

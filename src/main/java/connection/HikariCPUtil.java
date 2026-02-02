@@ -1,10 +1,10 @@
 package connection;
 
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 
 public class HikariCPUtil {
@@ -15,37 +15,39 @@ public class HikariCPUtil {
         try {
             System.out.println("🔵 Inicializando HikariCP...");
 
-            HikariConfig config = new HikariConfig();
+            dataSource = new HikariDataSource();
 
             // ✅ CONFIGURAÇÃO DO DRIVER (OBRIGATÓRIO)
-            config.setDriverClassName("org.postgresql.Driver");
+            dataSource.setDriverClassName("org.postgresql.Driver");
 
             // ✅ SUAS CONFIGURAÇÕES DE BANCO DE DADOS
-            config.setJdbcUrl("jdbc:postgresql://localhost:5432/jeffe6510_nippon?sslmode=disable&tcpKeepAlive=true&socketTimeout=30");
-            config.setUsername("jeffe6510_admin");
-            config.setPassword("Aplic@tiv0");
+            dataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/jeffe6510_nippon?sslmode=disable&tcpKeepAlive=true&socketTimeout=30");
+            dataSource.setUsername("jeffe6510_admin");
+            dataSource.setPassword("Aplic@tiv0");
 
             // Configurações do pool
-            config.setMaximumPoolSize(20);           // Máximo de conexões no pool
-            config.setMinimumIdle(5);                // Mínimo de conexões ociosas
-            config.setConnectionTimeout(30000);      // Timeout para obter conexão (30s)
-            config.setIdleTimeout(600000);           // Tempo que conexão pode ficar ociosa (10min)
-            config.setMaxLifetime(1800000);          // Tempo máximo de vida da conexão (30min)
+            dataSource.setMaximumPoolSize(20);
+            dataSource.setMinimumIdle(5);
+            dataSource.setConnectionTimeout(30000);
+            dataSource.setIdleTimeout(600000);
+            dataSource.setMaxLifetime(1800000);
 
             // Configurações adicionais recomendadas
-            config.setConnectionTestQuery("SELECT 1");
-            config.setPoolName("HikariCP-Pool");
+            dataSource.setConnectionTestQuery("SELECT 1");
+            dataSource.setPoolName("HikariCP-Pool");
+
+            // ✅ CONFIGURAÇÕES DE SHUTDOWN (NOVAS)
+            dataSource.setRegisterMbeans(false);
+            dataSource.setLeakDetectionThreshold(60000);
 
             // Propriedades do PostgreSQL
-            config.addDataSourceProperty("cachePrepStmts", "true");
-            config.addDataSourceProperty("prepStmtCacheSize", "250");
-            config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-
-            dataSource = new HikariDataSource(config);
+            dataSource.addDataSourceProperty("cachePrepStmts", "true");
+            dataSource.addDataSourceProperty("prepStmtCacheSize", "250");
+            dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
             System.out.println("✅ HikariCP inicializado com sucesso!");
-            System.out.println("📊 Pool configurado: max=" + config.getMaximumPoolSize() + ", min=" + config.getMinimumIdle());
-            System.out.println("🔗 Conectado ao banco: " + config.getJdbcUrl());
+            System.out.println("📊 Pool configurado: max=" + dataSource.getMaximumPoolSize() + ", min=" + dataSource.getMinimumIdle());
+            System.out.println("🔗 Conectado ao banco: " + dataSource.getJdbcUrl());
 
         } catch (Exception e) {
             System.err.println("❌ ERRO ao inicializar HikariCP:");

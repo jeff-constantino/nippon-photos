@@ -20,6 +20,7 @@ public class DAOContas {
      * Construtor NOVO - recebe conexão gerenciada pelo Filter
      * USO RECOMENDADO
      */
+
     public DAOContas(Connection connection) {
         this.connection = connection;
         this.gerenciarTransacao = false;
@@ -29,6 +30,7 @@ public class DAOContas {
      * Construtor LEGADO - busca própria conexão
      * Mantido para compatibilidade temporária
      */
+    @Deprecated
     public DAOContas() {
         try {
             this.connection = ConnectionPool.getConnection();

@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { padding-bottom: 80px; background-color: #fff; }
+        body { padding-bottom: 80px; background-color: #020202; }
         .card-estoque { border-radius: 18px; color: #fff; cursor: pointer; transition: 0.2s; min-height: 160px; border: none; display: flex; align-items: center; justify-content: center; text-align: center; }
         .card-estoque:hover { transform: scale(1.02); filter: brightness(1.1); }
         .bg-cadastro { background-color: #ffbd00; color: #000; }

@@ -412,8 +412,8 @@
                                     <h4 class="card-title" style="text-align: center; margin-top: 2rem;">DESPESAS ADMINISTRATIVAS</h4>
                                     <div class="row">
                                         <div class="col-6 mb-3">
-                                            <label for="aluguel" style="font-size: 1.0rem;">Aluguel</label>
-                                            <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 1.0rem;" value="${aluguelValue}">
+                                            <label for="aluguel" style="font-size: 1.0rem;">aluguel</label>
+                                            <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 1.0rem;" value="${aluguelValue}" disabled>
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="salarios" style="font-size: 1.0rem;">Salários</label>

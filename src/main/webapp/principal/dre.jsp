@@ -411,11 +411,7 @@
 
                                     <h4 class="card-title" style="text-align: center; margin-top: 2rem;">DESPESAS ADMINISTRATIVAS</h4>
                                     <div class="row">
-                                        <!-- Aluguel oculto -->
-                                        <div class="col-6 mb-3 d-none">
-                                            <label for="aluguel" style="font-size: 1.0rem;">Aluguel</label>
-                                            <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 1.0rem;" value="0.00">
-                                        </div>
+
 
                                         <!-- Salários -->
                                         <div class="col-6 mb-3">
@@ -447,16 +443,12 @@
                                             <input type="text" class="form-control money" id="prestacoes" name="prestacoes" style="font-size: 1.0rem;" value="${prestacoesValue}">
                                         </div>
 
-                                        <!-- Internet oculto -->
-                                        <div class="col-6 mb-3 d-none">
-                                            <label for="internet" style="font-size: 1.0rem;">Internet</label>
-                                            <input type="text" class="form-control money" id="internet" name="internet" style="font-size: 1.0rem;" value="0.00">
-                                        </div>
+
 
                                         <!-- Outras Despesas -->
                                         <div class="col-6 mb-3">
                                             <label for="outrasDesp" style="font-size: 1.0rem;">Outras Despesas</label>
-                                            <input type="text" class="form-control money" id="outrasDesp" name="obsDesp" style="font-size: 1.0rem;" value="${obsDespValue}">
+                                            <input type="text" class="form-control money" id="outrasDesp" name="outrasDesp" style="font-size: 1.0rem;" value="${outrasDespValue}">
                                         </div>
 
                                         <!-- Observações ocupando 2 colunas -->
@@ -647,7 +639,7 @@
        CÁLCULOS
        =============================== */
     const INPUT_IMPOSTOS = ['icms', 'pis', 'cofins', 'inss', 'irpj', 'csll'];
-    const INPUT_DESPESAS_ADM = ['aluguel', 'salarios', 'contas', 'despesasGerais', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp'];
+    const INPUT_DESPESAS_ADM = ['salarios', 'contas', 'despesasGerais', 'bonificacoes', 'prestacoes', 'outrasDesp'];
 
     function calculateTotalImpostos() {
         let total = 0;
@@ -739,7 +731,7 @@
        =============================== */
     const EDITABLE_MONEY_FIELDS = [
         'icms', 'pis', 'cofins', 'inss', 'irpj', 'csll',
-        'aluguel', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp'
+        'bonificacoes', 'prestacoes', 'outrasDesp'
     ];
 
     $('#formDre').on('submit', function (event) {
@@ -790,10 +782,10 @@
             'inss': '${inssValue}',
             'irpj': '${irpjValue}',
             'csll': '${csllValue}',
-            'aluguel': '${aluguelValue}',
+
             'bonificacoes': '${bonificacoesValue}',
             'prestacoes': '${prestacoesValue}',
-            'internet': '${internetValue}',
+
             'outrasDesp': '${outrasDespValue}',
             'obsDesp': '${obsDespValue}'
         };
@@ -804,7 +796,7 @@
             if (valor && valor.trim() !== '' && !valor.includes('$' + '{')) {
                 const input = document.getElementById(id);
                 if (input) {
-                    const valorNumerico = parseFloat(valor.replace(',', '.'));
+                    const valorNumerico = parseFloat(valor.replace(/\./g, '').replace(',', '.'));
                     if (!isNaN(valorNumerico)) {
                         input.value = 'R$ ' + valorNumerico.toLocaleString('pt-BR', {
                             minimumFractionDigits: 2,

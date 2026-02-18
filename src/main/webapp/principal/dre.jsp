@@ -377,7 +377,7 @@
                                     <h4 class="card-title" style="text-align: center">IMPOSTOS SOBRE VENDAS</h4>
                                     <div class="row">
                                         <div class="col-6 mb-3">
-                                            <label for="icms" style="font-size: 1.0rem;">ICMS</label>
+                                            <label for="icms" style="font-size: 1.0rem;">ISS</label>
                                             <input type="text" class="form-control money" id="icms" name="icms" style="font-size: 1.0rem;" value="${icmsValue}">
                                         </div>
                                         <div class="col-6 mb-3">
@@ -441,8 +441,18 @@
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="outrasDesp" style="font-size: 1.0rem;">Outras Despesas</label>
-                                            <input type="text" class="form-control money" id="outrasDesp" name="outrasDesp" style="font-size: 1.0rem;" value="${outrasDespValue}">
+                                            <input type="text" class="form-control money" id="outrasDesp" name="obsDesp" style="font-size: 1.0rem;" value="${obsDespValue}">
                                         </div>
+                                        <div class="col-6 mb-3">
+                                            <label for="obsDesp" style="font-size: 1.0rem;">Observações</label>
+                                            <textarea
+                                                    class="form-control"
+                                                    id="obsDesp"
+                                                    name="obsDesp"
+                                                    rows="4"><c:out value="${obsDespValue}" /></textarea>
+                                        </div>
+
+
                                     </div>
                                     <hr>
                                     <div class="row">
@@ -768,7 +778,8 @@
             'bonificacoes': '${bonificacoesValue}',
             'prestacoes': '${prestacoesValue}',
             'internet': '${internetValue}',
-            'outrasDesp': '${outrasDespValue}'
+            'outrasDesp': '${outrasDespValue}',
+            'obsDesp': '${obsDespValue}'
         };
 
         Object.keys(campos).forEach(id => {

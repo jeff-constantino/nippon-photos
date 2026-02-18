@@ -53,8 +53,18 @@ public class ModelDre implements Serializable {
     private BigDecimal despesadin;
     private BigDecimal sangria;
     private BigDecimal saldo;
+    private String obsDesp;
 
     // ===== GETTERS E SETTERS =====
+
+
+    public String getObsDesp() {
+        return obsDesp;
+    }
+
+    public void setObsDesp(String obsDesp) {
+        this.obsDesp = obsDesp;
+    }
 
     public Long getId_dre() {
         return id_dre;

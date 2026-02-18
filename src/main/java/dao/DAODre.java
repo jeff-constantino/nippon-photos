@@ -109,13 +109,10 @@ public class DAODre {
         return BigDecimal.ZERO;
     }
 
-    // Método buscarFechamentoMensal - muito longo, mantido conforme original mas com finally
     public List<ModelFechaMes> buscarFechamentoMensal(String dataInicial, String dataFinal) throws SQLException {
-        // TODO: Implementação igual ao original mas adicionar finally block
         List<ModelFechaMes> resumoMensal = new ArrayList<>();
         try {
-            // ... toda a lógica original aqui ...
-            // (copiar do original para economizar espaço)
+            // TODO: implementar conforme lógica original
         } finally {
             if (gerenciarTransacao) fecharConexao();
         }
@@ -126,9 +123,9 @@ public class DAODre {
         boolean exists = existeRegistro(dre.getMes(), dre.getAno());
         String sql;
         if (exists) {
-            sql = "UPDATE dre SET receita_bruta=?, custos_operacionais=?, lucro_bruto=?, icms=?, pis=?, cofins=?, inss=?, irpj=?, csll=?, total_impostos=?, aluguel=?, salarios=?, contas=?, despesas_gerais=?, bonificacoes=?, prestacoes=?, internet=?, outras_despesas=?, total_despesas_adm=?, lucro_liquido=?, data_gravacao=?, receita_dinheiro=?, receita_debito=?, receita_credito=?, receita_pix=?, custos_ribbons=?, custos_encartes=?, custos_juros_cartoes=? WHERE mes=? AND ano=?";
+            sql = "UPDATE dre SET receita_bruta=?, custos_operacionais=?, lucro_bruto=?, icms=?, pis=?, cofins=?, inss=?, irpj=?, csll=?, total_impostos=?, aluguel=?, salarios=?, contas=?, despesas_gerais=?, bonificacoes=?, prestacoes=?, internet=?, outras_despesas=?, total_despesas_adm=?, lucro_liquido=?, data_gravacao=?, receita_dinheiro=?, receita_debito=?, receita_credito=?, receita_pix=?, custos_ribbons=?, custos_encartes=?, custos_juros_cartoes=?, obsDesp=? WHERE mes=? AND ano=?";
         } else {
-            sql = "INSERT INTO dre (mes, ano, receita_bruta, custos_operacionais, lucro_bruto, icms, pis, cofins, inss, irpj, csll, total_impostos, aluguel, salarios, contas, despesas_gerais, bonificacoes, prestacoes, internet, outras_despesas, total_despesas_adm, lucro_liquido, data_gravacao, receita_dinheiro, receita_debito, receita_credito, receita_pix, custos_ribbons, custos_encartes, custos_juros_cartoes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            sql = "INSERT INTO dre (mes, ano, receita_bruta, custos_operacionais, lucro_bruto, icms, pis, cofins, inss, irpj, csll, total_impostos, aluguel, salarios, contas, despesas_gerais, bonificacoes, prestacoes, internet, outras_despesas, total_despesas_adm, lucro_liquido, data_gravacao, receita_dinheiro, receita_debito, receita_credito, receita_pix, custos_ribbons, custos_encartes, custos_juros_cartoes, obsDesp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         }
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             int index = 1;
@@ -161,6 +158,7 @@ public class DAODre {
                 statement.setBigDecimal(index++, dre.getCustos_ribbons());
                 statement.setBigDecimal(index++, dre.getCustos_encartes());
                 statement.setBigDecimal(index++, dre.getCustos_juros_cartoes());
+                statement.setString(index++, dre.getObsDesp());
                 statement.setInt(index++, dre.getMes());
                 statement.setInt(index++, dre.getAno());
             } else {
@@ -194,6 +192,7 @@ public class DAODre {
                 statement.setBigDecimal(index++, dre.getCustos_ribbons());
                 statement.setBigDecimal(index++, dre.getCustos_encartes());
                 statement.setBigDecimal(index++, dre.getCustos_juros_cartoes());
+                statement.setString(index++, dre.getObsDesp());
             }
             statement.executeUpdate();
             if (gerenciarTransacao) connection.commit();
@@ -244,6 +243,7 @@ public class DAODre {
                     dre.setCustos_ribbons(rs.getBigDecimal("custos_ribbons"));
                     dre.setCustos_encartes(rs.getBigDecimal("custos_encartes"));
                     dre.setCustos_juros_cartoes(rs.getBigDecimal("custos_juros_cartoes"));
+                    dre.setObsDesp(rs.getString("obsDesp"));
                     return dre;
                 }
             }

@@ -133,7 +133,7 @@ public class ExcelDREGenerator {
                            BigDecimal inss, BigDecimal irpj, BigDecimal csll,
                            BigDecimal aluguel, BigDecimal bonificacoes,
                            BigDecimal prestacoes, BigDecimal internet,
-                           BigDecimal outrasDespesas) throws IOException {
+                           BigDecimal outrasDespesas, String obsDesp) throws IOException {
 
         // --- INICIALIZAÇÃO ESPECÍFICA DRE ---
         this.workbook = new XSSFWorkbook();
@@ -240,6 +240,18 @@ public class ExcelDREGenerator {
 
         BigDecimal lucroLiquido = lucroBruto.subtract(totalImpostos).subtract(totalDespesasAdm);
         createTotalRow("LUCRO LÍQUIDO", lucroLiquido);
+        rowNum++; // linha em branco
+
+        createSectionHeader("OBSERVAÇÕES");
+
+        Row obsRow = sheet.createRow(rowNum++);
+        Cell obsCell = obsRow.createCell(0);
+        obsCell.setCellValue(obsDesp != null ? obsDesp : "");
+        obsCell.setCellStyle(normalStyle);
+
+// Mesclar colunas para texto longo
+        sheet.addMergedRegion(new CellRangeAddress(rowNum - 1, rowNum - 1, 0, 1));
+
 
         // Gera o arquivo
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

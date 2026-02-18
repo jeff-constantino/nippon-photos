@@ -411,50 +411,65 @@
 
                                     <h4 class="card-title" style="text-align: center; margin-top: 2rem;">DESPESAS ADMINISTRATIVAS</h4>
                                     <div class="row">
-                                        <div class="col-6 mb-3">
-                                            <label for="aluguel" style="font-size: 1.0rem;" hidden="hidden">aluguel</label>
-                                            <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 1.0rem;" value="${aluguelValue}" disabled hidden="hidden">
+                                        <!-- Aluguel oculto -->
+                                        <div class="col-6 mb-3 d-none">
+                                            <label for="aluguel" style="font-size: 1.0rem;">Aluguel</label>
+                                            <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 1.0rem;" value="${aluguelValue}">
                                         </div>
+
+                                        <!-- Salários -->
                                         <div class="col-6 mb-3">
                                             <label for="salarios" style="font-size: 1.0rem;">Salários</label>
                                             <input type="text" class="form-control money" id="salarios" name="salarios" style="font-size: 1.0rem; color: black" value="${valorTotalSalarios}" readonly>
                                         </div>
+
+                                        <!-- Contas -->
                                         <div class="col-6 mb-3">
                                             <label for="contas" style="font-size: 1.0rem;">Contas</label>
                                             <input type="text" class="form-control money" id="contas" name="contas" style="font-size: 1.0rem; color: black" value="${valorTotalContas}" readonly>
                                         </div>
+
+                                        <!-- Despesas Gerais -->
                                         <div class="col-6 mb-3">
                                             <label for="despesasGerais" style="font-size: 1.0rem;">Despesas Gerais</label>
                                             <input type="text" class="form-control money" id="despesasGerais" name="despesasGerais" style="font-size: 1.0rem; color: black" value="${valorTotalDespesas}" readonly>
                                         </div>
+
+                                        <!-- Bonificações -->
                                         <div class="col-6 mb-3">
                                             <label for="bonificacoes" style="font-size: 1.0rem;">Bonificações</label>
                                             <input type="text" class="form-control money" id="bonificacoes" name="bonificacoes" style="font-size: 1.0rem;" value="${bonificacoesValue}">
                                         </div>
+
+                                        <!-- Prestações -->
                                         <div class="col-6 mb-3">
                                             <label for="prestacoes" style="font-size: 1.0rem;">Prestações de Equipamentos</label>
                                             <input type="text" class="form-control money" id="prestacoes" name="prestacoes" style="font-size: 1.0rem;" value="${prestacoesValue}">
                                         </div>
-                                        <div class="col-6 mb-3">
-                                            <label for="internet" style="font-size: 1.0rem;" hidden="hidden">Internet</label>
-                                            <input type="text" class="form-control money" id="internet" name="internet" style="font-size: 1.0rem;" value="${internetValue}" disabled hidden="hidden">
+
+                                        <!-- Internet oculto -->
+                                        <div class="col-6 mb-3 d-none">
+                                            <label for="internet" style="font-size: 1.0rem;">Internet</label>
+                                            <input type="text" class="form-control money" id="internet" name="internet" style="font-size: 1.0rem;" value="${internetValue}">
                                         </div>
+
+                                        <!-- Outras Despesas -->
                                         <div class="col-6 mb-3">
                                             <label for="outrasDesp" style="font-size: 1.0rem;">Outras Despesas</label>
                                             <input type="text" class="form-control money" id="outrasDesp" name="obsDesp" style="font-size: 1.0rem;" value="${obsDespValue}">
                                         </div>
+
+                                        <!-- Observações ocupando 2 colunas -->
                                         <div class="col-12 mb-3">
                                             <label for="obsDesp" style="font-size: 1.0rem;">Observações</label>
                                             <textarea
                                                     class="form-control"
                                                     id="obsDesp"
                                                     name="obsDesp"
-                                                    rows="4"
-                                                    style="font-size: 1.0rem;"><c:out value="${obsDespValue}" /></textarea>
+                                                    rows="4"><c:out value="${obsDespValue}" /></textarea>
                                         </div>
-
-
                                     </div>
+
                                     <hr>
                                     <div class="row">
                                         <div class="col-12 mb-3">

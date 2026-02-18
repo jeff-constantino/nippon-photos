@@ -123,9 +123,9 @@ public class DAODre {
         boolean exists = existeRegistro(dre.getMes(), dre.getAno());
         String sql;
         if (exists) {
-            sql = "UPDATE dre SET receita_bruta=?, custos_operacionais=?, lucro_bruto=?, icms=?, pis=?, cofins=?, inss=?, irpj=?, csll=?, total_impostos=?, aluguel=?, salarios=?, contas=?, despesas_gerais=?, bonificacoes=?, prestacoes=?, internet=?, outras_despesas=?, total_despesas_adm=?, lucro_liquido=?, data_gravacao=?, receita_dinheiro=?, receita_debito=?, receita_credito=?, receita_pix=?, custos_ribbons=?, custos_encartes=?, custos_juros_cartoes=?, obsDesp=? WHERE mes=? AND ano=?";
+            sql = "UPDATE dre SET receita_bruta=?, custos_operacionais=?, lucro_bruto=?, icms=?, pis=?, cofins=?, inss=?, irpj=?, csll=?, total_impostos=?, salarios=?, contas=?, despesas_gerais=?, bonificacoes=?, prestacoes=?, outras_despesas=?, total_despesas_adm=?, lucro_liquido=?, data_gravacao=?, receita_dinheiro=?, receita_debito=?, receita_credito=?, receita_pix=?, custos_ribbons=?, custos_encartes=?, custos_juros_cartoes=?, obsDesp=? WHERE mes=? AND ano=?";
         } else {
-            sql = "INSERT INTO dre (mes, ano, receita_bruta, custos_operacionais, lucro_bruto, icms, pis, cofins, inss, irpj, csll, total_impostos, aluguel, salarios, contas, despesas_gerais, bonificacoes, prestacoes, internet, outras_despesas, total_despesas_adm, lucro_liquido, data_gravacao, receita_dinheiro, receita_debito, receita_credito, receita_pix, custos_ribbons, custos_encartes, custos_juros_cartoes, obsDesp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            sql = "INSERT INTO dre (mes, ano, receita_bruta, custos_operacionais, lucro_bruto, icms, pis, cofins, inss, irpj, csll, total_impostos, salarios, contas, despesas_gerais, bonificacoes, prestacoes, outras_despesas, total_despesas_adm, lucro_liquido, data_gravacao, receita_dinheiro, receita_debito, receita_credito, receita_pix, custos_ribbons, custos_encartes, custos_juros_cartoes, obsDesp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         }
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -141,13 +141,11 @@ public class DAODre {
                 statement.setBigDecimal(index++, dre.getIrpj());
                 statement.setBigDecimal(index++, dre.getCsll());
                 statement.setBigDecimal(index++, dre.getTotal_impostos());
-                statement.setBigDecimal(index++, dre.getAluguel());
                 statement.setBigDecimal(index++, dre.getSalarios());
                 statement.setBigDecimal(index++, dre.getContas());
                 statement.setBigDecimal(index++, dre.getDespesas_gerais());
                 statement.setBigDecimal(index++, dre.getBonificacoes());
                 statement.setBigDecimal(index++, dre.getPrestacoes());
-                statement.setBigDecimal(index++, dre.getInternet());
                 statement.setBigDecimal(index++, dre.getOutras_despesas());
                 statement.setBigDecimal(index++, dre.getTotal_despesas_adm());
                 statement.setBigDecimal(index++, dre.getLucro_liquido());
@@ -175,13 +173,11 @@ public class DAODre {
                 statement.setBigDecimal(index++, dre.getIrpj());
                 statement.setBigDecimal(index++, dre.getCsll());
                 statement.setBigDecimal(index++, dre.getTotal_impostos());
-                statement.setBigDecimal(index++, dre.getAluguel());
                 statement.setBigDecimal(index++, dre.getSalarios());
                 statement.setBigDecimal(index++, dre.getContas());
                 statement.setBigDecimal(index++, dre.getDespesas_gerais());
                 statement.setBigDecimal(index++, dre.getBonificacoes());
                 statement.setBigDecimal(index++, dre.getPrestacoes());
-                statement.setBigDecimal(index++, dre.getInternet());
                 statement.setBigDecimal(index++, dre.getOutras_despesas());
                 statement.setBigDecimal(index++, dre.getTotal_despesas_adm());
                 statement.setBigDecimal(index++, dre.getLucro_liquido());
@@ -194,8 +190,6 @@ public class DAODre {
                 statement.setBigDecimal(index++, dre.getCustos_encartes());
                 statement.setBigDecimal(index++, dre.getCustos_juros_cartoes());
                 statement.setString(index++, dre.getObsDesp());
-                statement.setInt(index++, dre.getMes()); // adicionando mes
-                statement.setInt(index++, dre.getAno()); // adicionando ano
             }
             statement.executeUpdate();
             if (gerenciarTransacao) connection.commit();
@@ -228,13 +222,13 @@ public class DAODre {
                     dre.setIrpj(rs.getBigDecimal("irpj"));
                     dre.setCsll(rs.getBigDecimal("csll"));
                     dre.setTotal_impostos(rs.getBigDecimal("total_impostos"));
-                    dre.setAluguel(rs.getBigDecimal("aluguel"));
+
                     dre.setSalarios(rs.getBigDecimal("salarios"));
                     dre.setContas(rs.getBigDecimal("contas"));
                     dre.setDespesas_gerais(rs.getBigDecimal("despesas_gerais"));
                     dre.setBonificacoes(rs.getBigDecimal("bonificacoes"));
                     dre.setPrestacoes(rs.getBigDecimal("prestacoes"));
-                    dre.setInternet(rs.getBigDecimal("internet"));
+
                     dre.setOutras_despesas(rs.getBigDecimal("outras_despesas"));
                     dre.setTotal_despesas_adm(rs.getBigDecimal("total_despesas_adm"));
                     dre.setLucro_liquido(rs.getBigDecimal("lucro_liquido"));

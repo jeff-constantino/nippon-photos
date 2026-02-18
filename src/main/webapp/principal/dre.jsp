@@ -414,7 +414,7 @@
                                         <!-- Aluguel oculto -->
                                         <div class="col-6 mb-3 d-none">
                                             <label for="aluguel" style="font-size: 1.0rem;">Aluguel</label>
-                                            <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 1.0rem;" value="${aluguelValue}">
+                                            <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 1.0rem;" value="0.00">
                                         </div>
 
                                         <!-- Salários -->
@@ -450,7 +450,7 @@
                                         <!-- Internet oculto -->
                                         <div class="col-6 mb-3 d-none">
                                             <label for="internet" style="font-size: 1.0rem;">Internet</label>
-                                            <input type="text" class="form-control money" id="internet" name="internet" style="font-size: 1.0rem;" value="${internetValue}">
+                                            <input type="text" class="form-control money" id="internet" name="internet" style="font-size: 1.0rem;" value="0.00">
                                         </div>
 
                                         <!-- Outras Despesas -->

@@ -413,7 +413,7 @@
                                     <div class="row">
                                         <div class="col-6 mb-3">
                                             <label for="aluguel" style="font-size: 1.0rem;">aluguel</label>
-                                            <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 1.0rem;" value="${aluguelValue}" disabled>
+                                            <input type="text" class="form-control money" id="aluguel" name="aluguel" style="font-size: 1.0rem;" value="${aluguelValue}" disabled hidden="hidden">
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="salarios" style="font-size: 1.0rem;">Salários</label>
@@ -437,7 +437,7 @@
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="internet" style="font-size: 1.0rem;">Internet</label>
-                                            <input type="text" class="form-control money" id="internet" name="internet" style="font-size: 1.0rem;" value="${internetValue}">
+                                            <input type="text" class="form-control money" id="internet" name="internet" style="font-size: 1.0rem;" value="${internetValue}" disabled hidden="hidden">
                                         </div>
                                         <div class="col-6 mb-3">
                                             <label for="outrasDesp" style="font-size: 1.0rem;">Outras Despesas</label>

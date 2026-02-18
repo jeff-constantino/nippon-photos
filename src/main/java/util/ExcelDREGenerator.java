@@ -131,8 +131,8 @@ public class ExcelDREGenerator {
                            BigDecimal totalImpostos, BigDecimal totalDespesasAdm,
                            BigDecimal icms, BigDecimal pis, BigDecimal cofins,
                            BigDecimal inss, BigDecimal irpj, BigDecimal csll,
-                           BigDecimal aluguel, BigDecimal bonificacoes,
-                           BigDecimal prestacoes, BigDecimal internet,
+                           BigDecimal bonificacoes,
+                           BigDecimal prestacoes,
                            BigDecimal outrasDespesas, String obsDesp) throws IOException {
 
         // --- INICIALIZAÇÃO ESPECÍFICA DRE ---
@@ -219,13 +219,13 @@ public class ExcelDREGenerator {
         BigDecimal contas = fechamento.getValor_total_contas() != null ? fechamento.getValor_total_contas() : BigDecimal.ZERO;
         BigDecimal despesas = fechamento.getValor_total_despesas() != null ? fechamento.getValor_total_despesas() : BigDecimal.ZERO;
 
-        createDataRow("Aluguel", aluguel);
+
         createDataRow("Salários", totalSalarios);
         createDataRow("Contas", contas);
         createDataRow("Despesas Gerais", despesas);
         createDataRow("Bonificações", bonificacoes);
         createDataRow("Prestações de Equipamentos", prestacoes);
-        createDataRow("Internet", internet);
+
         createDataRow("Outras Despesas", outrasDespesas);
         createSubtotalRow("TOTAL DESPESAS ADMINISTRATIVAS", totalDespesasAdm);
 

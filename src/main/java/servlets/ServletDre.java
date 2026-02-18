@@ -131,10 +131,10 @@ public class ServletDre extends ServletGenericUtil {
             request.setAttribute("irpjValue", df.format(dreExistente.getIrpj()));
             request.setAttribute("csllValue", df.format(dreExistente.getCsll()));
 
-            request.setAttribute("aluguelValue", df.format(dreExistente.getAluguel()));
+
             request.setAttribute("bonificacoesValue", df.format(dreExistente.getBonificacoes()));
             request.setAttribute("prestacoesValue", df.format(dreExistente.getPrestacoes()));
-            request.setAttribute("internetValue", df.format(dreExistente.getInternet()));
+
             request.setAttribute("outrasDespValue", df.format(dreExistente.getOutras_despesas()));
             request.setAttribute("obsDespValue", dreExistente.getObsDesp());
 
@@ -217,21 +217,21 @@ public class ServletDre extends ServletGenericUtil {
             BigDecimal irpj = parseBigDecimal(request.getParameter("irpj"));
             BigDecimal csll = parseBigDecimal(request.getParameter("csll"));
 
-            BigDecimal aluguel = parseBigDecimal(request.getParameter("aluguel"));
+
             BigDecimal salarios = parseBigDecimal(request.getParameter("salarios"));
             BigDecimal contas = parseBigDecimal(request.getParameter("contas"));
             BigDecimal despesasGerais = parseBigDecimal(request.getParameter("despesasGerais"));
             BigDecimal bonificacoes = parseBigDecimal(request.getParameter("bonificacoes"));
             BigDecimal prestacoes = parseBigDecimal(request.getParameter("prestacoes"));
-            BigDecimal internet = parseBigDecimal(request.getParameter("internet"));
+
             BigDecimal outrasDesp = parseBigDecimal(request.getParameter("outrasDesp"));
             String obsDesp = Optional.ofNullable(request.getParameter("obsDesp")).orElse("");
 
 
 
             BigDecimal totalImpostos = icms.add(pis).add(cofins).add(inss).add(irpj).add(csll);
-            BigDecimal totalDespesasAdm = aluguel.add(salarios).add(contas).add(despesasGerais)
-                    .add(bonificacoes).add(prestacoes).add(internet).add(outrasDesp);
+            BigDecimal totalDespesasAdm = salarios.add(contas).add(despesasGerais)
+                    .add(bonificacoes).add(prestacoes).add(outrasDesp);
 
             BigDecimal lucroBruto = receitaBruta.subtract(custosOperacionais);
             BigDecimal lucroLiquido = lucroBruto.subtract(totalImpostos).subtract(totalDespesasAdm);
@@ -251,13 +251,13 @@ public class ServletDre extends ServletGenericUtil {
             dre.setCsll(csll);
             dre.setTotal_impostos(totalImpostos);
 
-            dre.setAluguel(aluguel);
+
             dre.setSalarios(salarios);
             dre.setContas(contas);
             dre.setDespesas_gerais(despesasGerais);
             dre.setBonificacoes(bonificacoes);
             dre.setPrestacoes(prestacoes);
-            dre.setInternet(internet);
+
             dre.setOutras_despesas(outrasDesp);
             dre.setObsDesp(obsDesp);
             dre.setTotal_despesas_adm(totalDespesasAdm);
@@ -448,10 +448,10 @@ public class ServletDre extends ServletGenericUtil {
 
         BigDecimal totalImpostos = icms.add(pis).add(cofins).add(inss).add(irpj).add(csll);
 
-        BigDecimal aluguel = parseBigDecimal(request.getParameter("aluguel"));
+
         BigDecimal bonificacoes = parseBigDecimal(request.getParameter("bonificacoes"));
         BigDecimal prestacoes = parseBigDecimal(request.getParameter("prestacoes"));
-        BigDecimal internet = parseBigDecimal(request.getParameter("internet"));
+
         BigDecimal outrasDespesas = parseBigDecimal(request.getParameter("outrasDesp"));
         String obsDesp = Optional.ofNullable(request.getParameter("obsDesp")).orElse("");
 
@@ -461,8 +461,8 @@ public class ServletDre extends ServletGenericUtil {
         BigDecimal contas = Optional.ofNullable(fechamento.getValor_total_contas()).orElse(BigDecimal.ZERO);
         BigDecimal despesas = Optional.ofNullable(fechamento.getValor_total_despesas()).orElse(BigDecimal.ZERO);
 
-        BigDecimal totalDespesasAdm = aluguel.add(salarios).add(contas).add(despesas)
-                .add(bonificacoes).add(prestacoes).add(internet).add(outrasDespesas);
+        BigDecimal totalDespesasAdm = salarios.add(contas).add(despesas)
+                .add(bonificacoes).add(prestacoes).add(outrasDespesas);
 
         SimpleDateFormat sdfMesAno = new SimpleDateFormat("MMMM yyyy", new Locale("pt", "BR"));
         LocalDate dataRef = LocalDate.of(ano, mes, 1);
@@ -473,7 +473,7 @@ public class ServletDre extends ServletGenericUtil {
             byte[] excelBytes = generator.gerarDRE(
                     fechamento, mesAno, totalImpostos, totalDespesasAdm,
                     icms, pis, cofins, inss, irpj, csll,
-                    aluguel, bonificacoes, prestacoes, internet, outrasDespesas, obsDesp
+                    bonificacoes, prestacoes, outrasDespesas, obsDesp
             );
 
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

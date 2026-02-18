@@ -24,13 +24,13 @@ public class ModelDre implements Serializable {
     private BigDecimal total_impostos;
 
     // Despesas administrativas
-
+    private BigDecimal aluguel;
     private BigDecimal salarios;
     private BigDecimal contas;
     private BigDecimal despesas_gerais;
     private BigDecimal bonificacoes;
     private BigDecimal prestacoes;
-
+    private BigDecimal internet;
     private BigDecimal outras_despesas;
     private BigDecimal total_despesas_adm;
 
@@ -170,7 +170,13 @@ public class ModelDre implements Serializable {
         this.total_impostos = total_impostos;
     }
 
+    public BigDecimal getAluguel() {
+        return aluguel;
+    }
 
+    public void setAluguel(BigDecimal aluguel) {
+        this.aluguel = aluguel;
+    }
 
     public BigDecimal getSalarios() {
         return salarios;
@@ -212,7 +218,13 @@ public class ModelDre implements Serializable {
         this.prestacoes = prestacoes;
     }
 
+    public BigDecimal getInternet() {
+        return internet;
+    }
 
+    public void setInternet(BigDecimal internet) {
+        this.internet = internet;
+    }
 
     public BigDecimal getOutras_despesas() {
         return outras_despesas;

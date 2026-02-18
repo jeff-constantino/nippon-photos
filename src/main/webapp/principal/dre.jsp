@@ -443,13 +443,14 @@
                                             <label for="outrasDesp" style="font-size: 1.0rem;">Outras Despesas</label>
                                             <input type="text" class="form-control money" id="outrasDesp" name="obsDesp" style="font-size: 1.0rem;" value="${obsDespValue}">
                                         </div>
-                                        <div class="col-6 mb-3">
+                                        <div class="col-12 mb-3">
                                             <label for="obsDesp" style="font-size: 1.0rem;">Observações</label>
                                             <textarea
                                                     class="form-control"
                                                     id="obsDesp"
                                                     name="obsDesp"
-                                                    rows="4"><c:out value="${obsDespValue}" /></textarea>
+                                                    rows="4"
+                                                    style="font-size: 1.0rem;"><c:out value="${obsDespValue}" /></textarea>
                                         </div>
 
 

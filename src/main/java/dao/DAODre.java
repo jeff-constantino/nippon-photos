@@ -127,6 +127,7 @@ public class DAODre {
         } else {
             sql = "INSERT INTO dre (mes, ano, receita_bruta, custos_operacionais, lucro_bruto, icms, pis, cofins, inss, irpj, csll, total_impostos, aluguel, salarios, contas, despesas_gerais, bonificacoes, prestacoes, internet, outras_despesas, total_despesas_adm, lucro_liquido, data_gravacao, receita_dinheiro, receita_debito, receita_credito, receita_pix, custos_ribbons, custos_encartes, custos_juros_cartoes, obsDesp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         }
+
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             int index = 1;
             if (exists) {
@@ -193,6 +194,8 @@ public class DAODre {
                 statement.setBigDecimal(index++, dre.getCustos_encartes());
                 statement.setBigDecimal(index++, dre.getCustos_juros_cartoes());
                 statement.setString(index++, dre.getObsDesp());
+                statement.setInt(index++, dre.getMes()); // adicionando mes
+                statement.setInt(index++, dre.getAno()); // adicionando ano
             }
             statement.executeUpdate();
             if (gerenciarTransacao) connection.commit();

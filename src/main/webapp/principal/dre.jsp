@@ -686,7 +686,7 @@
     function initializeCalculations() {
         recalculateAll();
         const camposImpostos = INPUT_IMPOSTOS.map(id => document.getElementById(id)).filter(e => e);
-        const camposDespesas = ['aluguel', 'bonificacoes', 'prestacoes', 'internet', 'outrasDesp']
+        const camposDespesas = ['bonificacoes', 'prestacoes', 'outrasDesp']
             .map(id => document.getElementById(id)).filter(e => e);
 
         camposImpostos.forEach(input => {
@@ -798,10 +798,8 @@
                 if (input) {
                     const valorNumerico = parseFloat(valor.replace(/\./g, '').replace(',', '.'));
                     if (!isNaN(valorNumerico)) {
-                        input.value = 'R$ ' + valorNumerico.toLocaleString('pt-BR', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        });
+                        $(input).maskMoney('mask', valorNumerico);
+                        $(input).trigger('change'); // força o recálculo se necessário
 
                     }
                 }
@@ -810,7 +808,7 @@
 
         setTimeout(() => {
             recalculateAll();
-        }, 100);
+        }, 300);
     }
 </script>
 

@@ -798,8 +798,8 @@
             'csll': '${csllValue}',
             'bonificacoes': '${bonificacoesValue}',
             'prestacoes': '${prestacoesValue}',
-            'outrasDesp': '${outrasDespValue}',
-            'obsDesp': '${obsDespValue}'
+            'outrasDesp': '${outrasDespValue}'
+
         };
 
         console.log('Valores recebidos do servidor:', campos);

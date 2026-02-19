@@ -769,6 +769,7 @@
         paramsMap.totalImpostos = parseMoneyToNumber(document.getElementById('totalImpostos')?.value || '0');
         paramsMap.totalDespesasAdm = parseMoneyToNumber(document.getElementById('totalDespesasAdm')?.value || '0');
         paramsMap.lucroLqd = parseMoneyToNumber(document.getElementById('lucroLqd')?.value || '0');
+        paramsMap.obsDesp = document.getElementById('obsDesp')?.value || '';
 
         const params = new URLSearchParams(paramsMap);
         window.location.href = '<%= request.getContextPath() %>/ServletDre?' + params.toString();

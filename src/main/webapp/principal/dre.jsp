@@ -642,30 +642,22 @@
     const INPUT_DESPESAS_ADM = ['salarios', 'contas', 'despesasGerais', 'bonificacoes', 'prestacoes', 'outrasDesp'];
 
     function calculateTotalImpostos() {
-        console.log('=== calculateTotalImpostos chamada ===');
         let total = 0;
         INPUT_IMPOSTOS.forEach(id => {
             const element = document.getElementById(id);
-            const valor = element ? parseMoneyToNumber(element.value) : 0;
-            console.log(`  Imposto ${id}: ${valor}`);
-            if (element) total += valor;
+            if (element) total += parseMoneyToNumber(element.value);
         });
-        console.log('  Total Impostos:', total);
         document.getElementById('totalImpostos').value = formatToCurrency(total);
         document.getElementById('impostoVenda').value = formatToCurrency(total);
         calculateLucroLiquido();
     }
 
     function calculateTotalDespesasAdm() {
-        console.log('=== calculateTotalDespesasAdm chamada ===');
         let total = 0;
         INPUT_DESPESAS_ADM.forEach(id => {
             const element = document.getElementById(id);
-            const valor = element ? parseMoneyToNumber(element.value) : 0;
-            console.log(`  Despesa ${id}: ${valor}`);
-            if (element) total += valor;
+            if (element) total += parseMoneyToNumber(element.value);
         });
-        console.log('  Total Despesas Adm:', total);
         document.getElementById('totalDespesasAdm').value = formatToCurrency(total);
         document.getElementById('despAdm').value = formatToCurrency(total);
         calculateLucroLiquido();
@@ -675,11 +667,10 @@
         const lucroBruto = parseMoneyToNumber(document.getElementById('lucroBrt')?.value);
         const impostoVenda = parseMoneyToNumber(document.getElementById('impostoVenda')?.value);
         const despAdm = parseMoneyToNumber(document.getElementById('despAdm')?.value);
-        console.log('=== calculateLucroLiquido ===');
-        console.log('  lucroBruto:', lucroBruto, '| impostos:', impostoVenda, '| despesas:', despAdm);
+
 
         const lucro = lucroBruto - impostoVenda - despAdm;
-        console.log('  Lucro Líquido:', lucro);
+
 
         const campo = document.getElementById('lucroLqd');
         if (campo) {
@@ -787,8 +778,6 @@
        PREENCHER CAMPOS DA DRE CARREGADA
        =============================== */
     function preencherCamposDRE() {
-        console.log('=== preencherCamposDRE chamada ===');
-
         const campos = {
             'icms': '${icmsValue}',
             'pis': '${pisValue}',
@@ -799,29 +788,20 @@
             'bonificacoes': '${bonificacoesValue}',
             'prestacoes': '${prestacoesValue}',
             'outrasDesp': '${outrasDespValue}'
-
         };
-
-        console.log('Valores recebidos do servidor:', campos);
 
         Object.keys(campos).forEach(id => {
             const valor = campos[id];
-            console.log(`Campo: ${id} | Valor: ${valor}`);
-
             if (valor && valor.trim() !== '' && !valor.includes('$' + '{')) {
                 const input = document.getElementById(id);
-                console.log(`Elemento encontrado para ${id}:`, input);
                 if (input) {
                     $(input).maskMoney('mask', parseFloat(valor.replace(/\./g, '').replace(',', '.')));
                     $(input).trigger('change');
                 }
-            } else {
-                console.log(`Campo ${id} ignorado — valor vazio ou não resolvido pelo JSP`);
             }
         });
 
         setTimeout(() => {
-            console.log('=== recalculateAll chamado ===');
             recalculateAll();
         }, 300);
     }

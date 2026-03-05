@@ -1,8 +1,8 @@
 package connection;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
 
 @WebListener
 public class AppShutdownListener implements ServletContextListener {
@@ -21,6 +21,13 @@ public class AppShutdownListener implements ServletContextListener {
             System.out.println("✅ Pool HikariCP fechado com sucesso");
         } catch (Exception e) {
             System.err.println("❌ Erro ao fechar HikariCP: " + e.getMessage());
+        }
+
+        try {
+            ConnectionPool.closePool();
+            System.out.println("✅ Pool NipponPool fechado com sucesso");
+        } catch (Exception e) {
+            System.err.println("❌ Erro ao fechar NipponPool: " + e.getMessage());
         }
     }
 }

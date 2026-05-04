@@ -1050,8 +1050,8 @@
     const conf3_valor = parseFloat('${listaConfigs[0].conf3_valor}');
 
     // Comissões disponíveis
-    const comissao1Valor = parseFloat('${configSalario.comissao}');
-    const comissao2Valor = parseFloat('${configSalario.comissao2}');
+    const comissao1Valor = parseFloat('${configSalario.clt}');
+    const comissao2Valor = parseFloat('${configSalario.mei}');
 
     // NOVO: Usar apenas a comissão ativa do funcionário
     const comissaoAtiva = parseFloat('${valorComissaoAtiva}');
@@ -1238,7 +1238,7 @@
             return;
         }
 
-        // Cálculo do INSS (sempre com base na Comissão 1)
+        // Cálculo do INSS (sempre com base na Comissão 1 CLT)
         let aliquotaInss = 0;
         let parcelaDeduzirInss = 0;
 
@@ -1259,7 +1259,7 @@
         const valorInss = (baseCalculoComissao1 * aliquotaInss) - parcelaDeduzirInss;
         if (inssInput) inssInput.value = isNaN(valorInss) ? '0.00' : valorInss.toFixed(2);
 
-        // Cálculo do FGTS (sempre com base na Comissão 1)
+        // Cálculo do FGTS (sempre com base na Comissão 1 CLT)
         const valorFgts = baseCalculoComissao1 * (fgtsAliquota / 100);
         if (fgtsInput) fgtsInput.value = isNaN(valorFgts) ? '0.00' : valorFgts.toFixed(2);
 
@@ -1369,10 +1369,10 @@
         // =======================
         let descontosTotal;
 
-        if (tipoComissao === 'COMISSÃO 1') {
+        if (tipoComissao === 'CLT') {
             descontosTotal = inss + vales + descontos + descontoAtraso + valorRibbon + descontosIr;
         } else {
-            descontosTotal = inss + fgts + vales + descontos + descontoAtraso + valorRibbon + descontosIr;
+            descontosTotal = vales + descontos + descontoAtraso + valorRibbon + descontosIr;
         }
 
         const descontosTotalInput = document.getElementById('descontos_total');

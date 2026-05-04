@@ -26,7 +26,7 @@ INSERT INTO public.conf_materiais(
 	(3, ENVELOPE, 150.00, 200, 0.75);
 
 INSERT INTO public.conf_salarios(
-	idconf, salario, comissao, comissao2, fgts)
+	idconf, salario, clt, mei, fgts)
 	VALUES
     	(1, 1518.00, 15.00, 20.00, 8.00);
 

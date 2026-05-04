@@ -95,7 +95,7 @@ public class DAOSalarios {
     }
 
     public void gravarSalarios(ModelSalarios model) throws Exception {
-        String sql = "INSERT INTO salarios (mes, ano, funcionario_id, nome_funcionario, qtd_fotos, qtd_arquivos, qtd_sobras, atrasos, faltas, advertencias, suspensoes, dsr, valor_atrasos, valor_faltas, valor_suspensoes, vales, inss, fgts, venda_total, comissao, salario_total, salario_liquido1, comissao2, salario_total2, salario_liquido2, aproveitamento, descontos_mes, descontos_1, descontos_2, parcela, tipo_comissao, adc_noturno, bonificacoes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO salarios (mes, ano, funcionario_id, nome_funcionario, qtd_fotos, qtd_arquivos, qtd_sobras, atrasos, faltas, advertencias, suspensoes, dsr, valor_atrasos, valor_faltas, valor_suspensoes, vales, inss, fgts, venda_total, clt, salario_total, salario_liquido1, mei, salario_total2, salario_liquido2, aproveitamento, descontos_mes, descontos_1, descontos_2, parcela, tipo_comissao, adc_noturno, bonificacoes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, model.getMes());
             stmt.setInt(2, model.getAno());
@@ -116,10 +116,10 @@ public class DAOSalarios {
             stmt.setBigDecimal(17, model.getInss());
             stmt.setBigDecimal(18, model.getFgts());
             stmt.setBigDecimal(19, model.getVenda_total());
-            stmt.setBigDecimal(20, model.getComissao());
+            stmt.setBigDecimal(20, model.getClt());
             stmt.setBigDecimal(21, model.getSalario_total());
             stmt.setBigDecimal(22, model.getSalario_liquido1());
-            stmt.setBigDecimal(23, model.getComissao2());
+            stmt.setBigDecimal(23, model.getMei());
             stmt.setBigDecimal(24, model.getSalario_total2());
             stmt.setBigDecimal(25, model.getSalario_liquido2());
             stmt.setBigDecimal(26, model.getAproveitamento());
@@ -171,10 +171,10 @@ public class DAOSalarios {
                 salario.setParcela(rs.getBigDecimal("parcela"));
                 salario.setFgts(rs.getBigDecimal("fgts"));
                 salario.setVenda_total(rs.getBigDecimal("venda_total"));
-                salario.setComissao(rs.getBigDecimal("comissao"));
+                salario.setClt(rs.getBigDecimal("clt"));
                 salario.setSalario_total(rs.getBigDecimal("salario_total"));
                 salario.setSalario_liquido1(rs.getBigDecimal("salario_liquido1"));
-                salario.setComissao2(rs.getBigDecimal("comissao2"));
+                salario.setMei(rs.getBigDecimal("mei"));
                 salario.setSalario_total2(rs.getBigDecimal("salario_total2"));
                 salario.setSalario_liquido2(rs.getBigDecimal("salario_liquido2"));
                 salario.setAproveitamento(rs.getBigDecimal("aproveitamento"));
@@ -195,7 +195,7 @@ public class DAOSalarios {
     }
 
     public void atualizarSalario(ModelSalarios model) throws Exception {
-        String sql = "UPDATE salarios SET qtd_fotos = ?, qtd_arquivos = ?, qtd_sobras = ?, aproveitamento = ?, advertencias = ?, faltas = ?, suspensoes = ?, dsr = ?, atrasos = ?, valor_faltas = ?, valor_suspensoes = ?, valor_atrasos = ?, venda_total = ?, vales = ?, inss = ?, parcela = ?, fgts = ?, descontos_mes = ?, comissao = ?, salario_total = ?, descontos_1 = ?, salario_liquido1 = ?, comissao2 = ?, salario_total2 = ?, descontos_2 = ?, salario_liquido2 = ?, tipo_comissao = ?, adc_noturno = ?, bonificacoes = ? WHERE id_salario = ?";
+        String sql = "UPDATE salarios SET qtd_fotos = ?, qtd_arquivos = ?, qtd_sobras = ?, aproveitamento = ?, advertencias = ?, faltas = ?, suspensoes = ?, dsr = ?, atrasos = ?, valor_faltas = ?, valor_suspensoes = ?, valor_atrasos = ?, venda_total = ?, vales = ?, inss = ?, parcela = ?, fgts = ?, descontos_mes = ?, clt = ?, salario_total = ?, descontos_1 = ?, salario_liquido1 = ?, mei = ?, salario_total2 = ?, descontos_2 = ?, salario_liquido2 = ?, tipo_comissao = ?, adc_noturno = ?, bonificacoes = ? WHERE id_salario = ?";
         try {
             if (connection == null) throw new Exception("Connection é null!");
             if (connection.isClosed()) throw new Exception("Connection está fechada!");
@@ -219,11 +219,11 @@ public class DAOSalarios {
                 stmt.setBigDecimal(i++, model.getParcela());
                 stmt.setBigDecimal(i++, model.getFgts());
                 stmt.setBigDecimal(i++, model.getDescontos_mes());
-                stmt.setBigDecimal(i++, model.getComissao());
+                stmt.setBigDecimal(i++, model.getClt());
                 stmt.setBigDecimal(i++, model.getSalario_total());
                 stmt.setBigDecimal(i++, model.getDescontos_1());
                 stmt.setBigDecimal(i++, model.getSalario_liquido1());
-                stmt.setBigDecimal(i++, model.getComissao2());
+                stmt.setBigDecimal(i++, model.getMei());
                 stmt.setBigDecimal(i++, model.getSalario_total2());
                 stmt.setBigDecimal(i++, model.getDescontos_2());
                 stmt.setBigDecimal(i++, model.getSalario_liquido2());

@@ -731,16 +731,16 @@
                                                                         <input type="text" class="form-control" id="salario" name="salario" value="${configsSalarios[0].salario}">
                                                                     </div>
                                                                     <div class="col-3">
-                                                                        <label for="conf2_nome">Comissão 1</label>
-                                                                        <input type="text" class="form-control" id="comissao" name="comissao" value="${configsSalarios[0].comissao}">
+                                                                        <label for="conf2_nome">CLT</label>
+                                                                        <input type="text" class="form-control" id="clt" name="clt" value="${configsSalarios[0].clt}">
                                                                     </div>
 
                                                                 </div>
 
                                                                 <div class="row mb-4 d-flex">
                                                                     <div class="col-3">
-                                                                        <label for="conf2_valor">COMISSÃO 2</label>
-                                                                        <input type="text" class="form-control" id="comissao2" name="comissao2" value="${configsSalarios[0].comissao2}">
+                                                                        <label for="conf2_valor">MEI</label>
+                                                                        <input type="text" class="form-control" id="mei" name="mei" value="${configsSalarios[0].mei}">
                                                                     </div>
                                                                     <div class="col-3">
                                                                         <label for="conf2_nome">FGTS</label>
@@ -1039,8 +1039,8 @@
                                                 <th>Ações</th>
                                                 <th>ID</th>
                                                 <th>Salário</th>
-                                                <th>Comissão 1</th>
-                                                <th>Comissão 2</th>
+                                                <th>CLT</th>
+                                                <th>MEI</th>
                                                 <th>FGTS</th>
 
                                             </tr>
@@ -1058,8 +1058,8 @@
                                                                onclick="gerenciarSalario(
                                                                    ${modelConfiguracao.idconf},
                                                                        '${modelConfiguracao.salario}',
-                                                                       '${modelConfiguracao.comissao}',
-                                                                       '${modelConfiguracao.comissao2}',
+                                                                       '${modelConfiguracao.clt}',
+                                                                       '${modelConfiguracao.mei}',
                                                                        '${modelConfiguracao.fgts}'
                                                                        )">
                                                                 Editar
@@ -1069,8 +1069,8 @@
 
                                                         <!-- Formatação do valor com JSTL -->
                                                         <td><fmt:formatNumber value="${modelConfiguracao.salario}" type="currency" currencySymbol="R$" /></td>
-                                                        <td><fmt:formatNumber value="${modelConfiguracao.comissao / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
-                                                        <td><fmt:formatNumber value="${modelConfiguracao.comissao2 / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConfiguracao.clt / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
+                                                        <td><fmt:formatNumber value="${modelConfiguracao.mei / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
                                                         <td><fmt:formatNumber value="${modelConfiguracao.fgts / 100}" type="percent" maxFractionDigits="2" minFractionDigits="2"/></td>
 
 
@@ -1405,12 +1405,12 @@
        document.getElementById('conf3_valor').value = conf3_valor;
    }
 
-       function gerenciarSalario(idconf, salario, comissao, comissao2, fgts) {
+       function gerenciarSalario(idconf, salario, clt, mei, fgts) {
        // Preencher o campo idConf
        document.getElementById('idConf_salario').value = idconf;
        document.getElementById('salario').value = salario;
-       document.getElementById('comissao').value = comissao;
-       document.getElementById('comissao2').value = comissao2;
+       document.getElementById('clt').value = clt;
+       document.getElementById('mei').value = mei;
        document.getElementById('fgts').value = fgts;
 
    }

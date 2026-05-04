@@ -70,10 +70,10 @@ public class ServletSalarios extends ServletGenericUtil {
 
                 BigDecimal valorComissao = BigDecimal.ZERO;
                 if (configSalario != null) {
-                    if ("COMISSÃO 1".equalsIgnoreCase(tipoComissao)) {
-                        valorComissao = configSalario.getComissao();
-                    } else if ("COMISSÃO 2".equalsIgnoreCase(tipoComissao)) {
-                        valorComissao = configSalario.getComissao2();
+                    if ("CLT".equalsIgnoreCase(tipoComissao)) {
+                        valorComissao = configSalario.getClt();
+                    } else if ("MEI".equalsIgnoreCase(tipoComissao)) {
+                        valorComissao = configSalario.getMei();
                     }
                 }
 

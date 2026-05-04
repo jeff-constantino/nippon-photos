@@ -21,8 +21,8 @@ public class ModelConfiguracao implements java.io.Serializable {
     //MODEL PARA A TABELA DE SALÁRIOS E COMISSÕES
 
     private BigDecimal salario;
-    private BigDecimal comissao;
-    private BigDecimal comissao2;
+    private BigDecimal clt;
+    private BigDecimal mei;
     private BigDecimal inss;
     private BigDecimal fgts;
 
@@ -140,20 +140,20 @@ public class ModelConfiguracao implements java.io.Serializable {
         this.salario = salario;
     }
 
-    public BigDecimal getComissao() {
-        return comissao;
+    public BigDecimal getClt() {
+        return clt;
     }
 
-    public void setComissao(BigDecimal comissao) {
-        this.comissao = comissao;
+    public void setClt(BigDecimal clt) {
+        this.clt = clt;
     }
 
-    public BigDecimal getComissao2() {
-        return comissao2;
+    public BigDecimal getMei() {
+        return mei;
     }
 
-    public void setComissao2(BigDecimal comissao2) {
-        this.comissao2 = comissao2;
+    public void setMei(BigDecimal mei) {
+        this.mei = mei;
     }
 
     public BigDecimal getInss() {

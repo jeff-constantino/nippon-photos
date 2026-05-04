@@ -54,24 +54,24 @@ public class DAOConfiguracao {
         try {
             String sql;
             if (model.getIdconf() == null) {
-                sql = "INSERT INTO conf_salarios (salario, comissao, fgts, comissao2) VALUES (?, ?, ?, ?)";
+                sql = "INSERT INTO conf_salarios (salario, clt, fgts, mei) VALUES (?, ?, ?, ?)";
                 try (PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
                     stmt.setBigDecimal(1, model.getSalario());
-                    stmt.setBigDecimal(2, model.getComissao());
+                    stmt.setBigDecimal(2, model.getClt());
                     stmt.setBigDecimal(3, model.getFgts());
-                    stmt.setBigDecimal(4, model.getComissao2());
+                    stmt.setBigDecimal(4, model.getMei());
                     stmt.executeUpdate();
                     try (ResultSet rs = stmt.getGeneratedKeys()) {
                         if (rs.next()) model.setIdconf(rs.getLong(1));
                     }
                 }
             } else {
-                sql = "UPDATE conf_salarios SET salario=?, comissao=?, fgts=?, comissao2=? WHERE idconf =?";
+                sql = "UPDATE conf_salarios SET salario=?, clt=?, fgts=?, mei=? WHERE idconf =?";
                 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                     stmt.setBigDecimal(1, model.getSalario());
-                    stmt.setBigDecimal(2, model.getComissao());
+                    stmt.setBigDecimal(2, model.getClt());
                     stmt.setBigDecimal(3, model.getFgts());
-                    stmt.setBigDecimal(4, model.getComissao2());
+                    stmt.setBigDecimal(4, model.getMei());
                     stmt.setLong(5, model.getIdconf());
                     stmt.executeUpdate();
                 }
@@ -210,9 +210,9 @@ public class DAOConfiguracao {
                 ModelConfiguracao modelConfiguracao = new ModelConfiguracao();
                 modelConfiguracao.setIdconf(resultSet.getLong("idconf"));
                 modelConfiguracao.setSalario(resultSet.getBigDecimal("salario"));
-                modelConfiguracao.setComissao(resultSet.getBigDecimal("comissao"));
+                modelConfiguracao.setClt(resultSet.getBigDecimal("clt"));
                 modelConfiguracao.setFgts(resultSet.getBigDecimal("fgts"));
-                modelConfiguracao.setComissao2(resultSet.getBigDecimal("comissao2"));
+                modelConfiguracao.setMei(resultSet.getBigDecimal("mei"));
                 listaSalarios.add(modelConfiguracao);
             }
         } catch (SQLException e) {

@@ -38,14 +38,14 @@ public class ServletConfiguracao extends ServletGenericUtil {
                 }
 
                 BigDecimal salario = parseToBigDecimal(request.getParameter("salario"));
-                BigDecimal comissao = parseToBigDecimal(request.getParameter("comissao"));
+                BigDecimal clt = parseToBigDecimal(request.getParameter("clt"));
                 BigDecimal fgts = parseToBigDecimal(request.getParameter("fgts"));
-                BigDecimal comissao2 = parseToBigDecimal(request.getParameter("comissao2"));
+                BigDecimal mei = parseToBigDecimal(request.getParameter("mei"));
 
                 modelConfiguracao.setSalario(salario);
-                modelConfiguracao.setComissao(comissao);
+                modelConfiguracao.setClt(clt);
                 modelConfiguracao.setFgts(fgts);
-                modelConfiguracao.setComissao2(comissao2);
+                modelConfiguracao.setMei(mei);
 
                 // Campos IRRF
                 modelConfiguracao.setId_irrf_1(parseToLong(request.getParameter("id_irrf_1")));

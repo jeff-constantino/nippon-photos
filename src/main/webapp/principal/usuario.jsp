@@ -177,17 +177,17 @@
                                                                                                 <label>COMISSÃO</label>
                                                                                                 <select class="form-select" id="comissao" name="comissao" required>
                                                                                                     <option disabled="disabled">Selecione a Comissão</option>
-                                                                                                    <option value="Comissão 1" <%
-                                                                                                        if (modelLogin != null && "Comissão 1".equalsIgnoreCase(modelLogin.getComissao())) {
+                                                                                                    <option value="CLT" <%
+                                                                                                        if (modelLogin != null && "CLT".equalsIgnoreCase(modelLogin.getComissao())) {
                                                                                                             out.print("selected=\"selected\"");
                                                                                                         }
-                                                                                                    %>>Comissão 1
+                                                                                                    %>>CLT
                                                                                                     </option>
-                                                                                                    <option value="Comissão 2" <%
-                                                                                                        if (modelLogin != null && "Comissão 2".equalsIgnoreCase(modelLogin.getComissao())) {
+                                                                                                    <option value="MEI" <%
+                                                                                                        if (modelLogin != null && "MEI".equalsIgnoreCase(modelLogin.getComissao())) {
                                                                                                             out.print("selected=\"selected\"");
                                                                                                         }
-                                                                                                    %>>Comissão 2
+                                                                                                    %>>MEI
                                                                                                     </option>
                                                                                                 </select>
                                                                                             </div>
@@ -481,22 +481,22 @@
                                                 <select class="form-select" id="comissao2" name="comissao" required>
                                                     <option disabled>Selecione a Comissão</option>
 
-                                                    <option value="Comissão 1"
+                                                    <option value="CLT"
                                                             <%
-                                                                if (modelLogin != null && "Comissão 1".equalsIgnoreCase(modelLogin.getComissao())) {
+                                                                if (modelLogin != null && "CLT".equalsIgnoreCase(modelLogin.getComissao())) {
                                                                     out.print("selected=\"selected\"");
                                                                 }
                                                             %>>
-                                                        Comissão 1
+                                                        CLT
                                                     </option>
 
-                                                    <option value="Comissão 2"
+                                                    <option value="MEI"
                                                             <%
-                                                                if (modelLogin != null && "Comissão 2".equalsIgnoreCase(modelLogin.getComissao())) {
+                                                                if (modelLogin != null && "MEI".equalsIgnoreCase(modelLogin.getComissao())) {
                                                                     out.print("selected=\"selected\"");
                                                                 }
                                                             %>>
-                                                        Comissão 2
+                                                        MEI
                                                     </option>
                                                 </select>
                                             </div>

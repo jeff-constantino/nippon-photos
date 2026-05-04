@@ -38,15 +38,15 @@ public class ModelSalarios implements Serializable {
 
     private BigDecimal venda_total; //salario_bruto no jsp
 
-    private BigDecimal comissao;
+    private BigDecimal clt;
     private BigDecimal salario_total;
     private BigDecimal salario_liquido1;
 
-    private BigDecimal comissao2;
+    private BigDecimal mei;
     private BigDecimal salario_total2;
     private BigDecimal salario_liquido2;
 
-
+    private BigDecimal comissao;
 
 
     private BigDecimal descontos_mes;
@@ -298,12 +298,12 @@ public class ModelSalarios implements Serializable {
         this.venda_total = venda_total;
     }
 
-    public BigDecimal getComissao() {
-        return comissao;
+    public BigDecimal getClt() {
+        return clt;
     }
 
-    public void setComissao(BigDecimal comissao) {
-        this.comissao = comissao;
+    public void setClt(BigDecimal clt) {
+        this.clt = clt;
     }
 
     public BigDecimal getSalario_total() {
@@ -322,12 +322,12 @@ public class ModelSalarios implements Serializable {
         this.salario_liquido1 = salario_liquido1;
     }
 
-    public BigDecimal getComissao2() {
-        return comissao2;
+    public BigDecimal getMei() {
+        return mei;
     }
 
-    public void setComissao2(BigDecimal comissao2) {
-        this.comissao2 = comissao2;
+    public void setMei(BigDecimal mei) {
+        this.mei = mei;
     }
 
     public BigDecimal getSalario_total2() {
@@ -346,5 +346,11 @@ public class ModelSalarios implements Serializable {
         this.salario_liquido2 = salario_liquido2;
     }
 
+    public BigDecimal getComissao() {
+        return comissao;
+    }
 
+    public void setComissao(BigDecimal comissao) {
+        this.comissao = comissao;
+    }
 }

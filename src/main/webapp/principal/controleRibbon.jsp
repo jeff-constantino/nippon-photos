@@ -603,33 +603,33 @@
     });
 
         // Função para navegar entre elementos focáveis com as setas
-        function navigateFocusableElements(event) {
-            const focusableElements = Array.from(
-                document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
-            ).filter(element => !element.disabled && element.tabIndex !== -1);
-
-            if (focusableElements.length === 0) return;
-
-            const currentElement = document.activeElement;
-            if (!focusableElements.includes(currentElement)) return;
-
-            let currentIndex = focusableElements.indexOf(currentElement);
-
-            switch (event.key) {
-                case 'ArrowRight':
-                case 'ArrowDown':
-                    currentIndex = (currentIndex + 1) % focusableElements.length;
-                    break;
-                case 'ArrowLeft':
-                case 'ArrowUp':
-                    currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
-                    break;
-                default:
-                    return;
-            }
-
-            focusableElements[currentIndex].focus();
-        }
+        // function navigateFocusableElements(event) {
+        //     const focusableElements = Array.from(
+        //         document.querySelectorAll('input, select, textarea, button, [tabindex]:not([tabindex="-1"])')
+        //     ).filter(element => !element.disabled && element.tabIndex !== -1);
+        //
+        //     if (focusableElements.length === 0) return;
+        //
+        //     const currentElement = document.activeElement;
+        //     if (!focusableElements.includes(currentElement)) return;
+        //
+        //     let currentIndex = focusableElements.indexOf(currentElement);
+        //
+        //     switch (event.key) {
+        //         case 'ArrowRight':
+        //         case 'ArrowDown':
+        //             currentIndex = (currentIndex + 1) % focusableElements.length;
+        //             break;
+        //         case 'ArrowLeft':
+        //         case 'ArrowUp':
+        //             currentIndex = (currentIndex - 1 + focusableElements.length) % focusableElements.length;
+        //             break;
+        //         default:
+        //             return;
+        //     }
+        //
+        //     focusableElements[currentIndex].focus();
+        // }
 
         // Bloqueia a alteração de valor com as setas nos inputs do tipo number
         document.querySelectorAll('input[type="number"]').forEach(input => {

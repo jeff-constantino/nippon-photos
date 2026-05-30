@@ -1290,9 +1290,7 @@
         if (parcelaInput) parcelaInput.value = parcelaDeduzirIrrf.toFixed(2);
     }
 
-    // ===================================================================
-    // Função principal de cálculo dos salários (salarioTotal e salarioLiquido)
-    // ===================================================================
+
     // ===================================================================
     // Função principal de cálculo dos salários (salarioTotal e salarioLiquido)
     // ===================================================================

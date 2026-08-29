@@ -2,15 +2,19 @@ CD IdeaProjects\nippon-photos
 mvn clean package
 C:\Users\Jeff Constantino\IdeaProjects\nippon-photos\target
 
-CRIAR SANGRIA e buscar no fechames
 
 
-package com.ponto.util;
+EXIBIR DATAS E QUANTIDADES DE FOTOS DESCONTADAS NO SALARIO
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
-Multa rescisória Jeff 1546,13.
-242,88 fgts Mes.
-212,71 encargo fgts.
-168,93 inss.
+SELECT
+    l.nome,
+    v.data_venda,
+    ABS(COALESCE(v.ribbon_dif::INTEGER, 0)) AS ribbon_descontar
+FROM vendas v
+INNER JOIN model_login l ON v.vendedor_id = l.id
+WHERE v.ribbon = 'DESCONTAR'
+  AND v.data_venda BETWEEN TO_DATE('2026-07-01', 'YYYY-MM-DD') AND TO_DATE('2026-07-31', 'YYYY-MM-DD')
+ORDER BY v.data_venda ASC;
+
+

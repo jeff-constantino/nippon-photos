@@ -376,30 +376,38 @@
 
                                     <h4 class="card-title" style="text-align: center">IMPOSTOS SOBRE VENDAS</h4>
                                     <div class="row">
-                                        <div class="col-6 mb-3">
-                                            <label for="icms" style="font-size: 1.0rem;">ISS</label>
-                                            <input type="text" class="form-control money" id="icms" name="icms" style="font-size: 1.0rem;" value="${icmsValue}">
-                                        </div>
-                                        <div class="col-6 mb-3">
-                                            <label for="pis" style="font-size: 1.0rem;">PIS</label>
-                                            <input type="text" class="form-control money" id="pis" name="pis" style="font-size: 1.0rem;" value="${pisValue}">
-                                        </div>
-                                        <div class="col-6 mb-3">
-                                            <label for="cofins" style="font-size: 1.0rem;">COFINS</label>
-                                            <input type="text" class="form-control money" id="cofins" name="cofins" style="font-size: 1.0rem;" value="${cofinsValue}">
-                                        </div>
-                                        <div class="col-6 mb-3">
-                                            <label for="inss" style="font-size: 1.0rem;">INSS</label>
-                                            <input type="text" class="form-control money" id="inss" name="inss" style="font-size: 1.0rem;" value="${inssValue}">
-                                        </div>
+
                                         <div class="col-6 mb-3">
                                             <label for="irpj" style="font-size: 1.0rem;">IRPJ</label>
                                             <input type="text" class="form-control money" id="irpj" name="irpj" style="font-size: 1.0rem;" value="${irpjValue}">
                                         </div>
+
                                         <div class="col-6 mb-3">
                                             <label for="csll" style="font-size: 1.0rem;">CSLL</label>
                                             <input type="text" class="form-control money" id="csll" name="csll" style="font-size: 1.0rem;" value="${csllValue}">
                                         </div>
+
+                                        <div class="col-6 mb-3">
+                                            <label for="cofins" style="font-size: 1.0rem;">COFINS</label>
+                                            <input type="text" class="form-control money" id="cofins" name="cofins" style="font-size: 1.0rem;" value="${cofinsValue}">
+                                        </div>
+
+                                        <div class="col-6 mb-3">
+                                            <label for="pis" style="font-size: 1.0rem;">PIS</label>
+                                            <input type="text" class="form-control money" id="pis" name="pis" style="font-size: 1.0rem;" value="${pisValue}">
+                                        </div>
+
+                                        <div class="col-6 mb-3">
+                                            <label for="inss" style="font-size: 1.0rem;">INSS</label>
+                                            <input type="text" class="form-control money" id="inss" name="inss" style="font-size: 1.0rem;" value="${inssValue}">
+                                        </div>
+
+                                        <div class="col-6 mb-3">
+                                            <label for="icms" style="font-size: 1.0rem;">ICMS</label>
+                                            <input type="text" class="form-control money" id="icms" name="icms" style="font-size: 1.0rem;" value="${icmsValue}">
+                                        </div>
+
+
                                     </div>
                                     <hr>
                                     <div class="row">

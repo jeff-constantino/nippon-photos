@@ -99,7 +99,10 @@ public class ServletComparativoYoY extends ServletGenericUtil {
 
     private String formatarValor(BigDecimal valor) {
         if (valor == null) return "0,00";
-        return String.format("%,.2f", valor).replace(",", "X").replace(".", ",").replace("X", ".");
+        java.text.NumberFormat nf = java.text.NumberFormat.getNumberInstance(java.util.Locale.forLanguageTag("pt-BR"));
+        nf.setMinimumFractionDigits(2);
+        nf.setMaximumFractionDigits(2);
+        return nf.format(valor);
     }
 
     private void enviarJSON(HttpServletResponse response, Object objeto) throws IOException {

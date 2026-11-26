@@ -215,14 +215,20 @@
      */
     function formatarParaBR(valor) {
         if (valor === null || valor === undefined || valor === "") return "0,00";
+        if (typeof valor === "number") {
+            return isNaN(valor) ? "0,00" : valor.toLocaleString("pt-BR", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
 
-        // Remove vírgulas de milhar se existirem e converte para número
-        let numero = typeof valor === 'string' ?
-            parseFloat(valor.replace(/,/g, "")) : valor;
+        let str = String(valor).trim().replace(/^R\$\s*/, "");
+        if (str.includes(",")) {
+            str = str.replace(/\./g, "").replace(",", ".");
+        }
 
-        if (isNaN(numero)) return "0,00";
-
-        return numero.toLocaleString('pt-BR', {
+        let numero = parseFloat(str);
+        return isNaN(numero) ? "0,00" : numero.toLocaleString("pt-BR", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });

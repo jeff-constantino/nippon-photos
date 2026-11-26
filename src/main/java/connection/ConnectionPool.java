@@ -14,7 +14,7 @@ public class ConnectionPool {
             HikariConfig config = new HikariConfig();
 
             // Configurações da conexão
-            config.setJdbcUrl("jdbc:postgresql://localhost:5432/jeffe6510_nippon");
+            config.setJdbcUrl("jdbc:postgresql://ic-postgresql-QHPA:5432/jeffe6510_nippon");
             config.setUsername("jeffe6510_admin");
             config.setPassword("Aplic@tiv0");
             config.setDriverClassName("org.postgresql.Driver");

@@ -21,7 +21,7 @@ public class HikariCPUtil {
             dataSource.setDriverClassName("org.postgresql.Driver");
 
             // ✅ SUAS CONFIGURAÇÕES DE BANCO DE DADOS
-            dataSource.setJdbcUrl("jdbc:postgresql://localhost:5432/jeffe6510_nippon?sslmode=disable&tcpKeepAlive=true&socketTimeout=30");
+            dataSource.setJdbcUrl("jdbc:postgresql://ic-postgresql-QHPA:5432/jeffe6510_nippon?sslmode=disable&tcpKeepAlive=true&socketTimeout=30");
             dataSource.setUsername("jeffe6510_admin");
             dataSource.setPassword("Aplic@tiv0");
 

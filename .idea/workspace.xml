@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a1c39f09-50ad-47a3-9049-fa08da54a622" name="Changes" comment="ajuste moeda locale" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;jeff-constantino&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/jeff-constantino/nippon-photos.git&quot;,
+    &quot;accountId&quot;: &quot;3e26c451-83ad-4d73-b7c6-9fd0b1430263&quot;
+  }
+}</component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0067927984805425" />
+      <entry key="MS500" value="1.686747787073413" />
+      <entry key="S2" value="3.6586750318553927" />
+      <entry key="S5" value="4.826051466306889" />
+      <entry key="S10" value="5.362426627187617" />
+      <entry key="S30" value="5.774936345036174" />
+      <entry key="S60" value="5.8858115807313025" />
+      <entry key="M2" value="5.94248461600204" />
+      <entry key="M5" value="5.9768918504337805" />
+      <entry key="M10" value="5.988432401929712" />
+      <entry key="M15" value="5.992766599902811" />
+      <entry key="M30" value="6.06362576557562" />
+      <entry key="H1" value="6.889754895268087" />
+      <entry key="H2" value="9.731551777047496" />
+      <entry key="H4" value="14.182270687426184" />
+      <entry key="D1" value="22.44251060447828" />
+      <entry key="W1" value="24.6097201515798" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9658138519281243" />
+      <entry key="MS500" value="1.6722313141843173" />
+      <entry key="S2" value="3.6488295403795585" />
+      <entry key="S5" value="4.820387586474065" />
+      <entry key="S10" value="5.359182586088826" />
+      <entry key="S30" value="5.77374772236555" />
+      <entry key="S60" value="5.885202747327102" />
+      <entry key="M2" value="5.942176479871635" />
+      <entry key="M5" value="5.976767691696988" />
+      <entry key="M10" value="5.988370168947592" />
+      <entry key="M15" value="5.992724904460206" />
+      <entry key="M30" value="6.063593021061538" />
+      <entry key="H1" value="6.8896711655862655" />
+      <entry key="H2" value="9.731410368165417" />
+      <entry key="H4" value="14.18213230980617" />
+      <entry key="D1" value="22.44246891019906" />
+      <entry key="W1" value="24.609713537745925" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3McseYpVtnVnHTY0E1cc4qkTLoC" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.jshint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Jeff Constantino\IdeaProjects\nippon-photos\src\main\webapp\adm" />
+      <recent name="C:\Users\Jeff Constantino\IdeaProjects\nippon-photos\src\main\webapp" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-ac68fc9d2b05-intellij.indexing.shared.core-IU-263.7307.353" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a1c39f09-50ad-47a3-9049-fa08da54a622" name="Changes" comment="" />
+      <created>1795661286187</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1795661286187</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="ALTERADO URL SERVIDOR POSTGRES" />
+    <MESSAGE value="ALTERADO URL SERVIDOR POSTGRES no hikari" />
+    <MESSAGE value="ajustado index" />
+    <MESSAGE value="ajuste moeda locale" />
+    <option name="LAST_COMMIT_MESSAGE" value="ajuste moeda locale" />
+  </component>
+</project>

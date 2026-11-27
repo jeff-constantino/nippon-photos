@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a1c39f09-50ad-47a3-9049-fa08da54a622" name="Changes" comment="ajuste moeda locale" />
+    <list default="true" id="a1c39f09-50ad-47a3-9049-fa08da54a622" name="Changes" comment="ajuste de logo">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/ToDo" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ToDo" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,23 +30,23 @@
 }</component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0067927984805425" />
-      <entry key="MS500" value="1.686747787073413" />
-      <entry key="S2" value="3.6586750318553927" />
-      <entry key="S5" value="4.826051466306889" />
-      <entry key="S10" value="5.362426627187617" />
-      <entry key="S30" value="5.774936345036174" />
-      <entry key="S60" value="5.8858115807313025" />
-      <entry key="M2" value="5.94248461600204" />
-      <entry key="M5" value="5.9768918504337805" />
-      <entry key="M10" value="5.988432401929712" />
-      <entry key="M15" value="5.992766599902811" />
-      <entry key="M30" value="6.06362576557562" />
-      <entry key="H1" value="6.889754895268087" />
-      <entry key="H2" value="9.731551777047496" />
-      <entry key="H4" value="14.182270687426184" />
-      <entry key="D1" value="22.44251060447828" />
-      <entry key="W1" value="24.6097201515798" />
+      <entry key="MS100" value="1.0409820515012063" />
+      <entry key="MS500" value="1.6541708689253962" />
+      <entry key="S2" value="2.448593878398095" />
+      <entry key="S5" value="2.7512448532335707" />
+      <entry key="S10" value="2.8703014126296367" />
+      <entry key="S30" value="2.955523971455773" />
+      <entry key="S60" value="2.9824490951640534" />
+      <entry key="M2" value="3.1593282731725902" />
+      <entry key="M5" value="4.439762410318279" />
+      <entry key="M10" value="5.941485043610482" />
+      <entry key="M15" value="6.731154510531407" />
+      <entry key="M30" value="7.7847534333051" />
+      <entry key="H1" value="9.120329442327588" />
+      <entry key="H2" value="12.172169023227832" />
+      <entry key="H4" value="16.768677628923783" />
+      <entry key="D1" value="25.332090140363473" />
+      <entry key="W1" value="27.592386155814268" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -65,23 +68,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9658138519281243" />
-      <entry key="MS500" value="1.6722313141843173" />
-      <entry key="S2" value="3.6488295403795585" />
-      <entry key="S5" value="4.820387586474065" />
-      <entry key="S10" value="5.359182586088826" />
-      <entry key="S30" value="5.77374772236555" />
-      <entry key="S60" value="5.885202747327102" />
-      <entry key="M2" value="5.942176479871635" />
-      <entry key="M5" value="5.976767691696988" />
-      <entry key="M10" value="5.988370168947592" />
-      <entry key="M15" value="5.992724904460206" />
-      <entry key="M30" value="6.063593021061538" />
-      <entry key="H1" value="6.8896711655862655" />
-      <entry key="H2" value="9.731410368165417" />
-      <entry key="H4" value="14.18213230980617" />
-      <entry key="D1" value="22.44246891019906" />
-      <entry key="W1" value="24.609713537745925" />
+      <entry key="MS100" value="1.0122412165178831" />
+      <entry key="MS500" value="1.6442964789814873" />
+      <entry key="S2" value="2.4449068202900532" />
+      <entry key="S5" value="2.7495896961113435" />
+      <entry key="S10" value="2.869438592504502" />
+      <entry key="S30" value="2.955227977481966" />
+      <entry key="S60" value="2.9822995119125633" />
+      <entry key="M2" value="3.1592446137335948" />
+      <entry key="M5" value="4.4397024162257415" />
+      <entry key="M10" value="5.941439444564689" />
+      <entry key="M15" value="6.731118532880804" />
+      <entry key="M30" value="7.784722586006269" />
+      <entry key="H1" value="9.120252556011671" />
+      <entry key="H2" value="12.172034488548789" />
+      <entry key="H4" value="16.768542660110523" />
+      <entry key="D1" value="25.332048546904712" />
+      <entry key="W1" value="27.592379531739297" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -139,6 +142,7 @@
     <MESSAGE value="ALTERADO URL SERVIDOR POSTGRES no hikari" />
     <MESSAGE value="ajustado index" />
     <MESSAGE value="ajuste moeda locale" />
-    <option name="LAST_COMMIT_MESSAGE" value="ajuste moeda locale" />
+    <MESSAGE value="ajuste de logo" />
+    <option name="LAST_COMMIT_MESSAGE" value="ajuste de logo" />
   </component>
 </project>

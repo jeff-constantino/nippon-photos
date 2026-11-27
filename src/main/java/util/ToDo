@@ -2,26 +2,87 @@ CD IdeaProjects\nippon-photos
 mvn clean package
 C:\Users\Jeff Constantino\IdeaProjects\nippon-photos\target
 
-corrigir redirecionamento icp
-docker exec ic-nginx-5ynZ sh -c 'cat > /www/sites/hashtag.app.br/redirect/nippon.conf <<EOF
-location = / {
-    return 302 https://hashtag.app.br/nippon/index.jsp;
-}
-EOF'
-
-
-
 EXIBIR DATAS E QUANTIDADES DE FOTOS DESCONTADAS NO SALARIO
 
 
-SELECT
-    l.nome,
-    v.data_venda,
-    ABS(COALESCE(v.ribbon_dif::INTEGER, 0)) AS ribbon_descontar
-FROM vendas v
-INNER JOIN model_login l ON v.vendedor_id = l.id
-WHERE v.ribbon = 'DESCONTAR'
-  AND v.data_venda BETWEEN TO_DATE('2026-07-01', 'YYYY-MM-DD') AND TO_DATE('2026-07-31', 'YYYY-MM-DD')
-ORDER BY v.data_venda ASC;
+*****Guia: corrigir loop de redirecionamento (painel ICP + Nginx em container)*****
 
+Troque DOMINIO e DESTINO pelos valores do seu caso. Exemplo: DOMINIO=jeffconstantino.dev.br, DESTINO=/portifolio.
 
+Container do Nginx: ic-nginx-5ynZ
+
+Sintoma
+
+A URL fica empilhando o caminho: /portifolio/portifolio/portifolio/...
+
+Causa
+
+O painel cria um redirect com $request_uri (ou um if ($host ...) sem location). Ele vale para todas as páginas, não só para a raiz, e por isso entra em loop.
+
+Passo 1: ver os arquivos de redirect do domínio
+bash
+docker exec ic-nginx-5ynZ ls /www/sites/DOMINIO/redirect/
+docker exec ic-nginx-5ynZ sh -c 'head -n 50 /www/sites/DOMINIO/redirect/*.conf'
+
+O erro aparece assim:
+
+nginx
+if ($host ~ '^DOMINIO') {
+    return 301 http://DOMINIO/DESTINO$request_uri;
+}
+Passo 2: mover o arquivo com defeito para .bak
+
+Isso mantém uma cópia de segurança, e o Nginx ignora arquivos .bak:
+
+bash
+docker exec ic-nginx-5ynZ sh -c 'for f in $(grep -l request_uri /www/sites/DOMINIO/redirect/*.conf); do mv "$f" "$f.bak"; done'
+
+Se o redirect defeituoso não tiver request_uri (como o do nippon.conf, que só tinha o if ($host ...)), mova o arquivo pelo nome:
+
+bash
+docker exec ic-nginx-5ynZ sh -c 'mv /www/sites/DOMINIO/redirect/NOME.conf /www/sites/DOMINIO/redirect/NOME.conf.bak'
+Passo 3: criar a regra correta (só para a raiz)
+bash
+docker exec ic-nginx-5ynZ sh -c 'cat > /www/sites/DOMINIO/redirect/raiz.conf <<EOF
+location = / {
+    return 302 https://DOMINIO/DESTINO;
+}
+EOF'
+
+Exemplo preenchido:
+
+bash
+docker exec ic-nginx-5ynZ sh -c 'cat > /www/sites/jeffconstantino.dev.br/redirect/raiz.conf <<EOF
+location = / {
+    return 302 https://jeffconstantino.dev.br/portifolio;
+}
+EOF'
+
+O location = / faz a regra valer só para a raiz exata, então não há loop.
+
+Passo 4: validar e recarregar
+bash
+docker exec ic-nginx-5ynZ nginx -t && docker exec ic-nginx-5ynZ nginx -s reload
+
+Precisa aparecer syntax is ok e test is successful. Se der erro, não recarregue: veja a mensagem e corrija o arquivo.
+
+Passo 5: testar
+bash
+curl -IL https://DOMINIO
+
+Resultado esperado:
+
+302 com location: https://DOMINIO/DESTINO
+(opcional) outro 302 para DESTINO/, que é o Tomcat adicionando a barra final
+200 no final
+
+No navegador, use aba anônima ou limpe o cache do site, porque o 301 antigo fica guardado.
+
+Passo 6: limpeza (opcional, quando estiver estável)
+bash
+docker exec ic-nginx-5ynZ sh -c 'rm /www/sites/DOMINIO/redirect/*.bak'
+Regras para não dar problema de novo
+Não edite o redirect pela tela do painel depois da correção. Ele pode recriar o arquivo com defeito. Se acontecer, repita os passos 1 e 2.
+Use 302 enquanto testa. O 301 fica em cache no navegador e mascara a correção. Troque para 301 só quando estiver tudo certo.
+Nunca use $request_uri no destino de um redirect de raiz.
+Sempre rode nginx -t antes do reload.
